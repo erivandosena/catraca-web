@@ -1,0 +1,81 @@
+#!/usr/bin/env python
+# -*- coding: latin-1 -*-
+
+#import RPi.GPIO as GPIO
+import pingo 
+from time import sleep
+from catraca import configuracao 
+from catraca.dispositivos import display
+
+__author__ = "Erivando Sena" 
+__copyright__ = "Copyright 2015, Unilab" 
+__email__ = "erivandoramos@unilab.edu.br" 
+__status__ = "Prototype" # Prototype | Development | Production 
+
+
+placa = configuracao.pinos_rpi()
+
+# green/data0 is pin 11 gpio 17
+# white/data1 is pin 12 gpio 18
+
+DO_GPIO = 17 
+D1_GPIO = 18
+D0 = placa.pins[11]
+D1 = placa.pins[12]
+D0.mode = configuracao.pino_entrada()
+D1.mode = configuracao.pino_entrada()
+
+numero_cartao = ''
+bits = ''
+
+def zero(self):
+    global bits
+    bits = bits + '0'
+
+
+def um(self):
+    global bits
+    bits = bits + '1'
+
+
+def leitor_rfid():
+    global bits
+    global numero_cartao
+    
+    #display.display("Bem-vindo!","Aproxime CARTAO",2,0)
+    try:
+        configuracao.detecta_evento(DO_GPIO, zero)
+        configuracao.detecta_evento(D1_GPIO, um)
+        while True:
+            if len(bits) == 32:
+                numero_cartao = int(str(bits), 2)
+                bits = ''
+                return numero_cartao
+    except KeyboardInterrupt:
+        print '\nInterrupido manualmente' # pass
+    except Exception:
+        print '\nErro geral [Leitor RFID].'
+    finally:
+        #display.display("ID: "+str(numero_cartao),"Desconhecido",2,0)
+        print 'Leitor RFID finalizado'
+
+def leitor():
+    leitor_rfid()
+    global numero_cartao
+    return numero_cartao
+
+def ler_cartao():
+    ID = 0
+    #display.display("Bem-vindo!","Aproxime CARTAO",2,0)
+    ID = int(leitor())
+    if (ID == 3995148318): # or (ID == 3995121086):
+        print 'Cartão válido. ID:'+ str(ID)
+        display.display("ID: "+str(ID),"Administrador",2,0)
+        sleep(4)
+        return True
+    else:
+        print 'Cartão inválido.'
+        display.display("ID: "+str(ID),"Cadastro Ausente",2,0)
+        sleep(4)
+        return False
+
