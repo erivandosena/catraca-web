@@ -31,7 +31,7 @@ def multithread():
         print ts.name + " iniciado"
     
     except (SystemExit, KeyboardInterrupt):
-        print '\nInterrupido manualmente'
+        print '\nInterrompido manualmente'
     #except Exception:
     #    print '\nErro geral [Multithread].'
     finally:

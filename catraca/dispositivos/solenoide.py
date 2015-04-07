@@ -44,29 +44,42 @@ def magnetiza_solenoides():
         print 'Solenoides finalizados.'
 
 
-def solenoides(): 
-    while (solenoide_1.state == baixo) & (solenoide_2.state == baixo):
-        print('Solenoides aguardando estado dos sensores.')
+#def solenoides(): 
+#    while (solenoide_1.state == baixo) & (solenoide_2.state == baixo):
+#        print('Solenoides aguardando estado dos sensores.')
 
 
-def magnetiza_solenoide_1():
-    if solenoide_2.state == alto:
-        solenoide_1.state = baixo
-        print('SOLENOIDE 1... Desatracado!')
-        return False
-    elif solenoide_2.state == baixo:
+def magnetiza_solenoide_1(estado):
+    #if solenoide_2.state == alto:
+    #solenoide_1.state = alto
+    #print('SOLENOIDE 1... Atracado!')
+    #    return False
+    #elif solenoide_2.state == baixo:
+    #solenoide_2.state = baixo
+    #print('SOLENOIDE 2... Desatracado!')
+    #return True
+    if estado == True:
         solenoide_1.state = alto
         print('SOLENOIDE 1... Atracado!')
-        return True
-
-
-def magnetiza_solenoide_2():
-    if solenoide_1.state == alto:
-        solenoide_2.state = baixo
+    else:
+        solenoide_1.state = baixo
         print('SOLENOIDE 1... Desatracado!')
-        return False
-    elif solenoide_1.state == baixo:
+
+
+def magnetiza_solenoide_2(estado):
+    #if solenoide_1.state == alto:
+    #solenoide_2.state = alto
+    #print('SOLENOIDE 2... Atracado!')
+    #    return False
+    #elif solenoide_1.state == baixo:
+    #solenoide_1.state = baixo
+    #print('SOLENOIDE 1... Desatracado!')
+    #    return True
+    if estado == True:
         solenoide_2.state = alto
-        print('SOLENOIDE 1... Atracado!')
-        return True
+        print('SOLENOIDE 2... Atracado!')
+    else:
+        solenoide_2.state = baixo
+        print('SOLENOIDE 2... Desatracado!')
+
 
