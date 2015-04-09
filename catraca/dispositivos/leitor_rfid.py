@@ -5,7 +5,7 @@
 import pingo 
 from time import sleep
 from catraca import configuracao 
-from catraca.dispositivos import display
+from catraca.dispositivos import display, solenoide
 
 
 __author__ = "Erivando Sena" 
@@ -23,8 +23,11 @@ D0 = placa.pins[11]
 D1 = placa.pins[12]
 D0.mode = configuracao.pino_entrada()
 D1.mode = configuracao.pino_entrada()
+baixo = configuracao.pino_baixo()
 bits = ''
 numero_cartao = ''
+
+ACESSO = False
 
 def zero(self):
     global bits
@@ -55,6 +58,7 @@ def leitor():
         print 'Leitor RFID finalizado'
 
 def ler_cartao(id_cartao):
+    global ACESSO
     ID = id_cartao #int(leitor())
     if (len(str(ID)) == 0):
         display.display("Por favor...","APROXIME CARTAO",2,2)
@@ -62,21 +66,22 @@ def ler_cartao(id_cartao):
         if (ID == 3995148318): # or (ID == 3995121086):
             print 'Cartão Válido. ID:'+ str(ID)
             display.display("ID: "+str(ID),"Administrador",2,3)
+            ACESSO = True
             display.display("SALDO ATUAL","R$ 1,60",2,3)
             display.display("ACESSO","LIBERADO!",2,3)
+            sleep(0.05)
+            ACESSO = False
             display.display("Bem-vindo!","APROXIME CARTAO",2,0)
-            return True
+            #return True
         else:
             print 'Cartão inválido.'
+            ACESSO = False
             display.display("ID: "+str(ID),"Cadastro Ausente",2,3)
             display.display("ACESSO","BLOQUEADO!",2,3)
             display.display("Bem-vindo!","APROXIME CARTAO",2,0)
-            return False
+            #return False
 
-def libera_acesso():
-    #display.display("Bem-vindo!","APROXIME CARTAO",2,0)
-    if (ler_cartao(numero_cartao)) and (len(str(numero_cartao)) == 10):
-        return True
-    else:
-        return False
+def verifica_acesso():
+    global ACESSO
+    return ACESSO
 

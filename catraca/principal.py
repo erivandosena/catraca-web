@@ -21,7 +21,7 @@ def main():
     multithread()
 
 def multithread():
-    os.system("echo 'Sistema da Catraca iniciado!' | mail -s 'Raspberry Pi B' erivandoramos@bol.com.br")
+    #os.system("echo 'Sistema da Catraca iniciado!' | mail -s 'Raspberry Pi B' erivandoramos@bol.com.br")
     try:
         ts = sensor.Sensor("Sensores")
         tl = leitor.Leitor("Leitor")
@@ -29,7 +29,7 @@ def multithread():
         print tl.name + " iniciado"
         ts.start()
         print ts.name + " iniciado"
-    
+
     except (SystemExit, KeyboardInterrupt):
         print '\nInterrompido manualmente'
     #except Exception:

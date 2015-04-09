@@ -26,9 +26,7 @@ alto = configuracao.pino_alto()
 def ler_sensores():
     try:
         while True:
-            if (sensor_1.state == baixo) or (sensor_2.state == baixo):
-                #print('Catraca aguardando GIRO <- ou ->')
-                #else:    
+            if (sensor_1.state == baixo) or (sensor_2.state == baixo):   
                 if sensor_1.state == alto:
                     ler_sensor_1()
                 if sensor_2.state == alto:
@@ -39,26 +37,24 @@ def ler_sensores():
     #    print '\nErro geral [Sensores].'
     finally:
         display.display("Catraca","OFFLINE",2,0)
-        configuracao.limpa_pinos()
+        #configuracao.limpa_pinos()
         print 'Sensor finalizado'
 
-def ler_sensor_1(): 
-    print('GIRANDO... A CATRACA NO SENTIDO HORARIO ->')
-    #if (not leitor_rfid.libera_acesso()):
-    if sensor_1.state == alto:
+def ler_sensor_1():
+    print str(leitor_rfid.verifica_acesso()) + ' SENSOR 1'
+    while (sensor_1.state == alto) and (leitor_rfid.verifica_acesso() == False):
         if sensor_2.state == alto:
-            solenoide.magnetiza_solenoide_2(False)
-        solenoide.magnetiza_solenoide_1(True)
+            solenoide.magnetiza_solenoide_2(baixo)
+        solenoide.magnetiza_solenoide_1(alto)
     else:
-        solenoide.magnetiza_solenoide_1(False)
+        solenoide.magnetiza_solenoide_1(baixo)
 
 def ler_sensor_2():
-    print('GIRANDO... A CATRACA NO SENTIDO ANTIHORARIO <-')
-    #if (not leitor_rfid.libera_acesso()):
-    if sensor_2.state == alto:
+    print str(leitor_rfid.verifica_acesso()) + ' SENSOR 2'
+    while (sensor_2.state == alto) and (leitor_rfid.verifica_acesso() == False):
         if sensor_1.state == alto:
-            solenoide.magnetiza_solenoide_1(False)
-        solenoide.magnetiza_solenoide_2(True)
+            solenoide.magnetiza_solenoide_1(baixo)
+        solenoide.magnetiza_solenoide_2(alto)
     else:
-        solenoide.magnetiza_solenoide_2(False)
+        solenoide.magnetiza_solenoide_2(baixo)
 
