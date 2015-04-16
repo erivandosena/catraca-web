@@ -10,30 +10,6 @@ __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production
 
 
-# PINOS GPIO
-SDA			=	2
-SCL			=	3
-LIVRE_1		=	4
-LCD_RS		=	7
-LCD_E		=	8
-OPTICA_2	=	9
-OPTICA_1	=	10
-SOLENOID_1	=	11
-TX			=	14
-RX			=	15
-RFID_D0		=	17
-RFID_D1		=	18
-LCD_D7		=	22
-LCD_D6		=	23
-LCD_D5		=	24
-LCD_D4		=	25
-SOLENOID_2	=	27
-LED_SETA_D	=	28
-LED_SETA_E	=	29
-LED_X		=	30
-LIVRE_2		=	31
-
-
 
 def pinos_rpi():
     return pingo.rpi.RaspberryPi()
