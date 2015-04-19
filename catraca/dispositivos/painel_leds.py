@@ -2,8 +2,8 @@
 # -*- coding: latin-1 -*-
 
 
-import pingo 
 from time import sleep
+from catraca.pinos import PinoControle
 from catraca import configuracao 
 #from catraca.dispositivos import display, leitor_rfid, solenoide
 
@@ -14,24 +14,30 @@ __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production 
 
 
-#placa = configuracao.pinos_rpi()
-placa = pingo.detect.MyBoard()
-sensor_1 = placa.pins[19]
-sensor_2 = placa.pins[21]
-sensor_1.mode = configuracao.pino_entrada()
-sensor_2.mode = configuracao.pino_entrada()
-baixo = configuracao.pino_baixo()
-alto = configuracao.pino_alto()
+rpi = PinoControle()
 
-def acende_senta_direira():
-    return placa.pins
+led_sd = rpi.ler(28)['gpio']
+led_se = rpi.ler(29)['gpio']
+led_x = rpi.ler(30)['gpio']
 
-def ler_sensores():
-    pass
 
-def ler_sensor_1():
-    pass
+def leds_sd(comando):
+    if comando:
+        return rpi.atualiza(led_sd, comando)
+    else:
+        return rpi.atualiza(led_sd, comando)
 
-def ler_sensor_2():
-    pass
+def leds_se(comando):
+    if comando:
+        return rpi.atualiza(led_se, comando)
+    else:
+        return rpi.atualiza(led_se, comando)
+
+def leds_x(comando):
+    if comando:
+        return rpi.atualiza(led_x, comando)
+    else:
+        return rpi.atualiza(led_x, comando)
+
+
 

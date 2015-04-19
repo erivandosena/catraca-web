@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 
-import pingo
+#import pingo
 from time import sleep
+from catraca.pinos import PinoControle
 from catraca import configuracao
-
 __author__ = "Erivando Sena"
 __copyright__ = "Copyright 2015, Unilab"
 __email__ = "erivandoramos@unilab.edu.br"
@@ -31,7 +31,8 @@ __status__ = "Prototype" # Prototype | Development | Production
 16: LCD Backlight 	   - GND
 """
 
-placa = configuracao.pinos_rpi()
+#placa = configuracao.pinos_rpi()
+rpi = PinoControle()
 
 saida = configuracao.pino_saida()
 
@@ -39,12 +40,12 @@ baixo = configuracao.pino_baixo()
 alto = configuracao.pino_alto()
 
 # Definição pinos GPIO para mapeamento LCD
-LCD_RS = placa.pins[26] # GPIO 7
-LCD_E  = placa.pins[24] # GPIO 8
-LCD_D4 = placa.pins[22] # GPIO 25
-LCD_D5 = placa.pins[18] # GPIO 24
-LCD_D6 = placa.pins[16] # GPIO 23
-LCD_D7 = placa.pins[15] # GPIO 22
+LCD_RS = rpi.ler(7)['gpio'] #placa.pins[26] # GPIO 7
+LCD_E  = rpi.ler(8)['gpio'] #placa.pins[24] # GPIO 8
+LCD_D4 = rpi.ler(25)['gpio'] #placa.pins[22] # GPIO 25
+LCD_D5 = rpi.ler(24)['gpio'] #placa.pins[18] # GPIO 24
+LCD_D6 = rpi.ler(23)['gpio'] #placa.pins[16] # GPIO 23
+LCD_D7 = rpi.ler(22)['gpio'] #placa.pins[15] # GPIO 22
 
 # Definição de constantes
 LCD_WIDTH = 16 # Máximo de caracteres por linha
@@ -60,12 +61,12 @@ E_DELAY = 0.00005
 
 def display(linha_1, linha_2, posicao, duracao):
     try:
-        LCD_E.mode  = saida # E
-        LCD_RS.mode = saida # RS
-        LCD_D4.mode = saida # DB4
-        LCD_D5.mode = saida # DB5
-        LCD_D6.mode = saida # DB6
-        LCD_D7.mode = saida # DB7
+        #LCD_E.mode  = saida # E
+        #LCD_RS.mode = saida # RS
+        #LCD_D4.mode = saida # DB4
+        #LCD_D5.mode = saida # DB5
+        #LCD_D6.mode = saida # DB6
+        #LCD_D7.mode = saida # DB7
 
         # Inicializa o display
         lcd_init()
@@ -109,44 +110,63 @@ def lcd_string(message,style):
 
 def lcd_byte(bits, mode):
     # bits = data (byte para pinos de dados)
-    LCD_RS.state = alto if mode else baixo # RS
+    #LCD_RS.state = alto if mode else baixo # RS
+    rpi.atualiza(LCD_RS, alto if mode else baixo) #RS
     sleep(0.001)
 
-    LCD_D4.state = baixo
-    LCD_D5.state = baixo
-    LCD_D6.state = baixo
-    LCD_D7.state = baixo
+    #LCD_D4.state = baixo
+    #LCD_D5.state = baixo
+    #LCD_D6.state = baixo
+    #LCD_D7.state = baixo
+
+    rpi.atualiza(LCD_D4, baixo)
+    rpi.atualiza(LCD_D5, baixo)
+    rpi.atualiza(LCD_D6, baixo)
+    rpi.atualiza(LCD_D7, baixo)
+
     if bits & 0x10 == 0x10:
-        LCD_D4.state = alto
+        #LCD_D4.state = alto
+        rpi.atualiza(LCD_D4, alto)
     if bits & 0x20 == 0x20:
-        LCD_D5.state = alto
+        #LCD_D5.state = alto
+        rpi.atualiza(LCD_D5, alto)
     if bits & 0x40 == 0x40:
-        LCD_D6.state = alto
+        #LCD_D6.state = alto
+        rpi.atualiza(LCD_D6, alto)
     if bits & 0x80 == 0x80:
-        LCD_D7.state = alto
+        #LCD_D7.state = alto
+        rpi.atualiza(LCD_D7, alto)
 
     sleep(E_DELAY)
-    LCD_E.state = alto
+    #LCD_E.state = alto
+    rpi.atualiza(LCD_E, alto)
     sleep(E_PULSE)
-    LCD_E.state = baixo
+    #LCD_E.state = baixo
+    rpi.atualiza(LCD_E, baixo)
     sleep(E_DELAY)
 
-    LCD_D4.state = baixo
-    LCD_D5.state = baixo
-    LCD_D6.state = baixo
-    LCD_D7.state = baixo
+    rpi.atualiza(LCD_D4, baixo)
+    rpi.atualiza(LCD_D5, baixo)
+    rpi.atualiza(LCD_D6, baixo)
+    rpi.atualiza(LCD_D7, baixo)
     if bits & 0x01 == 0x01:
-        LCD_D4.state = alto
+        #LCD_D4.state = alto
+        rpi.atualiza(LCD_D4, alto)
     if bits & 0x02 == 0x02:
-        LCD_D5.state = alto
+        #LCD_D5.state = alto
+        rpi.atualiza(LCD_D5, alto)
     if bits & 0x04 == 0x04:
-        LCD_D6.state = alto
+        #LCD_D6.state = alto
+        rpi.atualiza(LCD_D6, alto)
     if bits & 0x08 == 0x08:
-        LCD_D7.state = alto
+        #LCD_D7.state = alto
+        rpi.atualiza(LCD_D7, alto)
 
     sleep(E_DELAY)
-    LCD_E.state = alto
+    #LCD_E.state = alto
+    rpi.atualiza(LCD_E, alto)
     sleep(E_PULSE)
-    LCD_E.state = baixo
+    #LCD_E.state = baixo
+    rpi.atualiza(LCD_E, baixo)
     sleep(E_DELAY)
 

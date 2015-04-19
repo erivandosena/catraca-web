@@ -4,10 +4,10 @@
 import os
 import time
 from threading import Thread
-from catraca.pinos import PinoControle
 from dispositivos import display, leitor, sensor, painel_leds
 from catraca import configuracao
 from datetime import datetime
+from catraca.pinos import ManagerPinos
 
 now = datetime.now()
 
@@ -18,26 +18,18 @@ def main():
     #display.display("Iniciando...",os.name.upper(),2,2)
     #display.display("Catraca","ON-LINE",2,2)
     #display.display(str(now.day)+"/"+str(now.month)+"/"+str(now.year), str(now.hour)+":"+str(now.minute)+":"+str(now.second),2,4)
-    multithread()
-    #print painel_leds.leds_se(False)
-    #pino = PinoControle()
-    #print pino.ler(17)['gpio']
-    #gpio = pino.gpio
-    #print pino.pins
+    #multithread()
+    #print painel_leds.acende_senta_direira()
+    pino = ManagerPinos()
+    for p in pino.pins["pin_num, pin_config in self.pins.items():"]:
+    p = pino.pins[30]
+    #print p
     #pino = pinos.pins[30]
-    #pinos = pino.gpio
-    #print pino.gpio.OUT
-    #print pino.gpio.IN
-    #print pino.gpio.PUD_UP
-    #print pino.gpio.PUD_DOWN
-    
-    #pino.configura(30, False)
-    #pino.atualiza(30, True)
-    #print pino.ler(17)['estado']
-    #time.sleep(3)
-    #pino.atualiza(30, False)
-    #print pino.ler(18)['estado']
-    #print pino.ler_todos()
+    pinos = pino.gpio
+    pinos.setup(p, pinos.OUT)
+    pinos.output(p, pinos.HIGH)
+    time.sleep(4)
+    pinos.output(p, pinos.LOW)
 
 def multithread():
     #os.system("echo 'Sistema da Catraca iniciado!' | mail -s 'Raspberry Pi B' erivandoramos@bol.com.br")

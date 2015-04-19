@@ -1,0 +1,111 @@
+#2:(NAO USADO)
+#    gpio: 2
+#    nome: SDA
+#    modo: RST
+#    estado: HIGH 
+#3:(NAO USADO)
+#    gpio: 3
+#    nome: SCL
+#    modo: RST
+#    estado: HIGH
+4:
+    gpio: 4
+    nome: LIVRE_1
+    modo: OUT
+    estado: LOW
+7:
+    gpio: 7
+    nome: LCD_RS
+    modo: OUT
+    estado: LOW
+8:
+    gpio: 8
+    nome: LCD_E
+    modo: OUT
+    estado: LOW
+9:
+    gpio: 9
+    nome: OPTICA_2
+    modo: IN
+    estado: LOW
+    resistor: PUD_DOWN
+10:
+    gpio: 10
+    nome: OPTICA_1
+    modo: IN
+    estado: LOW
+    resistor: PUD_DOWN
+11:
+    gpio: 11
+    nome: SOLENOID_1
+    modo: OUT
+    estado: LOW
+#14:(NAO USADO)
+#    gpio: 14
+#    nome: TX
+#    modo: RST
+#    estado: LOW
+#15:(NAO USADO)
+#    gpio: 15
+#    nome: RX
+#    modo: RST
+#    estado: LOW
+17:
+    gpio: 17
+    nome: RFID_D0
+    modo: IN
+    estado: LOW
+    resistor: PUD_UP
+    evento: FALLING
+18:
+    gpio: 18
+    nome: RFID_D1
+    modo: IN
+    estado: LOW
+    resistor: PUD_UP
+    evento: FALLING
+22:
+    gpio: 22
+    nome: LCD_D7
+    modo: OUT
+    estado: LOW
+23:
+    gpio: 23
+    nome: LCD_D6
+    modo: OUT
+    estado: LOW
+24:
+    gpio: 24
+    nome: LCD_D5
+    modo: OUT
+    estado: LOW
+25:
+    gpio: 25
+    nome: LCD_D4
+    modo: OUT
+    estado: LOW
+27:
+    gpio: 27
+    nome: SOLENOID_2
+    modo: OUT
+    estado: LOW
+28:
+    gpio: 28
+    nome: LED_SETA_D
+    modo: OUT
+    estado: LOW
+29:
+    gpio: 29
+    nome: LED_SETA_E
+    modo: OUT
+    estado: LOW
+30:
+    gpio: 30
+    nome: LED_X
+    modo: OUT
+    estado: LOW
+31:
+    gpio: 31
+    nome: LIVRE_2
+    modo: OUT
+    estado: LOW
