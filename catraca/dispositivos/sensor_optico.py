@@ -2,11 +2,9 @@
 # -*- coding: latin-1 -*-
 
 
-#import pingo 
 from time import sleep
-from catraca.pinos import PinoControle
-from catraca import configuracao 
-from catraca.dispositivos import display, leitor_rfid, solenoide
+from catraca.pinos import PinoControle 
+from catraca.dispositivos import display, leitor_rfid, solenoide, painel_leds
 
 
 __author__ = "Erivando Sena" 
@@ -15,20 +13,15 @@ __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production 
 
 
-#placa = configuracao.pinos_rpi()
 rpi = PinoControle()
-sensor_1 = rpi.ler(10)['gpio']#placa.pins[19]
-sensor_2 = rpi.ler(9)['gpio']#placa.pins[21]
-#sensor_1.mode = configuracao.pino_entrada()
-#sensor_2.mode = configuracao.pino_entrada()
-baixo = configuracao.pino_baixo()
-alto = configuracao.pino_alto()
+sensor_1 = rpi.ler(10)['gpio']
+sensor_2 = rpi.ler(9)['gpio']
+baixo = rpi.baixo()
+alto = rpi.alto()
 
 
 def ler_sensores():
     try:
-        print rpi.ler(sensor_1)['estado']
-        print baixo
         while True:
             #if (sensor_1.state == baixo) or (sensor_2.state == baixo):
             if (rpi.ler(sensor_1)['estado'] == baixo) or (rpi.ler(sensor_2)['estado'] == baixo):   
@@ -51,8 +44,14 @@ def ler_sensor_1():
         if rpi.ler(sensor_2)['estado'] == alto:
             solenoide.magnetiza_solenoide_2(baixo)
         solenoide.magnetiza_solenoide_1(alto)
+        painel_leds.leds_x(True)
     else:
         solenoide.magnetiza_solenoide_1(baixo)
+        painel_leds.leds_x(False)
+        while leitor_rfid.verifica_acesso():
+            painel_leds.leds_sd(True)
+        else:
+            painel_leds.leds_sd(False)
 
 def ler_sensor_2():
     print str(leitor_rfid.verifica_acesso()) + ' SENSOR 2'
@@ -60,6 +59,12 @@ def ler_sensor_2():
         if rpi.ler(sensor_1)['estado'] == alto:
             solenoide.magnetiza_solenoide_1(baixo)
         solenoide.magnetiza_solenoide_2(alto)
+        painel_leds.leds_x(True)
     else:
         solenoide.magnetiza_solenoide_2(baixo)
+        painel_leds.leds_x(False)
+        while leitor_rfid.verifica_acesso():
+            painel_leds.leds_se(True)
+        else:
+            painel_leds.leds_se(False)
 

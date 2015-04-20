@@ -4,7 +4,7 @@
 from catraca import principal 
 
 __author__ = "Erivando Sena" 
-__copyright__ = "Copyright 2015, Universidade da Integração Internacional da Lusofonia Afro-Brasileira" 
+__copyright__ = "Copyright 2015, Universidade da Integracao Internacional da Lusofonia Afro-Brasileira" 
 __email__ = "erivandoramos@unilab.edu.br" 
 __status__ = "Prototype" # Prototype | Development | Production 
 

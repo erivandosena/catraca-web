@@ -101,3 +101,31 @@ class PinoControle(PinosGPIO):
             return None
         except Exception:
             self.gpio.cleanup()
+
+    def entrada(self):
+        return self.gpio.IN
+
+    def saida(self):
+        return self.gpio.OUT
+
+    def baixo(self):
+        return self.gpio.LOW
+
+    def alto(self):
+        return self.gpio.HIGH
+
+    def desativa_avisos(self):
+        return self.gpio.setwarnings(False)
+
+    def limpa(self):
+        return self.gpio.cleanup()
+
+    def entrada_up(self, num_pino):
+        return self.gpio.setup(num_pino, self.gpio.IN, pull_up_down=self.gpio.PUD_UP)
+
+    def entrada_down(self, num_pino):
+        return self.gpio.setup(num_pino, self.gpio.IN, pull_up_down=self.gpio.PUD_DOWN)
+
+    def evento_falling(self, num_pino, obj):
+        return self.gpio.add_event_detect(num_pino, self.gpio.FALLING, callback=obj)
+

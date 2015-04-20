@@ -4,8 +4,6 @@
 
 from time import sleep
 from catraca.pinos import PinoControle
-from catraca import configuracao 
-#from catraca.dispositivos import display, leitor_rfid, solenoide
 
 
 __author__ = "Erivando Sena" 
@@ -15,7 +13,6 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 
 rpi = PinoControle()
-
 led_sd = rpi.ler(28)['gpio']
 led_se = rpi.ler(29)['gpio']
 led_x = rpi.ler(30)['gpio']
@@ -38,6 +35,5 @@ def leds_x(comando):
         return rpi.atualiza(led_x, comando)
     else:
         return rpi.atualiza(led_x, comando)
-
 
 
