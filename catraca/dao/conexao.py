@@ -23,47 +23,39 @@ class ConexaoFactory(object):
         self.__erroCon = None
         self.__factory = None
  
-    # Cria Factory para objetos
     def getConexao(self, banco):
- 
-        # Define conexão e fonte de dados
         con = None
         self.__factory = banco
- 
-        # Cria string de conexão postgres
+        # PostgreSQL
         if (banco == self.__POSTGRESQL):
             str_conexao = "\
                     dbname='catraca'\
                     user='postgres'\
                     host='localhost'\
                     password='postgres'\
-					"
+                    "
             try:
                 con = psycopg2.connect(str_conexao)
             except Exception, e:
                 self.__erroCon = str(e)
- 
-        # Cria string de conexão mysql
+        # MySQL
         if (banco == self.__MYSQL):
             str_conexao = "user='%s', password='%s', host='%s', database='%s'" % (usuario, senha, localhost, banco)
             try:
                 con = mysql.connector.connect(str_conexao)
             except Exception, e:
                 self.__erroCon = str(e)
- 
-        # Cria string de conexão sqlite
+        # SQLite
         if (banco == self.__SQLITE):
             str_conexao = "'%s'" % (os.path.join(os.path.dirname(os.path.abspath(__file__)),"banco.db"))
             try:
                 con = sqlite3.connect(str_conexao)
             except Exception, e:
                 self.__erroCon = str(e)
- 
         return con
- 
+
     def getErros(self):
         return self.__erroCon
  
-    # Retorna Factory da conexão
     def getFactory(self):
         return self.__factory

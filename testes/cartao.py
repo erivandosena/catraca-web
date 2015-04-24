@@ -10,102 +10,82 @@ __copyright__ = "Copyright 2015, Unilab"
 __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production
 
-class TesteCartao(object):
 
-    #def __init__(self, id, numero, creditos, valor, tipo):
-    def __init__(self):
-        super(TesteCartao, self).__init__()
-        #self.id = id
-        #self.numero = numero
-        #self.creditos = creditos
-        #self.valor = valor
-        #self.tipo = tipo
+def pesquisar(id):
+    cartao = Cartao()
+    pesquisar = CartaoDAO()
+ 
+    try:
+        cartao = pesquisar.busca_cartao(id)
+    except ValueError:
+        print pesquisar.getErro()
+    # Exibe dados
+    pprint.pprint(cartao.getId())
+    pprint.pprint(cartao.getNumero())
+    pprint.pprint(cartao.getCreditos())
+    pprint.pprint(cartao.getValor())
+    pprint.pprint(cartao.getTipo())
+    print '-------------------------'
+ 
+def inserir(numero,creditos,valor,tipo):
+    cartao = Cartao()
+    #cartao.setId(id)
+    cartao.setNumero(numero)
+    cartao.setCreditos(creditos)
+    cartao.setValor(valor)
+    cartao.setTipo(tipo)
 
-    def pesquisar(self):
- 
-        cartao = Cartao()
-        pesquisar = CartaoDAO()
- 
-        try:
-            cartao = pesquisar.busca_cartao(self.id)
-        except ValueError:
-            print pesquisar.getErro()
- 
-        # Exibe dados
-        pprint.pprint(0, str(cartao.getId()))
-        pprint.pprint(0, cartao.getNumero())
-        pprint.pprint(0, cartao.getCreditos())
-        pprint.pprint(0, str(cartao.getValor()))
-        pprint.pprint(0, cartao.getTipo())
- 
-    def inserir(self):
- 
-        cartao = Cartao()
+    inserir = CartaoDAO()
+    resultado = inserir.insere_cartao(cartao)
 
-        #cartao.setId(self.id)
-        cartao.setNumero(self.numero)
-        cartao.setCreditos(self.creditos)
-        cartao.setValor(self.valor)
-        cartao.setTipo(self.tipo)
+    if (resultado):
+        print "Dados inseridos com suscesso!"
+    else:
+        print "Erro:"
+        print inserir.getErro()
  
-        inserir = CartaoDAO()
- 
-        # realiza a trasferencia de objetos
-        resultado = inserir.insere_cartao(cartao)
- 
-        if (resultado):
-            print "Dados inseridos com suscesso!"
-        else:
-            print "Erro:"
-			print inserir.getErro()
- 
-    def alterar(self):
+def alterar(id,numero,creditos,valor,tipo):
+    cartao = Cartao()
+    cartao.setId(id)
+    cartao.setNumero(numero)
+    cartao.setCreditos(creditos)
+    cartao.setValor(valor)
+    cartao.setTipo(tipo)
 
-        cartao = Cartao()
- 
-        cartao.setId(self.id)
-        cartao.setNumero(self.numero)
-        cartao.setCreditos(self.creditos)
-        cartao.setValor(self.valor)
-        cartao.setTipo(self.tipo)
- 
-        alterar = CartaoDAO()
+    alterar = CartaoDAO()
+    resultado = alterar.altera_cartao(cartao)
 
-        resultado = alterar.altera_cartao(cartao)
+    if (resultado):
+        print "Dados alterados com suscesso!"
+    else:
+        print "Erro:"
+	print alterar.getErro()
+ 
+def excluir(id):
+    cartao = Cartao()
+    cartao.setId(id)
+    #cartao.setNumero(numero)
+    #cartao.setCreditos(creditos)
+    #cartao.setValor(valor)
+    #cartao.setTipo(tipo)
 
-        if (resultado):
-            print "Dados alterados com suscesso!"
-        else:
-            print "Erro:"
-			print alterar.getErro()
- 
-    def excluir(self):
- 
-        cartao = Cartao()
+    apagar = CartaoDAO()
+    resultado = apagar.exclui_cartao(cartao)
 
-        cartao.setId(self.id)
-        cartao.setNumero(self.numero)
-        cartao.setCreditos(self.creditos)
-        cartao.setValor(self.valor)
-        cartao.setTipo(self.tipo)
- 
-        apagar = CartaoDAO()
-
-        resultado = apagar.exclui_cartao(cartao)
- 
-        if (resultado):
-            print "Dados excluidos com suscesso!"
-        else:
-            print "Erro:"
-			print apagar.getErro()
+    if (resultado):
+        print "Dados excluidos com suscesso!"
+    else:
+        print "Erro:"
+	print apagar.getErro()
 	
 def main():
     print 'Iniciando os testes...'
-	#teste_cartao = TesteCartao(1, 1111111111, 19, 1.50, 2)
-    teste_cartao = TesteCartao()
-    teste_cartao.pesquisar(5)
-    #teste_cartao.inserir(1111111111, 19, 1.50, 2)
+    pesquisar(1)
+
+    inserir(9999999999, 8, 6.90, 3)
+
+    pesquisar(8)
+    #teste_cartao.pesquisar()
     #teste_cartao.alterar(3, 6666666666, 19, 1.50, 3)
     #teste_cartao.excluir(4)
-	
-	
+    

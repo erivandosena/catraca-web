@@ -10,7 +10,6 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 class Cartao(object):
 
-   # Define atributos privados
     def __init__(self):
         super(Cartao, self).__init__()
         self.__cart_id = None
@@ -19,7 +18,7 @@ class Cartao(object):
         self.__cart_vlr_credito = None
         self.__cart_tipo = None
  
-    # Define métodos Gette's e Setter's
+    #  Gette's e Setter's
     def getId(self):
         return self.__cart_id
  
@@ -48,4 +47,4 @@ class Cartao(object):
         return self.__cart_tipo
  
     def setTipo(self, tipo):
-        self.__card_tipo = tipo
+        self.__cart_tipo = tipo
