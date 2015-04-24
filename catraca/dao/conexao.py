@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 
+import os
+import psycopg2
+import mysql.connector
+import sqlite3
+
 
 __author__ = "Erivando Sena"
 __copyright__ = "Copyright 2015, Unilab"
@@ -8,12 +13,13 @@ __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production
 
 
-class ConexaoFactory():
+class ConexaoFactory(object):
 
     def __init__(self):
         super(ConexaoFactory, self).__init__()
         self.__POSTGRESQL = 1
         self.__MYSQL = 2
+        self.__SQLITE = 3
         self.__erroCon = None
         self.__factory = None
  
@@ -24,29 +30,37 @@ class ConexaoFactory():
         con = None
         self.__factory = banco
  
-        # Cria string de conexãopostgres
+        # Cria string de conexão postgres
         if (banco == self.__POSTGRESQL):
-            sconexao = "user/pass@localhost/XE"
+            str_conexao = "\
+                    dbname='catraca'\
+                    user='postgres'\
+                    host='localhost'\
+                    password='postgres'\
+					"
             try:
-                con = cx_Oracle.connect(sconexao)
+                con = psycopg2.connect(str_conexao)
             except Exception, e:
                 self.__erroCon = str(e)
  
-        # Cria string de conexãomysql
+        # Cria string de conexão mysql
         if (banco == self.__MYSQL):
-            sconexao = "DATABASE=DEVA" + \
-                       ";HOSTNAME=localhost;PORT=50000;PROTOCOL=TCPIP;" + \
-                       "UID=user;" + \
-                       "PWD=pass"
+            str_conexao = "user='%s', password='%s', host='%s', database='%s'" % (usuario, senha, localhost, banco)
             try:
-                self.__IBMDriver = ibm_db
-                con = ibm_db.connect(sconexao, "", "")
+                con = mysql.connector.connect(str_conexao)
+            except Exception, e:
+                self.__erroCon = str(e)
+ 
+        # Cria string de conexão sqlite
+        if (banco == self.__SQLITE):
+            str_conexao = "'%s'" % (os.path.join(os.path.dirname(os.path.abspath(__file__)),"banco.db"))
+            try:
+                con = sqlite3.connect(str_conexao)
             except Exception, e:
                 self.__erroCon = str(e)
  
         return con
  
-    # Retorna Erros
     def getErros(self):
         return self.__erroCon
  

@@ -8,7 +8,7 @@ __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production
 
 
-class Cartao():
+class Cartao(object):
 
    # Define atributos privados
     def __init__(self):
