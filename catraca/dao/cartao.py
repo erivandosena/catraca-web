@@ -17,6 +17,7 @@ class Cartao(object):
         self.__cart_qtd_creditos = None
         self.__cart_vlr_credito = None
         self.__cart_tipo = None
+        self.__cart_dt_acesso = None
  
     #  Gette's e Setter's
     def getId(self):
@@ -48,3 +49,9 @@ class Cartao(object):
  
     def setTipo(self, tipo):
         self.__cart_tipo = tipo
+
+    def getData(self):
+        return self.__cart_dt_acesso
+
+    def setData(self, data):
+        self.__cart_dt_acesso = data

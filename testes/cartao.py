@@ -4,6 +4,8 @@
 import pprint
 from catraca.dao.cartao import Cartao
 from catraca.dao.cartaodao import CartaoDAO
+from datetime import datetime
+
 
 __author__ = "Erivando Sena"
 __copyright__ = "Copyright 2015, Unilab"
@@ -25,15 +27,16 @@ def pesquisar(id):
     pprint.pprint(cartao.getCreditos())
     pprint.pprint(cartao.getValor())
     pprint.pprint(cartao.getTipo())
+    pprint.pprint(cartao.getData())
     print '-------------------------'
  
-def inserir(numero,creditos,valor,tipo):
+def inserir(numero,creditos,valor,tipo,data):
     cartao = Cartao()
-    #cartao.setId(id)
     cartao.setNumero(numero)
     cartao.setCreditos(creditos)
     cartao.setValor(valor)
     cartao.setTipo(tipo)
+    cartao.setData(data)
 
     inserir = CartaoDAO()
     resultado = inserir.insere_cartao(cartao)
@@ -44,13 +47,14 @@ def inserir(numero,creditos,valor,tipo):
         print "Erro:"
         print inserir.getErro()
  
-def alterar(id,numero,creditos,valor,tipo):
+def alterar(id,numero,creditos,valor,tipo,data):
     cartao = Cartao()
     cartao.setId(id)
     cartao.setNumero(numero)
     cartao.setCreditos(creditos)
     cartao.setValor(valor)
     cartao.setTipo(tipo)
+    cartao.setData(data)
 
     alterar = CartaoDAO()
     resultado = alterar.altera_cartao(cartao)
@@ -64,10 +68,6 @@ def alterar(id,numero,creditos,valor,tipo):
 def excluir(id):
     cartao = Cartao()
     cartao.setId(id)
-    #cartao.setNumero(numero)
-    #cartao.setCreditos(creditos)
-    #cartao.setValor(valor)
-    #cartao.setTipo(tipo)
 
     apagar = CartaoDAO()
     resultado = apagar.exclui_cartao(cartao)
@@ -80,12 +80,16 @@ def excluir(id):
 	
 def main():
     print 'Iniciando os testes...'
-    pesquisar(1)
-
-    inserir(9999999999, 8, 6.90, 3)
-
-    pesquisar(8)
-    #teste_cartao.pesquisar()
-    #teste_cartao.alterar(3, 6666666666, 19, 1.50, 3)
-    #teste_cartao.excluir(4)
-    
+    #pesquisar(6666666666)
+    cartao = CartaoDAO()
+    #inserir(9999999999, 4, 6.90, 3)
+    cart = cartao.busca_cartao(6666666666)
+    pesquisar(cart.getNumero())
+    #cart.setNumero(6666666666)
+    cart.setTipo(3)
+    data_hora = datetime.now().strftime("'%Y-%m-%d %H:%M:%S'")
+    cart.setData(data_hora)
+    print data_hora
+    print cartao.altera_cartao(cart)
+    #excluir(9)
+    pesquisar(cart.getNumero())
