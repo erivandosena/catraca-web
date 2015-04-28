@@ -79,17 +79,24 @@ def excluir(id):
 	print apagar.getErro()
 	
 def main():
-    print 'Iniciando os testes...'
-    #pesquisar(6666666666)
-    cartao = CartaoDAO()
-    #inserir(9999999999, 4, 6.90, 3)
-    cart = cartao.busca_cartao(6666666666)
-    pesquisar(cart.getNumero())
-    #cart.setNumero(6666666666)
-    cart.setTipo(3)
-    data_hora = datetime.now().strftime("'%Y-%m-%d %H:%M:%S'")
-    cart.setData(data_hora)
-    print data_hora
-    print cartao.altera_cartao(cart)
-    #excluir(9)
-    pesquisar(cart.getNumero())
+    print 'Iniciando os testes cartao...'
+    """
+    cartao_dao = CartaoDAO()
+    cartao = cartao_dao.busca_cartao(1212121212)
+    cartao_dao.busca_cartao(cartao.getNumero())
+    #cartao.setNumero(1212121212)
+    #cartao.setCreditos(44)
+    #cartao.setValor(4.00)
+    #cartao.setTipo(2)
+    cartao.setData(datetime.now().strftime("'%Y-%m-%d %H:%M:%S'"))
+    print cartao_dao.altera_cartao(cartao)
+    c =  cartao_dao.busca_cartao(cartao.getNumero())
+    print c.getId()
+    print c.getNumero()
+    print c.getCreditos()
+    import locale
+    print locale.setlocale(locale.LC_ALL, 'pt_BR')
+    print locale.currency(c.getValor()).format()
+    print "R$ " + str(c.getValor()).replace(".",",")
+    print c.getData().strftime("%d/%m/%Y %H:%M:%S")
+    """

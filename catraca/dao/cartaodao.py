@@ -85,8 +85,7 @@ class CartaoDAO(object):
              "cart_tipo = " + str(cartao.getTipo()) + ", " +\
              "cart_dt_acesso = " + str(cartao.getData()) +\
              " WHERE "\
-             "cart_id = " + str(cartao.getId()) 
-       print sql
+             "cart_id = " + str(cartao.getId())
        try:
            cursor=self.__con.cursor()
            cursor.execute(sql)
@@ -94,7 +93,6 @@ class CartaoDAO(object):
            return True
        except Exception, e:
            self.__erro = str(e)
-           print e
            return False
     
     # Delete
