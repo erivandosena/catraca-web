@@ -19,24 +19,23 @@ class Cartao(object):
         self.__cart_tipo = None
         self.__cart_dt_acesso = None
  
-    #  Gette's e Setter's
     def getId(self):
         return self.__cart_id
  
-    def setId(self, id):
-        self.__cart_id = id
+    def setId(self, valor):
+        self.__cart_id = valor
  
     def getNumero(self):
         return self.__cart_numero
  
-    def setNumero(self, numero):
-        self.__cart_numero = numero
+    def setNumero(self, valor):
+        self.__cart_numero = valor
  
     def getCreditos(self):
         return self.__cart_qtd_creditos
  
-    def setCreditos(self, creditos):
-        self.__cart_qtd_creditos = creditos
+    def setCreditos(self, valor):
+        self.__cart_qtd_creditos = valor
  
     def getValor(self):
         return self.__cart_vlr_credito
@@ -47,11 +46,11 @@ class Cartao(object):
     def getTipo(self):
         return self.__cart_tipo
  
-    def setTipo(self, tipo):
-        self.__cart_tipo = tipo
+    def setTipo(self, valor):
+        self.__cart_tipo = valor
 
     def getData(self):
         return self.__cart_dt_acesso
 
-    def setData(self, data):
-        self.__cart_dt_acesso = data
+    def setData(self, valor):
+        self.__cart_dt_acesso = valor

@@ -20,16 +20,15 @@ class CartaoDAO(object):
         self.__factory = None
 
         try:
-            # Em .getConexao(?) use: 1 p/(PostgreSQL) 2 p/(MySQL) 3 p/(SQLite)
             conexao = ConexaoFactory()
-            self.__con = conexao.getConexao(1)
+            self.__con = conexao.getConexao(1) #use 1=PostgreSQL 2=MySQL 3=SQLite
             self.__factory = conexao.getFactory()
         except Exception, e:
             self.__erro = str(e)
  
     # Select por id ou numero do cartao
     def busca_cartao(self, id):
-        cartao = Cartao()
+        obj = Cartao()
         sql = "SELECT cart_id, "\
               "cart_numero, "\
               "cart_qtd_creditos, "\
@@ -44,29 +43,29 @@ class CartaoDAO(object):
             cursor.execute(sql)
             dados = cursor.fetchone()
             # Carrega objeto
-            cartao.setId(dados[0])
-            cartao.setNumero(dados[1])
-            cartao.setCreditos(dados[2])
-            cartao.setValor(dados[3])
-            cartao.setTipo(dados[4])
-            cartao.setData(dados[5])        
+            obj.setId(dados[0])
+            obj.setNumero(dados[1])
+            obj.setCreditos(dados[2])
+            obj.setValor(dados[3])
+            obj.setTipo(dados[4])
+            obj.setData(dados[5])        
         except Exception, e:
             self.__erro = str(e)
-        return cartao
+        return obj
  
     # Insert
-    def insere_cartao(self, cartao):
+    def insere_cartao(self, obj):
         sql = "INSERT INTO cartao("\
               "cart_numero, "\
               "cart_qtd_creditos, "\
               "cart_vlr_credito, "\
               "cart_tipo, "\
               "cart_dt_acesso) VALUES (" +\
-              str(cartao.getNumero()) + ", " +\
-              str(cartao.getCreditos()) + ", " +\
-              str(cartao.getValor()) + ", " +\
-              str(cartao.getTipo()) + ", " +\
-              str(cartao.getData()) + ")"
+              str(obj.getNumero()) + ", " +\
+              str(obj.getCreditos()) + ", " +\
+              str(obj.getValor()) + ", " +\
+              str(obj.getTipo()) + ", " +\
+              str(obj.getData()) + ")"
         try:
             cursor=self.__con.cursor()
             cursor.execute(sql)
@@ -77,15 +76,15 @@ class CartaoDAO(object):
             return False
 
     # Update
-    def altera_cartao(self, cartao):
+    def altera_cartao(self, obj):
        sql = "UPDATE cartao SET " +\
-             "cart_numero = " + str(cartao.getNumero()) + ", " +\
-             "cart_qtd_creditos = " + str(cartao.getCreditos()) + ", " +\
-             "cart_vlr_credito = " + str(cartao.getValor()) + ", " +\
-             "cart_tipo = " + str(cartao.getTipo()) + ", " +\
-             "cart_dt_acesso = " + str(cartao.getData()) +\
+             "cart_numero = " + str(obj.getNumero()) + ", " +\
+             "cart_qtd_creditos = " + str(obj.getCreditos()) + ", " +\
+             "cart_vlr_credito = " + str(obj.getValor()) + ", " +\
+             "cart_tipo = " + str(obj.getTipo()) + ", " +\
+             "cart_dt_acesso = " + str(obj.getData()) +\
              " WHERE "\
-             "cart_id = " + str(cartao.getId())
+             "cart_id = " + str(obj.getId())
        try:
            cursor=self.__con.cursor()
            cursor.execute(sql)
@@ -96,8 +95,8 @@ class CartaoDAO(object):
            return False
     
     # Delete
-    def exclui_cartao(self, cartao):
-        sql = "DELETE FROM cartao WHERE cart_id = " + str(cartao.getId())
+    def exclui_cartao(self, obj):
+        sql = "DELETE FROM cartao WHERE cart_id = " + str(obj.getId())
         try:
             cursor=self.__con.cursor()
             cursor.execute(sql)

@@ -21,17 +21,18 @@ locale.setlocale(locale.LC_ALL, 'pt_BR')
 
 def main():
     print 'Iniciando os testes raspberry...'
-    raspberry_dao = RaspberryDAO()
-
+    """
+    # teste (insert)
     raspberry = Raspberry()
-    
-    raspberry = raspberry_dao.busca(41)
-
-    raspberry.setIp("10.5.53")
-    raspberry.setLocal("RU Liade")
+    # teste (update)
+    raspberry_dao = RaspberryDAO()
+    # teste (select)
+    ##raspberry = raspberry_dao.busca(42)
+    raspberry.setIp("10.5.2.253")
+    raspberry.setLocal("RU Liberdade")
     raspberry.setTempo(10)
-    raspberry.setMensagem("SEJA BINDO!")
-    raspberry.setSentido(1)
+    raspberry.setMensagem("SEJA BEM-VINDO!")
+    raspberry.setSentido(2)
 
     if raspberry.getId():
         if raspberry_dao.altera(raspberry):
@@ -47,11 +48,15 @@ def main():
         else:
             print "Erro ao inserir:"
             print raspberry_dao.getErro()
-    
-    print "Delay..."
-    #time.sleep(10)
+    """
+    """
+    # teste excluir
+    raspberry_dao = RaspberryDAO()
     raspberry = raspberry_dao.busca(41)
     print raspberry.getId()
     print raspberry.getIp()
     if raspberry_dao.exclui(raspberry):
         print "Excluido com sucesso!"
+    else:
+        print aspberry_dao.getErro()
+    """

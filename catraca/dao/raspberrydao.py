@@ -20,14 +20,12 @@ class RaspberryDAO(object):
         self.__factory = None
 
         try:
-            # Em .getConexao(?) use: 1 p/(PostgreSQL) 2 p/(MySQL) 3 p/(SQLite)
             conexao = ConexaoFactory()
-            self.__con = conexao.getConexao(1)
+            self.__con = conexao.getConexao(1) # 1 para PostgreSQL
             self.__factory = conexao.getFactory()
         except Exception, e:
             self.__erro = str(e)
 
-    # Select por id ou IP
     def busca(self, id):
         obj = Raspberry()
         sql = "SELECT rasp_id, "\

@@ -10,4 +10,4 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 if __name__ == '__main__':
     principal.main()
-    #app.run(host='10.5.2.253',port=8081,debug=True)
+

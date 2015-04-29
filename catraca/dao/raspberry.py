@@ -19,7 +19,6 @@ class Raspberry(object):
         self.__rasp_mensagem = None
         self.__rasp_sentido_giro = None
 
-    #  Gette's e Setter's
     def getId(self):
         return self.__rasp_id
 
