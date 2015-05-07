@@ -26,8 +26,8 @@ class CartaoDAO(object):
         except Exception, e:
             self.__erro = str(e)
  
-    # Select por id ou numero do cartao
-    def busca_cartao(self, id):
+    # Select por codigo ou id do cartao
+    def busca_id(self, id):
         obj = Cartao()
         sql = "SELECT cart_id, "\
               "cart_numero, "\
@@ -52,9 +52,9 @@ class CartaoDAO(object):
         except Exception, e:
             self.__erro = str(e)
         return obj
- 
+
     # Insert
-    def insere_cartao(self, obj):
+    def insere(self, obj):
         sql = "INSERT INTO cartao("\
               "cart_numero, "\
               "cart_qtd_creditos, "\
@@ -76,7 +76,7 @@ class CartaoDAO(object):
             return False
 
     # Update
-    def altera_cartao(self, obj):
+    def altera(self, obj):
        sql = "UPDATE cartao SET " +\
              "cart_numero = " + str(obj.getNumero()) + ", " +\
              "cart_qtd_creditos = " + str(obj.getCreditos()) + ", " +\
@@ -95,7 +95,7 @@ class CartaoDAO(object):
            return False
     
     # Delete
-    def exclui_cartao(self, obj):
+    def exclui(self, obj):
         sql = "DELETE FROM cartao WHERE cart_id = " + str(obj.getId())
         try:
             cursor=self.__con.cursor()

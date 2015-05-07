@@ -13,21 +13,23 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 
 rpi = PinoControle()
-solenoide_1 = rpi.ler(11)['gpio']
-solenoide_2 = rpi.ler(27)['gpio']
+solenoide_1 = rpi.ler(19)['gpio']
+solenoide_2 = rpi.ler(26)['gpio']
 baixo = rpi.baixo()
 alto = rpi.alto()
 
+def ativa_solenoide(solenoide,estado):
+    if solenoide == 1:
+        if estado:
+            rpi.atualiza(solenoide_1, alto)
+            rpi.atualiza(solenoide_2, baixo)
+        else:
+            rpi.atualiza(solenoide_1, baixo)
+    elif solenoide == 2:
+        if estado:
+            rpi.atualiza(solenoide_2, alto)
+            rpi.atualiza(solenoide_1, baixo)
+        else:
+            rpi.atualiza(solenoide_2, baixo)
 
-def magnetiza_solenoide_1(estado):
-    if estado == alto:
-        rpi.atualiza(solenoide_1, alto)
-    else:
-        rpi.atualiza(solenoide_1, baixo)
-
-def magnetiza_solenoide_2(estado):
-    if estado == alto:
-        rpi.atualiza(solenoide_2, alto)
-    else:
-        rpi.atualiza(solenoide_2, baixo)
 

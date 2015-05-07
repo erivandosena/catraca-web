@@ -63,14 +63,22 @@ class PinoControle(PinosGPIO):
             self.pins[pino_numero]
             self.gpio.output(pino_numero, valor)
             estado = self.gpio.input(pino_numero)
-            if estado:
-                return True
-            else:
-                return False
+            return estado
         except KeyError:
             return None
         except Exception:
             self.gpio.cleanup()
+            
+    def estado(self, numero):
+        pino_numero = int(numero)
+        try:
+            estado = self.gpio.input(pino_numero)
+            return estado
+        except KeyError:
+            return None
+        except Exception:
+            self.gpio.cleanup()
+
 
     def ler(self, numero):
         pino_numero = int(numero)

@@ -1,10 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 
-
 from threading import Thread
 from catraca.dispositivos import leitor_rfid
-
 
 __author__ = "Erivando Sena" 
 __copyright__ = "Copyright 2015, Unilab" 
@@ -18,5 +16,5 @@ class Leitor(Thread):
         self.nome = nome
 
     def run(self):
+        #leitor_rfid.cartao()
         leitor_rfid.leitor()
-

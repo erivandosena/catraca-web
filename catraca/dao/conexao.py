@@ -29,7 +29,7 @@ class ConexaoFactory(object):
         # PostgreSQL
         if (banco == self.__POSTGRESQL):
             str_conexao = "\
-                    dbname='catraca'\
+                    dbname='raspberry'\
                     user='postgres'\
                     host='localhost'\
                     password='postgres'\

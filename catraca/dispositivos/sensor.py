@@ -18,5 +18,6 @@ class Sensor(Thread):
         self.nome = nome
 
     def run(self):
-        sensor_optico.ler_sensores()
+        #sensor_optico.ler_sensores()
+        pass
 
