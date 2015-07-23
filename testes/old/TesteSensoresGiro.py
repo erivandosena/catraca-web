@@ -129,15 +129,23 @@ def registra_giro(tempo):
 def main():
     """Bloco principal do programa.
     """
+    solenoide.ativa_solenoide(1,1)
+    painel_leds.leds_se(1)
+    painel_leds.leds_x(1)
     giro = SensorOptico()
-    if giro.registra_giro(6000):
-        print 'GIROU A CATRACA'
-    else:
-        print 'NÃO GIROU A CATRACA'
-    
-    ##while True:
-    #    print ler_sensor(1)
-    #    print ler_sensor(2)
+    while True:
+        if giro.registra_giro(10000):
+            print 'GIROU A CATRACA'
+            solenoide.ativa_solenoide(1,0)
+            painel_leds.leds_se(0)
+            painel_leds.leds_x(0)
+            break
+        else:
+            print 'NÃO GIROU A CATRACA'
+            solenoide.ativa_solenoide(1,0)
+            painel_leds.leds_se(0)
+            painel_leds.leds_x(0)
+            break
 
 
 if __name__ == '__main__':

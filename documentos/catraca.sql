@@ -1,3 +1,4 @@
+/*
 CREATE DATABASE raspberry
   WITH OWNER = postgres
        ENCODING = 'UTF8'
@@ -5,6 +6,11 @@ CREATE DATABASE raspberry
        LC_COLLATE = 'en_GB.UTF-8'
        LC_CTYPE = 'en_GB.UTF-8'
        CONNECTION LIMIT = -1;
+*/
+
+CREATE DATABASE raspberry
+  WITH ENCODING='UTF8'
+       CONNECTION LIMIT=-1;
 
 CREATE TABLE cartao
 (

@@ -13,6 +13,7 @@ __status__ = "Prototype" # Prototype | Development | Production
 rpi = PinoControle()
 led_sd = rpi.ler(11)['gpio']
 led_se = rpi.ler(22)['gpio']
+led_x = rpi.ler(18)['gpio']
 
 
 
@@ -28,13 +29,12 @@ def leds_se(comando):
     else:
         return rpi.atualiza(led_se, comando)
 
-"""
 def leds_x(comando):
     if comando:
         return rpi.atualiza(led_x, comando)
     else:
         return rpi.atualiza(led_x, comando)
-"""
+
 
 
 

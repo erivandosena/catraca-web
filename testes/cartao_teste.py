@@ -14,7 +14,7 @@ __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production
 
 
-locale.setlocale(locale.LC_ALL, 'pt_BR')
+locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
 def main():
@@ -26,10 +26,10 @@ def main():
     cartao_dao = CartaoDAO()
     # teste (select)
     ##cartao = cartao_dao.busca(42)
-    cartao.setNumero(3995148318)
-    cartao.setCreditos(10)
-    cartao.setValor(4.00)
-    cartao.setTipo(5) # 1=Estudante, 2=Docente, 3=Tecnico, 4=Terceirizado, 5=Visitante, 6=Administrador.
+    cartao.setNumero(3995121086)
+    cartao.setCreditos(0)
+    cartao.setValor(1.60)
+    cartao.setTipo(3) # 1=Estudante, 2=Docente, 3=Tecnico, 4=Terceirizado, 5=Visitante, 6=Administrador.
     cartao.setData(datetime.now().strftime("'%Y-%m-%d %H:%M:%S'"))
 
     if cartao.getId():

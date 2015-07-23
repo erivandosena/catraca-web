@@ -3,7 +3,7 @@
 
 import os
 import psycopg2
-import mysql.connector
+#import mysql.connector
 import sqlite3
 
 
@@ -42,7 +42,8 @@ class ConexaoFactory(object):
         if (banco == self.__MYSQL):
             str_conexao = "user='%s', password='%s', host='%s', database='%s'" % (usuario, senha, localhost, banco)
             try:
-                con = mysql.connector.connect(str_conexao)
+                #con = mysql.connector.connect(str_conexao)
+                pass
             except Exception, e:
                 self.__erroCon = str(e)
         # SQLite

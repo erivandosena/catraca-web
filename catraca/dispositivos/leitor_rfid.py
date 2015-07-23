@@ -28,7 +28,7 @@ alto = rpi.alto()
 bits = ''
 numero_cartao = ''
 conta_acesso = 0
-locale.setlocale(locale.LC_ALL, 'pt_BR')
+locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 def zero(self):
     global bits
@@ -38,7 +38,7 @@ def um(self):
     global bits
     bits = bits + '1' 
 
-def leitor():
+def ler_cartao():
     display.mensagem("  Bem-vindo!\nAPROXIME CARTAO",0,True,False)
     global bits
     global numero_cartao
@@ -50,7 +50,7 @@ def leitor():
             if len(bits) == 32:
                 sleep(0.1)
                 numero_cartao = int(str(bits), 2)
-                ler_cartao(numero_cartao)
+                valida_cartao(numero_cartao)
                 bits = ''
             elif (len(bits) > 0) or (len(bits) > 32):
                 bits = ''
@@ -64,10 +64,10 @@ def leitor():
         print 'Leitor RFID finalizado'
 
 
-def busca_cartao(id):
-    cartao_dao = CartaoDAO()
-    cartao = cartao_dao.busca(id)
-    return cartao
+#def busca_cartao(id):
+#    cartao_dao = CartaoDAO()
+#    cartao = cartao_dao.busca(id)
+#    return cartao
 
 def busca_id_cartao(id):
     cartao_dao = CartaoDAO()
@@ -83,19 +83,10 @@ def cartao():
     else:
         ler_cartao(id)
 
-def ler_cartao(id_cartao):
-    global conta_acesso
 
+def valida_cartao(id_cartao):
     cartao = busca_id_cartao(id_cartao)
     creditos = cartao.getCreditos()
-    
-    #print cartao
-    
-    #print cartao.getNumero()
-    
-    #print id_cartao
-    
-    #print conta_acesso
     
     if (cartao == None) or (len(str(id_cartao)) <> 10):
         display.mensagem("  Por favor...\nREPITA OPERACAO",0,True,False)
@@ -121,11 +112,11 @@ def ler_cartao(id_cartao):
             print 'Cartao Valido! ID:'+ str(id_cartao)
             display.mensagem(" ID: "+str(id_cartao)+"\n SALDO "+str(locale.currency(cartao.getValor()*creditos)).replace(".",","),1,False,False)
             display.mensagem("     ACESSO\n    LIBERADO!",1,False,False)
-            solenoide.ativa_solenoide(1,alto)
             
-            #sensor_optico = SensorOptico()
-            
-            #print sensor_optico.registra_giro(6000)
+            solenoide.ativa_solenoide(1,1)
+            painel_leds.leds_se(1)
+            painel_leds.leds_x(1)
+
             
             """
             while sensor_optico.ler_sensor(2):
@@ -138,32 +129,28 @@ def ler_cartao(id_cartao):
                 print 'Desativa Solenoide 2'
             """    
             giro = SensorOptico()
-            if giro.registra_giro(6000):
-                print 'GIROU A CATRACA'
-            else:
-                print 'NÃO GIROU A CATRACA' 
-             
-            solenoide.ativa_solenoide(1,baixo)
-                
-            #if sensor_optico.registra_giro(6000):
-            #    print 'PASSOU NA CATRACA'
-            #    solenoide.ativa_solenoide(1,baixo)
-            #else:
-            #    print 'NÃO PASSOU NA CATRACA, TEMPO EXPIRADO'
-            #    solenoide.ativa_solenoide(1,baixo)
+            while True:
+                if giro.registra_giro(6000):
+                    print'GIROU A CATRACA'
+                    solenoide.ativa_solenoide(1,baixo)
+                    painel_leds.leds_se(0)
+                    painel_leds.leds_x(0)
+                    break
+                else:
+                    print 'NÃO GIROU A CATRACA' 
+                    solenoide.ativa_solenoide(1,baixo)
+                    painel_leds.leds_se(0)
+                    painel_leds.leds_x(0)
+                    break
             
-
             #saldo_creditos = creditos - CONTA_ACESSO
-            #cartao = Cartao()
-            #cartao_dao = CartaoDAO()
+            cartao = Cartao()
+            cartao_dao = CartaoDAO()
             #cartao.setCreditos(saldo_creditos)
             #if cartao_dao.altera(cartao):
             #    print "Alterado com sucesso!"
             #else:
             #    print "Erro ao alterar:"
             #    print cartao_dao.getErro()
-            
-            
             display.mensagem("   Bem-vindo!\nAPROXIME CARTAO",0,True,False)
             return None
-

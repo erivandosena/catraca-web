@@ -5,44 +5,37 @@ import os
 import socket
 from datetime import datetime
 from threading import Thread
-#from catraca.pinos import PinoControle
 from dispositivos import display
 from dispositivos import leitor
-#from dispositivos import sensor
+from catraca.logs import Logs
 
+__author__ = "Erivando Sena"
+__copyright__ = "Copyright 2015, Unilab"
+__email__ = "erivandoramos@unilab.edu.br"
+__status__ = "Prototype" # Prototype | Development | Production
 
-
-now = datetime.now()
 
 def main():
-    print 'Iniciando...'
-    print 'Sistema Operacional: '+ os.name
+    now = datetime.now()
+    print 'Processando...'
+    Logs().logger.debug('Iniciando aplicacao...')
     display.mensagem("Iniciando...\n"+os.name.upper(),1,False,False)
-    
     display.mensagem(datetime.now().strftime('%d de %B %Y \n    %H:%M:%S'),2,False,False)
     #display.mensagem(str(now.day)+"/"+str(now.month)+"/"+str(now.year)+"\n"+str(now.hour)+":"+str(now.minute)+":"+str(now.second),2,False,False)
-    
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(('google.com', 0))
+    s.connect(('unilab.edu.br', 0))
     ip = ' IP %s' % ( s.getsockname()[0] )
     display.mensagem("Catraca 1 ONLINE\n"+ip,2,False,False)
-
-    
     multithread()
 
 def multithread():
     #os.system("echo 'Sistema da Catraca iniciado!' | mail -s 'Raspberry Pi B' erivandoramos@bol.com.br")
     try:
-        #ts = sensor.Sensor("Sensores")
-        tl = leitor.Leitor("Leitor")
+        tl = leitor.Leitor()
         tl.start()
-        print tl.name + " iniciado"
-        #ts.start()
-        #print ts.name + " iniciado"
-
     except (SystemExit, KeyboardInterrupt):
-        print '\nInterrompido manualmente'
-    #except Exception:
-    #    print '\nErro geral [Multithread].'
+        raise
+    except Exception:
+        Logs().logger.error('Erro executando thread', exc_info=True)
     finally:
-        print 'Threads finalizadas'
+        pass

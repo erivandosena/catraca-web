@@ -11,10 +11,9 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 
 class Leitor(Thread):
-    def __init__(self, nome):
+    def __init__(self):
         super(Leitor, self).__init__()
-        self.nome = nome
 
     def run(self):
         #leitor_rfid.cartao()
-        leitor_rfid.leitor()
+        leitor_rfid.ler_cartao()

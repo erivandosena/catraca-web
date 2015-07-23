@@ -5,6 +5,7 @@
 from time import sleep
 import Adafruit_CharLCD as LCD
 from catraca.pinos import PinoControle
+from catraca.logs import Logs
 
 
 __author__ = "Erivando Sena"
@@ -74,6 +75,7 @@ def mensagem(texto, duracao, cursor, scroll):
     finally:
         #lcd.clear()
         print 'Display finalizado'
+        #Logs().logger.debug('Display finalizado')
 
 
 def lcd_scroll(texto):

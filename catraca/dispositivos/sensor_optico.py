@@ -43,18 +43,14 @@ class SensorOptico(object):
     @classmethod
     def ler_sensor(self, sensor):
         if sensor == 1:
-            #print str(sensor) + ' 1 = '+ str(self.rpi.estado(self.sensor_1))
             return self.rpi.estado(self.sensor_1)
         elif sensor == 2:
-            #print str(sensor) + ' 2 = '+ str(self.rpi.estado(self.sensor_2))
             return self.rpi.estado(self.sensor_2)
     
     @classmethod
     def registra_giro(self, tempo):
         codigo_giro = ''
         # cronômetro regressivo para o giro
-        
-            
         for segundo in range(tempo, -1, -1):
             sleep(0.001)
             print str(segundo / 1000) + ' segundos restantes p/ o giro'
@@ -95,5 +91,4 @@ class SensorOptico(object):
                     codigo_giro = str(self.ler_sensor(2)) + '' + str(self.ler_sensor(1))
                     return True
                     #break
-                
         return False

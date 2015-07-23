@@ -113,10 +113,10 @@
 
 18: 
     gpio: 18
-    nome: PCM_CLK
-    modo: IN
+    nome: LED_X #PCM_CLK
+    modo: OUT
     estado: LOW
-    resistor: PUD_UP
+    #resistor: PUD_UP
 
 19: 
     gpio: 19
