@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
 
-from catraca import principal 
 from catraca.logs import Logs
 from catraca.painel import Painel
 

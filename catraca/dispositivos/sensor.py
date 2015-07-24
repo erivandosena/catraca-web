@@ -3,7 +3,7 @@
 
 
 from threading import Thread
-from catraca.dispositivos import sensor_optico
+from catraca.dispositivos.sensoroptico import Sensor
 
 
 __author__ = "Erivando Sena" 
@@ -18,6 +18,5 @@ class Sensor(Thread):
         self.nome = nome
 
     def run(self):
-        #sensor_optico.ler_sensores()
         pass
 

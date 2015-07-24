@@ -88,7 +88,7 @@ class CartaoDAO(object):
        try:
            cursor=self.__con.cursor()
            cursor.execute(sql)
-           self.__con.commit()
+           #self.__con.commit()
            return True
        except Exception, e:
            self.__erro = str(e)
@@ -108,3 +108,9 @@ class CartaoDAO(object):
 
     def getErro(self):
         return self.__erro
+    
+    def getCommit(self):
+        return self.__con.commit()
+    
+    def getRollback(self):
+        return self.__con.rollback()

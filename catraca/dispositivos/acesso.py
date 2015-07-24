@@ -1,17 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 
-import locale
-from time import sleep
 from threading import Thread
 from catraca.logs import Logs
-from catraca.pinos import PinoControle
-from catraca.dispositivos import display
-from catraca.dispositivos import painel_leds
-from catraca.dao.cartaodao import Cartao
-from catraca.dao.cartaodao import CartaoDAO
-from catraca.dispositivos.sensor_optico import SensorOptico
-from catraca.dispositivos import solenoide
 from catraca.dispositivos.leitorcartao import LeitorCartao
 
 __author__ = "Erivando Sena" 
@@ -21,6 +12,9 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 
 class Acesso(Thread):
+    
+    log = Logs()
+    
     def __init__(self):
         super(Acesso, self).__init__()
 
@@ -33,7 +27,7 @@ class Acesso(Thread):
         except SystemExit, KeyboardInterrupt:
             raise
         except Exception:
-            Logs().logger.error('Erro iniciando leitura do cartao.', exc_info=True)
+            self.log.logger.error('Erro iniciando leitura do cartao.', exc_info=True)
         finally:
             pass
             

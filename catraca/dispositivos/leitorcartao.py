@@ -8,10 +8,12 @@ from catraca.logs import Logs
 from catraca.pinos import PinoControle
 from catraca.dao.cartaodao import Cartao
 from catraca.dao.cartaodao import CartaoDAO
-from catraca.dispositivos.sensor_optico import SensorOptico
-from catraca.dispositivos import display
-from catraca.dispositivos import painel_leds
-from catraca.dispositivos import solenoide
+from catraca.dispositivos.display import Display
+from catraca.dispositivos.solenoide import Solenoide
+from catraca.dispositivos.pictograma import Pictograma
+from catraca.dispositivos.sensoroptico import SensorOptico
+
+
 
 __author__ = "Erivando Sena" 
 __copyright__ = "Copyright 2015, Unilab" 
@@ -21,6 +23,14 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 class LeitorCartao(object):
     
+    log = Logs()
+    display = Display()
+    solenoide = Solenoide()
+    cartao_dao = CartaoDAO()
+    pictograma = Pictograma()
+    rpi = PinoControle()
+    D0 = rpi.ler(17)['gpio']
+    D1 = rpi.ler(27)['gpio']
     locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
     bits = ''
     ID = ''
@@ -29,21 +39,16 @@ class LeitorCartao(object):
         super(LeitorCartao, self).__init__()
       
     def zero(self, obj):
-        #global bits
         self.bits = self.bits + '0'
     
     def um(self, obj):
-        #global bits
         self.bits = self.bits + '1'
 
     def ler(self):
-        display.mensagem("  Bem-vindo!\nAPROXIME CARTAO",0,True,False)
+        self.display.mensagem("  Bem-vindo!\nAPROXIME CARTAO",0,True,False)
         try:
-            rpi = PinoControle()
-            D0 = rpi.ler(17)['gpio']
-            D1 = rpi.ler(27)['gpio']
-            rpi.evento_falling(D0, self.zero)
-            rpi.evento_falling(D1, self.um)
+            self.rpi.evento_falling(self.D0, self.zero)
+            self.rpi.evento_falling(self.D1, self.um)
             while True:
                 sleep(0.5)
                 if len(self.bits) == 32:
@@ -52,15 +57,15 @@ class LeitorCartao(object):
                     self.bits = ''
                     self.valida_cartao(ID)
                 elif (len(self.bits) > 0) or (len(self.bits) > 32):
+                    self.log.logger.error('Erro obtendo binario: '+str(self.bits))
                     self.bits = ''
-                    display.mensagem("PROBLEMA AO LER!\nREPITA OPERACAO",0,True,False)
-                    #return None
+                    self.display.mensagem("PROBLEMA AO LER!\nREPITA OPERACAO",1,True,False)
         except SystemExit, KeyboardInterrupt:
             raise
         except Exception, e:
-            Logs().logger.error('Erro lendo cartao.', exc_info=True)
+            self.log.logger.error('Erro lendo cartao.', exc_info=True)
         finally:
-            pass
+            self.display.mensagem("   Bem-vindo!\nAPROXIME CARTAO",0,True,False)
 
     def valida_cartao(self, id_cartao):
         try:
@@ -69,30 +74,28 @@ class LeitorCartao(object):
             creditos = cartao.getCreditos()
             
             if (cartao == None) or (len(str(id_cartao)) <> 10):
-                display.mensagem("  Por favor...\nREPITA OPERACAO",0,True,False)
+                self.log.logger.error('Cartao com ID incorreto.')
+                self.display.mensagem("  Por favor...\nREPITA OPERACAO",0,True,False)
                 return None
             else:
                 if (cartao.getNumero() <> id_cartao):
-                    print 'Cartao invalido!'
-                    display.mensagem(" ID: "+str(id_cartao)+"\nNAO CADASTRADO!",3,False,False)
-                    display.mensagem("     ACESSO\n   BLOQUEADO!",1,False,False)
-                    solenoide.ativa_solenoide(1,0)
-                    display.mensagem("    Bem-vindo!\nAPROXIME CARTAO",0,True,False)
+                    self.log.logger.info('Cartao invalido! (Nao cadastrado) ID:'+ str(id_cartao))
+                    self.display.mensagem(" ID: "+str(id_cartao)+"\nNAO CADASTRADO!",3,False,False)
+                    self.display.mensagem("     ACESSO\n   BLOQUEADO!",1,False,False)
                     return None
                 elif (creditos == 0):
-                    print 'Cartao sem credito!'
-                    display.mensagem(" ID: "+str(id_cartao)+"\n SALDO NEGATIVO!",3,False,False)
-                    display.mensagem("     ACESSO\n   BLOQUEADO!",1,False,False)
-                    solenoide.ativa_solenoide(1,0)
-                    display.mensagem("   Bem-vindo!\nAPROXIME CARTAO",0,True,False)
+                    self.log.logger.info('Cartao sem credito! ID:'+ str(id_cartao))
+                    self.display.mensagem(" ID: "+str(id_cartao)+"\n SALDO NEGATIVO!",3,False,False)
+                    self.display.mensagem("     ACESSO\n   BLOQUEADO!",1,False,False)
                     return None
                 else:
-                    print 'Cartao Valido! ID:'+ str(id_cartao)
-                    display.mensagem(" ID: "+str(id_cartao)+"\n SALDO "+str(locale.currency(cartao.getValor()*creditos)).replace(".",","),1,False,False)
-                    display.mensagem("     ACESSO\n    LIBERADO!",1,False,False)
-                    solenoide.ativa_solenoide(1,1)
-                    painel_leds.leds_se(1)
-                    painel_leds.leds_x(1)
+                    self.log.logger.debug('Cartao valido! ID:'+ str(id_cartao))
+                    self.display.mensagem(" ID: "+str(id_cartao)+"\n SALDO "+str(locale.currency(cartao.getValor()*creditos)).replace(".",","),1,False,False)
+                    self.display.mensagem("     ACESSO\n    LIBERADO!",1,False,False)
+                    self.solenoide.ativa_solenoide(1,1)
+                    self.pictograma.seta_esquerda(1)
+                    self.pictograma.xis(1)
+
                     """
                     while sensor_optico.ler_sensor(2):
                         solenoide.ativa_solenoide(2,alto)
@@ -107,39 +110,46 @@ class LeitorCartao(object):
                     giro = SensorOptico()
                     while True:
                         if giro.registra_giro(6000):
-                            print'GIROU A CATRACA'
-                            CONTA_ACESSO = 1
-                            solenoide.ativa_solenoide(1,0)
-                            painel_leds.leds_se(0)
-                            painel_leds.leds_x(0)
+                            self.log.logger.info('Girou a catraca.')
+                            self.debita_cartao(creditos, cartao)
                             break
                         else:
-                            print 'NÃO GIROU A CATRACA' 
-                            solenoide.ativa_solenoide(1,0)
-                            painel_leds.leds_se(0)
-                            painel_leds.leds_x(0)
+                            self.log.logger.info('Nao girou a catraca.')
+                            self.cartao_dao.getRollback()
                             break
-                    
-                    saldo_creditos = creditos - CONTA_ACESSO
-                    cartao_dao = CartaoDAO()
-                    cartao.setCreditos(saldo_creditos)
-                    cartao.setData(datetime.now().strftime("'%Y-%m-%d %H:%M:%S'"))
-                    if cartao_dao.altera(cartao):
-                        print "Alterado com sucesso!"
-                    else:
-                        print "Erro ao alterar:"
-                        print cartao_dao.getErro()
-                    display.mensagem("   Bem-vindo!\nAPROXIME CARTAO",0,True,False)
                     return None
         except SystemExit, KeyboardInterrupt:
             raise
         except Exception:
-            Logs().logger.error('Erro validando ID do cartao.', exc_info=True)
+            self.log.logger.error('Erro validando ID do cartao.', exc_info=True)
         finally:
-            pass
+            self.solenoide.ativa_solenoide(1,0)
+            self.pictograma.seta_esquerda(0)
+            self.pictograma.xis(0)
+            self.display.mensagem("   Bem-vindo!\nAPROXIME CARTAO",0,True,False)
         
     def busca_id_cartao(self, id):
-        cartao_dao = CartaoDAO()
-        cartao = cartao_dao.busca_id(id)
+        cartao = self.cartao_dao.busca_id(id)
         return cartao
-        
+    
+    def debita_cartao(self, creditos, cartao):
+        try:
+            saldo_creditos = creditos - 1
+            cartao.setCreditos(saldo_creditos)
+            #cartao.setData(datetime.now().strftime("'%Y-%m-%d %H:%M:%S'"))
+            cartao.setData("'"+str(cartao.getData())+"'")
+            if self.cartao_dao.altera(cartao):
+                self.cartao_dao.getCommit()
+                self.log.logger.info('Cartao alterado com sucesso.')
+            else:
+                self.log.logger.error('Erro ao alterar cartao. '+cartao_dao.getErro())
+                self.cartao_dao.getRollback()
+        except SystemExit, KeyboardInterrupt:
+            raise
+        except DatabaseError:
+            self.cartao_dao.getRollback()
+            self.log.logger.critical('Erro ao salvar informacao no banco de dados.', exc_info=True)
+        except Exception:
+            self.log.logger.critical('Erro realizando operacao de debito no cartao.', exc_info=True)
+        finally:
+            pass
