@@ -26,10 +26,10 @@ def main():
     cartao_dao = CartaoDAO()
     # teste (select)
     ##cartao = cartao_dao.busca(42)
-    cartao.setNumero(3995121086)
+    cartao.setNumero(3995295262)
     cartao.setCreditos(0)
-    cartao.setValor(1.60)
-    cartao.setTipo(3) # 1=Estudante, 2=Docente, 3=Tecnico, 4=Terceirizado, 5=Visitante, 6=Administrador.
+    cartao.setValor(0.00)
+    cartao.setTipo(6) # 1=Estudante(1,10), 2=Tecnico(1,60), 3=Professor(2,20), 4=Visitante(4,00) 5=Operador, 6=Administrador.
     cartao.setData(datetime.now().strftime("'%Y-%m-%d %H:%M:%S'"))
 
     if cartao.getId():

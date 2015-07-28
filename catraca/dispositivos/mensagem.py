@@ -5,7 +5,7 @@ import time
 import threading
 from threading import Thread
 from catraca.logs import Logs
-from catraca.dispositivos.leitorcartao import LeitorCartao
+from catraca.dispositivos.aviso import Aviso
 from catraca.dispositivos.threadcatraca import ThreadCatraca
 
 __author__ = "Erivando Sena" 
@@ -14,13 +14,15 @@ __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production 
 
 
-class Acesso(ThreadCatraca):
+class Mensagem(ThreadCatraca):
     
     log = Logs()
+    
     #threadLock = threading.Lock()
+    #threads = []
     
     def __init__(self, threadID, name, counter):
-        #super(Acesso, self).__init__()
+        #super(Mensagem, self).__init__()
         Thread.__init__(self)
         #self.threadID = threadID
         #self.name = name
@@ -32,25 +34,35 @@ class Acesso(ThreadCatraca):
         #self.print_time(self.name, self.counter, 2)
         # Free lock to release next thread
         #self.threadLock.release()
-        self.ler_cartao()
+        self.exibe_mensagens()
+        
+    def finaliza_mensagem(self):
+        return self.para()
+        
         
 #     def print_time(self,threadName,delay,counter):
 #         while counter:
-#         #while True:    
+#         #while True:
 #             time.sleep(delay)
 #             print "%s: %s" % (threadName, time.ctime(time.time()))
 #             counter -= 1
-        
-    def ler_cartao(self):
+
+    def exibe_mensagens(self):
         try:
-            LeitorCartao().ler()
+            while True:
+                aviso = Aviso()
+                aviso.exibir_datahora()
+                aviso.exibir_local()
+                aviso.exibir_site()
+                aviso.exibir_desenvolvedor()
+                
         except SystemExit, KeyboardInterrupt:
             raise
         except Exception:
-            self.log.logger.error('Erro iniciando leitura do cartao.', exc_info=True)
+            self.log.logger.error('Erro exibindo mensagem no display', exc_info=True)
         finally:
             pass
     
     def nome(self):
-        return 'Leitor RFID.'
+        return 'Mensagens no Display.'
             
