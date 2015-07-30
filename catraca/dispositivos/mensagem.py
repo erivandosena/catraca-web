@@ -6,7 +6,9 @@ import threading
 from threading import Thread
 from catraca.logs import Logs
 from catraca.dispositivos.aviso import Aviso
-from catraca.dispositivos.threadcatraca import ThreadCatraca
+#from catraca.dispositivos.threadcatraca import ThreadCatraca
+from catraca.dispositivos.leitorcartao import LeitorCartao
+
 
 __author__ = "Erivando Sena" 
 __copyright__ = "Copyright 2015, Unilab" 
@@ -14,19 +16,19 @@ __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production 
 
 
-class Mensagem(ThreadCatraca):
+class Mensagem(Thread):
     
     log = Logs()
     
     #threadLock = threading.Lock()
     #threads = []
     
-    def __init__(self, threadID, name, counter):
+    def __init__(self):
         #super(Mensagem, self).__init__()
         Thread.__init__(self)
-        #self.threadID = threadID
-        #self.name = name
-        #self.counter = counter
+        #self.threadID = 2
+        self.name = 'Thread Mensagem.'
+        #self.counter = 2
 
     def run(self):
         print "%s Rodando... " % self.name
@@ -34,10 +36,15 @@ class Mensagem(ThreadCatraca):
         #self.print_time(self.name, self.counter, 2)
         # Free lock to release next thread
         #self.threadLock.release()
-        self.exibe_mensagens()
         
-    def finaliza_mensagem(self):
-        return self.para()
+        self.exibe_mensagens(True)
+        
+#         if LeitorCartao().ler():
+#             self.lock.acquire()
+#         else:
+        
+        
+        
         
         
 #     def print_time(self,threadName,delay,counter):
@@ -47,14 +54,15 @@ class Mensagem(ThreadCatraca):
 #             print "%s: %s" % (threadName, time.ctime(time.time()))
 #             counter -= 1
 
-    def exibe_mensagens(self):
+    def exibe_mensagens(self, valor):
         try:
-            while True:
+            while valor:
                 aviso = Aviso()
                 aviso.exibir_datahora()
                 aviso.exibir_local()
-                aviso.exibir_site()
                 aviso.exibir_desenvolvedor()
+                #self.lock.acquire()
+                #self.join()
                 
         except SystemExit, KeyboardInterrupt:
             raise
@@ -63,6 +71,9 @@ class Mensagem(ThreadCatraca):
         finally:
             pass
     
-    def nome(self):
-        return 'Mensagens no Display.'
+    def inicia_mensagem(self):
+        return self.exibe_mensagens(True)
+        
+    def finaliza_mensagem(self):
+        return self.exibe_mensagens(False)
             

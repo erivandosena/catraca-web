@@ -8,6 +8,7 @@ from dispositivos.acesso import Acesso
 from catraca.logs import Logs
 from dispositivos.mensagem import Mensagem
 from dispositivos.aviso import Aviso
+from dispositivos.threadcatraca import ThreadCatraca
 
 
 __author__ = "Erivando Sena"
@@ -19,7 +20,8 @@ __status__ = "Prototype" # Prototype | Development | Production
 class Painel(object):
     
     log = Logs()
-    aviso = Aviso()
+    aviso = Aviso() 
+    
     
     def __init__(self):
         super(Painel, self).__init__()
@@ -34,26 +36,34 @@ class Painel(object):
     
     def thread(self):
         #os.system("echo 'Sistema da Catraca iniciado!' | mail -s 'Raspberry Pi B' erivandoramos@bol.com.br")
-        
-        #threadLock = threading.Lock()
-        threads = []
-        
-        
         try:
-            acesso = Acesso(1,'Thread-1',1)
-            mensagem = Mensagem(2,'Thread-2',2)
+            threads = []
+            
+            acesso = Acesso()
+            mensagem = Mensagem()
+
+            #acesso.start()
+            
+            
+            #acesso = ThreadCatraca(1, "Acesso", 1)
+            #mensagem = ThreadCatraca(2, "Mensagem", 2)
+
             acesso.start()
             mensagem.start()
+                
+            #mensagem.start()
             
             threads.append(acesso)
             threads.append(mensagem)
-            
-            
-            #acesso.join()
-            #mensagem.join()
+
             
             for t in threads:
+                print t
                 t.join()
+                print t
+                #mensagem.join()
+                
+                
             print "Saindo da Thread principal"
  
         except (SystemExit, KeyboardInterrupt):

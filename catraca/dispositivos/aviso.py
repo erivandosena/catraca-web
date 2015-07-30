@@ -35,20 +35,20 @@ class Aviso(object):
         self.display.mensagem("Catraca ON-LINE\n IP "+self.ip,3,False,False)
         
     def exibir_local(self):
-        self.display.mensagem('       RU\n   Liberdade',4,False,False)
+        self.display.mensagem('      RU\n   Liberdade',4,False,False)
 
     def exibir_datahora(self):
         data_hora = datetime.now().strftime('%d de %B %Y \n    %H:%M:%S')
         self.display.mensagem(data_hora,3,False,False)
 
     def exibir_ip(self):
-        self.display.mensagem('       IP\n   '+ip,4,False,False)
+        self.display.mensagem('       IP\n   '+ip,5,False,False)
     
     def exibir_site(self):
-        self.display.mensagem('    ACESSE\n Unilab.edu.br',4,False,False)
+        self.display.mensagem('    UNILAB - Unilab.edu.br',5,False,False)
         
     def exibir_aguarda_cartao(self):
-        self.display.mensagem("  Bem-vindo!\nAPROXIME CARTAO",0,True,False)
+        self.display.mensagem("   Bem-vindo!\nAPROXIME CARTAO",1,True,False)
         
     def exibir_erro_leitura_cartao(self):
         self.display.mensagem("PROBLEMA AO LER!\nREPITA OPERACAO",1,True,False)
@@ -69,7 +69,7 @@ class Aviso(object):
         self.display.mensagem(tipo+"\n SALDO "+saldo,2,False,False)
         
     def exibir_desenvolvedor(self):
-        self.display.mensagem('     DISUP\n      DTI',3,False,False)
+        self.display.mensagem('Desenvolvido por\n  DISUP | DTI',5,False,False)
         
         
     

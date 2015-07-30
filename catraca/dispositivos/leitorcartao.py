@@ -7,7 +7,6 @@ from datetime import datetime
 from catraca.logs import Logs
 from catraca.pinos import PinoControle
 from catraca.dao.cartaodao import Cartao
-from catraca.dispositivos.mensagem import Mensagem
 from catraca.dao.cartaodao import CartaoDAO
 from catraca.dispositivos.aviso import Aviso
 from catraca.dispositivos.solenoide import Solenoide
@@ -25,7 +24,6 @@ class LeitorCartao(object):
     
     log = Logs()
     aviso = Aviso()
-    #display = Display()
     solenoide = Solenoide()
     cartao_dao = CartaoDAO()
     pictograma = Pictograma()
@@ -49,9 +47,9 @@ class LeitorCartao(object):
         self.bits = self.bits + '1'
 
     def ler(self):
-        mensagem = Mensagem(2,'Thread-2',2)
-        mensagem.finaliza_mensagem()
+        status = False
         self.aviso.exibir_aguarda_cartao()
+        #self.mensagem.inicia_mensagem()
         try:
             self.rpi.evento_falling(self.D0, self.zero)
             self.rpi.evento_falling(self.D1, self.um)
@@ -61,6 +59,7 @@ class LeitorCartao(object):
                     sleep(0.1)
                     ID = int(str(self.bits), 2)
                     self.bits = ''
+                    status = True
                     self.valida_cartao(ID)
                 elif (len(self.bits) > 0) or (len(self.bits) > 32):
                     self.log.logger.error('Erro obtendo binario: '+str(self.bits))
@@ -73,8 +72,11 @@ class LeitorCartao(object):
             self.log.logger.error('Erro lendo cartao.', exc_info=True)
         finally:
             self.aviso.exibir_aguarda_cartao()
+            status = False
+        return status
 
     def valida_cartao(self, id_cartao):
+        #self.mensagem.finaliza_mensagem()
         try:
             cartao = Cartao()
             cartao = self.busca_id_cartao(id_cartao)
@@ -141,6 +143,7 @@ class LeitorCartao(object):
             self.pictograma.seta_esquerda(0)
             self.pictograma.xis(0)
             self.aviso.exibir_aguarda_cartao()
+            #self.mensagem.inicia_mensagem()
         
     def busca_id_cartao(self, id):
         cartao = self.cartao_dao.busca_id(id)
@@ -174,7 +177,7 @@ class LeitorCartao(object):
                    3 : '    Professor',
                    4 : '    Visitante',
                    5 : '    Operador',
-                   6 : '  Administrador',
+                   6 : ' Administrador',
         }
         return opcoes.get(tipo, "  Desconhecido").upper()
     
