@@ -3,6 +3,7 @@
 
 from cartao import Cartao
 from conexao import ConexaoFactory
+from .. logs import Logs
 
 
 __author__ = "Erivando Sena"
@@ -12,17 +13,29 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 
 class CartaoDAO(object):
+    
+    log = Logs()
 
     def __init__(self):
         super(CartaoDAO, self).__init__()
         self.__erro = None
         self.__con = None
         self.__factory = None
+        self.__fecha = None
 
+#         try:
+#             conexao = ConexaoFactory()
+#             self.__con = conexao.getConexao(1) #use 1=PostgreSQL 2=MySQL 3=SQLite
+#             self.__factory = conexao.getFactory()
+#         except Exception, e:
+#             self.__erro = str(e)
+
+    def abre_conexao(self):
         try:
             conexao = ConexaoFactory()
             self.__con = conexao.getConexao(1) #use 1=PostgreSQL 2=MySQL 3=SQLite
             self.__factory = conexao.getFactory()
+            return self.__con.cursor()
         except Exception, e:
             self.__erro = str(e)
  
@@ -39,7 +52,7 @@ class CartaoDAO(object):
               "cart_id = " + str(id) +\
               " OR cart_numero = " + str(id)
         try:
-            cursor = self.__con.cursor()
+            cursor = self.abre_conexao()#self.__con.cursor()
             cursor.execute(sql)
             dados = cursor.fetchone()
             # Carrega objeto
@@ -48,10 +61,16 @@ class CartaoDAO(object):
             obj.setCreditos(dados[2])
             obj.setValor(dados[3])
             obj.setTipo(dados[4])
-            obj.setData(dados[5])        
+            obj.setData(dados[5])    
+            return obj    
         except Exception, e:
             self.__erro = str(e)
-        return obj
+        finally:
+            pass
+#             self.__con.close()
+#             print "Conexão finalizada.(Select)"
+#             self.log.logger.debug('Conexão com o Bd finalizada.')
+            
 
     # Insert
     def insere(self, obj):
@@ -86,13 +105,18 @@ class CartaoDAO(object):
              " WHERE "\
              "cart_id = " + str(obj.getId())
        try:
-           cursor=self.__con.cursor()
+           cursor = self.abre_conexao()#self.__con.cursor()
            cursor.execute(sql)
            #self.__con.commit()
            return True
        except Exception, e:
            self.__erro = str(e)
            return False
+       finally:
+           pass
+#            self.__con.close()
+#            print "Conexão finalizada.(Update)"
+#            self.log.logger.debug('Conexão com o Bd finalizada.')
     
     # Delete
     def exclui(self, obj):
@@ -115,6 +139,11 @@ class CartaoDAO(object):
     def getRollback(self):
         return self.__con.rollback()
     
-    def __del__(self):
-            print "Conexão finalizada."
-            del self
+    def getFecha(self):
+        return self.__con.close()
+    
+#     def __del__(self):
+#             print "Conexão finalizada."
+#             self.log.logger.debug('Conexão com o Bd finalizada.')
+#             del self
+#     

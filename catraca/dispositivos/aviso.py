@@ -62,12 +62,15 @@ class Aviso(object):
     def exibir_cartao_saldo_negativo(self, tipo):
         self.display.mensagem(tipo+"\n   SEM SALDO!",2,False,False)
         
-    def exibir_cartao_invalido(self, tipo):
-        self.display.mensagem(tipo+"\n NAO CADASTRADO!",2,False,False)
+    def exibir_cartao_nao_cadastrado(self):
+        self.display.mensagem("      CARTAO\n NAO CADASTRADO!",2,False,False)
         
     def exibir_cartao_valido(self, tipo, saldo):
         self.display.mensagem(tipo+"\n SALDO "+saldo,2,False,False)
         
+    def exibir_cartao_invalido(self):
+        self.display.mensagem("     CARTAO\n  INVALIDO!",2,False,False)     
+           
     def exibir_desenvolvedor(self):
         self.display.mensagem('Desenvolvido por\n  DISUP | DTI',5,False,False)
         

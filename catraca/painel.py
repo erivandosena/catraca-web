@@ -71,14 +71,16 @@ class Painel(object):
                 mensagem.reinicia()
                 # depois de alguma operação
                 
-                print 'depois de alguma operação'
+               # print 'depois de alguma operação'
                 
                 mensagem.pausa()
                 # alguma outra operação
                 
-                print 'alguma outra operação'
+               # print 'alguma outra operação'
+            
             
             print('mensagem.iterations == {}'.format(mensagem.iterations))  # mostrar conversa executado
+            # http://stackoverflow.com/questions/15729498/how-to-start-and-stop-thread
  
         except (SystemExit, KeyboardInterrupt):
             raise

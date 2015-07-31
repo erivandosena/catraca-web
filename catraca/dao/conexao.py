@@ -5,6 +5,7 @@ import os
 import psycopg2
 #import mysql.connector
 import sqlite3
+from .. logs import Logs
 
 
 __author__ = "Erivando Sena"
@@ -14,6 +15,8 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 
 class ConexaoFactory(object):
+
+    log = Logs()
 
     def __init__(self):
         super(ConexaoFactory, self).__init__()
@@ -38,6 +41,12 @@ class ConexaoFactory(object):
                 con = psycopg2.connect(str_conexao)
             except Exception, e:
                 self.__erroCon = str(e)
+            finally:
+                pass
+#                 #con.close()
+#                 print "Conexão finalizada"
+#                 self.log.logger.debug('Conexão com o Bd finalizada.')
+                
         # MySQL
         if (banco == self.__MYSQL):
             str_conexao = "user='%s', password='%s', host='%s', database='%s'" % (usuario, senha, localhost, banco)

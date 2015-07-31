@@ -27,6 +27,7 @@ class LeitorCartao(object):
     solenoide = Solenoide()
     cartao_dao = CartaoDAO()
     pictograma = Pictograma()
+    giro = SensorOptico()
     
     rpi = PinoControle()
     D0 = rpi.ler(17)['gpio']
@@ -71,6 +72,7 @@ class LeitorCartao(object):
         except Exception, e:
             self.log.logger.error('Erro lendo cartao.', exc_info=True)
         finally:
+            print 'finaliza ler'
             self.aviso.exibir_aguarda_cartao()
             status = False
         return status
@@ -78,23 +80,29 @@ class LeitorCartao(object):
     def valida_cartao(self, id_cartao):
         #self.mensagem.finaliza_mensagem()
         try:
-            cartao = Cartao()
+            #cartao = Cartao()
             cartao = self.busca_id_cartao(id_cartao)
-            creditos = cartao.getCreditos()
-            usuario_cartao = cartao.getTipo()
-            
 
-            tipo = self.tipo_usuario(usuario_cartao)
-            
-            if (cartao == None) or (len(str(id_cartao)) <> 10):
-                self.log.logger.error('Cartao com ID incorreto.')
+            #if (cartao == None) or (len(str(id_cartao)) <> 10):
+            if (cartao == None):
+                self.log.logger.info('Cartao nao cadastrado ID:'+ str(id_cartao))
+                self.aviso.exibir_cartao_nao_cadastrado()
+                self.aviso.exibir_acesso_bloqueado()
+                self.aviso.exibir_aguarda_cartao()
+                return None
+            elif (len(str(id_cartao)) <> 10):
+                self.log.logger.error('Cartao com ID incorreto:'+ str(id_cartao))
                 self.aviso.exibir_erro_leitura_cartao()
+                self.aviso.exibir_acesso_bloqueado()
                 self.aviso.exibir_aguarda_cartao()
                 return None
             else:
+                creditos = cartao.getCreditos()
+                usuario_cartao = cartao.getTipo()
+                tipo = self.tipo_usuario(usuario_cartao)
                 if (cartao.getNumero() <> id_cartao):
-                    self.log.logger.info('Cartao invalido! (Nao cadastrado) ID:'+ str(id_cartao))
-                    self.aviso.exibir_cartao_invalido(tipo)
+                    self.log.logger.info('Cartao nao cadastrado ID:'+ str(id_cartao))
+                    self.aviso.exibir_cartao_nao_cadastrado()
                     self.aviso.exibir_acesso_bloqueado()
                     return None
                 elif (creditos == 0):
@@ -121,17 +129,23 @@ class LeitorCartao(object):
                         print 'Desativa Solenoide 2'
                     """    
                     CONTA_ACESSO = 0
-                    giro = SensorOptico()
+                    #giro = SensorOptico()
                     self.debita_cartao(creditos, cartao)
                     while True:
-                        if giro.registra_giro(6000):
+                        if self.giro.registra_giro(6000):
                             self.log.logger.info('Girou a catraca.')
                             self.cartao_dao.getCommit() # persiste no banco de dados
                             self.log.logger.info('Cartao alterado com sucesso.')
+                            self.cartao_dao.getFecha()
+                            print "Conexão finalizada (c/ giro)"
+                            self.log.logger.info('Conexão finalizada com o BD. (c/ giro)')
                             break
                         else:
                             self.log.logger.info('Nao girou a catraca.')
                             self.cartao_dao.getRollback()
+                            self.cartao_dao.getFecha()
+                            print "Conexão finalizada (s/ giro)"
+                            self.log.logger.info('Conexão finalizada com o BD. (s/ giro)')
                             break
                     return None
         except SystemExit, KeyboardInterrupt:
@@ -144,10 +158,26 @@ class LeitorCartao(object):
             self.pictograma.xis(0)
             self.aviso.exibir_aguarda_cartao()
             #self.mensagem.inicia_mensagem()
+            print 'finaliza valida_cartao'
+            self.cartao_dao.getFecha()
+            print "Conexão finalizada"
         
     def busca_id_cartao(self, id):
-        cartao = self.cartao_dao.busca_id(id)
-        return cartao
+        try:
+            cartao = self.cartao_dao.busca_id(id)
+            return cartao
+        except SystemExit, KeyboardInterrupt:
+            raise
+        except Exception:
+            self.log.logger.critical('Erro realizando operacao de cosulta no cartao.', exc_info=True)
+        finally:
+            #pass
+#             self.cartao_dao.getFecha()
+#             print "Conexão finalizada (Cartao select)"
+#             self.log.logger.debug('Conexão (Cartao select) com o Bd finalizada.')
+            print 'finaliza busca_id_cartao'
+#         
+        
     
     def debita_cartao(self, creditos, cartao):
         try:
@@ -162,13 +192,18 @@ class LeitorCartao(object):
                 self.cartao_dao.getRollback()
         except SystemExit, KeyboardInterrupt:
             raise
-        except DatabaseError:
-            self.cartao_dao.getRollback()
-            self.log.logger.critical('Erro ao salvar informacao no banco de dados.', exc_info=True)
+#         except DatabaseError:
+#             self.cartao_dao.getRollback()
+#             self.log.logger.critical('Erro ao salvar informacao no banco de dados.', exc_info=True)
         except Exception:
+            self.cartao_dao.getRollback()
             self.log.logger.critical('Erro realizando operacao de debito no cartao.', exc_info=True)
         finally:
-            pass
+            #pass
+#             self.cartao_dao.getFecha()
+#             print "Conexão finalizada (Cartao)"
+#             self.log.logger.debug('Conexão (Cartao) com o Bd finalizada.')
+            print 'finaliza debita_cartao'
         
     def tipo_usuario(self, tipo):
         opcoes = {
