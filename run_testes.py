@@ -12,7 +12,7 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 
 if __name__ == '__main__':
-    cartao_teste.main()
+    #cartao_teste.main()
     #catraca_teste.main()
     #TesteLCD16x2.main()
     #TesteRFID.main()

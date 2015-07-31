@@ -114,3 +114,7 @@ class CartaoDAO(object):
     
     def getRollback(self):
         return self.__con.rollback()
+    
+    def __del__(self):
+            print "Conexão finalizada."
+            del self

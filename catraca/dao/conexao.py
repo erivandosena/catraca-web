@@ -60,3 +60,4 @@ class ConexaoFactory(object):
  
     def getFactory(self):
         return self.__factory
+    

@@ -5,10 +5,11 @@ import os
 import threading
 from threading import Thread
 from dispositivos.acesso import Acesso
-from catraca.logs import Logs
+from logs import Logs
 from dispositivos.mensagem import Mensagem
 from dispositivos.aviso import Aviso
 from dispositivos.threadcatraca import ThreadCatraca
+from dispositivos.mensagemcondicao import MensagemCondicao
 
 
 __author__ = "Erivando Sena"
@@ -37,34 +38,47 @@ class Painel(object):
     def thread(self):
         #os.system("echo 'Sistema da Catraca iniciado!' | mail -s 'Raspberry Pi B' erivandoramos@bol.com.br")
         try:
-            threads = []
+            #threads = []
             
             acesso = Acesso()
             mensagem = Mensagem()
-
-            #acesso.start()
+            mcondicao = MensagemCondicao()
             
             
             #acesso = ThreadCatraca(1, "Acesso", 1)
             #mensagem = ThreadCatraca(2, "Mensagem", 2)
 
             acesso.start()
-            mensagem.start()
+            mensagem.start() # Chama o método run ()
                 
             #mensagem.start()
             
-            threads.append(acesso)
-            threads.append(mensagem)
+            #threads.append(acesso)
+            #threads.append(mensagem)
 
             
-            for t in threads:
-                print t
-                t.join()
-                print t
-                #mensagem.join()
+#             for t in threads:
+#                 print t
+#                 t.join()
+#                 print t
+#                 #mensagem.join()
+#                 
+#                 
+#             print "Saindo da Thread principal"
+
+
+            while mcondicao.condition:
+                mensagem.reinicia()
+                # depois de alguma operação
                 
+                print 'depois de alguma operação'
                 
-            print "Saindo da Thread principal"
+                mensagem.pausa()
+                # alguma outra operação
+                
+                print 'alguma outra operação'
+            
+            print('mensagem.iterations == {}'.format(mensagem.iterations))  # mostrar conversa executado
  
         except (SystemExit, KeyboardInterrupt):
             raise

@@ -113,3 +113,7 @@ class CatracaDAO(object):
 
     def getErro(self):
         return self.__erro
+    
+    def __del__(self):
+            print "Conexão finalizada."
+            del self
