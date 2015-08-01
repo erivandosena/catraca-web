@@ -59,7 +59,7 @@ class Aviso(object):
     def exibir_acesso_liberado(self):
         self.display.mensagem("     ACESSO\n    LIBERADO!",0,False,False)
 
-    def exibir_cartao_saldo_negativo(self, tipo):
+    def exibir_cartao_sem_saldo(self, tipo):
         self.display.mensagem(tipo+"\n   SEM SALDO!",2,False,False)
         
     def exibir_cartao_nao_cadastrado(self):

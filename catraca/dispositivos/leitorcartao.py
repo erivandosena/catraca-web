@@ -80,38 +80,41 @@ class LeitorCartao(object):
     def valida_cartao(self, id_cartao):
         #self.mensagem.finaliza_mensagem()
         try:
-            #cartao = Cartao()
-            cartao = self.busca_id_cartao(id_cartao)
-
+            cartao = Cartao()
+            if (len(str(id_cartao)) <> 10):
+                self.log.logger.error('Cartao com ID incorreto:'+ str(id_cartao))
+                self.aviso.exibir_erro_leitura_cartao()
+                self.aviso.exibir_aguarda_cartao()
+                return None
+            elif (len(str(id_cartao)) == 10):
+                cartao = self.busca_id_cartao(id_cartao)
             #if (cartao == None) or (len(str(id_cartao)) <> 10):
             if (cartao == None):
                 self.log.logger.info('Cartao nao cadastrado ID:'+ str(id_cartao))
                 self.aviso.exibir_cartao_nao_cadastrado()
-                self.aviso.exibir_acesso_bloqueado()
                 self.aviso.exibir_aguarda_cartao()
                 return None
-            elif (len(str(id_cartao)) <> 10):
-                self.log.logger.error('Cartao com ID incorreto:'+ str(id_cartao))
-                self.aviso.exibir_erro_leitura_cartao()
-                self.aviso.exibir_acesso_bloqueado()
-                self.aviso.exibir_aguarda_cartao()
-                return None
+#             elif (len(str(id_cartao)) <> 10):
+#                 self.log.logger.error('Cartao com ID incorreto:'+ str(id_cartao))
+#                 self.aviso.exibir_erro_leitura_cartao()
+#                 self.aviso.exibir_aguarda_cartao()
+#                 return None
             else:
                 creditos = cartao.getCreditos()
                 usuario_cartao = cartao.getTipo()
                 tipo = self.tipo_usuario(usuario_cartao)
-                if (cartao.getNumero() <> id_cartao):
-                    self.log.logger.info('Cartao nao cadastrado ID:'+ str(id_cartao))
-                    self.aviso.exibir_cartao_nao_cadastrado()
-                    self.aviso.exibir_acesso_bloqueado()
-                    return None
-                elif (creditos == 0):
-                    self.log.logger.info('Cartao sem credito! ID:'+ str(id_cartao))
-                    self.aviso.exibir_cartao_saldo_negativo(tipo)
+#                 if (cartao.getNumero() <> id_cartao):
+#                     self.log.logger.info('Cartao nao cadastrado ID:'+ str(id_cartao))
+#                     self.aviso.exibir_cartao_nao_cadastrado()
+#                     self.aviso.exibir_acesso_bloqueado()
+#                     return None
+                if (creditos == 0):
+                    self.log.logger.info('Cartao sem credito ID:'+ str(id_cartao))
+                    self.aviso.exibir_cartao_sem_saldo(tipo)
                     self.aviso.exibir_acesso_bloqueado()
                     return None
                 else:
-                    self.log.logger.debug('Cartao valido! ID:'+ str(id_cartao))
+                    self.log.logger.debug('Cartao valido ID:'+ str(id_cartao))
                     saldo = str(locale.currency(cartao.getValor()*creditos)).replace(".",",")
                     self.aviso.exibir_cartao_valido(tipo, saldo)
                     self.aviso.exibir_acesso_liberado()
@@ -128,29 +131,43 @@ class LeitorCartao(object):
                         print 'Sensor 2 = '+str(sensor_optico.ler_sensor(2))
                         print 'Desativa Solenoide 2'
                     """    
-                    CONTA_ACESSO = 0
+                    #CONTA_ACESSO = 0
                     #giro = SensorOptico()
-                    self.debita_cartao(creditos, cartao)
+                    
+                    #self.debita_cartao(creditos, cartao)
+                    ##############################################################
+                    # OPERACAO DE DEBITO NO CARTAO
+                    ##############################################################
+                    saldo_creditos = creditos - 1
+                    cartao.setCreditos(saldo_creditos)
+                    cartao.setData(datetime.now().strftime("'%Y-%m-%d %H:%M:%S'"))
+                    ##############################################################
+                    #cartao.setData("'"+str(cartao.getData())+"'")
+                    if not self.cartao_dao.altera(cartao): # altera no banco de dados
+                        self.log.logger.critical('Erro atualizando valores no cartao.')
+                        raise Exception(self.cartao_dao.getErro())
+                    
                     while True:
                         if self.giro.registra_giro(6000):
                             self.log.logger.info('Girou a catraca.')
                             self.cartao_dao.getCommit() # persiste no banco de dados
                             self.log.logger.info('Cartao alterado com sucesso.')
-                            self.cartao_dao.getFecha()
-                            print "Conexão finalizada (c/ giro)"
-                            self.log.logger.info('Conexão finalizada com o BD. (c/ giro)')
+#                             self.cartao_dao.getFecha()
+#                             print "Conexão finalizada (c/ giro)"
+#                             self.log.logger.info('Conexão finalizada com o BD. (c/ giro)')
                             break
                         else:
                             self.log.logger.info('Nao girou a catraca.')
                             self.cartao_dao.getRollback()
-                            self.cartao_dao.getFecha()
-                            print "Conexão finalizada (s/ giro)"
-                            self.log.logger.info('Conexão finalizada com o BD. (s/ giro)')
+#                             self.cartao_dao.getFecha()
+#                             print "Conexão finalizada (s/ giro)"
+#                             self.log.logger.info('Conexão finalizada com o BD. (s/ giro)')
                             break
                     return None
         except SystemExit, KeyboardInterrupt:
             raise
         except Exception:
+            self.cartao_dao.getRollback()
             self.log.logger.error('Erro validando ID do cartao.', exc_info=True)
         finally:
             self.solenoide.ativa_solenoide(1,0)
@@ -160,7 +177,8 @@ class LeitorCartao(object):
             #self.mensagem.inicia_mensagem()
             print 'finaliza valida_cartao'
             self.cartao_dao.getFecha()
-            print "Conexão finalizada"
+            print "Conexão finalizada (Cartao update)"
+            self.log.logger.debug('[Cartao Update] Conexão finalizada com o BD.')
         
     def busca_id_cartao(self, id):
         try:
@@ -169,41 +187,41 @@ class LeitorCartao(object):
         except SystemExit, KeyboardInterrupt:
             raise
         except Exception:
-            self.log.logger.critical('Erro realizando operacao de cosulta no cartao.', exc_info=True)
+            self.log.logger.error('Erro realizando cosulta no cartao.', exc_info=True)
         finally:
             #pass
-#             self.cartao_dao.getFecha()
-#             print "Conexão finalizada (Cartao select)"
-#             self.log.logger.debug('Conexão (Cartao select) com o Bd finalizada.')
             print 'finaliza busca_id_cartao'
-#         
-        
-    
-    def debita_cartao(self, creditos, cartao):
-        try:
-            saldo_creditos = creditos - 1
-            cartao.setCreditos(saldo_creditos)
-            #cartao.setData(datetime.now().strftime("'%Y-%m-%d %H:%M:%S'"))
-            cartao.setData("'"+str(cartao.getData())+"'")
-            if self.cartao_dao.altera(cartao): # altera no banco de dados
-                self.log.logger.debug('Iniciando alteracao do cartao.')
-            else:
-                self.log.logger.error('Erro ao alterar cartao. '+cartao_dao.getErro())
-                self.cartao_dao.getRollback()
-        except SystemExit, KeyboardInterrupt:
-            raise
-#         except DatabaseError:
+            self.cartao_dao.getFecha()
+            print "Conexão finalizada (Cartao select)"
+            self.log.logger.debug('[Cartao Select] Conexão finalizada com o BD.')
+            
+#     def debita_cartao(self, creditos, cartao):
+#         try:
+#             saldo_creditos = creditos - 1
+#             cartao.setCreditos(saldo_creditos)
+#             #cartao.setData(datetime.now().strftime("'%Y-%m-%d %H:%M:%S'"))
+#             cartao.setData("'"+str(cartao.getData())+"'")
+#             if not self.cartao_dao.altera(cartao): # altera no banco de dados
+#                 raise Exception(self.cartao_dao.getErro())
+#                 #self.cartao_dao.getErro()
+# #                 self.log.logger.debug('Iniciando alteracao do cartao.')
+# #             else:
+# #                 self.log.logger.critical('Erro ao alterar cartao. '+cartao_dao.getErro())
+# #                 self.cartao_dao.getRollback()
+#         except SystemExit, KeyboardInterrupt:
+#             raise
+# #         except DatabaseError:
+# #             self.cartao_dao.getRollback()
+# #             self.log.logger.critical('Erro ao salvar informacao no banco de dados.', exc_info=True)
+#         except Exception:
 #             self.cartao_dao.getRollback()
-#             self.log.logger.critical('Erro ao salvar informacao no banco de dados.', exc_info=True)
-        except Exception:
-            self.cartao_dao.getRollback()
-            self.log.logger.critical('Erro realizando operacao de debito no cartao.', exc_info=True)
-        finally:
-            #pass
-#             self.cartao_dao.getFecha()
-#             print "Conexão finalizada (Cartao)"
-#             self.log.logger.debug('Conexão (Cartao) com o Bd finalizada.')
-            print 'finaliza debita_cartao'
+#             self.log.logger.critical('Erro realizando operacao de debito no cartao.', exc_info=True)
+#         finally:
+#             #pass
+# #             self.cartao_dao.getFecha()
+# #             print "Conexão finalizada (Cartao)"
+# #             self.log.logger.debug('Conexão (Cartao) com o Bd finalizada.')
+#             print 'finaliza debita_cartao'
         
     def tipo_usuario(self, tipo):
         opcoes = {
