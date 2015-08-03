@@ -37,6 +37,7 @@ class CartaoDAO(object):
 
     @property
     def fecha_conexao(self):
+        print 'fecha_conexao no cartaodao'
         return self.__con.close()
     
 #         try:
@@ -49,7 +50,7 @@ class CartaoDAO(object):
     def abre_conexao(self):
         try:
             conexao_bd = ConexaoFactory()
-            self.__con = conexao_bd.conexao = 1 #use 1=PostgreSQL 2=MySQL 3=SQLite
+            self.__con = conexao_bd.conexao(1) #use 1=PostgreSQL 2=MySQL 3=SQLite
             self.__factory = conexao_bd.factory
             return self.__con.cursor()
         except Exception, e:
@@ -75,18 +76,23 @@ class CartaoDAO(object):
             cursor.execute(sql)
             dados = cursor.fetchone()
             # Carrega objeto
-            obj.id = dados[0]
-            obj.numero = dados[1]
-            obj.creditos = dados[2]
-            obj.valor = dados[3]
-            obj.tipo = dados[4]
-            obj.data = dados[5]    
-            return obj    
+            if dados:
+                obj.id = dados[0]
+                obj.numero = dados[1]
+                obj.creditos = dados[2]
+                obj.valor = dados[3]
+                obj.tipo = dados[4]
+                obj.data = dados[5]    
+                return obj  
+            else:
+                return None  
         except Exception, e:
             self.log.logger.error('Erro ao realizar SELECT na tabela cartao.', exc_info=True)
             self.__erro = str(e)
         finally:
-            pass
+            #pass
+            cursor.close()
+            print 'cursor cartao select fechado.'
 
     # Insert
     def insere(self, obj):
@@ -132,7 +138,9 @@ class CartaoDAO(object):
            self.__erro = str(e)
            return False
        finally:
-           pass
+           #pass
+           cursor.close()
+           print 'cursor cartao update fechado.'
     
     # Delete
     def exclui(self, obj):

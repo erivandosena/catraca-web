@@ -31,8 +31,8 @@ class Painel(object):
         print 'Processando...'
         self.log.logger.debug('Iniciando aplicacao...')
         self.aviso.exibir_inicializacao()
-        self.aviso.exibir_datahora()
         self.aviso.exibir_estatus_catraca()
+        self.aviso.exibir_datahora()
         self.thread()
     
     def thread(self):
@@ -49,7 +49,7 @@ class Painel(object):
             #mensagem = ThreadCatraca(2, "Mensagem", 2)
 
             acesso.start()
-            mensagem.start() # Chama o método run ()
+            #mensagem.start() # Chama o método run ()
                 
             #mensagem.start()
             
