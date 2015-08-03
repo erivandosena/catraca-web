@@ -1,8 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 
+import time
 import locale
 from time import sleep
+#from dateutil import parser
 from datetime import datetime
 from catraca.logs import Logs
 from catraca.pinos import PinoControle
@@ -37,6 +39,8 @@ class LeitorCartao(object):
     
     bits = ''
     ID = ''
+    
+    hora_atual = datetime.now().strftime('%H:%M:%S')
     
     def __init__(self):
         super(LeitorCartao, self).__init__()
@@ -100,8 +104,8 @@ class LeitorCartao(object):
 #                 self.aviso.exibir_aguarda_cartao()
 #                 return None
             else:
-                creditos = cartao.getCreditos()
-                usuario_cartao = cartao.getTipo()
+                creditos = cartao.creditos
+                usuario_cartao = cartao.tipo
                 tipo = self.tipo_usuario(usuario_cartao)
 #                 if (cartao.getNumero() <> id_cartao):
 #                     self.log.logger.info('Cartao nao cadastrado ID:'+ str(id_cartao))
@@ -113,9 +117,14 @@ class LeitorCartao(object):
                     self.aviso.exibir_cartao_sem_saldo(tipo)
                     self.aviso.exibir_acesso_bloqueado()
                     return None
+                #elif not (self.hora_atual >= time.strptime('11:00:00','%H:%M:%S')) and (self.hora_atual <= time.strptime('13:30:00','%H:%M:%S')) or (self.hora_atual >= time.strptime('17:30:00','%H:%M:%S')) and (self.hora_atual <= time.strptime('19:00:00','%H:%M:%S')):
+                elif not (self.hora_atual >= time.strptime('11:00:00','%H:%M:%S')) and (self.hora_atual <= time.strptime('13:30:00','%H:%M:%S')) or (self.hora_atual >= time.strptime('17:30:00','%H:%M:%S')) and (self.hora_atual <= time.strptime('19:00:00','%H:%M:%S')):    
+                    self.aviso.exibir_horario_invalido()
+                    self.aviso.exibir_acesso_bloqueado()
+                    return None
                 else:
                     self.log.logger.debug('Cartao valido ID:'+ str(id_cartao))
-                    saldo = str(locale.currency(cartao.getValor()*creditos)).replace(".",",")
+                    saldo = str(locale.currency(cartao.valor*creditos)).replace(".",",")
                     self.aviso.exibir_cartao_valido(tipo, saldo)
                     self.aviso.exibir_acesso_liberado()
                     self.solenoide.ativa_solenoide(1,1)
@@ -139,18 +148,18 @@ class LeitorCartao(object):
                     # OPERACAO DE DEBITO NO CARTAO
                     ##############################################################
                     saldo_creditos = creditos - 1
-                    cartao.setCreditos(saldo_creditos)
-                    cartao.setData(datetime.now().strftime("'%Y-%m-%d %H:%M:%S'"))
+                    cartao.creditos = saldo_creditos
+                    cartao.data = datetime.now().strftime("'%Y-%m-%d %H:%M:%S'")
                     ##############################################################
                     #cartao.setData("'"+str(cartao.getData())+"'")
                     if not self.cartao_dao.altera(cartao): # altera no banco de dados
                         self.log.logger.critical('Erro atualizando valores no cartao.')
-                        raise Exception(self.cartao_dao.getErro())
+                        raise Exception(self.cartao_dao.erro)
                     
                     while True:
                         if self.giro.registra_giro(6000):
                             self.log.logger.info('Girou a catraca.')
-                            self.cartao_dao.getCommit() # persiste no banco de dados
+                            self.cartao_dao.commit # persiste no banco de dados
                             self.log.logger.info('Cartao alterado com sucesso.')
 #                             self.cartao_dao.getFecha()
 #                             print "Conexão finalizada (c/ giro)"
@@ -158,7 +167,7 @@ class LeitorCartao(object):
                             break
                         else:
                             self.log.logger.info('Nao girou a catraca.')
-                            self.cartao_dao.getRollback()
+                            self.cartao_dao.rollback
 #                             self.cartao_dao.getFecha()
 #                             print "Conexão finalizada (s/ giro)"
 #                             self.log.logger.info('Conexão finalizada com o BD. (s/ giro)')
@@ -167,7 +176,7 @@ class LeitorCartao(object):
         except SystemExit, KeyboardInterrupt:
             raise
         except Exception:
-            self.cartao_dao.getRollback()
+            self.cartao_dao.rollback
             self.log.logger.error('Erro validando ID do cartao.', exc_info=True)
         finally:
             self.solenoide.ativa_solenoide(1,0)
@@ -176,7 +185,7 @@ class LeitorCartao(object):
             self.aviso.exibir_aguarda_cartao()
             #self.mensagem.inicia_mensagem()
             print 'finaliza valida_cartao'
-            self.cartao_dao.getFecha()
+            self.cartao_dao.fecha_conexao
             print "Conexão finalizada (Cartao update)"
             self.log.logger.debug('[Cartao Update] Conexão finalizada com o BD.')
         
@@ -187,11 +196,11 @@ class LeitorCartao(object):
         except SystemExit, KeyboardInterrupt:
             raise
         except Exception:
-            self.log.logger.error('Erro realizando cosulta no cartao.', exc_info=True)
+            self.log.logger.error('Erro consultando ID do cartao.', exc_info=True)
         finally:
             #pass
             print 'finaliza busca_id_cartao'
-            self.cartao_dao.getFecha()
+            self.cartao_dao.fecha_conexao
             print "Conexão finalizada (Cartao select)"
             self.log.logger.debug('[Cartao Select] Conexão finalizada com o BD.')
             

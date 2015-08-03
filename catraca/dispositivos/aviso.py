@@ -47,6 +47,9 @@ class Aviso(object):
     def exibir_site(self):
         self.display.mensagem('    UNILAB - Unilab.edu.br',5,False,False)
         
+    def exibir_desenvolvedor(self):
+        self.display.mensagem('Desenvolvido por\n  DISUP | DTI',5,False,False)
+        
     def exibir_aguarda_cartao(self):
         self.display.mensagem("   Bem-vindo!\nAPROXIME CARTAO",1,True,False)
         
@@ -69,11 +72,10 @@ class Aviso(object):
         self.display.mensagem(tipo+"\n SALDO "+saldo,2,False,False)
         
     def exibir_cartao_invalido(self):
-        self.display.mensagem("     CARTAO\n  INVALIDO!",2,False,False)     
-           
-    def exibir_desenvolvedor(self):
-        self.display.mensagem('Desenvolvido por\n  DISUP | DTI',5,False,False)
+        self.display.mensagem("     CARTAO\n  INVALIDO!",2,False,False)
         
+    def exibir_horario_invalido(self):
+        self.display.mensagem("FORA DO HORARIO\nDE ATENDIMENTO!",2,False,False)  
         
     
 

@@ -18,39 +18,51 @@ class Cartao(object):
         self.__cart_vlr_credito = None
         self.__cart_tipo = None
         self.__cart_dt_acesso = None
- 
-    def getId(self):
+
+    @property
+    def id(self):
         return self.__cart_id
- 
-    def setId(self, valor):
+    
+    @id.setter
+    def id(self, valor):
         self.__cart_id = valor
  
-    def getNumero(self):
+    @property
+    def numero(self):
         return self.__cart_numero
- 
-    def setNumero(self, valor):
+    
+    @numero.setter
+    def numero(self, valor):
         self.__cart_numero = valor
- 
-    def getCreditos(self):
+    
+    @property
+    def creditos(self):
         return self.__cart_qtd_creditos
  
-    def setCreditos(self, valor):
+    @creditos.setter
+    def creditos(self, valor):
         self.__cart_qtd_creditos = valor
- 
-    def getValor(self):
+    
+    @property
+    def valor(self):
         return self.__cart_vlr_credito
  
-    def setValor(self, valor):
+    @valor.setter
+    def valor(self, valor):
         self.__cart_vlr_credito = valor
- 
-    def getTipo(self):
-        return self.__cart_tipo
- 
-    def setTipo(self, valor):
-        self.__cart_tipo = valor
 
-    def getData(self):
+    @property
+    def tipo(self):
+        return self.__cart_tipo
+
+    @tipo.setter
+    def tipo(self, valor):
+        self.__cart_tipo = valor
+    
+    @property
+    def data(self):
         return self.__cart_dt_acesso
 
-    def setData(self, valor):
+    @data.setter
+    def data(self, valor):
         self.__cart_dt_acesso = valor

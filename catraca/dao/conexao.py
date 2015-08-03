@@ -2,9 +2,9 @@
 # -*- coding: latin-1 -*-
 
 import os
+import sqlite3
 import psycopg2
 #import mysql.connector
-import sqlite3
 from .. logs import Logs
 
 
@@ -25,8 +25,16 @@ class ConexaoFactory(object):
         self.__SQLITE = 3
         self.__erroCon = None
         self.__factory = None
- 
-    def getConexao(self, banco):
+
+    @property
+    def erro_conexao(self):
+        return self.__erroCon
+
+    @property
+    def factory(self):
+        return self.__factory
+    
+    def conexao(self, banco):
         con = None
         self.__factory = banco
         # PostgreSQL
@@ -40,12 +48,10 @@ class ConexaoFactory(object):
             try:
                 con = psycopg2.connect(str_conexao)
             except Exception, e:
+                self.log.logger.critical('Erro na conexao com PostgreSQL.', exc_info=True)
                 self.__erroCon = str(e)
             finally:
                 pass
-#                 #con.close()
-#                 print "Conexão finalizada"
-#                 self.log.logger.debug('Conexão com o Bd finalizada.')
                 
         # MySQL
         if (banco == self.__MYSQL):
@@ -54,19 +60,21 @@ class ConexaoFactory(object):
                 #con = mysql.connector.connect(str_conexao)
                 pass
             except Exception, e:
+                self.log.logger.critical('Erro na conexao com MySQL.', exc_info=True)
                 self.__erroCon = str(e)
+            finally:
+                pass
+            
         # SQLite
         if (banco == self.__SQLITE):
             str_conexao = "'%s'" % (os.path.join(os.path.dirname(os.path.abspath(__file__)),"banco.db"))
             try:
                 con = sqlite3.connect(str_conexao)
             except Exception, e:
+                self.log.logger.critical('Erro na conexao com SQLite.', exc_info=True)
                 self.__erroCon = str(e)
+            finally:
+                pass
+            
         return con
-
-    def getErros(self):
-        return self.__erroCon
- 
-    def getFactory(self):
-        return self.__factory
     

@@ -18,11 +18,24 @@ class CatracaDAO(object):
         self.__erro = None
         self.__con = None
         self.__factory = None
+        
+    @property
+    def erro(self):
+        return self.__erro
 
+#         try:
+#             conexao = ConexaoFactory()
+#             self.__con = conexao.getConexao(1) # 1 para PostgreSQL
+#             self.__factory = conexao.getFactory()
+#         except Exception, e:
+#             self.__erro = str(e)
+
+    def abre_conexao(self):
         try:
-            conexao = ConexaoFactory()
-            self.__con = conexao.getConexao(1) # 1 para PostgreSQL
-            self.__factory = conexao.getFactory()
+            conexao_bd = ConexaoFactory()
+            self.__con = conexao_bd.conexao = 1 #use 1=PostgreSQL 2=MySQL 3=SQLite
+            self.__factory = conexao_bd.factory
+            return self.__con.cursor()
         except Exception, e:
             self.__erro = str(e)
 
@@ -37,7 +50,8 @@ class CatracaDAO(object):
               "FROM catraca WHERE "\
               "catr_id = " + str(id)
         try:
-            cursor = self.__con.cursor()
+            #cursor = self.__con.cursor()
+            cursor = self.abre_conexao()
             cursor.execute(sql)
             dados = cursor.fetchone()
 
@@ -65,7 +79,8 @@ class CatracaDAO(object):
               str(obj.getMensagem()) + "', " +\
               str(obj.getSentido()) + ")"
         try:
-            cursor=self.__con.cursor()
+            #cursor=self.__con.cursor()
+            cursor = self.abre_conexao()
             cursor.execute(sql)
             self.__con.commit()
             return True
@@ -90,7 +105,8 @@ class CatracaDAO(object):
              "catr_id = " + str(obj.getId())
 
        try:
-           cursor=self.__con.cursor()
+           #cursor=self.__con.cursor()
+           cursor = self.abre_conexao()
            cursor.execute(sql)
            self.__con.commit()
            return True
@@ -103,14 +119,13 @@ class CatracaDAO(object):
         sql = "DELETE FROM catraca WHERE catr_id = " + str(obj.getId())
         print sql
         try:
-            cursor=self.__con.cursor()
+            #cursor=self.__con.cursor()
+            cursor = self.abre_conexao()
             cursor.execute(sql)
             self.__con.commit()
             return True
         except Exception, e:
             self.__erro = str(e)
             return False
-
-    def getErro(self):
-        return self.__erro
+        
     
