@@ -26,7 +26,7 @@ CREATE TABLE cartao
 ALTER TABLE cartao OWNER TO postgres;
 COMMENT ON COLUMN cartao.cart_numero IS 'Numero do ID do cartao de acesso.';
 COMMENT ON COLUMN cartao.cart_vlr_credito IS 'Valor unitario em R$.';
-COMMENT ON COLUMN cartao.cart_tipo IS '1=Estudante, 2=Tecnico, 3=Professor, 4=Visitante, 5=Isento, 6=Operador, 7=Administrador.';
+COMMENT ON COLUMN cartao.cart_tipo IS '1=Estudante, 2=Professor, 3=Tecnico, 4=Visitante, 5=Operador, 6=Administrador.';
 COMMENT ON COLUMN cartao.cart_dt_acesso IS 'Data/hora do ultimo acesso.';
 
 CREATE TABLE catraca

@@ -76,12 +76,13 @@ class Aviso(object):
         self.display.mensagem("     CARTAO\n  INVALIDO!",2,False,False)
         
     def exibir_horario_invalido(self):
-        self.display.mensagem("FORA DO HORARIO\nDE ATENDIMENTO",2,False,False)  
+        self.display.mensagem("FORA DO HORARIO\n DE ATENDIMENTO",2,False,False)  
         
-    def exibir_cartao_utilizado(self):
-        self.display.mensagem("CARTAO JA USADO\nPARA 01 REFEICAO",2,False,False) 
+    def exibir_cartao_utilizado1(self):
+        self.display.mensagem("CARTAO JA USADO\nPARA 1a REFEICAO",2,False,False) 
     
-
+    def exibir_cartao_utilizado2(self):
+        self.display.mensagem("CARTAO JA USADO\nPARA 2a REFEICAO",2,False,False) 
         
     
         

@@ -33,10 +33,12 @@ class SensorOptico(object):
     
     def registra_giro(self, tempo):
         codigo_giro = ''
+        tempo_giro = 0
         # cronômetro regressivo para o giro
         try:
             for segundo in range(tempo, -1, -1):
-                sleep(0.1)
+                #sleep(1)
+                tempo_giro += segundo / 1000
                 self.log.logger.debug(str(segundo / 1000) + ' seg. restantes para expirar o tempo para giro.')
                 self.log.logger.debug('Catraca em repouso, codigo sensores: '+ str(self.ler_sensor(1)) + '' + str(self.ler_sensor(2)))
                 # GIRO HORARIO
@@ -77,13 +79,15 @@ class SensorOptico(object):
                         self.log.logger.debug('Finalizando o giro antihorario, codigo sensores: '+ str(codigo_giro))
                     if codigo_giro == '01':
                         codigo_giro = str(self.ler_sensor(2)) + '' + str(self.ler_sensor(1))
-                        self.log.logger.info('Giro antihorario finalizado em '+ str((segundo / 1000)-tempo)+' segundo(s).')
+                        self.log.logger.info('Giro antihorario finalizado em '+ str(tempo_giro)+' segundo(s).')
                         self.log.logger.debug('Giro antihorario completo no codigo: '+ str(codigo_giro))
+                        print str(tempo_giro)
                         return True
                     elif codigo_giro == '00': 
                         codigo_giro = str(self.ler_sensor(2)) + '' + str(self.ler_sensor(1))
-                        self.log.logger.info('Giro antihorario finalizado em '+ str((segundo / 1000)-tempo)+' segundo(s).')
+                        self.log.logger.info('Giro antihorario finalizado em '+ str(tempo_giro)+' segundo(s).')
                         self.log.logger.debug('Giro antihorario completo no codigo: '+ str(codigo_giro))
+                        print str(tempo_giro)
                         return True
             return False
         except SystemExit, KeyboardInterrupt:
