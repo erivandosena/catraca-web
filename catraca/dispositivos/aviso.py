@@ -54,7 +54,8 @@ class Aviso(object):
         self.display.mensagem("   Bem-vindo!\nAPROXIME CARTAO",1,True,False)
         
     def exibir_erro_leitura_cartao(self):
-        self.display.mensagem("PROBLEMA AO LER!\nREPITA OPERACAO",1,True,False)
+        # self.display.mensagem("PROBLEMA AO LER!\nREPITA OPERACAO",1,True,False)
+        self.display.mensagem("APROXIME CARTAO\n  NOVAMENTE...",1,True,False)
         
     def exibir_acesso_bloqueado(self):
         self.display.mensagem("     ACESSO\n   BLOQUEADO!",1,False,False)
@@ -75,8 +76,10 @@ class Aviso(object):
         self.display.mensagem("     CARTAO\n  INVALIDO!",2,False,False)
         
     def exibir_horario_invalido(self):
-        self.display.mensagem("FORA DO HORARIO\nDE ATENDIMENTO!",2,False,False)  
+        self.display.mensagem("FORA DO HORARIO\nDE ATENDIMENTO",2,False,False)  
         
+    def exibir_cartao_utilizado(self):
+        self.display.mensagem("CARTAO JA USADO\nPARA 01 REFEICAO",2,False,False) 
     
 
         

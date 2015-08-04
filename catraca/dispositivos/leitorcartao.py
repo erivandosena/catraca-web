@@ -92,23 +92,24 @@ class LeitorCartao(object):
             p2_hora_inicio = datetime.strptime('17:30:00','%H:%M:%S').time()
             p2_hora_fim = datetime.strptime('19:00:00','%H:%M:%S').time()
             
-            print str(hora_atual)
-            print str(p1_hora_inicio)+' '+str(hora_atual < p1_hora_inicio)
-            print str(p1_hora_fim)+' '+str(hora_atual > p1_hora_fim)
-            print str(p2_hora_inicio)+' '+str(hora_atual < p2_hora_inicio)
-            print str(p2_hora_fim)+' '+str(hora_atual > p2_hora_fim)
-            
-            print 50 * "="
-            print '11:00:00 - 13:30:00 '+str(((hora_atual < p1_hora_inicio) and (hora_atual > p1_hora_fim)))
-            print '17:30:00 - 19:00:00 '+str(((hora_atual < p2_hora_inicio) and (hora_atual > p2_hora_fim)))
-            print 50 * "§"
-            print '11:00:00 - 13:30:00 / 17:30:00 - 19:00:00 '+str( (((hora_atual < p1_hora_inicio) and (hora_atual > p1_hora_fim)) or ((hora_atual < p2_hora_inicio) and (hora_atual > p2_hora_fim))) )
-            print '11:00:00 - 13:30:00 / 17:30:00 - 19:00:00 '+str( (((hora_atual >= p1_hora_inicio) and (hora_atual <= p1_hora_fim)) or ((hora_atual >= p2_hora_inicio) and (hora_atual <= p2_hora_fim))) )
+#             print str(hora_atual)
+#             print str(p1_hora_inicio)+' '+str(hora_atual < p1_hora_inicio)
+#             print str(p1_hora_fim)+' '+str(hora_atual > p1_hora_fim)
+#             print str(p2_hora_inicio)+' '+str(hora_atual < p2_hora_inicio)
+#             print str(p2_hora_fim)+' '+str(hora_atual > p2_hora_fim)
+#             
+#             print 50 * "="
+#             print '11:00:00 - 13:30:00 '+str(((hora_atual < p1_hora_inicio) and (hora_atual > p1_hora_fim)))
+#             print '17:30:00 - 19:00:00 '+str(((hora_atual < p2_hora_inicio) and (hora_atual > p2_hora_fim)))
+#             print 50 * "§"
+#             print '11:00:00 - 13:30:00 / 17:30:00 - 19:00:00 '+str( (((hora_atual < p1_hora_inicio) and (hora_atual > p1_hora_fim)) or ((hora_atual < p2_hora_inicio) and (hora_atual > p2_hora_fim))) )
+#             print '11:00:00 - 13:30:00 / 17:30:00 - 19:00:00 '+str( (((hora_atual >= p1_hora_inicio) and (hora_atual <= p1_hora_fim)) or ((hora_atual >= p2_hora_inicio) and (hora_atual <= p2_hora_fim))) )
+#             
             
             if not (((hora_atual >= p1_hora_inicio) and (hora_atual <= p1_hora_fim)) or ((hora_atual >= p2_hora_inicio) and (hora_atual <= p2_hora_fim))):        
                 self.aviso.exibir_horario_invalido()
                 self.aviso.exibir_acesso_bloqueado()
-                print 'passou na validaoa de horario'
+                print 'passou na validaoa de horarios'
                 return None
             elif (len(str(id_cartao)) <> 10):
                 self.log.logger.error('Cartao com ID incorreto:'+ str(id_cartao))
@@ -132,12 +133,29 @@ class LeitorCartao(object):
                     creditos = cartao.creditos
                     usuario_cartao = cartao.tipo
                     tipo = self.tipo_usuario(usuario_cartao)
+                    ultimo_acesso =  datetime.strptime(str(cartao.data),'%H:%M:%S').time()
     #                 if (cartao.getNumero() <> id_cartao):
     #                     self.log.logger.info('Cartao nao cadastrado ID:'+ str(id_cartao))
     #                     self.aviso.exibir_cartao_nao_cadastrado()
     #                     self.aviso.exibir_acesso_bloqueado()
     #                     return None
-                    if (creditos == 0):
+#                     if ((ultimo_acesso >= p1_hora_inicio) and (ultimo_acesso <= p1_hora_fim)):
+#                         return None
+#                     elif ((ultimo_acesso >= p2_hora_inicio) and (ultimo_acesso <= p2_hora_fim)): 
+#                         return None
+                    if (hora_atual >= p1_hora_inicio):
+                        if ((ultimo_acesso >= p1_hora_inicio) and (ultimo_acesso <= p1_hora_fim)):
+                            self.aviso.exibir_cartao_utilizado()
+                            self.aviso.exibir_acesso_bloqueado()
+                            print 'passou na validaoa de hora p/ 1 refeicao dia'
+                            return None    
+                    elif (hora_atual >= p2_hora_inicio):
+                        if ((ultimo_acesso >= p2_hora_inicio) and (ultimo_acesso <= p2_hora_fim)):
+                            self.aviso.exibir_cartao_utilizado()
+                            self.aviso.exibir_acesso_bloqueado()
+                            print 'passou na validaoa de hora p/ 1 refeicao noite'
+                            return None
+                    elif (creditos == 0):
                         self.log.logger.info('Cartao sem credito ID:'+ str(id_cartao))
                         self.aviso.exibir_cartao_sem_saldo(tipo)
                         self.aviso.exibir_acesso_bloqueado()
