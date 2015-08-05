@@ -126,14 +126,14 @@ class LeitorCartao(object):
                         year=databd.year, 
                     ).strptime(databd.strftime('%d/%m/%Y'),'%d/%m/%Y')
 
-                    if (hora_atual >= p1_hora_inicio):
+                    if ((hora_atual >= p1_hora_inicio) and (hora_atual <= p1_hora_fim)):
                         print 'passou na validação dia'
                         if ((hora_ultimo_acesso >= p1_hora_inicio) and (hora_ultimo_acesso <= p1_hora_fim) and (data_ultimo_acesso <= data_atual)):
                             self.aviso.exibir_cartao_utilizado1()
                             self.aviso.exibir_acesso_bloqueado()
                             print 'passou na validaoa de hora p/ 1ª refeicao dia'
                             return None    
-                    if (hora_atual >= p2_hora_inicio):
+                    if ((hora_atual >= p2_hora_inicio) and (hora_atual <= p2_hora_fim)):
                         print 'passou na validação noite'
                         if ((hora_ultimo_acesso >= p2_hora_inicio) and (hora_ultimo_acesso <= p2_hora_fim) and (data_ultimo_acesso <= data_atual)):
                             self.aviso.exibir_cartao_utilizado2()

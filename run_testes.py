@@ -1,8 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
 
-from testes import cartao_teste
-from testes import catraca_teste
+#from testes import cartao_teste
+#from testes import catraca_teste
+from testes.testehorarios import TesteHorarios
 
 
 __author__ = "Erivando Sena" 
@@ -18,4 +19,5 @@ if __name__ == '__main__':
     #TesteRFID.main()
     #TesteLeds.main()
     #TesteSensoresGiro.main()
+    TesteHorarios().main()
     pass
