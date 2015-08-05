@@ -81,8 +81,7 @@ class LeitorCartao(object):
     def valida_cartao(self, id_cartao):
         try:
             cartao = Cartao()
-            
-            data_atual = datetime.now().strftime('%d/%m/%Y')
+
             hora_atual = datetime.strptime(datetime.now().strftime('%H:%M:%S'),'%H:%M:%S').time()
             p1_hora_inicio = datetime.strptime('11:00:00','%H:%M:%S').time()
             p1_hora_fim = datetime.strptime('13:30:00','%H:%M:%S').time()
@@ -110,27 +109,33 @@ class LeitorCartao(object):
                     creditos = cartao.creditos
                     usuario_cartao = cartao.tipo
                     tipo = self.tipo_usuario(usuario_cartao)
+                    
+                    hora_ultimo_acesso = datetime.strptime(cartao.data.strftime('%H:%M:%S'),'%H:%M:%S').time()
 
-                    data = cartao.data
+                    datasis = datetime.now()
+                    data_atual = datetime(
+                        day=datasis.day,
+                        month=datasis.month,
+                        year=datasis.year, 
+                    ).strptime(datasis.strftime('%d/%m/%Y'),'%d/%m/%Y')
+                    
+                    databd = cartao.data
                     data_ultimo_acesso = datetime(
-                        day=data.day,
-                        month=data.month,
-                        year=data.year, 
-                    ).strftime('%d/%m/%Y')
-                    
-                    hora_ultimo_acesso = datetime.strptime(str(cartao.data),'%Y-%m-%d %H:%M:%S').time()
-                    data_ultimo_acesso = datetime.strptime(cartao.data.strftime('%d/%m/%Y'),'%d/%m/%Y')
-                    
+                        day=databd.day,
+                        month=databd.month,
+                        year=databd.year, 
+                    ).strptime(databd.strftime('%d/%m/%Y'),'%d/%m/%Y')
+
                     if (hora_atual >= p1_hora_inicio):
                         print 'passou na validação dia'
-                        if ((hora_ultimo_acesso >= p1_hora_inicio) and (hora_ultimo_acesso <= p1_hora_fim) and (data_ultimo_acesso == data_atual)):
+                        if ((hora_ultimo_acesso >= p1_hora_inicio) and (hora_ultimo_acesso <= p1_hora_fim) and (data_ultimo_acesso <= data_atual)):
                             self.aviso.exibir_cartao_utilizado1()
                             self.aviso.exibir_acesso_bloqueado()
                             print 'passou na validaoa de hora p/ 1ª refeicao dia'
                             return None    
                     if (hora_atual >= p2_hora_inicio):
                         print 'passou na validação noite'
-                        if ((hora_ultimo_acesso >= p2_hora_inicio) and (hora_ultimo_acesso <= p2_hora_fim) and (data_ultimo_acesso == data_atual)):
+                        if ((hora_ultimo_acesso >= p2_hora_inicio) and (hora_ultimo_acesso <= p2_hora_fim) and (data_ultimo_acesso <= data_atual)):
                             self.aviso.exibir_cartao_utilizado2()
                             self.aviso.exibir_acesso_bloqueado()
                             print 'passou na validaoa de hora p/ 2ª refeicao noite'
@@ -149,7 +154,7 @@ class LeitorCartao(object):
                         self.pictograma.seta_esquerda(1)
                         self.pictograma.xis(1)
                         ##############################################################
-                        # OPERACAO DE DEBITO NO CARTAO
+                        # OPERACAO DE DECREMENTO DE CREDITO NO CARTAO
                         ##############################################################
                         saldo_creditos = creditos - 1
                         cartao.creditos = saldo_creditos
@@ -173,20 +178,16 @@ class LeitorCartao(object):
         except SystemExit, KeyboardInterrupt:
             raise
         except Exception:
-            #self.cartao_dao.rollback
+            if self.cartao_dao.conexao_status:
+                self.cartao_dao.rollback
             self.log.logger.error('Erro validando ID do cartao.', exc_info=True)
         finally:
             self.solenoide.ativa_solenoide(1,0)
             self.pictograma.seta_esquerda(0)
             self.pictograma.xis(0)
             self.aviso.exibir_aguarda_cartao()
-            #self.mensagem.inicia_mensagem()
-            if self.cartao_dao.abre_conexao() is not None:
-                self.cartao_dao.fecha_conexao
-                print "Conexão finalizada (Cartao update)"
-                self.log.logger.debug('[Cartao Update] Conexão finalizada com o BD.')
-            print 'finaliza valida_cartao'
-        
+            self.log.logger.debug('[valida_cartao] Conexão finalizada com o BD.')
+
     def busca_id_cartao(self, id):
         try:
             cartao = self.cartao_dao.busca_id(id)
@@ -196,11 +197,7 @@ class LeitorCartao(object):
         except Exception:
             self.log.logger.error('Erro consultando ID do cartao.', exc_info=True)
         finally:
-            #pass
-            print 'finaliza busca_id_cartao'
-            #self.cartao_dao.fecha_conexao
-            #print "Conexão finalizada (Cartao select)"
-            #self.log.logger.debug('[Cartao Select] Conexão finalizada com o BD.')
+            pass
 
     def tipo_usuario(self, tipo):
         opcoes = {
@@ -212,4 +209,5 @@ class LeitorCartao(object):
                    6 : ' Administrador',
         }
         return opcoes.get(tipo, "  Desconhecido").upper()
+    
     

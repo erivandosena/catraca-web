@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 
+from contextlib import closing
 from cartao import Cartao
 from conexao import ConexaoFactory
 from .. logs import Logs
@@ -37,29 +38,29 @@ class CartaoDAO(object):
 
     @property
     def fecha_conexao(self):
-        print 'fecha_conexao no cartaodao'
         return self.__con.close()
-    
-#         try:
-#             conexao = ConexaoFactory()
-#             self.__con = conexao.getConexao(1) #use 1=PostgreSQL 2=MySQL 3=SQLite
-#             self.__factory = conexao.getFactory()
-#         except Exception, e:
-#             self.__erro = str(e)
+
+    @property
+    def conexao_status(self):
+        if self.__con.closed:
+            return False
+        else:
+            return True
 
     def abre_conexao(self):
         try:
-            conexao_bd = ConexaoFactory()
-            self.__con = conexao_bd.conexao(1) #use 1=PostgreSQL 2=MySQL 3=SQLite
-            self.__factory = conexao_bd.factory
-            return self.__con.cursor()
+            conexao_factory = ConexaoFactory()
+            self.__con = conexao_factory.conexao(1) #use 1=PostgreSQL 2=MySQL 3=SQLite
+            self.__con.autocommit = False
+            self.__factory = conexao_factory.factory
+            return self.__con
         except Exception, e:
             self.log.logger.critical('Erro abrindo conexao com o banco de dados.', exc_info=True)
             self.__erro = str(e)
         finally:
             pass
  
-    # Select por codigo ou id do cartao
+    # Select
     def busca_id(self, id):
         obj = Cartao()
         sql = "SELECT cart_id, "\
@@ -72,27 +73,28 @@ class CartaoDAO(object):
               "cart_id = " + str(id) +\
               " OR cart_numero = " + str(id)
         try:
-            cursor = self.abre_conexao()#self.__con.cursor()
-            cursor.execute(sql)
-            dados = cursor.fetchone()
-            # Carrega objeto
-            if dados:
-                obj.id = dados[0]
-                obj.numero = dados[1]
-                obj.creditos = dados[2]
-                obj.valor = dados[3]
-                obj.tipo = dados[4]
-                obj.data = dados[5]    
-                return obj  
-            else:
-                return None  
+            with closing(self.abre_conexao()) as conexao:
+                with closing(conexao.cursor()) as cursor:
+                    cursor.execute(sql)
+                    dados = cursor.fetchone()
+                    # Carrega objeto
+                    if dados:
+                        obj.id = dados[0]
+                        obj.numero = dados[1]
+                        obj.creditos = dados[2]
+                        obj.valor = dados[3]
+                        obj.tipo = dados[4]
+                        obj.data = dados[5]    
+                        return obj  
+                    else:
+                        return None
         except Exception, e:
-            self.log.logger.error('Erro ao realizar SELECT na tabela cartao.', exc_info=True)
+            if self.conexao_status:
+                self.fecha_conexao
             self.__erro = str(e)
+            self.log.logger.error('Erro ao realizar SELECT na tabela cartao.', exc_info=True)
         finally:
-            #pass
-            cursor.close()
-            print 'cursor cartao select fechado.'
+            pass
 
     # Insert
     def insere(self, obj):
@@ -129,18 +131,17 @@ class CartaoDAO(object):
              " WHERE "\
              "cart_id = " + str(obj.id)
        try:
-           cursor = self.abre_conexao()#self.__con.cursor()
-           cursor.execute(sql)
-           #self.__con.commit()
-           return True
+            with closing(self.abre_conexao()) as conexao:
+                with closing(conexao.cursor()) as cursor:
+                    cursor.execute(sql)
+                    #self.__con.commit()
+                    return True
        except Exception, e:
-           self.log.logger.error('Erro ao realizar UPDATE na tabela cartao.', exc_info=True)
            self.__erro = str(e)
+           self.log.logger.error('Erro ao realizar UPDATE na tabela cartao.', exc_info=True)
            return False
        finally:
-           #pass
-           cursor.close()
-           print 'cursor cartao update fechado.'
+           pass
     
     # Delete
     def exclui(self, obj):

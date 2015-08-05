@@ -37,44 +37,46 @@ class ConexaoFactory(object):
     def conexao(self, banco):
         con = None
         self.__factory = banco
-        # PostgreSQL
-        if (banco == self.__POSTGRESQL):
-            str_conexao = "\
-                    dbname='raspberry'\
-                    user='postgres'\
-                    host='localhost'\
-                    password='postgres'\
-                    "
-            try:
-                con = psycopg2.connect(str_conexao)
-            except Exception, e:
-                self.log.logger.critical('Erro na conexao com PostgreSQL.', exc_info=True)
-                self.__erroCon = str(e)
-            finally:
-                pass
-                
-        # MySQL
-        if (banco == self.__MYSQL):
-            str_conexao = "user='%s', password='%s', host='%s', database='%s'" % (usuario, senha, localhost, banco)
-            try:
-                #con = mysql.connector.connect(str_conexao)
-                pass
-            except Exception, e:
-                self.log.logger.critical('Erro na conexao com MySQL.', exc_info=True)
-                self.__erroCon = str(e)
-            finally:
-                pass
-            
-        # SQLite
-        if (banco == self.__SQLITE):
-            str_conexao = "'%s'" % (os.path.join(os.path.dirname(os.path.abspath(__file__)),"banco.db"))
-            try:
-                con = sqlite3.connect(str_conexao)
-            except Exception, e:
-                self.log.logger.critical('Erro na conexao com SQLite.', exc_info=True)
-                self.__erroCon = str(e)
-            finally:
-                pass
-            
-        return con
-    
+        try:
+            # PostgreSQL
+            if (banco == self.__POSTGRESQL):
+                str_conexao = "\
+                        dbname='raspberry'\
+                        user='postgres'\
+                        host='localhost'\
+                        password='postgres'\
+                        "
+                try:
+                    con = psycopg2.connect(str_conexao)
+                except Exception, e:
+                    self.log.logger.critical('Erro na conexao com PostgreSQL.', exc_info=True)
+                    self.__erroCon = str(e)
+                finally:
+                    pass
+            # MySQL
+            if (banco == self.__MYSQL):
+                str_conexao = "user='%s', password='%s', host='%s', database='%s'" % (usuario, senha, localhost, banco)
+                try:
+                    #con = mysql.connector.connect(str_conexao)
+                    pass
+                except Exception, e:
+                    self.log.logger.critical('Erro na conexao com MySQL.', exc_info=True)
+                    self.__erroCon = str(e)
+                finally:
+                    pass
+            # SQLite
+            if (banco == self.__SQLITE):
+                str_conexao = "'%s'" % (os.path.join(os.path.dirname(os.path.abspath(__file__)),"banco.db"))
+                try:
+                    con = sqlite3.connect(str_conexao)
+                except Exception, e:
+                    self.log.logger.critical('Erro na conexao com SQLite.', exc_info=True)
+                    self.__erroCon = str(e)
+                finally:
+                    pass
+            return con
+        except Exception, e:
+            self.log.logger.critical('Erro na string de conexao com banco de dados.', exc_info=True)
+            self.__erroCon = str(e)
+        finally:
+            pass
