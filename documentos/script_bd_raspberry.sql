@@ -7,15 +7,16 @@ CREATE DATABASE raspberry
 -- Table: usuario
 CREATE TABLE usuario
 (
-  usua_id serial NOT NULL,
-  usua_nome character varying(200),
-  usua_email character varying(200),
-  usua_login character varying(50),
-  usua_senha character varying(50),
-  usua_nivel integer,
-  id_externo bigint NOT NULL,
-  usua_num_doc character varying(50),
-  CONSTRAINT pk_usua_id PRIMARY KEY (usua_id )
+  usua_id serial NOT NULL, -- Campo autoincremento destinado para chave primaria da tabela.
+  usua_nome character varying(200), -- Nome completo do utilizador do cartao.
+  usua_email character varying(150), -- E-mail do utilizador do cartao.
+  usua_login character varying(50), -- Nome de usuario do utilizador do cartao.
+  usua_senha character varying(50), -- Senha de usuario do utilizador do cartao.
+  usua_nivel integer, -- Nivel de acesso ao sistema do utilizador do cartao.
+  id_externo bigint NOT NULL, -- Campo controle de ID unico proveniente de outros sistemas.
+  usua_num_doc character varying(25), -- Numero de CPF ou RG ou CIE do utilizador do cartao.
+  CONSTRAINT pk_usua_id PRIMARY KEY (usua_id ),
+  CONSTRAINT u_id_externo UNIQUE (id_externo )
 )
 WITH (
   OIDS=FALSE
@@ -23,7 +24,15 @@ WITH (
 ALTER TABLE usuario
   OWNER TO postgres;
 COMMENT ON TABLE usuario
-  IS 'Tabela de usuario do cartao de acesso na catraca.';
+  IS 'Tabela de usuario do cartao para acesso na catraca.';
+COMMENT ON COLUMN usuario.usua_id IS 'Campo autoincremento destinado para chave primaria da tabela.';
+COMMENT ON COLUMN usuario.usua_nome IS 'Nome completo do utilizador do cartao.';
+COMMENT ON COLUMN usuario.usua_email IS 'E-mail do utilizador do cartao.';
+COMMENT ON COLUMN usuario.usua_login IS 'Nome de usuario do utilizador do cartao.';
+COMMENT ON COLUMN usuario.usua_senha IS 'Senha de usuario do utilizador do cartao.';
+COMMENT ON COLUMN usuario.usua_nivel IS 'Nivel de acesso ao sistema do utilizador do cartao.';
+COMMENT ON COLUMN usuario.id_externo IS 'Campo controle de ID unico proveniente de outros sistemas.';
+COMMENT ON COLUMN usuario.usua_num_doc IS 'Numero de CPF ou RG ou CIE do utilizador do cartao.';
 
 -- Table: tipos
 CREATE TABLE tipos
@@ -52,9 +61,13 @@ CREATE TABLE cartao
   cart_tipo integer, -- 1=Estudante, 2=Professor, 3=Tecnico, 4=Visitante, 5=Operador, 6=Administrador.
   cart_dt_acesso timestamp without time zone, -- Data/hora do ultimo acesso.
   tipo_id integer NOT NULL, -- Relacionamento 1:1 com a tabela tipos.
+  usua_id integer NOT NULL,
   CONSTRAINT pk_cart_id PRIMARY KEY (cart_id ),
   CONSTRAINT fk_tipo_id FOREIGN KEY (tipo_id)
       REFERENCES tipos (tipo_id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_usua_id FOREIGN KEY (usua_id)
+      REFERENCES usuario (usua_id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
 )
 WITH (
