@@ -73,7 +73,6 @@ class LeitorCartao(object):
         except Exception, e:
             self.log.logger.error('Erro lendo cartao.', exc_info=True)
         finally:
-            print 'finaliza ler'
             self.aviso.exibir_aguarda_cartao()
             status = False
         return status
@@ -91,7 +90,6 @@ class LeitorCartao(object):
             if not (((hora_atual >= p1_hora_inicio) and (hora_atual <= p1_hora_fim)) or ((hora_atual >= p2_hora_inicio) and (hora_atual <= p2_hora_fim))):        
                 self.aviso.exibir_horario_invalido()
                 self.aviso.exibir_acesso_bloqueado()
-                print 'passou na validaoa de horarios'
                 return None
             elif (len(str(id_cartao)) <> 10):
                 self.log.logger.error('Cartao com ID incorreto:'+ str(id_cartao))
@@ -127,18 +125,14 @@ class LeitorCartao(object):
                     ).strptime(databd.strftime('%d/%m/%Y'),'%d/%m/%Y')
 
                     if ((hora_atual >= p1_hora_inicio) and (hora_atual <= p1_hora_fim)):
-                        print 'passou na validação dia'
-                        if ((hora_ultimo_acesso >= p1_hora_inicio) and (hora_ultimo_acesso <= p1_hora_fim) and (data_ultimo_acesso <= data_atual)):
+                        if ((hora_ultimo_acesso >= p1_hora_inicio) and (hora_ultimo_acesso <= p1_hora_fim) and (data_ultimo_acesso == data_atual)):
                             self.aviso.exibir_cartao_utilizado1()
                             self.aviso.exibir_acesso_bloqueado()
-                            print 'passou na validaoa de hora p/ 1ª refeicao dia'
                             return None    
                     if ((hora_atual >= p2_hora_inicio) and (hora_atual <= p2_hora_fim)):
-                        print 'passou na validação noite'
-                        if ((hora_ultimo_acesso >= p2_hora_inicio) and (hora_ultimo_acesso <= p2_hora_fim) and (data_ultimo_acesso <= data_atual)):
+                        if ((hora_ultimo_acesso >= p2_hora_inicio) and (hora_ultimo_acesso <= p2_hora_fim) and (data_ultimo_acesso == data_atual)):
                             self.aviso.exibir_cartao_utilizado2()
                             self.aviso.exibir_acesso_bloqueado()
-                            print 'passou na validaoa de hora p/ 2ª refeicao noite'
                             return None
                     if (creditos == 0):
                         self.log.logger.info('Cartao sem credito ID:'+ str(id_cartao))
@@ -166,12 +160,14 @@ class LeitorCartao(object):
                         while True:
                             if self.giro.registra_giro(6000):
                                 self.log.logger.info('Girou a catraca.')
-                                self.cartao_dao.commit # persiste no banco de dados
-                                self.log.logger.info('Cartao alterado com sucesso.')
+                                if self.cartao_dao.conexao_status:
+                                    self.cartao_dao.commit # persiste no banco de dados
+                                    self.log.logger.info('Cartao alterado com sucesso.')
                                 break
                             else:
                                 self.log.logger.info('Nao girou a catraca.')
-                                self.cartao_dao.rollback
+                                if self.cartao_dao.conexao_status:
+                                    self.cartao_dao.rollback
                                 break
             else:
                 return None
@@ -186,7 +182,9 @@ class LeitorCartao(object):
             self.pictograma.seta_esquerda(0)
             self.pictograma.xis(0)
             self.aviso.exibir_aguarda_cartao()
-            self.log.logger.debug('[valida_cartao] Conexão finalizada com o BD.')
+            if self.cartao_dao.conexao_status:
+                self.cartao_dao.fecha_conexao
+                self.log.logger.debug('[valida_cartao] Conexão finalizada com o BD.')
 
     def busca_id_cartao(self, id):
         try:

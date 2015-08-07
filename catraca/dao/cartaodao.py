@@ -42,10 +42,13 @@ class CartaoDAO(object):
 
     @property
     def conexao_status(self):
-        if self.__con.closed:
-            return False
+        if self.__con is not None:
+            if self.__con.closed:
+                return False
+            else:
+                return True
         else:
-            return True
+            return False
 
     def abre_conexao(self):
         try:
@@ -73,24 +76,23 @@ class CartaoDAO(object):
               "cart_id = " + str(id) +\
               " OR cart_numero = " + str(id)
         try:
-            with closing(self.abre_conexao()) as conexao:
-                with closing(conexao.cursor()) as cursor:
-                    cursor.execute(sql)
-                    dados = cursor.fetchone()
-                    # Carrega objeto
-                    if dados:
-                        obj.id = dados[0]
-                        obj.numero = dados[1]
-                        obj.creditos = dados[2]
-                        obj.valor = dados[3]
-                        obj.tipo = dados[4]
-                        obj.data = dados[5]    
-                        return obj  
-                    else:
-                        return None
+            with closing(self.abre_conexao().cursor()) as cursor:
+                cursor.execute(sql)
+                dados = cursor.fetchone()
+                # Carrega objeto
+                if dados:
+                    obj.id = dados[0]
+                    obj.numero = dados[1]
+                    obj.creditos = dados[2]
+                    obj.valor = dados[3]
+                    obj.tipo = dados[4]
+                    obj.data = dados[5]    
+                    return obj  
+                else:
+                    return None
         except Exception, e:
-            if self.conexao_status:
-                self.fecha_conexao
+            #if self.conexao_status:
+            #    self.fecha_conexao
             self.__erro = str(e)
             self.log.logger.error('Erro ao realizar SELECT na tabela cartao.', exc_info=True)
         finally:
@@ -131,11 +133,10 @@ class CartaoDAO(object):
              " WHERE "\
              "cart_id = " + str(obj.id)
        try:
-            with closing(self.abre_conexao()) as conexao:
-                with closing(conexao.cursor()) as cursor:
-                    cursor.execute(sql)
-                    #self.__con.commit()
-                    return True
+            with closing(self.abre_conexao().cursor()) as cursor:
+                cursor.execute(sql)
+                #self.__con.commit()
+                return True
        except Exception, e:
            self.__erro = str(e)
            self.log.logger.error('Erro ao realizar UPDATE na tabela cartao.', exc_info=True)
