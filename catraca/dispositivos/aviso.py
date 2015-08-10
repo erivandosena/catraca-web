@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 
-from catraca.dispositivos.display import Display
-from catraca.logs import Logs
-from datetime import datetime
-import locale
 import os
 import socket
+import locale
+from time import strftime
+from datetime import datetime
+from catraca.logs import Logs
+from catraca.dispositivos.display import Display
 
 
 __author__ = "Erivando Sena" 
@@ -28,6 +29,20 @@ class Aviso(object):
     def __init__(self):
         super(Aviso, self).__init__()
         
+    def saldacaao(self):
+        hora = strftime('%H')
+        mensagem = ''
+        if hora > 6 and hora <= 12:
+            mensagem = '    BOM DIA!'
+        elif hora > 12  and hora <=18:
+            mensagem = '   BOA TARDE!'
+        else:
+            mensagem = '   BOA NOITE!'
+        return mensagem
+        
+    def exibir_saldacaao(self):
+        self.display.mensagem(self.mensagem,1,False,False)
+        
     def exibir_inicializacao(self):
         self.display.mensagem('Iniciando...\n'+os.name.upper(),3,False,False)
         
@@ -41,8 +56,8 @@ class Aviso(object):
         data_hora = datetime.now().strftime('%d/%B/%Y\n    %H:%M:%S')
         self.display.mensagem(data_hora,3,False,False)
 
-#     def exibir_ip(self):
-#         self.display.mensagem('       IP\n   '+ip,5,False,False)
+    def exibir_ip(self):
+        self.display.mensagem('       IP\n   '+ip,5,False,False)
     
     def exibir_site(self):
         self.display.mensagem('    UNILAB - Unilab.edu.br',5,False,False)
@@ -51,7 +66,7 @@ class Aviso(object):
         self.display.mensagem('Desenvolvido por\n  DISUP | DTI',5,False,False)
         
     def exibir_aguarda_cartao(self):
-        self.display.mensagem("   Bem-vindo!\nAPROXIME CARTAO",1,True,False)
+        self.display.mensagem(self.saldacaao()+'\nAPROXIME CARTAO',1,True,False)
         
     def exibir_erro_leitura_cartao(self):
         # self.display.mensagem("PROBLEMA AO LER!\nREPITA OPERACAO",1,True,False)
@@ -78,18 +93,13 @@ class Aviso(object):
     def exibir_horario_invalido(self):
         self.display.mensagem("FORA DO HORARIO\n DE ATENDIMENTO",2,False,False)  
         
+    def exibir_dia_invalido(self):
+        self.display.mensagem("  DIA NAO UTIL\nPARA ATENDIMENTO",2,False,False)
+        
     def exibir_cartao_utilizado1(self):
         self.display.mensagem("CARTAO JA USADO\nPARA 1a REFEICAO",2,False,False) 
     
     def exibir_cartao_utilizado2(self):
-        self.display.mensagem("CARTAO JA USADO\nPARA 2a REFEICAO",2,False,False) 
-        
-    
-        
-    
-        
-        
-        
-        
+        self.display.mensagem("CARTAO JA USADO\nPARA 2a REFEICAO",2,False,False)
         
         

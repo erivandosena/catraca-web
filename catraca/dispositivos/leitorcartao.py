@@ -3,8 +3,10 @@
 
 import time
 import locale
+import calendar
+#from datetime import datetime
+import datetime
 from time import sleep
-from datetime import datetime
 from catraca.logs import Logs
 from catraca.pinos import PinoControle
 from catraca.dao.cartaodao import Cartao
@@ -81,12 +83,16 @@ class LeitorCartao(object):
         try:
             cartao = Cartao()
 
-            hora_atual = datetime.strptime(datetime.now().strftime('%H:%M:%S'),'%H:%M:%S').time()
-            p1_hora_inicio = datetime.strptime('11:00:00','%H:%M:%S').time()
-            p1_hora_fim = datetime.strptime('13:30:00','%H:%M:%S').time()
-            p2_hora_inicio = datetime.strptime('17:30:00','%H:%M:%S').time()
-            p2_hora_fim = datetime.strptime('19:00:00','%H:%M:%S').time()
+            hora_atual = datetime.datetime.strptime(datetime.datetime.now().strftime('%H:%M:%S'),'%H:%M:%S').time()
+            p1_hora_inicio = datetime.datetime.strptime('11:00:00','%H:%M:%S').time()
+            p1_hora_fim = datetime.datetime.strptime('13:30:00','%H:%M:%S').time()
+            p2_hora_inicio = datetime.datetime.strptime('17:30:00','%H:%M:%S').time()
+            p2_hora_fim = datetime.datetime.strptime('19:00:00','%H:%M:%S').time()
 
+            if not self.dias_uteis():
+                self.aviso.exibir_dia_invalido
+                self.aviso.exibir_acesso_bloqueado()
+                return None
             if not (((hora_atual >= p1_hora_inicio) and (hora_atual <= p1_hora_fim)) or ((hora_atual >= p2_hora_inicio) and (hora_atual <= p2_hora_fim))):        
                 self.aviso.exibir_horario_invalido()
                 self.aviso.exibir_acesso_bloqueado()
@@ -108,17 +114,17 @@ class LeitorCartao(object):
                     usuario_cartao = cartao.tipo
                     tipo = self.tipo_usuario(usuario_cartao)
                     
-                    hora_ultimo_acesso = datetime.strptime(cartao.data.strftime('%H:%M:%S'),'%H:%M:%S').time()
+                    hora_ultimo_acesso = datetime.datetime.strptime(cartao.data.strftime('%H:%M:%S'),'%H:%M:%S').time()
 
-                    datasis = datetime.now()
-                    data_atual = datetime(
+                    datasis = datetime.datetime.now()
+                    data_atual = datetime.datetime(
                         day=datasis.day,
                         month=datasis.month,
                         year=datasis.year, 
                     ).strptime(datasis.strftime('%d/%m/%Y'),'%d/%m/%Y')
                     
                     databd = cartao.data
-                    data_ultimo_acesso = datetime(
+                    data_ultimo_acesso = datetime.datetime(
                         day=databd.day,
                         month=databd.month,
                         year=databd.year, 
@@ -152,7 +158,7 @@ class LeitorCartao(object):
                         ##############################################################
                         saldo_creditos = creditos - 1
                         cartao.creditos = saldo_creditos
-                        cartao.data = datetime.now().strftime("'%Y-%m-%d %H:%M:%S'")
+                        cartao.data = datetime.datetime.now().strftime("'%Y-%m-%d %H:%M:%S'")
                         ##############################################################
                         if not self.cartao_dao.altera(cartao): # altera no banco de dados
                             self.log.logger.critical('Erro atualizando valores no cartao.')
@@ -207,5 +213,30 @@ class LeitorCartao(object):
                    6 : ' Administrador',
         }
         return opcoes.get(tipo, "  Desconhecido").upper()
+    
+    def dias_uteis(self):
+        dia_util = True
+        weekday_count = 0
+        cal = calendar.Calendar()
+        data_atual = datetime.datetime.now()
+        for week in cal.monthdayscalendar(data_atual.year, data_atual.month):
+            for i, day in enumerate(week):
+                if (day == 0) or (i >= 5):
+                    if (day <> 0) and (day <> data_atual.day):
+                        #print str(day) + ' não é dia útil'
+                        pass
+                    if day == data_atual.day:
+                        dia_util = False
+                        #print str(day) + ' não é dia útil [HOJE]'
+                    continue
+                if day == data_atual.day:
+                    dia_util = True
+                    #print str(day) + ' é dia útil [HOJE]'
+                else:
+                    #print str(day) + ' é dia útil'
+                    pass
+                weekday_count += 1
+        #print 'Total de dias uteis: '+str(weekday_count)
+        return dia_util
     
     

@@ -10,9 +10,6 @@ CREATE TABLE tipos
   tipo_id serial NOT NULL, -- Campo autoincremento destinado para chave primaria da tabela.
   tipo_nome character varying(16), -- Tipos de utilizadores permitidos: 1=Estudante, 2=Professor, 3=Tecnico, 4=Visitante, 5=Operador, 6=Administrador.
   CONSTRAINT pk_tipo_id PRIMARY KEY (tipo_id )
-)
-WITH (
-  OIDS=FALSE
 );
 ALTER TABLE tipos
   OWNER TO postgres;
@@ -21,35 +18,6 @@ COMMENT ON TABLE tipos
 COMMENT ON COLUMN tipos.tipo_id IS 'Campo autoincremento destinado para chave primaria da tabela.';
 COMMENT ON COLUMN tipos.tipo_nome IS 'Tipos de utilizadores permitidos: 1=Estudante, 2=Professor, 3=Tecnico, 4=Visitante, 5=Operador, 6=Administrador.';
 
--- Table: cartao
-CREATE TABLE cartao
-(
-  cart_id serial NOT NULL, -- Campo autoincremento destinado para chave primaria da tabela.
-  cart_numero bigint, -- Numero do ID do cartao de acesso sem permissao de duplicidade.
-  cart_qtd_creditos integer, -- Quantidade de creditos para uso diario do cartao.
-  cart_vlr_credito numeric(8,2), -- Valor em R$ para uso diario do cartao.
-  cart_tipo integer, -- 1=Estudante, 2=Professor, 3=Tecnico, 4=Visitante, 5=Operador, 6=Administrador.
-  cart_dt_acesso timestamp without time zone, -- Data/hora do ultimo acesso.
-  usua_id integer NOT NULL,
-  CONSTRAINT pk_cart_id PRIMARY KEY (cart_id ),
-  CONSTRAINT fk_usua_id FOREIGN KEY (usua_id)
-      REFERENCES usuario (usua_id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT u_cart_numero UNIQUE (cart_numero )
-)
-WITH (
-  OIDS=FALSE
-);
-ALTER TABLE cartao
-  OWNER TO postgres;
-COMMENT ON TABLE cartao
-  IS 'Tabela dos registros de uso do Smart Card RFID.';
-COMMENT ON COLUMN cartao.cart_id IS 'Campo autoincremento destinado para chave primaria da tabela.';
-COMMENT ON COLUMN cartao.cart_numero IS 'Numero do ID do cartao de acesso sem permissao de duplicidade.';
-COMMENT ON COLUMN cartao.cart_qtd_creditos IS 'Quantidade de creditos para uso diario do cartao.';
-COMMENT ON COLUMN cartao.cart_vlr_credito IS 'Valor em R$ para uso diario do cartao.';
-COMMENT ON COLUMN cartao.cart_tipo IS '1=Estudante, 2=Professor, 3=Tecnico, 4=Visitante, 5=Operador, 6=Administrador.';
-COMMENT ON COLUMN cartao.cart_dt_acesso IS 'Data/hora do ultimo acesso.';
 
 -- Table: usuario
 CREATE TABLE usuario
@@ -62,21 +30,14 @@ CREATE TABLE usuario
   usua_nivel integer, -- Nivel de acesso ao sistema do utilizador do cartao.
   id_externo bigint NOT NULL, -- Campo controle de ID unico proveniente de outros sistemas.
   usua_num_doc character varying(25), -- Numero de CPF ou CIE do utilizador do cartao sem permissao de duplicidade.
-  cart_id integer NOT NULL, -- Campo autoincremento destinado para chave primaria da tabela.
-  tipo_id integer NOT NULL,
+  tipo_id integer NOT NULL, -- Campo para chave estrengeira da tabela tipos.
   CONSTRAINT pk_usua_id PRIMARY KEY (usua_id ),
-  CONSTRAINT fk_cart_id FOREIGN KEY (cart_id)
-      REFERENCES cartao (cart_id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT fk_tipo_id FOREIGN KEY (tipo_id)
       REFERENCES tipos (tipo_id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT u_id_externo UNIQUE (id_externo ),
   CONSTRAINT u_usua_email UNIQUE (usua_email ),
   CONSTRAINT u_usua_num_doc UNIQUE (usua_num_doc )
-)
-WITH (
-  OIDS=FALSE
 );
 ALTER TABLE usuario
   OWNER TO postgres;
@@ -90,24 +51,35 @@ COMMENT ON COLUMN usuario.usua_senha IS 'Senha de usuario do utilizador do carta
 COMMENT ON COLUMN usuario.usua_nivel IS 'Nivel de acesso ao sistema do utilizador do cartao.';
 COMMENT ON COLUMN usuario.id_externo IS 'Campo controle de ID unico proveniente de outros sistemas.';
 COMMENT ON COLUMN usuario.usua_num_doc IS 'Numero de CPF ou CIE do utilizador do cartao sem permissao de duplicidade.';
-COMMENT ON COLUMN usuario.cart_id IS 'Campo autoincremento destinado para chave primaria da tabela.';
+COMMENT ON COLUMN usuario.tipo_id IS 'Campo para chave estrengeira da tabela tipos.';
 
--- Table: mensagem
-CREATE TABLE mensagem
+
+-- Table: cartao
+CREATE TABLE cartao
 (
-  mens_id serial NOT NULL, -- Campo autoincremento destinado para chave primaria da tabela.
-  mens_texto_display character varying(16), -- Mensagem de texto para exibicao em display LCD de 16 caracteres.
-  CONSTRAINT pk_mens_id PRIMARY KEY (mens_id )
-)
-WITH (
-  OIDS=FALSE
+  cart_id serial NOT NULL, -- Campo autoincremento destinado para chave primaria da tabela.
+  cart_numero bigint, -- Numero do ID do cartao de acesso sem permissao de duplicidade.
+  cart_qtd_creditos integer, -- Quantidade de creditos para uso diario do cartao.
+  cart_vlr_credito numeric(8,2), -- Valor em R$ para uso diario do cartao.
+  cart_dt_acesso timestamp without time zone, -- Data/hora do ultimo acesso.
+  usua_id integer NOT NULL, -- Campo para chave estrengeira da tabela usuario.
+  CONSTRAINT pk_cart_id PRIMARY KEY (cart_id ),
+  CONSTRAINT fk_usua_id FOREIGN KEY (usua_id)
+      REFERENCES usuario (usua_id) MATCH SIMPLE
+      ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT u_cart_numero UNIQUE (cart_numero )
 );
-ALTER TABLE mensagem
+ALTER TABLE cartao
   OWNER TO postgres;
-COMMENT ON TABLE mensagem
-  IS 'Tabela de mensagens para exibicao no display LCD.';
-COMMENT ON COLUMN mensagem.mens_id IS 'Campo autoincremento destinado para chave primaria da tabela.';
-COMMENT ON COLUMN mensagem.mens_texto_display IS 'Mensagem de texto para exibicao em display LCD de 16 caracteres.';
+COMMENT ON TABLE cartao
+  IS 'Tabela dos registros de uso do Smart Card RFID.';
+COMMENT ON COLUMN cartao.cart_id IS 'Campo autoincremento destinado para chave primaria da tabela.';
+COMMENT ON COLUMN cartao.cart_numero IS 'Numero do ID do cartao de acesso sem permissao de duplicidade.';
+COMMENT ON COLUMN cartao.cart_qtd_creditos IS 'Quantidade de creditos para uso diario do cartao.';
+COMMENT ON COLUMN cartao.cart_vlr_credito IS 'Valor em R$ para uso diario do cartao.';
+COMMENT ON COLUMN cartao.cart_dt_acesso IS 'Data/hora do ultimo acesso.';
+COMMENT ON COLUMN cartao.usua_id IS 'Campo para chave estrengeira da tabela usuario.';
+
 
 -- Table: giros
 CREATE TABLE giros
@@ -117,9 +89,6 @@ CREATE TABLE giros
   giro_giros_antihorario integer DEFAULT 0, -- Contador de giros no sentido anti-horario(Saida).
   giro_data_giro time without time zone NOT NULL DEFAULT now(), -- Data/hora da ocorrencia do giro.
   CONSTRAINT pk_giro_id PRIMARY KEY (giro_id )
-)
-WITH (
-  OIDS=FALSE
 );
 ALTER TABLE giros
   OWNER TO postgres;
@@ -129,6 +98,7 @@ COMMENT ON COLUMN giros.giro_id IS 'Campo autoincremento destinado para chave pr
 COMMENT ON COLUMN giros.giro_giros_horario IS 'Contador de giros no sentido horario(Entrada).';
 COMMENT ON COLUMN giros.giro_giros_antihorario IS 'Contador de giros no sentido anti-horario(Saida).';
 COMMENT ON COLUMN giros.giro_data_giro IS 'Data/hora da ocorrencia do giro.';
+
 
 -- Table: catraca
 CREATE TABLE catraca
@@ -141,18 +111,11 @@ CREATE TABLE catraca
   catr_hora_fim_almoco time without time zone, -- Hora final do 1º periodo para liberacao da catraca.
   catr_hora_inicio_janta time without time zone, -- Hora inicio do 2º periodo para liberacao da catraca.
   catr_hora_fim_janta time without time zone, -- Hora final do 2º periodo para liberacao da catraca.
-  mens_id integer NOT NULL,
-  giro_id integer NOT NULL,
+  giro_id integer NOT NULL, -- Campo para chave estrengeira da tabela giros.
   CONSTRAINT pk_catr_id PRIMARY KEY (catr_id ),
   CONSTRAINT fk_giro_id FOREIGN KEY (giro_id)
       REFERENCES giros (giro_id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT fk_mens_id FOREIGN KEY (mens_id)
-      REFERENCES mensagem (mens_id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
-)
-WITH (
-  OIDS=FALSE
 );
 ALTER TABLE catraca
   OWNER TO postgres;
@@ -166,3 +129,4 @@ COMMENT ON COLUMN catraca.catr_hora_inicio_almoco IS 'Hora inicio do 1º periodo 
 COMMENT ON COLUMN catraca.catr_hora_fim_almoco IS 'Hora final do 1º periodo para liberacao da catraca.';
 COMMENT ON COLUMN catraca.catr_hora_inicio_janta IS 'Hora inicio do 2º periodo para liberacao da catraca.';
 COMMENT ON COLUMN catraca.catr_hora_fim_janta IS 'Hora final do 2º periodo para liberacao da catraca.';
+COMMENT ON COLUMN catraca.giro_id IS 'Campo para chave estrengeira da tabela giros.';
