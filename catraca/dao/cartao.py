@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 
+from usuario import Usuario
 
 __author__ = "Erivando Sena"
 __copyright__ = "Copyright 2015, Unilab"
@@ -16,9 +17,9 @@ class Cartao(object):
         self.__cart_numero = None
         self.__cart_qtd_creditos = None
         self.__cart_vlr_credito = None
-        self.__cart_tipo = None
         self.__cart_dt_acesso = None
-
+        self.__usuario = Usuario()
+        
     @property
     def id(self):
         return self.__cart_id
@@ -51,13 +52,13 @@ class Cartao(object):
     def valor(self, valor):
         self.__cart_vlr_credito = valor
 
-    @property
-    def tipo(self):
-        return self.__cart_tipo
-
-    @tipo.setter
-    def tipo(self, valor):
-        self.__cart_tipo = valor
+#     @property
+#     def tipo(self):
+#         return self.__cart_tipo
+# 
+#     @tipo.setter
+#     def tipo(self, valor):
+#         self.__cart_tipo = valor
     
     @property
     def data(self):
@@ -66,3 +67,12 @@ class Cartao(object):
     @data.setter
     def data(self, valor):
         self.__cart_dt_acesso = valor
+        
+    @property
+    def usuario(self):
+        return self.__usuario
+
+    @usuario.setter
+    def usuario(self, obj):
+        self.__usuario = obj
+        

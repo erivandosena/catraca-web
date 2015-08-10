@@ -5,18 +5,18 @@ CREATE DATABASE raspberry
 */
 
 -- Table: tipos
-CREATE TABLE tipos
+CREATE TABLE tipo
 (
   tipo_id serial NOT NULL, -- Campo autoincremento destinado para chave primaria da tabela.
   tipo_nome character varying(16), -- Tipos de utilizadores permitidos: 1=Estudante, 2=Professor, 3=Tecnico, 4=Visitante, 5=Operador, 6=Administrador.
   CONSTRAINT pk_tipo_id PRIMARY KEY (tipo_id )
 );
-ALTER TABLE tipos
+ALTER TABLE tipo
   OWNER TO postgres;
-COMMENT ON TABLE tipos
+COMMENT ON TABLE tipo
   IS 'Tabela dos tipos de utilizadores da catraca.';
-COMMENT ON COLUMN tipos.tipo_id IS 'Campo autoincremento destinado para chave primaria da tabela.';
-COMMENT ON COLUMN tipos.tipo_nome IS 'Tipos de utilizadores permitidos: 1=Estudante, 2=Professor, 3=Tecnico, 4=Visitante, 5=Operador, 6=Administrador.';
+COMMENT ON COLUMN tipo.tipo_id IS 'Campo autoincremento destinado para chave primaria da tabela.';
+COMMENT ON COLUMN tipo.tipo_nome IS 'Tipos de utilizadores permitidos: 1=Estudante, 2=Professor, 3=Tecnico, 4=Visitante, 5=Operador, 6=Administrador.';
 
 
 -- Table: usuario
@@ -33,7 +33,7 @@ CREATE TABLE usuario
   tipo_id integer NOT NULL, -- Campo para chave estrengeira da tabela tipos.
   CONSTRAINT pk_usua_id PRIMARY KEY (usua_id ),
   CONSTRAINT fk_tipo_id FOREIGN KEY (tipo_id)
-      REFERENCES tipos (tipo_id) MATCH SIMPLE
+      REFERENCES tipo (tipo_id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT u_id_externo UNIQUE (id_externo ),
   CONSTRAINT u_usua_email UNIQUE (usua_email ),
@@ -82,7 +82,7 @@ COMMENT ON COLUMN cartao.usua_id IS 'Campo para chave estrengeira da tabela usua
 
 
 -- Table: giros
-CREATE TABLE giros
+CREATE TABLE giro
 (
   giro_id serial NOT NULL, -- Campo autoincremento destinado para chave primaria da tabela.
   giro_giros_horario integer DEFAULT 0, -- Contador de giros no sentido horario(Entrada).
@@ -90,14 +90,14 @@ CREATE TABLE giros
   giro_data_giro time without time zone NOT NULL DEFAULT now(), -- Data/hora da ocorrencia do giro.
   CONSTRAINT pk_giro_id PRIMARY KEY (giro_id )
 );
-ALTER TABLE giros
+ALTER TABLE giro
   OWNER TO postgres;
-COMMENT ON TABLE giros
+COMMENT ON TABLE giro
   IS 'Tabela de contabilizacao de giros horario e anti-horario.';
-COMMENT ON COLUMN giros.giro_id IS 'Campo autoincremento destinado para chave primaria da tabela.';
-COMMENT ON COLUMN giros.giro_giros_horario IS 'Contador de giros no sentido horario(Entrada).';
-COMMENT ON COLUMN giros.giro_giros_antihorario IS 'Contador de giros no sentido anti-horario(Saida).';
-COMMENT ON COLUMN giros.giro_data_giro IS 'Data/hora da ocorrencia do giro.';
+COMMENT ON COLUMN giro.giro_id IS 'Campo autoincremento destinado para chave primaria da tabela.';
+COMMENT ON COLUMN giro.giro_giros_horario IS 'Contador de giros no sentido horario(Entrada).';
+COMMENT ON COLUMN giro.giro_giros_antihorario IS 'Contador de giros no sentido anti-horario(Saida).';
+COMMENT ON COLUMN giro.giro_data_giro IS 'Data/hora da ocorrencia do giro.';
 
 
 -- Table: catraca
@@ -114,7 +114,7 @@ CREATE TABLE catraca
   giro_id integer NOT NULL, -- Campo para chave estrengeira da tabela giros.
   CONSTRAINT pk_catr_id PRIMARY KEY (catr_id ),
   CONSTRAINT fk_giro_id FOREIGN KEY (giro_id)
-      REFERENCES giros (giro_id) MATCH SIMPLE
+      REFERENCES giro (giro_id) MATCH SIMPLE
       ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 ALTER TABLE catraca

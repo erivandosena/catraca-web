@@ -2,8 +2,7 @@
 # -*- coding: latin-1 -*-
 
 from contextlib import closing
-from cartao import Cartao
-from usuario import Usuario
+from giro import Giro
 from conexao import ConexaoFactory
 from .. logs import Logs
 
@@ -14,12 +13,12 @@ __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production
 
 
-class CartaoDAO(object):
+class GiroDAO(object):
     
     log = Logs()
 
     def __init__(self):
-        super(CartaoDAO, self).__init__()
+        super(GiroDAO, self).__init__()
         self.__erro = None
         self.__con = None
         self.__factory = None
@@ -59,108 +58,113 @@ class CartaoDAO(object):
             self.__factory = conexao_factory.factory
             return self.__con
         except Exception, e:
-            self.log.logger.critical('Erro abrindo conexao com o banco de dados.', exc_info=True)
             self.__erro = str(e)
+            self.log.logger.critical('Erro abrindo conexao com o banco de dados.', exc_info=True)
         finally:
             pass
- 
-    # Select
-    def busca_id(self, id):
-        obj = Cartao()
-        sql = "SELECT cart_id, "\
-              "cart_numero, "\
-              "cart_qtd_creditos, "\
-              "cart_vlr_credito, "\
-              "cart_dt_acesso, "\
-              "usua_id "\
-              "FROM cartao WHERE "\
-              "cart_id = " + str(id) +\
-              " OR cart_numero = " + str(id)
+        
+    def busca_giro(self, id):
+        obj = Giro()
+        sql = "SELECT giro_id, "\
+              "giro_giros_horario, "\
+              "giro_giros_antihorario, "\
+              "giro_data_giro "\
+              "FROM giro WHERE "\
+              "giro_id = " + str(id)
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
                 dados = cursor.fetchone()
-                # Carrega objeto
                 if dados:
                     obj.id = dados[0]
-                    obj.numero = dados[1]
-                    obj.creditos = dados[2]
-                    obj.valor = dados[3]
-                    obj.data = dados[4]    
-                    obj.usuario = Usuario().busca_usuario(dados[5])
-                    return obj
+                    obj.horario = dados[1]    
+                    obj.antihorario = dados[2]
+                    obj.data = dados[3]    
+                    return obj  
                 else:
                     return None
         except Exception, e:
-            #if self.conexao_status:
-            #    self.fecha_conexao
             self.__erro = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela cartao.', exc_info=True)
+            self.log.logger.error('Erro ao realizar SELECT na tabela giro.', exc_info=True)
         finally:
             pass
 
-    # Insert
-    def insere(self, obj):
-        sql = "INSERT INTO cartao("\
-              "cart_numero, "\
-              "cart_qtd_creditos, "\
-              "cart_vlr_credito, "\
-              "cart_dt_acesso, "\
-              "usua_id) VALUES (" +\
-              str(obj.numero) + ", " +\
-              str(obj.creditos) + ", " +\
-              str(obj.valor) + ", " +\
-              str(obj.data) + ", " +\
-              str(obj.usuario) + ")"
+    def busca(self, id):
+        obj = Giro()
+        sql = "SELECT giro_id, "\
+              "giro_giros_horario, "\
+              "giro_giros_antihorario, "\
+              "giro_data_giro "\
+              "FROM giro WHERE "\
+              "firo_id = " + str(id)
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
-                #cursor = self.__con.cursor()
-                #cursor = self.abre_conexao()
+                cursor.execute(sql)
+                dados = cursor.fetchone()
+                if dados:
+                    obj.id = dados[0]
+                    obj.horario = dados[1]    
+                    obj.antihorario = dados[2]
+                    obj.data = dados[3]    
+                    return obj  
+                else:
+                    return None
+        except Exception, e:
+            self.__erro = str(e)
+            self.log.logger.error('Erro ao realizar SELECT na tabela giro.', exc_info=True)
+        finally:
+            pass
+
+    def insere(self, obj):
+        sql = "INSERT INTO giro("\
+              "giro_giros_horario, "\
+              "giro_giros_antihorario, "\
+              "giro_data_giro) VALUES (" +\
+              str(obj.horario) + ", " +\
+              str(obj.antihorario) + ", " +\
+              str(obj.data) + ")"
+        try:
+            with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
                 self.__con.commit()
                 return True
         except Exception, e:
-            self.log.logger.error('Erro ao realizar INSERT na tabela cartao.', exc_info=True)
             self.__erro = str(e)
+            self.log.logger.error('Erro ao realizar INSERT na tabela giro.', exc_info=True)
             return False
+        finally:
+            pass
 
-    # Update
     def altera(self, obj):
-       sql = "UPDATE cartao SET " +\
-             "cart_numero = " + str(obj.numero) + ", " +\
-             "cart_qtd_creditos = " + str(obj.creditos) + ", " +\
-             "cart_vlr_credito = " + str(obj.valor) + ", " +\
-             "cart_dt_acesso = " + str(obj.data) + ", " +\
-             "usua_id = " + str(obj.usuario) +\
+       sql = "UPDATE giro SET " +\
+             "giro_giros_horario = " + str(obj.horario) + ", " +\
+             "giro_giros_antihorario = " + str(obj.antihorario) + ", " +\
+             "giro_data_giro = " + str(obj.data) +\
              " WHERE "\
-             "cart_id = " + str(obj.id)
+             "giro_id = " + str(obj.id)
        try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
-                #self.__con.commit()
                 return True
        except Exception, e:
-           self.__erro = str(e)
-           self.log.logger.error('Erro ao realizar UPDATE na tabela cartao.', exc_info=True)
-           return False
+            self.__erro = str(e)
+            self.log.logger.error('Erro ao realizar UPDATE na tabela giro.', exc_info=True)
+            return False
        finally:
            pass
     
-    # Delete
     def exclui(self, obj):
-        sql = "DELETE FROM cartao WHERE cart_id = " + str(obj.id)
+        sql = "DELETE FROM tipo WHERE giro_id = " + str(obj.id)
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
-                #cursor = self.__con.cursor()
-                #cursor = self.abre_conexao()
                 cursor.execute(sql)
                 self.__con.commit()
                 return True
         except Exception, e:
             self.__erro = str(e)
-            self.log.logger.error('Erro ao realizar DELETE na tabela cartao.', exc_info=True)
+            self.log.logger.error('Erro ao realizar DELETE na tabela giro.', exc_info=True)
             return False
         finally:
-            pass
+           pass
+       
         
-    
