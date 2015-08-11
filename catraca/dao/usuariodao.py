@@ -113,7 +113,7 @@ class UsuarioDAO(object):
               "tipo_id "\
               "FROM usuario WHERE "\
               "usua_nome = " + str(valor) +\
-              " OR documento = " + str(valor)
+              " OR usua_num_doc = " + str(valor)
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -182,6 +182,7 @@ class UsuarioDAO(object):
        try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
+                self.__con.commit()
                 return True
        except Exception, e:
             self.__erro = str(e)

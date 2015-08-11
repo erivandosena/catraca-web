@@ -3,7 +3,9 @@
 
 
 import locale
-from datetime import datetime
+import datetime
+from catraca.dao.usuario import Usuario
+from catraca.dao.usuariodao import UsuarioDAO
 from catraca.dao.cartao import Cartao
 from catraca.dao.cartaodao import CartaoDAO
 
@@ -19,6 +21,61 @@ locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 def main():
     print 'Iniciando os testes tabela cartao...'
+    
+    usuario = Usuario()
+    usuario_dao = UsuarioDAO()
+    
+    cartao = Cartao()
+    cartao_dao = CartaoDAO()
+
+    cartao.numero = 3995295262
+    cartao.creditos = 10
+    cartao.valor = 1.10
+    cartao.data = datetime.datetime.now().strftime("'%Y-%m-%d %H:%M:%S'")
+    cartao.usuario = usuario_dao.busca("'12345678912'").id
+    
+
+    if cartao.id:
+        if cartao_dao.altera(usuario):
+            print "Alterado com sucesso!"
+        else:
+            print "Erro ao alterar:"
+            print cartao_dao.erro
+    else:
+        if cartao_dao.insere(usuario):
+            print "Inserido com sucesso!"
+        else:
+            print "Erro ao inserir:"
+            print cartao_dao.erro
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     
     # teste (insert)
     cartao = Cartao()

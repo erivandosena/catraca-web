@@ -2,8 +2,8 @@
 # -*- coding: latin-1 -*-
 
 from contextlib import closing
-from tipo import Tipo
 from conexao import ConexaoFactory
+from tipo import Tipo
 from .. logs import Logs
 
 
@@ -113,7 +113,7 @@ class TipoDAO(object):
                 self.__con.commit()
                 return True
         except Exception, e:
-            self.__erro = str(e)
+            #self.__erro = str(e)
             self.log.logger.error('Erro ao realizar INSERT na tabela tipo.', exc_info=True)
             return False
         finally:
@@ -127,6 +127,7 @@ class TipoDAO(object):
        try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
+                self.__con.commit()
                 return True
        except Exception, e:
            self.__erro = str(e)

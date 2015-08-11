@@ -145,6 +145,7 @@ class GiroDAO(object):
        try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
+                self.__con.commit()
                 return True
        except Exception, e:
             self.__erro = str(e)

@@ -5,8 +5,8 @@
 #from datetime import datetime
 import locale
 from catraca.dao.tipo import Tipo
-from catraca.dao.usuario import Usuario
 from catraca.dao.tipodao import TipoDAO
+from catraca.dao.usuario import Usuario
 from catraca.dao.usuariodao import UsuarioDAO
 
 
@@ -20,7 +20,7 @@ locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
 def main():
-    print 'Iniciando os testes tabela tipo...'
+    print 'Iniciando os testes tabela usuario...'
     
     tipo = Tipo()
     tipo_dao = TipoDAO()
@@ -33,9 +33,9 @@ def main():
     usuario.login = "'acleber'"
     usuario.senha = "'acleber'"
     usuario.nivel = "'1'"
-    usuario.externo = "'00003'"
-    usuario.documento = "12345678914"
-    usuario.tipo = tipo_dao.busca("'Tecnico'").id
+    usuario.externo = "'00001'"
+    usuario.documento = "12345678912"
+    usuario.tipo = tipo_dao.busca("'Estudante'").id
     
 
     if usuario.id:

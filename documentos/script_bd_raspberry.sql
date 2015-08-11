@@ -4,7 +4,7 @@ CREATE DATABASE raspberry
        CONNECTION LIMIT=-1;
 */
 
--- Table: tipos
+-- Table: tipo
 CREATE TABLE tipo
 (
   tipo_id serial NOT NULL, -- Campo autoincremento destinado para chave primaria da tabela.
@@ -81,7 +81,7 @@ COMMENT ON COLUMN cartao.cart_dt_acesso IS 'Data/hora do ultimo acesso.';
 COMMENT ON COLUMN cartao.usua_id IS 'Campo para chave estrengeira da tabela usuario.';
 
 
--- Table: giros
+-- Table: giro
 CREATE TABLE giro
 (
   giro_id serial NOT NULL, -- Campo autoincremento destinado para chave primaria da tabela.

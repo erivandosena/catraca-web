@@ -49,8 +49,8 @@ class ConexaoFactory(object):
                 try:
                     con = psycopg2.connect(str_conexao)
                 except Exception, e:
-                    self.log.logger.critical('Erro na conexao com PostgreSQL.', exc_info=True)
                     self.__erroCon = str(e)
+                    self.log.logger.critical('Erro na conexao com PostgreSQL.', exc_info=True)
                 finally:
                     pass
             # MySQL
@@ -60,8 +60,8 @@ class ConexaoFactory(object):
                     #con = mysql.connector.connect(str_conexao)
                     pass
                 except Exception, e:
-                    self.log.logger.critical('Erro na conexao com MySQL.', exc_info=True)
                     self.__erroCon = str(e)
+                    self.log.logger.critical('Erro na conexao com MySQL.', exc_info=True)
                 finally:
                     pass
             # SQLite
@@ -70,13 +70,13 @@ class ConexaoFactory(object):
                 try:
                     con = sqlite3.connect(str_conexao)
                 except Exception, e:
-                    self.log.logger.critical('Erro na conexao com SQLite.', exc_info=True)
                     self.__erroCon = str(e)
+                    self.log.logger.critical('Erro na conexao com SQLite.', exc_info=True)
                 finally:
                     pass
             return con
         except Exception, e:
-            self.log.logger.critical('Erro na string de conexao com banco de dados.', exc_info=True)
             self.__erroCon = str(e)
+            self.log.logger.critical('Erro na string de conexao com banco de dados.', exc_info=True)
         finally:
             pass

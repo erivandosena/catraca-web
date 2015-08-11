@@ -22,9 +22,8 @@ def main():
     
     tipo = Tipo()
     tipo_dao = TipoDAO()
-
-    # Estudante(1,10), Professor(2,20), Tecnico(1,60), Visitante(4,00), Operador, Administrador.
-    tipo.nome = "'Administrador'"
+    tipo.nome = "'Estudante'"
+    # Estudante(1,10), Professor(2,20), Tecnico(1,60), Visitante(4,00), Operador, Administrador.   
 
     if tipo.id:
         if tipo_dao.altera(tipo):
@@ -38,4 +37,4 @@ def main():
         else:
             print "Erro ao inserir:"
             print tipo_dao.erro
-            
+             
