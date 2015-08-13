@@ -65,16 +65,15 @@ class TipoDAO(object):
         
     def busca_tipo(self, id):
         obj = Tipo()
-        sql = "SELECT tipo_id, tipo_nome "\
-              "FROM tipo WHERE "\
-              "tipo_id = " + str(id)
+        sql = "SELECT tipo_id, tipo_nome, tipo_vlr_credito FROM tipo WHERE tipo_id = " + str(id)
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
                 dados = cursor.fetchone()
                 if dados:
                     obj.id = dados[0]
-                    obj.nome = dados[1]    
+                    obj.nome = dados[1]
+                    obj.valor = dados[2]  
                     return obj  
                 else:
                     return None
@@ -86,16 +85,15 @@ class TipoDAO(object):
  
     def busca(self, nome):
         obj = Tipo()
-        sql = "SELECT tipo_id, tipo_nome "\
-              "FROM tipo WHERE "\
-              "tipo_nome = " + str(nome)
+        sql = "SELECT tipo_id, tipo_nome, tipo_vlr_credito FROM tipo WHERE tipo_nome = " + str(nome)
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
                 dados = cursor.fetchone()
                 if dados:
                     obj.id = dados[0]
-                    obj.nome = dados[1]    
+                    obj.nome = dados[1]
+                    obj.valor = dados[2]
                     return obj  
                 else:
                     return None
@@ -106,14 +104,18 @@ class TipoDAO(object):
             pass
 
     def insere(self, obj):
-        sql = "INSERT INTO tipo(tipo_nome) VALUES ("+ str(obj.nome) +")"
+        sql = "INSERT INTO tipo("\
+              "tipo_nome, "\
+              "tipo_vlr_credito) VALUES (" +\
+              str(obj.nome) + ", " +\
+              str(obj.valor) + ")"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
                 self.__con.commit()
                 return True
         except Exception, e:
-            #self.__erro = str(e)
+            self.__erro = str(e)
             self.log.logger.error('Erro ao realizar INSERT na tabela tipo.', exc_info=True)
             return False
         finally:
@@ -121,7 +123,8 @@ class TipoDAO(object):
 
     def altera(self, obj):
        sql = "UPDATE tipo SET " +\
-             "tipo_nome = " + str(obj.nome) +\
+             "tipo_nome = " + str(obj.nome) + ", " +\
+             "tipo_vlr_credito = " + str(obj.valor) +\
              " WHERE "\
              "tipo_id = " + str(obj.id)
        try:

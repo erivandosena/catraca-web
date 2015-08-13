@@ -2,9 +2,8 @@
 # -*- coding: latin-1 -*-
 
 from contextlib import closing
+from cartao import Cartao
 from conexao import ConexaoFactory
-from turno import Turno
-from giro import Giro
 from .. logs import Logs
 
 
@@ -14,12 +13,12 @@ __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production
 
 
-class CatracaDAO(object):
+class RegistroDAO(object):
     
     log = Logs()
 
     def __init__(self):
-        super(CatracaDAO, self).__init__()
+        super(RegistroDAO, self).__init__()
         self.__erro = None
         self.__con = None
         self.__factory = None
@@ -63,87 +62,78 @@ class CatracaDAO(object):
             self.__erro = str(e)
         finally:
             pass
- 
-    def busca_id(self, id):
-        obj = Catraca()
-        sql = "SELECT catr_id, "\
-              "catr_ip, "\
-              "catr_localizacao, "\
-              "catr_tempo_giro, "\
-              "catr_operacao, "\
-              "turn_id, "\
-              "giro_id "\
-              "FROM catraca WHERE "\
-              "catr_id = " + str(id)
+
+    def busca_registro_periodo(self, data1, data2):
+        obj = Registro()
+        sql = "SELECT regi_id, "\
+              "regi_datahora, "\
+              "regi_giro, "\
+              "regi_valor, "\
+              "cart_id "\
+              "FROM registro WHERE "\
+              "regi_datahora BETWEEN " + str(data1) +\
+              " AND " + str(data2) +\
+              " ORDER BY regi_datahora DESC"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
                 dados = cursor.fetchone()
                 if dados:
                     obj.id = dados[0]
-                    obj.ip = dados[1]
-                    obj.localizacao = dados[2]
-                    obj.tempo = dados[3]
-                    obj.operacao = dados[4]    
-                    obj.turno = Turno().busca_turno(dados[5])  
-                    obj.giro = Giro().busca_giro(dados[6])  
+                    obj.data = dados[1]
+                    obj.giro = dados[2]
+                    obj.valor = dados[3]
+                    obj.cartao = Cartao().busca_cartao(dados[4])
                     return obj
                 else:
                     return None
         except Exception, e:
             self.__erro = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela catraca.', exc_info=True)
+            self.log.logger.error('Erro ao realizar SELECT na tabela registro.', exc_info=True)
         finally:
             pass
 
     def insere(self, obj):
-        sql = "INSERT INTO catraca("\
-              "catr_ip, "\
-              "catr_localizacao, "\
-              "catr_tempo_giro, "\
-              "catr_operacao, "\
-              "turn_id, "\
-              "giro_id) VALUES (" +\
-              str(obj.ip) + ", " +\
-              str(obj.localizacao) + ", " +\
-              str(obj.tempo) + ", " +\
-              str(obj.operacao) + ", " +\
-              str(obj.turno) + ", " +\
-              str(obj.giro) + ")"
+        sql = "INSERT INTO registro("\
+              "regi_datahora, "\
+              "regi_giro, "\
+              "regi_valor, "\
+              "cart_id) VALUES (" +\
+              str(obj.data) + ", " +\
+              str(obj.giro) + ", " +\
+              str(obj.valor) + ", " +\
+              str(obj.cartao) + ")"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
                 self.__con.commit()
                 return True
         except Exception, e:
-            self.log.logger.error('Erro ao realizar INSERT na tabela catraca.', exc_info=True)
+            self.log.logger.error('Erro ao realizar INSERT na tabela registro.', exc_info=True)
             self.__erro = str(e)
             return False
 
     def altera(self, obj):
-       sql = "UPDATE catraca SET " +\
-             "catr_ip = " + str(obj.ip) + ", " +\
-             "catr_localizacao = " + str(obj.localizacao) + ", " +\
-             "catr_tempo_giro = " + str(obj.tempo) + ", " +\
-             "catr_operacao = " + str(obj.operacao) + ", " +\
-             "turn_id = " + str(obj.turno) + ", " +\
-             "giro_id = " + str(obj.giro) +\
+       sql = "UPDATE registro SET " +\
+             "regi_datahora = " + str(obj.data) + ", " +\
+             "regi_giro = " + str(obj.giro) + ", " +\
+             "regi_valor = " + str(obj.valor) + ", " +\
+             "cart_id = " + str(obj.cartao) +\
              " WHERE "\
-             "catr_id = " + str(obj.id)
+             "regi_id = " + str(obj.id)
        try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
-                self.__con.commit()
                 return True
        except Exception, e:
            self.__erro = str(e)
-           self.log.logger.error('Erro ao realizar UPDATE na tabela catraca.', exc_info=True)
+           self.log.logger.error('Erro ao realizar UPDATE na tabela registro.', exc_info=True)
            return False
        finally:
            pass
-    
+
     def exclui(self, obj):
-        sql = "DELETE FROM catraca WHERE catr_id = " + str(obj.id)
+        sql = "DELETE FROM registro WHERE regi_id = " + str(obj.id)
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -151,9 +141,8 @@ class CatracaDAO(object):
                 return True
         except Exception, e:
             self.__erro = str(e)
-            self.log.logger.error('Erro ao realizar DELETE na tabela catraca.', exc_info=True)
+            self.log.logger.error('Erro ao realizar DELETE na tabela registro.', exc_info=True)
             return False
         finally:
             pass
         
-    

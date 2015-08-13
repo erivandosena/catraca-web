@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 
+from turno import Turno
 from giro import Giro
 
 __author__ = "Erivando Sena"
@@ -14,13 +15,11 @@ class Catraca(object):
     def __init__(self):
         super(Catraca, self).__init__()
         self.__catr_id = None
-        self.__catr_local = None
+        self.__catr_ip = None
+        self.__catr_localizacao = None
         self.__catr_tempo_giro = None
-        self.__catr_sentido_giro = None
-        self.__catr_hora_inicio_almoco = None
-        self.__catr_hora_fim_almoco = None
-        self.__catr_hora_inicio_janta = None
-        self.__catr_hora_fim_janta = None
+        self.__catr_operacao = None
+        self.__turno = Turno()
         self.__giro = Giro()
 
     @property
@@ -30,14 +29,22 @@ class Catraca(object):
     @id.setter
     def id(self, valor):
         self.__catr_id = valor
+        
+    @property
+    def ip(self):
+        return self.__catr_ip
+    
+    @ip.setter
+    def ip(self, valor):
+        self.__catr_ip = valor
  
     @property
-    def local(self):
-        return self.__catr_local
+    def localizacao(self):
+        return self.__catr_localizacao
     
-    @local.setter
-    def local(self, valor):
-        self.__catr_local = valor
+    @localizacao.setter
+    def localizacao(self, valor):
+        self.__catr_localizacao = valor
  
     @property
     def tempo(self):
@@ -48,44 +55,20 @@ class Catraca(object):
         self.__catr_tempo_giro = valor
  
     @property
-    def sentido(self):
-        return self.__catr_sentido_giro
+    def operacao(self):
+        return self.__catr_operacao
     
-    @sentido.setter
-    def sentido(self, valor):
-        self.__catr_sentido_giro = valor
- 
+    @operacao.setter
+    def operacao(self, valor):
+        self.__catr_operacao = valor
+        
     @property
-    def inicio_almoco(self):
-        return self.__catr_hora_inicio_almoco
+    def turno(self):
+        return self.__turno
     
-    @inicio_almoco.setter
-    def inicio_almoco(self, valor):
-        self.__catr_hora_inicio_almoco = valor
- 
-    @property
-    def fim_almoco(self):
-        return self.__catr_hora_fim_almoco
-    
-    @fim_almoco.setter
-    def fim_almoco(self, valor):
-        self.__catr_hora_fim_almoco = valor
- 
-    @property
-    def inicio_janta(self):
-        return self.__catr_hora_inicio_janta
-    
-    @inicio_janta.setter
-    def inicio_janta(self, valor):
-        self.__catr_hora_inicio_janta = valor
- 
-    @property
-    def fim_janta(self):
-        return self.__catr_hora_fim_janta
-    
-    @fim_janta.setter
-    def fim_janta(self, valor):
-        self.__catr_hora_fim_janta = valor
+    @turno.setter
+    def turno(self, obj):
+        self.__turno = obj
  
     @property
     def giro(self):

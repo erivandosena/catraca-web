@@ -3,7 +3,7 @@
 
 from contextlib import closing
 from cartao import Cartao
-from usuario import Usuario
+from perfil import Perfil
 from conexao import ConexaoFactory
 from .. logs import Logs
 
@@ -65,14 +65,12 @@ class CartaoDAO(object):
             pass
  
     # Select
-    def busca_id(self, id):
+    def busca_cartao(self, id):
         obj = Cartao()
         sql = "SELECT cart_id, "\
               "cart_numero, "\
               "cart_qtd_creditos, "\
-              "cart_vlr_credito, "\
-              "cart_dt_acesso, "\
-              "usua_id "\
+              "perf_id "\
               "FROM cartao WHERE "\
               "cart_id = " + str(id) +\
               " OR cart_numero = " + str(id)
@@ -84,10 +82,8 @@ class CartaoDAO(object):
                 if dados:
                     obj.id = dados[0]
                     obj.numero = dados[1]
-                    obj.creditos = dados[2]
-                    obj.valor = dados[3]
-                    obj.data = dados[4]    
-                    obj.usuario = Usuario().busca_usuario(dados[5])
+                    obj.creditos = dados[2] 
+                    obj.perfil = Perfil().busca_perfil(dados[3])
                     return obj
                 else:
                     return None
@@ -104,14 +100,10 @@ class CartaoDAO(object):
         sql = "INSERT INTO cartao("\
               "cart_numero, "\
               "cart_qtd_creditos, "\
-              "cart_vlr_credito, "\
-              "cart_dt_acesso, "\
-              "usua_id) VALUES (" +\
+              "perf_id) VALUES (" +\
               str(obj.numero) + ", " +\
               str(obj.creditos) + ", " +\
-              str(obj.valor) + ", " +\
-              str(obj.data) + ", " +\
-              str(obj.usuario) + ")"
+              str(obj.perfil) + ")"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 #cursor = self.__con.cursor()
@@ -129,9 +121,7 @@ class CartaoDAO(object):
        sql = "UPDATE cartao SET " +\
              "cart_numero = " + str(obj.numero) + ", " +\
              "cart_qtd_creditos = " + str(obj.creditos) + ", " +\
-             "cart_vlr_credito = " + str(obj.valor) + ", " +\
-             "cart_dt_acesso = " + str(obj.data) + ", " +\
-             "usua_id = " + str(obj.usuario) +\
+             "perf_id = " + str(obj.perfil) +\
              " WHERE "\
              "cart_id = " + str(obj.id)
        try:

@@ -16,6 +16,7 @@ class Registro(object):
         self.__regi_id = None
         self.__regi_datahora = None
         self.__regi_giro = 0
+        self.__regi_valor = 0.00
         self.__cartao = Cartao()
 
     @property
@@ -41,6 +42,14 @@ class Registro(object):
     @giro.setter
     def giro(self, valor):
         self.__regi_giro = valor
+    
+    @property
+    def valor(self):
+        return self.__regi_valor
+    
+    @valor.setter
+    def valor(self, valor):
+        self.__regi_valor = valor
     
     @property
     def cartao(self):
