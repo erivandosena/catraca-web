@@ -14,6 +14,7 @@ class Tipo(object):
         super(Tipo, self).__init__()
         self.__tipo_id = None
         self.__tipo_nome = None
+        self.__tipo_vlr_credito = None
         
     @property
     def id(self):
@@ -30,4 +31,12 @@ class Tipo(object):
     @nome.setter
     def nome(self, valor):
         self.__tipo_nome = valor
+        
+    @property
+    def valor(self):
+        return self.__tipo_vlr_credito
+    
+    @valor.setter
+    def valor(self, valor):
+        self.__tipo_vlr_credito = valor
         

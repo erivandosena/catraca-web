@@ -69,7 +69,6 @@ class Aviso(object):
         self.display.mensagem(self.saldacaao()+'\nAPROXIME CARTAO',1,True,False)
         
     def exibir_erro_leitura_cartao(self):
-        # self.display.mensagem("PROBLEMA AO LER!\nREPITA OPERACAO",1,True,False)
         self.display.mensagem("APROXIME CARTAO\n  NOVAMENTE...",1,True,False)
         
     def exibir_acesso_bloqueado(self):

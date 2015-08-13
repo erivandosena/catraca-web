@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 
-from usuario import Usuario
+from perfil import Perfil
 
 __author__ = "Erivando Sena"
 __copyright__ = "Copyright 2015, Unilab"
@@ -16,9 +16,7 @@ class Cartao(object):
         self.__cart_id = None
         self.__cart_numero = None
         self.__cart_qtd_creditos = None
-        self.__cart_vlr_credito = None
-        self.__cart_dt_acesso = None
-        self.__usuario = Usuario()
+        self.__perfil = Perfil()
         
     @property
     def id(self):
@@ -43,36 +41,12 @@ class Cartao(object):
     @creditos.setter
     def creditos(self, valor):
         self.__cart_qtd_creditos = valor
-    
-    @property
-    def valor(self):
-        return self.__cart_vlr_credito
- 
-    @valor.setter
-    def valor(self, valor):
-        self.__cart_vlr_credito = valor
-
-#     @property
-#     def tipo(self):
-#         return self.__cart_tipo
-# 
-#     @tipo.setter
-#     def tipo(self, valor):
-#         self.__cart_tipo = valor
-    
-    @property
-    def data(self):
-        return self.__cart_dt_acesso
-
-    @data.setter
-    def data(self, valor):
-        self.__cart_dt_acesso = valor
         
     @property
-    def usuario(self):
-        return self.__usuario
+    def perfil(self):
+        return self.__perfil
 
-    @usuario.setter
-    def usuario(self, obj):
-        self.__usuario = obj
+    @perfil.setter
+    def perfil(self, obj):
+        self.__perfil = obj
         
