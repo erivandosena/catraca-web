@@ -2,7 +2,8 @@
 # -*- coding: latin-1 -*-
 
 from contextlib import closing
-from tipo import Tipo
+from tipodao import TipoDAO
+from perfil import Perfil
 from conexao import ConexaoFactory
 from .. logs import Logs
 
@@ -18,7 +19,7 @@ class PerfilDAO(object):
     log = Logs()
 
     def __init__(self):
-        super(CatracaDAO, self).__init__()
+        super(PerfilDAO, self).__init__()
         self.__erro = None
         self.__con = None
         self.__factory = None
@@ -82,8 +83,8 @@ class PerfilDAO(object):
                     obj.nome = dados[1]
                     obj.email = dados[2]
                     obj.telefone = dados[3]
-                    obj.nascimento = dados[4]    
-                    obj.tipo = Tipo().busca_tipo(dados[5])  
+                    obj.nascimento = dados[4] 
+                    obj.tipo = TipoDAO().busca_tipo(dados[5])
                     return obj
                 else:
                     return None
@@ -99,12 +100,12 @@ class PerfilDAO(object):
               "perf_email, "\
               "perf_tel, "\
               "perf_datanascimento, "\
-              "tipo_id) VALUES (" +\
-              str(obj.nome) + ", " +\
-              str(obj.email) + ", " +\
-              str(obj.telefone) + ", " +\
-              str(obj.nascimento) + ", " +\
-              str(obj.tipo) + ")"
+              "tipo_id) VALUES ('" +\
+              str(obj.nome) + "', '" +\
+              str(obj.email) + "', '" +\
+              str(obj.telefone) + "', '" +\
+              str(obj.nascimento) + "', " +\
+              str(obj.tipo.id) + ")"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -117,11 +118,11 @@ class PerfilDAO(object):
 
     def altera(self, obj):
        sql = "UPDATE perfil SET " +\
-             "perf_nome = " + str(obj.nome) + ", " +\
-             "perf_email = " + str(obj.email) + ", " +\
-             "perf_tel = " + str(obj.telefone) + ", " +\
-             "perf_datanascimento = " + str(obj.nascimento) + ", " +\
-             "tipo_id = " + str(obj.tipo) +\
+             "perf_nome = '" + str(obj.nome) + "', " +\
+             "perf_email = '" + str(obj.email) + "', " +\
+             "perf_tel = '" + str(obj.telefone) + "', " +\
+             "perf_datanascimento = '" + str(obj.nascimento) + "', " +\
+             "tipo_id = " + str(obj.tipo.id) +\
              " WHERE "\
              "perf_id = " + str(obj.id)
        try:

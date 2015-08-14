@@ -2,7 +2,7 @@
 # -*- coding: latin-1 -*-
 
 from contextlib import closing
-from cartao import Cartao
+from cartaodao import CartaoDAO
 from conexao import ConexaoFactory
 from .. logs import Logs
 
@@ -83,7 +83,7 @@ class RegistroDAO(object):
                     obj.data = dados[1]
                     obj.giro = dados[2]
                     obj.valor = dados[3]
-                    obj.cartao = Cartao().busca_cartao(dados[4])
+                    obj.cartao = CartaoDAO().busca_cartao(dados[4])
                     return obj
                 else:
                     return None

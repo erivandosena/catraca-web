@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 
-from tipo import Tipo
-
 __author__ = "Erivando Sena"
 __copyright__ = "Copyright 2015, Unilab"
 __email__ = "erivandoramos@unilab.edu.br"
@@ -18,31 +16,31 @@ class Perfil(object):
         self.__perf_email = None
         self.__perf_tel = None
         self.__perf_datanascimento = None
-        self.__tipo = Tipo()
+        self.__tipo = None
 
     @property
     def id(self):
-        return self.__usua_id
+        return self.__perf_id
     
     @id.setter
     def id(self, valor):
-        self.__usua_id = valor
+        self.__perf_id = valor
         
     @property
     def nome(self):
-        return self.__usua_nome
+        return self.__perf_nome
     
     @nome.setter
     def nome(self, valor):
-        self.__usua_nome = valor
+        self.__perf_nome = valor
         
     @property
     def email(self):
-        return self.__usua_email
+        return self.__perf_email
     
     @email.setter
     def email(self, valor):
-        self.__usua_email = valor
+        self.__perf_email = valor
         
     @property
     def telefone(self):
@@ -67,3 +65,4 @@ class Perfil(object):
     @tipo.setter
     def tipo(self, obj):
         self.__tipo = obj
+        

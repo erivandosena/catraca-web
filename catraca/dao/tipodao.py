@@ -73,8 +73,8 @@ class TipoDAO(object):
                 if dados:
                     obj.id = dados[0]
                     obj.nome = dados[1]
-                    obj.valor = dados[2]  
-                    return obj  
+                    obj.valor = dados[2]
+                    return obj
                 else:
                     return None
         except Exception, e:
@@ -106,8 +106,8 @@ class TipoDAO(object):
     def insere(self, obj):
         sql = "INSERT INTO tipo("\
               "tipo_nome, "\
-              "tipo_vlr_credito) VALUES (" +\
-              str(obj.nome) + ", " +\
+              "tipo_vlr_credito) VALUES ('" +\
+              obj.nome + "', " +\
               str(obj.valor) + ")"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
@@ -123,7 +123,7 @@ class TipoDAO(object):
 
     def altera(self, obj):
        sql = "UPDATE tipo SET " +\
-             "tipo_nome = " + str(obj.nome) + ", " +\
+             "tipo_nome = '" + str(obj.nome) + "', " +\
              "tipo_vlr_credito = " + str(obj.valor) +\
              " WHERE "\
              "tipo_id = " + str(obj.id)

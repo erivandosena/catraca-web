@@ -2,10 +2,12 @@
 # -*- coding: latin-1 -*-
 
 
-#from datetime import datetime
 import locale
+import datetime
 from catraca.dao.tipo import Tipo
 from catraca.dao.tipodao import TipoDAO
+from catraca.dao.perfil import Perfil
+from catraca.dao.perfildao import PerfilDAO
 
 
 __author__ = "Erivando Sena"
@@ -18,21 +20,31 @@ locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 
 def main():
-    print 'Iniciando os testes tabela tipo...'
+    print 'Iniciando os testes tabela perfil...'
     
     tipo = Tipo()
     tipo_dao = TipoDAO()
-    tipo.nome = 'Visitante' # Estudante(1,10), Professor(2,20), Tecnico(1,60), Visitante(4,00), Operador, Administrador.
-    tipo.valor = 4.00
+    
+    perfil = Perfil()
+    perfil_dao = PerfilDAO()
 
-    if tipo.id:
-        if tipo_dao.altera(tipo):
+    perfil.nome = "ADA LOVELACE"
+    perfil.email = "teste4@teste.tw"
+    perfil.telefone = "85999670877"
+    perfil.nascimento = "09/1815"
+    perfil.tipo = tipo_dao.busca_tipo(2).id
+
+
+    if perfil.id:
+        if perfil_dao.altera(perfil):
             print "Alterado com sucesso!"
         else:
-            print tipo_dao.erro
+            print perfil_dao.erro
     else:
-        if tipo_dao.insere(tipo):
+        if perfil_dao.insere(perfil):
             print "Inserido com sucesso!"
         else:
-            print tipo_dao.erro
+            print perfil_dao.erro
+
+
 

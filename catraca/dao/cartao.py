@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 
-from perfil import Perfil
 
 __author__ = "Erivando Sena"
 __copyright__ = "Copyright 2015, Unilab"
@@ -16,7 +15,7 @@ class Cartao(object):
         self.__cart_id = None
         self.__cart_numero = None
         self.__cart_qtd_creditos = None
-        self.__perfil = Perfil()
+        self.__perfil = None
         
     @property
     def id(self):
