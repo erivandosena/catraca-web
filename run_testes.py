@@ -19,7 +19,7 @@ __status__ = "Prototype" # Prototype | Development | Production
 if __name__ == '__main__':
     #catraca_teste.main()
     #usuario_teste.main()
-#     tipo_teste.main()
+    #tipo_teste.main()
 #     perfil_teste.main()
 #     cartao_teste.main()
 #     registro_teste.main()

@@ -63,20 +63,34 @@ class TipoDAO(object):
         finally:
             pass
         
-    def busca_tipo(self, id):
+    def busca_tipo(self, *arg):
         obj = Tipo()
-        sql = "SELECT tipo_id, tipo_nome, tipo_vlr_credito FROM tipo WHERE tipo_id = " + str(id)
+        list = []
+        id = None
+        for i in arg:
+            id = i
+        if id:
+            sql = "SELECT tipo_id, tipo_nome, tipo_vlr_credito FROM tipo WHERE tipo_id = " + str(id)
+        elif id is None:
+            sql = "SELECT tipo_id, tipo_nome, tipo_vlr_credito FROM tipo"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
-                dados = cursor.fetchone()
-                if dados:
-                    obj.id = dados[0]
-                    obj.nome = dados[1]
-                    obj.valor = dados[2]
-                    return obj
-                else:
-                    return None
+                if id:
+                    dados = cursor.fetchone()
+                    if dados is not None:
+                        obj.id = dados[0]
+                        obj.nome = dados[1]
+                        obj.valor = dados[2]
+                        return obj
+                    else:
+                        return None
+                elif id is None:
+                    list = cursor.fetchall()
+                    if list != []:
+                        return list
+                    else:
+                        return None
         except Exception, e:
             self.__erro = str(e)
             self.log.logger.error('Erro ao realizar SELECT na tabela tipo.', exc_info=True)

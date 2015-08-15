@@ -18,8 +18,8 @@ def main():
     
     tipo = Tipo()
     tipo_dao = TipoDAO()
-    tipo.nome = "Visitante" # Estudante(1,10), Professor(2,20), Tecnico(1,60), Visitante(4,00), Operador, Administrador.
-    tipo.valor = 4.00
+    tipo.nome = "teste" # Estudante(1,10), Professor(2,20), Tecnico(1,60), Visitante(4,00), Operador, Administrador.
+    tipo.valor = 1.00
 
     if tipo.id:
         if tipo_dao.altera(tipo):
@@ -31,4 +31,7 @@ def main():
             print "Inserido com sucesso!"
         else:
             print tipo_dao.erro
+            
+    for tipo in tipo_dao.busca_tipo():
+        print str(tipo[1]) +" "+ str(tipo[2])
 
