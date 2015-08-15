@@ -77,7 +77,6 @@ class CartaoDAO(object):
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
                 dados = cursor.fetchone()
-                # Carrega objeto
                 if dados:
                     obj.id = dados[0]
                     obj.numero = dados[1]
@@ -99,11 +98,9 @@ class CartaoDAO(object):
               "perf_id) VALUES (" +\
               str(obj.numero) + ", " +\
               str(obj.creditos) + ", " +\
-              str(obj.perfil) + ")"
+              str(obj.perfil.id) + ")"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
-                #cursor = self.__con.cursor()
-                #cursor = self.abre_conexao()
                 cursor.execute(sql)
                 self.__con.commit()
                 return True
@@ -116,13 +113,12 @@ class CartaoDAO(object):
        sql = "UPDATE cartao SET " +\
              "cart_numero = " + str(obj.numero) + ", " +\
              "cart_creditos = " + str(obj.creditos) + ", " +\
-             "perf_id = " + str(obj.perfil) +\
+             "perf_id = " + str(obj.perfil.id) +\
              " WHERE "\
              "cart_id = " + str(obj.id)
        try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
-                #self.__con.commit()
                 return True
        except Exception, e:
            self.__erro = str(e)

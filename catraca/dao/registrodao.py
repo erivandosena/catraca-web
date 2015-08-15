@@ -102,7 +102,7 @@ class RegistroDAO(object):
               str(obj.data) + ", " +\
               str(obj.giro) + ", " +\
               str(obj.valor) + ", " +\
-              str(obj.cartao) + ")"
+              str(obj.cartao.id) + ")"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -118,7 +118,7 @@ class RegistroDAO(object):
              "regi_datahora = " + str(obj.data) + ", " +\
              "regi_giro = " + str(obj.giro) + ", " +\
              "regi_valor = " + str(obj.valor) + ", " +\
-             "cart_id = " + str(obj.cartao) +\
+             "cart_id = " + str(obj.cartao.id) +\
              " WHERE "\
              "regi_id = " + str(obj.id)
        try:

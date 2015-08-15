@@ -2,7 +2,6 @@
 # -*- coding: latin-1 -*-
 
 
-#from datetime import datetime
 import locale
 from catraca.dao.tipo import Tipo
 from catraca.dao.tipodao import TipoDAO
@@ -14,15 +13,12 @@ __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production
 
 
-locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
-
-
 def main():
     print 'Iniciando os testes tabela tipo...'
     
     tipo = Tipo()
     tipo_dao = TipoDAO()
-    tipo.nome = 'Visitante' # Estudante(1,10), Professor(2,20), Tecnico(1,60), Visitante(4,00), Operador, Administrador.
+    tipo.nome = "Visitante" # Estudante(1,10), Professor(2,20), Tecnico(1,60), Visitante(4,00), Operador, Administrador.
     tipo.valor = 4.00
 
     if tipo.id:

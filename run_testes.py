@@ -3,7 +3,7 @@
 
 #from testes.testehorarios import TesteHorarios
 #from testes import catraca_teste
-#from testes import tipo_teste
+from testes import tipo_teste
 from testes import perfil_teste
 from testes import cartao_teste
 from testes import registro_teste
@@ -18,14 +18,9 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 if __name__ == '__main__':
     #catraca_teste.main()
-    #TesteLCD16x2.main()
-    #TesteRFID.main()
-    #TesteLeds.main()
-    #TesteSensoresGiro.main()
-    #TesteHorarios().main()
     #usuario_teste.main()
-    #tipo_teste.main()
-    #perfil_teste.main()
-    #cartao_teste.main()
-    registro_teste.main()
+#     tipo_teste.main()
+#     perfil_teste.main()
+#     cartao_teste.main()
+#     registro_teste.main()
     pass

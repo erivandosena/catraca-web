@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 
-from cartao import Cartao
-
 __author__ = "Erivando Sena"
 __copyright__ = "Copyright 2015, Unilab"
 __email__ = "erivandoramos@unilab.edu.br"
@@ -17,7 +15,7 @@ class Registro(object):
         self.__regi_datahora = None
         self.__regi_giro = 0
         self.__regi_valor = 0.00
-        self.__cartao = Cartao()
+        self.__cartao = None
 
     @property
     def id(self):
@@ -56,6 +54,6 @@ class Registro(object):
         return self.__cartao
     
     @cartao.setter
-    def cartao(self, valor):
-        self.__cartao = valor
+    def cartao(self, obj):
+        self.__cartao = obj
         
