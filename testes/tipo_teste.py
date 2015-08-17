@@ -19,19 +19,16 @@ def main():
     tipo = Tipo()
     tipo_dao = TipoDAO()
     tipo.nome = "teste" # Estudante(1,10), Professor(2,20), Tecnico(1,60), Visitante(4,00), Operador, Administrador.
-    tipo.valor = 1.00
+    tipo.valor = 0.00
 
-    if tipo.id:
-        if tipo_dao.altera(tipo):
-            print "Alterado com sucesso!"
-        else:
-            print tipo_dao.erro
-    else:
-        if tipo_dao.insere(tipo):
-            print "Inserido com sucesso!"
-        else:
-            print tipo_dao.erro
-            
-    for tipo in tipo_dao.busca_tipo():
+    #tipo = tipo_dao.busca(7)
+    #tipo.valor = 1.99
+
+    tipo_dao.mantem(tipo,False)
+    print tipo_dao.aviso
+        
+    print 30 * "="
+    
+    for tipo in tipo_dao.busca():
         print str(tipo[1]) +" "+ str(tipo[2])
-
+        

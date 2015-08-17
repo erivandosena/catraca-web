@@ -130,17 +130,29 @@ COMMENT ON COLUMN mensagem.mens_institucional2 IS 'Texto 02 livre para avisos, i
 COMMENT ON COLUMN mensagem.mens_institucional3 IS 'Texto 03 livre para avisos, informes, etc.';
 COMMENT ON COLUMN mensagem.mens_institucional4 IS 'Texto 04 livre para avisos, informes, etc.';
 
+-- Inclui mensagens default na tabela mensagem
+INSERT INTO mensagem(mens_inicializacao, mens_saldacao, mens_aguardacartao, 
+            mens_erroleitor, mens_bloqueioacesso, mens_liberaacesso, mens_semcredito, 
+            mens_semcadastro, mens_cartaoinvalido, mens_turnoinvalido, mens_datainvalida, 
+            mens_cartaoutilizado, mens_institucional1, mens_institucional2, 
+            mens_institucional3, mens_institucional4) 
+            VALUES ('Iniciando...','   BEM-VINDO!','   APROXIME\n   SEU CARTAO','APROXIME CARTAO\n  NOVAMENTE...',
+            '     ACESSO\n   BLOQUEADO!','     ACESSO\n    LIBERADO!','     CARTAO\n   SEM SALDO!',
+            '     CARTAO\n NAO CADASTRADO!','     CARTAO\n  INVALIDO!','FORA DO HORARIO\n DE ATENDIMENTO',
+            '  DIA NAO UTIL\nPARA ATENDIMENTO','CARTAO JA USADO\nPARA 01 REFEICAO','    UNILAB - Unilab.edu.br',
+            'Desenvolvido por\n  DISUP | DTI','      RU\n   Liberdade','      BOM\n    APETITE!');
+
 -- TABLE catraca
 CREATE TABLE catraca
 (
   catr_id serial NOT NULL, -- Campo autoincremento destinado para chave primaria da tabela.
+  catr_ip character varying(12), -- Numero IP da catraca.
   catr_localizacao character varying(16), -- Nome do local de instalacao da catraca.
   catr_tempo_giro integer, -- Tempo para o giro do braço da catraca em milissegundos.
+  catr_operacao integer, -- 1=Giro Horario(Entrada controlada com saida bloqueada),2=Giros Horario/Anti-horario(Entrada controlada com saida liberada),3=Giros Horario/Anti-horario(Entrada e saida liberadas).
   giro_id integer NOT NULL, -- Campo para chave estrangeira da tabela giro.
   turn_id integer NOT NULL, -- Campo para chave estrangeira da tabela turno.
   mens_id integer NOT NULL, -- Campo para chave estrangeira da tabela mensagem.
-  catr_ip character varying(12), -- Numero IP da catraca.
-  catr_operacao integer, -- 1=Giro Horario(Entrada controlada com saida bloqueada),2=Giros Horario/Anti-horario(Entrada controlada com saida liberada),3=Giros Horario/Anti-horario(Entrada e saida liberadas).
   CONSTRAINT pk_catr_id PRIMARY KEY (catr_id ),
   CONSTRAINT fk_giro_id FOREIGN KEY (giro_id) REFERENCES giro (giro_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT fk_mens_id FOREIGN KEY (mens_id) REFERENCES mensagem (mens_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION,
@@ -197,14 +209,3 @@ COMMENT ON COLUMN usuario.usua_login IS 'Nome de usuario do utilizador do cartao
 COMMENT ON COLUMN usuario.usua_senha IS 'Senha de usuario do utilizador do cartao.';
 COMMENT ON COLUMN usuario.usua_nivel IS 'Nivel de acesso ao sistema do utilizador do cartao.';
 
--- Inclui mensagens default na tabela mensagem
-INSERT INTO mensagem(mens_inicializacao, mens_saldacao, mens_aguardacartao, 
-            mens_erroleitor, mens_bloqueioacesso, mens_liberaacesso, mens_semcredito, 
-            mens_semcadastro, mens_cartaoinvalido, mens_turnoinvalido, mens_datainvalida, 
-            mens_cartaoutilizado, mens_institucional1, mens_institucional2, 
-            mens_institucional3, mens_institucional4) 
-            VALUES ('Iniciando...','   BEM-VINDO!','   APROXIME\n   SEU CARTAO','APROXIME CARTAO\n  NOVAMENTE...',
-            '     ACESSO\n   BLOQUEADO!','     ACESSO\n    LIBERADO!','     CARTAO\n   SEM SALDO!',
-            '     CARTAO\n NAO CADASTRADO!','     CARTAO\n  INVALIDO!','FORA DO HORARIO\n DE ATENDIMENTO',
-            '  DIA NAO UTIL\nPARA ATENDIMENTO','CARTAO JA USADO\nPARA 01 REFEICAO','    UNILAB - Unilab.edu.br',
-            'Desenvolvido por\n  DISUP | DTI','      RU\n   Liberdade','      BOM\n    APETITE!');

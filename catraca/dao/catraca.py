@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 
-from turno import Turno
-from giro import Giro
 
 __author__ = "Erivando Sena"
 __copyright__ = "Copyright 2015, Unilab"
@@ -19,8 +17,9 @@ class Catraca(object):
         self.__catr_localizacao = None
         self.__catr_tempo_giro = None
         self.__catr_operacao = None
-        self.__turno = Turno()
-        self.__giro = Giro()
+        self.__turno = None
+        self.__giro = None
+        self.__mensagem = None
 
     @property
     def id(self):
@@ -77,4 +76,13 @@ class Catraca(object):
     @giro.setter
     def giro(self, obj):
         self.__giro = obj
+        
+    @property
+    def mensagem(self):
+        return self.__mensagem
+    
+    @mensagem.setter
+    def mensagem(self, obj):
+        self.__mensagem = obj
+        
         

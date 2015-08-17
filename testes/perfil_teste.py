@@ -27,16 +27,14 @@ def main():
     perfil.nascimento = "02/1955"
     perfil.tipo = tipo_dao.busca_tipo(3)
 
-    if perfil.id:
-        if perfil_dao.altera(perfil):
-            print "Alterado com sucesso!"
-        else:
-            print perfil_dao.erro
-    else:
-        if perfil_dao.insere(perfil):
-            print "Inserido com sucesso!"
-        else:
-            print perfil_dao.erro
+    perfil = perfil_dao.busca(0)
+    perfil.nome
 
-
+    perfil_dao.mantem(perfil,False)
+    print tipo_dao.aviso
+        
+    print 30 * "="
+    
+    for perfil in perfil_dao.busca():
+        print str(perfil[1]) +" "+ str(perfil[2])
 

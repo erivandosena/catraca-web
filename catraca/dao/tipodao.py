@@ -23,10 +23,10 @@ class TipoDAO(object):
         self.__con = None
         self.__factory = None
         self.__fecha = None
-        
+    
     @property
-    def erro(self):
-        return self.__erro
+    def aviso(self):
+        return self.__aviso
 
     @property
     def commit(self):
@@ -58,12 +58,12 @@ class TipoDAO(object):
             self.__factory = conexao_factory.factory
             return self.__con
         except Exception, e:
-            self.__erro = str(e)
+            self.__aviso = str(e)
             self.log.logger.critical('Erro abrindo conexao com o banco de dados.', exc_info=True)
         finally:
             pass
         
-    def busca_tipo(self, *arg):
+    def busca(self, *arg):
         obj = Tipo()
         list = []
         id = None
@@ -92,76 +92,45 @@ class TipoDAO(object):
                     else:
                         return None
         except Exception, e:
-            self.__erro = str(e)
+            self.__aviso = str(e)
             self.log.logger.error('Erro ao realizar SELECT na tabela tipo.', exc_info=True)
         finally:
             pass
- 
-    def busca(self, nome):
-        obj = Tipo()
-        sql = "SELECT tipo_id, tipo_nome, tipo_vlr_credito FROM tipo WHERE tipo_nome = " + str(nome)
+        
+    def mantem(self, obj, delete):
         try:
-            with closing(self.abre_conexao().cursor()) as cursor:
-                cursor.execute(sql)
-                dados = cursor.fetchone()
-                if dados:
-                    obj.id = dados[0]
-                    obj.nome = dados[1]
-                    obj.valor = dados[2]
-                    return obj  
+            if obj is not None:
+                if delete:
+                    sql = "DELETE FROM tipo WHERE tipo_id = " + str(obj.id)
+                    msg = "Excluido com sucesso!"
                 else:
-                    return None
+                    if obj.id:
+                        sql = "UPDATE tipo SET " +\
+                              "tipo_nome = '" + str(obj.nome) + "', " +\
+                              "tipo_vlr_credito = " + str(obj.valor) +\
+                              " WHERE "\
+                              "tipo_id = " + str(obj.id)
+                        msg = "Alterado com sucesso!"
+                    else:
+                        sql = "INSERT INTO tipo("\
+                              "tipo_nome, "\
+                              "tipo_vlr_credito) VALUES ('" +\
+                              obj.nome + "', " +\
+                              str(obj.valor) + ")"
+                        msg = "Inserido com sucesso!"
+                with closing(self.abre_conexao().cursor()) as cursor:
+                    cursor.execute(sql)
+                    self.__con.commit()
+                    self.__aviso = msg
+                    return True
+            else:
+                msg = "Objeto inexistente!"
+                self.__aviso = msg
+                return False
         except Exception, e:
-            self.__erro = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela tipo.', exc_info=True)
-        finally:
-            pass
-
-    def insere(self, obj):
-        sql = "INSERT INTO tipo("\
-              "tipo_nome, "\
-              "tipo_vlr_credito) VALUES ('" +\
-              obj.nome + "', " +\
-              str(obj.valor) + ")"
-        try:
-            with closing(self.abre_conexao().cursor()) as cursor:
-                cursor.execute(sql)
-                self.__con.commit()
-                return True
-        except Exception, e:
-            self.__erro = str(e)
-            self.log.logger.error('Erro ao realizar INSERT na tabela tipo.', exc_info=True)
+            self.__aviso = str(e)
+            self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela tipo.', exc_info=True)
             return False
         finally:
             pass
-
-    def altera(self, obj):
-       sql = "UPDATE tipo SET " +\
-             "tipo_nome = '" + str(obj.nome) + "', " +\
-             "tipo_vlr_credito = " + str(obj.valor) +\
-             " WHERE "\
-             "tipo_id = " + str(obj.id)
-       try:
-            with closing(self.abre_conexao().cursor()) as cursor:
-                cursor.execute(sql)
-                self.__con.commit()
-                return True
-       except Exception, e:
-           self.__erro = str(e)
-           self.log.logger.error('Erro ao realizar UPDATE na tabela tipo.', exc_info=True)
-           return False
-       finally:
-           pass
-    
-    def exclui(self, obj):
-        sql = "DELETE FROM tipo WHERE tipo_id = " + str(obj.id)
-        try:
-            with closing(self.abre_conexao().cursor()) as cursor:
-                cursor.execute(sql)
-                self.__con.commit()
-                return True
-        except Exception, e:
-            self.__erro = str(e)
-            self.log.logger.error('Erro ao realizar DELETE na tabela tipo.', exc_info=True)
-            return False
         

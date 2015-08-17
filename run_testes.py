@@ -22,5 +22,5 @@ if __name__ == '__main__':
     #tipo_teste.main()
 #     perfil_teste.main()
 #     cartao_teste.main()
-#     registro_teste.main()
+    #registro_teste.main()
     pass

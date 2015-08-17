@@ -26,22 +26,22 @@ def main():
 
     registro.data = datetime.datetime.now().strftime("'%Y-%m-%d %H:%M:%S'")
     registro.giro = 1
-    registro.cartao = cartao_dao.busca_cartao(6)
+    registro.cartao = cartao_dao.busca(7)
     registro.valor = registro.cartao.perfil.tipo.valor
 
 #     print registro.cartao.perfil.tipo.nome
 #     print registro.cartao.perfil.nome
 #     print registro.cartao.numero
 #     print locale.currency(registro.valor).format()
+
+    registro = registro_dao.busca(6)
+
+    registro_dao.mantem(registro,True)
+    print registro_dao.aviso
+        
+    print 30 * "="
     
-    if registro.id:
-        if registro_dao.altera(registro):
-            print "Alterado com sucesso!"
-        else:
-            print registro_dao.erro
-    else:
-        if registro_dao.insere(registro):
-            print "Inserido com sucesso!"
-        else:
-            print registro_dao.erro
+    for registro in registro_dao.busca():
+        print str(registro[1]) +" "+ str(registro[2]) +" "+ str(registro[3])  +" "+ str(registro[4])
+        
             
