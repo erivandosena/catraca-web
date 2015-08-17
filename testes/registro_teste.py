@@ -26,7 +26,7 @@ def main():
 
     registro.data = datetime.datetime.now().strftime("'%Y-%m-%d %H:%M:%S'")
     registro.giro = 1
-    registro.cartao = cartao_dao.busca(7)
+    registro.cartao = cartao_dao.busca(4)
     registro.valor = registro.cartao.perfil.tipo.valor
 
 #     print registro.cartao.perfil.tipo.nome
@@ -34,9 +34,9 @@ def main():
 #     print registro.cartao.numero
 #     print locale.currency(registro.valor).format()
 
-    registro = registro_dao.busca(6)
+    #registro = registro_dao.busca(6)
 
-    registro_dao.mantem(registro,True)
+    registro_dao.mantem(registro,False)
     print registro_dao.aviso
         
     print 30 * "="

@@ -5,6 +5,12 @@
 import locale
 from catraca.dao.catraca import Catraca
 from catraca.dao.catracadao import CatracaDAO
+from catraca.dao.giro import Giro
+from catraca.dao.girodao import GiroDAO
+from catraca.dao.turno import Turno
+from catraca.dao.turnodao import TurnoDAO
+from catraca.dao.mensagem import Mensagem
+from catraca.dao.mensagemdao import MensagemDAO
 
 
 __author__ = "Erivando Sena"
@@ -19,39 +25,29 @@ locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 def main():
     print 'Iniciando os testes tabela catraca...'
     
-    # teste (insert)
-    catraca = Catraca()
-    # teste (update)
-    catraca_dao = CatracaDAO()
-    # teste (select)
-    ##catraca = catraca_dao.busca(42)
-    catraca.setIp("10.5.2.253")
-    catraca.setLocal("RU Liberdade")
-    catraca.setTempo(5)
-    catraca.setMensagem("SEJA BEM-VINDO!")
-    catraca.setSentido(1)
-
-    if catraca.getId():
-        if catraca_dao.altera(catraca):
-            print "Alterado com sucesso!"
-        else:
-            print "Erro ao alterar:"
-            print catraca_dao.getErro()
-    else:
-        if catraca_dao.insere(catraca):
-            print "Inserido com sucesso!"
-        else:
-            print "Erro ao inserir:"
-            print catraca_dao.getErro()
     
-    """
-    # teste excluir
+    catraca = Catraca()
     catraca_dao = CatracaDAO()
-    catraca = catraca_dao.busca(41)
-    print catraca.getId()
-    print catraca.getIp()
-    if catraca_dao.exclui(catraca):
-        print "Excluido com sucesso!"
+    giro_dao = GiroDAO()
+    turno_dao = TurnoDAO()
+    mensagem_dao = MensagemDAO()
+
+    catraca.ip = "10.5.2.253"
+    catraca.localizacao = "RU Liberdade"
+    catraca.tempo = 6000
+    catraca.operacao = 1
+    catraca.turno = turno_dao.busca(1).id
+    catraca.giro = giro_dao.busca(1).id
+    catraca.mensagem = mensagem_dao.busca(1).id
+
+    cat = catraca_dao.busca()
+    if cat is not None:
+        print "Nao e possivel inserir, somente alterar!"
     else:
-        print aspberry_dao.getErro()
-    """
+        catraca_dao.mantem(catraca,False)
+        print catraca_dao.aviso
+        
+    print 30 * "="
+    
+    for catraca in catraca_dao.busca():
+        print str(catraca[1]) +" "+ str(catraca[2]) +" "+ str(catraca[3]) +" "+ str(catraca[4])+" "+ str(catraca[5]) +" "+ str(catraca[6]) +" "+ str(catraca[6])

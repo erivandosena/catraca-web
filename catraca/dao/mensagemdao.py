@@ -88,23 +88,22 @@ class MensagemDAO(object):
                     dados = cursor.fetchone()
                     if dados is not None:
                         obj.id = dados[0]
-                        obj.msg_id = dados[1]
-                        obj.msg_inicializacao = dados[2]
-                        obj.msg_saldacao = dados[3]
-                        obj.msg_aguardacartao = dados[4]
-                        obj.msg_erroleitor = dados[5]
-                        obj.msg_bloqueioacesso = dados[6]
-                        obj.msg_liberaacesso = dados[7]
-                        obj.msg_semcredito = dados[8]
-                        obj.msg_semcadastro = dados[9]
-                        obj.msg_cartaoinvalido = dados[10]
-                        obj.msg_turnoinvalido = dados[11]
-                        obj.msg_datainvalida = dados[12]
-                        obj.msg_cartaoutilizado = dados[13]
-                        obj.msg_institucional1 = dados[14]
-                        obj.msg_institucional2 = dados[15]
-                        obj.msg_institucional3 = dados[16]
-                        obj.msg_institucional4 = dados[17]
+                        obj.msg_inicializacao = dados[1]
+                        obj.msg_saldacao = dados[2]
+                        obj.msg_aguardacartao = dados[3]
+                        obj.msg_erroleitor = dados[4]
+                        obj.msg_bloqueioacesso = dados[5]
+                        obj.msg_liberaacesso = dados[6]
+                        obj.msg_semcredito = dados[7]
+                        obj.msg_semcadastro = dados[8]
+                        obj.msg_cartaoinvalido = dados[9]
+                        obj.msg_turnoinvalido = dados[10]
+                        obj.msg_datainvalida = dados[11]
+                        obj.msg_cartaoutilizado = dados[12]
+                        obj.msg_institucional1 = dados[13]
+                        obj.msg_institucional2 = dados[14]
+                        obj.msg_institucional3 = dados[15]
+                        obj.msg_institucional4 = dados[16]
                         return obj
                     else:
                         return None
@@ -259,23 +258,23 @@ class MensagemDAO(object):
                 else:
                     if obj.id:
                         sql = "UPDATE mensagem SET " +\
-                             "mens_inicializacao = " + str(obj.msg_inicializacao) + ", " +\
-                             "mens_saldacao = " + str(obj.msg_saldacao) + ", " +\
-                             "mens_aguardacartao = " + str(obj.msg_aguardacartao) + ", " +\
-                             "mens_erroleitor = " + str(obj.msg_erroleitor) + ", " +\
-                             "mens_bloqueioacesso = " + str(obj.msg_bloqueioacesso) + ", " +\
-                             "mens_liberaacesso = " + str(obj.msg_liberaacesso) + ", " +\
-                             "mens_semcredito = " + str(obj.msg_semcredito) + ", " +\
-                             "mens_semcadastro = " + str(obj.msg_semcadastro) + ", " +\
-                             "mens_cartaoinvalido = " + str(obj.msg_cartaoinvalido) + ", " +\
-                             "mens_turnoinvalido = " + str(obj.msg_turnoinvalido) + ", " +\
-                             "mens_datainvalida = " + str(obj.msg_datainvalida) + ", " +\
-                             "mens_cartaoutilizado = " + str(obj.msg_cartaoutilizado) + ", " +\
-                             "mens_institucional1 = " + str(obj.msg_institucional1) + ", " +\
-                             "mens_institucional2 = " + str(obj.msg_institucional2) + ", " +\
-                             "mens_institucional3 = " + str(obj.msg_institucional3) + ", " +\
-                             "mens_institucional4 = " + str(obj.msg_institucional4) +\
-                             " WHERE "\
+                             "mens_inicializacao = '" + str(obj.msg_inicializacao) + "', " +\
+                             "mens_saldacao = '" + str(obj.msg_saldacao) + "', " +\
+                             "mens_aguardacartao = '" + str(obj.msg_aguardacartao) + "', " +\
+                             "mens_erroleitor = '" + str(obj.msg_erroleitor) + "', " +\
+                             "mens_bloqueioacesso = '" + str(obj.msg_bloqueioacesso) + "', " +\
+                             "mens_liberaacesso = '" + str(obj.msg_liberaacesso) + "', " +\
+                             "mens_semcredito = '" + str(obj.msg_semcredito) + "', " +\
+                             "mens_semcadastro = '" + str(obj.msg_semcadastro) + "', " +\
+                             "mens_cartaoinvalido = '" + str(obj.msg_cartaoinvalido) + "', " +\
+                             "mens_turnoinvalido = '" + str(obj.msg_turnoinvalido) + "', " +\
+                             "mens_datainvalida = '" + str(obj.msg_datainvalida) + "', " +\
+                             "mens_cartaoutilizado = '" + str(obj.msg_cartaoutilizado) + "', " +\
+                             "mens_institucional1 = '" + str(obj.msg_institucional1) + "', " +\
+                             "mens_institucional2 = '" + str(obj.msg_institucional2) + "', " +\
+                             "mens_institucional3 = '" + str(obj.msg_institucional3) + "', " +\
+                             "mens_institucional4 = '" + str(obj.msg_institucional4) +\
+                             "' WHERE "\
                              "mens_id = " + str(obj.id)
                         msg = "Alterado com sucesso!"
                     else:
@@ -295,23 +294,23 @@ class MensagemDAO(object):
                               "mens_institucional1, "\
                               "mens_institucional2, "\
                               "mens_institucional3, "\
-                              "mens_institucional4) VALUES (" +\
-                              str(obj.msg_inicializacao) + ", " +\
-                              str(obj.msg_saldacao) + ", " +\
-                              str(obj.msg_aguardacartao) + ", " +\
-                              str(obj.msg_erroleitor) + ", " +\
-                              str(obj.msg_bloqueioacesso) + ", " +\
-                              str(obj.msg_liberaacesso) + ", " +\
-                              str(obj.msg_semcredito) + ", " +\
-                              str(obj.msg_semcadastro) + ", " +\
-                              str(obj.msg_cartaoinvalido) + ", " +\
-                              str(obj.msg_turnoinvalido) + ", " +\
-                              str(obj.msg_datainvalida) + ", " +\
-                              str(obj.msg_cartaoutilizado) + ", " +\
-                              str(obj.msg_institucional1) + ", " +\
-                              str(obj.msg_institucional2) + ", " +\
-                              str(obj.msg_institucional3) + ", " +\
-                              str(obj.msg_institucional4) + ")"
+                              "mens_institucional4) VALUES ('" +\
+                              str(obj.msg_inicializacao) + "', '" +\
+                              str(obj.msg_saldacao) + "', '" +\
+                              str(obj.msg_aguardacartao) + "', '" +\
+                              str(obj.msg_erroleitor) + "', '" +\
+                              str(obj.msg_bloqueioacesso) + "', '" +\
+                              str(obj.msg_liberaacesso) + "', '" +\
+                              str(obj.msg_semcredito) + "', '" +\
+                              str(obj.msg_semcadastro) + "', '" +\
+                              str(obj.msg_cartaoinvalido) + "', '" +\
+                              str(obj.msg_turnoinvalido) + "', '" +\
+                              str(obj.msg_datainvalida) + "', '" +\
+                              str(obj.msg_cartaoutilizado) + "', '" +\
+                              str(obj.msg_institucional1) + "', '" +\
+                              str(obj.msg_institucional2) + "', '" +\
+                              str(obj.msg_institucional3) + "', '" +\
+                              str(obj.msg_institucional4) + "')"
                         msg = "Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)

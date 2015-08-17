@@ -21,12 +21,11 @@ def main():
     tipo.nome = "teste" # Estudante(1,10), Professor(2,20), Tecnico(1,60), Visitante(4,00), Operador, Administrador.
     tipo.valor = 0.00
 
-    #tipo = tipo_dao.busca(7)
-    #tipo.valor = 1.99
+    tipo = tipo_dao.busca(7)
 
-    tipo_dao.mantem(tipo,False)
+    tipo_dao.mantem(tipo,True)
     print tipo_dao.aviso
-        
+    
     print 30 * "="
     
     for tipo in tipo_dao.busca():

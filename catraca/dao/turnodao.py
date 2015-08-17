@@ -202,9 +202,9 @@ class TurnoDAO(object):
                 else:
                     if obj.id:
                         sql = "UPDATE turno SET " +\
-                              "turn_hora_inicio = " + str(obj.inicio) + ", " +\
-                              "turn_hora_fim = " + str(obj.fim) + ", " +\
-                              "turn_data = " + str(obj.data) + ", " +\
+                              "turn_hora_inicio = '" + str(obj.inicio) + "', " +\
+                              "turn_hora_fim = '" + str(obj.fim) + "', " +\
+                              "turn_data = '" + str(obj.data) + "', " +\
                               "turn_continuo = " + str(obj.continuo) +\
                               " WHERE "\
                               "turn_id = " + str(obj.id)
@@ -214,9 +214,9 @@ class TurnoDAO(object):
                               "turn_hora_inicio, "\
                               "turn_hora_fim, "\
                               "turn_data, "\
-                              "turn_continuo) VALUES (" +\
-                              str(obj.inicio) + ", " +\
-                              str(obj.fim) + ", " +\
+                              "turn_continuo) VALUES ('" +\
+                              str(obj.inicio) + "', '" +\
+                              str(obj.fim) + "', " +\
                               str(obj.data) + ", " +\
                               str(obj.continuo) + ")"
                         msg = "Inserido com sucesso!"

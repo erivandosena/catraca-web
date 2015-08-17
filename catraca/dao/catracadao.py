@@ -28,7 +28,7 @@ class CatracaDAO(object):
         self.__fecha = None
         
     @property
-    def erro(self):
+    def aviso(self):
         return self.__aviso
 
     @property

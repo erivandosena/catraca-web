@@ -66,7 +66,7 @@ class Mensagem(object):
     def msg_erroleitor(self):
         return self.__mens_erroleitor
     
-    @erroleitor.setter
+    @msg_erroleitor.setter
     def msg_erroleitor(self, valor):
         self.__mens_erroleitor = valor
         
@@ -165,6 +165,6 @@ class Mensagem(object):
         return self.__mens_institucional4
     
     @msg_institucional4.setter
-    def msg_institucional1(self, valor):
+    def msg_institucional4(self, valor):
         self.__mens_institucional4 = valor
         
