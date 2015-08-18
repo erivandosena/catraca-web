@@ -5,7 +5,8 @@ from contextlib import closing
 from tipodao import TipoDAO
 from perfil import Perfil
 from conexao import ConexaoFactory
-from .. logs import Logs
+from conexaogenerica import ConexaoGenerica
+#from .. logs import Logs
 
 
 __author__ = "Erivando Sena"
@@ -14,12 +15,14 @@ __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production
 
 
-class PerfilDAO(object):
+class PerfilDAO(ConexaoGenerica):
     
-    log = Logs()
+    #log = Logs()
 
     def __init__(self):
         super(PerfilDAO, self).__init__()
+        ConexaoGenerica.__init__(self)
+    """
         self.__aviso = None
         self.__con = None
         self.__factory = None
@@ -63,6 +66,7 @@ class PerfilDAO(object):
             self.__aviso = str(e)
         finally:
             pass
+    """
         
     def busca(self, *arg):
         obj = Perfil()
@@ -109,7 +113,7 @@ class PerfilDAO(object):
                     else:
                         return None
         except Exception, e:
-            self.__aviso = str(e)
+            self.aviso = str(e)
             self.log.logger.error('Erro ao realizar SELECT na tabela perfil.', exc_info=True)
         finally:
             pass
@@ -235,19 +239,18 @@ class PerfilDAO(object):
                         msg = "Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
-                    self.__con.commit()
-                    self.__aviso = msg
+                    self..commit()
+                    self.aviso = msg
                     return True
             else:
                 msg = "Objeto inexistente!"
-                self.__aviso = msg
+                self.aviso = msg
                 return False
         except Exception, e:
-            self.__aviso = str(e)
+            self.aviso = str(e)
             self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela perfil.', exc_info=True)
             return False
         finally:
             pass
-        
         
     

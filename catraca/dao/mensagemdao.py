@@ -4,7 +4,8 @@
 from contextlib import closing
 from conexao import ConexaoFactory
 from mensagem import Mensagem
-from .. logs import Logs
+from conexaogenerica import ConexaoGenerica
+#from .. logs import Logs
 
 
 __author__ = "Erivando Sena"
@@ -13,12 +14,14 @@ __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production
 
 
-class MensagemDAO(object):
+class MensagemDAO(ConexaoGenerica):
     
-    log = Logs()
+    #log = Logs()
 
     def __init__(self):
         super(MensagemDAO, self).__init__()
+        ConexaoGenerica.__init__(self)
+    """
         self.__aviso = None
         self.__con = None
         self.__factory = None
@@ -62,6 +65,7 @@ class MensagemDAO(object):
             self.__aviso = str(e)
         finally:
             pass
+    """
         
     def busca(self, *arg):
         obj = Mensagem()
@@ -114,7 +118,7 @@ class MensagemDAO(object):
                     else:
                         return None
         except Exception, e:
-            self.__aviso = str(e)
+            self.aviso = str(e)
             self.log.logger.error('Erro ao realizar SELECT na tabela mensagem.', exc_info=True)
         finally:
             pass
@@ -314,15 +318,15 @@ class MensagemDAO(object):
                         msg = "Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
-                    self.__con.commit()
-                    self.__aviso = msg
+                    self.commit()
+                    self.aviso = msg
                     return True
             else:
                 msg = "Objeto inexistente!"
-                self.__aviso = msg
+                self.aviso = msg
                 return False
         except Exception, e:
-            self.__aviso = str(e)
+            self.aviso = str(e)
             self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela mensagem.', exc_info=True)
             return False
         finally:
