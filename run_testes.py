@@ -10,6 +10,7 @@ from testes import catraca_teste
 from testes import giro_teste
 from testes import turno_teste
 from testes import mensagem_teste
+from testes import finalidade_teste
 
 
 __author__ = "Erivando Sena" 
@@ -21,12 +22,13 @@ __status__ = "Prototype" # Prototype | Development | Production
 if __name__ == '__main__':
     
     #usuario_teste.main()
-    tipo_teste.main()
+    #tipo_teste.main()
     #perfil_teste.main()
     #cartao_teste.main()
-    #registro_teste.main()
     #giro_teste.main()
     #turno_teste.main()
     #mensagem_teste.main()
     #catraca_teste.main()
+    #finalidade_teste.main()
+    registro_teste.main()
     pass

@@ -36,12 +36,19 @@ def main():
 
     #registro = registro_dao.busca(6)
 
-    registro_dao.mantem(registro,False)
-    print registro_dao.aviso
+#     registro_dao.mantem(registro,False)
+#     print registro_dao.aviso
         
-    print 30 * "="
+    print 62 * "="
+    print '======################### RELATORIO ####################======'
+    print 62 * "="
     
     for registro in registro_dao.busca():
-        print str(registro[1]) +" "+ str(registro[2]) +" "+ str(registro[3])  +" "+ str(registro[4])
-        
-            
+        cartao = cartao_dao.busca(registro[4])
+        print str(registro[1]) +" "\
+        + str(registro[2]) +" "\
+        + str(registro[3]) +" "\
+        + str(cartao.numero) +" "\
+        + str(cartao.perfil.nome) +" "\
+        + str(cartao.perfil.tipo.nome)
+    print 62 * "="

@@ -77,16 +77,14 @@ class TurnoDAO(ConexaoGenerica):
             sql = "SELECT turn_id, "\
                    "turn_hora_inicio, "\
                    "turn_hora_fim, "\
-                   "turn_data, "\
-                   "turn_continuo "\
+                   "fina_id "\
                    "FROM turno WHERE "\
                    "turn_id = " + str(id)
         elif id is None:
             sql = "SELECT turn_id, "\
                    "turn_hora_inicio, "\
                    "turn_hora_fim, "\
-                   "turn_data, "\
-                   "turn_continuo "\
+                   "fina_id "\
                    "FROM turno"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
@@ -97,8 +95,7 @@ class TurnoDAO(ConexaoGenerica):
                         obj.id = dados[0]
                         obj.inicio = dados[1]
                         obj.fim = dados[2]
-                        obj.data = dados[3]
-                        obj.continuo = dados[4]
+                        obj.finalidade = dados[3]
                         return obj
                     else:
                         return None
@@ -208,8 +205,7 @@ class TurnoDAO(ConexaoGenerica):
                         sql = "UPDATE turno SET " +\
                               "turn_hora_inicio = '" + str(obj.inicio) + "', " +\
                               "turn_hora_fim = '" + str(obj.fim) + "', " +\
-                              "turn_data = '" + str(obj.data) + "', " +\
-                              "turn_continuo = " + str(obj.continuo) +\
+                              "fina_id = " + str(obj.finalidade) +\
                               " WHERE "\
                               "turn_id = " + str(obj.id)
                         msg = "Alterado com sucesso!"
@@ -217,12 +213,11 @@ class TurnoDAO(ConexaoGenerica):
                         sql = "INSERT INTO turno("\
                               "turn_hora_inicio, "\
                               "turn_hora_fim, "\
-                              "turn_data, "\
-                              "turn_continuo) VALUES ('" +\
+                              "fina_id) VALUES ('" +\
                               str(obj.inicio) + "', '" +\
                               str(obj.fim) + "', " +\
                               str(obj.data) + ", " +\
-                              str(obj.continuo) + ")"
+                              str(obj.finalidade) + ")"
                         msg = "Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)

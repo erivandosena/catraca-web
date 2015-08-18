@@ -55,22 +55,33 @@ COMMENT ON COLUMN cartao.cart_numero IS 'Numero do ID do cartao de acesso sem pe
 COMMENT ON COLUMN cartao.cart_creditos IS 'Quantidade de creditos para uso diario do cartao.';
 COMMENT ON COLUMN cartao.perf_id IS 'Campo para chave estrangeira da tabela perfil';
 
+-- TABLE finalidade
+CREATE TABLE finalidade
+(
+  fina_id serial NOT NULL, -- Campo autoincremento destinado para chave primaria da tabela.
+  fina_nome character varying(34), -- Nome da finalidade.
+  CONSTRAINT pk_fina_id PRIMARY KEY (fina_id )
+);
+ALTER TABLE finalidade OWNER TO postgres;
+COMMENT ON TABLE finalidade IS 'Tabela dos tipos de finalidade do turno (Ex. Cafe, Almoco, Janta).';
+COMMENT ON COLUMN finalidade.fina_id IS 'Campo autoincremento destinado para chave primaria da tabela.';
+COMMENT ON COLUMN finalidade.fina_nome IS 'Nome da finalidade.';
+
 -- TABLE turno
 CREATE TABLE turno
 (
   turn_id serial NOT NULL, -- Campo autoincremento destinado para chave primaria da tabela.
   turn_hora_inicio time without time zone, -- Hora inicio do periodo para liberacao da catraca.
   turn_hora_fim time without time zone, -- Hora final do periodo para liberacao da catraca.
-  turn_data timestamp without time zone, -- Data para o periodo da liberacao da catraca.
-  turn_continuo integer DEFAULT 0, -- Define a forma de liberacao dos turnos: 0=Continuo, 1=por data exclusiva.
-  CONSTRAINT pk_turn_id PRIMARY KEY (turn_id)
+  fina_id integer, -- Campo para chave estrangeira da tabela finalidade
+  CONSTRAINT pk_turn_id PRIMARY KEY (turn_id ),
+  CONSTRAINT fk_fina_id FOREIGN KEY (fina_id) REFERENCES finalidade (fina_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 ALTER TABLE turno OWNER TO postgres;
 COMMENT ON COLUMN turno.turn_id IS 'Campo autoincremento destinado para chave primaria da tabela.';
 COMMENT ON COLUMN turno.turn_hora_inicio IS 'Hora inicio do periodo para liberacao da catraca.';
 COMMENT ON COLUMN turno.turn_hora_fim IS 'Hora final do periodo para liberacao da catraca.';
-COMMENT ON COLUMN turno.turn_data IS 'Data para o periodo da liberacao da catraca.';
-COMMENT ON COLUMN turno.turn_continuo IS 'Define a forma de liberacao dos turnos: 0=Continuo, 1=por data exclusiva.';
+COMMENT ON COLUMN turno.fina_id IS 'Campo para chave estrangeira da tabela finalidade';
 
 -- Table giro
 CREATE TABLE giro
@@ -208,4 +219,3 @@ COMMENT ON COLUMN usuario.usua_email IS 'E-mail do utilizador do cartao sem perm
 COMMENT ON COLUMN usuario.usua_login IS 'Nome de usuario do utilizador do cartao.';
 COMMENT ON COLUMN usuario.usua_senha IS 'Senha de usuario do utilizador do cartao.';
 COMMENT ON COLUMN usuario.usua_nivel IS 'Nivel de acesso ao sistema do utilizador do cartao.';
-

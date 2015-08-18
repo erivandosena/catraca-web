@@ -258,7 +258,7 @@ class CatracaDAO(ConexaoGenerica):
                         msg = "Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
-                    self..commit()
+                    self.commit()
                     self.aviso = msg
                     return False
             else:

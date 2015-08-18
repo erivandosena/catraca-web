@@ -6,6 +6,7 @@ import locale
 import datetime
 from catraca.dao.turno import Turno
 from catraca.dao.turnodao import TurnoDAO
+from catraca.dao.finalidadedao import FinalidadeDAO
 
 
 __author__ = "Erivando Sena"
@@ -25,10 +26,12 @@ def main():
 
     turno.inicio = datetime.datetime.strptime('11:00:00','%H:%M:%S').time()
     turno.fim = datetime.datetime.strptime('13:30:00','%H:%M:%S').time()
-    turno.data = datetime.datetime.now().strftime("'%Y-%m-%d %H:%M:%S'")
-    #turno.data = "null"
-    turno.continuo = 0
-
+    
+    turno = turno_dao.busca(2)
+    turno.inicio = datetime.datetime.strptime('17:30:00','%H:%M:%S').time()
+    turno.fim = datetime.datetime.strptime('19:00:00','%H:%M:%S').time()
+    turno.finalidade = FinalidadeDAO().busca(3).id
+    
 
     turno_dao.mantem(turno,False)
     print turno_dao.aviso
@@ -36,4 +39,4 @@ def main():
     print 30 * "="
     
     for turno in turno_dao.busca():
-        print str(turno[1]) +" "+ str(turno[2]) +" "+ str(turno[3]) +" "+ str(turno[4])
+        print str(turno[1]) +" "+ str(turno[2]) +" "+ str(FinalidadeDAO().busca(turno[3]).nome) 

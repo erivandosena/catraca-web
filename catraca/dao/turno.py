@@ -14,8 +14,7 @@ class Turno(object):
         self.__turn_id = None
         self.__turn_hora_inicio = None
         self.__turn_hora_fim = None
-        self.__turn_data = None
-        self.__turn_continuo = None
+        self.__finalidade = None
 
     @property
     def id(self):
@@ -42,18 +41,11 @@ class Turno(object):
         self.__turn_hora_fim = valor
     
     @property
-    def data(self):
-        return self.__turn_data
+    def finalidade(self):
+        return self.__finalidade
     
-    @data.setter
-    def data(self, valor):
-        self.__turn_data = valor
-    
-    @property
-    def continuo(self):
-        return self.__turn_continuo
-    
-    @continuo.setter
-    def continuo(self, valor):
-        self.__turn_continuo = valor
+    @finalidade.setter
+    def finalidade(self, valor):
+        self.__finalidade = valor
+        
         
