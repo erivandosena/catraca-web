@@ -59,7 +59,7 @@ COMMENT ON COLUMN cartao.perf_id IS 'Campo para chave estrangeira da tabela perf
 CREATE TABLE finalidade
 (
   fina_id serial NOT NULL, -- Campo autoincremento destinado para chave primaria da tabela.
-  fina_nome character varying(34), -- Nome da finalidade.
+  fina_nome character varying(34), -- Nome da finalidade.(EX. Cafe, Almoco, Janta)
   CONSTRAINT pk_fina_id PRIMARY KEY (fina_id )
 );
 ALTER TABLE finalidade OWNER TO postgres;
