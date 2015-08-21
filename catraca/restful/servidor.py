@@ -3,20 +3,15 @@
 
 """Implementacao de servidor REST utilizando Flask RESTful."""
 
-
 from flask import Flask, jsonify, abort, make_response
 from flask.ext.restful import Api, Resource, reqparse, fields, marshal
 from flask.ext.httpauth import HTTPBasicAuth
 from catraca.dao.tipodao import TipoDAO
 from catraca.dao.tipo import Tipo
-import json
-import decimal, simplejson
-#from catraca.dao.mensagemdao import MensagemDAO
 
 app = Flask(__name__, static_url_path="")
 api = Api(app)
 auth = HTTPBasicAuth()
-
 tipo = Tipo()
 tipo_dao = TipoDAO()
 
@@ -26,24 +21,10 @@ def get_password(username):
         return 'Unilab'
     return None
 
-
 @auth.error_handler
 def unauthorized():
     # retornar 403 em vez de 401 para impedir a exibicao padrao dos navegadores
-    # auth dialog
     return make_response(jsonify({'message': 'Acesso negado.'}), 403)
-
-class DecimalJSONEncoder(simplejson.JSONEncoder):
-    def default(self, o):
-        if isinstance(o, decimal.Decimal):
-            return str(o)
-        return super(DecimalJSONEncoder, self).default(o)
-#     
-# #tipo = MensagemDAO().busca()
-# 
-# #print json.dumps(tipo.__dict__ ,default=decimal_default,sort_keys=True,indent=4,separators=(',', ': '))
-# #tasks = json.dumps(tipo.__dict__, sort_keys=True, indent=4, cls=DecimalJSONEncoder)
-# #tasks = simplejson.dumps(tipo.__dict__, sort_keys=True, indent=4)
 
 def obtem_lista(lista):
     ilista=[]
@@ -56,34 +37,9 @@ def obtem_lista(lista):
         ilista.append(i)
     return ilista
 
-# tasks = [
-#     {
-#         'id': 1,
-#         'title': u'Buy groceries',
-#         'description': u'Milk, Cheese, Pizza, Fruit, Tylenol',
-#         'done': False
-#      },
-#     {
-#         'id': 2,
-#         'title': u'Learn Python',
-#         'description': u'Need to find a good Python tutorial on the web',
-#         'done': False
-#     }
-# ]
-# 
-# task_fields = {
-#     'title': fields.String,
-#     'description': fields.String,
-#     'done': fields.Boolean,
-#     'uri': fields.Url('task')
-# }
-
 tasks = obtem_lista(tipo_dao.busca())
 
-print tasks
-
 task_fields = {
-    #'id': fields.Integer,
     'title': fields.String,
     'description': fields.String,
     'done': fields.Boolean,
@@ -99,7 +55,6 @@ class TaskListAPI(Resource):
         self.reqparse.add_argument('title', type=str, required=True, help='No task title provided', location='json')
         self.reqparse.add_argument('description', type=str, default="", location='json')
         super(TaskListAPI, self).__init__()
-
 
     def get(self):
         print "SELECIONOU"
@@ -152,11 +107,11 @@ class TaskAPI(Resource):
             if v is not None:
                 task[k] = v
                 
-#         tipo = Tipo()
-#         tipo.nome = args['title']
-#         tipo.valor = args['description']
-#         tipo_dao.mantem(tipo,False)
-#         print tipo_dao.aviso
+        tipo = tipo_dao.busca(id)
+        tipo.nome = args['title']
+        tipo.valor = args['description']
+        tipo_dao.mantem(tipo,False)
+        print tipo_dao.aviso
                 
         print "EDITOU"
         return {'task': marshal(task, task_fields)}
@@ -165,6 +120,11 @@ class TaskAPI(Resource):
         task = [task for task in tasks if task['id'] == id]
         if len(task) == 0:
             abort(404)
+            
+        tipo = tipo_dao.busca(id)
+        tipo_dao.mantem(tipo,True)
+        print tipo_dao.aviso
+            
         tasks.remove(task[0])
         print "EXCLUIU"
         return {'result': True}
