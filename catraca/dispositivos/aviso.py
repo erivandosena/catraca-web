@@ -100,10 +100,8 @@ class Aviso(object):
     def exibir_dia_invalido(self):
         self.display.mensagem("  DIA NAO UTIL\nPARA ATENDIMENTO",2,False,False)
         
-    def exibir_cartao_utilizado1(self):
-        self.display.mensagem("CARTAO JA USADO\nPARA 1a REFEICAO",2,False,False) 
-    
-    def exibir_cartao_utilizado2(self):
-        self.display.mensagem("CARTAO JA USADO\nPARA 2a REFEICAO",2,False,False)
+    def exibir_cartao_utilizado(self):
+        self.display.mensagem("CARTAO JA USADO\n NESTE HORARIO",2,False,False)
+        
         
         

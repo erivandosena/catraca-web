@@ -11,8 +11,9 @@ from testes import giro_teste
 from testes import turno_teste
 from testes import mensagem_teste
 from testes import finalidade_teste
-from catraca.restful.servidor import app
+#from catraca.restful.servidor import app
 from testes import requests_teste
+from testes import controlegiro_teste
 
 
 __author__ = "Erivando Sena" 
@@ -33,7 +34,8 @@ if __name__ == '__main__':
     #catraca_teste.main()
     #finalidade_teste.main()
     #registro_teste.main()
-    requests_teste.main()
+    #requests_teste.main()
+    controlegiro_teste.main()
     #app.run(host='10.5.2.253', port=27289, debug=True)
     #app.run(host='192.168.1.253', port=27289, debug=True)
     #pass

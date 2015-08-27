@@ -6,7 +6,6 @@ import os
 from logs import Logs
 from dispositivos.aviso import Aviso
 from dispositivos.acesso import Acesso
-from dispositivos.restful import RestFul
 from dispositivos.mensagem import Mensagem
 from dispositivos.mensagemcondicao import MensagemCondicao
 
@@ -30,8 +29,8 @@ class Painel(object):
         print 'Processando...'
         self.log.logger.debug('Iniciando aplicacao...')
         self.aviso.exibir_inicializacao()
-        self.aviso.exibir_estatus_catraca()
         self.aviso.exibir_datahora()
+        self.aviso.exibir_estatus_catraca()
         self.thread()
     
     def thread(self):
@@ -40,7 +39,6 @@ class Painel(object):
             #threads = []
             
             acesso = Acesso()
-            restful = RestFul()
             mensagem = Mensagem()
             mcondicao = MensagemCondicao()
   
@@ -50,7 +48,7 @@ class Painel(object):
             #mensagem = ThreadCatraca(2, "Mensagem", 2)
 
             acesso.start()
-            restful.start()
+ 
             #telegram.start()
             #mensagem.start() # Chama o método run ()
                 
@@ -70,19 +68,19 @@ class Painel(object):
 #             print "Saindo da Thread principal"
 
 
-            while mcondicao.condition:
-                mensagem.reinicia()
-                # depois de alguma operação
-                
-               # print 'depois de alguma operação'
-                
-                mensagem.pausa()
-                # alguma outra operação
-                
-               # print 'alguma outra operação'
-            
-            
-            print('mensagem.iterations == {}'.format(mensagem.iterations))  # mostrar conversa executado
+#             while mcondicao.condition:
+#                 mensagem.reinicia()
+#                 # depois de alguma operação
+#                 
+#                # print 'depois de alguma operação'
+#                 
+#                 mensagem.pausa()
+#                 # alguma outra operação
+#                 
+#                # print 'alguma outra operação'
+#             
+#             
+#             print('mensagem.iterations == {}'.format(mensagem.iterations))  # mostrar conversa executado
             # http://stackoverflow.com/questions/15729498/how-to-start-and-stop-thread
  
         except (SystemExit, KeyboardInterrupt):

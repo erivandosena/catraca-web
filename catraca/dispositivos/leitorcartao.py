@@ -173,9 +173,15 @@ class LeitorCartao(object):
                         saldo = str(locale.currency(cartao.perfil.tipo.valor*creditos)).replace(".",",")
                         self.aviso.exibir_cartao_valido(tipo, saldo)
                         self.aviso.exibir_acesso_liberado()
-                        self.solenoide.ativa_solenoide(1,1)
-                        self.pictograma.seta_esquerda(1)
-                        self.pictograma.xis(1)
+                        
+                        if catraca.operacao == 1:
+                            self.solenoide.ativa_solenoide(1,1)
+                            self.pictograma.seta_esquerda(1)
+                            self.pictograma.xis(1)
+                        elif catraca.operacao == 2:
+                            self.solenoide.ativa_solenoide(2,1)
+                            self.pictograma.seta_direita(1)
+                            self.pictograma.xis(1)
                         ##############################################################
                         ## OPERACAO DE DECREMENTO DE CREDITO NO CARTAO
                         ##############################################################
@@ -229,9 +235,15 @@ class LeitorCartao(object):
                 self.log.logger.info("Alteracao no cartao cancelada!(rollback)")
             self.log.logger.error('Erro validando ID do cartao:\n'+self.cartao_dao.aviso)
         finally:
-            self.solenoide.ativa_solenoide(1,0)
-            self.pictograma.seta_esquerda(0)
-            self.pictograma.xis(0)
+            if catraca.operacao == 1:
+                self.solenoide.ativa_solenoide(1,0)
+                self.pictograma.seta_esquerda(0)
+                self.pictograma.xis(0)
+            if catraca.operacao == 2:
+                self.solenoide.ativa_solenoide(2,0)
+                self.pictograma.seta_direita(0)
+                self.pictograma.xis(0)
+                
             self.aviso.exibir_aguarda_cartao()
 
             if registro_dao.conexao_status():

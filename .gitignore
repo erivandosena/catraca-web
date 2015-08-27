@@ -1,8 +1,12 @@
+# Fontes compilados #
+#####################
 *.pyc
+**/*~
 
-!/log
+# Documentacao      #
+#####################
+!/documentos
 
-#/documentos
-
-!/home/pi/Catraca/catraca/telegram/tg
-
+# Logs              #
+#####################
+/log/**/*
