@@ -23,23 +23,18 @@ class ConexaoGenerica(object):
         self.__factory = None
         self.__fecha = None
         
-    #@property
     def aviso(self):
         return self.__aviso
 
-    #@property
     def commit(self):
         return self.__con.commit()
 
-    #@property
     def rollback(self):
         return self.__con.rollback()
 
-    #@property
     def fecha_conexao(self):
         return self.__con.close()
 
-    #@property
     def conexao_status(self):
         if self.__con is not None:
             if self.__con.closed:

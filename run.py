@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: iso-8859-1 -*-
 
+
 from catraca.logs import Logs
 from catraca.painel import Painel
 
@@ -14,3 +15,4 @@ __status__ = "Prototype" # Prototype | Development | Production
 if __name__ == '__main__':
     Logs().main()
     Painel().main()
+    

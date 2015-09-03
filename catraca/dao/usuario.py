@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 
-from tipo import Tipo
 
 __author__ = "Erivando Sena"
 __copyright__ = "Copyright 2015, Unilab"

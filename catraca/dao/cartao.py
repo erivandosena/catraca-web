@@ -15,6 +15,7 @@ class Cartao(object):
         self.__cart_id = None
         self.__cart_numero = None
         self.__cart_qtd_creditos = None
+        self.__cart_data = None
         self.__perfil = None
         
     @property
@@ -40,6 +41,15 @@ class Cartao(object):
     @creditos.setter
     def creditos(self, valor):
         self.__cart_qtd_creditos = valor
+        
+    @property
+    def data(self):
+        return self.__cart_data
+ 
+    @data.setter
+    def data(self, valor):
+        self.__cart_data = valor
+        
         
     @property
     def perfil(self):

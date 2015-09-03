@@ -16,11 +16,11 @@
         </div>
     </div>
     <div id="main" class="container">
-    	<button data-bind="click: beginAdd" class="btn">Imprimir Relat&oacute;rio</button>
+    	<button data-bind="click: beginAdd" class="btn">Nova Tarefa</button>
     	<br /><br />
         <table class="table table-striped">
-            <tr><td style="width: 140px;"><strong>Data/Hora</strong></td><td><strong>Giro na Catraca</strong></td><td style="width: 100px;"><strong>Valor R$</strong></td><td style="width: 150px;"><strong>Cart&atilde;o</strong></td></tr>
-            <!-- ko foreach: registros -->
+            <tr><td style="width: 1px;"></td><td><b>Descri&ccedil;&atilde;o</b></td><td><b>Op&ccedil;&atilde;o</b></td></tr>
+            <!-- ko foreach: tipos -->
             <tr>
                 <td>
                     <!--
@@ -28,8 +28,10 @@
                     <span data-bind="visible: !done()" class="label label-important">Em andamento</span>
                     -->
                 </td>
-                <tr><td style="width: 140px;"><p data-bind="text: data"></p></td><td><p data-bind="text: giro"></p></td>
-                <td style="width: 100px;"><p data-bind="text: valor"></p></td><td style="width: 150px;"><p data-bind="text: cartao"></p></td>
+                <td><p><b data-bind="text: nome"></b></p><p data-bind="text: valor"></p></td>
+                <td>
+                    <button data-bind="click: $parent.beginEdit" class="btn">Edita</button>
+                    <button data-bind="click: $parent.remove" class="btn">Deleta</button>
                     <!--
                     <span data-bind="visible: done">
                         <button data-bind="click: $parent.markInProgress" class="btn">Marcar em andamento</button>
@@ -38,12 +40,12 @@
                         <button data-bind="click: $parent.markDone" class="btn">Marcar finalizado</button>
                     </span>
                     -->
+                </td>
             </tr>
             <!-- /ko -->
         </table>
-        <button data-bind="click: beginAdd" class="btn">Imprimir Relat&oacute;rio</button>
+        <button data-bind="click: beginAdd" class="btn">Nova Tarefa</button>
     </div>
-    <!-- 
     <div id="add" class="modal hide fade" tabindex="=1" role="dialog" aria-labelledby="addDialogLabel" aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">X</button>
@@ -89,7 +91,7 @@
                         <input data-bind="value: valor" type="text" id="inputDescription" placeholder="Informe uma descrição" style="width: 300px;">
                     </div>
                 </div>
-               
+                <!--
                 <div class="control-group">
                     <div class="controls">
                         <label class="checkbox">
@@ -97,7 +99,7 @@
                         </label>
                     </div>
                 </div>
-                
+                -->
             </form>
         </div>
         <div class="modal-footer">
@@ -105,7 +107,6 @@
             <button class="btn" data-dismiss="modal" aria-hidden="true">Cancela</button>
         </div>
     </div>
-    -->
     <div id="login" class="modal hide fade" tabindex="=1" role="dialog" aria-labelledby="loginLabel" aria-hidden="true">
         <div class="modal-header">
             <h3 id="loginLabel">&Aacute;rea Restrita</h3>
@@ -134,25 +135,24 @@
     <script type="text/javascript">
         function TiposViewModel() {
             var self = this;
-            //self.registrosURI = 'http://192.168.1.253:27289/api/catraca'; 
-            self.registrosURI = 'http://10.5.1.8:8888/api/registros'; //ou 37389
+            //self.tiposURI = 'http://192.168.1.253:27289/api/catraca'; 
+            self.tiposURI = 'http://10.5.2.253:27289/api/catraca'; //ou 37389
             self.username = "";
             self.password = "";
-            self.registros = ko.observableArray();
+            self.tipos = ko.observableArray();
 
             self.ajax = function(uri, method, data) {
                 var request = {
                     url: uri,
                     type: method,
-                    //crossDomain: true, // enable this
                     contentType: "application/json",
                     accepts: "application/json",
                     cache: false,
                     dataType: 'json',
                     data: JSON.stringify(data),
                     beforeSend: function (xhr) {
-                    	xhr.setRequestHeader("Authorization", "Basic " + btoa(self.username + ":" + self.password));
-                        //xhr.setRequestHeader("Authorization", "Basic " + btoa("catraca:Unilab"));
+                        //xhr.setRequestHeader("Authorization", "Basic " + btoa(self.username + ":" + self.password));
+                        xhr.setRequestHeader("Authorization", "Basic " + btoa("catraca:Unilab"));
                     },
                     error: function(jqXHR) {
                         console.log("ajax error " + jqXHR.status);
@@ -160,22 +160,19 @@
                 };
                 return $.ajax(request);
             }
-            /*
             self.updateTipo = function(tipo, newTipo) {
-                var i = self.registros.indexOf(tipo);
-                self.registros()[i].uri(newTipo.uri);
-                self.registros()[i].nome(newTipo.nome);
-                self.registros()[i].valor(newTipo.valor);
+                var i = self.tipos.indexOf(tipo);
+                self.tipos()[i].uri(newTipo.uri);
+                self.tipos()[i].nome(newTipo.nome);
+                self.tipos()[i].valor(newTipo.valor);
             }
-            */
 
             self.beginAdd = function() {
                 $('#add').modal('show');
             }
-            /*
             self.add = function(tipo) {
-                self.ajax(self.registrosURI, 'POST', tipo).done(function(data) {
-                    self.registros.push({
+                self.ajax(self.tiposURI, 'POST', tipo).done(function(data) {
+                    self.tipos.push({
                         uri: ko.observable(data.tipo.uri),
                         nome: ko.observable(data.tipo.nome),
                         valor: ko.observable(data.tipo.valor)
@@ -193,7 +190,7 @@
             }
             self.remove = function(tipo) {
                 self.ajax(tipo.uri(), 'DELETE').done(function() {
-                    self.registros.remove(tipo);
+                    self.tipos.remove(tipo);
                 });
             }
             self.markInProgress = function(tipo) {
@@ -201,32 +198,28 @@
                     self.updateTipo(tipo, res.tipo);
                 });
             }
-            */
             self.beginLogin = function() {
                 $('#login').modal('show');
             }
             self.login = function(username, password) {
                 self.username = username;
                 self.password = password;
-                self.ajax(self.registrosURI, 'GET').done(function(data) {
-                    for (var i = 0; i < data.registros.length; i++) {
-                        self.registros.push({
-                            //uri: ko.observable(data.registros[i].uri),
-                            data: ko.observable(data.registros[i].regi_datahora),
-                            giro: ko.observable(data.registros[i].regi_giro),
-                            valor: ko.observable(data.registros[i].regi_valor),
-                            cartao: ko.observable(data.registros[i].cart_id)
+                self.ajax(self.tiposURI, 'GET').done(function(data) {
+                    for (var i = 0; i < data.tipos.length; i++) {
+                        self.tipos.push({
+                            uri: ko.observable(data.tipos[i].uri),
+                            nome: ko.observable(data.tipos[i].nome),
+                            valor: ko.observable(data.tipos[i].valor)
                         });
                     }
                 }).fail(function(jqXHR) {
-                    if (jqXHR.status =  403)
+                    if (jqXHR.status == 403)
                         setTimeout(self.beginLogin, 500);
                 });
             }
             
             self.beginLogin();
         }
-        /*
         function AddTipoViewModel() {
             var self = this;
             self.nome = ko.observable();
@@ -234,7 +227,7 @@
  
             self.addTipo = function() {
                 $('#add').modal('hide');
-                registrosViewModel.add({
+                tiposViewModel.add({
                     nome: self.nome(),
                     valor: self.valor()
                 });
@@ -256,13 +249,12 @@
  
             self.editTipo = function() {
                 $('#edit').modal('hide');
-                registrosViewModel.edit(self.tipo, {
+                tiposViewModel.edit(self.tipo, {
                     nome: self.nome(),
                     valor: self.valor()
                 });
             }
         }
-        */
         function LoginViewModel() {
             var self = this;
             self.username = ko.observable();
@@ -270,18 +262,18 @@
  
             self.login = function() {
                 $('#login').modal('hide');
-                registrosViewModel.login(self.username(), self.password());
+                tiposViewModel.login(self.username(), self.password());
             }
         }
         
-        var registrosViewModel = new TiposViewModel();
-        //var addTipoViewModel = new AddTipoViewModel();
-        //var editTipoViewModel = new EditTipoViewModel();
+        var tiposViewModel = new TiposViewModel();
+        var addTipoViewModel = new AddTipoViewModel();
+        var editTipoViewModel = new EditTipoViewModel();
         var loginViewModel = new LoginViewModel();
         
-        ko.applyBindings(registrosViewModel, $('#main')[0]);
-        //ko.applyBindings(addTipoViewModel, $('#add')[0]);
-        //ko.applyBindings(editTipoViewModel, $('#edit')[0]);
+        ko.applyBindings(tiposViewModel, $('#main')[0]);
+        ko.applyBindings(addTipoViewModel, $('#add')[0]);
+        ko.applyBindings(editTipoViewModel, $('#edit')[0]);
         ko.applyBindings(loginViewModel, $('#login')[0]);
     </script>
 </body>

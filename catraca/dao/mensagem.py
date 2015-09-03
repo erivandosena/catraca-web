@@ -29,6 +29,7 @@ class Mensagem(object):
         self.__mens_institucional2 = None
         self.__mens_institucional3 = None
         self.__mens_institucional4 = None
+        self.__catraca = None
 
     @property
     def id(self):
@@ -167,4 +168,12 @@ class Mensagem(object):
     @msg_institucional4.setter
     def msg_institucional4(self, valor):
         self.__mens_institucional4 = valor
+        
+    @property
+    def catraca(self):
+        return self.__catraca
+    
+    @catraca.setter
+    def catraca(self, obj):
+        self.__catraca = obj
         

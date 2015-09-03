@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 
+
 import time
 import threading
 from threading import Thread
 from catraca.logs import Logs
 from catraca.dispositivos.aviso import Aviso
-#from catraca.dispositivos.threadcatraca import ThreadCatraca
 from catraca.dispositivos.leitorcartao import LeitorCartao
 
 
@@ -19,16 +19,11 @@ __status__ = "Prototype" # Prototype | Development | Production
 class Mensagem(threading.Thread):
     
     log = Logs()
-    
-    #threadLock = threading.Lock()
-    #threads = []
-    
+
     def __init__(self):
-        #super(Mensagem, self).__init__()
+        super(Mensagem, self).__init__()
         threading.Thread.__init__(self)
-        #self.threadID = 2
         self.name = 'Thread Mensagem.'
-        #self.counter = 2
         self.iterations = 0
         self.daemon = True  # OK para o principal sair, mesmo se a instância ainda está em execução
         self.paused = True  # começar uma pausa
@@ -36,18 +31,7 @@ class Mensagem(threading.Thread):
 
     def run(self):
         print "%s Rodando... " % self.name
-        #self.threadLock.acquire()
-        #self.print_time(self.name, self.counter, 2)
-        # Free lock to release next thread
-        #self.threadLock.release()
-        
-        #self.exibe_mensagens(True)
-        
-#         if LeitorCartao().ler():
-#             self.lock.acquire()
-#         else:
         self.reinicia() # cancelar pausa auto 
-        
         while True:
             with self.state:
                 if self.paused:
@@ -68,13 +52,6 @@ class Mensagem(threading.Thread):
             
     def para(self):
         self.stopped = True
-                  
-#     def print_time(self,threadName,delay,counter):
-#         while counter:
-#         #while True:
-#             time.sleep(delay)
-#             print "%s: %s" % (threadName, time.ctime(time.time()))
-#             counter -= 1
 
     def exibe_mensagens(self, valor):
         try:

@@ -1,14 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 
+
 import os
-import threading
-from threading import Thread
-from dispositivos.acesso import Acesso
 from logs import Logs
-from dispositivos.mensagem import Mensagem
 from dispositivos.aviso import Aviso
-from dispositivos.threadcatraca import ThreadCatraca
+from dispositivos.acesso import Acesso
+from dispositivos.restful import RestFul
+from dispositivos.mensagem import Mensagem
 from dispositivos.mensagemcondicao import MensagemCondicao
 
 
@@ -41,14 +40,18 @@ class Painel(object):
             #threads = []
             
             acesso = Acesso()
+            restful = RestFul()
             mensagem = Mensagem()
             mcondicao = MensagemCondicao()
+  
             
             
             #acesso = ThreadCatraca(1, "Acesso", 1)
             #mensagem = ThreadCatraca(2, "Mensagem", 2)
 
             acesso.start()
+            restful.start()
+            #telegram.start()
             #mensagem.start() # Chama o método run ()
                 
             #mensagem.start()

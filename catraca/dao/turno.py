@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 
+
 __author__ = "Erivando Sena"
 __copyright__ = "Copyright 2015, Unilab"
 __email__ = "erivandoramos@unilab.edu.br"
@@ -15,6 +16,7 @@ class Turno(object):
         self.__turn_hora_inicio = None
         self.__turn_hora_fim = None
         self.__finalidade = None
+        self.__catraca = None
 
     @property
     def id(self):
@@ -48,4 +50,11 @@ class Turno(object):
     def finalidade(self, valor):
         self.__finalidade = valor
         
+    @property
+    def catraca(self):
+        return self.__catraca
+    
+    @catraca.setter
+    def catraca(self, obj):
+        self.__catraca = obj
         

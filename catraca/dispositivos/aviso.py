@@ -4,7 +4,6 @@
 import os
 import socket
 import locale
-from time import strftime
 from datetime import datetime
 from catraca.logs import Logs
 from catraca.dispositivos.display import Display
@@ -30,16 +29,22 @@ class Aviso(object):
         super(Aviso, self).__init__()
         
     def saldacaao(self):
-        hora = strftime('%H')
-        mensagem = ''
-        if hora > 6 and hora <= 12:
-            mensagem = '    BOM DIA!'
-        elif hora > 12  and hora <=18:
-            mensagem = '   BOA TARDE!'
-        else:
-            mensagem = '   BOA NOITE!'
-        return mensagem
-        
+        hora = int(datetime.now().strftime('%H'))
+        periodo = 0
+        if (hora >= 6 and hora < 12):
+            periodo = 1
+        if (hora >= 12 and hora < 18):
+           periodo = 2
+        if (hora >= 18 and hora < 00):
+            periodo = 3
+        opcoes = {
+                   1 : '     OLA\n    BOM DIA!',
+                   2 : '     OLA\n   BOA TARDE!',
+                   3 : '     OLA\n   BOA NOITE!',
+
+        }
+        return opcoes.get(periodo, "      Ola!").upper()
+    
     def exibir_saldacaao(self):
         self.display.mensagem(self.mensagem,1,False,False)
         
@@ -66,7 +71,7 @@ class Aviso(object):
         self.display.mensagem('Desenvolvido por\n  DISUP | DTI',5,False,False)
         
     def exibir_aguarda_cartao(self):
-        self.display.mensagem(self.saldacaao()+'\nAPROXIME CARTAO',1,True,False)
+        self.display.mensagem('   BEM-VINDO!\nAPROXIME CARTAO',1,True,False)
         
     def exibir_erro_leitura_cartao(self):
         self.display.mensagem("APROXIME CARTAO\n  NOVAMENTE...",1,True,False)

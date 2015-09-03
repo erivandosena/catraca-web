@@ -21,7 +21,6 @@ class FinalidadeDAO(ConexaoGenerica):
 
     def busca(self, *arg):
         obj = Finalidade()
-        list = []
         id = None
         for i in arg:
             id = i
