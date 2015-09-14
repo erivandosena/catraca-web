@@ -28,7 +28,7 @@ class Aviso(object):
     def __init__(self):
         super(Aviso, self).__init__()
         
-    def saldacaao(self):
+    def saldacao(self):
         hora = int(datetime.now().strftime('%H'))
         periodo = 0
         if (hora >= 6 and hora < 12):
@@ -38,15 +38,15 @@ class Aviso(object):
         if (hora >= 18 and hora < 00):
             periodo = 3
         opcoes = {
-                   1 : '     OLA\n    BOM DIA!',
-                   2 : '     OLA\n   BOA TARDE!',
-                   3 : '     OLA\n   BOA NOITE!',
+                   1 : '      OLA\n   BOM DIA!',
+                   2 : '      OLA\n   BOA TARDE!',
+                   3 : '      OLA\n   BOA NOITE!',
 
         }
         return opcoes.get(periodo, "      Ola!").upper()
     
-    def exibir_saldacaao(self):
-        self.display.mensagem(self.mensagem,1,False,False)
+    def exibir_saldacao(self):
+        self.display.mensagem(self.saldacao(),2,False,False)
         
     def exibir_inicializacao(self):
         self.display.mensagem('Iniciando...\n'+os.name.upper(),3,False,False)
@@ -71,37 +71,41 @@ class Aviso(object):
         self.display.mensagem('Desenvolvido por\n  DISUP | DTI',5,False,False)
         
     def exibir_aguarda_cartao(self):
-        self.display.mensagem('   BEM-VINDO!\nAPROXIME CARTAO',1,True,False)
+        self.display.mensagem('   BEM-VINDO!\nAPROXIME CARTAO',0,True,False)
         
     def exibir_erro_leitura_cartao(self):
         self.display.mensagem("APROXIME CARTAO\n  NOVAMENTE...",1,True,False)
         
     def exibir_acesso_bloqueado(self):
-        self.display.mensagem("     ACESSO\n   BLOQUEADO!",1,False,False)
+        self.display.mensagem("     ACESSO\n   BLOQUEADO!",0,False,False)
         
     def exibir_acesso_liberado(self):
         self.display.mensagem("     ACESSO\n    LIBERADO!",0,False,False)
 
     def exibir_cartao_sem_saldo(self, tipo):
-        self.display.mensagem(tipo+"\n   SEM SALDO!",2,False,False)
+        self.display.mensagem(tipo+"\n   SEM SALDO!",0,False,False)
         
     def exibir_cartao_nao_cadastrado(self):
-        self.display.mensagem("     CARTAO\n NAO CADASTRADO!",2,False,False)
+        self.display.mensagem("     CARTAO\n NAO CADASTRADO!",1,False,False)
         
     def exibir_cartao_valido(self, tipo, saldo):
-        self.display.mensagem(tipo+"\n SALDO "+saldo,2,False,False)
+        self.display.mensagem(tipo+"\n SALDO "+saldo,0,False,False)
         
     def exibir_cartao_invalido(self):
-        self.display.mensagem("     CARTAO\n  INVALIDO!",2,False,False)
+        self.display.mensagem("     CARTAO\n  INVALIDO!",1,False,False)
         
     def exibir_horario_invalido(self):
-        self.display.mensagem("FORA DO HORARIO\n DE ATENDIMENTO",2,False,False)  
+        self.display.mensagem("FORA DO HORARIO\n DE ATENDIMENTO",1,False,False)  
         
     def exibir_dia_invalido(self):
-        self.display.mensagem("  DIA NAO UTIL\nPARA ATENDIMENTO",2,False,False)
+        self.display.mensagem("  DIA NAO UTIL\nPARA ATENDIMENTO",1,False,False)
         
     def exibir_cartao_utilizado(self):
-        self.display.mensagem("CARTAO JA USADO\n NESTE HORARIO",2,False,False)
+        self.display.mensagem("CARTAO JA USADO\n NESTE HORARIO",1,False,False)
         
-        
+    def exibir_acesso_livre(self):
+        self.display.mensagem("   BEM-VINDO!\n  ACESSO LIVRE",1,False,False)
+
+    def exibir_aguarda_leitura(self):
+        self.display.mensagem(' CONSULTANDO...\n    AGUARDE!',0,True,False)
         

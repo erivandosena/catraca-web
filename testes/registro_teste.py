@@ -38,14 +38,14 @@ def main():
     registro.cartao = cartao_dao.busca(4)
     registro.valor = registro.cartao.perfil.tipo.valor
     
-    if registro_dao.conexao_status():
-         print "conexao_status: "+ str(registro_dao.conexao_status())
+#     if registro_dao.conexao_status():
+#          print "conexao_status: "+ str(registro_dao.conexao_status())
 
-
-    if not registro_dao.mantem(registro,False):
-        raise Exception(registro_dao.aviso)
-    else:
-        print registro_dao.aviso
+# 
+#     if not registro_dao.mantem(registro,False):
+#         raise Exception(registro_dao.aviso)
+#     else:
+#         print registro_dao.aviso
 
 
 #     print registro.cartao.perfil.tipo.nome
@@ -105,4 +105,5 @@ def main():
         + str(cartao.numero) +" "\
         + str(cartao.perfil.nome) +" "\
         + str(cartao.perfil.tipo.nome)
+        print 62 * "-"
     print 62 * "="

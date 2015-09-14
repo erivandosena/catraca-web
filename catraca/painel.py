@@ -30,6 +30,7 @@ class Painel(object):
         self.log.logger.debug('Iniciando aplicacao...')
         self.aviso.exibir_inicializacao()
         self.aviso.exibir_datahora()
+        self.aviso.exibir_saldacao()
         self.aviso.exibir_estatus_catraca()
         self.thread()
     
