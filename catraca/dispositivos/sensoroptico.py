@@ -37,12 +37,9 @@ class SensorOptico(object):
         # cronômetro regressivo para o giro
         try:
             for segundo in range(tempo, -1, -1):
-                #sleep(0.99)
                 tempo_decorrido = (tempo/1000)-(segundo/1000)
-                #tempo_decorrido += 1
                 self.log.logger.debug(str(segundo ) + ' seg. restantes para expirar o tempo para giro.')
                 self.log.logger.debug('Catraca em repouso, codigo sensores: '+ str(self.ler_sensor(1)) + '' + str(self.ler_sensor(2)))
-                #print str(segundo)
                 print str(tempo_decorrido)
                 """
                 # GIRO HORARIO
@@ -87,13 +84,11 @@ class SensorOptico(object):
                         codigo_giro = str(self.ler_sensor(2)) + '' + str(self.ler_sensor(1))
                         self.log.logger.info('Giro antihorario finalizado em '+ str(tempo_decorrido)+' segundo(s).')
                         self.log.logger.debug('Giro antihorario completo no codigo: '+ str(codigo_giro))
-                        #print "Finalizou em: "+ str(tempo_decorrido)+ " seg."
                         return True
                     elif codigo_giro == '00':
                         codigo_giro = str(self.ler_sensor(2)) + '' + str(self.ler_sensor(1))
                         self.log.logger.info('Giro antihorario finalizado em '+ str(tempo_decorrido)+' segundo(s).')
                         self.log.logger.debug('Giro antihorario completo no codigo: '+ str(codigo_giro))
-                        #print "Finalizou em: "+ str(tempo_decorrido)+ " seg."
                         return True
             return False
         except SystemExit, KeyboardInterrupt:
@@ -102,3 +97,4 @@ class SensorOptico(object):
             self.log.logger.error('Erro lendo sensores opticos.', exc_info=True)
         finally:
             pass
+        

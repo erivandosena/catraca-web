@@ -112,15 +112,51 @@ def main():
 #         print 62 * "-"
 #     print 62 * "="
 
+    id = 3995148318
         
-    tempo = 20
-    conta_segundo = 0
-    for segundo in range(tempo, -1, -1):
-        sleep(0.99)
-        conta_segundo += 1
-        print str(segundo)
+    def lista_cartoes():
+
+        try:
+            lista = cartao_dao.busca()
+            lista.sort()
+            return lista
+        except SystemExit, KeyboardInterrupt:
+            raise
+        except Exception:
+            self.log.logger.error('Erro consultando ID.', exc_info=True)
+        finally:
+            pass
         
-        if(conta_segundo == 5):
-            print "Finalizou em: "+ str(conta_segundo)+ " seg."
-            return False
+    cartoes = lista_cartoes()
+    
+    def pesquisa_id(lista, id):
+        resultado = None
+        lista.sort()
+        for cartao in lista:
+            if cartao[1] == id:
+                resultado = cartao
+                return resultado
+                break
+        return resultado
+      
+    cartao = pesquisa_id(cartoes, id)
+    if cartao is not None:
+        print cartao
+        print cartao[1]
+        print cartao[2]
+    else:
+        print 'não encontrado!'
+        
+    databd = cartao[3]
+    data_ultimo_acesso = datetime.datetime(
+        day=databd.day,
+        month=databd.month,
+        year=databd.year, 
+    ).strptime(databd.strftime('%d/%m/%Y'),'%d/%m/%Y')
+    
+    print data_ultimo_acesso.day
+
+        
+
+
         

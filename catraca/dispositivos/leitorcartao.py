@@ -62,6 +62,12 @@ class LeitorCartao(object):
     turno_valido = False
     turno_atual = None
     cartoes = []
+    cartao_id = None
+    
+    hora_atual = datetime.datetime.strptime('00:00:00','%H:%M:%S').time()
+    hora_inicio = datetime.datetime.strptime('00:00:00','%H:%M:%S').time()
+    hora_fim = datetime.datetime.strptime('00:00:00','%H:%M:%S').time()
+    
 
     def __init__(self):
         super(LeitorCartao, self).__init__()
@@ -73,16 +79,20 @@ class LeitorCartao(object):
         
         for turno in self.turnos:
             #self.conta_turnos += 1
-            hora_atual = datetime.datetime.strptime(datetime.datetime.now().strftime('%H:%M:%S'),'%H:%M:%S').time()
-            hora_inicio = datetime.datetime.strptime(str(turno[1]),'%H:%M:%S').time()
-            hora_fim = datetime.datetime.strptime(str(turno[2]),'%H:%M:%S').time()
+            validade = False
+            self.hora_atual = datetime.datetime.strptime(datetime.datetime.now().strftime('%H:%M:%S'),'%H:%M:%S').time()
+            self.hora_inicio = datetime.datetime.strptime(str(turno[1]),'%H:%M:%S').time()
+            self.hora_fim = datetime.datetime.strptime(str(turno[2]),'%H:%M:%S').time()
     
-            if ((hora_atual >= hora_inicio) and (hora_atual <= hora_fim)):
+            if ((self.hora_atual >= self.hora_inicio) and (self.hora_atual <= self.hora_fim)):
                 self.turno_atual = self.turno_dao.busca(turno[0])
                 #finalidade_turno = FinalidadeDAO().busca(turno[3]).nome
                 #print "Turno encontrado entre:" +str(p1_hora_inicio)+" "+str(p1_hora_fim)+ " -> " + finalidade_turno
-                turno_valido = True
+                validade = True
                 break
+        turno_valido = validade
+        
+        print 'construtor'
         
     def obtem_ip(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -129,8 +139,8 @@ class LeitorCartao(object):
 
     def valida_cartao(self, id_cartao):
         try:
-            idcartao = 0
-            creditocartao = 0.00
+#             idcartao = 0
+#             creditocartao = 0.00
             #cartao = Cartao()
             #registro = Registro()
             #registro_dao = RegistroDAO()
@@ -140,9 +150,9 @@ class LeitorCartao(object):
             
             #self.aviso.exibir_aguarda_liberacao()
             
-            hora_atual = datetime.datetime.strptime(datetime.datetime.now().strftime('%H:%M:%S'),'%H:%M:%S').time()
-            hora_inicio = datetime.datetime.strptime('00:00:00','%H:%M:%S').time()
-            hora_fim = datetime.datetime.strptime('00:00:00','%H:%M:%S').time()
+            self.hora_atual = datetime.datetime.strptime(datetime.datetime.now().strftime('%H:%M:%S'),'%H:%M:%S').time()
+#             hora_inicio = datetime.datetime.strptime('00:00:00','%H:%M:%S').time()
+#             hora_fim = datetime.datetime.strptime('00:00:00','%H:%M:%S').time()
 
             """
             -> VERIFICAÇÃO DESATIVADA TEMPORARIAMENTE PARA TESTES
@@ -161,15 +171,15 @@ class LeitorCartao(object):
 #                     #finalidade_turno = FinalidadeDAO().busca(turno[3]).nome
 #                     #print "Turno encontrado entre:" +str(p1_hora_inicio)+" "+str(p1_hora_fim)+ " -> " + finalidade_turno
 #                     break
-            if turno_valido:
-                print "Turno encontrado entre:" +str(hora_inicio)+" "+str(hora_fim)
+#             if turno_valido:
+#                 print "Turno encontrado entre:" +str(hora_inicio)+" "+str(hora_fim)
                 
-            if not (((hora_atual >= hora_inicio) and (hora_atual <= hora_fim)) or ((hora_atual >= hora_inicio) and (hora_atual <= hora_fim))):
+            if not (((self.hora_atual >= self.hora_inicio) and (self.hora_atual <= self.hora_fim)) or ((self.hora_atual >= self.hora_inicio) and (self.hora_atual <= self.hora_fim))):
                 #print "Fora do horario!"
                 self.aviso.exibir_horario_invalido()
                 self.aviso.exibir_acesso_bloqueado()
                 return None
-            elif ((hora_atual >= hora_inicio) and (hora_atual <= hora_fim)):
+            elif ((self.hora_atual >= self.hora_inicio) and (self.hora_atual <= self.hora_fim)):
                 #print "Turno liberado entre:" +str(p1_hora_inicio)+" "+str(p1_hora_fim)
                 #print "*****faco coisas apartir daqui!*****"
                 pass
@@ -182,30 +192,24 @@ class LeitorCartao(object):
                 #self.cartao = self.busca_id_cartao(id_cartao)
                 
                  
-                for cartao in self.lista_cartoes():
-                    if cartao[1] == id_cartao:
-                        idcartao = cartao[1]
-                        creditocartao = cartao[2] 
-                        break
-                        
-                        
-                if len(idcartao) == 0:
+                self.cartao_id = self.pesquisa_id(self.cartoes, id_cartao)
+                if self.cartao_id is None:
+                    self.log.logger.info('Cartao nao cadastrado ID:'+ str(id_cartao))
+                    self.aviso.exibir_cartao_nao_cadastrado()
+                    self.aviso.exibir_aguarda_cartao()
                     return None
 #                 if (self.cartao == None):
 #                     self.log.logger.info('Cartao nao cadastrado ID:'+ str(id_cartao))
 #                     self.aviso.exibir_cartao_nao_cadastrado()
 #                     self.aviso.exibir_aguarda_cartao()
 #                     return None
-#                 if self.lista_cartoes.index(id_cartao):
-#                     self.log.logger.info('Cartao nao cadastrado ID:'+ str(id_cartao))
-#                     self.aviso.exibir_cartao_nao_cadastrado()
-#                     self.aviso.exibir_aguarda_cartao()
-#                     return None
                 else:
                     #creditos = self.cartao.creditos
-                    creditos = creditocartao
+                    creditos = cartao[2]
+                    #hora_ultimo_acesso = datetime.datetime.strptime(self.cartao.data.strftime('%H:%M:%S'),'%H:%M:%S').time()
+                    hora_ultimo_acesso = datetime.datetime.strptime(self.cartao[3].strftime('%H:%M:%S'),'%H:%M:%S').time()
                     #tipo = self.cartao.perfil.nome
-                    hora_ultimo_acesso = datetime.datetime.strptime(self.cartao.data.strftime('%H:%M:%S'),'%H:%M:%S').time()
+                    tipo = cartao[4]
                     
                     datasis = datetime.datetime.now()
                     data_atual = datetime.datetime(
@@ -214,7 +218,8 @@ class LeitorCartao(object):
                         year=datasis.year, 
                     ).strptime(datasis.strftime('%d/%m/%Y'),'%d/%m/%Y')
                     
-                    databd = self.cartao.data
+                    #databd = self.cartao.data
+                    databd = cartao[3]
                     data_ultimo_acesso = datetime.datetime(
                         day=databd.day,
                         month=databd.month,
@@ -253,7 +258,7 @@ class LeitorCartao(object):
                             self.pictograma.seta_direita(1)
                             self.pictograma.xis(1)
                             
-                        self.cartao = self.busca_id_cartao(idcartao)
+                        self.cartao = self.busca_id_cartao(id_cartao)
                         
                         self.aviso.exibir_acesso_liberado()
                         ##############################################################
@@ -279,7 +284,7 @@ class LeitorCartao(object):
                                 self.registro.giro = 1
                                 self.registro.valor = self.cartao.perfil.tipo.valor
                                 self.registro.cartao = self.cartao
-                                self.registro.turno = turno_atual
+                                self.registro.turno = self.turno_atual
                                 if not self.registro_dao.mantem(self.registro,False):
                                     raise Exception('Erro inserindo valores no registro:\n'+ self.registro_dao.aviso)
                                 else:
@@ -296,7 +301,7 @@ class LeitorCartao(object):
                                 self.registro.valor = 0.00
                                 self.registro.data = self.cartao.data
                                 self.registro.cartao = self.cartao
-                                self.registro.turno = turno_atual
+                                self.registro.turno = self.turno_atual
                                 if not self.registro_dao.mantem(self.registro,False):
                                     raise Exception('Erro inserindo valores no registro:\n'+ self.registro_dao.aviso)
                                 else:
@@ -310,7 +315,7 @@ class LeitorCartao(object):
             if self.cartao_dao.conexao_status():
                 self.cartao_dao.rollback()
                 self.log.logger.info("Alteracao no cartao cancelada!(rollback)")
-            #self.log.logger.error('Erro validando ID do cartao:\n'+ self.cartao_dao.aviso)
+            self.log.logger.error('Erro validando ID do cartao:\n'+ self.cartao_dao.aviso)
         finally:
             if self.catraca.operacao == 1:
                 self.solenoide.ativa_solenoide(1,0)
@@ -343,20 +348,26 @@ class LeitorCartao(object):
             self.log.logger.error('Erro consultando ID do cartao.', exc_info=True)
         finally:
             pass
-        
+
     def lista_cartoes(self):
-        #lista = []
         try:
-            cartoes = self.cartao_dao.busca()
-#             for id in cartoes:
-#                 lista.append(id[1])
-            return cartoes
+            lista = self.cartao_dao.busca()
+            return lista.sort()
         except SystemExit, KeyboardInterrupt:
             raise
         except Exception:
-            self.log.logger.error('Erro consultando ID.', exc_info=True)
+            self.log.logger.error('Erro obtendo lista de cartoes', exc_info=True)
         finally:
             pass
+        
+    def pesquisa_id(self, lista, id):
+        resultado = None
+        for cartao in lista:
+            if cartao[1] == id:
+                resultado = cartao
+                return resultado
+                break
+        return resultado
     
     def dias_uteis(self):
         dia_util = True
