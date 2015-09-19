@@ -193,8 +193,10 @@ CREATE TABLE registro
   regi_giro integer NOT NULL DEFAULT 0, -- Confirmacao de efetivacao de giro na catraca.
   regi_valor numeric(8,2) NOT NULL, -- Valor referente a refeicao.
   cart_id integer NOT NULL, -- Campo para chave estrangeira da tabela cartao.
+  turn_id integer, -- Campo para chave estrangeira da tabela turno.
   CONSTRAINT pk_regi_id PRIMARY KEY (regi_id ),
   CONSTRAINT fk_cart_id FOREIGN KEY (cart_id) REFERENCES cartao (cart_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
+  CONSTRAINT pk_turn_id FOREIGN KEY (turn_id) REFERENCES turno (turn_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 ALTER TABLE registro OWNER TO postgres;
 COMMENT ON TABLE registro IS 'Tabela de registros de uso do cartao na catraca.';
@@ -203,6 +205,7 @@ COMMENT ON COLUMN registro.regi_datahora IS 'Data/hora da utilizacao do cartao n
 COMMENT ON COLUMN registro.regi_giro IS 'Confirmacao de efetivacao de giro na catraca.';
 COMMENT ON COLUMN registro.regi_valor IS 'Valor em R$ referente a refeicao.';
 COMMENT ON COLUMN registro.cart_id IS 'Campo para chave estrangeira da tabela cartao.';
+COMMENT ON COLUMN registro.turn_id IS 'Campo para chave estrangeira da tabela turno.';
 
 -- TABLE usuario
 CREATE TABLE usuario

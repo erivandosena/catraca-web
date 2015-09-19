@@ -10,7 +10,9 @@ from catraca.dao.registro import Registro
 from catraca.dao.registrodao import RegistroDAO
 from catraca.dao.cartaodao import CartaoDAO
 from catraca.dao.catracadao import CatracaDAO
+from catraca.dao.turnodao import TurnoDAO
 from catraca.dao.finalidadedao import FinalidadeDAO
+from time import sleep
 
 
 __author__ = "Erivando Sena"
@@ -32,11 +34,13 @@ def main():
     registro = Registro()
     registro_dao = RegistroDAO()
     cartao_dao = CartaoDAO()
+    turno_dao = TurnoDAO()
 
     registro.data = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
     registro.giro = 1
-    registro.cartao = cartao_dao.busca(4)
-    registro.valor = registro.cartao.perfil.tipo.valor
+    registro.valor = 0.01
+    registro.cartao = cartao_dao.busca(1)
+    registro.turno = turno_dao.busca(2)
     
 #     if registro_dao.conexao_status():
 #          print "conexao_status: "+ str(registro_dao.conexao_status())
@@ -92,18 +96,31 @@ def main():
             
     
     """  
-    print 62 * "="
-    print '======################### RELATORIO ####################======'
-    print 62 * "="
-    
+#     print 62 * "="
+#     print '======################### RELATORIO ####################======'
+#     print 62 * "="
+#     
+#     
+#     for registro in registro_dao.busca():
+#         cartao = cartao_dao.busca(registro[4])
+#         print str(registro[1]) +" "\
+#         + str(registro[2]) +" "\
+#         + str(registro[3]) +" "\
+#         + str(cartao.numero) +" "\
+#         + str(cartao.perfil.tipo.nome) +" "\
+#         + str(TurnoDAO().busca(registro[5]))
+#         print 62 * "-"
+#     print 62 * "="
 
-    for registro in registro_dao.busca():
-        cartao = cartao_dao.busca(registro[4])
-        print str(registro[1]) +" "\
-        + str(registro[2]) +" "\
-        + str(registro[3]) +" "\
-        + str(cartao.numero) +" "\
-        + str(cartao.perfil.nome) +" "\
-        + str(cartao.perfil.tipo.nome)
-        print 62 * "-"
-    print 62 * "="
+        
+    tempo = 20
+    conta_segundo = 0
+    for segundo in range(tempo, -1, -1):
+        sleep(0.99)
+        conta_segundo += 1
+        print str(segundo)
+        
+        if(conta_segundo == 5):
+            print "Finalizou em: "+ str(conta_segundo)+ " seg."
+            return False
+        

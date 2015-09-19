@@ -17,6 +17,7 @@ class Registro(object):
         self.__regi_giro = 0
         self.__regi_valor = 0.00
         self.__cartao = None
+        self.__turno = None
 
     @property
     def id(self):
@@ -57,4 +58,13 @@ class Registro(object):
     @cartao.setter
     def cartao(self, obj):
         self.__cartao = obj
+        
+    @property
+    def turno(self):
+        return self.__turno
+    
+    @turno.setter
+    def turno(self, obj):
+        self.__turno = obj
+        
         

@@ -32,6 +32,7 @@ class Painel(object):
         self.aviso.exibir_datahora()
         self.aviso.exibir_saldacao()
         self.aviso.exibir_estatus_catraca()
+        self.aviso.exibir_aguarda_cartao()
         self.thread()
     
     def thread(self):

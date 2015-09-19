@@ -7,6 +7,7 @@ from conexao import ConexaoFactory
 from conexaogenerica import ConexaoGenerica
 from registro import Registro
 from cartaodao import CartaoDAO
+from turnodao import TurnoDAO
 
 
 __author__ = "Erivando Sena"
@@ -31,7 +32,8 @@ class RegistroDAO(ConexaoGenerica):
                   "regi_datahora, "\
                   "regi_giro, "\
                   "regi_valor, "\
-                  "cart_id "\
+                  "cart_id, "\
+                  "turn_id "\
                   "FROM registro WHERE "\
                   "cart_id = " + str(id) +\
                   " ORDER BY regi_datahora DESC"
@@ -40,7 +42,8 @@ class RegistroDAO(ConexaoGenerica):
                   "regi_datahora, "\
                   "regi_giro, "\
                   "regi_valor, "\
-                  "cart_id "\
+                  "cart_id, "\
+                  "turn_id "\
                   "FROM registro ORDER BY regi_datahora DESC"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
@@ -53,6 +56,7 @@ class RegistroDAO(ConexaoGenerica):
                         obj.giro = dados[2]
                         obj.valor = dados[3]
                         obj.cartao = CartaoDAO().busca(dados[4])
+                        obj.turno = TurnoDAO().busca(dados[5])
                         return obj
                     else:
                         return None
@@ -75,7 +79,8 @@ class RegistroDAO(ConexaoGenerica):
               "regi_datahora, "\
               "regi_giro, "\
               "regi_valor, "\
-              "cart_id "\
+              "cart_id, "\
+              "turn_id "\
               "FROM registro WHERE "\
               "regi_datahora BETWEEN " + str(data1) +\
               " AND " + str(data2) +\
@@ -100,7 +105,8 @@ class RegistroDAO(ConexaoGenerica):
               "regi_datahora, "\
               "regi_giro, "\
               "regi_valor, "\
-              "cart_id "\
+              "cart_id, "\
+              "turn_id "\
               "FROM registro WHERE "\
               "cart_id = " + str(cartao)
         try:
@@ -129,7 +135,8 @@ class RegistroDAO(ConexaoGenerica):
                               "regi_datahora = '" + str(obj.data) + "', " +\
                               "regi_giro = " + str(obj.giro) + ", " +\
                               "regi_valor = " + str(obj.valor) + ", " +\
-                              "cart_id = " + str(obj.cartao.id) +\
+                              "cart_id = " + str(obj.cartao.id) + ", " +\
+                              "turn_id = " + str(obj.turno.id) +\
                               " WHERE "\
                               "regi_id = " + str(obj.id)
                         msg = "Alterado com sucesso!"
@@ -138,11 +145,13 @@ class RegistroDAO(ConexaoGenerica):
                               "regi_datahora, "\
                               "regi_giro, "\
                               "regi_valor, "\
-                              "cart_id) VALUES ('" +\
+                              "cart_id, "\
+                              "turn_id) VALUES ('" +\
                               str(obj.data) + "', " +\
                               str(obj.giro) + ", " +\
                               str(obj.valor) + ", " +\
-                              str(obj.cartao.id) + ")"
+                              str(obj.cartao.id) + ", " +\
+                              str(obj.turno.id) + ")"
                         msg = "Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)

@@ -38,7 +38,7 @@ class Aviso(object):
         if (hora >= 18 and hora < 00):
             periodo = 3
         opcoes = {
-                   1 : '      OLA\n   BOM DIA!',
+                   1 : '      OLA\n    BOM DIA!',
                    2 : '      OLA\n   BOA TARDE!',
                    3 : '      OLA\n   BOA NOITE!',
 
@@ -108,4 +108,7 @@ class Aviso(object):
 
     def exibir_aguarda_leitura(self):
         self.display.mensagem(' CONSULTANDO...\n    AGUARDE!',0,True,False)
+        
+    def exibir_aguarda_liberacao(self):
+        self.display.mensagem('    AGUARDE...\n   LIBERACAO',0,True,False)
         

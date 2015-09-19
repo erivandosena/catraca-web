@@ -32,7 +32,7 @@ class Logs(object):
     def main(self):
         LOG_FILENAME = '/home/pi/Catraca/log/catraca.log'
         logging.basicConfig(
-                            level=logging.INFO, 
+                            level=logging.DEBUG, 
                             filename= LOG_FILENAME, 
                             #filemode='w',
                             handler = logging.handlers.RotatingFileHandler(LOG_FILENAME, maxBytes=20, backupCount=5),
