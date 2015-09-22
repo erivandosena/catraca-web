@@ -82,8 +82,8 @@ class Aviso(object):
     def exibir_acesso_liberado(self):
         self.display.mensagem("     ACESSO\n    LIBERADO!",0,False,False)
 
-    def exibir_cartao_sem_saldo(self, tipo):
-        self.display.mensagem(tipo+"\n   SEM SALDO!",0,False,False)
+    def exibir_cartao_sem_saldo(self):
+        self.display.mensagem("   SEM SALDO\n  RECARREGUE!",1,False,False)
         
     def exibir_cartao_nao_cadastrado(self):
         self.display.mensagem("     CARTAO\n NAO CADASTRADO!",1,False,False)
@@ -97,6 +97,9 @@ class Aviso(object):
     def exibir_horario_invalido(self):
         self.display.mensagem("FORA DO HORARIO\n DE ATENDIMENTO",1,False,False)  
         
+    def exibir_turno_invalido(self):
+        self.display.mensagem("NAO EXISTE TURNO\nAVISE AO GUICHE!",1,False,False)
+        
     def exibir_dia_invalido(self):
         self.display.mensagem("  DIA NAO UTIL\nPARA ATENDIMENTO",1,False,False)
         
@@ -106,9 +109,12 @@ class Aviso(object):
     def exibir_acesso_livre(self):
         self.display.mensagem("   BEM-VINDO!\n  ACESSO LIVRE",1,False,False)
 
-    def exibir_aguarda_leitura(self):
-        self.display.mensagem(' CONSULTANDO...\n    AGUARDE!',0,True,False)
+    def exibir_aguarda_consulta(self):
+        self.display.mensagem(' CONSULTANDO...\n    AGUARDE!',0,False,False)
         
     def exibir_aguarda_liberacao(self):
         self.display.mensagem('    AGUARDE...\n   LIBERACAO',0,True,False)
+        
+    def exibir_aguarda_sincronizacao(self):
+        self.display.mensagem('SINCRONIZANDO...\n    AGUARDE!',0,True,False)
         

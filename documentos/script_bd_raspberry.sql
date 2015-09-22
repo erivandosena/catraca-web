@@ -115,16 +115,18 @@ CREATE TABLE giro
   giro_id serial NOT NULL, -- Campo autoincremento destinado para chave primaria da tabela.
   giro_giros_horario integer DEFAULT 0, -- Contador de giros no sentido horario(Entrada).
   giro_giros_antihorario integer DEFAULT 0, -- Contador de giros no sentido anti-horario(Saida).
-  giro_data_giro time without time zone NOT NULL DEFAULT now(), -- Data/hora da ocorrencia do giro.
+  giro_tempo_realizado integer DEFAULT 0, -- Tempo do giro realizado em segundos.
+  giro_data_giro timestamp without time zone NOT NULL DEFAULT now(), -- Data/hora da ocorrencia do giro.
   catr_id integer NOT NULL, -- Campo para chave estrangeira da tabela catraca.
   CONSTRAINT pk_giro_id PRIMARY KEY (giro_id),
-  CONSTRAINT fk_catr_id FOREIGN KEY (catr_id) REFERENCES catraca (catr_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
+  CONSTRAINT pk_catr_id FOREIGN KEY (catr_id) REFERENCES catraca (catr_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 ALTER TABLE giro OWNER TO postgres;
 COMMENT ON TABLE giro IS 'Tabela de contabilizacao de giros horario e anti-horario.';
 COMMENT ON COLUMN giro.giro_id IS 'Campo autoincremento destinado para chave primaria da tabela.';
 COMMENT ON COLUMN giro.giro_giros_horario IS 'Contador de giros no sentido horario(Entrada).';
 COMMENT ON COLUMN giro.giro_giros_antihorario IS 'Contador de giros no sentido anti-horario(Saida).';
+COMMENT ON COLUMN giro.giro_tempo_realizado IS 'Tempo do giro realizado em segundos.';
 COMMENT ON COLUMN giro.giro_data_giro IS 'Data/hora da ocorrencia do giro.';
 COMMENT ON COLUMN giro.catr_id IS 'Campo para chave estrangeira da tabela catraca.';
 

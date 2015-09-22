@@ -13,6 +13,7 @@ from catraca.dao.catracadao import CatracaDAO
 from catraca.dao.turnodao import TurnoDAO
 from catraca.dao.finalidadedao import FinalidadeDAO
 from time import sleep
+from catraca.dispositivos.sensoroptico import SensorOptico
 
 
 __author__ = "Erivando Sena"
@@ -35,6 +36,7 @@ def main():
     registro_dao = RegistroDAO()
     cartao_dao = CartaoDAO()
     turno_dao = TurnoDAO()
+    catraca_dao = CatracaDAO()
 
     registro.data = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
     registro.giro = 1
@@ -96,6 +98,17 @@ def main():
             
     
     """  
+    
+    sensor_optico = SensorOptico()
+    
+    def aguarda_giro(tempo):
+        for segundo in range(tempo, -1, -1):
+            tempo_decorrido = (tempo/1000)-(segundo/1000)
+            print sensor_optico.registra_giro(tempo/1000, tempo_decorrido)
+            
+    aguarda_giro(30000)
+    
+    
 #     print 62 * "="
 #     print '======################### RELATORIO ####################======'
 #     print 62 * "="
@@ -112,50 +125,88 @@ def main():
 #         print 62 * "-"
 #     print 62 * "="
 
-    id = 3995148318
-        
-    def lista_cartoes():
-
-        try:
-            lista = cartao_dao.busca()
-            lista.sort()
-            return lista
-        except SystemExit, KeyboardInterrupt:
-            raise
-        except Exception:
-            self.log.logger.error('Erro consultando ID.', exc_info=True)
-        finally:
-            pass
-        
-    cartoes = lista_cartoes()
-    
-    def pesquisa_id(lista, id):
-        resultado = None
-        lista.sort()
-        for cartao in lista:
-            if cartao[1] == id:
-                resultado = cartao
-                return resultado
-                break
-        return resultado
-      
-    cartao = pesquisa_id(cartoes, id)
-    if cartao is not None:
-        print cartao
-        print cartao[1]
-        print cartao[2]
-    else:
-        print 'não encontrado!'
-        
-    databd = cartao[3]
-    data_ultimo_acesso = datetime.datetime(
-        day=databd.day,
-        month=databd.month,
-        year=databd.year, 
-    ).strptime(databd.strftime('%d/%m/%Y'),'%d/%m/%Y')
-    
-    print data_ultimo_acesso.day
-
+#     id = 3995148318
+#         
+#     def lista_cartoes():
+# 
+#         try:
+#             lista = cartao_dao.busca()
+#             lista.sort()
+#             return lista
+#         except SystemExit, KeyboardInterrupt:
+#             raise
+#         except Exception:
+#             self.log.logger.error('Erro consultando ID.', exc_info=True)
+#         finally:
+#             pass
+#         
+#     cartoes = lista_cartoes()
+#     
+#     def pesquisa_id(lista, id):
+#         resultado = None
+#         for cartao in lista:
+#             if cartao[1] == id:
+#                 resultado = cartao
+#                 return resultado
+#                 break
+#         return resultado
+#       
+#     cartao = pesquisa_id(cartoes, id)
+#     if cartao is not None:
+#         print cartao
+#         print cartao[1]
+#         print cartao[2]
+#     else:
+#         print 'não encontrado!'
+#         
+#     databd = cartao[3]
+#     data_ultimo_acesso = datetime.datetime(
+#         day=databd.day,
+#         month=databd.month,
+#         year=databd.year, 
+#     ).strptime(databd.strftime('%d/%m/%Y'),'%d/%m/%Y')
+#     
+#     print data_ultimo_acesso.day
+#     
+#     def obtem_turno():
+#         catraca = catraca_dao.busca_por_ip('10.5.2.253')
+#         turnos = catraca.turnos
+#         turnos.sort()
+#         for turno in turnos:
+#             hora_atual = datetime.datetime.strptime(datetime.datetime.now().strftime('%H:%M:%S'),'%H:%M:%S').time()
+#             hora_inicio = datetime.datetime.strptime(str(turno[1]),'%H:%M:%S').time()
+#             hora_fim = datetime.datetime.strptime(str(turno[2]),'%H:%M:%S').time()
+#             if ((hora_atual >= hora_inicio) and (hora_atual <= hora_fim)):
+#                 return turno
+#                 break
+#         return None
+#         
+#     print obtem_turno()
+#     
+#     print datetime.datetime.now()
+#     print datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+#     print datetime.datetime.strptime(datetime.datetime.now().strftime('%H:%M:%S'),'%H:%M:%S').time()
+#     print datetime.datetime.now().strftime("%H:%M:%S")
+#     
+#     def teste(boleano):
+#         status = False
+#         try:
+#             if boleano:            
+#                 print 'testando...'
+#                 status = True
+#                 #/0
+#             else:
+#                 print 'nao testou!'
+#         except SystemExit, KeyboardInterrupt:
+#             raise
+#         except Exception, e:
+#             status = False
+#             print 'Erro: '+ str(e) 
+#         finally:
+#             print 'teste finalizado!'   
+#         return status
+# 
+#     print teste(True)
         
 
 

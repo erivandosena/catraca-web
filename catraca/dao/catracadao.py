@@ -91,9 +91,9 @@ class CatracaDAO(ConexaoGenerica):
                     obj.localizacao = dados[2]
                     obj.tempo = dados[3]
                     obj.operacao = dados[4]
-                    obj.giro = GiroDAO().busca_por_catraca(dados[0])
-                    obj.turno = TurnoDAO().busca_por_catraca(dados[0])
-                    obj.mensagem = MensagemDAO().busca_por_catraca(dados[0])
+                    obj.giros = GiroDAO().busca_por_catraca(dados[0])
+                    obj.turnos = TurnoDAO().busca_por_catraca(dados[0])
+                    obj.mensagens = MensagemDAO().busca_por_catraca(dados[0])
                     return obj
                 else:
                     return None

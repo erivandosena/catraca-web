@@ -17,9 +17,9 @@ class Catraca(object):
         self.__catr_localizacao = None
         self.__catr_tempo_giro = None
         self.__catr_operacao = None
-        self.__giro = []
-        self.__turno = []
-        self.__mensagem = []
+        self.__giros = []
+        self.__turnos = []
+        self.__mensagens = []
         
 
     @property
@@ -63,26 +63,26 @@ class Catraca(object):
         self.__catr_operacao = valor
  
     @property
-    def giro(self):
-        return self.__giro
+    def giros(self):
+        return self.__giros
     
-    @giro.setter
-    def giro(self, list):
-        self.__giro = list
+    @giros.setter
+    def giros(self, list):
+        self.__giros = list
         
     @property
-    def turno(self):
-        return self.__turno
+    def turnos(self):
+        return self.__turnos
     
-    @turno.setter
-    def turno(self, list):
-        self.__turno = list
+    @turnos.setter
+    def turnos(self, list):
+        self.__turnos = list
         
     @property
-    def mensagem(self):
-        return self.__mensagem
+    def mensagens(self):
+        return self.__mensagens
     
-    @mensagem.setter
-    def mensagem(self, list):
-        self.__mensagem = list
+    @mensagens.setter
+    def mensagens(self, list):
+        self.__mensagens = list
         

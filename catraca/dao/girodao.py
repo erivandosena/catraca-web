@@ -29,6 +29,7 @@ class GiroDAO(ConexaoGenerica):
             sql = "SELECT giro_id, "\
                   "giro_giros_horario, "\
                   "giro_giros_antihorario, "\
+                  "giro_tempo_realizado, "\
                   "giro_data_giro, "\
                   "catr_id "\
                   "FROM giro WHERE "\
@@ -37,6 +38,7 @@ class GiroDAO(ConexaoGenerica):
             sql = "SELECT giro_id, "\
                   "giro_giros_horario, "\
                   "giro_giros_antihorario, "\
+                  "giro_tempo_realizado, "\
                   "giro_data_giro, "\
                   "catr_id "\
                   "FROM giro"
@@ -49,8 +51,9 @@ class GiroDAO(ConexaoGenerica):
                         obj.id = dados[0]
                         obj.horario = dados[1]
                         obj.antihorario = dados[2]
-                        obj.data = dados[3]
-                        obj.catraca = dados[4]
+                        obj.tempo = dados[3]
+                        obj.data = dados[4]
+                        obj.catraca = dados[5]
                         return obj
                     else:
                         return None
@@ -70,6 +73,7 @@ class GiroDAO(ConexaoGenerica):
         sql = "SELECT giro_id, "\
               "giro_giros_horario, "\
               "giro_giros_antihorario, "\
+              "giro_tempo_realizado, "\
               "giro_data_giro, "\
               "catr_id "\
               "FROM giro WHERE "\
@@ -99,7 +103,8 @@ class GiroDAO(ConexaoGenerica):
                         sql = "UPDATE giro SET " +\
                               "giro_giros_horario = " + str(obj.horario) + ", " +\
                               "giro_giros_antihorario = " + str(obj.antihorario) + ", " +\
-                              "giro_data_giro = " + str(obj.data) + ", " +\
+                              "giro_tempo_realizado = " + str(obj.tempo) + ", " +\
+                              "giro_data_giro = '" + str(obj.data) + "', " +\
                               "catr_id = " + str(obj.catraca.id) +\
                               " WHERE "\
                               "giro_id = " + str(obj.id)
@@ -108,10 +113,12 @@ class GiroDAO(ConexaoGenerica):
                         sql = "INSERT INTO giro("\
                               "giro_giros_horario, "\
                               "giro_giros_antihorario, "\
+                              "giro_tempo_realizado, "\
                               "giro_data_giro, catr_id) VALUES (" +\
                               str(obj.horario) + ", " +\
                               str(obj.antihorario) + ", " +\
-                              str(obj.data) + ", " +\
+                              str(obj.tempo) + ", '" +\
+                              str(obj.data) + "', " +\
                               str(obj.catraca.id) + ")"
                         msg = "Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:

@@ -24,6 +24,15 @@ class SensorOptico(object):
     def __init__(self):
         super(SensorOptico, self).__init__()
         self.__erro = None
+        self.__tempo_decorrido = 0
+        
+    @property
+    def tempo_decorrido(self):
+        return self.__tempo_decorrido
+    
+    @tempo_decorrido.setter
+    def tempo_decorrido(self, tempo):
+        self.__tempo_decorrido = tempo
 
     def ler_sensor(self, sensor):
         if sensor == 1:
@@ -33,14 +42,14 @@ class SensorOptico(object):
     
     def registra_giro(self, tempo):
         codigo_giro = ''
-        tempo_decorrido  = 0
         # cronômetro regressivo para o giro
+        finaliza_giro = True
         try:
             for segundo in range(tempo, -1, -1):
-                tempo_decorrido = (tempo/1000)-(segundo/1000)
+                self.tempo_decorrido = (tempo/1000)-(segundo/1000)
+                print str(self.tempo_decorrido)+" de "+str(tempo/1000)
                 self.log.logger.debug(str(segundo ) + ' seg. restantes para expirar o tempo para giro.')
                 self.log.logger.debug('Catraca em repouso, codigo sensores: '+ str(self.ler_sensor(1)) + '' + str(self.ler_sensor(2)))
-                print str(tempo_decorrido)
                 """
                 # GIRO HORARIO
                 if self.ler_sensor(1) == 1 and self.ler_sensor(2) == 0:
@@ -82,15 +91,24 @@ class SensorOptico(object):
                         self.log.logger.debug('Finalizando o giro antihorario, codigo sensores: '+ str(codigo_giro))
                     if codigo_giro == '01':
                         codigo_giro = str(self.ler_sensor(2)) + '' + str(self.ler_sensor(1))
-                        self.log.logger.info('Giro antihorario finalizado em '+ str(tempo_decorrido)+' segundo(s).')
+                        self.log.logger.info('Giro antihorario finalizado em '+ str(self.tempo_decorrido)+' segundo(s).')
                         self.log.logger.debug('Giro antihorario completo no codigo: '+ str(codigo_giro))
-                        return True
+                        finaliza_giro = False
+                        print 'Finalizou no girou 01'
+                        return finaliza_giro
                     elif codigo_giro == '00':
                         codigo_giro = str(self.ler_sensor(2)) + '' + str(self.ler_sensor(1))
-                        self.log.logger.info('Giro antihorario finalizado em '+ str(tempo_decorrido)+' segundo(s).')
+                        self.log.logger.info('Giro antihorario finalizado em '+ str(self.tempo_decorrido)+' segundo(s).')
                         self.log.logger.debug('Giro antihorario completo no codigo: '+ str(codigo_giro))
-                        return True
-            return False
+                        finaliza_giro = False
+                        print 'Finalizou no girou 00'
+                        return finaliza_giro
+                if self.tempo_decorrido == tempo/1000:
+                    finaliza_giro = False
+                    print 'Finalizou no tempo decorrido de: '+ str(self.tempo_decorrido)
+                    return finaliza_giro
+            finaliza_giro = False
+            return finaliza_giro
         except SystemExit, KeyboardInterrupt:
             raise
         except Exception:

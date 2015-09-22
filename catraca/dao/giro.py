@@ -15,6 +15,7 @@ class Giro(object):
         self.__giro_id = None
         self.__giro_giros_horario = 0
         self.__giro_giros_antihorario = 0
+        self.__giro_tempo_realizado = 0
         self.__giro_data_giro = None
         self.__catraca = None
 
@@ -41,6 +42,14 @@ class Giro(object):
     @antihorario.setter
     def antihorario(self, valor):
         self.__giro_giros_antihorario = valor
+        
+    @property
+    def tempo(self):
+        return self.__giro_tempo_realizado
+    
+    @tempo.setter
+    def tempo(self, valor):
+        self.__giro_tempo_realizado = valor
     
     @property
     def data(self):

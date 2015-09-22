@@ -26,13 +26,12 @@ class Painel(object):
         super(Painel, self).__init__()
     
     def main(self):
-        print 'Processando...'
-        self.log.logger.debug('Iniciando aplicacao...')
+        print 'Iniciando...'
+        self.log.logger.info('Iniciando aplicacao...')
         self.aviso.exibir_inicializacao()
         self.aviso.exibir_datahora()
         self.aviso.exibir_saldacao()
         self.aviso.exibir_estatus_catraca()
-        self.aviso.exibir_aguarda_cartao()
         self.thread()
     
     def thread(self):
@@ -41,8 +40,8 @@ class Painel(object):
             #threads = []
             
             acesso = Acesso()
-            mensagem = Mensagem()
-            mcondicao = MensagemCondicao()
+            #mensagem = Mensagem()
+            #mcondicao = MensagemCondicao()
   
             
             
