@@ -42,12 +42,12 @@ class SensorOptico(object):
     
     def registra_giro(self, tempo):
         codigo_giro = ''
-        # cronômetro regressivo para o giro
         finaliza_giro = True
         try:
+            # cronômetro regressivo para o giro
             for segundo in range(tempo, -1, -1):
                 self.tempo_decorrido = (tempo/1000)-(segundo/1000)
-                print str(self.tempo_decorrido)+" de "+str(tempo/1000)
+                #print str(self.tempo_decorrido)+" de "+str(tempo/1000)
                 self.log.logger.debug(str(segundo ) + ' seg. restantes para expirar o tempo para giro.')
                 self.log.logger.debug('Catraca em repouso, codigo sensores: '+ str(self.ler_sensor(1)) + '' + str(self.ler_sensor(2)))
                 """
@@ -92,23 +92,20 @@ class SensorOptico(object):
                     if codigo_giro == '01':
                         codigo_giro = str(self.ler_sensor(2)) + '' + str(self.ler_sensor(1))
                         self.log.logger.info('Giro antihorario finalizado em '+ str(self.tempo_decorrido)+' segundo(s).')
-                        self.log.logger.debug('Giro antihorario completo no codigo: '+ str(codigo_giro))
+                        #self.log.logger.debug('Giro antihorario completo no codigo: '+ str(codigo_giro))
                         finaliza_giro = False
-                        print 'Finalizou no girou 01'
+                        #print 'Finalizou no girou 01'
                         return finaliza_giro
                     elif codigo_giro == '00':
                         codigo_giro = str(self.ler_sensor(2)) + '' + str(self.ler_sensor(1))
                         self.log.logger.info('Giro antihorario finalizado em '+ str(self.tempo_decorrido)+' segundo(s).')
-                        self.log.logger.debug('Giro antihorario completo no codigo: '+ str(codigo_giro))
+                        #self.log.logger.debug('Giro antihorario completo no codigo: '+ str(codigo_giro))
                         finaliza_giro = False
-                        print 'Finalizou no girou 00'
+                        #print 'Finalizou no girou 00'
                         return finaliza_giro
-                if self.tempo_decorrido == tempo/1000:
-                    finaliza_giro = False
-                    print 'Finalizou no tempo decorrido de: '+ str(self.tempo_decorrido)
-                    return finaliza_giro
-            finaliza_giro = False
-            return finaliza_giro
+
+#                 finaliza_giro = False
+            return True
         except SystemExit, KeyboardInterrupt:
             raise
         except Exception:

@@ -102,9 +102,23 @@ def main():
     sensor_optico = SensorOptico()
     
     def aguarda_giro(tempo):
-        for segundo in range(tempo, -1, -1):
-            tempo_decorrido = (tempo/1000)-(segundo/1000)
-            print sensor_optico.registra_giro(tempo/1000, tempo_decorrido)
+        finaliza_tempo = True
+        contador = tempo/1000
+        while True:
+            if not sensor_optico.registra_giro(tempo):
+                print "girou!"
+            else:
+                print "nao girou"
+#             contador = contador -1
+#             print str(contador)
+#             #print str(self.tempo_decorrido)+" de "+str(tempo/1000)
+#             #self.tempo_decorrido = (tempo/1000)-(segundo/1000)
+#             #3decorrido = (contador/1000)-(tempo/1000)
+#             #print str(decorrido)
+#             if contador == 0:
+#                 print 'Finalizou no tempo decorrido de: '+ str(decorrido)
+#                 retfinaliza_tempo = False
+            
             
     aguarda_giro(30000)
     

@@ -88,8 +88,8 @@ class Aviso(object):
     def exibir_cartao_nao_cadastrado(self):
         self.display.mensagem("     CARTAO\n NAO CADASTRADO!",1,False,False)
         
-    def exibir_cartao_valido(self, tipo, saldo):
-        self.display.mensagem(tipo+"\n SALDO "+saldo,0,False,False)
+    def exibir_cartao_valido(self, saldo):
+        self.display.mensagem("SALDO DO CARTAO:\n"+saldo,0,True,False)
         
     def exibir_cartao_invalido(self):
         self.display.mensagem("     CARTAO\n  INVALIDO!",1,False,False)
@@ -117,4 +117,7 @@ class Aviso(object):
         
     def exibir_aguarda_sincronizacao(self):
         self.display.mensagem('SINCRONIZANDO...\n    AGUARDE!',0,True,False)
+        
+    def exibir_agradecimento(self):
+        self.display.mensagem('   OBRIGADO\n   BOM APETITE!',0,False,False)
         

@@ -70,13 +70,15 @@ class LeitorCartao(object):
     def __init__(self):
         super(LeitorCartao, self).__init__()
         self.aviso.exibir_aguarda_sincronizacao()
-        self.catraca = self.catraca_dao.busca_por_ip(self.obtem_ip())
-        self.turno = self.obtem_turno(self.catraca)
+        
+        #self.catraca = self.obtem_catraca()
+        #self.turno = self.obtem_turno(self.catraca)
+        self.verifica_turnos()
+        
         self.turno_atual = self.turno_dao.busca(self.turno[0]) if self.turno != None else None #Op. ternario
-        self.cartoes = self.obtem_cartoes()
+        self.cartoes = self.verifica_cartoes()
         self.giro = self.giro_dao.busca(self.catraca.id)
         self.aviso.exibir_aguarda_cartao()
-        print 'Coisas iniciadas no construtor de LeitorCartao'
     
     def zero(self, obj):
         self.bits = self.bits + '0'
@@ -92,11 +94,12 @@ class LeitorCartao(object):
             while True:
                 sleep(1)
                 if len(self.bits) == 32:
+                    #os.system('mpg321 -q -g 50 audio/Censor_B-Josh-8135_hifi.mp3 &') #http://www.flashkit.com/soundfx/Electronic/Beeps
+                    self.aviso.exibir_aguarda_consulta()
+                    self.log.logger.info('Binario obtido corretamente: '+str(self.bits))
                     ID = int(str(self.bits), 2)
                     status = True
-                    self.log.logger.info('Binario obtido corretamente: '+str(self.bits))
-                    self.bits = ''
-                    self.aviso.exibir_aguarda_consulta()
+                    self.bits = ''                    
                     self.valida_cartao(ID)
                 elif (len(self.bits) > 0) or (len(self.bits) > 32):
                     self.log.logger.error('Erro obtendo binario: '+str(self.bits))
@@ -114,12 +117,13 @@ class LeitorCartao(object):
         return status
 
     def valida_cartao(self, id_cartao):
+        #self.aviso.exibir_aguarda_liberacao()
         self.hora_atual = self.obtem_hora()
         try:
             ##############################################################
             ## VERIFICA SE HOUVE ATUALIZACAO NOS CARTOES DURANTE O TURNO
             ##############################################################
-            self.cartoes = self.obtem_cartoes()
+            self.cartoes = self.verifica_cartoes()
             """
             -> VERIFICAÇÃO DESATIVADA TEMPORARIAMENTE DURANTE OS TESTES
             if not self.dias_uteis():
@@ -134,6 +138,10 @@ class LeitorCartao(object):
                 self.aviso.exibir_horario_invalido()
                 self.aviso.exibir_acesso_bloqueado()
                 self.log.logger.info('Cartao apresentado fora do horario de atendimento ID:'+ str(id_cartao))
+                ##############################################################
+                ## VERIFICA ATUALIZACOES NO TURNO DE FUNCIONAMENTO
+                ##############################################################
+                self.verifica_turnos()
                 return None
             ##############################################################
             ## VERIFICA SE EXISTE TURNO NO HORARIO DE FUNCIONAMENTO
@@ -170,7 +178,6 @@ class LeitorCartao(object):
                     ##############################################################
                     ## OBTEM AS INFORMACOES DO CARTAO CONSULTADO NO BANCO DE DADOS
                     ##############################################################
-                    self.aviso.exibir_aguarda_liberacao()
                     creditos = self.cartao_ativo[2]
                     hora_ultimo_acesso = datetime.datetime.strptime(self.cartao_ativo[3].strftime('%H:%M:%S'),'%H:%M:%S').time()
                     tipo = self.cartao_ativo[4]
@@ -214,6 +221,7 @@ class LeitorCartao(object):
                         self.aviso.exibir_cartao_valido(tipo, saldo)
                         self.log.logger.info('Saldo atual do cartao ID:'+ str(id_cartao) + ' - ' + saldo)
                         """
+                        self.aviso.exibir_cartao_valido("  R$ <TESTE>")
                         ##############################################################
                         ## INICIA A OPERACAO DE DECREMENTO DE CREDITO DO CARTAO
                         ##############################################################
@@ -226,25 +234,16 @@ class LeitorCartao(object):
                             raise Exception('Erro atualizando valores no cartao.')
                         else:
                             self.log.logger.info("[Cartao] " + self.cartao_dao.aviso)
+                        self.aviso.exibir_aguarda_liberacao()
                         ##############################################################
                         ## LIBERA O ACESSO E SINALIZA O MESMO AO UTILIZADOR
                         ##############################################################
-                        self.aviso.exibir_aguarda_liberacao()
-                        if self.catraca.operacao == 1:
-                            self.solenoide.ativa_solenoide(1,1)
-                            self.pictograma.seta_esquerda(1)
-                            self.pictograma.xis(1)
-                            self.aviso.exibir_acesso_liberado()
-                        if self.catraca.operacao == 2:
-                            self.solenoide.ativa_solenoide(2,1)
-                            self.pictograma.seta_direita(1)
-                            self.pictograma.xis(1)
-                            self.aviso.exibir_acesso_liberado()                            
+                        self.desbroqueia_acesso()                        
                         ##############################################################
-                        ## AGUARDA UTILIZADOR REALIZAR, OU NAO, O GIRO NA CATRACA
+                        ## AGUARDA UTILIZADOR PASSAR NA CATRACA E REALIZAR O GIRO
                         ##############################################################
                         while True:
-                            if self.sensor_optico.registra_giro(self.catraca.tempo):                                
+                            if not self.sensor_optico.registra_giro(self.catraca.tempo):                                
                                 self.log.logger.info('Utilizador REALIZOU GIRO na catraca.')
                                 ##############################################################
                                 ## EFETIVA A OPERACAO DE DECREMENTO DE CREDITO DO CARTAO
@@ -255,16 +254,17 @@ class LeitorCartao(object):
                                 ##############################################################
                                 ## REGISTRA INFORMACOES DA OPERACAO REALIZADA COM EXITO
                                 ##############################################################
-                                self.registro.data = self.cartao.data
-                                self.registro.giro = 1
-                                self.registro.valor = self.cartao.perfil.tipo.valor
-                                self.registro.cartao = self.cartao
-                                self.registro.turno = self.turno_atual
-                                if not self.registro_dao.mantem(self.registro,False):
-                                    self.log.logger.error('[Registro] ' + self.registro_dao.aviso)
-                                    raise Exception('Erro inserindo valores no registro.')
-                                else:
-                                    self.log.logger.info('[Registro] ' + self.registro_dao.aviso)
+                                if self.turno_atual is not None:
+                                    self.registro.data = self.cartao.data
+                                    self.registro.giro = 1
+                                    self.registro.valor = self.cartao.perfil.tipo.valor
+                                    self.registro.cartao = self.cartao
+                                    self.registro.turno = self.turno_atual
+                                    if not self.registro_dao.mantem(self.registro,False):
+                                        self.log.logger.error('[Registro] ' + self.registro_dao.aviso)
+                                        raise Exception('Erro inserindo valores no registro.')
+                                    else:
+                                        self.log.logger.info('[Registro] ' + self.registro_dao.aviso)
                                 ##############################################################
                                 ## REGISTRA INFORMACOES DE GIRO REALIZADO NA CATRACA
                                 ##############################################################                                
@@ -283,30 +283,38 @@ class LeitorCartao(object):
                             else:
                                 self.log.logger.info('Utilizador NAO realizou GIRO na catraca.')
                                 ##############################################################
-                                ## NAO REALIZA OPERACAO DE DECREMENTO DE CREDITO NO CARTAO
+                                ## NAO CONFIRMA OPERACAO DE DECREMENTO DE CREDITO NO CARTAO
                                 ##############################################################
                                 if self.cartao_dao.conexao_status():
                                     self.cartao_dao.rollback()
                                     self.log.logger.info("Alteracao no cartao cancelada! (rollback)")
                                 ##############################################################
-                                ## REGISTRA INFORMACOES DA OPERACAO REALIZADA COM SEM EXITO
+                                ## REGISTRA INFORMACOES DA OPERACAO REALIZADA SEM EXITO
                                 ##############################################################
-                                self.registro.data = self.cartao.data
-                                self.registro.giro = 0
-                                self.registro.valor = 0.00
-                                self.registro.cartao = self.cartao
-                                self.registro.turno = self.turno_atual
-                                if not self.registro_dao.mantem(self.registro,False):
-                                    self.log.logger.error('[Registro] ' + self.registro_dao.aviso)
-                                    raise Exception('Erro inserindo valores no registro.')
-                                else:
-                                    self.log.logger.info('[Registro] ' + self.registro_dao.aviso)
+                                if self.turno_atual is not None:
+                                    self.registro.data = self.cartao.data
+                                    self.registro.giro = 0
+                                    self.registro.valor = 0.00
+                                    self.registro.cartao = self.cartao
+                                    self.registro.turno = self.turno_atual
+                                    if not self.registro_dao.mantem(self.registro,False):
+                                        self.log.logger.error('[Registro] ' + self.registro_dao.aviso)
+                                        raise Exception('Erro inserindo valores no registro.')
+                                    else:
+                                        self.log.logger.info('[Registro] ' + self.registro_dao.aviso)
                                 break
+                        ##############################################################
+                        ## BLOQUEIA O ACESSO E SINALIZA O MESMO AO UTILIZADOR
+                        ##############################################################
+                        self.broqueia_acesso()
+                        ##############################################################
+                        ## EXIBE MENSAGEM NO DISPLAY AO UTILIZADOR DO PROXIMO ACESSO
+                        ##############################################################
+                        self.aviso.exibir_aguarda_cartao()
                         ##############################################################
                         ## VERIFICA ATUALIZACOES NO TURNO DE FUNCIONAMENTO
                         ##############################################################
-                        self.catraca = self.catraca_dao.busca_por_ip(self.obtem_ip())
-                        self.turno = self.obtem_turno(self.catraca)
+                        self.verifica_turnos()
             else:
                 ##############################################################
                 ## CANCELA ACESSO PELA INVALIDADE DO ID DO CARTAO APRESENTADO
@@ -323,14 +331,7 @@ class LeitorCartao(object):
             ##############################################################
             ## BLOQUEIA O ACESSO E SINALIZA O MESMO AO UTILIZADOR
             ##############################################################
-            if self.catraca.operacao == 1:
-                self.solenoide.ativa_solenoide(1,0)
-                self.pictograma.seta_esquerda(0)
-                self.pictograma.xis(0)
-            if self.catraca.operacao == 2:
-                self.solenoide.ativa_solenoide(2,0)
-                self.pictograma.seta_direita(0)
-                self.pictograma.xis(0)
+            self.broqueia_acesso()
             ##############################################################
             ## FECHA POSSIVEIS CONEXOES ABERTAS COM O BANCO DE DADOS
             ##############################################################
@@ -343,12 +344,7 @@ class LeitorCartao(object):
             if self.giro_dao.conexao_status():
                 self.giro_dao.fecha_conexao()
                 self.log.logger.debug('[Giro] Conexao finalizada com o BD.')
-                
-            ##############################################################
-            ## EXIBE MENSAGEM NO DISPLAY AO UTILIZADOR DO PROXIMO ACESSO
-            ##############################################################
-            self.aviso.exibir_aguarda_cartao()
-            
+                      
     def pesquisa_id(self, lista, id):
         resultado = None
         for cartao in lista:
@@ -392,6 +388,9 @@ class LeitorCartao(object):
             self.log.logger.error('Erro obtendo lista de cartoes', exc_info=True)
         finally:
             pass
+        
+    def obtem_catraca(self):
+        return self.catraca_dao.busca_por_ip(self.obtem_ip())
     
     def obtem_ip(self):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -427,5 +426,38 @@ class LeitorCartao(object):
         return datetime.datetime.now().strftime("%Y-%m-%d")
     
     def obtem_datahora(self):
-        return datetime.datetime.now()#.strftime("%Y-%m-%d %H:%M:%S")
+        return datetime.datetime.now()
+    
+    def verifica_cartoes(self):
+        return self.obtem_cartoes()
+        
+    def verifica_turnos(self):
+        self.catraca = self.obtem_catraca()
+        self.turno = self.obtem_turno(self.catraca)
+    
+    def desbroqueia_acesso(self):
+        if self.catraca.operacao == 1:
+            self.solenoide.ativa_solenoide(1,1)
+            self.pictograma.seta_esquerda(1)
+            self.pictograma.xis(1)
+            self.aviso.exibir_acesso_liberado()
+        if self.catraca.operacao == 2:
+            self.solenoide.ativa_solenoide(2,1)
+            self.pictograma.seta_direita(1)
+            self.pictograma.xis(1)
+            self.aviso.exibir_acesso_liberado() 
+    
+    def broqueia_acesso(self):
+        if self.catraca.operacao == 1:
+            self.solenoide.ativa_solenoide(1,0)
+            self.pictograma.seta_esquerda(0)
+            self.pictograma.xis(0)
+        if self.catraca.operacao == 2:
+            self.solenoide.ativa_solenoide(2,0)
+            self.pictograma.seta_direita(0)
+            self.pictograma.xis(0)
+        ##############################################################
+        ## EXIBE MENSAGEM NO DISPLAY AO UTILIZADOR DO PROXIMO ACESSO
+        ##############################################################
+        self.aviso.exibir_aguarda_cartao()
     
