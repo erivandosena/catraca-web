@@ -3,19 +3,17 @@
 
 ### BEGIN INIT INFO
 # Provides: 			Catraca
-# Required-Start: 		$local_fs $remote_fs $network $time $all
-# Required-Stop: 		$local_fs $remote_fs $network $time $all
-# Should-Start: 		$syslog
-# Should-Stop: 			$syslog
+# Required-Start: 		$local_fs $remote_fs $syslog
+# Required-Stop: 		$local_fs $remote_fs $syslog
 # Default-Start: 		2 3 4 5
 # Default-Stop: 		0 1 6
 # Short-Description: 		Inicia aplicacao e api da catraca
 # Description: 			Inicia aplicacao da catraca de baixo nivel e a API cliente RESTful.
 ### END INIT INFO
 
-# Script de inicializacao LSB (https://wiki.debian.org/LSBInitScripts)
+# Script de inicialização LSB (https://wiki.debian.org/LSBInitScripts)
 # Autor: Erivando Sena
-# Copyright: (c) 2015 Unilab
+# Copyright: © 2015 Unilab
 # Email: erivandoramos@unilab.edu.br
 # Data: 22/07/2015
 # Status: Prototype  (Prototype | Development | Production)
@@ -32,23 +30,19 @@ DAEMON=$DIR/run.py
 DAEMON_NAME=Catraca
 DAEMON_USER=root
 PIDFILE=/var/run/$DAEMON_NAME.pid
-LOGFILE=$DIR/log/stdbuf/$DAEMON_NAME.log
-DAEMON_OPTS="" #--background
-DAEMON_ARGS=""
+DAEMON_OPTS=""
 
 . /lib/lsb/init-functions
 
 do_start() {
   log_daemon_msg "Iniciando $DAEMON_NAME"
-  sudo start-stop-daemon --verbose --start --user $DAEMON_USER --pidfile $PIDFILE --make-pidfile \
-	--chuid $DAEMON_USER --startas $DAEMON -- $DAEMON_OPTS \
-	-- -c "exec stdbuf -oL -eL $DAEMON $DAEMON_ARGS > $LOGFILE 2>&1"
-  log_end_msg $?
+  start-stop-daemon --verbose --start  --pidfile $PIDFILE --make-pidfile --user $DAEMON_USER --chuid $DAEMON_USER --startas $DAEMON -- $DAEMON_OPTS
+  log_end_msg $?                     #--background
 }
 do_stop() {
   log_daemon_msg "Parando $DAEMON_NAME"
-  sudo start-stop-daemon --stop --pidfile $PIDFILE --retry 10
-  log_end_msg $?
+  start-stop-daemon --stop --pidfile $PIDFILE --retry 10
+log_end_msg $?
 }
 case "$1" in
 
