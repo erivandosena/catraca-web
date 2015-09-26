@@ -69,13 +69,9 @@ class LeitorCartao(object):
     
     def __init__(self):
         super(LeitorCartao, self).__init__()
+        
         self.aviso.exibir_aguarda_sincronizacao()
-        
-        #self.catraca = self.obtem_catraca()
-        #self.turno = self.obtem_turno(self.catraca)
         self.verifica_turnos()
-        
-        self.turno_atual = self.turno_dao.busca(self.turno[0]) if self.turno != None else None #Op. ternario
         self.cartoes = self.verifica_cartoes()
         self.giro = self.giro_dao.busca(self.catraca.id)
         self.aviso.exibir_aguarda_cartao()
@@ -243,7 +239,7 @@ class LeitorCartao(object):
                         ## AGUARDA UTILIZADOR PASSAR NA CATRACA E REALIZAR O GIRO
                         ##############################################################
                         while True:
-                            if not self.sensor_optico.registra_giro(self.catraca.tempo):                                
+                            if not self.sensor_optico.registra_giro(self.catraca.tempo, self.catraca):                                
                                 self.log.logger.info('Utilizador REALIZOU GIRO na catraca.')
                                 ##############################################################
                                 ## EFETIVA A OPERACAO DE DECREMENTO DE CREDITO DO CARTAO
@@ -262,7 +258,7 @@ class LeitorCartao(object):
                                     self.registro.turno = self.turno_atual
                                     if not self.registro_dao.mantem(self.registro,False):
                                         self.log.logger.error('[Registro] ' + self.registro_dao.aviso)
-                                        raise Exception('Erro inserindo valores no registro.')
+                                        #raise Exception('Erro inserindo valores no registro.')
                                     else:
                                         self.log.logger.info('[Registro] ' + self.registro_dao.aviso)
                                 ##############################################################
@@ -299,7 +295,7 @@ class LeitorCartao(object):
                                     self.registro.turno = self.turno_atual
                                     if not self.registro_dao.mantem(self.registro,False):
                                         self.log.logger.error('[Registro] ' + self.registro_dao.aviso)
-                                        raise Exception('Erro inserindo valores no registro.')
+                                        #raise Exception('Erro inserindo valores no registro.')
                                     else:
                                         self.log.logger.info('[Registro] ' + self.registro_dao.aviso)
                                 break
@@ -434,6 +430,7 @@ class LeitorCartao(object):
     def verifica_turnos(self):
         self.catraca = self.obtem_catraca()
         self.turno = self.obtem_turno(self.catraca)
+        self.turno_atual = self.turno_dao.busca(self.turno[0]) if self.turno != None else None #Op. ternario
     
     def desbroqueia_acesso(self):
         if self.catraca.operacao == 1:
