@@ -27,12 +27,23 @@ class Solenoide(object):
             if estado:
                 self.rpi.atualiza(self.solenoide_1, self.alto)
                 self.rpi.atualiza(self.solenoide_2, self.baixo)
+                return True
             else:
                 self.rpi.atualiza(self.solenoide_1, self.baixo)
+                return False
         elif solenoide == 2:
             if estado:
                 self.rpi.atualiza(self.solenoide_2, self.alto)
                 self.rpi.atualiza(self.solenoide_1, self.baixo)
+                return True
             else:
                 self.rpi.atualiza(self.solenoide_2, self.baixo)
+                return False
+            
+    def obtem_estado_solenoide(self,solenoide):
+        if solenoide == 1:
+            return self.rpi.estado(self.solenoide_1)
+        elif solenoide == 2:
+            return self.rpi.estado(self.solenoide_2)
+        
                 

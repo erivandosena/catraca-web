@@ -23,6 +23,7 @@ from catraca.dao.registrodao import RegistroDAO
 from catraca.dao.cartao import Cartao
 from catraca.dao.registro import Registro
 from catraca.dao.giro import Giro
+from catraca.util import Util
 
 
 
@@ -37,6 +38,7 @@ class LeitorCartao(object):
     locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
     
     log = Logs()
+    util = Util()
     aviso = Aviso()
     solenoide = Solenoide()
     pictograma = Pictograma()
@@ -47,7 +49,6 @@ class LeitorCartao(object):
     D1 = rpi.ler(27)['gpio']
     
     bits = '' #11101110000100010000010011101110
-    ID = ''
 
     cartao = Cartao()
     registro = Registro()
@@ -66,7 +67,9 @@ class LeitorCartao(object):
     hora_atual = datetime.datetime.strptime('00:00:00','%H:%M:%S').time()
     hora_inicio = datetime.datetime.strptime('00:00:00','%H:%M:%S').time()
     hora_fim = datetime.datetime.strptime('00:00:00','%H:%M:%S').time()
-    
+
+    numero_cartao = 0
+
     def __init__(self):
         super(LeitorCartao, self).__init__()
         
@@ -83,34 +86,33 @@ class LeitorCartao(object):
         self.bits = self.bits + '1'
         
     def ler(self):
-        status = False
         try:            
             self.rpi.evento_falling(self.D0, self.zero)
             self.rpi.evento_falling(self.D1, self.um)
             while True:
                 sleep(1)
+                #self.bits = '11101110000100010000010011101110'
                 if len(self.bits) == 32:
-                    #os.system('mpg321 -q -g 50 audio/Censor_B-Josh-8135_hifi.mp3 &') #http://www.flashkit.com/soundfx/Electronic/Beeps
+                    print self.util.beep_buzzer(760, .1, 1)
                     self.aviso.exibir_aguarda_consulta()
                     self.log.logger.info('Binario obtido corretamente: '+str(self.bits))
-                    ID = int(str(self.bits), 2)
-                    status = True
-                    self.bits = ''                    
-                    self.valida_cartao(ID)
+                    self.numero_cartao = int(str(self.bits), 2)
+                    self.bits = ''
+                    self.valida_cartao(self.numero_cartao)
                 elif (len(self.bits) > 0) or (len(self.bits) > 32):
                     self.log.logger.error('Erro obtendo binario: '+str(self.bits))
+                    self.numero_cartao = 0
                     self.bits = ''
                     self.aviso.exibir_erro_leitura_cartao()
                     self.aviso.exibir_aguarda_cartao()
         except SystemExit, KeyboardInterrupt:
             raise
         except Exception, e:
-            status = False
             self.log.logger.error('Erro lendo cartao.', exc_info=True)
         finally:
             self.bits = ''
+            self.numero_cartao = 0
             self.aviso.exibir_aguarda_cartao()
-        return status
 
     def valida_cartao(self, id_cartao):
         #self.aviso.exibir_aguarda_liberacao()
@@ -306,10 +308,6 @@ class LeitorCartao(object):
                         ##############################################################
                         self.broqueia_acesso()
                         ##############################################################
-                        ## EXIBE MENSAGEM NO DISPLAY AO UTILIZADOR DO PROXIMO ACESSO
-                        ##############################################################
-                        self.aviso.exibir_aguarda_cartao()
-                        ##############################################################
                         ## VERIFICA ATUALIZACOES NO TURNO DE FUNCIONAMENTO
                         ##############################################################
                         self.verifica_turnos()
@@ -326,10 +324,16 @@ class LeitorCartao(object):
 #                 self.cartao_dao.rollback()
 #                 self.log.logger.info("Alteracao no cartao cancelada! (rollback)")
         finally:
+            self.bits = ''
+            self.numero_cartao = 0
             ##############################################################
             ## BLOQUEIA O ACESSO E SINALIZA O MESMO AO UTILIZADOR
             ##############################################################
             self.broqueia_acesso()
+            ##############################################################
+            ## EXIBE MENSAGEM NO DISPLAY AO UTILIZADOR DO PROXIMO ACESSO
+            ##############################################################
+            self.aviso.exibir_aguarda_cartao()
             ##############################################################
             ## FECHA POSSIVEIS CONEXOES ABERTAS COM O BANCO DE DADOS
             ##############################################################
@@ -434,18 +438,6 @@ class LeitorCartao(object):
         self.turno = self.obtem_turno(self.catraca)
         self.turno_atual = self.turno_dao.busca(self.turno[0]) if self.turno != None else None #Op. ternario
     
-    def desbroqueia_acesso(self):
-        if self.catraca.operacao == 1:
-            self.solenoide.ativa_solenoide(1,1)
-            self.pictograma.seta_esquerda(1)
-            self.pictograma.xis(1)
-            self.aviso.exibir_acesso_liberado()
-        if self.catraca.operacao == 2:
-            self.solenoide.ativa_solenoide(2,1)
-            self.pictograma.seta_direita(1)
-            self.pictograma.xis(1)
-            self.aviso.exibir_acesso_liberado() 
-    
     def broqueia_acesso(self):
         if self.catraca.operacao == 1:
             self.solenoide.ativa_solenoide(1,0)
@@ -460,3 +452,15 @@ class LeitorCartao(object):
         ##############################################################
         self.aviso.exibir_aguarda_cartao()
     
+    def desbroqueia_acesso(self):
+        if self.catraca.operacao == 1:
+            self.solenoide.ativa_solenoide(1,1)
+            self.pictograma.seta_esquerda(1)
+            self.pictograma.xis(1)
+            self.aviso.exibir_acesso_liberado()
+        if self.catraca.operacao == 2:
+            self.solenoide.ativa_solenoide(2,1)
+            self.pictograma.seta_direita(1)
+            self.pictograma.xis(1)
+            self.aviso.exibir_acesso_liberado()
+            
