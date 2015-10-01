@@ -78,8 +78,11 @@ class PinoControle(PinosGPIO):
             return None
         except Exception:
             self.gpio.cleanup()
-
-
+            
+    def ler_pwm(self, numero, frequencia):
+        pwm = self.gpio.PWM(numero, frequencia) 
+        return pwm
+        
     def ler(self, numero):
         pino_numero = int(numero)
         try:

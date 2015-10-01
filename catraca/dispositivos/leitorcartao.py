@@ -239,66 +239,68 @@ class LeitorCartao(object):
                         ## AGUARDA UTILIZADOR PASSAR NA CATRACA E REALIZAR O GIRO
                         ##############################################################
                         while True:
-                            if not self.sensor_optico.registra_giro(self.catraca.tempo, self.catraca):                                
-                                self.log.logger.info('Utilizador REALIZOU GIRO na catraca.')
-                                ##############################################################
-                                ## EFETIVA A OPERACAO DE DECREMENTO DE CREDITO DO CARTAO
-                                ##############################################################
-                                if self.cartao_dao.conexao_status():
-                                    self.cartao_dao.commit() # se girou, persiste no banco de dados.
-                                    self.log.logger.info('Cartao com alteracao comitada com sucesso.')
-                                ##############################################################
-                                ## REGISTRA INFORMACOES DA OPERACAO REALIZADA COM EXITO
-                                ##############################################################
-                                if self.turno_atual is not None:
-                                    self.registro.data = self.cartao.data
-                                    self.registro.giro = 1
-                                    self.registro.valor = self.cartao.perfil.tipo.valor
-                                    self.registro.cartao = self.cartao
-                                    self.registro.turno = self.turno_atual
-                                    if not self.registro_dao.mantem(self.registro,False):
-                                        self.log.logger.error('[Registro] ' + self.registro_dao.aviso)
-                                        #raise Exception('Erro inserindo valores no registro.')
-                                    else:
-                                        self.log.logger.info('[Registro] ' + self.registro_dao.aviso)
-                                ##############################################################
-                                ## REGISTRA INFORMACOES DE GIRO REALIZADO NA CATRACA
-                                ##############################################################                                
-                                giro = Giro()
-                                giro.horario = 1 if self.catraca.operacao == 1 else 0
-                                giro.antihorario = 1 if self.catraca.operacao == 2 else 0
-                                giro.tempo = self.sensor_optico.tempo_decorrido
-                                giro.data = self.cartao.data
-                                giro.catraca = self.catraca
-                                if not self.giro_dao.mantem(giro,False):
-                                    self.log.logger.error('[Giro] ' + self.giro_dao.aviso)
-                                    raise Exception('Erro inserindo valores no giro.')
-                                else:
-                                    self.log.logger.info('[Giro] ' + self.giro_dao.aviso)
-                                break
-                            else:
-                                self.log.logger.info('Utilizador NAO realizou GIRO na catraca.')
-                                ##############################################################
-                                ## NAO CONFIRMA OPERACAO DE DECREMENTO DE CREDITO NO CARTAO
-                                ##############################################################
-                                if self.cartao_dao.conexao_status():
-                                    self.cartao_dao.rollback()
-                                    self.log.logger.info("Alteracao no cartao cancelada! (rollback)")
-                                ##############################################################
-                                ## REGISTRA INFORMACOES DA OPERACAO REALIZADA SEM EXITO
-                                ##############################################################
-                                if self.turno_atual is not None:
-                                    self.registro.data = self.cartao.data
-                                    self.registro.giro = 0
-                                    self.registro.valor = 0.00
-                                    self.registro.cartao = self.cartao
-                                    self.registro.turno = self.turno_atual
-                                    if not self.registro_dao.mantem(self.registro,False):
-                                        self.log.logger.error('[Registro] ' + self.registro_dao.aviso)
-                                        #raise Exception('Erro inserindo valores no registro.')
-                                    else:
-                                        self.log.logger.info('[Registro] ' + self.registro_dao.aviso)
-                                break
+                            print self.sensor_optico.registra_giro(self.catraca.tempo, self.catraca)
+                            break
+#                             if not self.sensor_optico.registra_giro(self.catraca.tempo, self.catraca):                                
+#                                 self.log.logger.info('Utilizador REALIZOU GIRO na catraca.')
+#                                 ##############################################################
+#                                 ## EFETIVA A OPERACAO DE DECREMENTO DE CREDITO DO CARTAO
+#                                 ##############################################################
+#                                 if self.cartao_dao.conexao_status():
+#                                     self.cartao_dao.commit() # se girou, persiste no banco de dados.
+#                                     self.log.logger.info('Cartao com alteracao comitada com sucesso.')
+#                                 ##############################################################
+#                                 ## REGISTRA INFORMACOES DA OPERACAO REALIZADA COM EXITO
+#                                 ##############################################################
+#                                 if self.turno_atual is not None:
+#                                     self.registro.data = self.cartao.data
+#                                     self.registro.giro = 1
+#                                     self.registro.valor = self.cartao.perfil.tipo.valor
+#                                     self.registro.cartao = self.cartao
+#                                     self.registro.turno = self.turno_atual
+#                                     if not self.registro_dao.mantem(self.registro,False):
+#                                         self.log.logger.error('[Registro] ' + self.registro_dao.aviso)
+#                                         #raise Exception('Erro inserindo valores no registro.')
+#                                     else:
+#                                         self.log.logger.info('[Registro] ' + self.registro_dao.aviso)
+#                                 ##############################################################
+#                                 ## REGISTRA INFORMACOES DE GIRO REALIZADO NA CATRACA
+#                                 ##############################################################                                
+#                                 giro = Giro()
+#                                 giro.horario = 1 if self.catraca.operacao == 1 else 0
+#                                 giro.antihorario = 1 if self.catraca.operacao == 2 else 0
+#                                 giro.tempo = self.sensor_optico.tempo_decorrido
+#                                 giro.data = self.cartao.data
+#                                 giro.catraca = self.catraca
+#                                 if not self.giro_dao.mantem(giro,False):
+#                                     self.log.logger.error('[Giro] ' + self.giro_dao.aviso)
+#                                     raise Exception('Erro inserindo valores no giro.')
+#                                 else:
+#                                     self.log.logger.info('[Giro] ' + self.giro_dao.aviso)
+#                                 break
+#                             else:
+#                                 self.log.logger.info('Utilizador NAO realizou GIRO na catraca.')
+#                                 ##############################################################
+#                                 ## NAO CONFIRMA OPERACAO DE DECREMENTO DE CREDITO NO CARTAO
+#                                 ##############################################################
+#                                 if self.cartao_dao.conexao_status():
+#                                     self.cartao_dao.rollback()
+#                                     self.log.logger.info("Alteracao no cartao cancelada! (rollback)")
+#                                 ##############################################################
+#                                 ## REGISTRA INFORMACOES DA OPERACAO REALIZADA SEM EXITO
+#                                 ##############################################################
+#                                 if self.turno_atual is not None:
+#                                     self.registro.data = self.cartao.data
+#                                     self.registro.giro = 0
+#                                     self.registro.valor = 0.00
+#                                     self.registro.cartao = self.cartao
+#                                     self.registro.turno = self.turno_atual
+#                                     if not self.registro_dao.mantem(self.registro,False):
+#                                         self.log.logger.error('[Registro] ' + self.registro_dao.aviso)
+#                                         #raise Exception('Erro inserindo valores no registro.')
+#                                     else:
+#                                         self.log.logger.info('[Registro] ' + self.registro_dao.aviso)
+#                                 break
                         ##############################################################
                         ## BLOQUEIA O ACESSO E SINALIZA O MESMO AO UTILIZADOR
                         ##############################################################
