@@ -38,6 +38,7 @@ class Util(object):
     log = Logs()
     rpi = PinoControle()
     pino_buzzer = rpi.ler(21)['gpio']
+    cronometro = 0
 
     def __init__(self):
         super(Util, self).__init__()
@@ -62,16 +63,18 @@ class Util(object):
         return retorno
     
     def beep_buzzer(self, frequencia, intensidade, quantidade_beep):
-        contador = 0
-        while contador <= quantidade_beep:
+        while quantidade_beep > 0:
             self.rpi.atualiza(self.pino_buzzer, True)
             self.buzzer(frequencia, intensidade)
             print 'beeep!'
             sleep(intensidade)
             self.rpi.atualiza(self.pino_buzzer, False)
-            contador += 1
-            return True
-        return False
+            quantidade_beep -= 1
+            
+    def emite_beep(self, frequencia, intensidade, quantidade_beep, delay_beep):
+        self.cronometro += 1
+        if self.cronometro/1000 == delay_beep:
+            self.beep_buzzer(frequencia, intensidade, quantidade_beep)
             
     def obtem_hora(self):
         hora_atual = datetime.datetime.strptime(datetime.datetime.now().strftime('%H:%M:%S'),'%H:%M:%S').time()

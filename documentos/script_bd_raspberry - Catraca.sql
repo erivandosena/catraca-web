@@ -197,7 +197,7 @@ CREATE TABLE registro
   cart_id integer NOT NULL, -- Campo para chave estrangeira da tabela cartao.
   turn_id integer, -- Campo para chave estrangeira da tabela turno.
   CONSTRAINT pk_regi_id PRIMARY KEY (regi_id ),
-  CONSTRAINT fk_cart_id FOREIGN KEY (cart_id) REFERENCES cartao (cart_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
+  CONSTRAINT fk_cart_id FOREIGN KEY (cart_id) REFERENCES cartao (cart_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT pk_turn_id FOREIGN KEY (turn_id) REFERENCES turno (turn_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION
 );
 ALTER TABLE registro OWNER TO postgres;
