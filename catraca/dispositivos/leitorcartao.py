@@ -100,7 +100,8 @@ class LeitorCartao(object):
                     self.bits = ''
                     self.valida_cartao(self.numero_cartao)
                 elif (len(self.bits) > 0) or (len(self.bits) > 32):
-                    self.util.beep_buzzer(750, .1, 2)
+                    #self.util.beep_buzzer(750, .1, 2)
+                    self.util.emite_beep(250, .1, 3, 0) #0 seg.
                     self.log.logger.error('Erro obtendo binario: '+str(self.bits))
                     self.numero_cartao = 0
                     self.bits = ''
@@ -134,8 +135,9 @@ class LeitorCartao(object):
             ## VERIFICA O HORARIO PARA FUNCIONAMENTO DO TURNO
             ##############################################################
             if not (((self.hora_atual >= self.hora_inicio) and (self.hora_atual <= self.hora_fim)) or ((self.hora_atual >= self.hora_inicio) and (self.hora_atual <= self.hora_fim))):
-                self.util.beep_buzzer(750, .1, 2)
+                #self.util.beep_buzzer(750, .1, 2)
                 self.aviso.exibir_horario_invalido()
+                self.util.emite_beep(250, .1, 3, 0) #0 seg.
                 self.aviso.exibir_acesso_bloqueado()
                 self.log.logger.info('Cartao apresentado fora do horario de atendimento ID:'+ str(id_cartao))
                 ##############################################################
@@ -157,7 +159,8 @@ class LeitorCartao(object):
             ## VERIFICA SE O ID DO CARTAO E DIFERENTE DE 10 CARACTERES
             ##############################################################
             if (len(str(id_cartao)) <> 10):
-                self.util.beep_buzzer(750, .1, 2)
+                #self.util.beep_buzzer(750, .1, 2)
+                self.util.emite_beep(250, .1, 3, 0) #0 seg.
                 self.aviso.exibir_erro_leitura_cartao()
                 self.aviso.exibir_aguarda_cartao()
                 self.log.logger.info('Cartao com ID incorreto:'+ str(id_cartao))
@@ -171,7 +174,8 @@ class LeitorCartao(object):
                 ##############################################################
                 self.cartao_ativo = self.pesquisa_id(self.cartoes, id_cartao)
                 if self.cartao_ativo is None:
-                    self.util.beep_buzzer(750, .1, 2)
+                    #self.util.beep_buzzer(750, .1, 2)
+                    self.util.emite_beep(250, .1, 3, 0) #0 seg.
                     self.aviso.exibir_cartao_nao_cadastrado()
                     self.aviso.exibir_aguarda_cartao()
                     self.log.logger.info('Cartao nao cadastrado ID:'+ str(id_cartao))
@@ -209,8 +213,9 @@ class LeitorCartao(object):
                     ## VERIFICA SE O CARTAO POSSUI CREDITO(S) PARA UTILIZACAO
                     ##############################################################
                     if (creditos == 0):
-                        self.util.beep_buzzer(710, .1, 2)
+                        #self.util.beep_buzzer(710, .1, 2)
                         self.aviso.exibir_cartao_sem_saldo()
+                        self.util.emite_beep(250, .1, 3, 0) #0 seg.
                         self.aviso.exibir_acesso_bloqueado()
                         self.log.logger.error('Cartao sem credito ID:'+ str(id_cartao))
                         return None

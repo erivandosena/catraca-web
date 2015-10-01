@@ -43,7 +43,7 @@ class Alerta(Thread):
 
     def verifica_giro_irregular(self):
         self.util.cronometro = 0
-        print self.sensor_optico.obtem_codigo_sensores()
+        #print self.sensor_optico.obtem_codigo_sensores()
         while (self.sensor_optico.obtem_direcao_giro() == 'horario' and \
             self.solenoide.obtem_estado_solenoide(1) == 0) or \
             (self.sensor_optico.obtem_direcao_giro() == 'antihorario' and \
