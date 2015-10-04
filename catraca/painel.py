@@ -7,8 +7,8 @@ from time import sleep
 from logs import Logs
 from dispositivos.aviso import Aviso
 from dispositivos.acesso import Acesso
-#from dispositivos.mensagem import Mensagem
 from dispositivos.alerta import Alerta
+from catraca.restful.cliente_restful import ClienteRestful
 
 
 __author__ = "Erivando Sena"
@@ -21,7 +21,6 @@ class Painel(object):
     
     log = Logs()
     aviso = Aviso() 
-    
     
     def __init__(self):
         super(Painel, self).__init__()
@@ -40,9 +39,10 @@ class Painel(object):
         try:
             acesso = Acesso()
             acesso.start()
-            sleep(10)
+            #sleep(5)
             alerta = Alerta()
-            # http://stackoverflow.com/questions/15729498/how-to-start-and-stop-thread
+            #sleep(5)
+            cr = ClienteRestful()
  
         except (SystemExit, KeyboardInterrupt):
             raise

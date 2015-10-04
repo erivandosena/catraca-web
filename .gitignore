@@ -1,8 +1,8 @@
 # Fontes compilados #
 #####################
 *.pyc
-**/*~
-
+*.autosave
+	
 # Documentacao      #
 #####################
 !/documentos

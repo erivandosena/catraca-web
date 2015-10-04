@@ -66,7 +66,7 @@ def main():
     
 
     def post_tipo(tipo):
-        url = 'http://10.5.1.8:8888/api/tipo/inserir'
+        url = 'http://10.5.0.15:27289/api/tipo/inserir'
         #dados = {"tipo_nome":"Teste requests","tipo_vlr_credito":"9.91"}
         header = {'Content-type': 'application/json'}
         r = requests.post(url, auth=('teste', 'teste'), headers=header, data=json.dumps(tipo))
@@ -75,7 +75,7 @@ def main():
     lista_tipos(tipo_dao.busca())
 
 
-    url = 'http://10.5.1.8:8888/api/tipo/listar'
+    url = 'http://10.5.0.15:27289/api/tipo/listar'
     r = requests.get(url, auth=('teste', 'teste'))
     print r.status_code
     print r.headers['content-type']
