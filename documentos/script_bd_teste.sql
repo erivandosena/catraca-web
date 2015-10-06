@@ -5,8 +5,8 @@
 -------------------------------
 
 -- Database: bd_teste
-CREATE DATABASE bd_teste WITH OWNER = postgres ENCODING = 'UTF8' TABLESPACE = pg_default LC_COLLATE = 'en_US.UTF-8' LC_CTYPE = 'en_US.UTF-8' CONNECTION LIMIT = -1;
-COMMENT ON DATABASE bd_teste IS 'Bando de dados de teste.';
+--CREATE DATABASE bd_teste WITH OWNER = postgres ENCODING = 'UTF8' TABLESPACE = pg_default LC_COLLATE = 'en_US.UTF-8' LC_CTYPE = 'en_US.UTF-8' CONNECTION LIMIT = -1;
+--COMMENT ON DATABASE bd_teste IS 'Bando de dados de teste.';
 
 -- Table: usuario
 CREATE TABLE usuario
@@ -37,7 +37,7 @@ CREATE TABLE transacao
   tran_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
   tran_valor numeric(8,2), -- Valor total em R$ contabil do turno.
   tran_descricao character varying(150), -- Descricao referente a transacao contabilizada do turno.
-  tran_datahora timestamp without time zone, -- Data e hora da execucao.
+  tran_data timestamp without time zone, -- Data e hora da execucao.
   usua_id integer NOT NULL, -- Campo para chave estrangeira da tabela usuario.(Usuario responsavel por realizar a operacao de transacao).
   CONSTRAINT pk_tran_id PRIMARY KEY (tran_id), -- Chave primaria da tabela transacao.
   CONSTRAINT fk_usua_id FOREIGN KEY (usua_id) REFERENCES usuario (usua_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION -- Chave estrangeira da tabela usuario.
@@ -47,7 +47,7 @@ COMMENT ON TABLE transacao IS 'Tabela que armazena a contabilidade do guiche dur
 COMMENT ON COLUMN transacao.tran_id IS 'Campo autoincremento para chave primaria da tabela.';
 COMMENT ON COLUMN transacao.tran_valor IS 'Valor total em R$ contabil do turno.';
 COMMENT ON COLUMN transacao.tran_descricao IS 'Descricao referente a transacao contabilizada do turno.';
-COMMENT ON COLUMN transacao.tran_datahora IS 'Data e hora da execucao.';
+COMMENT ON COLUMN transacao.tran_data IS 'Data e hora da execucao.';
 COMMENT ON COLUMN transacao.usua_id IS 'Campo para chave estrangeira da tabela usuario.(Usuario responsavel por realizar a operacao de transacao).';
 COMMENT ON CONSTRAINT pk_tran_id ON transacao IS 'Chave primaria da tabela transacao.';
 COMMENT ON CONSTRAINT fk_usua_id ON transacao IS 'Chave estrangeira da tabela usuario.';
@@ -71,12 +71,12 @@ COMMENT ON CONSTRAINT pk_tipo_id ON tipo IS 'Chave primaria da tabela tipo.';
 CREATE TABLE cartao
 (
   cart_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
-  cart_numero integer, -- Numero ID do cartao Smart Card sem permissao de duplicidade.
+  cart_numero bigint, -- Numero ID do cartao Smart Card sem permissao de duplicidade.
   cart_creditos numeric(8,2), -- Total de creditos em R$ para uso do cartao.
   tipo_id integer NOT NULL, -- Campo para chave estrangeira da tabela tipo.
   CONSTRAINT pk_cart_id PRIMARY KEY (cart_id), -- Chave primaria da tabela cartao.
-  CONSTRAINT fk_tipo_id FOREIGN KEY (tipo_id) REFERENCES tipo (tipo_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, -- Chave estrangeira da tabela cartao.
-  CONSTRAINT uk_cart_numero UNIQUE (cart_numero) -- Restricao de valor unico para o campo cart_numero da tabela cartao.
+  CONSTRAINT fk_tipo_id FOREIGN KEY (tipo_id) REFERENCES tipo (tipo_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, -- Chave estrangeira da tabelatipo.
+  CONSTRAINT uk_cart_numero UNIQUE (cart_numero) -- Restricao de duplicidades para o campo cart_numero.
 );
 ALTER TABLE cartao OWNER TO postgres;
 COMMENT ON TABLE cartao IS 'Tabela que armazena os registros de uso do cartao RFID.';
@@ -85,8 +85,8 @@ COMMENT ON COLUMN cartao.cart_numero IS 'Numero ID do cartao Smart Card sem perm
 COMMENT ON COLUMN cartao.cart_creditos IS 'Total de creditos em R$ para uso do cartao.';
 COMMENT ON COLUMN cartao.tipo_id IS 'Campo para chave estrangeira da tabela tipo.';
 COMMENT ON CONSTRAINT pk_cart_id ON cartao IS 'Chave primaria da tabela cartao.';
-COMMENT ON CONSTRAINT fk_tipo_id ON cartao IS 'Chave estrangeira da tabela cartao.';
-COMMENT ON CONSTRAINT uk_cart_numero ON cartao IS 'Restricao de valor unico para o campo cart_numero da tabela cartao.';
+COMMENT ON CONSTRAINT fk_tipo_id ON cartao IS 'Chave estrangeira da tabelatipo.';
+COMMENT ON CONSTRAINT uk_cart_numero ON cartao IS 'Restricao de duplicidades para o campo cart_numero.';
 
 -- Table: vinculo
 CREATE TABLE vinculo
@@ -121,19 +121,19 @@ CREATE TABLE isencao
 (
   isen_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
   isen_inicio timestamp without time zone, -- Data e hora do inico da validade para isencao de pagamento.
-  isen_final timestamp without time zone, -- Data e hora do fim da validade para isencao de pagamento.
+  isen_fim timestamp without time zone, -- Data e hora do fim da validade para isencao de pagamento.
   cart_id integer NOT NULL, -- Campo para chave estrangeira da tabela cartao.
-  CONSTRAINT pk_isen_id PRIMARY KEY (cart_id), -- Chave primaria da tabela isencao.
+  CONSTRAINT pk_isen_id PRIMARY KEY (isen_id), -- Chave primaria da tabela isencao.
   CONSTRAINT fk_cart_id FOREIGN KEY (cart_id) REFERENCES cartao (cart_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION -- Chave estrangeira da tabela cartao.
 );
 ALTER TABLE isencao OWNER TO postgres;
 COMMENT ON TABLE isencao IS 'Tabela que armazena as validades para isencao das refeicoes.';
 COMMENT ON COLUMN isencao.isen_id IS 'Campo autoincremento para chave primaria da tabela.';
 COMMENT ON COLUMN isencao.isen_inicio IS 'Data e hora do inico da validade para isencao de pagamento.';
-COMMENT ON COLUMN isencao.isen_final IS 'Data e hora do fim da validade para isencao de pagamento.';
+COMMENT ON COLUMN isencao.isen_fim IS 'Data e hora do fim da validade para isencao de pagamento.';
 COMMENT ON COLUMN isencao.cart_id IS 'Campo para chave estrangeira da tabela cartao.';
 COMMENT ON CONSTRAINT pk_isen_id ON isencao IS 'Chave primaria da tabela isencao.';
-COMMENT ON CONSTRAINT fk_cart_id ON isencao IS 'Chave estrangeira da tabela cartao.';
+COMMENT ON CONSTRAINT fk_cart_id ON isencao IS 'Chave estrangeira da tabela cartao. ';
 
 -- Table: unidade
 CREATE TABLE unidade
@@ -175,19 +175,17 @@ CREATE TABLE giro
   giro_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
   giro_giros_horario integer DEFAULT 0, -- Contador de giros no sentido horario.
   giro_giros_antihorario integer DEFAULT 0, -- Contador de giros no sentido anti-horario.
-  giro_tempo_realizado integer DEFAULT 0, -- Tempo do giro realizado em segundos.
-  giro_data_giro timestamp without time zone NOT NULL DEFAULT now(), -- Registro de data e hora da ocorrencia do giro.
+  giro_data_giros timestamp without time zone NOT NULL DEFAULT now(), -- Registro de data e hora da ocorrencia dos giros.
   catr_id integer NOT NULL, -- Campo para chave estrangeira da tabela catraca.
   CONSTRAINT pk_giro_id PRIMARY KEY (giro_id), -- Chave primaria da tabela giro.
   CONSTRAINT pk_catr_id FOREIGN KEY (catr_id) REFERENCES catraca (catr_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION -- Chave estrangeira da tabela catraca.
 );
 ALTER TABLE giro OWNER TO postgres;
-COMMENT ON TABLE giro IS 'Tabela que armazena a contabilizacao de giros horario e anti-horario da catraca.';
+COMMENT ON TABLE giro IS 'Tabela que armazena a contabilizacao de giros da catraca.';
 COMMENT ON COLUMN giro.giro_id IS 'Campo autoincremento para chave primaria da tabela.';
 COMMENT ON COLUMN giro.giro_giros_horario IS 'Contador de giros no sentido horario.';
 COMMENT ON COLUMN giro.giro_giros_antihorario IS 'Contador de giros no sentido anti-horario.';
-COMMENT ON COLUMN giro.giro_tempo_realizado IS 'Tempo do giro realizado em segundos.';
-COMMENT ON COLUMN giro.giro_data_giro IS 'Registro de data e hora da ocorrencia do giro.';
+COMMENT ON COLUMN giro.giro_data_giros IS 'Registro de data e hora da ocorrencia dos giros.';
 COMMENT ON COLUMN giro.catr_id IS 'Campo para chave estrangeira da tabela catraca.';
 COMMENT ON CONSTRAINT pk_giro_id ON giro IS 'Chave primaria da tabela giro.';
 COMMENT ON CONSTRAINT pk_catr_id ON giro IS 'Chave estrangeira da tabela catraca.';
@@ -243,8 +241,8 @@ COMMENT ON CONSTRAINT fk_catr_id ON mensagem IS 'Chave estrangeira da tabela cat
 CREATE TABLE guiche
 (
   guic_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
-  guic_hora_abertura timestamp without time zone, -- Data e hora do inicio de funcionamento do guiche.
-  guic_hora_encerramento timestamp without time zone, -- Data e hora do fim de funcionamento do guiche.
+  guic_abertura timestamp without time zone, -- Data e hora do inicio de funcionamento do guiche.
+  guic_encerramento timestamp without time zone, -- Data e hora do fim de funcionamento do guiche.
   guic_ativo boolean, -- Status de atividade atual do guiche.
   unid_id integer NOT NULL, -- Campo para chave estrangeira da tabela unidade.
   usua_id integer NOT NULL, -- Campo para chave estrangeira da tabela usuario.
@@ -253,10 +251,10 @@ CREATE TABLE guiche
   CONSTRAINT fk_usua_id FOREIGN KEY (usua_id) REFERENCES usuario (usua_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION -- Chave estrangeira da tabela usuario.
 );
 ALTER TABLE guiche OWNER TO postgres;
-COMMENT ON TABLE guiche  IS 'Tabela que armazena as infiomacoes do guiche que ira realizar as operacoes financeiras.';
+COMMENT ON TABLE guiche IS 'Tabela que armazena as infiomacoes do guiche que ira realizar as operacoes financeiras.';
 COMMENT ON COLUMN guiche.guic_id IS 'Campo autoincremento para chave primaria da tabela.';
-COMMENT ON COLUMN guiche.guic_hora_abertura IS 'Data e hora do inicio de funcionamento do guiche.';
-COMMENT ON COLUMN guiche.guic_hora_encerramento IS 'Data e hora do fim de funcionamento do guiche.';
+COMMENT ON COLUMN guiche.guic_abertura IS 'Data e hora do inicio de funcionamento do guiche.';
+COMMENT ON COLUMN guiche.guic_encerramento IS 'Data e hora do fim de funcionamento do guiche.';
 COMMENT ON COLUMN guiche.guic_ativo IS 'Status de atividade atual do guiche.';
 COMMENT ON COLUMN guiche.unid_id IS 'Campo para chave estrangeira da tabela unidade.';
 COMMENT ON COLUMN guiche.usua_id IS 'Campo para chave estrangeira da tabela usuario.';
@@ -264,11 +262,12 @@ COMMENT ON CONSTRAINT pk_guic_id ON guiche IS 'Chave primaria da tabela guiche.'
 COMMENT ON CONSTRAINT fk_unid_id ON guiche IS 'Chave estrangeira da tabela unidade.';
 COMMENT ON CONSTRAINT fk_usua_id ON guiche IS 'Chave estrangeira da tabela usuario.';
 
+
 -- Table: fluxo
 CREATE TABLE fluxo
 (
   flux_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
-  flux_datahora timestamp without time zone, -- Registro de data e hora do cadastro.
+  flux_data timestamp without time zone, -- Registro de data e hora do cadastro.
   flux_valor numeric(8,2), -- Valor em R$ da receita ou despesa.
   flux_descricao character varying(200), -- Descricao para o historio do fluxo de caixa.
   guic_id integer NOT NULL, -- Campo para chave estrengeira da tabela guiche.
@@ -278,7 +277,7 @@ CREATE TABLE fluxo
 ALTER TABLE fluxo OWNER TO postgres;
 COMMENT ON TABLE fluxo IS 'Tabela que armazena os registros dos fluxos de caixa.';
 COMMENT ON COLUMN fluxo.flux_id IS 'Campo autoincremento para chave primaria da tabela.';
-COMMENT ON COLUMN fluxo.flux_datahora IS 'Registro de data e hora do cadastro.';
+COMMENT ON COLUMN fluxo.flux_data IS 'Registro de data e hora do cadastro.';
 COMMENT ON COLUMN fluxo.flux_valor IS 'Valor em R$ da receita ou despesa.';
 COMMENT ON COLUMN fluxo.flux_descricao IS 'Descricao para o historio do fluxo de caixa.';
 COMMENT ON COLUMN fluxo.guic_id IS 'Campo para chave estrengeira da tabela guiche.';
@@ -303,14 +302,16 @@ COMMENT ON CONSTRAINT pk_turn_id ON turno IS 'Chave primaria da tabela turno.';
 -- Table: registro
 CREATE TABLE registro
 (
-  regi_id serial NOT NULL,
+  regi_id bigserial NOT NULL,
   regi_data timestamp without time zone, -- Data e hora que efetivou o giro na catraca.
   regi_valor_pago numeric(8,2), -- Valor em R$ da refeicao.
   regi_valor_custo numeric(8,2), -- Valor em R$ do custo da refeicao.
   cart_id integer NOT NULL, -- Campo para chave estrangeira da tabela cartao.
   turn_id integer NOT NULL, -- Campo para chave estrangeira da tabela turno.
-  CONSTRAINT pk_regi PRIMARY KEY (regi_id), -- Chave primaria da tabela registro.
+  catr_id integer NOT NULL, -- Campo para chave estrangeira da tabela catraca.
+  CONSTRAINT pk_regi PRIMARY KEY (regi_id),
   CONSTRAINT fk_cart_id FOREIGN KEY (cart_id) REFERENCES cartao (cart_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, -- Chave estrangeira da tabela cartao.
+  CONSTRAINT fk_catr_id FOREIGN KEY (catr_id) REFERENCES catraca (catr_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, -- Chave estrangeira da tabela catraca.
   CONSTRAINT fk_turn_id FOREIGN KEY (turn_id) REFERENCES turno (turn_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION -- Chave estrangeira da tabela turno.
 );
 ALTER TABLE registro OWNER TO postgres;
@@ -320,28 +321,27 @@ COMMENT ON COLUMN registro.regi_valor_pago IS 'Valor em R$ da refeicao.';
 COMMENT ON COLUMN registro.regi_valor_custo IS 'Valor em R$ do custo da refeicao.';
 COMMENT ON COLUMN registro.cart_id IS 'Campo para chave estrangeira da tabela cartao.';
 COMMENT ON COLUMN registro.turn_id IS 'Campo para chave estrangeira da tabela turno.';
-COMMENT ON CONSTRAINT pk_regi ON registro IS 'Chave primaria da tabela registro.';
+COMMENT ON COLUMN registro.catr_id IS 'Campo para chave estrangeira da tabela catraca.';
 COMMENT ON CONSTRAINT fk_cart_id ON registro IS 'Chave estrangeira da tabela cartao.';
+COMMENT ON CONSTRAINT fk_catr_id ON registro IS 'Chave estrangeira da tabela catraca.';
 COMMENT ON CONSTRAINT fk_turn_id ON registro IS 'Chave estrangeira da tabela turno.';
 
 -- Table: unidade_turno
-CREATE TABLE unidade_turno
+CREATE TABLE turno
 (
-  untu_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
-  turn_id integer NOT NULL, -- Campo para chave estrangeira da tabela turno.
-  unid_id integer NOT NULL, -- Campo para chave estrangeira da tabela unidade.
-  CONSTRAINT pk_untu_id PRIMARY KEY (untu_id), -- Chave primaria da tabela unidade_turno.
-  CONSTRAINT fk_turn_id FOREIGN KEY (turn_id) REFERENCES turno (turn_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, -- Chave estrangeira da tabela turno.
-  CONSTRAINT fk_unid_id FOREIGN KEY (unid_id) REFERENCES unidade (unid_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION -- Chave estrangeira da tabela unidade.
+  turn_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
+  turn_hora_inicio time without time zone, -- Hora inicio do periodo para liberacao da catraca.
+  turn_hora_fim time without time zone, -- Hora final do periodo para liberacao da catraca.
+  turn_descricao character varying(25), -- Descricao da refeicao disponibilizada durante o turno. Ex.: Cafe, Almoco, Janta.
+  CONSTRAINT pk_turn_id PRIMARY KEY (turn_id) -- Chave primaria da tabela turno.
 );
-ALTER TABLE unidade_turno OWNER TO postgres;
-COMMENT ON TABLE unidade_turno IS 'Tabela que armazena o local fisico de funcionamento das catracas para o turno.';
-COMMENT ON COLUMN unidade_turno.untu_id IS 'Campo autoincremento para chave primaria da tabela.';
-COMMENT ON COLUMN unidade_turno.turn_id IS 'Campo para chave estrangeira da tabela turno.';
-COMMENT ON COLUMN unidade_turno.unid_id IS 'Campo para chave estrangeira da tabela unidade.';
-COMMENT ON CONSTRAINT pk_untu_id ON unidade_turno IS 'Chave primaria da tabela unidade_turno.';
-COMMENT ON CONSTRAINT fk_turn_id ON unidade_turno IS 'Chave estrangeira da tabela turno.';
-COMMENT ON CONSTRAINT fk_unid_id ON unidade_turno IS 'Chave estrangeira da tabela unidade.';
+ALTER TABLE turno OWNER TO postgres;
+COMMENT ON TABLE turno IS 'Tabela que armazena os horarios de inicio e fim de funcionamento dos turnos.';
+COMMENT ON COLUMN turno.turn_id IS 'Campo autoincremento para chave primaria da tabela.';
+COMMENT ON COLUMN turno.turn_hora_inicio IS 'Hora inicio do periodo para liberacao da catraca.';
+COMMENT ON COLUMN turno.turn_hora_fim IS 'Hora final do periodo para liberacao da catraca.';
+COMMENT ON COLUMN turno.turn_descricao IS 'Descricao da refeicao disponibilizada durante o turno. Ex.: Cafe, Almoco, Janta.';
+COMMENT ON CONSTRAINT pk_turn_id ON turno IS 'Chave primaria da tabela turno.';
 
 -- Table: custo_cartao
 CREATE TABLE custo_cartao
@@ -363,12 +363,12 @@ CREATE TABLE custo_refeicao
 (
   cure_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
   cure_valor numeric(8,2), -- Valor em R$ do custo da refeicao.
-  cure_data timestamp without time zone, -- Data de cadastro do custo.
+  cure_data timestamp without time zone, -- Data e hora de cadastro do custo.
   CONSTRAINT pk_cure_id PRIMARY KEY (cure_id) -- Chave primaria da tabela custo_refeicao.
 );
 ALTER TABLE custo_refeicao OWNER TO postgres;
 COMMENT ON TABLE custo_refeicao IS 'Tabela que armazena os registros de custo da refeicao.';
 COMMENT ON COLUMN custo_refeicao.cure_id IS 'Campo autoincremento para chave primaria da tabela.';
 COMMENT ON COLUMN custo_refeicao.cure_valor IS 'Valor em R$ do custo da refeicao.';
-COMMENT ON COLUMN custo_refeicao.cure_data IS 'Data de cadastro do custo.';
+COMMENT ON COLUMN custo_refeicao.cure_data IS 'Data e hora de cadastro do custo.';
 COMMENT ON CONSTRAINT pk_cure_id ON custo_refeicao IS 'Chave primaria da tabela custo_refeicao.';

@@ -3,7 +3,7 @@
 CAUTION: Do not modify this file unless you know what you are doing.
          Unexpected results may occur if the code is changed deliberately.
 -->
-<dbmodel pgmodeler-ver="0.8.0-beta1" last-position="0,539" last-zoom="1"
+<dbmodel pgmodeler-ver="0.8.0-beta1" last-position="23,0" last-zoom="0.7"
 	 default-schema="public" default-owner="postgres">
 <database name="bd_teste" encoding="UTF8" lc-collate="en_US" lc-ctype="en_US">
 	<role name="postgres"/>
@@ -26,7 +26,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Tabela que armazena as informacoes externas de usuarios do sistema provenientes do SIG.]]></comment>
-	<position x="38" y="245.2"/>
+	<position x="48.5714" y="31.4286"/>
 	<column name="usua_id" not-null="true" default-value="nextval('usuario_usua_id_seq'::regclass)">
 		<type name="integer"/>
 		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
@@ -73,7 +73,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Tabela que armazena a contabilidade do guiche durante o turno.]]></comment>
-	<position x="453" y="28.2"/>
+	<position x="617" y="255.714"/>
 	<column name="tran_id" not-null="true" default-value="nextval('transacao_tran_id_seq'::regclass)">
 		<type name="integer"/>
 		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
@@ -112,7 +112,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Tabela que armazena os tipos de usuarios da catraca, ex. estudante, professor, visitante ...]]></comment>
-	<position x="794" y="730.2"/>
+	<position x="1193.71" y="385.714"/>
 	<column name="tipo_id" not-null="true" default-value="nextval('tipo_tipo_id_seq'::regclass)">
 		<type name="integer"/>
 		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
@@ -143,13 +143,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Tabela que armazena os registros de uso do cartao RFID.]]></comment>
-	<position x="993" y="380.2"/>
+	<position x="1148.86" y="115.714"/>
 	<column name="cart_id" not-null="true" default-value="nextval('cartao_cart_id_seq'::regclass)">
 		<type name="integer"/>
 		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
 	</column>
 	<column name="cart_numero">
-		<type name="integer"/>
+		<type name="bigint"/>
 		<comment><![CDATA[Numero ID do cartao Smart Card sem permissao de duplicidade.]]></comment>
 	</column>
 	<column name="cart_creditos">
@@ -166,7 +166,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</constraint>
 	<constraint name="uk_cart_numero" type="uq-constr" table="public.cartao">
 		<columns names="cart_numero" ref-type="src-columns"/>
-		<comment><![CDATA[Restricao de valor unico para o campo cart_numero da tabela cartao.]]></comment>
+		<comment><![CDATA[Restricao de duplicidades para o campo cart_numero.]]></comment>
 	</constraint>
 </table>
 
@@ -182,7 +182,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Tabela que armazena as informacoes de vinculo entre o usuario e o tipo de cartao.]]></comment>
-	<position x="501" y="267.2"/>
+	<position x="679.857" y="31.4286"/>
 	<column name="vinc_id" not-null="true" default-value="nextval('vinculo_vinc_id_seq'::regclass)">
 		<type name="integer"/>
 		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
@@ -232,7 +232,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Tabela que armazena as validades para isencao das refeicoes.]]></comment>
-	<position x="41" y="487.6"/>
+	<position x="1808.57" y="72.5428"/>
 	<column name="isen_id" not-null="true" default-value="nextval('isencao_isen_id_seq'::regclass)">
 		<type name="integer"/>
 		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
@@ -250,7 +250,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<comment><![CDATA[Campo para chave estrangeira da tabela cartao.]]></comment>
 	</column>
 	<constraint name="pk_isen_id" type="pk-constr" table="public.isencao">
-		<columns names="cart_id" ref-type="src-columns"/>
+		<columns names="isen_id" ref-type="src-columns"/>
 		<comment><![CDATA[Chave primaria da tabela isencao.]]></comment>
 	</constraint>
 </table>
@@ -267,7 +267,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Tabela que armazena o local fisico de funcionamento das catracas.]]></comment>
-	<position x="1360" y="391.6"/>
+	<position x="386.714" y="881.971"/>
 	<column name="unid_id" not-null="true" default-value="nextval('unidade_unid_id_seq'::regclass)">
 		<type name="integer"/>
 		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
@@ -294,7 +294,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Tabela que armazena as predefinicoes e configuracoes para o funcionamento da catraca.]]></comment>
-	<position x="1042" y="1081.6"/>
+	<position x="824.857" y="1087.4"/>
 	<column name="catr_id" not-null="true" default-value="nextval('catraca_catr_id_seq'::regclass)">
 		<type name="integer"/>
 		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
@@ -332,8 +332,8 @@ CAUTION: Do not modify this file unless you know what you are doing.
 <table name="giro">
 	<schema name="public"/>
 	<role name="postgres"/>
-	<comment><![CDATA[Tabela que armazena a contabilizacao de giros horario e anti-horario da catraca.]]></comment>
-	<position x="42" y="956.6"/>
+	<comment><![CDATA[Tabela que armazena a contabilizacao de giros da catraca.]]></comment>
+	<position x="1382.43" y="976.829"/>
 	<column name="giro_id" not-null="true" default-value="nextval('giro_giro_id_seq'::regclass)">
 		<type name="integer"/>
 		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
@@ -346,13 +346,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer"/>
 		<comment><![CDATA[Contador de giros no sentido anti-horario.]]></comment>
 	</column>
-	<column name="giro_tempo_realizado" default-value="0">
-		<type name="integer"/>
-		<comment><![CDATA[Tempo do giro realizado em segundos.]]></comment>
-	</column>
-	<column name="giro_data_giro" not-null="true" default-value="now()">
+	<column name="giro_data_giros" not-null="true" default-value="now()">
 		<type name="timestamp"/>
-		<comment><![CDATA[Registro de data e hora da ocorrencia do giro.]]></comment>
+		<comment><![CDATA[Registro de data e hora da ocorrencia dos giros.]]></comment>
 	</column>
 	<column name="catr_id" not-null="true">
 		<type name="integer"/>
@@ -376,7 +372,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Tabela que armazena as mensagens para exibicao em display LCD de 2 linhas de 16 caracteres.]]></comment>
-	<position x="40" y="1098.6"/>
+	<position x="1702.57" y="906.829"/>
 	<column name="mens_id" not-null="true" default-value="nextval('mensagem_mens_id_seq'::regclass)">
 		<type name="integer"/>
 		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
@@ -467,7 +463,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Tabela que armazena as infiomacoes do guiche que ira realizar as operacoes financeiras.]]></comment>
-	<position x="889" y="31"/>
+	<position x="357.143" y="469.371"/>
 	<column name="guic_id" not-null="true" default-value="nextval('guiche_guic_id_seq'::regclass)">
 		<type name="integer"/>
 		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
@@ -510,7 +506,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Tabela que armazena os registros dos fluxos de caixa.]]></comment>
-	<position x="1313" y="20"/>
+	<position x="816" y="415.657"/>
 	<column name="flux_id" not-null="true" default-value="nextval('fluxo_flux_id_seq'::regclass)">
 		<type name="integer"/>
 		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
@@ -549,7 +545,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Tabela que armazena os horarios de inicio e fim de funcionamento dos turnos.]]></comment>
-	<position x="41" y="833"/>
+	<position x="1236.29" y="555.086"/>
 	<column name="turn_id" not-null="true" default-value="nextval('turno_turn_id_seq'::regclass)">
 		<type name="integer"/>
 		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
@@ -561,6 +557,10 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<column name="turn_hora_fim">
 		<type name="time"/>
 		<comment><![CDATA[Hora final do periodo para liberacao da catraca.]]></comment>
+	</column>
+	<column name="turn_descricao">
+		<type name="character varying" length="25"/>
+		<comment><![CDATA[Descricao da refeicao disponibilizada durante o turno. Ex.: Cafe, Almoco, Janta.]]></comment>
 	</column>
 	<constraint name="pk_turn_id" type="pk-constr" table="public.turno">
 		<columns names="turn_id" ref-type="src-columns"/>
@@ -580,9 +580,9 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Tabela que armazena os registros de uso do cartao na catraca.]]></comment>
-	<position x="340" y="620"/>
+	<position x="1786.57" y="486.514"/>
 	<column name="regi_id" not-null="true" default-value="nextval('registro_regi_id_seq'::regclass)">
-		<type name="integer"/>
+		<type name="bigint"/>
 	</column>
 	<column name="regi_data">
 		<type name="timestamp"/>
@@ -604,9 +604,12 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<type name="integer"/>
 		<comment><![CDATA[Campo para chave estrangeira da tabela turno.]]></comment>
 	</column>
+	<column name="catr_id" not-null="true">
+		<type name="integer"/>
+		<comment><![CDATA[Campo para chave estrangeira da tabela catraca.]]></comment>
+	</column>
 	<constraint name="pk_regi" type="pk-constr" table="public.registro">
 		<columns names="regi_id" ref-type="src-columns"/>
-		<comment><![CDATA[Chave primaria da tabela registro.]]></comment>
 	</constraint>
 </table>
 
@@ -622,7 +625,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Tabela que armazena o local fisico de funcionamento das catracas para o turno.]]></comment>
-	<position x="883" y="913"/>
+	<position x="885.571" y="673.657"/>
 	<column name="untu_id" not-null="true" default-value="nextval('unidade_turno_untu_id_seq'::regclass)">
 		<type name="integer"/>
 		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
@@ -653,7 +656,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Tabela que armazena os registros de custo do cartao.]]></comment>
-	<position x="41" y="144.4"/>
+	<position x="51.4286" y="1112.2"/>
 	<column name="cuca_id" not-null="true" default-value="nextval('custo_cartao_cuca_id_seq'::regclass)">
 		<type name="integer"/>
 		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
@@ -684,7 +687,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	<schema name="public"/>
 	<role name="postgres"/>
 	<comment><![CDATA[Tabela que armazena os registros de custo da refeicao.]]></comment>
-	<position x="42" y="36.2"/>
+	<position x="384.857" y="1113.63"/>
 	<column name="cure_id" not-null="true" default-value="nextval('custo_refeicao_cure_id_seq'::regclass)">
 		<type name="integer"/>
 		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
@@ -695,7 +698,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	</column>
 	<column name="cure_data">
 		<type name="timestamp"/>
-		<comment><![CDATA[Data de cadastro do custo.]]></comment>
+		<comment><![CDATA[Data e hora de cadastro do custo.]]></comment>
 	</column>
 	<constraint name="pk_cure_id" type="pk-constr" table="public.custo_refeicao">
 		<columns names="cure_id" ref-type="src-columns"/>
@@ -714,7 +717,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.tipo" table="public.cartao">
 	<columns names="tipo_id" ref-type="src-columns"/>
 	<columns names="tipo_id" ref-type="dst-columns"/>
-		<comment><![CDATA[Chave estrangeira da tabela cartao.]]></comment>
+		<comment><![CDATA[Chave estrangeira da tabelatipo.]]></comment>
 </constraint>
 
 <constraint name="fk_cart_id" type="fk-constr" comparison-type="MATCH SIMPLE"
@@ -735,7 +738,7 @@ CAUTION: Do not modify this file unless you know what you are doing.
 	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.cartao" table="public.isencao">
 	<columns names="cart_id" ref-type="src-columns"/>
 	<columns names="cart_id" ref-type="dst-columns"/>
-		<comment><![CDATA[Chave estrangeira da tabela cartao.]]></comment>
+		<comment><![CDATA[Chave estrangeira da tabela cartao. ]]></comment>
 </constraint>
 
 <constraint name="fk_unid_id" type="fk-constr" comparison-type="MATCH SIMPLE"
@@ -794,6 +797,13 @@ CAUTION: Do not modify this file unless you know what you are doing.
 		<comment><![CDATA[Chave estrangeira da tabela turno.]]></comment>
 </constraint>
 
+<constraint name="fk_catr_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.catraca" table="public.registro">
+	<columns names="catr_id" ref-type="src-columns"/>
+	<columns names="catr_id" ref-type="dst-columns"/>
+		<comment><![CDATA[Chave estrangeira da tabela catraca.]]></comment>
+</constraint>
+
 <constraint name="fk_turn_id" type="fk-constr" comparison-type="MATCH SIMPLE"
 	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.turno" table="public.unidade_turno">
 	<columns names="turn_id" ref-type="src-columns"/>
@@ -809,88 +819,97 @@ CAUTION: Do not modify this file unless you know what you are doing.
 </constraint>
 
 <relationship name="rel_transacao_usuario" type="relfk"
+	 custom-color="#83af1f"
 	 src-table="public.transacao"
 	 dst-table="public.usuario"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_cartao_tipo" type="relfk"
+	 custom-color="#5aa578"
 	 src-table="public.cartao"
 	 dst-table="public.tipo"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_vinculo_cartao" type="relfk"
+	 custom-color="#4b3e56"
 	 src-table="public.vinculo"
 	 dst-table="public.cartao"
-	 src-required="false" dst-required="false">
-	<label ref-type="name-label">
-		<position x="9.12573" y="-41.4485"/>
-	</label>
-</relationship>
+	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_vinculo_usuario" type="relfk"
+	 custom-color="#9ac721"
 	 src-table="public.vinculo"
 	 dst-table="public.usuario"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_isencao_cartao" type="relfk"
+	 custom-color="#249b49"
 	 src-table="public.isencao"
 	 dst-table="public.cartao"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_catraca_unidade" type="relfk"
+	 custom-color="#942665"
 	 src-table="public.catraca"
 	 dst-table="public.unidade"
-	 src-required="false" dst-required="false">
-	<label ref-type="name-label">
-		<position x="8.97574" y="-53.8485"/>
-	</label>
-</relationship>
+	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_giro_catraca" type="relfk"
+	 custom-color="#abb258"
 	 src-table="public.giro"
 	 dst-table="public.catraca"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_mensagem_catraca" type="relfk"
+	 custom-color="#94e1e5"
 	 src-table="public.mensagem"
 	 dst-table="public.catraca"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_guiche_unidade" type="relfk"
+	 custom-color="#a239f5"
 	 src-table="public.guiche"
 	 dst-table="public.unidade"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_guiche_usuario" type="relfk"
+	 custom-color="#4e132e"
 	 src-table="public.guiche"
 	 dst-table="public.usuario"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_fluxo_guiche" type="relfk"
+	 custom-color="#081cb1"
 	 src-table="public.fluxo"
 	 dst-table="public.guiche"
-	 src-required="false" dst-required="false">
-	<label ref-type="src-label">
-		<position x="3.64001" y="-0.199997"/>
-	</label>
-</relationship>
+	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_registro_cartao" type="relfk"
+	 custom-color="#87ec86"
 	 src-table="public.registro"
 	 dst-table="public.cartao"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_registro_turno" type="relfk"
+	 custom-color="#63e1f3"
 	 src-table="public.registro"
 	 dst-table="public.turno"
 	 src-required="false" dst-required="false"/>
 
+<relationship name="rel_registro_catraca" type="relfk"
+	 custom-color="#e41bea"
+	 src-table="public.registro"
+	 dst-table="public.catraca"
+	 src-required="false" dst-required="false"/>
+
 <relationship name="rel_unidade_turno_turno" type="relfk"
+	 custom-color="#36beed"
 	 src-table="public.unidade_turno"
 	 dst-table="public.turno"
 	 src-required="false" dst-required="false"/>
 
 <relationship name="rel_unidade_turno_unidade" type="relfk"
+	 custom-color="#871fa4"
 	 src-table="public.unidade_turno"
 	 dst-table="public.unidade"
 	 src-required="false" dst-required="false"/>

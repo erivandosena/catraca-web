@@ -1,27 +1,25 @@
 #!/usr/bin/env python
-# -*- coding: latin-1 -*-
+# -*- coding: utf-8 -*-
 
 
 __author__ = "Erivando Sena"
-__copyright__ = "Copyright 2015, Unilab"
+__copyright__ = "(C) Copyright 2015, Unilab"
 __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production
 
 
 class Catraca(object):
-
+    
     def __init__(self):
-        super(Catraca, self).__init__()
         self.__catr_id = None
         self.__catr_ip = None
-        self.__catr_localizacao = None
         self.__catr_tempo_giro = None
         self.__catr_operacao = None
+        self.__unidade = None
         self.__giros = []
-        self.__turnos = []
         self.__mensagens = []
-        
-
+        self.__registros = []
+    
     @property
     def id(self):
         return self.__catr_id
@@ -29,7 +27,7 @@ class Catraca(object):
     @id.setter
     def id(self, valor):
         self.__catr_id = valor
-        
+    
     @property
     def ip(self):
         return self.__catr_ip
@@ -37,15 +35,7 @@ class Catraca(object):
     @ip.setter
     def ip(self, valor):
         self.__catr_ip = valor
- 
-    @property
-    def localizacao(self):
-        return self.__catr_localizacao
     
-    @localizacao.setter
-    def localizacao(self, valor):
-        self.__catr_localizacao = valor
- 
     @property
     def tempo(self):
         return self.__catr_tempo_giro
@@ -53,7 +43,7 @@ class Catraca(object):
     @tempo.setter
     def tempo(self, valor):
         self.__catr_tempo_giro = valor
- 
+    
     @property
     def operacao(self):
         return self.__catr_operacao
@@ -61,7 +51,15 @@ class Catraca(object):
     @operacao.setter
     def operacao(self, valor):
         self.__catr_operacao = valor
- 
+    
+    @property
+    def unidade(self):
+        return self.__unidade
+    
+    @unidade.setter
+    def unidade(self, obj):
+        self.__unidade = obj
+    
     @property
     def giros(self):
         return self.__giros
@@ -69,15 +67,7 @@ class Catraca(object):
     @giros.setter
     def giros(self, list):
         self.__giros = list
-        
-    @property
-    def turnos(self):
-        return self.__turnos
     
-    @turnos.setter
-    def turnos(self, list):
-        self.__turnos = list
-        
     @property
     def mensagens(self):
         return self.__mensagens
@@ -85,4 +75,12 @@ class Catraca(object):
     @mensagens.setter
     def mensagens(self, list):
         self.__mensagens = list
+    
+    @property
+    def registros(self):
+        return self.__registros
+     
+    @registros.setter
+    def registros(self, list):
+        self.__registros = list
         

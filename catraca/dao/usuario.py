@@ -1,25 +1,24 @@
 #!/usr/bin/env python
-# -*- coding: latin-1 -*-
+# -*- coding: utf-8 -*-
 
 
 __author__ = "Erivando Sena"
-__copyright__ = "Copyright 2015, Unilab"
+__copyright__ = "(C) Copyright 2015, Unilab"
 __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production
 
 
 class Usuario(object):
-
+    
     def __init__(self):
-        super(Usuario, self).__init__()
         self.__usua_id = None
         self.__usua_nome = None
         self.__usua_email = None
         self.__usua_login = None
         self.__usua_senha = None
         self.__usua_nivel = None
-
-
+        self.__id_base_externa = None
+    
     @property
     def id(self):
         return self.__usua_id
@@ -51,8 +50,7 @@ class Usuario(object):
     @login.setter
     def login(self, valor):
         self.__usua_login = valor
-        
-        
+    
     @property
     def senha(self):
         return self.__usua_senha
@@ -69,4 +67,11 @@ class Usuario(object):
     def nivel(self, valor):
         self.__usua_nivel = valor
         
+    @property
+    def id_externo(self):
+        return self.__id_base_externa
+    
+    @id_externo.setter
+    def id_externo(self, valor):
+        self.__id_base_externa = valor
         

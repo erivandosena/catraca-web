@@ -1,17 +1,16 @@
 #!/usr/bin/env python
-# -*- coding: latin-1 -*-
+# -*- coding: utf-8 -*-
 
 
 __author__ = "Erivando Sena"
-__copyright__ = "Copyright 2015, Unilab"
+__copyright__ = "(C) Copyright 2015, Unilab"
 __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production
 
 
 class Mensagem(object):
-
+    
     def __init__(self):
-        super(Mensagem, self).__init__()
         self.__mens_id = None
         self.__mens_inicializacao = None
         self.__mens_saldacao = None
@@ -30,7 +29,7 @@ class Mensagem(object):
         self.__mens_institucional3 = None
         self.__mens_institucional4 = None
         self.__catraca = None
-
+    
     @property
     def id(self):
         return self.__mens_id
@@ -103,8 +102,7 @@ class Mensagem(object):
     @msg_semcadastro.setter
     def msg_semcadastro(self, valor):
         self.__mens_semcadastro = valor
-        
-        
+
     @property
     def msg_cartaoinvalido(self):
         return self.__mens_cartaoinvalido

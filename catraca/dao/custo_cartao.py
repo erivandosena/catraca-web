@@ -8,34 +8,34 @@ __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production
 
 
-class Tipo(object):
+class CustoCartao(object):
     
     def __init__(self):
-        self.__tipo_id = None
-        self.__tipo_nome = None
-        self.__tipo_valor = None
+        self.__cuca_id = None
+        self.__cuca_valor = None
+        self.__cuca_data = None
     
     @property
     def id(self):
-        return self.__tipo_id
+        return self.__cuca_id
     
     @id.setter
     def id(self, valor):
-        self.__tipo_id = valor
-    
-    @property
-    def nome(self):
-        return self.__tipo_nome
-    
-    @nome.setter
-    def nome(self, valor):
-        self.__tipo_nome = valor
+        self.__cuca_id = valor
     
     @property
     def valor(self):
-        return self.__tipo_valor
+        return self.__cuca_valor
     
     @valor.setter
     def valor(self, valor):
-        self.__tipo_valor = valor
+        self.__cuca_valor = valor
+    
+    @property
+    def data(self):
+        return self.__cuca_data
+    
+    @data.setter
+    def data(self, valor):
+        self.__cuca_data = valor
         

@@ -1,23 +1,21 @@
 #!/usr/bin/env python
-# -*- coding: latin-1 -*-
+# -*- coding: utf-8 -*-
 
 
 __author__ = "Erivando Sena"
-__copyright__ = "Copyright 2015, Unilab"
+__copyright__ = "(C) Copyright 2015, Unilab"
 __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production
 
 
 class Cartao(object):
-
+    
     def __init__(self):
-        super(Cartao, self).__init__()
         self.__cart_id = None
         self.__cart_numero = None
-        self.__cart_qtd_creditos = None
-        self.__cart_data = None
-        self.__perfil = None
-        
+        self.__cart_creditos = None
+        self.__tipo = None
+    
     @property
     def id(self):
         return self.__cart_id
@@ -25,7 +23,7 @@ class Cartao(object):
     @id.setter
     def id(self, valor):
         self.__cart_id = valor
- 
+    
     @property
     def numero(self):
         return self.__cart_numero
@@ -36,26 +34,17 @@ class Cartao(object):
     
     @property
     def creditos(self):
-        return self.__cart_qtd_creditos
- 
+        return self.__cart_creditos
+    
     @creditos.setter
     def creditos(self, valor):
-        self.__cart_qtd_creditos = valor
-        
+        self.__cart_creditos = valor
+    
     @property
-    def data(self):
-        return self.__cart_data
- 
-    @data.setter
-    def data(self, valor):
-        self.__cart_data = valor
-        
-        
-    @property
-    def perfil(self):
-        return self.__perfil
-
-    @perfil.setter
-    def perfil(self, obj):
-        self.__perfil = obj
+    def tipo(self):
+        return self.__tipo
+    
+    @tipo.setter
+    def tipo(self, obj):
+        self.__tipo = obj
         

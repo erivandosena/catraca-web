@@ -1,24 +1,22 @@
 #!/usr/bin/env python
-# -*- coding: latin-1 -*-
+# -*- coding: utf-8 -*-
 
 
 __author__ = "Erivando Sena"
-__copyright__ = "Copyright 2015, Unilab"
+__copyright__ = "(C) Copyright 2015, Unilab"
 __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production
 
 
 class Giro(object):
-
+    
     def __init__(self):
-        super(Giro, self).__init__()
         self.__giro_id = None
-        self.__giro_giros_horario = 0
-        self.__giro_giros_antihorario = 0
-        self.__giro_tempo_realizado = 0
-        self.__giro_data_giro = None
+        self.__giro_giros_horario = None
+        self.__giro_giros_antihorario = None
+        self.__giro_data_giros = None
         self.__catraca = None
-
+    
     @property
     def id(self):
         return self.__giro_id
@@ -26,7 +24,7 @@ class Giro(object):
     @id.setter
     def id(self, valor):
         self.__giro_id = valor
-    
+
     @property
     def horario(self):
         return self.__giro_giros_horario
@@ -34,7 +32,7 @@ class Giro(object):
     @horario.setter
     def horario(self, valor):
         self.__giro_giros_horario = valor
-    
+        
     @property
     def antihorario(self):
         return self.__giro_giros_antihorario
@@ -44,25 +42,17 @@ class Giro(object):
         self.__giro_giros_antihorario = valor
         
     @property
-    def tempo(self):
-        return self.__giro_tempo_realizado
+    def giros(self):
+        return self.__giro_data_giros
     
-    @tempo.setter
-    def tempo(self, valor):
-        self.__giro_tempo_realizado = valor
-    
-    @property
-    def data(self):
-        return self.__giro_data_giro
-    
-    @data.setter
-    def data(self, valor):
-        self.__giro_data_giro = valor
+    @giros.setter
+    def giros(self, valor):
+        self.__giro_data_giros = valor
         
     @property
     def catraca(self):
         return self.__catraca
-    
+
     @catraca.setter
     def catraca(self, obj):
         self.__catraca = obj
