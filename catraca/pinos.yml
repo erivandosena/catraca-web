@@ -134,10 +134,10 @@
 
 21: 
     gpio: 21
-    nome: GpioPuro
-    modo: IN
+    nome: BUZZER_PWM
+    modo: OUT
     estado: LOW
-    resistor: PUD_UP
+    #resistor: PUD_UP
 
 22: 
     gpio: 22

@@ -339,6 +339,8 @@ def main():
                     if tempo_decorrido == tempo/1000:
                         finaliza_giro = False
                         return finaliza_giro
+                    else:
+                        finaliza_giro = True
                     if ler_sensor(2) == 1 and ler_sensor(1) == 0:
                         codigo_giro = str(ler_sensor(2)) + '' + str(ler_sensor(1))
                         print 'Girou a catraca no sentido antihorario, codigo sensores: '+ str(codigo_giro)

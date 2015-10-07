@@ -3,11 +3,12 @@
 
 
 import os
+from time import sleep
 from logs import Logs
 from dispositivos.aviso import Aviso
 from dispositivos.acesso import Acesso
-from dispositivos.mensagem import Mensagem
-from dispositivos.mensagemcondicao import MensagemCondicao
+#from dispositivos.mensagem import Mensagem
+from dispositivos.alerta import Alerta
 
 
 __author__ = "Erivando Sena"
@@ -37,51 +38,10 @@ class Painel(object):
     def thread(self):
         #os.system("echo 'Sistema da Catraca iniciado!' | mail -s 'Raspberry Pi B' erivandoramos@bol.com.br")
         try:
-            #threads = []
-            
             acesso = Acesso()
-            #mensagem = Mensagem()
-            #mcondicao = MensagemCondicao()
-  
-            
-            
-            #acesso = ThreadCatraca(1, "Acesso", 1)
-            #mensagem = ThreadCatraca(2, "Mensagem", 2)
-
             acesso.start()
- 
-            #telegram.start()
-            #mensagem.start() # Chama o método run ()
-                
-            #mensagem.start()
-            
-            #threads.append(acesso)
-            #threads.append(mensagem)
-
-            
-#             for t in threads:
-#                 print t
-#                 t.join()
-#                 print t
-#                 #mensagem.join()
-#                 
-#                 
-#             print "Saindo da Thread principal"
-
-
-#             while mcondicao.condition:
-#                 mensagem.reinicia()
-#                 # depois de alguma operação
-#                 
-#                # print 'depois de alguma operação'
-#                 
-#                 mensagem.pausa()
-#                 # alguma outra operação
-#                 
-#                # print 'alguma outra operação'
-#             
-#             
-#             print('mensagem.iterations == {}'.format(mensagem.iterations))  # mostrar conversa executado
+            sleep(10)
+            alerta = Alerta()
             # http://stackoverflow.com/questions/15729498/how-to-start-and-stop-thread
  
         except (SystemExit, KeyboardInterrupt):
