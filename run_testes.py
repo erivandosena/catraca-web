@@ -1,7 +1,6 @@
 #!/usr/bin/env python
-# -*- coding: iso-8859-1 -*-
+# -*- coding: utf-8 -*-
 
-#from testes.testehorarios import TesteHorarios
 from testes import tipo_teste
 from testes import perfil_teste
 from testes import cartao_teste
@@ -11,16 +10,12 @@ from testes import giro_teste
 from testes import turno_teste
 from testes import mensagem_teste
 from testes import finalidade_teste
-#from catraca.restful.servidor import app
 from testes import requests_teste
 from testes import controlegiro_teste
 from testes import buzzer_teste
 
 
 __author__ = "Erivando Sena" 
-__copyright__ = "Copyright 2015, Universidade da Integracao Internacional da Lusofonia Afro-Brasileira"
-__email__ = "erivandoramos@unilab.edu.br"
-__status__ = "Prototype" # Prototype | Development | Production
 
 
 if __name__ == '__main__':
@@ -36,7 +31,7 @@ if __name__ == '__main__':
     #finalidade_teste.main()
     #registro_teste.main()
     #requests_teste.main()
-    buzzer_teste.main()
+    #buzzer_teste.main()
     #controlegiro_teste.main()
     #app.run(host='10.5.2.253', port=27289, debug=True)
     #app.run(host='192.168.1.253', port=27289, debug=True)

@@ -10,23 +10,11 @@ import calendar
 import datetime
 from time import sleep
 from catraca.logs import Logs
-from catraca.pinos import PinoControle
-# from catraca.dispositivos.aviso import Aviso
-# from catraca.dispositivos.pictograma import Pictograma
-# from catraca.dispositivos.sensoroptico import SensorOptico
-# from catraca.dispositivos.solenoide import Solenoide
-# from catraca.dao.cartaodao import CartaoDAO
-# from catraca.dao.catracadao import CatracaDAO
-# from catraca.dao.turnodao import TurnoDAO
-# from catraca.dao.girodao import GiroDAO
-# from catraca.dao.registrodao import RegistroDAO
-# from catraca.dao.cartao import Cartao
-# from catraca.dao.registro import Registro
-# from catraca.dao.giro import Giro
+from catraca.controle.raspberrypi.pinos import PinoControle
 
 
 __author__ = "Erivando Sena" 
-__copyright__ = "Copyright 2015, Unilab" 
+__copyright__ = "(C) Copyright 2015, Unilab" 
 __email__ = "erivandoramos@unilab.edu.br" 
 __status__ = "Prototype" # Prototype | Development | Production 
 
