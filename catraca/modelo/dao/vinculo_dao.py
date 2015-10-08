@@ -101,11 +101,11 @@ class VinculoDAO(ConexaoGenerica):
                       "cart_id, "\
                       "usua_id) VALUES (" +\
                       str(obj.id) + ", " +\
-                      str(obj.avulso) + ", " +\
-                      str(obj.inicio) + ", " +\
-                      str(obj.fim) + ", '" +\
-                      str(obj.descricao) + "', '" +\
-                      str(obj.refeicoes) + "', " +\
+                      str(obj.avulso) + ", '" +\
+                      str(obj.inicio) + "', '" +\
+                      str(obj.fim) + "', '" +\
+                      str(obj.descricao) + "', " +\
+                      str(obj.refeicoes) + ", " +\
                       str(obj.cartao) + ", " +\
                       str(obj.usuario) + ")"
                 self.aviso = "Inserido com sucesso!"

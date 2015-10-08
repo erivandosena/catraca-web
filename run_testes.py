@@ -22,12 +22,12 @@ __author__ = "Erivando Sena"
 if __name__ == '__main__':
     
     
-    #requests_teste.main()
+    requests_teste.main()
     
     #usuario_teste.main()
     #tipo_teste.main()
     #perfil_teste.main()
-    cartao_teste.main()
+    #cartao_teste.main()
     #giro_teste.main()
     #turno_teste.main()
     #mensagem_teste.main()

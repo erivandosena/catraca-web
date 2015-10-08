@@ -13,8 +13,8 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 class ServidorRestful(object):
     
-    #URL = 'http://200.129.19.65:27289/api/'
-    URL = 'http://10.5.0.15:27289/api/'
+    URL = 'http://200.129.19.65:27289/api/'
+    #URL = 'http://10.5.0.15:27289/api/'
     timeout_conexao = 0.2 #0.0009
 
     def __init__(self):
@@ -42,6 +42,9 @@ class ServidorRestful(object):
         try:
             response = requests.get(url=self.URL, timeout=(self.timeout_conexao, 10.0))
         except requests.exceptions.ConnectTimeout as excecao:
+            print "rede off"
+            return None
+        except Exception as excecao:
             print "rede off"
             return None
         else:

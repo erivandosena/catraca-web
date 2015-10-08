@@ -3,13 +3,17 @@
 
 
 import os
+import sys
+import pwd
 import time
 import socket
 import locale
 import calendar
 import datetime
+import subprocess
 from time import sleep
 from catraca.logs import Logs
+from catraca.visao.interface.aviso import Aviso
 from catraca.controle.raspberrypi.pinos import PinoControle
 
 
@@ -24,10 +28,11 @@ class Util(object):
     locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
     
     log = Logs()
+    aviso = Aviso()
     rpi = PinoControle()
     pino_buzzer = rpi.ler(21)['gpio']
     cronometro = 0
-
+    
     def __init__(self):
         super(Util, self).__init__()
         
@@ -36,6 +41,15 @@ class Util(object):
         s.connect(('unilab.edu.br', 0))
         ip = '%s' % ( s.getsockname()[0] )
         return ip
+    
+    def obtem_nome_rpi(self):
+        return socket.gethostname()
+    
+    def obtem_nome_root_rpi(self):
+        return pwd.getpwuid(os.getuid())[0]
+    
+    def obtem_path(self, arquivo):
+        return "%s" % (os.path.join(os.path.dirname(os.path.abspath(__file__)), arquivo))
         
     def buzzer(self, frequencia, intensidade):
         period = 1.0 / frequencia
@@ -74,6 +88,9 @@ class Util(object):
     def obtem_datahora(self):
         return datetime.datetime.now()
     
+    def obtem_datahora_display(self):
+        return datetime.datetime.now().strftime('%d/%B/%Y\n    %H:%M:%S')
+    
     def obtem_datahora_postgresql(self):
         return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
      
@@ -96,4 +113,14 @@ class Util(object):
                     pass
                 weekday_count += 1
         return dia_util
+    
+    def reinicia_raspberrypi(self):
+        self.aviso.exibir_reinicia_catraca()
+        terminal = 'sudo reboot'
+        subprocess.call(terminal.split())
+        
+    def desliga_raspberrypi(self):
+        self.aviso.exibir_desliga_catraca()
+        terminal = 'sudo shutdown -h now'
+        subprocess.call(terminal.split())
         

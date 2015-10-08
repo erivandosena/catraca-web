@@ -28,7 +28,7 @@ class CustoRefeicaoDAO(ConexaoGenerica):
         if id:
             sql = "SELECT cure_id, cure_valor, cure_data FROM custo_refeicao WHERE cure_id = " + str(id)
         elif id is None:
-            sql = "SELECT cure_id, cure_valor, cure_data FROM custo_refeicao ORDER BY cure_id"
+            sql = "SELECT cure_id, cure_valor, cure_data FROM custo_refeicao ORDER BY cure_id DESC LIMIT 1"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -61,8 +61,8 @@ class CustoRefeicaoDAO(ConexaoGenerica):
                     "cure_valor, "\
                     "cure_data) VALUES (" +\
                     str(obj.id) + ", " +\
-                    str(obj.valor) + ", " +\
-                    str(obj.data) + ")"
+                    str(obj.valor) + ", '" +\
+                    str(obj.data) + "')"
                 self.aviso = "Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)

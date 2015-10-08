@@ -8,7 +8,6 @@ from time import sleep
 from threading import Thread
 from catraca.logs import Logs
 from catraca.util import Util
-from catraca.controle.dispositivos.leitorcartao import LeitorCartao
 from catraca.controle.dispositivos.solenoide import Solenoide
 from catraca.controle.dispositivos.sensoroptico import SensorOptico
 
@@ -24,7 +23,6 @@ class Alerta(Thread):
     util = Util()
     solenoide = Solenoide()
     sensor_optico = SensorOptico()
-    leitor = LeitorCartao()
  
     def __init__(self, intervalo=1):
         super(Alerta, self).__init__()
@@ -33,10 +31,11 @@ class Alerta(Thread):
         self.intervalo = intervalo
         thread = Thread(target=self.run, args=())
         thread.daemon = True # Daemonize thread
-        thread.start()
+        #thread.start()
+        print "%s Rodando... " % self.name
 
     def run(self):
-        print "%s Rodando... " % self.name
+        #print "%s Rodando... " % self.name
         while True:
             self.verifica_giro_irregular()
             sleep(self.intervalo)

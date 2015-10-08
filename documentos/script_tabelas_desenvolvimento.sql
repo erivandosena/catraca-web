@@ -2,7 +2,7 @@
 -- Autor_script : Erivando Sena
 -- Copyright    : Unilab
 -- Data_criacao : 16/10/2015
--- Data_revisao : 03/11/2015
+-- Data_revisao : 04/11/2015
 -- Status       : Desenvolvimento
 ---------------------------------
 
@@ -30,7 +30,7 @@ COMMENT ON COLUMN usuario.usua_login IS 'Nome de usuario no SIG.';
 COMMENT ON COLUMN usuario.usua_senha IS 'Senha cadastrada no SIG.';
 COMMENT ON COLUMN usuario.usua_nivel IS 'Status atual do usuario no SIG.';
 COMMENT ON COLUMN usuario.id_base_externa IS 'Campo da chave primaria (uid) no sistema SIG.';
-COMMENT ON CONSTRAINT pk_usua ON usuario IS 'Chave primaria da tabela usuario.';
+COMMENT ON CONSTRAINT pk_usua_id ON usuario IS 'Chave primaria da tabela usuario.';
 
 -- Table: transacao
 CREATE TABLE transacao
@@ -116,6 +116,7 @@ COMMENT ON COLUMN vinculo.cart_id IS 'Campo para chave estrangeira da tabela car
 COMMENT ON COLUMN vinculo.usua_id IS 'Campo para chave estrangeira da tabela usuario.(Usuario responsavel por realizar a operacao de vinculo).';
 COMMENT ON CONSTRAINT fk_cart_id ON vinculo IS 'Chave estrangeira da tabela cartao.';
 COMMENT ON CONSTRAINT fk_usua_id ON vinculo IS 'Chave estrangeira da tabela usuario.';
+COMMENT ON CONSTRAINT pk_vinc_id ON vinculo IS 'Chave primaria da tabela vinculo.';
 
 -- Table: isencao
 CREATE TABLE isencao
@@ -330,7 +331,7 @@ CREATE TABLE registro
   cart_id integer NOT NULL, -- Campo para chave estrangeira da tabela cartao.
   turn_id integer NOT NULL, -- Campo para chave estrangeira da tabela turno.
   catr_id integer NOT NULL, -- Campo para chave estrangeira da tabela catraca.
-  CONSTRAINT pk_regi PRIMARY KEY (regi_id),
+  CONSTRAINT pk_regi_id PRIMARY KEY (regi_id),
   CONSTRAINT fk_cart_id FOREIGN KEY (cart_id) REFERENCES cartao (cart_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, -- Chave estrangeira da tabela cartao.
   CONSTRAINT fk_catr_id FOREIGN KEY (catr_id) REFERENCES catraca (catr_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, -- Chave estrangeira da tabela catraca.
   CONSTRAINT fk_turn_id FOREIGN KEY (turn_id) REFERENCES turno (turn_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION -- Chave estrangeira da tabela turno.
@@ -346,6 +347,7 @@ COMMENT ON COLUMN registro.catr_id IS 'Campo para chave estrangeira da tabela ca
 COMMENT ON CONSTRAINT fk_cart_id ON registro IS 'Chave estrangeira da tabela cartao.';
 COMMENT ON CONSTRAINT fk_catr_id ON registro IS 'Chave estrangeira da tabela catraca.';
 COMMENT ON CONSTRAINT fk_turn_id ON registro IS 'Chave estrangeira da tabela turno.';
+COMMENT ON CONSTRAINT pk_regi_id ON registro IS 'Chave primaria da tabela registro.';
 
 -- Table: unidade_turno
 CREATE TABLE unidade_turno

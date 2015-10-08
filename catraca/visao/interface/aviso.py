@@ -57,9 +57,10 @@ class Aviso(object):
     def exibir_local(self):
         self.display.mensagem('      RU\n   Liberdade',4,False,False)
 
-    def exibir_datahora(self):
-        data_hora = datetime.now().strftime('%d/%B/%Y\n    %H:%M:%S')
-        self.display.mensagem(data_hora,3,False,False)
+    def exibir_datahora(self, data_hora, tempo):
+        #data_hora = datetime.now().strftime('%d/%B/%Y\n     %H:%M:%S')
+        #self.display.limpa_lcd()
+        self.display.mensagem(data_hora, tempo, False, False)
 
     def exibir_ip(self):
         self.display.mensagem('       IP\n   '+ip,5,False,False)
@@ -120,4 +121,14 @@ class Aviso(object):
         
     def exibir_agradecimento(self):
         self.display.mensagem('   OBRIGADO\n   BOM APETITE!',0,False,False)
+        
+    def exibir_catraca_nao_cadastrada(self):
+        self.display.mensagem("    CATRACA\n NAO CADASTRADA!",1,False,False)
+
+    def exibir_reinicia_catraca(self):
+        self.display.mensagem(" REINICIANDO...\n    CATRACA",4,True,False)
+        
+    def exibir_desliga_catraca(self):
+        self.display.mensagem(" DESLIGANDO...\n    CATRACA",4,True,False)
+        
         

@@ -97,7 +97,7 @@ class RegistroDAO(ConexaoGenerica):
         finally:
             pass
         
-    def busca_utilizacao(self, data_ini, data_fim, id_cartao, limite):
+    def busca_utilizacao(self, data_ini, data_fim, id_cartao):
         sql = "SELECT count(regi_id) FROM registro " +\
             "WHERE (regi_data BETWEEN '"+ str(data_ini) +"' AND '"+ str(data_fim) +"') AND " +\
             "(cart_id = "+str(id_cartao)+")" #+\
@@ -182,50 +182,51 @@ class RegistroDAO(ConexaoGenerica):
         finally:
             pass
         
-#     def mantem(self, obj, delete):
-#         try:
-#             if obj is not None:
-#                 if delete:
-#                     sql = "DELETE FROM registro WHERE regi_id = " + str(obj.id)
-#                     self.aviso = "Excluido com sucesso!"
-#                 else:
-#                     if obj.id:
-#                         sql = "UPDATE registro SET " +\
-#                               "regi_data = '" + str(obj.data) + "', " +\
-#                               "regi_valor_pago = " + str(obj.pago) + ", " +\
-#                               "regi_valor_custo = " + str(obj.custo) + ", " +\
-#                               "cart_id = " + str(obj.cartao) + ", " +\
-#                               "turn_id = " + str(obj.turno) + ", " +\
-#                               "catr_id = " + str(obj.catraca) +\
-#                               " WHERE "\
-#                               "regi_id = " + str(obj.id)
-#                         self.aviso = "Alterado com sucesso!"
-#                     else:
-#                         sql = "INSERT INTO registro("\
-#                               "regi_data, "\
-#                               "regi_valor_pago, "\
-#                               "regi_valor_custo, "\
-#                               "cart_id, "\
-#                               "turn_id, "\
-#                               "catr_id) VALUES ('" +\
-#                               str(obj.data) + "', " +\
-#                               str(obj.pago) + ", " +\
-#                               str(obj.custo) + ", " +\
-#                               str(obj.cartao) + ", " +\
-#                               str(obj.turno) + ", " +\
-#                               str(obj.catraca) + ")"
-#                         self.aviso = "Inserido com sucesso!"
-#                 with closing(self.abre_conexao().cursor()) as cursor:
-#                     cursor.execute(sql)
-#                     self.commit()
-#                     return True
-#             else:
-#                 self.aviso = "Objeto inexistente!"
-#                 return False
-#         except Exception, e:
-#             self.aviso = str(e)
-#             self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela registro.', exc_info=True)
-#             return False
-#         finally:
-#             pass
+    def mantem_registro_off(self, obj, delete):
+        try:
+            if obj is not None:
+                if delete:
+                    sql = "DELETE FROM registro_off WHERE reof_id = " + str(obj.id)
+                    self.aviso = "Excluido com sucesso!"
+                else:
+                    if obj.id:
+                        sql = "UPDATE registro_off SET " +\
+                              "reof_data = '" + str(obj.data) + "', " +\
+                              "reof_valor_pago = " + str(obj.pago) + ", " +\
+                              "reof_valor_custo = " + str(obj.custo) + ", " +\
+                              "cart_id = " + str(obj.cartao) + ", " +\
+                              "turn_id = " + str(obj.turno) + ", " +\
+                              "catr_id = " + str(obj.catraca) +\
+                              " WHERE "\
+                              "reof_id = " + str(obj.id)
+                        self.aviso = "Alterado com sucesso!"
+                    else:
+                        sql = "INSERT INTO registro_off("\
+                              "reof_data, "\
+                              "reof_valor_pago, "\
+                              "reof_valor_custo, "\
+                              "cart_id, "\
+                              "turn_id, "\
+                              "catr_id) VALUES (" +\
+                              str(obj.id) + ", '" +\
+                              str(obj.data) + "', " +\
+                              str(obj.pago) + ", " +\
+                              str(obj.custo) + ", " +\
+                              str(obj.cartao) + ", " +\
+                              str(obj.turno) + ", " +\
+                              str(obj.catraca) + ")"
+                        self.aviso = "Inserido com sucesso!"
+                with closing(self.abre_conexao().cursor()) as cursor:
+                    cursor.execute(sql)
+                    self.commit()
+                    return True
+            else:
+                self.aviso = "Objeto inexistente!"
+                return False
+        except Exception, e:
+            self.aviso = str(e)
+            self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela registro_off.', exc_info=True)
+            return False
+        finally:
+            pass
         

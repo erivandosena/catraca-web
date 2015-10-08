@@ -76,7 +76,7 @@ class UsuarioDAO(ConexaoGenerica):
                       "usua_nome, "\
                       "usua_email, "\
                       "usua_login, "\
-                      "usua_senha "\
+                      "usua_senha, "\
                       "usua_nivel) VALUES (" +\
                       str(obj.id) + ", '" +\
                       str(obj.nome) + "', '" +\

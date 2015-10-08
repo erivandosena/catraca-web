@@ -63,6 +63,28 @@ class TurnoDAO(ConexaoGenerica):
         finally:
             pass
         
+    def busca_por_catraca(self, obj, hora_atual):
+        sql = "SELECT turno.turn_id, turno.turn_hora_inicio, turno.turn_hora_fim, turno.turn_descricao FROM turno "\
+                "INNER JOIN unidade_turno ON turno.turn_id = unidade_turno.turn_id "\
+                "INNER JOIN catraca_unidade ON unidade_turno.unid_id = catraca_unidade.unid_id "\
+                "INNER JOIN catraca ON catraca_unidade.catr_id = catraca.catr_id "\
+                "WHERE catraca.catr_ip = '"+str(obj.ip)+"' "+\
+                "AND turno.turn_hora_inicio <= '" + str(hora_atual) +"'"+\
+                "AND turno.turn_hora_fim >= '" + str(hora_atual) + "'";
+        try:
+            with closing(self.abre_conexao().cursor()) as cursor:
+                cursor.execute(sql)
+                list = cursor.fetchone()
+                if list != []:
+                    return list
+                else:
+                    return None
+        except Exception, e:
+            self.aviso = str(e)
+            self.log.logger.error('Erro ao realizar SELECT na tabela turno.', exc_info=True)
+        finally:
+            pass
+   
     def insere(self, obj):
         try:
             if obj:

@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import os
-import sys
-import pwd
-import socket
+
 import sqlite3
 import urlparse
 import psycopg2
@@ -21,9 +18,10 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 
 class ConexaoFactory(object):
-
+    
     log = Logs()
-
+    #util = Util()
+    
     def __init__(self):
         super(ConexaoFactory, self).__init__()
         self.__POSTGRESQL = 1
@@ -31,11 +29,11 @@ class ConexaoFactory(object):
         self.__SQLITE = 3
         self.__erroCon = None
         self.__factory = None
-
+        
     @property
     def erro_conexao(self):
         return self.__erroCon
-
+    
     @property
     def factory(self):
         return self.__factory
@@ -44,7 +42,7 @@ class ConexaoFactory(object):
         con = None
         self.__factory = tipo_banco
         try:
-            str_conexao = self.obtem_dns("bd_teste","postgres","localhost","postgres", tipo_banco)
+            str_conexao = self.obtem_dns("desenvolvimento","postgres","localhost","postgres", tipo_banco)
             # PostgreSQL
             if (tipo_banco == self.__POSTGRESQL):
                 try:
@@ -76,18 +74,19 @@ class ConexaoFactory(object):
                 finally:
                     pass
             return con
-        except Exception as excecao:
-            self.__erroCon = str(excecao)
-            self.log.logger.critical('Erro na string de conexao com banco de dados.', exc_info=True)
+#         except Exception as excecao:
+#             self.__erroCon = str(excecao)
+#             self.log.logger.critical('Erro na string de conexao com banco de dados.', exc_info=True)
+#         
         finally:
             pass
         
     def obtem_dns(self, bd = None, usuario = None, host = None, senha = None, tipo_banco = 1):
         try:
             if bd == None:
-                bd = socket.gethostname()
+                bd = Util().obtem_nome_rpi()
             if usuario == None:
-                usuario = pwd.getpwuid(os.getuid())[0]
+                usuario = Util().obtem_nome_root_rpi()
             if host == None:
                 host = Util().obtem_ip()
             if senha == None:
@@ -97,7 +96,7 @@ class ConexaoFactory(object):
             elif tipo_banco == 2:
                 dns = "user='%s' password='%s' host='%s' database='%s'" % (usuario, senha, host, bd)
             elif tipo_banco == 3:
-                dns = "'%s'" % (os.path.join(os.path.dirname(os.path.abspath(__file__)), str(bd)+".db"))
+                dns = Util().obtem_path(str(bd)+".db")
         except Exception as excecao:
             self.aviso = str(excecao)
             self.log.logger.error('Erro ao obter string de conexao.', exc_info=True)

@@ -54,12 +54,8 @@ class UnidadeDAO(ConexaoGenerica):
     def insere(self, obj):
         try:
             if obj:
-                if delete:
-                    sql = "DELETE FROM unidade WHERE unid_id = " + str(obj.id)
-                    self.aviso = "Excluido com sucesso!"
-                else:
-                    sql = "INSERT INTO unidade(unid_id, unid_nome) VALUES (" + str(obj.id) + ",'" + str(obj.nome) + "')"
-                    self.aviso = "Inserido com sucesso!"
+                sql = "INSERT INTO unidade(unid_id, unid_nome) VALUES (" + str(obj.id) + ",'" + str(obj.nome) + "')"
+                self.aviso = "Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
@@ -72,6 +68,7 @@ class UnidadeDAO(ConexaoGenerica):
             self.log.logger.error('Erro realizando INSERT na tabela unidade.', exc_info=True)
             return False
         finally:
+            cursor.close()
             pass
 
     def atualiza_exclui(self, obj, delete):
