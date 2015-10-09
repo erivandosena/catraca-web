@@ -93,13 +93,14 @@ class LeitorCartao(object):
                 sleep(1)
                 #self.bits = '11101110000100010000010011101110'
                 if len(self.bits) == 32:
-                    print self.util.beep_buzzer(760, .1, 1)
+                    self.util.beep_buzzer(860, .1, 1)
                     self.aviso.exibir_aguarda_consulta()
                     self.log.logger.info('Binario obtido corretamente: '+str(self.bits))
                     self.numero_cartao = int(str(self.bits), 2)
                     self.bits = ''
                     self.valida_cartao(self.numero_cartao)
                 elif (len(self.bits) > 0) or (len(self.bits) > 32):
+                    self.util.beep_buzzer(750, .1, 2)
                     self.log.logger.error('Erro obtendo binario: '+str(self.bits))
                     self.numero_cartao = 0
                     self.bits = ''
@@ -133,6 +134,7 @@ class LeitorCartao(object):
             ## VERIFICA O HORARIO PARA FUNCIONAMENTO DO TURNO
             ##############################################################
             if not (((self.hora_atual >= self.hora_inicio) and (self.hora_atual <= self.hora_fim)) or ((self.hora_atual >= self.hora_inicio) and (self.hora_atual <= self.hora_fim))):
+                self.util.beep_buzzer(750, .1, 2)
                 self.aviso.exibir_horario_invalido()
                 self.aviso.exibir_acesso_bloqueado()
                 self.log.logger.info('Cartao apresentado fora do horario de atendimento ID:'+ str(id_cartao))
@@ -155,6 +157,7 @@ class LeitorCartao(object):
             ## VERIFICA SE O ID DO CARTAO E DIFERENTE DE 10 CARACTERES
             ##############################################################
             if (len(str(id_cartao)) <> 10):
+                self.util.beep_buzzer(750, .1, 2)
                 self.aviso.exibir_erro_leitura_cartao()
                 self.aviso.exibir_aguarda_cartao()
                 self.log.logger.info('Cartao com ID incorreto:'+ str(id_cartao))
@@ -168,6 +171,7 @@ class LeitorCartao(object):
                 ##############################################################
                 self.cartao_ativo = self.pesquisa_id(self.cartoes, id_cartao)
                 if self.cartao_ativo is None:
+                    self.util.beep_buzzer(750, .1, 2)
                     self.aviso.exibir_cartao_nao_cadastrado()
                     self.aviso.exibir_aguarda_cartao()
                     self.log.logger.info('Cartao nao cadastrado ID:'+ str(id_cartao))
@@ -205,6 +209,7 @@ class LeitorCartao(object):
                     ## VERIFICA SE O CARTAO POSSUI CREDITO(S) PARA UTILIZACAO
                     ##############################################################
                     if (creditos == 0):
+                        self.util.beep_buzzer(710, .1, 2)
                         self.aviso.exibir_cartao_sem_saldo()
                         self.aviso.exibir_acesso_bloqueado()
                         self.log.logger.error('Cartao sem credito ID:'+ str(id_cartao))
@@ -236,12 +241,13 @@ class LeitorCartao(object):
                         ##############################################################
                         ## LIBERA O ACESSO E SINALIZA O MESMO AO UTILIZADOR
                         ##############################################################
-                        self.desbroqueia_acesso()                        
+                        self.desbroqueia_acesso()
                         ##############################################################
                         ## AGUARDA UTILIZADOR PASSAR NA CATRACA E REALIZAR O GIRO
                         ##############################################################
                         while True:
                             print self.sensor_optico.registra_giro(self.catraca.tempo, self.catraca)
+                            print "%.2f" % round(self.sensor_optico.tempo_decorrido, 2)
                             break
 #                             if not self.sensor_optico.registra_giro(self.catraca.tempo, self.catraca):                                
 #                                 self.log.logger.info('Utilizador REALIZOU GIRO na catraca.')
@@ -453,6 +459,7 @@ class LeitorCartao(object):
         self.aviso.exibir_aguarda_cartao()
     
     def desbroqueia_acesso(self):
+        self.util.beep_buzzer(950, .1, 2)
         if self.catraca.operacao == 1:
             self.solenoide.ativa_solenoide(1,1)
             self.pictograma.seta_esquerda(1)

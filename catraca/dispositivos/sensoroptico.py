@@ -27,6 +27,10 @@ class SensorOptico(object):
     sensor_1 = rpi.ler(6)['gpio']
     sensor_2 = rpi.ler(13)['gpio']
     solenoide = Solenoide()
+    tempo_decorrido = 0
+    tempo_decorrente = 0
+    finaliza_giro = False
+    
 
     def __init__(self):
         super(SensorOptico, self).__init__()
@@ -38,57 +42,124 @@ class SensorOptico(object):
             return self.rpi.estado(self.sensor_2)
         
     def registra_giro(self, tempo, catraca):
-        finaliza_giro = False
-        tempo_giro = tempo
-        # cronômetro regressivo para o giro
+        codigo_giro_completo = ''
+        giro = None
+        self.tempo_decorrente = 0
         try:
-            for segundo in range(tempo, -1, -1):
-                self.tempo_decorrido =  tempo/1000 - segundo/1000
+            ##############################################################
+            ## INICIA CRONOMETRO REGRESSIVO PARA O GIRO EM MILISSEGUNDOS
+            ##############################################################
+            while self.tempo_decorrente < tempo:
+                #print self.cronometro_tempo(self.tempo_decorrido, tempo, 1.6)
+                if self.cronometro_tempo(self.tempo_decorrido, tempo, 1.6) == False:
+                    break
+                #self.tempo_decorrente += 1.6
+#                 print tempo_decorrente/1000
+            #for segundo in range(tempo, -1, -1):
+                #self.tempo_decorrido =  tempo/1000 - segundo/1000
+                self.tempo_decorrido =  self.tempo_decorrente /1000
                 self.log.logger.debug(str(self.tempo_decorrido) + ' seg. restantes para expirar o tempo de giro.')
+                ##############################################################
+                ## CATRACA SEM MOVIMENTO DE GIROS HORARIO OU ANTIHORARIO
+                ##############################################################
                 if self.obtem_codigo_sensores() == '00':
                     self.log.logger.debug('Catraca em repouso, codigo sensores: '+ self.obtem_codigo_sensores())
-                elif self.obtem_codigo_sensores() == '10':
-                    self.log.logger.info('Girou a catraca no sentido '+self.obtem_direcao_giro())
-                    while self.obtem_codigo_sensores() == '10':
-                        self.log.logger.debug('Continuou o giro '+self.obtem_direcao_giro()+', codigo sensores: '+ self.obtem_codigo_sensores())
-                    cronometro_beep = 0
-                    while self.obtem_codigo_sensores() == '11':
-                        self.log.logger.debug('No meio do giro '+self.obtem_direcao_giro()+', codigo sensores: '+ self.obtem_codigo_sensores())
-                         
-                        # giro incompleto com uso do cartao
-                        #while self.sensor_optico.obtem_codigo_sensores() == '11':
-                        #    if self.solenoide.obtem_estado_solenoide(1) == 1 or self.solenoide.obtem_estado_solenoide(2) == 1:
-                        
-                        if self.solenoide.obtem_estado_solenoide(1) == 0:
-                            self.solenoide.ativa_solenoide(1,1)
-                        elif self.solenoide.obtem_estado_solenoide(2) == 0:
-                            self.solenoide.ativa_solenoide(2,1)
-
-                        cronometro_beep += 1
-                        if cronometro_beep/1000 >= 50: # 5seg.
-                            self.util.beep_buzzer(840, 1, 1)
-                            
-                    while self.obtem_codigo_sensores() == '01':
-                        self.log.logger.debug('Finalizando o giro '+self.obtem_direcao_giro()+', codigo sensores: '+ self.obtem_codigo_sensores())
-                    if self.obtem_codigo_sensores(catraca.operacao) == '01':
-                        self.log.logger.info('Giro '+self.obtem_direcao_giro()+' finalizado em '+ str(tempo_giro/1000)+' segundo(s) no codigo: '+ self.obtem_codigo_sensores())
-                        finaliza_giro = True
-                        return finaliza_giro
-                    elif self.obtem_codigo_sensores() == '00': 
-                        self.log.logger.info('Giro '+self.obtem_direcao_giro()+' finalizado em '+ str(tempo_giro/1000)+' segundo(s) no codigo: '+ self.obtem_codigo_sensores())
-                        finaliza_giro = True
-                        return finaliza_giro   
-            if self.tempo_decorrido == tempo/1000:
-                self.log.logger.info('Tempo expirado em '+ str(tempo_giro/1000)+' segundo(s) sem giro '+self.obtem_direcao_giro())
-                finaliza_giro = False
-                return finaliza_giro
+                ##############################################################
+                ## INICIANDO VERIFICA SE HOUVE ALGUM GIRO HORARIO OU ANTIHORARIO
+                ##############################################################
+                elif self.obtem_codigo_sensores() == '10' or self.obtem_codigo_sensores() == '01':# or self.obtem_codigo_sensores() == '11':
+                    ##############################################################
+                    ## CAPTURA O TIPO DE GIRO EXECUTADO
+                    ##############################################################
+                    if giro is None:
+                        giro = self.obtem_direcao_giro()
+                    ##############################################################
+                    ## VERIFICA SE O GIRO EXECUTADO CONVEM COM O HABILIRADO
+                    ##############################################################
+                    if self.obtem_giro_iniciado(giro) == catraca.operacao:
+                        self.log.logger.info('Girou a catraca no sentido '+giro)
+                        ##############################################################
+                        ## VERIFICA SE O GIRO FOI HORARIO OU ANTIHORARIO
+                        ##############################################################
+                        while self.obtem_codigo_sensores() == '10' or self.obtem_codigo_sensores() == '01':
+                            self.log.logger.debug('Continuou o giro '+giro+', codigo sensores: '+ self.obtem_codigo_sensores())
+#                             tempo_decorrente += 1.6
+#                             if self.tempo_decorrido == tempo/1000:
+#                                 sself.log.logger.info('Tempo expirado em '+ str(self.tempo_decorrido)+' segundo(s) sem giro.')
+#                                 elf.finaliza_giro = False
+#                                 return self.finaliza_giro
+                            #print self.cronometro_tempo(self.tempo_decorrido, tempo, 1.6)
+                            if not self.cronometro_tempo(self.tempo_decorrido, tempo, 1.6):
+                                break
+                        #cronometro_beep = 0
+                        ##############################################################
+                        ## VERIFICA SE A CATRACA SE ENCONTRA EM MEIO GIRO
+                        ##############################################################
+                        self.util.cronometro = 0
+                        while self.obtem_codigo_sensores() == '11':
+                            self.log.logger.debug('No meio do giro '+giro+', codigo sensores: '+ self.obtem_codigo_sensores())
+#                             tempo_decorrente += 1.6
+#                             if self.tempo_decorrido == tempo/1000:
+#                                 self.log.logger.info('Tempo expirado em '+ str(self.tempo_decorrido)+' segundo(s) sem giro.')
+#                                 self.finaliza_giro = False
+#                                 return self.finaliza_giro
+                            #print self.cronometro_tempo(self.tempo_decorrido, tempo, 1.6)
+                            if self.cronometro_tempo(self.tempo_decorrido, tempo, 1.6) == False:
+                                break
+                            ##############################################################
+                            ## ALERTA CASO A CATRACA PARE NO MEIO DO GIRO MAIS DE 10 SEG
+                            ##############################################################
+                            self.util.emite_beep(860, 1, 1, 10) #10 seg.
+                        codigo_giro_completo = self.obtem_codigo_sensores()
+                        ##############################################################
+                        ## FINALIZANDO VERIFICA SE O GIRO FOI HORARIO OU ANTIHORARIO
+                        ##############################################################
+                        while self.obtem_codigo_sensores() == '10' or self.obtem_codigo_sensores() == '01':
+                            self.log.logger.debug('Finalizando o giro '+giro+', codigo sensores: '+ self.obtem_codigo_sensores())
+#                             tempo_decorrente += 1.6
+#                             if self.tempo_decorrido == tempo/1000:
+#                                 self.log.logger.info('Tempo expirado em '+ str(self.tempo_decorrido)+' segundo(s) sem giro.')
+#                                 self.finaliza_giro = False
+#                                 return self.finaliza_giro
+                            #print self.cronometro_tempo(self.tempo_decorrido, tempo, 1.6)
+                            if self.cronometro_tempo(self.tempo_decorrido, tempo, 1.6) == False:
+                                break
+                        codigo_giro_completo += self.obtem_codigo_sensores()
+                        ##############################################################
+                        ## VERIFICA SE O GIRO FOI COMPLETADO CORRETAMENTE
+                        ##############################################################
+                        if giro == 'antihorario':
+                            if codigo_giro_completo == '1000': 
+                                self.log.logger.info('Giro '+giro+' finalizado em '+ str(self.tempo_decorrido)+' segundo(s) no codigo: '+ self.obtem_codigo_sensores())
+                                self.finaliza_giro = True
+                                return self.finaliza_giro
+                        if giro == 'horario':
+                            if codigo_giro_completo == '0100':
+                                self.log.logger.info('Giro '+giro+' finalizado em '+ str(self.tempo_decorrido)+' segundo(s) no codigo: '+ self.obtem_codigo_sensores())
+                                self.finaliza_giro = True
+                                return self.finaliza_giro
+                    ##############################################################
+                    ## FINALIZA GIRO INCORRETO
+                    ##############################################################
+                    else:
+                        self.log.logger.info('Nao girou '+giro+ ', operacao cancelada.')
+                        self.finaliza_giro = False
+                        return self.finaliza_giro
+            ##############################################################
+            ## FINALIZA GIRO COM TEMPO EXPIRADO
+            ##############################################################
+            #if self.tempo_decorrido == tempo/1000:
+            else:
+                self.log.logger.info('Tempo expirado em '+ str(self.tempo_decorrido)+' segundo(s) sem giro.')
+                elf.finaliza_giro = False
+                return elf.finaliza_giro
         except SystemExit, KeyboardInterrupt:
             raise
         except Exception:
             self.log.logger.error('Erro lendo sensores opticos.', exc_info=True)
         finally:
-            return finaliza_giro
-        
+            return self.finaliza_giro
+
     def obtem_codigo_sensores(self):
         return str(self.ler_sensor(1)) + '' + str(self.ler_sensor(2))
     
@@ -101,3 +172,26 @@ class SensorOptico(object):
         }
         return opcoes.get(self.obtem_codigo_sensores(), None)
     
+    def obtem_giro_iniciado(self, modo_operacao):
+        opcoes = {
+                   'horario' : 1,
+                   'antihorario' : 2,
+        }
+        return opcoes.get(modo_operacao, None)
+    
+    def obtem_final_giro(self,tempo_decorrido, tempo):
+        if tempo_decorrido == tempo/1000:
+            self.log.logger.info('Tempo expirado em '+ str(tempo_decorrido)+' segundo(s) sem giro.')
+            self.finaliza_giro = False
+            return self.finaliza_giro
+        
+    def cronometro_tempo(self, tempo_decorrido, tempo, milissegundos):
+        self.tempo_decorrente += milissegundos
+        print self.tempo_decorrente
+        if tempo_decorrido == tempo/1000:
+            self.log.logger.info('Tempo expirado em '+ str(tempo_decorrido)+' segundo(s) sem giro.')
+            self.finaliza_giro = False
+            return self.finaliza_giro
+        else:
+            return True
+        
