@@ -2,10 +2,16 @@
 # -*- coding: utf-8 -*-
 
 import os
+import sys
+import pwd
+import socket
 import sqlite3
+import urlparse
 import psycopg2
 #import mysql.connector
+from contextlib import closing
 from catraca.logs import Logs
+from catraca.util import Util
 
 
 __author__ = "Erivando Sena"
@@ -34,18 +40,13 @@ class ConexaoFactory(object):
     def factory(self):
         return self.__factory
     
-    def conexao(self, banco):
+    def conexao(self, tipo_banco):
         con = None
-        self.__factory = banco
+        self.__factory = tipo_banco
         try:
+            str_conexao = self.obtem_dns("bd_teste","postgres","localhost","postgres", tipo_banco)
             # PostgreSQL
-            if (banco == self.__POSTGRESQL):
-                str_conexao = "\
-                        dbname='teste'\
-                        user='postgres'\
-                        host='localhost'\
-                        password='postgres'\
-                        "
+            if (tipo_banco == self.__POSTGRESQL):
                 try:
                     con = psycopg2.connect(str_conexao)
                 except Exception, e:
@@ -54,8 +55,8 @@ class ConexaoFactory(object):
                 finally:
                     pass
             # MySQL
-            if (banco == self.__MYSQL):
-                str_conexao = "user='%s', password='%s', host='%s', database='%s'" % (usuario, senha, localhost, banco)
+            if (tipo_banco == self.__MYSQL):
+                #str_conexao = "user='%s', password='%s', host='%s', database='%s'" % (usuario, senha, localhost, banco)
                 try:
                     #con = mysql.connector.connect(str_conexao)
                     pass
@@ -65,8 +66,8 @@ class ConexaoFactory(object):
                 finally:
                     pass
             # SQLite
-            if (banco == self.__SQLITE):
-                str_conexao = "'%s'" % (os.path.join(os.path.dirname(os.path.abspath(__file__)),"banco.db"))
+            if (tipo_banco == self.__SQLITE):
+                #str_conexao = "'%s'" % (os.path.join(os.path.dirname(os.path.abspath(__file__)),"banco.db"))
                 try:
                     con = sqlite3.connect(str_conexao)
                 except Exception, e:
@@ -80,3 +81,26 @@ class ConexaoFactory(object):
             self.log.logger.critical('Erro na string de conexao com banco de dados.', exc_info=True)
         finally:
             pass
+        
+    def obtem_dns(self, bd = None, usuario = None, host = None, senha = None, tipo_banco = 1):
+        try:
+            if bd == None:
+                bd = socket.gethostname()
+            if usuario == None:
+                usuario = pwd.getpwuid(os.getuid())[0]
+            if host == None:
+                host = Util().obtem_ip()
+            if senha == None:
+                senha = 'postgres'
+            if tipo_banco == 1:
+                dns = "dbname='%s' user='%s' host='%s' password='%s'" % (bd, usuario, host, senha)
+            elif tipo_banco == 2:
+                dns = "user='%s' password='%s' host='%s' database='%s'" % (usuario, senha, host, bd)
+            elif tipo_banco == 3:
+                dns = "'%s'" % (os.path.join(os.path.dirname(os.path.abspath(__file__)), str(bd)+".db"))
+        except Exception, e:
+            self.aviso = str(e)
+            self.log.logger.error('Erro ao obter string de conexao.', exc_info=True)
+        finally:
+            return dns
+        

@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: latin-1 -*-
+# -*- coding: utf-8 -*-
 
 
 import os
@@ -7,16 +7,15 @@ import pprint
 import socket
 import locale
 import datetime
-from catraca.dao.registro import Registro
-from catraca.dao.registrodao import RegistroDAO
-from catraca.dao.cartaodao import CartaoDAO
-from catraca.dao.catracadao import CatracaDAO
-from catraca.dao.finalidadedao import FinalidadeDAO
-
-from catraca.dao.tipodao import TipoDAO
+# from catraca.dao.registro import Registro
+# from catraca.dao.registrodao import RegistroDAO
+# from catraca.dao.cartaodao import CartaoDAO
+# from catraca.dao.catracadao import CatracaDAO
+# from catraca.dao.finalidadedao import FinalidadeDAO
+# from catraca.dao.tipodao import TipoDAO
 import requests
 import json
-
+from catraca.visao.restful.tabela_registro import TabelaRegistro
 
 __author__ = "Erivando Sena"
 __copyright__ = "Copyright 2015, Unilab"
@@ -32,63 +31,68 @@ IP = '%s' % (socket.getsockname()[0])
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 def main():
-    print 'Iniciando os testes tabela registro...'
+    print 'Iniciando os testes restful'
     
-    registro = Registro()
-    registro_dao = RegistroDAO()
-    cartao_dao = CartaoDAO()
-
-    registro.data = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
-    registro.giro = 1
-    registro.cartao = cartao_dao.busca(4)
-    registro.valor = registro.cartao.perfil.tipo.valor
+    t_registro = TabelaRegistro()
     
-    if registro_dao.conexao_status():
-         print "conexao_status: "+ str(registro_dao.conexao_status())
-         
-
-    def lista_tipos(lista):
-        ilista=[]
-        count = 0
-        for item in lista:
-            i = {
-                #'id':item[0],
-                "tipo_nome":item[1],
-                "tipo_vlr_credito":float(item[2])
-            }
-            count += 1
-            post_tipo(i)
-            print i
-            print "inserindo.." + str(count)
-            
-    
-    tipo_dao = TipoDAO()
-    
-
-    def post_tipo(tipo):
-        url = 'http://10.5.0.15:27289/api/tipo/inserir'
-        #dados = {"tipo_nome":"Teste requests","tipo_vlr_credito":"9.91"}
-        header = {'Content-type': 'application/json'}
-        r = requests.post(url, auth=('teste', 'teste'), headers=header, data=json.dumps(tipo))
-
-    
-    lista_tipos(tipo_dao.busca())
-
-
-    url = 'http://10.5.0.15:27289/api/tipo/listar'
-    r = requests.get(url, auth=('teste', 'teste'))
-    print r.status_code
-    print r.headers['content-type']
-    #print r.text
-    pprint.pprint(r.text)
+    t_registro.registro_get()
     
     
-    """
-    if not registro_dao.mantem(registro,False):
-        raise Exception(registro_dao.aviso)
-    else:
-        print registro_dao.aviso
-    """
+#     registro = Registro()
+#     registro_dao = RegistroDAO()
+#     cartao_dao = CartaoDAO()
+# 
+#     registro.data = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S.%f")
+#     registro.giro = 1
+#     registro.cartao = cartao_dao.busca(4)
+#     registro.valor = registro.cartao.perfil.tipo.valor
+#     
+#     if registro_dao.conexao_status():
+#          print "conexao_status: "+ str(registro_dao.conexao_status())
+#          
+# 
+#     def lista_tipos(lista):
+#         ilista=[]
+#         count = 0
+#         for item in lista:
+#             i = {
+#                 #'id':item[0],
+#                 "tipo_nome":item[1],
+#                 "tipo_vlr_credito":float(item[2])
+#             }
+#             count += 1
+#             post_tipo(i)
+#             print i
+#             print "inserindo.." + str(count)
+#             
+#     
+#     tipo_dao = TipoDAO()
+#     
+# 
+#     def post_tipo(tipo):
+#         url = 'http://10.5.0.15:27289/api/tipo/inserir'
+#         #dados = {"tipo_nome":"Teste requests","tipo_vlr_credito":"9.91"}
+#         header = {'Content-type': 'application/json'}
+#         r = requests.post(url, auth=('teste', 'teste'), headers=header, data=json.dumps(tipo))
+# 
+#     
+#     lista_tipos(tipo_dao.busca())
+# 
+# 
+#     url = 'http://10.5.0.15:27289/api/tipo/listar'
+#     r = requests.get(url, auth=('teste', 'teste'))
+#     print r.status_code
+#     print r.headers['content-type']
+#     #print r.text
+#     pprint.pprint(r.text)
+#     
+#     
+#     """
+#     if not registro_dao.mantem(registro,False):
+#         raise Exception(registro_dao.aviso)
+#     else:
+#         print registro_dao.aviso
+#    """
 
 #     print 62 * "="
 #     print '======################### RELATORIO ####################======'

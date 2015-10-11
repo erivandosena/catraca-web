@@ -154,10 +154,9 @@ CREATE TABLE catraca
   catr_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
   catr_ip character varying(12), -- Numero IP da catraca.
   catr_tempo_giro integer, -- Tempo para o giro na catraca em segundos.
-  catr_operacao integer, -- 1=Giro Horario(Entrada controlada com saida bloqueada),...
-  unid_id integer, -- Campo para chave estrengeira da tabela unidade.
-  CONSTRAINT pk_catr_id PRIMARY KEY (catr_id), -- Chave primaria da tabela catraca.
-  CONSTRAINT fk_unid_id FOREIGN KEY (unid_id) REFERENCES unidade (unid_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION -- Chave estrangeira da tabela unidade.
+  catr_operacao integer, -- 1=Giro Horario(Entrada controlada com saida bloqueada),2=Giros Horario/Anti-horario(Entrada controlada com saida liberada),3=Giros Horario/Anti-horario(Entrada e saida liberadas).
+  catr_nome character varying(25), -- Nome da catraca formado pelo nome do host, nome da unidade e numero da catraca.
+  CONSTRAINT pk_catr_id PRIMARY KEY (catr_id) -- Chave primaria da tabela catraca.
 );
 ALTER TABLE catraca OWNER TO postgres;
 COMMENT ON TABLE catraca IS 'Tabela que armazena as predefinicoes e configuracoes para o funcionamento da catraca.';
@@ -165,9 +164,28 @@ COMMENT ON COLUMN catraca.catr_id IS 'Campo autoincremento para chave primaria d
 COMMENT ON COLUMN catraca.catr_ip IS 'Numero IP da catraca.';
 COMMENT ON COLUMN catraca.catr_tempo_giro IS 'Tempo para o giro na catraca em segundos.';
 COMMENT ON COLUMN catraca.catr_operacao IS '1=Giro Horario(Entrada controlada com saida bloqueada),2=Giros Horario/Anti-horario(Entrada controlada com saida liberada),3=Giros Horario/Anti-horario(Entrada e saida liberadas).';
-COMMENT ON COLUMN catraca.unid_id IS 'Campo para chave estrengeira da tabela unidade.';
+COMMENT ON COLUMN catraca.catr_nome IS 'Nome da catraca formado pelo nome do host, nome da unidade e numero da catraca. ';
 COMMENT ON CONSTRAINT pk_catr_id ON catraca IS 'Chave primaria da tabela catraca.';
-COMMENT ON CONSTRAINT fk_unid_id ON catraca IS 'Chave estrangeira da tabela unidade.';
+
+
+-- Table: catraca_unidade
+CREATE TABLE catraca_unidade
+(
+  caun_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
+  catr_id integer NOT NULL, -- Campo para chave estrangeira da tabela catraca.
+  unid_id integer NOT NULL, -- Campo para chave estrangeira da tabela unidade.
+  CONSTRAINT pk_caun_id PRIMARY KEY (caun_id), -- Chave primaria da tabela catraca_unidade.
+  CONSTRAINT fk_catr_id FOREIGN KEY (catr_id) REFERENCES catraca (catr_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, -- Chave estrangeira da tabela catraca.
+  CONSTRAINT fk_unid_id FOREIGN KEY (unid_id) REFERENCES unidade (unid_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION -- Chave estrangeira da tabela unidade.
+);
+ALTER TABLE catraca_unidade OWNER TO postgres;
+COMMENT ON TABLE catraca_unidade IS 'Tabela que armazena as informacoes da unidade e da catraca.';
+COMMENT ON COLUMN catraca_unidade.caun_id IS 'Campo autoincremento para chave primaria da tabela.';
+COMMENT ON COLUMN catraca_unidade.catr_id IS 'Campo para chave estrangeira da tabela catraca.';
+COMMENT ON COLUMN catraca_unidade.unid_id IS 'Campo para chave estrangeira da tabela unidade.';
+COMMENT ON CONSTRAINT pk_caun_id ON catraca_unidade IS 'Chave primaria da tabela catraca_unidade.';
+COMMENT ON CONSTRAINT fk_catr_id ON catraca_unidade IS 'Chave estrangeira da tabela catraca.';
+COMMENT ON CONSTRAINT fk_unid_id ON catraca_unidade IS 'Chave estrangeira da tabela unidade.';
 
 -- Table: giro
 CREATE TABLE giro
@@ -290,13 +308,15 @@ CREATE TABLE turno
   turn_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
   turn_hora_inicio time without time zone, -- Hora inicio do periodo para liberacao da catraca.
   turn_hora_fim time without time zone, -- Hora final do periodo para liberacao da catraca.
+  turn_descricao character varying(25), -- Descricao da refeicao disponibilizada durante o turno. Ex.: Cafe, Almoco, Janta.
   CONSTRAINT pk_turn_id PRIMARY KEY (turn_id) -- Chave primaria da tabela turno.
 );
 ALTER TABLE turno OWNER TO postgres;
-COMMENT ON TABLE turno IS 'Tabela que armazena os horarios de inicio e fim de funcionamento dos turnos.';
+COMMENT ON TABLE turnon IS 'Tabela que armazena os horarios de inicio e fim de funcionamento dos turnos.';
 COMMENT ON COLUMN turno.turn_id IS 'Campo autoincremento para chave primaria da tabela.';
 COMMENT ON COLUMN turno.turn_hora_inicio IS 'Hora inicio do periodo para liberacao da catraca.';
 COMMENT ON COLUMN turno.turn_hora_fim IS 'Hora final do periodo para liberacao da catraca.';
+COMMENT ON COLUMN turno.turn_descricao IS 'Descricao da refeicao disponibilizada durante o turno. Ex.: Cafe, Almoco, Janta.';
 COMMENT ON CONSTRAINT pk_turn_id ON turno IS 'Chave primaria da tabela turno.';
 
 -- Table: registro
@@ -327,21 +347,23 @@ COMMENT ON CONSTRAINT fk_catr_id ON registro IS 'Chave estrangeira da tabela cat
 COMMENT ON CONSTRAINT fk_turn_id ON registro IS 'Chave estrangeira da tabela turno.';
 
 -- Table: unidade_turno
-CREATE TABLE turno
+CREATE TABLE unidade_turno
 (
-  turn_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
-  turn_hora_inicio time without time zone, -- Hora inicio do periodo para liberacao da catraca.
-  turn_hora_fim time without time zone, -- Hora final do periodo para liberacao da catraca.
-  turn_descricao character varying(25), -- Descricao da refeicao disponibilizada durante o turno. Ex.: Cafe, Almoco, Janta.
-  CONSTRAINT pk_turn_id PRIMARY KEY (turn_id) -- Chave primaria da tabela turno.
+  untu_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
+  turn_id integer NOT NULL, -- Campo para chave estrangeira da tabela turno.
+  unid_id integer NOT NULL, -- Campo para chave estrangeira da tabela unidade.
+  CONSTRAINT pk_untu_id PRIMARY KEY (untu_id), -- Chave primaria da tabela unidade_turno.
+  CONSTRAINT fk_turn_id FOREIGN KEY (turn_id) REFERENCES turno (turn_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, -- Chave estrangeira da tabela turno.
+  CONSTRAINT fk_unid_id FOREIGN KEY (unid_id) REFERENCES unidade (unid_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION -- Chave estrangeira da tabela unidade.
 );
-ALTER TABLE turno OWNER TO postgres;
-COMMENT ON TABLE turno IS 'Tabela que armazena os horarios de inicio e fim de funcionamento dos turnos.';
-COMMENT ON COLUMN turno.turn_id IS 'Campo autoincremento para chave primaria da tabela.';
-COMMENT ON COLUMN turno.turn_hora_inicio IS 'Hora inicio do periodo para liberacao da catraca.';
-COMMENT ON COLUMN turno.turn_hora_fim IS 'Hora final do periodo para liberacao da catraca.';
-COMMENT ON COLUMN turno.turn_descricao IS 'Descricao da refeicao disponibilizada durante o turno. Ex.: Cafe, Almoco, Janta.';
-COMMENT ON CONSTRAINT pk_turn_id ON turno IS 'Chave primaria da tabela turno.';
+ALTER TABLE unidade_turno OWNER TO postgres;
+COMMENT ON TABLE unidade_turno IS 'Tabela que armazena o local fisico de funcionamento das catracas para o turno.';
+COMMENT ON COLUMN unidade_turno.untu_id IS 'Campo autoincremento para chave primaria da tabela.';
+COMMENT ON COLUMN unidade_turno.turn_id IS 'Campo para chave estrangeira da tabela turno.';
+COMMENT ON COLUMN unidade_turno.unid_id IS 'Campo para chave estrangeira da tabela unidade.';
+COMMENT ON CONSTRAINT pk_untu_id ON unidade_turno IS 'Chave primaria da tabela unidade_turno.';
+COMMENT ON CONSTRAINT fk_turn_id ON unidade_turno IS 'Chave estrangeira da tabela turno.';
+COMMENT ON CONSTRAINT fk_unid_id ON unidade_turno IS 'Chave estrangeira da tabela unidade.';
 
 -- Table: custo_cartao
 CREATE TABLE custo_cartao

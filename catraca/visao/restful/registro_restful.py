@@ -28,22 +28,24 @@ class RegistroRestful(ServidorRestful):
         #if lista != []:
         for item in lista:
             registro = {
-                "regi_datahora":item[1],
-                "regi_giro":item[2],
-                "regi_valor":float(item[3]),
+                "regi_data":item[1],
+                "regi_valor_pago":float(item[2]),
+                "regi_valor_custo":float(item[3]),
                 "cart_id":item[4],
-                "turn_id":item[5]
+                "turn_id":item[5],
+                "catr_id":item[6]
             }
             self.post_registro(registro)
             #self.registro_dao.mantem(self.registro_dao.busca(item[0]),True)
 
     def objeto_para_json(self, obj):
         registro = {
-            "regi_datahora":str(obj.data),
-            "regi_giro":str(obj.giro),
-            "regi_valor":str(obj.valor),
+            "regi_data":str(obj.data),
+            "regi_valor_pago":str(obj.pago),
+            "regi_valor_custo":str(obj.custo),
             "cart_id":str(obj.cartao.id),
-            "turn_id":str(obj.turno.id)
+            "turn_id":str(obj.turno.id),
+            "catr_id":str(obj.catraca.id)
         }
         self.post_registro(registro)
             
@@ -63,5 +65,4 @@ class RegistroRestful(ServidorRestful):
     
     def obtem_registro(self, id):
             return self.registro_dao.busca(id)
-    
     

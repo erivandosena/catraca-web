@@ -30,7 +30,7 @@ class Logs(object):
         return logging.getLogger(name)
     
     def main(self):
-        LOG_FILENAME = '/home/pi/Catraca/log/catraca.log'
+        LOG_FILENAME = '/home/pi/CatracaEletronica/log/catraca.log'
         logging.basicConfig(
                             level=logging.DEBUG, 
                             filename= LOG_FILENAME, 

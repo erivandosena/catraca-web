@@ -9,8 +9,9 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 
 class Registro(object):
-    
+
     def __init__(self):
+        super(Registro, self).__init__()
         self.__regi_id = None
         self.__regi_data = None
         self.__regi_valor_pago = None
@@ -18,7 +19,7 @@ class Registro(object):
         self.__cartao = None
         self.__turno = None
         self.__catraca = None
-    
+ 
     @property
     def id(self):
         return self.__regi_id

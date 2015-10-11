@@ -40,7 +40,7 @@ class RegistroDAO(ConexaoGenerica):
                     return None
         except Exception, e:
             self.aviso = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela tipo.', exc_info=True)
+            self.log.logger.error('Erro ao realizar SELECT na tabela registro.', exc_info=True)
         finally:
             pass
   
@@ -161,9 +161,9 @@ class RegistroDAO(ConexaoGenerica):
                               "regi_data = '" + str(obj.data) + "', " +\
                               "regi_valor_pago = " + str(obj.pago) + ", " +\
                               "regi_valor_custo = " + str(obj.custo) + ", " +\
-                              "cart_id = " + str(obj.cartao.id) + ", " +\
-                              "turn_id = " + str(obj.turno.id) + ", " +\
-                              "catr_id = " + str(obj.catraca.id) +\
+                              "cart_id = " + str(obj.cartao) + ", " +\
+                              "turn_id = " + str(obj.turno) + ", " +\
+                              "catr_id = " + str(obj.catraca) +\
                               " WHERE "\
                               "regi_id = " + str(obj.id)
                         msg = "Alterado com sucesso!"
@@ -178,9 +178,9 @@ class RegistroDAO(ConexaoGenerica):
                               str(obj.data) + "', " +\
                               str(obj.pago) + ", " +\
                               str(obj.custo) + ", " +\
-                              str(obj.cartao.id) + ", " +\
-                              str(obj.turno.id) + ", " +\
-                              str(obj.catraca.id) + ")"
+                              str(obj.cartao) + ", " +\
+                              str(obj.turno) + ", " +\
+                              str(obj.catraca) + ")"
                         msg = "Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
@@ -196,5 +196,5 @@ class RegistroDAO(ConexaoGenerica):
             self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela registro.', exc_info=True)
             return False
         finally:
-            pass
+            return self.aviso
         

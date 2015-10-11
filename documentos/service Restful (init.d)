@@ -1,33 +1,33 @@
-#!/bin/sh
-# /etc/init.d/Catraca
+#!/bin/sh -e
+#/etc/init.d/Restful
 
 ### BEGIN INIT INFO
-# Provides: 			Catraca
-# Required-Start: 		$local_fs $remote_fs $syslog
-# Required-Stop: 		$local_fs $remote_fs $syslog
-# Default-Start: 		2 3 4 5
-# Default-Stop: 		0 1 6
-# Short-Description: 		Inicia aplicacao e api da catraca
-# Description: 			Inicia aplicacao da catraca de baixo nivel e a API cliente RESTful.
+# Provides:                     Restful
+# Required-Start:               $local_fs $remote_fs $network
+# Required-Stop:                $local_fs $remote_fs $network
+# Default-Start:                2 3 4 5
+# Default-Stop:                 0 1 6
+# Short-Description:            Inicia api restful
+# Description:                  Inicia Servidor RESTful.
 ### END INIT INFO
 
-# Script de inicialização LSB (https://wiki.debian.org/LSBInitScripts)
+# Script de inicializacao LSB (https://wiki.debian.org/LSBInitScripts)
 # Autor: Erivando Sena
-# Copyright: © 2015 Unilab
+# Copyright: (c) 2015 Unilab
 # Email: erivandoramos@unilab.edu.br
 # Data: 22/07/2015
 # Status: Prototype  (Prototype | Development | Production)
 
 # Para INSTALAR:
-# (DESCONTINUADO partir do Debian 6.0) sudo update-rc.d Catraca defaults
-# (DESCONTINUADO partir do Debian 6.0) sudo update-rc.d -f Catraca remove
-# sudo insserv -v Catraca
-# sudo insserv -v Catraca -r
+# (DESCONTINUADO partir do Debian 6.0) sudo update-rc.d Restful defaults
+# (DESCONTINUADO partir do Debian 6.0) sudo update-rc.d -f Restful remove
+# sudo insserv -v Restful
+# sudo insserv -v Restful -r
 # Verificar na lista de servicos ativos: sudo service --status-all
 
-DIR=/home/pi/CatracaEletronica
-DAEMON=$DIR/run.py
-DAEMON_NAME=Catraca
+DIR=/home/erivando
+DAEMON=$DIR/run_restful.sh
+DAEMON_NAME=Restful
 DAEMON_USER=root
 PIDFILE=/var/run/$DAEMON_NAME.pid
 DAEMON_OPTS=""
@@ -62,10 +62,10 @@ case "$1" in
   *)
     echo "Use: /etc/init.d/$DEAMON_NAME {start|stop|restart|status}"
     echo "Ou use:"
-    echo "service Catraca start"
-    echo "service Catraca stop"
-    echo "service Catraca restart"
-    echo "service Catraca status"
+    echo "service ServidorRestful start"
+    echo "service ServidorRestful stop"
+    echo "service ServidorRestful restart"
+    echo "service ServidorRestful status"
     exit 1
     ;;
 

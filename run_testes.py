@@ -1,24 +1,26 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from testes import tipo_teste
-from testes import perfil_teste
-from testes import cartao_teste
-from testes import registro_teste
-from testes import catraca_teste
-from testes import giro_teste
-from testes import turno_teste
-from testes import mensagem_teste
-from testes import finalidade_teste
+# from testes import tipo_teste
+# from testes import perfil_teste
+# from testes import cartao_teste
+# from testes import registro_teste
+# from testes import catraca_teste
+# from testes import giro_teste
+# from testes import turno_teste
+# from testes import mensagem_teste
+# from testes import finalidade_teste
+# from testes import controlegiro_teste
+# from testes import buzzer_teste
 from testes import requests_teste
-from testes import controlegiro_teste
-from testes import buzzer_teste
 
 
 __author__ = "Erivando Sena" 
 
 
 if __name__ == '__main__':
+    
+    requests_teste.main()
     
     #usuario_teste.main()
     #tipo_teste.main()
