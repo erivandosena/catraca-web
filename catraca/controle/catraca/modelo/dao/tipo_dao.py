@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding: latin-1 -*-
 
 
 from contextlib import closing
@@ -34,7 +34,7 @@ class TipoDAO(ConexaoGenerica):
                 cursor.execute(sql)
                 if id:
                     dados = cursor.fetchone()
-                    if dados:
+                    if dados is not None:
                         obj.id = dados[0]
                         obj.nome = dados[1]
                         obj.valor = dados[2]
@@ -53,50 +53,35 @@ class TipoDAO(ConexaoGenerica):
         finally:
             pass
         
-    def insere(self, obj):
+    def mantem(self, obj, delete):
         try:
-            if obj:
-                sql = "INSERT INTO tipo("\
-                        "tipo_id, "\
-                        "tipo_nome, "\
-                        "tipo_valor) VALUES (" +\
-                        str(obj.id) + ", '" +\
-                        str(obj.nome) + "', '" +\
-                        str(obj.valor) + "')"
-                self.aviso = "Inserido com sucesso!"
-                with closing(self.abre_conexao().cursor()) as cursor:
-                    cursor.execute(sql)
-                    self.commit()
-                    return True
-            else:
-                self.aviso = "Objeto inexistente!"
-                return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela tipo.', exc_info=True)
-            return False
-        finally:
-            pass
-        
-    def atualiza_exclui(self, obj, delete):
-        try:
-            if obj:
+            if obj is not None:
                 if delete:
                     sql = "DELETE FROM tipo WHERE tipo_id = " + str(obj.id)
-                    self.aviso = "Excluido com sucesso!"
+                    msg = "Excluido com sucesso!"
                 else:
-                    sql = "UPDATE tipo SET " +\
-                          "tipo_nome = '" + str(obj.nome) + "', " +\
-                          "tipo_valor = '" + str(obj.valor) +\
-                          "' WHERE "\
-                          "tipo_id = " + str(obj.id)
-                    self.aviso = "Alterado com sucesso!"
+                    if obj.id:
+                        sql = "UPDATE tipo SET " +\
+                              "tipo_nome = " + str(obj.nome) + ", " +\
+                              "tipo_valor = '" + str(obj.valor) +\
+                              "' WHERE "\
+                              "tipo_id = " + str(obj.id)
+                        msg = "Alterado com sucesso!"
+                    else:
+                        sql = "INSERT INTO tipo("\
+                              "tipo_nome, "\
+                              "tipo_valor) VALUES (" +\
+                              str(obj.nome) + ", '" +\
+                              str(obj.valor) + "')"
+                        msg = "Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
+                    self.aviso = msg
                     return True
             else:
-                self.aviso = "Objeto inexistente!"
+                msg = "Objeto inexistente!"
+                self.aviso = msg
                 return False
         except Exception, e:
             self.aviso = str(e)
@@ -104,6 +89,4 @@ class TipoDAO(ConexaoGenerica):
             return False
         finally:
             pass
-        
-        
         

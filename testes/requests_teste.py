@@ -15,7 +15,11 @@ import datetime
 # from catraca.dao.tipodao import TipoDAO
 import requests
 import json
-from catraca.visao.restful.tabela_registro import TabelaRegistro
+from catraca.visao.restful.registro_json import RegistroJson
+from catraca.visao.restful.catraca_json import CatracaJson
+from catraca.visao.restful.cartao_json import CartaoJson
+from catraca.visao.restful.tipo_json import TipoJson
+from catraca.visao.restful.turno_json import TurnoJson
 
 __author__ = "Erivando Sena"
 __copyright__ = "Copyright 2015, Unilab"
@@ -32,10 +36,29 @@ locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 def main():
     print 'Iniciando os testes restful'
+
+#     tipo_json = TipoJson()
+#     tipo_json.tipo_get()
     
-    t_registro = TabelaRegistro()
+#     turno_json = TurnoJson()
+#     turno_json.turno_get()
+
+#     cartao_json = CartaoJson()
+#     cartao_json.cartao_get()
     
-    t_registro.registro_get()
+#     catraca_json = CatracaJson()
+#     catraca_json.catraca_get()
+    
+    registro_json = RegistroJson()
+    registro_json.registro_get()
+    
+    
+    
+    
+    
+    
+    
+    
     
     
 #     registro = Registro()

@@ -28,7 +28,7 @@ class CartaoDAO(ConexaoGenerica):
             id = i
         if id:
             sql = "SELECT cart_id, cart_numero, cart_creditos, tipo_id FROM cartao " +\
-                  "WHERE cart_numero = " + str(id) + " OR cart_id = " + str(id)
+                "WHERE cart_id = " + str(id)
         elif id is None:
             sql = "SELECT cart_id, cart_numero, cart_creditos, tipo_id FROM cartao"
         try:
@@ -40,7 +40,7 @@ class CartaoDAO(ConexaoGenerica):
                         obj.id = dados[0]
                         obj.numero = dados[1]
                         obj.creditos = dados[2]
-                        obj.tipo = TipolDAO().busca(dados[3])
+                        obj.tipo = TipoDAO().busca(dados[3])
                         return obj
                     else:
                         return None
@@ -56,38 +56,88 @@ class CartaoDAO(ConexaoGenerica):
         finally:
             pass
         
-    def mantem(self, obj, delete):
+    def busca_por_numero(self, *arg):
+        obj = Cartao()
+        id = None
+        for i in arg:
+            id = i
+        if id:
+            sql = "SELECT cart_id, cart_numero, cart_creditos, tipo_id FROM cartao " +\
+                  "WHERE cart_numero = " + str(id)
+        elif id is None:
+            sql = "SELECT cart_id, cart_numero, cart_creditos, tipo_id FROM cartao"
         try:
-            if obj is not None:
-                if delete:
-                    sql = "DELETE FROM cartao WHERE cart_id = " + str(obj.id)
-                    msg = "Excluido com sucesso!"
-                else:
-                    if obj.id:
-                        sql = "UPDATE cartao SET " +\
-                              "cart_numero = " + str(obj.numero) + ", " +\
-                              "cart_creditos = " + str(obj.creditos) + ", " +\
-                              "tipo_id = " + str(obj.tipo.id) +\
-                              " WHERE "\
-                              "cart_id = " + str(obj.id)
-                        msg = "Alterado com sucesso!"
+            with closing(self.abre_conexao().cursor()) as cursor:
+                cursor.execute(sql)
+                if id:
+                    dados = cursor.fetchone()
+                    if dados is not None:
+                        obj.id = dados[0]
+                        obj.numero = dados[1]
+                        obj.creditos = dados[2]
+                        obj.tipo = TipoDAO().busca(dados[3])
+                        return obj
                     else:
-                        sql = "INSERT INTO cartao("\
-                              "cart_numero, "\
-                              "cart_creditos, "\
-                              "tipo_id) VALUES (" +\
-                              str(obj.numero) + ", " +\
-                              str(obj.creditos) + ", " +\
-                              str(obj.tipo.id) + ")"
-                        msg = "Inserido com sucesso!"
+                        return None
+                elif id is None:
+                    list = cursor.fetchall()
+                    if list != []:
+                        return list
+                    else:
+                        return None
+        except Exception, e:
+            self.aviso = str(e)
+            self.log.logger.error('Erro ao realizar SELECT na tabela cartao.', exc_info=True)
+        finally:
+            pass
+        
+    def insere(self, obj):
+        try:
+            if obj:
+                sql = "INSERT INTO cartao("\
+                        "cart_id, "\
+                        "cart_numero, "\
+                        "cart_creditos, "\
+                        "tipo_id) VALUES (" +\
+                        str(obj.id) + ", " +\
+                        str(obj.numero) + ", " +\
+                        str(obj.creditos) + ", " +\
+                        str(obj.tipo) + ")"
+                self.aviso = "Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     #self.commit()
-                    self.aviso = msg
                     return True
             else:
-                msg = "Objeto inexistente!"
-                self.aviso = msg
+                self.aviso = "Objeto inexistente!"
+                return False
+        except Exception, e:
+            self.aviso = str(e)
+            self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela cartao.', exc_info=True)
+            return False
+        finally:
+            pass
+        
+    def atualiza_exclui(self, obj, delete):
+        try:
+            if obj:
+                if delete:
+                    sql = "DELETE FROM cartao WHERE cart_id = " + str(obj.id)
+                    self.aviso = "Excluido com sucesso!"
+                else:
+                    sql = "UPDATE cartao SET " +\
+                          "cart_numero = " + str(obj.numero) + ", " +\
+                          "cart_creditos = " + str(obj.creditos) + ", " +\
+                          "tipo_id = " + str(obj.tipo) +\
+                          " WHERE "\
+                          "cart_id = " + str(obj.id)
+                    self.aviso = "Alterado com sucesso!"
+                with closing(self.abre_conexao().cursor()) as cursor:
+                    cursor.execute(sql)
+                    #self.commit()
+                    return True
+            else:
+                self.aviso = "Objeto inexistente!"
                 return False
         except Exception, e:
             self.aviso = str(e)

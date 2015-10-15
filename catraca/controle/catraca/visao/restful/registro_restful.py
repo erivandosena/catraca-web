@@ -24,7 +24,7 @@ class RegistroRestful(ServidorRestful):
         super(RegistroRestful, self).__init__()
         ServidorRestful.__init__(self)
         
-    def lista_json(self, lista):
+    def lista_para_json(self, lista):
         #if lista != []:
         for item in lista:
             registro = {
@@ -38,7 +38,7 @@ class RegistroRestful(ServidorRestful):
             self.post_registro(registro)
             #self.registro_dao.mantem(self.registro_dao.busca(item[0]),True)
 
-    def objeto_json(self, obj):
+    def objeto_para_json(self, obj):
         registro = {
             "regi_data":str(obj.data),
             "regi_valor_pago":str(obj.pago),

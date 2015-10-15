@@ -63,53 +63,38 @@ class TurnoDAO(ConexaoGenerica):
         finally:
             pass
         
-    def insere(self, obj):
+    def mantem(self, obj, delete):
         try:
-            if obj:
-                sql = "INSERT INTO turno("\
-                        "turn_id, "\
-                        "turn_hora_inicio, "\
-                        "turn_hora_fim, "\
-                        "turn_descricao) VALUES (" +\
-                        str(obj.id) + ", '" +\
-                        str(obj.inicio) + "', '" +\
-                        str(obj.fim) + "', '" +\
-                        str(obj.descricao) + "')"
-                self.aviso = "Inserido com sucesso!"
-                with closing(self.abre_conexao().cursor()) as cursor:
-                    cursor.execute(sql)
-                    self.commit()
-                    return True
-            else:
-                self.aviso = "Objeto inexistente!"
-                return False
-        except Exception, e:
-            self.__aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela turno.', exc_info=True)
-            return False
-        finally:
-            pass
-        
-    def atualiza_exclui(self, obj, delete):
-        try:
-            if obj:
+            if obj is not None:
                 if delete:
                     sql = "DELETE FROM turno WHERE turn_id = " + str(obj.id)
                     msg = "Excluido com sucesso!"
                 else:
-                    sql = "UPDATE turno SET " +\
-                          "turn_hora_inicio = '" + str(obj.inicio) + "', " +\
-                          "turn_hora_fim = '" + str(obj.fim) + "', " +\
-                          "turn_descricao = '" + str(obj.descricao) +\
-                          "' WHERE "\
-                          "turn_id = " + str(obj.id)
-                    self.aviso = "Alterado com sucesso!"
+                    if obj.id:
+                        sql = "UPDATE turno SET " +\
+                              "turn_hora_inicio = '" + str(obj.inicio) + "', " +\
+                              "turn_hora_fim = '" + str(obj.fim) + "', " +\
+                              "turn_descricao = " + str(obj.descricao) +\
+                              " WHERE "\
+                              "turn_id = " + str(obj.id)
+                        msg = "Alterado com sucesso!"
+                    else:
+                        sql = "INSERT INTO turno("\
+                              "turn_hora_inicio, "\
+                              "turn_hora_fim, "\
+                              "turn_descricao) VALUES ('" +\
+                              str(obj.inicio) + "', '" +\
+                              str(obj.fim) + "', " +\
+                              str(obj.descricao) + ")"
+                        msg = "Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
+                    self.aviso = msg
                     return True
             else:
-                self.aviso = "Objeto inexistente!"
+                msg = "Objeto inexistente!"
+                self.aviso = msg
                 return False
         except Exception, e:
             self.__aviso = str(e)

@@ -6,6 +6,10 @@ from contextlib import closing
 from catraca.modelo.dados.conexao import ConexaoFactory
 from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
 from catraca.modelo.entidades.catraca import Catraca
+from catraca.modelo.dao.unidade_dao import UnidadeDAO
+# from catraca.modelo.dao.giro_dao import GiroDAO
+# from catraca.modelo.dao.mensagem_dao import MensagemDAO
+# from catraca.modelo.dao.registro_dao import RegistroDAO
 
 
 __author__ = "Erivando Sena"
@@ -30,7 +34,7 @@ class CatracaDAO(ConexaoGenerica):
                   "catr_ip, "\
                   "catr_tempo_giro, "\
                   "catr_operacao, "\
-                  "catr_nome "\
+                  "unid_id "\
                   "FROM catraca WHERE "\
                   "catr_id = " + str(id)
         elif id is None:
@@ -38,7 +42,7 @@ class CatracaDAO(ConexaoGenerica):
                   "catr_ip, "\
                   "catr_tempo_giro, "\
                   "catr_operacao, "\
-                  "catr_nome "\
+                  "unid_id "\
                   "FROM catraca"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
@@ -50,7 +54,10 @@ class CatracaDAO(ConexaoGenerica):
                         obj.ip = dados[1]
                         obj.tempo = dados[2]
                         obj.operacao = dados[3]
-                        obj.nome = dados[4]
+                        obj.unidade = UnidadeDAO().busca(dados[4])
+#                         obj.giros = GiroDAO().busca_por_catraca(dados[0])
+#                         obj.mensagens = MensagemDAO().busca_por_catraca(dados[0])
+#                         obj.registros = RegistroDAO().busca_por_catraca(dados[0])
                         return obj
                     else:
                         return None
@@ -72,7 +79,7 @@ class CatracaDAO(ConexaoGenerica):
               "catr_ip, "\
               "catr_tempo_giro, "\
               "catr_operacao, "\
-              "catr_nome "\
+              "unid_id "\
               "FROM catraca WHERE "\
               "catr_ip = '" + str(ip) + "'"
         try:
@@ -84,7 +91,10 @@ class CatracaDAO(ConexaoGenerica):
                     obj.ip = dados[1]
                     obj.tempo = dados[2]
                     obj.operacao = dados[3]
-                    obj.nome = dados[4]
+                    obj.unidade = UnidadeDAO().busca(dados[4])
+#                     obj.giros = GiroDAO().busca_por_catraca(dados[0])
+#                     obj.mensagens = MensagemDAO().busca_por_catraca(dados[0])
+#                     obj.registros = RegistroDAO().busca_por_catraca(dados[0])
                     return obj
                 else:
                     return None
@@ -94,56 +104,72 @@ class CatracaDAO(ConexaoGenerica):
         finally:
             pass
         
-    def insere(self, obj):
+    def busca_por_unidade(self, obj):
+        obj = Catraca()
+        sql = "SELECT catr_id, "\
+              "catr_ip, "\
+              "catr_tempo_giro, "\
+              "catr_operacao, "\
+              "unid_id "\
+              "FROM catraca WHERE "\
+              "unid_id = " + str(obj.id)
         try:
-            if obj:
-                sql = "INSERT INTO catraca("\
-                    "catr_id, "\
-                    "catr_ip, "\
-                    "catr_tempo_giro, "\
-                    "catr_operacao, "\
-                    "catr_nome) VALUES (" +\
-                    str(obj.id) + ", '" +\
-                    str(obj.ip) + "', " +\
-                    str(obj.tempo) + ", " +\
-                    str(obj.operacao) + ", '" +\
-                    str(obj.nome) + "')"
-                self.aviso = "Inserido com sucesso!"
-                with closing(self.abre_conexao().cursor()) as cursor:
-                    cursor.execute(sql)
-                    self.commit()
-                    return False
-            else:
-                self.aviso = "Objeto inexistente!"
-                return False
+            with closing(self.abre_conexao().cursor()) as cursor:
+                cursor.execute(sql)
+                dados = cursor.fetchone()
+                if dados is not None:
+                    obj.id = dados[0]
+                    obj.ip = dados[1]
+                    obj.tempo = dados[2]
+                    obj.operacao = dados[3]
+                    obj.unidade = UnidadeDAO().busca(dados[4])
+#                     obj.giros = GiroDAO().busca_por_catraca(dados[0])
+#                     obj.mensagens = MensagemDAO().busca_por_catraca(dados[0])
+#                     obj.registros = RegistroDAO().busca_por_catraca(dados[0])
+                    return obj
+                else:
+                    return None
         except Exception, e:
             self.aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela catraca.', exc_info=True)
-            return False
+            self.log.logger.error('Erro ao realizar SELECT na tabela catraca.', exc_info=True)
         finally:
-            pass   
+            pass
         
-    def atualiza_exclui(self, obj, delete):
+    def mantem(self, obj, delete):
         try:
-            if obj:
+            if obj is not None:
                 if delete:
                     sql = "DELETE FROM catraca WHERE catr_id = " + str(obj.id)
-                    self.aviso = "Excluido com sucesso!"
+                    msg = "Excluido com sucesso!"
                 else:
-                    sql = "UPDATE catraca SET " +\
-                        "catr_ip = '" + str(obj.ip) + "', " +\
-                        "catr_tempo_giro = " + str(obj.tempo) + ", " +\
-                        "catr_operacao = " + str(obj.operacao) + ", " +\
-                        "catr_nome = '" + str(obj.nome) +\
-                        "' WHERE "\
-                        "catr_id = " + str(obj.id)
-                    self.aviso = "Alterado com sucesso!"
+                    if obj.id:
+                        sql = "UPDATE catraca SET " +\
+                              "catr_ip = '" + str(obj.ip) + "', " +\
+                              "catr_tempo_giro = " + str(obj.tempo) + ", " +\
+                              "catr_operacao = " + str(obj.operacao) + ", " +\
+                              "unid_id = " + str(obj.unidade.id) +\
+                              " WHERE "\
+                              "catr_id = " + str(obj.id)
+                        msg = "Alterado com sucesso!"
+                    else:
+                        sql = "INSERT INTO catraca("\
+                              "catr_ip, "\
+                              "catr_tempo_giro, "\
+                              "catr_operacao, "\
+                              "unid_id) VALUES ('" +\
+                              str(obj.ip) + "', '" +\
+                              str(obj.tempo) + ", " +\
+                              str(obj.operacao) + ", " +\
+                              str(obj.unidade) + ")"
+                        msg = "Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
+                    self.aviso = msg
                     return False
             else:
-                self.aviso = "Objeto inexistente!"
+                msg = "Objeto inexistente!"
+                self.aviso = msg
                 return False
         except Exception, e:
             self.aviso = str(e)

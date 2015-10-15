@@ -15,7 +15,10 @@ class Catraca(object):
         self.__catr_ip = None
         self.__catr_tempo_giro = None
         self.__catr_operacao = None
-        self.__catr_nome = None
+        self.__unidade = None
+#         self.__giros = []
+#         self.__mensagens = []
+#         self.__registros = []
     
     @property
     def id(self):
@@ -50,11 +53,34 @@ class Catraca(object):
         self.__catr_operacao = valor
     
     @property
-    def nome(self):
-        return self.__catr_nome
+    def unidade(self):
+        return self.__unidade
     
-    @nome.setter
-    def nome(self, valor):
-        self.__catr_nome = valor
-
+    @unidade.setter
+    def unidade(self, obj):
+        self.__unidade = obj
+    
+#     @property
+#     def giros(self):
+#         return self.__giros
+#     
+#     @giros.setter
+#     def giros(self, list):
+#         self.__giros = list
+#     
+#     @property
+#     def mensagens(self):
+#         return self.__mensagens
+#     
+#     @mensagens.setter
+#     def mensagens(self, list):
+#         self.__mensagens = list
+#     
+#     @property
+#     def registros(self):
+#         return self.__registros
+#      
+#     @registros.setter
+#     def registros(self, list):
+#         self.__registros = list
         
