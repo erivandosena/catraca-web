@@ -115,7 +115,7 @@ CREATE TABLE giro
   giro_id serial NOT NULL, -- Campo autoincremento destinado para chave primaria da tabela.
   giro_giros_horario integer DEFAULT 0, -- Contador de giros no sentido horario(Entrada).
   giro_giros_antihorario integer DEFAULT 0, -- Contador de giros no sentido anti-horario(Saida).
-  giro_tempo_realizado integer DEFAULT 0, -- Tempo do giro realizado em segundos.
+  giro_tempo_realizado double precision DEFAULT 0, -- Tempo do giro realizado em segundos.
   giro_data_giro timestamp without time zone NOT NULL DEFAULT now(), -- Data/hora da ocorrencia do giro.
   catr_id integer NOT NULL, -- Campo para chave estrangeira da tabela catraca.
   CONSTRAINT pk_giro_id PRIMARY KEY (giro_id),
@@ -191,11 +191,11 @@ INSERT INTO mensagem(mens_inicializacao, mens_saldacao, mens_aguardacartao,
 CREATE TABLE registro
 (
   regi_id serial NOT NULL, -- Campo autoincremento destinado para chave primaria da tabela.
-  regi_datahora timestamp without time zone, -- Data/hora da utilizacao do cartao na catraca.
-  regi_giro integer NOT NULL DEFAULT 0, -- Confirmacao de efetivacao de giro na catraca.
-  regi_valor numeric(8,2) NOT NULL, -- Valor referente a refeicao.
+  regi_datahora timestamp without time zone NOT NULL, -- Data/hora da utilizacao do cartao na catraca.
+  regi_giro integer NOT NULL, -- Confirmacao de efetivacao de giro na catraca.
+  regi_valor numeric(8,2) NOT NULL, -- Valor em R$ referente a refeicao.
   cart_id integer NOT NULL, -- Campo para chave estrangeira da tabela cartao.
-  turn_id integer, -- Campo para chave estrangeira da tabela turno.
+  turn_id integer NOT NULL, -- Campo para chave estrangeira da tabela turno.
   CONSTRAINT pk_regi_id PRIMARY KEY (regi_id ),
   CONSTRAINT fk_cart_id FOREIGN KEY (cart_id) REFERENCES cartao (cart_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION,
   CONSTRAINT pk_turn_id FOREIGN KEY (turn_id) REFERENCES turno (turn_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION

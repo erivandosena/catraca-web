@@ -14,7 +14,7 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 class ServidorRestful(object):
     
-    URL = 'http://10.5.1.8:8888/api/'
+    URL = 'http://10.5.0.15:27289/api/'
 
     def __init__(self):
         super(ServidorRestful, self).__init__()
