@@ -1,0 +1,107 @@
+<?php 
+
+function __autoload($classe){
+
+	if(file_exists('classes/model/'.$classe.'.php')){
+		include_once 'classes/model/'.$classe.'.php';
+	}
+	else if(file_exists('classes/controller/'.$classe.'.php')){
+		include_once 'classes/controller/'.$classe.'.php';
+	}
+	else if(file_exists('classes/dao/'.$classe.'.php')){
+		include_once 'classes/dao/'.$classe.'.php';
+	}
+	else if(file_exists('classes/view/'.$classe.'.php')){
+		include_once 'classes/view/'.$classe.'.php';
+	}
+
+
+
+}
+
+ini_set('display_errors',1);
+ini_set('display_startup_erros',1);
+error_reporting(E_ALL);
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Catraca</title>
+</head>
+<body>
+	<?php 
+	
+		
+		
+		$dao = new UnidadeDAO();
+		$lista = $dao->retornaLista();
+		
+		
+		
+		
+		foreach($lista as $elemento){
+			echo 'ID: '.$elemento->getId().'<br>';
+			echo 'Nome: '.$elemento->getNome().'<br> ';
+			echo '<a href="?delete_unidade=1&unid_id='.$elemento->getId().'"> Deletar</a><br>';
+		}
+	
+		
+		
+		
+		
+		
+	?>
+
+	<form action="" method="get">
+			<fieldset>
+				<legend>Unidade Academica</legend>
+				<label for="unid_nome">Nome da Unidade Academica</label><br>
+				<input id="unid_nome" type="text" name="unid_nome"/>
+				<br>
+				<input type="submit" value="Enviar" />
+		</fieldset>
+	</form>
+	
+	
+	<?php 
+	
+	if(isset($_GET['unid_nome']))
+		if($_GET['unid_nome'] != null && $_GET['unid_nome'] != "")
+		{
+			$nome = $_GET['unid_nome'];
+			$unidade = new Unidade();
+			$unidade->setNome($nome);
+			if($dao->inserirUnidade($unidade))
+				echo "Inserido com sucesso";
+			else
+				echo "Erro ao tentar inserir";
+			
+			echo '<meta http-equiv="refresh" content="2; url=index.php">';
+			
+		}
+	
+	if(isset($_GET['delete_unidade'])){
+		if(isset($_GET['unid_id'])){
+			if(is_int(intval($_GET['unid_id']))){
+				$id = $_GET['unid_id'];
+				$unidade = new Unidade();
+				$unidade->setId($id);
+				if($dao->getConexao()->query($sql))
+					echo "Deletado com sucesso";
+				else 
+					echo "Erro ao tentar deletar";
+				
+			}
+		}
+		echo '<meta http-equiv="refresh" content="2; url=index.php">';
+		
+	}
+	
+	?>
+	
+	
+</body>
+
+</html>

@@ -1,0 +1,33 @@
+<?php
+
+class CartaoView{
+	
+	/**
+	 * 
+	 * @param mixed $lista
+	 */
+	public function mostraLista($lista){
+		foreach ($lista as $cartao){
+			echo $cartao->getNumero().'Tipo: '.$cartao->getTipo()->getNome().'<br>';
+		}
+		
+	}
+	
+	
+	public function mostraFormulario(){
+		echo '
+			<form action="" method="post">
+				<fieldset>
+					<legend>Unidade Academica</legend>
+					<label for="unid_nome">Nome da Unidade Academica</label><br>
+					<input id="unid_nome" type="text" name="unid_nome"/>
+					<br>
+					<input type="submit" value="Enviar" />
+			</fieldset>
+	</form>';
+	}
+	
+}
+
+
+?>

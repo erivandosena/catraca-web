@@ -1,0 +1,16 @@
+<?php
+
+class CartaoView{
+	
+	public function mostraLista(Cartao $lista){
+		
+		
+	}
+	
+	
+	
+	
+}
+
+
+?>

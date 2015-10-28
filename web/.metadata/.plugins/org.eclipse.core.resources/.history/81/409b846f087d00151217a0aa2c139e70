@@ -1,0 +1,18 @@
+<?php
+
+class CartaoView{
+	
+	public function mostraLista($lista){
+		foreach ($lista as $cartao){
+			echo $cartao->getNu
+		}
+		
+	}
+	
+	
+	
+	
+}
+
+
+?>

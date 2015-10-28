@@ -1,0 +1,9 @@
+<?php
+function __autoload($classe){
+	
+	echo $classe;
+	
+	
+	
+}
+

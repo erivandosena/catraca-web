@@ -1,0 +1,21 @@
+<?php
+
+
+class Vinculo{
+	
+	
+	
+	private $id;
+	private $avulso;
+	private $responsavel;
+	private $inicioValidade;
+	private $finalValidade;
+	private $quantidadeDeAlimentosPorTurno;
+	private $descricao;
+	private $cartao;	
+	
+	
+}
+
+
+?>

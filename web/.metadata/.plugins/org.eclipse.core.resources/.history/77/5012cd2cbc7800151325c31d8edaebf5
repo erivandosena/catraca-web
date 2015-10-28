@@ -1,0 +1,12 @@
+<?php
+function __autoload($classe){
+	
+	if(file_exists('classes/model/'.$classe.'.php')){
+		include_once 'classes/model/'.$classe.'.php';
+		echo "Incluiu o ".$classe;
+	}
+	
+	
+}
+
+$teste2 = new Unidade();

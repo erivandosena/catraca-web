@@ -1,0 +1,77 @@
+<?php
+
+
+class UnidadeController{
+	private $dao;
+	private $view;
+	public function UnidadeController(){
+		$this->dao = new UnidadeDAO();
+		
+	}
+	
+	
+	
+	public function listagem(){
+		
+		$lista = $this->dao->retornaLista();
+		
+		
+		
+		
+		foreach($lista as $elemento){
+			echo 'ID: '.$elemento->getId().'<br>';
+			echo 'Nome: '.$elemento->getNome().'<br> ';
+			echo '<a href="?delete_unidade=1&unid_id='.$elemento->getId().'"> Deletar</a><br>';
+		}
+		
+		
+		
+	}
+	public function cadastro(){
+		
+		if(isset($_GET['unid_nome']))
+			if($_GET['unid_nome'] != null && $_GET['unid_nome'] != "")
+			{
+				$nome = $_GET['unid_nome'];
+				$unidade = new Unidade();
+				$unidade->setNome($nome);
+				if($this->dao->inserirUnidade($unidade))
+					echo "Inserido com sucesso";
+				else
+					echo "Erro ao tentar inserir";
+					
+				echo '<meta http-equiv="refresh" content="2; url=index.php">';
+					
+			}
+	}
+	
+	public function delete(){
+
+		if(isset($_GET['delete_unidade'])){
+			if(isset($_GET['unid_id'])){
+				if(is_int(intval($_GET['unid_id']))){
+					$id = intval($_GET['unid_id']);
+		
+					$unidade = new Unidade();
+					$unidade->setId($id);
+		
+					if($this->dao->deletarUnidade($unidade))
+						echo "Deletado com sucesso";
+					else
+						echo "Erro ao tentar deletar";
+		
+				}
+			}
+			echo '<meta http-equiv="refresh" content="2; url=index.php">';
+		
+		}
+	}
+
+	
+	
+	
+}
+
+
+
+?>

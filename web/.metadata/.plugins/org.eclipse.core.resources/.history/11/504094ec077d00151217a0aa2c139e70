@@ -1,0 +1,44 @@
+<?php
+class CartaoDAO extends DAO{
+
+	public function retornaLista(){
+		$lista = array();
+		$result = $this->getConexao()->query("SELECT * FROM cartao LIMIT 100");
+
+		foreach ($result as $linha){
+			$cartao = new Cartao();
+			$cartao->setId($linha['cart_id']);
+			$cartao->setCreditos($linha['cart_creditos']);
+			$cartao->setNumero($linha['cart_numero']);
+			
+			$lista[] = $unidade;
+				
+		}
+		return $lista;
+	}
+
+	
+
+	public function inserirUnidade(Unidade $unidade){
+		$nome = $unidade->getNome();
+		if($this->getConexao()->query("INSERT INTO unidade (unid_nome) VALUES('$nome')"))
+			return true;
+		return false;
+		
+		
+	}
+	public function deletarUnidade(Unidade $unidade){
+		$id = $unidade->getId();
+		$sql = "DELETE FROM unidade WHERE unid_id = $id";
+		if($this->getConexao()->query($sql))
+			return true;
+		return false;
+	}
+	
+	
+	
+	
+}
+
+
+?>
