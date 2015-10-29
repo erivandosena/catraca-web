@@ -33,15 +33,14 @@ class GiroDAO(ConexaoGenerica):
                   "giro_data_giros, "\
                   "catr_id "\
                   "FROM giro WHERE "\
-                  "giro_id = " + str(id) +\
-                  " ORDER BY giro_data_giros DESC"
+                  "giro_id = " + str(id)
         elif id is None:
             sql = "SELECT giro_id, "\
                   "giro_giros_horario, "\
                   "giro_giros_antihorario, "\
                   "giro_data_giros, "\
                   "catr_id "\
-                  "FROM giro ORDER BY giro_data_giros DESC"
+                  "FROM giro ORDER BY giro_id"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -68,15 +67,20 @@ class GiroDAO(ConexaoGenerica):
         finally:
             pass
         
-    def busca_por_catraca(self, id):
+    def busca_por_catraca(self, obj):
+        return CatracaDAO().busca(obj.id)
+    
+    def busca_por_periodo(self, data_ini, data_fim, catraca):
         sql = "SELECT giro_id, "\
-              "giro_giros_horario, "\
-              "giro_giros_antihorario, "\
-              "giro_data_giros, "\
-              "catr_id "\
-              "FROM giro WHERE "\
-              "catr_id = " + str(id) +\
-              " ORDER BY giro_data_giros DESC"
+            "giro_giros_horario, "\
+            "giro_giros_antihorario, "\
+            "giro_data_giros, "\
+            "catr_id "\
+            "FROM giro WHERE "\
+            "giro_data_giros BETWEEN " + str(data_ini) +\
+            " AND " + str(data_fim) +\
+            " AND catr_id = " + str(catraca.id) +\
+            " ORDER BY giro_data_giros DESC"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -87,51 +91,63 @@ class GiroDAO(ConexaoGenerica):
                     return None
         except Exception, e:
             self.aviso = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela giro.', exc_info=True)
+            self.log.logger.error('Erro ao realizar SELECT na tabela registro.', exc_info=True)
         finally:
             pass
-          
-    def mantem(self, obj, delete):
+        
+    def insere(self, obj):
         try:
-            if obj is not None:
-                if delete:
-                    sql = "DELETE FROM tipo WHERE giro_id = " + str(obj.id)
-                    msg = "Excluido com sucesso!"
-                else:
-                    if obj.id:
-                        sql = "UPDATE giro SET " +\
-                              "giro_giros_horario = " + str(obj.horario) + ", " +\
-                              "giro_giros_antihorario = " + str(obj.antihorario) + ", " +\
-                              "giro_tempo_realizado = " + str(obj.tempo) + ", " +\
-                              "giro_data_giro = '" + str(obj.data) + "', " +\
-                              "catr_id = " + str(obj.catraca.id) +\
-                              " WHERE "\
-                              "giro_id = " + str(obj.id)
-                        msg = "Alterado com sucesso!"
-                    else:
-                        sql = "INSERT INTO giro("\
-                              "giro_giros_horario, "\
-                              "giro_giros_antihorario, "\
-                              "giro_tempo_realizado, "\
-                              "giro_data_giro, catr_id) VALUES (" +\
-                              str(obj.horario) + ", " +\
-                              str(obj.antihorario) + ", " +\
-                              str(obj.tempo) + ", '" +\
-                              str(obj.data) + "', " +\
-                              str(obj.catraca.id) + ")"
-                        msg = "Inserido com sucesso!"
+            if obj:
+                sql = "INSERT INTO giro("\
+                    "giro_id, "\
+                    "giro_giros_horario, "\
+                    "giro_giros_antihorario, "\
+                    "giro_data_giros, catr_id) VALUES (" +\
+                    str(obj.id) + ", " +\
+                    str(obj.horario) + ", " +\
+                    str(obj.antihorario) + ", '" +\
+                    str(obj.data) + "', " +\
+                    str(obj.catraca.id) + ")"
+                self.aviso = "Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
-                    self.aviso = msg
                     return True
             else:
-                msg = "Objeto inexistente!"
-                self.aviso = msg
+                self.aviso = "Objeto inexistente!"
                 return False
         except Exception, e:
             self.aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela giro.', exc_info=True)
+            self.log.logger.error('Erro realizando INSERT na tabela giro.', exc_info=True)
+            return False
+        finally:
+            pass
+          
+    def atualiza_exclui(self, obj, delete):
+        try:
+            if obj:
+                if delete:
+                    sql = "DELETE FROM tipo WHERE giro_id = " + str(obj.id)
+                    self.aviso = "Excluido com sucesso!"
+                else:
+                    sql = "UPDATE giro SET " +\
+                        "giro_giros_horario = " + str(obj.horario) + ", " +\
+                        "giro_giros_antihorario = " + str(obj.antihorario) + ", " +\
+                        "giro_data_giros = '" + str(obj.data) + "', " +\
+                        "catr_id = " + str(obj.catraca.id) +\
+                        " WHERE "\
+                        "giro_id = " + str(obj.id)
+                    self.aviso = "Alterado com sucesso!"
+                with closing(self.abre_conexao().cursor()) as cursor:
+                    cursor.execute(sql)
+                    self.commit()
+                    return True
+            else:
+                self.aviso = "Objeto inexistente!"
+                return False
+        except Exception, e:
+            self.aviso = str(e)
+            self.log.logger.error('Erro realizando DELETE/UPDATE na tabela giro.', exc_info=True)
             return False
         finally:
             pass

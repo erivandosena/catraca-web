@@ -6,8 +6,8 @@ import json
 import requests
 from catraca.logs import Logs
 from catraca.visao.restful.servidor_restful import ServidorRestful
-from catraca.modelo.dao.tipo_dao import TipoDAO
-from catraca.modelo.entidades.tipo import Tipo
+from catraca.modelo.dao.isencao_dao import IsencaoDAO
+from catraca.modelo.entidades.isencao import Isencao
 
 
 __author__ = "Erivando Sena" 
@@ -16,49 +16,51 @@ __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production 
 
 
-class TipoJson(ServidorRestful):
+class IsencaoJson(ServidorRestful):
     
     log = Logs()
-    tipo_dao = TipoDAO()
+    isencao_dao = IsencaoDAO()
     
     def __init__(self, ):
-        super(TipoJson, self).__init__()
+        super(IsencaoJson, self).__init__()
         ServidorRestful.__init__(self)
         
-    def tipo_get(self):
-        url = self.obter_servidor() + "tipo/jtipo"
+    def isencao_get(self):
+        url = self.obter_servidor() + "isencao/jisencao"
         header = {'Content-type': 'application/json'}
-        r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
+        r = requests.get(url, auth=(self.isencao, self.senha), headers=header)
         print "status HTTP: " + str(r.status_code)
         dados  = json.loads(r.text)
         
-        for item in dados["tipos"]:
+        for item in dados["isencaos"]:
             obj = self.dict_obj(item)
             if obj.id:
-                lista = self.tipo_dao.busca(obj.id)
+                lista = self.isencao_dao.busca(obj.id)
                 if lista is None:
                     print "nao existe - insert " + str(obj.nome)
-                    self.tipo_dao.insere(obj)
-                    print self.tipo_dao.aviso
+                    self.isencao_dao.insere(obj)
+                    print self.isencao_dao.aviso
                 else:
                     print "existe - update " + str(obj.nome)
-                    self.tipo_dao.atualiza_exclui(obj, False)
-                    print self.tipo_dao.aviso
+                    self.isencao_dao.atualiza_exclui(obj, False)
+                    print self.isencao_dao.aviso
         
     def dict_obj(self, formato_json):
-        tipo = Tipo()
+        isencao = Isencao()
         if isinstance(formato_json, list):
             formato_json = [self.dict_obj(x) for x in formato_json]
         if not isinstance(formato_json, dict):
             return formato_json
         for item in formato_json:
             
-            if item == "tipo_id":
-                tipo.id = self.dict_obj(formato_json[item])
-            if item == "tipo_nome":
-                tipo.nome = self.dict_obj(formato_json[item]).encode('utf-8')
-            if item == "tipo_valor":
-                tipo.valor = self.dict_obj(formato_json[item])
+            if item == "isen_id":
+                isencao.id = self.dict_obj(formato_json[item])
+            if item == "isen_inicio":
+                isencao.inicio = self.dict_obj(formato_json[item])
+            if item == "isen_fim":
+                isencao.fim = self.dict_obj(formato_json[item])
+            if item == "cart_id":
+                isencao.cartao = self.dict_obj(formato_json[item])
                 
-        return tipo
+        return isencao
     

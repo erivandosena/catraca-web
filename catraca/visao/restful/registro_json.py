@@ -30,9 +30,9 @@ class RegistroJson(ServidorRestful):
         header = {'Content-type': 'application/json'}
         r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
         print "Código: " + str(r.status_code)
-        data  = json.loads(r.text)
+        dados  = json.loads(r.text)
         
-        for item in data["registros"]:
+        for item in dados["registros"]:
             obj = self.dict_obj(item)
 
             if obj.id:

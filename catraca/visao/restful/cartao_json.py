@@ -29,7 +29,7 @@ class CartaoJson(ServidorRestful):
         url = self.obter_servidor() + "cartao/jcartao"
         header = {'Content-type': 'application/json'}
         r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
-        print "Código: " + str(r.status_code)
+        print "status HTTP: " + str(r.status_code)
         dados  = json.loads(r.text)
         
         for item in dados["cartoes"]:

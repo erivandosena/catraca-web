@@ -28,7 +28,7 @@ class TipoDAO(ConexaoGenerica):
         if id:
             sql = "SELECT tipo_id, tipo_nome, tipo_valor FROM tipo WHERE tipo_id = " + str(id)
         elif id is None:
-            sql = "SELECT tipo_id, tipo_nome, tipo_valor FROM tipo"
+            sql = "SELECT tipo_id, tipo_nome, tipo_valor FROM tipo ORDER BY tipo_id"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -73,7 +73,7 @@ class TipoDAO(ConexaoGenerica):
                 return False
         except Exception, e:
             self.aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela tipo.', exc_info=True)
+            self.log.logger.error('Erro realizando INSERT na tabela tipo.', exc_info=True)
             return False
         finally:
             pass
@@ -100,7 +100,7 @@ class TipoDAO(ConexaoGenerica):
                 return False
         except Exception, e:
             self.aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela tipo.', exc_info=True)
+            self.log.logger.error('Erro realizando DELETE/UPDATE na tabela tipo.', exc_info=True)
             return False
         finally:
             pass

@@ -30,7 +30,7 @@ class CartaoDAO(ConexaoGenerica):
             sql = "SELECT cart_id, cart_numero, cart_creditos, tipo_id FROM cartao " +\
                 "WHERE cart_id = " + str(id)
         elif id is None:
-            sql = "SELECT cart_id, cart_numero, cart_creditos, tipo_id FROM cartao"
+            sql = "SELECT cart_id, cart_numero, cart_creditos, tipo_id FROM cartao ORDER BY cart_id"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -40,7 +40,7 @@ class CartaoDAO(ConexaoGenerica):
                         obj.id = dados[0]
                         obj.numero = dados[1]
                         obj.creditos = dados[2]
-                        obj.tipo = TipoDAO().busca(dados[3])
+                        obj.tipo = self.busca_por_tipo(obj)
                         return obj
                     else:
                         return None
@@ -50,11 +50,14 @@ class CartaoDAO(ConexaoGenerica):
                         return list
                     else:
                         return None
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela cartao.', exc_info=True)
+#         except Exception, e:
+#             self.aviso = str(e)
+#             self.log.logger.error('Erro ao realizar SELECT na tabela cartao.', exc_info=True)
         finally:
             pass
+        
+    def busca_por_tipo(self, obj):
+        return TipoDAO().busca(obj.id)
         
     def busca_por_numero(self, *arg):
         obj = Cartao()
@@ -85,9 +88,9 @@ class CartaoDAO(ConexaoGenerica):
                         return list
                     else:
                         return None
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela cartao.', exc_info=True)
+#         except Exception, e:
+#             self.aviso = str(e)
+#             self.log.logger.error('Erro ao realizar SELECT na tabela cartao.', exc_info=True)
         finally:
             pass
         
@@ -111,10 +114,10 @@ class CartaoDAO(ConexaoGenerica):
             else:
                 self.aviso = "Objeto inexistente!"
                 return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela cartao.', exc_info=True)
-            return False
+#         except Exception, e:
+#             self.aviso = str(e)
+#             self.log.logger.error('Erro realizando INSERT na tabela cartao.', exc_info=True)
+#             return False
         finally:
             pass
         
@@ -139,10 +142,10 @@ class CartaoDAO(ConexaoGenerica):
             else:
                 self.aviso = "Objeto inexistente!"
                 return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela cartao.', exc_info=True)
-            return False
+#         except Exception, e:
+#             self.aviso = str(e)
+#             self.log.logger.error('Erro realizando DELETE/UPDATE na tabela cartao.', exc_info=True)
+#             return False
         finally:
             pass
         

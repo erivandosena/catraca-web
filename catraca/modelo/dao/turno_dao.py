@@ -37,7 +37,7 @@ class TurnoDAO(ConexaoGenerica):
                    "turn_hora_inicio, "\
                    "turn_hora_fim, "\
                    "turn_descricao "\
-                   "FROM turno"
+                   "FROM turno ORDER BY turn_id"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -85,7 +85,7 @@ class TurnoDAO(ConexaoGenerica):
                 return False
         except Exception, e:
             self.__aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela turno.', exc_info=True)
+            self.log.logger.error('Erro realizando INSERT na tabela turno.', exc_info=True)
             return False
         finally:
             pass
@@ -95,7 +95,7 @@ class TurnoDAO(ConexaoGenerica):
             if obj:
                 if delete:
                     sql = "DELETE FROM turno WHERE turn_id = " + str(obj.id)
-                    msg = "Excluido com sucesso!"
+                    self.aviso = "Excluido com sucesso!"
                 else:
                     sql = "UPDATE turno SET " +\
                           "turn_hora_inicio = '" + str(obj.inicio) + "', " +\
@@ -113,7 +113,7 @@ class TurnoDAO(ConexaoGenerica):
                 return False
         except Exception, e:
             self.__aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela turno.', exc_info=True)
+            self.log.logger.error('Erro realizando DELETE/UPDATE na tabela turno.', exc_info=True)
             return False
         finally:
             pass

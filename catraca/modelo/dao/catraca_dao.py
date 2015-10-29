@@ -39,7 +39,7 @@ class CatracaDAO(ConexaoGenerica):
                   "catr_tempo_giro, "\
                   "catr_operacao, "\
                   "catr_nome "\
-                  "FROM catraca"
+                  "FROM catraca ORDER BY catr_id"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)

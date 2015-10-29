@@ -15,11 +15,21 @@ import datetime
 # from catraca.dao.tipodao import TipoDAO
 import requests
 import json
-from catraca.visao.restful.registro_json import RegistroJson
-from catraca.visao.restful.catraca_json import CatracaJson
-from catraca.visao.restful.cartao_json import CartaoJson
 from catraca.visao.restful.tipo_json import TipoJson
 from catraca.visao.restful.turno_json import TurnoJson
+from catraca.visao.restful.unidade_json import UnidadeJson
+from catraca.visao.restful.custo_refeicao_json import CustoRefeicaoJson
+from catraca.visao.restful.usuario_json import UsuarioJson
+from catraca.visao.restful.catraca_json import CatracaJson
+from catraca.visao.restful.giro_json import GiroJson
+from catraca.visao.restful.mensagem_json import MensagemJson
+from catraca.visao.restful.cartao_json import CartaoJson
+from catraca.visao.restful.vinculo_json import VinculoJson
+from catraca.visao.restful.isencao_json import IsencaoJson
+from catraca.visao.restful.unidade_turno_json import UnidadeTurnoJson
+from catraca.visao.restful.catraca_unidade_json import CatracaUnidadeJson
+from catraca.visao.restful.registro_json import RegistroJson
+
 
 __author__ = "Erivando Sena"
 __copyright__ = "Copyright 2015, Unilab"
@@ -37,30 +47,63 @@ locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 def main():
     print 'Iniciando os testes restful'
 
-#     tipo_json = TipoJson()
-#     tipo_json.tipo_get()
+    print "===" * 10 + " TIPO " + "===" * 10
+    tipo_json = TipoJson()
+    tipo_json.tipo_get()
     
-#     turno_json = TurnoJson()
-#     turno_json.turno_get()
+    print "===" * 10 + " TURNO " + "===" * 10
+    turno_json = TurnoJson()
+    turno_json.turno_get()
+    
+    print "===" * 10 + " UNIDADE " + "===" * 10
+    unidade_json = UnidadeJson()
+    unidade_json.unidade_get()
+    
+    print "===" * 10 + " CUSTO-REFEIÇÃO " + "===" * 10
+    custo_refeicao_json = CustoRefeicaoJson()
+    custo_refeicao_json.custo_refeicao_get()
+    
+    print "===" * 10 + " USUÁRIO " + "===" * 10
+    usuario_json = UsuarioJson()
+    usuario_json.usuario_get()
 
-#     cartao_json = CartaoJson()
-#     cartao_json.cartao_get()
+    print "===" * 10 + " CATRACA " + "===" * 10
+    catraca_json = CatracaJson()
+    catraca_json.catraca_get()
     
-#     catraca_json = CatracaJson()
-#     catraca_json.catraca_get()
+    print "===" * 10 + " GIRO " + "===" * 10
+    giro_json = GiroJson()
+    giro_json.giro_get()
     
+    print "===" * 10 + " MENSAGEM " + "===" * 10
+    mensagem_json = MensagemJson()
+    mensagem_json.mensagem_get()
+    
+    print "===" * 10 + " CARTAO " + "===" * 10
+    cartao_json = CartaoJson()
+    cartao_json.cartao_get()
+    
+    print "===" * 10 + " VÍNCULO " + "===" * 10
+    vinculo_json = VinculoJson()
+    vinculo_json.vinculo_get()
+    
+    print "===" * 10 + " ISENÇÃO " + "===" * 10
+    isencao_json = IsencaoJson()
+    isencao_json.isencao_get()
+    
+    print "===" * 10 + " UNIDADE-TURNO " + "===" * 10
+    unidade_turno_json = UnidadeTurnoJson()
+    unidade_turno_json.unidade_turno_get()
+    
+    print "===" * 10 + " CATRACA-UNIDADE " + "===" * 10
+    catraca_unidade_json = CatracaUnidadeJson()
+    catraca_unidade_json.catraca_unidade_get()
+
+    print "===" * 10 + " REGISTRO " + "===" * 10
     registro_json = RegistroJson()
     registro_json.registro_get()
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
 #     registro = Registro()
 #     registro_dao = RegistroDAO()
 #     cartao_dao = CartaoDAO()
