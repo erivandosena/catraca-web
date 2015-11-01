@@ -6,6 +6,7 @@ from contextlib import closing
 from catraca.modelo.dados.conexao import ConexaoFactory
 from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
 from catraca.modelo.entidades.isencao import Isencao
+from catraca.modelo.dao.cartao_dao import CartaoDAO
 
 
 __author__ = "Erivando Sena"
@@ -48,9 +49,9 @@ class IsencaoDAO(ConexaoGenerica):
                         return list
                     else:
                         return None
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela isencao.', exc_info=True)
+#         except Exception, e:
+#             self.aviso = str(e)
+#             self.log.logger.error('Erro ao realizar SELECT na tabela isencao.', exc_info=True)
         finally:
             pass
         
@@ -68,9 +69,9 @@ class IsencaoDAO(ConexaoGenerica):
                         "isen_inicio, "\
                         "isen_fim, "\
                         "cart_id) VALUES (" +\
-                        str(obj.id) + ", " +\
-                        str(obj.inicio) + ", " +\
-                        str(obj.fim) + ", " +\
+                        str(obj.id) + ", '" +\
+                        str(obj.inicio) + "', '" +\
+                        str(obj.fim) + "', " +\
                         str(obj.cartao) + ")"
                 self.aviso = "Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
@@ -80,10 +81,10 @@ class IsencaoDAO(ConexaoGenerica):
             else:
                 self.aviso = "Objeto inexistente!"
                 return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT na tabela isencao.', exc_info=True)
-            return False
+#         except Exception, e:
+#             self.aviso = str(e)
+#             self.log.logger.error('Erro realizando INSERT na tabela isencao.', exc_info=True)
+#             return False
         finally:
             pass
         
@@ -95,11 +96,11 @@ class IsencaoDAO(ConexaoGenerica):
                     self.aviso = "Excluido com sucesso!"
                 else:
                     sql = "UPDATE isencao SET " +\
-                          "isen_inicio = " + str(obj.inicio) + ", " +\
-                          "isen_fim = " + str(obj.fim) + ", " +\
-                          "cart_id = " + str(obj.cartao.id) +\
+                          "isen_inicio = '" + str(obj.inicio) + "', " +\
+                          "isen_fim = '" + str(obj.fim) + "', " +\
+                          "cart_id = " + str(obj.cartao) +\
                           " WHERE "\
-                          "cart_id = " + str(obj.id)
+                          "isen_id = " + str(obj.id)
                     self.aviso = "Alterado com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
@@ -108,10 +109,10 @@ class IsencaoDAO(ConexaoGenerica):
             else:
                 self.aviso = "Objeto inexistente!"
                 return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando DELETE/UPDATE na tabela isencao.', exc_info=True)
-            return False
+#         except Exception, e:
+#             self.aviso = str(e)
+#             self.log.logger.error('Erro realizando DELETE/UPDATE na tabela isencao.', exc_info=True)
+#             return False
         finally:
             pass
         

@@ -49,8 +49,8 @@ class ConexaoFactory(object):
             if (tipo_banco == self.__POSTGRESQL):
                 try:
                     con = psycopg2.connect(str_conexao)
-                except Exception, e:
-                    self.__erroCon = str(e)
+                except Exception as excecao:
+                    self.__erroCon = str(excecao)
                     self.log.logger.critical('Erro na conexao com PostgreSQL.', exc_info=True)
                 finally:
                     pass
@@ -60,8 +60,8 @@ class ConexaoFactory(object):
                 try:
                     #con = mysql.connector.connect(str_conexao)
                     pass
-                except Exception, e:
-                    self.__erroCon = str(e)
+                except Exception as excecao:
+                    self.__erroCon = str(excecao)
                     self.log.logger.critical('Erro na conexao com MySQL.', exc_info=True)
                 finally:
                     pass
@@ -76,8 +76,8 @@ class ConexaoFactory(object):
                 finally:
                     pass
             return con
-        except Exception, e:
-            self.__erroCon = str(e)
+        except Exception as excecao:
+            self.__erroCon = str(excecao)
             self.log.logger.critical('Erro na string de conexao com banco de dados.', exc_info=True)
         finally:
             pass
@@ -98,8 +98,8 @@ class ConexaoFactory(object):
                 dns = "user='%s' password='%s' host='%s' database='%s'" % (usuario, senha, host, bd)
             elif tipo_banco == 3:
                 dns = "'%s'" % (os.path.join(os.path.dirname(os.path.abspath(__file__)), str(bd)+".db"))
-        except Exception, e:
-            self.aviso = str(e)
+        except Exception as excecao:
+            self.aviso = str(excecao)
             self.log.logger.error('Erro ao obter string de conexao.', exc_info=True)
         finally:
             return dns

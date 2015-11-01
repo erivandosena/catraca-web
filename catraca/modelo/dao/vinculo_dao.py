@@ -131,11 +131,11 @@ class VinculoDAO(ConexaoGenerica):
                     self.aviso = "Excluido com sucesso!"
                 else:
                     sql = "UPDATE vinculo SET " +\
-                          "vinc_avulso = '" + str(obj.data) + ", " +\
-                          "vinc_inicio = " + str(obj.pago) + ", " +\
-                          "vinc_fim = " + str(obj.custo) + ", '" +\
-                          "vinc_descricao = " + str(obj.custo) + "', '" +\
-                          "vinc_refeicoes = " + str(obj.cartao) + "', " +\
+                          "vinc_avulso = " + str(obj.avulso) + ", " +\
+                          "vinc_inicio = '" + str(obj.inicio) + "', " +\
+                          "vinc_fim = '" + str(obj.fim) + "', " +\
+                          "vinc_descricao = '" + str(obj.descricao) + "', " +\
+                          "vinc_refeicoes = " + str(obj.refeicoes) + ", " +\
                           "cart_id = " + str(obj.cartao) + ", " +\
                           "usua_id = " + str(obj.usuario) +\
                           " WHERE "\

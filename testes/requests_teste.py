@@ -15,20 +15,20 @@ import datetime
 # from catraca.dao.tipodao import TipoDAO
 import requests
 import json
-from catraca.visao.restful.tipo_json import TipoJson
-from catraca.visao.restful.turno_json import TurnoJson
-from catraca.visao.restful.unidade_json import UnidadeJson
-from catraca.visao.restful.custo_refeicao_json import CustoRefeicaoJson
-from catraca.visao.restful.usuario_json import UsuarioJson
-from catraca.visao.restful.catraca_json import CatracaJson
-from catraca.visao.restful.giro_json import GiroJson
-from catraca.visao.restful.mensagem_json import MensagemJson
-from catraca.visao.restful.cartao_json import CartaoJson
-from catraca.visao.restful.vinculo_json import VinculoJson
-from catraca.visao.restful.isencao_json import IsencaoJson
-from catraca.visao.restful.unidade_turno_json import UnidadeTurnoJson
-from catraca.visao.restful.catraca_unidade_json import CatracaUnidadeJson
-from catraca.visao.restful.registro_json import RegistroJson
+from catraca.controle.restful.tipo_json import TipoJson
+from catraca.controle.restful.turno_json import TurnoJson
+from catraca.controle.restful.unidade_json import UnidadeJson
+from catraca.controle.restful.custo_refeicao_json import CustoRefeicaoJson
+from catraca.controle.restful.usuario_json import UsuarioJson
+from catraca.controle.restful.catraca_json import CatracaJson
+from catraca.controle.restful.giro_json import GiroJson
+from catraca.controle.restful.mensagem_json import MensagemJson
+from catraca.controle.restful.cartao_json import CartaoJson
+from catraca.controle.restful.vinculo_json import VinculoJson
+from catraca.controle.restful.isencao_json import IsencaoJson
+from catraca.controle.restful.unidade_turno_json import UnidadeTurnoJson
+from catraca.controle.restful.catraca_unidade_json import CatracaUnidadeJson
+from catraca.controle.restful.registro_json import RegistroJson
 
 
 __author__ = "Erivando Sena"

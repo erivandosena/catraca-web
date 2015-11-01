@@ -1,10 +1,8 @@
 #!/usr/bin/env python
-# -*- coding: latin-1 -*-
+# -*- coding: utf-8 -*-
 
-import datetime
-from catraca.dao.cartao import Cartao
-from catraca.dao.cartaodao import CartaoDAO
-from catraca.dao.perfildao import PerfilDAO
+from catraca.modelo.dao.cartao_dao import CartaoDAO
+from catraca.modelo.dao.registro_dao import RegistroDAO
 
 
 __author__ = "Erivando Sena"
@@ -18,22 +16,40 @@ def main():
     
     # Estudante = 1 | Tecnico = 2 | Professor = 3 | Visitante = 4
 
-    cartao = Cartao()
+
+    print "=" * 20 + " Cartao ativo"
+    
     cartao_dao = CartaoDAO()
-    perfil_dao = PerfilDAO()
-
-    cartao.numero = 3994078862
-    cartao.creditos = 1000
-    cartao.perfil = perfil_dao.busca(4)
-    cartao.data = datetime.datetime.strptime("1939-01-01 00:00:00","%Y-%m-%d %H:%M:%S")
-    
-    
-    if not cartao_dao.mantem(cartao,False):
-        raise Exception(cartao_dao.aviso)
+    obj = cartao_dao.busca_cartao_valido("1234567890")
+    if obj:
+        print obj[0]
+        print obj[1]
+        print obj[2]
+        print obj[3]
+        print obj[4]
     else:
-        cartao_dao.commit()
-        print cartao_dao.aviso
-
+        print obj
+        
+    print "=" * 20 + " Limite de uso"
+        
+    registro_dao = RegistroDAO()
+    obj = registro_dao.busca_utilizacao("2015-10-16 11:00:00","2015-10-16 13:30:00", 1, 1)
+    if obj:
+        print obj[0]
+    else:
+        print obj
+        
+    print "=" * 20 + " Isencao"
+    
+    cartao_dao = CartaoDAO()
+    obj = cartao_dao.busca_isencao()
+    if obj:
+        print obj[0]
+        print obj[1]
+    else:
+        print obj
+     
+    
 #     if cartao.id:
 #         if cartao_dao.altera(cartao):
 #             print "Alterado com sucesso!"

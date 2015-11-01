@@ -97,6 +97,27 @@ class RegistroDAO(ConexaoGenerica):
         finally:
             pass
         
+    def busca_utilizacao(self, data_ini, data_fim, id_cartao, limite):
+        sql = "SELECT count(regi_id) FROM registro " +\
+            "WHERE (regi_data BETWEEN '"+ str(data_ini) +"' AND '"+ str(data_fim) +"') AND " +\
+            "(cart_id = "+str(id_cartao)+")" #+\
+            #" ORDER BY 1 DESC LIMIT "+str(limite)+";"
+        try:
+            with closing(self.abre_conexao().cursor()) as cursor:
+                cursor.execute(sql)
+#                 list = cursor.fetchall()
+#                 if list != []:
+                obj = cursor.fetchone()
+                if obj:
+                    return obj
+                else:
+                    return None
+#         except Exception, e:
+#             self.aviso = str(e)
+#             self.log.logger.error('Erro ao realizar SELECT na tabela registro.', exc_info=True)
+        finally:
+            pass
+        
     def insere(self, obj):
         try:
             if obj:

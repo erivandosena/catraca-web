@@ -3,7 +3,7 @@
 
 # from testes import tipo_teste
 # from testes import perfil_teste
-# from testes import cartao_teste
+from testes import cartao_teste
 # from testes import registro_teste
 # from testes import catraca_teste
 # from testes import giro_teste
@@ -15,17 +15,19 @@
 from testes import requests_teste
 
 
+
 __author__ = "Erivando Sena" 
 
 
 if __name__ == '__main__':
     
-    requests_teste.main()
+    
+    #requests_teste.main()
     
     #usuario_teste.main()
     #tipo_teste.main()
     #perfil_teste.main()
-    #cartao_teste.main()
+    cartao_teste.main()
     #giro_teste.main()
     #turno_teste.main()
     #mensagem_teste.main()

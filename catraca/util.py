@@ -73,6 +73,9 @@ class Util(object):
     
     def obtem_datahora(self):
         return datetime.datetime.now()
+    
+    def obtem_datahora_postgresql(self):
+        return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
      
     def obtem_dia_util(self):
         dia_util = True

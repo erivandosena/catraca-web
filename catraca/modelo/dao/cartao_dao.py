@@ -3,6 +3,7 @@
 
 
 from contextlib import closing
+from catraca.util import Util
 from catraca.modelo.dados.conexao import ConexaoFactory
 from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
 from catraca.modelo.entidades.cartao import Cartao
@@ -55,7 +56,7 @@ class CartaoDAO(ConexaoGenerica):
 #             self.log.logger.error('Erro ao realizar SELECT na tabela cartao.', exc_info=True)
         finally:
             pass
-        
+
     def busca_por_tipo(self, obj):
         return TipoDAO().busca(obj.id)
         
@@ -78,7 +79,7 @@ class CartaoDAO(ConexaoGenerica):
                         obj.id = dados[0]
                         obj.numero = dados[1]
                         obj.creditos = dados[2]
-                        obj.tipo = TipoDAO().busca(dados[3])
+                        obj.tipo = self.busca_por_tipo(obj)
                         return obj
                     else:
                         return None
@@ -94,6 +95,50 @@ class CartaoDAO(ConexaoGenerica):
         finally:
             pass
         
+        
+    def busca_cartao_valido(self, numero, data = None):
+        if data is None:
+            data = Util().obtem_datahora_postgresql()
+        sql = "SELECT cartao.cart_id, cartao.cart_numero, cartao.cart_creditos, "+\
+            "tipo.tipo_valor, vinculo.vinc_refeicoes FROM cartao " +\
+            "INNER JOIN tipo ON cartao.tipo_id = tipo.tipo_id " +\
+            "INNER JOIN vinculo ON vinculo.cart_id = cartao.cart_id " +\
+            "WHERE ('"+str(data)+"' BETWEEN vinculo.vinc_inicio AND vinculo.vinc_fim) AND "  +\
+            "(cartao.cart_numero = "+str(numero)+")"   
+        try:
+            with closing(self.abre_conexao().cursor()) as cursor:
+                cursor.execute(sql)
+                obj = cursor.fetchone()
+                if obj:
+                    return obj
+                else:
+                    return None
+#         except Exception, e:
+#             self.aviso = str(e)
+#             self.log.logger.error('Erro ao realizar SELECT na tabela cartao.', exc_info=True)
+        finally:
+            pass
+        
+    def busca_isencao(self, data = None):
+        if data is None:
+            data = Util().obtem_datahora_postgresql()
+        sql = "SELECT isencao.isen_inicio, isencao.isen_fim FROM cartao " +\
+        "INNER JOIN isencao ON isencao.cart_id = cartao.cart_id WHERE ('"+str(data)+"' "+\
+        "BETWEEN isencao.isen_inicio AND isencao.isen_fim)" 
+        try:
+            with closing(self.abre_conexao().cursor()) as cursor:
+                cursor.execute(sql)
+                obj = cursor.fetchone()
+                if obj:
+                    return obj
+                else:
+                    return None
+#         except Exception, e:
+#             self.aviso = str(e)
+#             self.log.logger.error('Erro ao realizar SELECT na tabela cartao.', exc_info=True)
+        finally:
+            pass
+  
     def insere(self, obj):
         try:
             if obj:

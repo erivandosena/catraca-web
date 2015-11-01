@@ -20,7 +20,7 @@ class UnidadeDAO(ConexaoGenerica):
         ConexaoGenerica.__init__(self)
 
     def busca(self, *arg):
-        obj = Tipo()
+        obj = Unidade()
         id = None
         for i in arg:
             id = i
@@ -58,7 +58,7 @@ class UnidadeDAO(ConexaoGenerica):
                     sql = "DELETE FROM unidade WHERE unid_id = " + str(obj.id)
                     self.aviso = "Excluido com sucesso!"
                 else:
-                    sql = "INSERT INTO unidade(unid_id, unid_nome) VALUES (" + str(obj.id) + "," + str(obj.nome) + ")"
+                    sql = "INSERT INTO unidade(unid_id, unid_nome) VALUES (" + str(obj.id) + ",'" + str(obj.nome) + "')"
                     self.aviso = "Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
@@ -81,7 +81,7 @@ class UnidadeDAO(ConexaoGenerica):
                     sql = "DELETE FROM unidade WHERE unid_id = " + str(obj.id)
                     self.aviso = "Excluido com sucesso!"
                 else:
-                    sql = "UPDATE unidade SET unid_nome = " + str(obj.nome) + " WHERE unid_id = " + str(obj.id)
+                    sql = "UPDATE unidade SET unid_nome = '" + str(obj.nome) + "' WHERE unid_id = " + str(obj.id)
                     self.aviso = "Alterado com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
