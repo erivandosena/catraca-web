@@ -1,0 +1,179 @@
+<?php
+ini_set ( 'display_errors', 1 );
+ini_set ( 'display_startup_erros', 1 );
+error_reporting ( E_ALL );
+function __autoload($classe) {
+	if (file_exists ( 'classes/dao/' . $classe . '.php' ))
+		include_once 'classes/dao/' . $classe . '.php';
+	if (file_exists ( 'classes/model/' . $classe . '.php' ))
+		include_once 'classes/model/' . $classe . '.php';
+	if (file_exists ( 'classes/controller/' . $classe . '.php' ))
+		include_once 'classes/controller/' . $classe . '.php';
+	if (file_exists ( 'classes/util/' . $classe . '.php' ))
+		include_once 'classes/util/' . $classe . '.php';
+	if (file_exists ( 'classes/view/' . $classe . '.php' ))
+		include_once 'classes/view/' . $classe . '.php';
+}
+
+$sessao = new Sessao ();
+
+if (isset ( $_GET ["sair"] )) {
+	
+	$sessao->mataSessao ();
+	header ( "Location:./index.php" );
+}
+
+?>
+<!DOCTYPE html>
+<html lang="pt-BR" xml:lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>Catraca</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<!-- meta tag para responsividade em Windows e Linux -->
+<link rel="stylesheet"
+	href="http://spa.dsi.unilab.edu.br/spa/css/spa.css" />
+<link rel="stylesheet" href="css/style.css" />
+
+</head>
+<body>
+	<div class="pagina fundo-cinza1">
+		<div id="barra-governo">
+			<div class="resolucao">
+				<div class="a-esquerda">
+					<a href="http://brasil.gov.br/" target="_blank"><span id="bandeira"></span><span>BRASIL</span></a>
+					<a href="http://acessoainformacao.unilab.edu.br/" target="_blank">Acesso
+						Ã  informaÃ§Ã£o</a>
+				</div>
+				<div class="a-direita">
+					<a href="#"><i class="icone-menu"></i></a>
+				</div>
+				<ul>
+					<li><a href="http://brasil.gov.br/barra#participe" target="_blank">Participe</a></li>
+					<li><a href="http://www.servicos.gov.br/" target="_blank">ServiÃ§os</a></li>
+					<li><a href="http://www.planalto.gov.br/legislacao" target="_blank">LegislaÃ§Ã£o</a></li>
+					<li><a href="http://brasil.gov.br/barra#orgaos-atuacao-canais"
+						target="_blank">Canais</a></li>
+				</ul>
+			</div>
+		</div>
+<?php
+
+if ($sessao->getNivelAcesso () != Sessao::NIVEL_SUPER) {
+	UsuarioController::main ( Sessao::NIVEL_DESLOGADO );
+} else {
+	
+	
+	
+	//Primeiro relatório. 
+	//Precisamos saber o número de fichas de cada tipo. 
+	
+	echo 'Teste da view:<br>';
+	$dao = new DAO ( null, DAO::TIPO_PG_LOCAL );
+	$result = $dao->getConexao ()->query ( "SELECT * FROM pg_catalog.pg_tables
+				WHERE schemaname NOT IN ('pg_catalog', 'information_schema', 'pg_toast')
+				ORDER BY schemaname, tablename" );
+	foreach ( $result as $linha ) {
+		echo $linha ['tablename'] . '<br>';
+	}
+}
+
+/*
+ * Uma matriz com os turnos. 
+ * Cada turno terá um conjunto de dados dentro de si. 
+ * Esses dados serão exibidos em tabelas. 
+ * 
+ *
+ */
+
+function mostraRelatorio(){
+	
+	$sql = "SELECT * FROM registro 
+			INNER JOIN turno 
+			ON turno.turn_id = registro.turn_id
+			INNER JOIN cartao 
+			ON cartao.cart_id = registro.cart_id
+			INNER JOIN tipo ON cartao.tipo_id = tipo.tipo_id
+			WHERE regi_data BETWEEN '2015-10-26 00:00:00' AND '2015-10-26 23:59:59';";
+	
+	$dao = new DAO ( null, DAO::TIPO_PG_CATRACA_TESTE);
+	$result = $dao->getConexao ()->query ($sql);
+	$somatorio = array();
+	
+	foreach($result as $linha){
+		$turno = new Turno();
+		$turno->setId($linha['turn_id']);
+		$turno->setDescricao($linha['turn_descricao']);
+		if(!isset($somatorio[$linha['tipo_id']]['valor'])){
+			$somatorio[$linha['tipo_id']]['valor'] = 0;
+			echo 'Atribuiu zero';
+		}
+		if(!isset($somatorio[$linha['tipo_id']]['quantidade']))
+			$somatorio[$linha['tipo_id']]['quantidade'] = 1;
+		else
+			$somatorio[$linha['tipo_id']]['quantidade']++;
+		$somatorio[$linha['tipo_id']]['nome'] = $linha['tipo_nome'];
+		$somatorio[$linha['tipo_id']]['valor'] += $linha['regi_valor_pago'];
+		
+		
+	}
+	var_dump($somatorio);
+	
+}
+mostraRelatorio();
+echo '<table border="1">
+<tbody>
+<tr>
+<th colspan="3">RESTAURANTE UNIVERSIT&Aacute;RIO (LIBERDADE)</th>
+</tr>
+<tr>
+<td>DATA:</td>
+<td>01/04/2015</td>
+<td>ALMO&Ccedil;O</td>
+</tr>
+<tr>
+<td>&nbsp;</td>
+<td>FICHAS</td>
+<td>VALOR</td>
+</tr>
+<tr>
+<td>ALUNO</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>PROFESSOR:</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>TECNICO</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>VISITANTE</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr><tr>
+<td>TERCEIRIZADO</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+<tr>
+<td>TOTAL</td>
+<td>&nbsp;</td>
+<td>&nbsp;</td>
+</tr>
+</tbody>
+</table>';
+
+
+
+?>
+
+</div>
+</body>
+</html>
+
+

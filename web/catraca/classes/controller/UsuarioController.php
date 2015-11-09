@@ -35,7 +35,7 @@ class UsuarioController{
 		if(isset($_POST['formlogin']))
 		
 		{
-			$usuarioDAO = new UsuarioDAO(null, DAO::TIPO_PG_TESTE);
+			$usuarioDAO = new UsuarioDAO(null, DAO::TIPO_PG_LOCAL);
 			$usuario = new Usuario();
 			$usuario->setLogin($_POST['login']);
 			$usuario->setSenha($_POST['senha']);
@@ -43,7 +43,7 @@ class UsuarioController{
 		
 				$sessao2 = new Sessao();
 				$sessao2->criaSessao($usuario->getId(), $usuario->getNivelAcesso(), $usuario->getLogin());
-				echo '<meta http-equiv="refresh" content=1;url="/interface">';
+				echo '<meta http-equiv="refresh" content=1;url="./index.php">';
 			}else{
 				$msg_erro= "Senha ou usuário Inválido";
 				$erro=true;
