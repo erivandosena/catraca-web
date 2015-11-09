@@ -24,7 +24,6 @@ class UsuarioDAO extends DAO {
 		foreach ( $this->getConexao ()->query ( $sql ) as $linha ) {
 			$usuario->setLogin ( $linha ['usua_login'] );
 			$usuario->setId ( $linha ['usua_id'] );
-			echo 'Caso ideal';
 			$usuario->setNivelAcesso ( $linha ['usua_nivel'] );
 			return true;
 		}
@@ -35,7 +34,6 @@ class UsuarioDAO extends DAO {
 		foreach($result2 as $linha){
 			
 			//Se eu to procurando aqui é pq houve algo errado no banco local. 
-			echo 'Verificou no SIG';
 			//2 não tinha. -- nesse caso fazemos um insert. 
 			//Vamos verificar isso agora. 
 			//Existe esse login?
@@ -45,13 +43,11 @@ class UsuarioDAO extends DAO {
 			foreach($result3 as $outraLinha){
 				//Vamos atualizar sua senha, meu filho. 
 				$this->getConexao()->query("UPDATE usuario set usua_senha = '$senha' WHERE usua_login = '$login'");
-				echo 'Atualizou';
 				//Caso isso aconteceu, podemos logar de novo. Mesmo augoritimo de antes.  Façamos recursividade? Não, é meio arriscado, Vamos repetir mesmo. 
 				foreach ( $this->getConexao ()->query ( $sql ) as $linha2 ) {
 					$usuario->setLogin ( $linha2 ['usua_login'] );
 					$usuario->setId ( $linha2 ['usua_id'] );
 					$usuario->setNivelAcesso ( $linha2 ['usua_nivel'] );
-					echo 'OUtro login';
 					return true;
 				}
 				
@@ -65,7 +61,6 @@ class UsuarioDAO extends DAO {
 			$this->getConexao()->query("INSERT into usuario(usua_login,usua_senha, usua_nome,usua_email, usua_nivel, id_base_externa) 
 										VALUES				('$login', '$senha', '$nome','$email', $nivel, $idBaseExterna)");
 			$usuario->setNivelAcesso ( $nivel);
-			echo 'Cadastrou';
 			return true;
 			
 		}

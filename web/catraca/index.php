@@ -59,32 +59,31 @@ if (isset ( $_GET ["sair"] )) {
 		</div>
 <?php
 
-	
-	echo 'Teste';
-	
-// 	//Primeiro relatório. 
-// 	//Precisamos saber o número de fichas de cada tipo. 
-	UsuarioController::main($sessao->getNivelAcesso());
-	
-// 	echo 'Teste da view:<br>';
-// 	$dao = new DAO ( null, DAO::TIPO_PG_SISTEMAS_COMUM);
-// 	$result = $dao->getConexao ()->query ( "SELECT * FROM vw_usuarios_autenticacao_catraca LIMIT 1" );
-// 	foreach ( $result as $linha ) {
-// 		foreach($linha as $chave => $valor){
-// 			echo $chave.'<br>';
-// 		}
-// 		break;
-// 	}
-	
-	
+
+
+if ($sessao->getNivelAcesso () == Sessao::NIVEL_SUPER) {
+	UsuarioController::main ( $sessao->getNivelAcesso() );
 	echo 'Teste da view:<br>';
 	$dao = new DAO ( null, DAO::TIPO_PG_LOCAL);
+	$novoNivel = Sessao::NIVEL_SUPER;
+	
+// 	$result = $dao->getConexao ()->exec( "UPDATE usuario set usua_nivel = $novoNivel WHERE usua_login = 'erivando'" );
+// 	echo $result;
 	$result = $dao->getConexao ()->query ( "SELECT * FROM usuario" );
+	
 	foreach ( $result as $linha ) {
 		print_r($linha);
 	}
 	
-	//echo $dao->getConexao()->exec("DELETE FROM usuario WHERE usua_login = 'jefponte'");
+} else {
+	
+	UsuarioController::main($sessao->getNivelAcesso());
+	
+	//Primeiro relatório. 
+	//Precisamos saber o número de fichas de cada tipo. 
+	
+
+}
 
 
 ?>
