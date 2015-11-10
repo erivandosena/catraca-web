@@ -32,15 +32,23 @@ class Util(object):
     rpi = PinoControle()
     pino_buzzer = rpi.ler(21)['gpio']
     cronometro = 0
+    hora_stop = None
     
     def __init__(self):
         super(Util, self).__init__()
         
     def obtem_ip(self):
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.connect(('unilab.edu.br', 0))
-        ip = '%s' % ( s.getsockname()[0] )
-        return ip
+        try:
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect(('unilab.edu.br', 0))
+            ip = '%s' % ( s.getsockname()[0] )
+            return ip
+        except Exception as excecao:
+            ip = '%s' % "127.0.0.1"
+            print "Erro obtendo IP local"
+            self.log.logger.error('Erro obtendo IP local', exc_info=True)
+        finally:
+            return ip
     
     def obtem_nome_rpi(self):
         return socket.gethostname()
@@ -123,4 +131,19 @@ class Util(object):
         self.aviso.exibir_desliga_catraca()
         terminal = 'sudo shutdown -h now'
         subprocess.call(terminal.split())
+        
+    def obtem_tempo_decorrido(self, minutos):
+        if self.hora_stop is None:
+            self.hora_stop = self.util.obtem_datahora()
+            hora_start = self.hora_stop
+            self.hora_stop += datetime.timedelta(minutes=minutos)
+            
+            print "====start=====> " + str( hora_start.strftime('%H:%M:%S'))
+            print "====stop======> " + str( self.hora_stop.strftime('%H:%M:%S'))
+        
+        if  self.util.obtem_datahora() >= self.hora_stop:
+            self.hora_stop = None
+            return False
+        else:
+            return True
         

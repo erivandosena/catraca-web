@@ -23,6 +23,7 @@ __status__ = "Prototype" # Prototype | Development | Production
 class RegistroJson(ServidorRestful):
     
     log = Logs()
+    util = Util()
     registro_dao = RegistroDAO()
     
     hora_atual = datetime.datetime.strptime('00:00:00','%H:%M:%S').time()
@@ -136,7 +137,7 @@ class RegistroJson(ServidorRestful):
         
     def obtem_turno(self):   
         catraca = CatracaDAO().busca_por_ip(Util().obtem_ip())
-        turnos = TurnoDAO().busca_por_catraca(catraca)
+        turnos = TurnoDAO().busca_por_catraca(catraca, self.util.obtem_hora())
         if turnos:
             turnos.sort()
             for turno in turnos:

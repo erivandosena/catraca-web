@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
+import time
 import Queue
 import threading
 import datetime
@@ -29,18 +29,16 @@ class Relogio(threading.Thread):
     catraca_dao = CatracaDAO()
     
     __periodo_ativo = None
-    __hora_sistema = None
-    __datahora_display = None
+    __turno_ativo = []
+
     hora_atual = None
     hora_inicio = None
     hora_fim = None
-    turno_ativo = None
-    cronometro = 0
+    
+    contador = 30
     
     def __init__(self, intervalo=1):
         super(Relogio, self).__init__()
-        self.__hora_sistema = self.util.obtem_hora()
-        self.__datahora_display = self.util.obtem_datahora_display()
         self.hora_atual = self.util.obtem_hora()
         threading.Thread.__init__(self)
         self.name = 'Thread Relogio'
@@ -68,25 +66,22 @@ class Relogio(threading.Thread):
         cliente_restful = ClienteRestful()
         cliente_restful.start()
         while True:
-            # atualiza variaveis com hora do sistema
-            self.hora = self.util.obtem_hora()
-            self.hora_atual = self.hora
-            self.data_hora_display = self.util.obtem_datahora_display()
-            
-            # atualiza thread com hora atual
-            cliente_restful.hora_real = self.hora
-            cliente_restful.data_hora_real = self.data_hora_display
-            # escerve data/hora no display
-            self.aviso.exibir_datahora(self.data_hora_display,0)  
+            # atualiza variaveis locais
+            self.hora_atual = self.util.obtem_hora()
             
             # verifica a disponibilidade de turnos
-            self.periodo = self.obtem_periodo()
+            self.periodo = None
+
+            # atualiza thread com variaveis
+            cliente_restful.hora = self.hora_atual
+            cliente_restful.datahora = self.util.obtem_datahora()
+            cliente_restful.periodo = self.periodo
+            cliente_restful.turno = self.turno
             
-            print self.hora
-            print self.turno_ativo
-            
+            print self.hora_atual
             print self.periodo
 
+            # delay de 1 segundo
             sleep(self.intervalo)
               
     @property
@@ -94,24 +89,17 @@ class Relogio(threading.Thread):
         return self.__periodo_ativo
 
     @periodo.setter
-    def periodo(self, valor):
+    def periodo(self, *valor):
+        valor = self.obtem_periodo()
         self.__periodo_ativo = valor
-    
+        
     @property
-    def hora(self):
-        return self.__hora_sistema
-
-    @hora.setter
-    def hora(self, hora):
-        self.__hora_sistema = hora
-
-    @property
-    def data_hora_display(self):
-        return self.__datahora_display
-    
-    @data_hora_display.setter
-    def data_hora_display(self, datahora):
-        self.__datahora_display = datahora
+    def turno(self):
+        return self.__turno_ativo
+ 
+    @turno.setter
+    def turno(self, lista):
+        self.__turno_ativo = lista
         
     def obtem_catraca(self):
         return self.catraca_dao.busca_por_ip(self.util.obtem_ip())
@@ -119,29 +107,32 @@ class Relogio(threading.Thread):
     def obtem_turno(self):
         p1 = datetime.datetime.strptime('05:59:59','%H:%M:%S').time()
         p2 = datetime.datetime.strptime('22:29:59','%H:%M:%S').time()
+        self.contador += 1
         if (self.hora_atual > p1) and (self.hora_atual < p2):
-            self.turno_ativo = self.turno_dao.busca_por_catraca(self.obtem_catraca(), self.hora)
-            print "novo select no turno!"
-            if self.turno_ativo:
-                self.hora_inicio = datetime.datetime.strptime(str(self.turno_ativo[1]),'%H:%M:%S').time()
-                self.hora_fim = datetime.datetime.strptime(str(self.turno_ativo[2]),'%H:%M:%S').time()       
-                return self.turno_ativo
-            else:
-                return None
+            if self.contador >= 30:
+                self.turno = self.turno_dao.busca_por_catraca(self.obtem_catraca(), self.hora_atual)
+                self.contador = 0
+                print "select no BD!"
+                if self.turno:
+                    self.hora_inicio = datetime.datetime.strptime(str(self.turno[1]),'%H:%M:%S').time()
+                    self.hora_fim = datetime.datetime.strptime(str(self.turno[2]),'%H:%M:%S').time()       
+                    return self.turno
+                else:
+                    return None
         else:
-            self.turno_ativo = None
+            self.turno = None
             return None
-            
-    def obtem_temporizador(self):
-        return False
-    
+
     def obtem_periodo(self):
         self.obtem_turno()
-        if self.turno_ativo:
+        if self.turno:
             if ((self.hora_atual >= self.hora_inicio) and (self.hora_atual <= self.hora_fim)) or ((self.hora_atual >= self.hora_inicio) and (self.hora_atual <= self.hora_fim)):  
+                print "turno ativo => "+ str(self.turno)
                 return True
             else:
+                self.turno = None
+                print "turno inativo => "+ str(self.turno)
                 return False
         else:
-            return False 
-            
+            return False
+        

@@ -2,7 +2,6 @@
 # -*- coding: latin-1 -*-
 
 import os
-import socket
 import locale
 from datetime import datetime
 from catraca.logs import Logs
@@ -20,10 +19,6 @@ class Aviso(object):
     log = Logs()
     display = Display()
     locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
-    
-    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-    s.connect(('unilab.edu.br', 0))
-    ip = '%s' % ( s.getsockname()[0] )
     
     def __init__(self):
         super(Aviso, self).__init__()
