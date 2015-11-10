@@ -40,7 +40,8 @@ class ControleRestful(Relogio, threading.Thread):
             if self.catraca_dao.busca_por_ip(self.util.obtem_ip()) is None:
                 print " PASSOU ==>>>> if self.catraca_dao.busca_por_ip(self.util.obtem_ip()) is None:"
                 CatracaJson().catraca_get()
-            self.periodo
+            periodo = self.periodo
+            print periodo
             print self.hora_atual
             sleep(self.intervalo) # delay de 1 segundo
             

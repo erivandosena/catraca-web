@@ -76,9 +76,9 @@ class Relogio(object):
                 self.turno = None
                 print "turno inativo Off "
                 return False
-#         else:
-# #             if (self.hora_atual > self.p1) and (self.hora_atual < self.p2):
-# #                 print "ATENÇÃO: Nao existem Turnos cadastrados dentro do horario comercial para funcionamento da catraca!"
+        else:
+#             if (self.hora_atual > self.p1) and (self.hora_atual < self.p2):
+#                 print "ATENÇÃO: Nao existem Turnos cadastrados dentro do horario comercial para funcionamento da catraca!"
 #             print "ATENÇÃO: Nao existem Turnos cadastrados para funcionamento da catraca!"
-#             return False
-#         
+            return False
+         
