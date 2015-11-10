@@ -48,6 +48,10 @@ class CatracaUnidadeJson(ServidorRestful):
                                 print "existe - update " + str(obj.catraca)
                                 self.catraca_unidade_dao.atualiza_exclui(obj, False)
                                 print self.catraca_unidade_dao.aviso
+                if dados["catraca_unidades"] == []:
+                    self.catraca_unidade_dao.atualiza_exclui(None,True)
+                    print self.catraca_unidade_dao.aviso
+                    
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json catraca_unidade.', exc_info=True)

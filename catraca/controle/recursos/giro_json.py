@@ -50,6 +50,10 @@ class GiroJson(ServidorRestful):
                                 self.giro_dao.atualiza_exclui(obj, False)
                                 self.giro_dao.commit()
                                 print self.giro_dao.aviso
+                if dados["giros"] == []:
+                    self.giro_dao.atualiza_exclui(None,True)
+                    print self.giro_dao.aviso
+                    
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json giro.', exc_info=True)

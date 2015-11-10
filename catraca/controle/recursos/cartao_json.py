@@ -50,6 +50,10 @@ class CartaoJson(ServidorRestful):
                                 self.cartao_dao.atualiza_exclui(obj, False)
                                 self.cartao_dao.commit()
                                 print self.cartao_dao.aviso
+                if dados["cartoes"] == []:
+                    self.cartao_dao.atualiza_exclui(None,True)
+                    print self.cartao_dao.aviso
+                    
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json cartao.', exc_info=True)

@@ -157,7 +157,10 @@ class CartaoDAO(ConexaoGenerica):
         try:
             if obj:
                 if delete:
-                    sql = "DELETE FROM cartao WHERE cart_id = " + str(obj.id)
+                    if obj.id:
+                        sql = "DELETE FROM cartao WHERE cart_id = " + str(obj.id)
+                    else:
+                        sql = "DELETE FROM cartao"
                     self.aviso = "Excluido com sucesso!"
                 else:
                     sql = "UPDATE cartao SET " +\

@@ -48,6 +48,10 @@ class IsencaoJson(ServidorRestful):
                                 print "existe - update " + str(obj.id)
                                 self.isencao_dao.atualiza_exclui(obj, False)
                                 print self.isencao_dao.aviso
+                if dados["isencoes"] == []:
+                    self.isencao_dao.atualiza_exclui(None,True)
+                    print self.isencao_dao.aviso
+                    
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json isencao.', exc_info=True)

@@ -90,7 +90,10 @@ class CatracaUnidadeDAO(ConexaoGenerica):
         try:
             if obj:
                 if delete:
-                    sql = "DELETE FROM catraca_unidade WHERE caun_id = " + str(obj.id)
+                    if obj.id:
+                        sql = "DELETE FROM catraca_unidade WHERE caun_id = " + str(obj.id)
+                    else:
+                        sql = "DELETE FROM catraca_unidade"
                     self.aviso = "Excluido com sucesso!"
                 else:
                     sql = "UPDATE catraca_unidade SET " +\

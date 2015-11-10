@@ -82,7 +82,10 @@ class TipoDAO(ConexaoGenerica):
         try:
             if obj:
                 if delete:
-                    sql = "DELETE FROM tipo WHERE tipo_id = " + str(obj.id)
+                    if obj.id:
+                        sql = "DELETE FROM tipo WHERE tipo_id = " + str(obj.id)
+                    else:
+                        sql = "DELETE FROM tipo"
                     self.aviso = "Excluido com sucesso!"
                 else:
                     sql = "UPDATE tipo SET " +\

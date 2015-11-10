@@ -48,6 +48,10 @@ class UsuarioJson(ServidorRestful):
                                 print "existe - update " + str(obj.nome)
                                 self.usuario_dao.atualiza_exclui(obj, False)
                                 print self.usuario_dao.aviso
+                if dados["usuarios"] == []:
+                    self.usuario_dao.atualiza_exclui(None,True)
+                    print self.usuario_dao.aviso
+                    
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json usuario.', exc_info=True)

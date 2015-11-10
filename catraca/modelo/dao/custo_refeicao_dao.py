@@ -82,7 +82,10 @@ class CustoRefeicaoDAO(ConexaoGenerica):
         try:
             if obj:
                 if delete:
-                    sql = "DELETE FROM custo_refeicao WHERE caun_id = " + str(obj.id)
+                    if obj.id:
+                        sql = "DELETE FROM custo_refeicao WHERE caun_id = " + str(obj.id)
+                    else:
+                        sql = "DELETE FROM custo_refeicao"
                     self.aviso = "Excluido com sucesso!"
                 else:
                     sql = "UPDATE custo_refeicao SET " +\

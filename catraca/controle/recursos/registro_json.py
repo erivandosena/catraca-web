@@ -56,6 +56,10 @@ class RegistroJson(ServidorRestful):
     #                             print "existe - update " + str(obj.data)
     #                             self.registro_dao.atualiza_exclui(obj, False)
     #                             print self.registro_dao.aviso
+                if dados["registros"] == []:
+                    self.registro_dao.atualiza_exclui(None,True)
+                    print self.registro_dao.aviso
+                    
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json registro.', exc_info=True)

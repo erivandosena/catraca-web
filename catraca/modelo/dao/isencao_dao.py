@@ -92,7 +92,10 @@ class IsencaoDAO(ConexaoGenerica):
         try:
             if obj:
                 if delete:
-                    sql = "DELETE FROM isencao WHERE isen_id = " + str(obj.id)
+                    if obj.id:
+                        sql = "DELETE FROM isencao WHERE isen_id = " + str(obj.id)
+                    else:
+                        sql = "DELETE FROM isencao"
                     self.aviso = "Excluido com sucesso!"
                 else:
                     sql = "UPDATE isencao SET " +\

@@ -48,6 +48,9 @@ class CustoRefeicaoJson(ServidorRestful):
                                 print "existe - update " + str(obj.valor)
                                 self.custo_refeicao_dao.atualiza_exclui(obj, False)
                                 print self.custo_refeicao_dao.aviso
+                if dados["custo_refeicoes"] == []:
+                    self.custo_refeicao_dao.atualiza_exclui(None,True)
+                    print self.custo_refeicao_dao.aviso
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json custo_refeicao.', exc_info=True)

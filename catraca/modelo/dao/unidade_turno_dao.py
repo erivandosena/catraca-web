@@ -90,7 +90,10 @@ class UnidadeTurnoDAO(ConexaoGenerica):
         try:
             if obj:
                 if delete:
-                    sql = "DELETE FROM unidade_turno WHERE untu_id = " + str(obj.id)
+                    if obj.id:
+                        sql = "DELETE FROM unidade_turno WHERE untu_id = " + str(obj.id)
+                    else:
+                        sql = "DELETE FROM unidade_turno"
                     self.aviso = "Excluido com sucesso!"
                 else:
                     sql = "UPDATE unidade_turno SET " +\

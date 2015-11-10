@@ -155,7 +155,10 @@ class RegistroDAO(ConexaoGenerica):
         try:
             if obj:
                 if delete:
-                    sql = "DELETE FROM registro WHERE regi_id = " + str(obj.id)
+                    if obj.id:
+                        sql = "DELETE FROM registro WHERE regi_id = " + str(obj.id)
+                    else:
+                        sql = "DELETE FROM registro"
                     self.aviso = "Excluido com sucesso!"
                 else:
                     sql = "UPDATE registro SET " +\

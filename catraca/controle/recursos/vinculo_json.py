@@ -48,6 +48,10 @@ class VinculoJson(ServidorRestful):
                                 print "existe - update " + str(obj.descricao)
                                 self.vinculo_dao.atualiza_exclui(obj, False)
                                 print self.vinculo_dao.aviso
+                if dados["vinculos"] == []:
+                    self.vinculo_dao.atualiza_exclui(None,True)
+                    print self.vinculo_dao.aviso
+                    
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json vinculo.', exc_info=True)

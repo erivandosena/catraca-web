@@ -127,7 +127,10 @@ class GiroDAO(ConexaoGenerica):
         try:
             if obj:
                 if delete:
-                    sql = "DELETE FROM giro WHERE giro_id = " + str(obj.id)
+                    if obj.id:
+                        sql = "DELETE FROM giro WHERE giro_id = " + str(obj.id)
+                    else:
+                        sql = "DELETE FROM giro"
                     self.aviso = "Excluido com sucesso!"
                 else:
                     sql = "UPDATE giro SET " +\

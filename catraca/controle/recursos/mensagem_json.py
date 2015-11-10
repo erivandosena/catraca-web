@@ -50,6 +50,10 @@ class MensagemJson(ServidorRestful):
                                 self.mensagem_dao.atualiza_exclui(obj, False)
                                 self.mensagem_dao.commit()
                                 print self.mensagem_dao.aviso
+                if dados["mensagens"] == []:
+                    self.mensagem_dao.atualiza_exclui(None,True)
+                    print self.mensagem_dao.aviso
+                    
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json mensagem.', exc_info=True)

@@ -48,6 +48,10 @@ class TurnoJson(ServidorRestful):
                                 print "existe - update " + str(obj.descricao)
                                 self.turno_dao.atualiza_exclui(obj, False)
                                 print self.turno_dao.aviso
+                if dados["turnos"] == []:
+                    self.turno_dao.atualiza_exclui(None,True)
+                    print self.turno_dao.aviso
+                    
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json turno.', exc_info=True)

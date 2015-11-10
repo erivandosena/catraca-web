@@ -103,7 +103,10 @@ class UsuarioDAO(ConexaoGenerica):
         try:
             if obj:
                 if delete:
-                    sql = "DELETE FROM usuario WHERE usua_id = " + str(obj.id)
+                    if obj.id:
+                        sql = "DELETE FROM usuario WHERE usua_id = " + str(obj.id)
+                    else:
+                        sql = "DELETE FROM usuario"
                     self.aviso = "Excluido com sucesso!"
                 else:
                     sql = "UPDATE usuario SET " +\

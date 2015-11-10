@@ -127,7 +127,10 @@ class VinculoDAO(ConexaoGenerica):
         try:
             if obj:
                 if delete:
-                    sql = "DELETE FROM vinculo WHERE vinc_id = " + str(obj.id)
+                    if obj.id:
+                        sql = "DELETE FROM vinculo WHERE vinc_id = " + str(obj.id)
+                    else:
+                        sql = "DELETE FROM vinculo"
                     self.aviso = "Excluido com sucesso!"
                 else:
                     sql = "UPDATE vinculo SET " +\

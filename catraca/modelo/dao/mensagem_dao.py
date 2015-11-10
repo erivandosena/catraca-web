@@ -139,7 +139,10 @@ class MensagemDAO(ConexaoGenerica):
         try:
             if obj:
                 if delete:
-                    sql = "DELETE FROM mensagem WHERE mens_id = " + str(obj.id)
+                    if obj.id:
+                        sql = "DELETE FROM mensagem WHERE mens_id = " + str(obj.id)
+                    else:
+                        sql = "DELETE FROM mensagem"
                     msg = "Excluido com sucesso!"
                 else:
                     self.aviso = "UPDATE mensagem SET " +\

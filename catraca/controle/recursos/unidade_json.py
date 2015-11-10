@@ -48,6 +48,10 @@ class UnidadeJson(ServidorRestful):
                                 print "existe - update " + str(obj.nome)
                                 self.unidade_dao.atualiza_exclui(obj, False)
                                 print self.unidade_dao.aviso
+                if dados["unidades"] == []:
+                    self.unidade_dao.atualiza_exclui(None,True)
+                    print self.unidade_dao.aviso
+                    
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json unidade.', exc_info=True)

@@ -75,7 +75,10 @@ class UnidadeDAO(ConexaoGenerica):
         try:
             if obj:
                 if delete:
-                    sql = "DELETE FROM unidade WHERE unid_id = " + str(obj.id)
+                    if obj.id:
+                        sql = "DELETE FROM unidade WHERE unid_id = " + str(obj.id)
+                    else:
+                        sql = "DELETE FROM unidade"
                     self.aviso = "Excluido com sucesso!"
                 else:
                     sql = "UPDATE unidade SET unid_nome = '" + str(obj.nome) + "' WHERE unid_id = " + str(obj.id)
