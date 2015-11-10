@@ -1,0 +1,26 @@
+<?php
+
+class UnidadeDAO extends DAO{
+
+	public function retornaLista(){
+		$lista = array();
+		$result = $this->getConexao()->query("SELECT * FROM unidade");
+		echo "Chamou aqui";
+		foreach ($result as $linha){
+			$unidade = new Unidade();
+			$unidade->setId($linha['unid_id']);
+			$unidade->setNome($linha['unid_nome']);
+				
+			$lista[] = $unidade;
+				
+		}
+		return $unidade;
+	}
+	
+	
+	
+	
+}
+
+
+?>

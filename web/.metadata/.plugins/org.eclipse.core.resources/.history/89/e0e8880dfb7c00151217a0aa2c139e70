@@ -1,0 +1,13 @@
+<?php
+
+
+class Tipo{
+	private $id;
+	private $nome;
+	private $valorCobrado;
+	
+	
+	
+	
+}
+?>

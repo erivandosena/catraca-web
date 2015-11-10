@@ -1,0 +1,28 @@
+<?php
+
+class DAO{
+	private $conexao;
+	private $tipoDeConexao;
+	
+	
+	const TIPO_PG_CATRACA_TESTE = 0;
+	const TIPO_PG_SIG = 1;
+	const TIPO_PG_CATRACA = 2;
+	
+	
+	
+	public function setConexao(PDO $conexao){
+		
+		
+		
+	}
+	public function getConexao(){
+		
+	}
+	
+	
+}
+
+
+
+?>

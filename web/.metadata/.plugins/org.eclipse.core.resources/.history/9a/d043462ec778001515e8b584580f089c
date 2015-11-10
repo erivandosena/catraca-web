@@ -1,0 +1,72 @@
+<?php
+
+/**
+ * Classe controller do MVC que serve para controlar Unidades Acadêmicas.  
+ * @author jefponte
+ *
+ */
+class UnidadeController{
+	private $dao;
+	private $view;
+	public function UnidadeController(){
+		$this->dao = new UnidadeDAO();
+		$this->view = new UnidadeView();
+	}
+	
+	
+	
+	public function listagem(){
+		
+		$lista = $this->dao->retornaLista();
+		$this->view->mostraLista($lista);
+		
+		
+	}
+	public function cadastro(){
+		$this->view->mostraFormulario();
+		
+		if(isset($_GET['unid_nome']))
+			if($_GET['unid_nome'] != null && $_GET['unid_nome'] != "")
+			{
+				$nome = $_GET['unid_nome'];
+				$unidade = new Unidade();
+				$unidade->setNome($nome);
+				if($this->dao->inserirUnidade($unidade))
+					$this->view->cadastroSucesso();
+				else
+					$this->view->cadastroFracasso();
+				echo '<meta http-equiv="refresh" content="2; url=index.php">';
+					
+			}
+	}
+	
+	public function delete(){
+
+		if(isset($_GET['delete_unidade'])){
+			if(isset($_GET['unid_id'])){
+				if(is_int(intval($_GET['unid_id']))){
+					$id = intval($_GET['unid_id']);
+		
+					$unidade = new Unidade();
+					$unidade->setId($id);
+		
+					if($this->dao->deletarUnidade($unidade))
+						$this->view->deleteSucesso();
+					else
+						$this->view->deleteFracasso();
+		
+				}
+			}
+			echo '<meta http-equiv="refresh" content="2; url=index.php">';
+		
+		}
+	}
+
+	
+	
+	
+}
+
+
+
+?>

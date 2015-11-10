@@ -1,0 +1,51 @@
+<?php
+
+class CartaoView{
+	
+	/**
+	 * 
+	 * @param mixed $lista
+	 */
+	public function mostraLista($lista){
+		foreach ($lista as $cartao){
+			echo $cartao->getNumero().'Tipo: '.$cartao->getTipo()->getNome().'<br>';
+		}
+		
+	}
+	
+	
+	public function mostraFormulario($listaDeTipos){
+		echo '
+			<form action="" method="post">
+				<fieldset>
+					<legend>Cartao</legend>
+					<label for="cart_numero">Numero do Cartao</label><br>
+					<input id="cart_numero" type="text" name="cart_numero"/>';
+		echo '<select name="tipo_id">';
+		foreach($listaDeTipos as $tipo){
+			echo '<option value="'.$tipo->getId().'">'.$tipo->getNome().'</option>';
+		}
+		echo '</select>';
+		echo '
+					<br>
+					<input type="submit" value="Enviar" />
+			</fieldset>
+	</form>';
+	}
+	public function cadastroSucesso(){
+		echo "Inserido com sucesso";
+	}
+	public function deleteSucesso(){
+		echo "Deletado com sucesso";
+	}
+	public function deleteFracasso(){
+		echo "Erro ao tentar deletar";
+	}
+	public function cadastroFracasso(){
+		echo "Erro ao tentar inserir";
+	}
+	
+}
+
+
+?>

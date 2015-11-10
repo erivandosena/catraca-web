@@ -1,0 +1,12 @@
+<?php
+
+class Isencao{
+	private $id;
+	private $dataDeInicio;
+	private $dataFinal;
+	private $cartao;
+	
+	
+}
+
+?>

@@ -1,0 +1,68 @@
+<?php 
+
+
+function __autoload($classe){
+
+	if(file_exists('classes/model/'.$classe.'.php')){
+		include_once 'classes/model/'.$classe.'.php';
+	}
+	else if(file_exists('classes/controller/'.$classe.'.php')){
+		include_once 'classes/controller/'.$classe.'.php';
+	}
+	else if(file_exists('classes/dao/'.$classe.'.php')){
+		include_once 'classes/dao/'.$classe.'.php';
+	}
+	else if(file_exists('classes/view/'.$classe.'.php')){
+		include_once 'classes/view/'.$classe.'.php';
+	}
+
+
+
+}
+ini_set('display_errors',1);
+ini_set('display_startup_erros',1);
+error_reporting(E_ALL);
+
+?>
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Catraca</title>
+</head>
+<body>
+
+Menu: 
+<a href="?pagina=unidade">Unidade Academica</a>
+|
+<a href="?pagina=unidade">Turnos</a>
+<hr>
+<br><br><br><br><br><br>
+	<?php 
+	
+	if(isset($_GET['pagina']))
+		
+		switch ($_GET['pagina']){
+			case "unidade":
+				UnidadeController::main();
+				break;
+			case "unidade_detalhe":
+				
+				break;
+			default:
+				UnidadeController::main();
+				break;
+		}
+	else 
+		UnidadeController::main();
+	
+	
+	?>
+	
+
+	
+	
+</body>
+
+</html>

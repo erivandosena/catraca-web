@@ -1,0 +1,37 @@
+<?php
+
+
+class Vinculo{
+	
+	
+	
+	private $id;
+	private $avulso;
+	private $responsavel;
+	private $inicioValidade;
+	private $finalValidade;
+	private $quantidadeDeAlimentosPorTurno;
+	private $descricao;
+	private $cartao;	
+	
+	
+	public function setId($id){
+		$this->id = $id;
+	}
+	public function getId(){
+		return $this->id;
+	}
+	public function setAvulso($avulso){
+		if($avulso)
+			$this->avulso = true;
+		else
+			$this->avulso = false;
+	}
+	
+	
+	
+	
+}
+
+
+?>

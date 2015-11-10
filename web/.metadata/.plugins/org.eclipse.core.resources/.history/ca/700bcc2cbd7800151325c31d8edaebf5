@@ -1,0 +1,37 @@
+<?php
+
+class UnidadeDAO extends DAO{
+
+	public function retornaLista(){
+		$lista = array();
+		$result = $this->getConexao()->query("SELECT * FROM unidade");
+
+		foreach ($result as $linha){
+			$unidade = new Unidade();
+			$unidade->setId($linha['unid_id']);
+			$unidade->setNome($linha['unid_nome']);
+				
+			$lista[] = $unidade;
+				
+		}
+		return $lista;
+	}
+	
+	public function inserirUnidade(Unidade $unidade){
+		$nome = $unidade->getNome();
+		if($dao->getConexao()->query("INSERT INTO unidade (unid_nome) VALUES('$nome')")){
+			return true;
+		}else{
+			return false;
+		
+		}
+		
+	}
+	
+	
+	
+	
+}
+
+
+?>
