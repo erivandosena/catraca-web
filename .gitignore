@@ -2,33 +2,17 @@
 #####################
 *.pyc
 *.autosave
+*.dia
 	
 # Documentacao      #
 #####################
-!/documentos
-<<<<<<< HEAD
-<<<<<<< HEAD
-web/
-=======
->>>>>>> remotes/origin/web_backend
-=======
-web/
->>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
+web/**/*
 
 # Logs              #
 #####################
 *.log
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 
 # Temp              #
 #####################
 *~
 
-<<<<<<< HEAD
-=======
->>>>>>> remotes/origin/web_backend
-=======
->>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
