@@ -15,10 +15,13 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 class UsuarioDAO(ConexaoGenerica):
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     
     #log = Logs()
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 
     def __init__(self):
         super(UsuarioDAO, self).__init__()
@@ -46,10 +49,14 @@ class UsuarioDAO(ConexaoGenerica):
                   "usua_senha, "\
                   "usua_nivel "\
 <<<<<<< HEAD
+<<<<<<< HEAD
                   "FROM usuario ORDER BY usua_id"
 =======
                   "FROM usuario"
 >>>>>>> remotes/origin/web_backend
+=======
+                  "FROM usuario ORDER BY usua_id"
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -78,6 +85,9 @@ class UsuarioDAO(ConexaoGenerica):
             pass
         
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
     def insere(self, obj):
         try:
             if obj:
@@ -138,6 +148,7 @@ class UsuarioDAO(ConexaoGenerica):
         except Exception, e:
             self.aviso = str(e)
             self.log.logger.error('Erro realizando DELETE/UPDATE na tabela usuario.', exc_info=True)
+<<<<<<< HEAD
 =======
     def mantem(self, obj, delete):
         try:
@@ -182,6 +193,8 @@ class UsuarioDAO(ConexaoGenerica):
             self.aviso = str(e)
             self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela usuario.', exc_info=True)
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
             return False
         finally:
             pass

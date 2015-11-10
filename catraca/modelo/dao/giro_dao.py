@@ -34,11 +34,15 @@ class GiroDAO(ConexaoGenerica):
                   "catr_id "\
                   "FROM giro WHERE "\
 <<<<<<< HEAD
+<<<<<<< HEAD
                   "giro_id = " + str(id)
 =======
                   "giro_id = " + str(id) +\
                   " ORDER BY giro_data_giros DESC"
 >>>>>>> remotes/origin/web_backend
+=======
+                  "giro_id = " + str(id)
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         elif id is None:
             sql = "SELECT giro_id, "\
                   "giro_giros_horario, "\
@@ -46,10 +50,14 @@ class GiroDAO(ConexaoGenerica):
                   "giro_data_giros, "\
                   "catr_id "\
 <<<<<<< HEAD
+<<<<<<< HEAD
                   "FROM giro ORDER BY giro_id"
 =======
                   "FROM giro ORDER BY giro_data_giros DESC"
 >>>>>>> remotes/origin/web_backend
+=======
+                  "FROM giro ORDER BY giro_id"
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -77,6 +85,9 @@ class GiroDAO(ConexaoGenerica):
             pass
         
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
     def busca_por_catraca(self, obj):
         return CatracaDAO().busca(obj.id)
     
@@ -91,6 +102,7 @@ class GiroDAO(ConexaoGenerica):
             " AND " + str(data_fim) +\
             " AND catr_id = " + str(catraca.id) +\
             " ORDER BY giro_data_giros DESC"
+<<<<<<< HEAD
 =======
     def busca_por_catraca(self, id):
         sql = "SELECT giro_id, "\
@@ -102,6 +114,8 @@ class GiroDAO(ConexaoGenerica):
               "catr_id = " + str(id) +\
               " ORDER BY giro_data_giros DESC"
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -113,6 +127,9 @@ class GiroDAO(ConexaoGenerica):
         except Exception, e:
             self.aviso = str(e)
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
             self.log.logger.error('Erro ao realizar SELECT na tabela registro.', exc_info=True)
         finally:
             pass
@@ -213,6 +230,7 @@ class GiroDAO(ConexaoGenerica):
         except Exception, e:
             self.aviso = str(e)
             self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela giro_off.', exc_info=True)
+<<<<<<< HEAD
 =======
             self.log.logger.error('Erro ao realizar SELECT na tabela giro.', exc_info=True)
         finally:
@@ -260,6 +278,8 @@ class GiroDAO(ConexaoGenerica):
             self.aviso = str(e)
             self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela giro.', exc_info=True)
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
             return False
         finally:
             pass

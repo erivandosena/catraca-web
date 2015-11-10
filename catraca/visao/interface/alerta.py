@@ -9,9 +9,12 @@ from threading import Thread
 from catraca.logs import Logs
 from catraca.util import Util
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 from catraca.controle.dispositivos.leitorcartao import LeitorCartao
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 from catraca.controle.dispositivos.solenoide import Solenoide
 from catraca.controle.dispositivos.sensoroptico import SensorOptico
 
@@ -28,19 +31,26 @@ class Alerta(Thread):
     solenoide = Solenoide()
     sensor_optico = SensorOptico()
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     leitor = LeitorCartao()
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
  
     def __init__(self, intervalo=1):
         super(Alerta, self).__init__()
         Thread.__init__(self)
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         self.intervalo = intervalo
         self.name = 'Thread Alerta(Sonoro).'
         thread = Thread(target=self.run, args=())
         thread.daemon = True # Daemonize thread
         #thread.start()
+<<<<<<< HEAD
 =======
         self.name = 'Thread Alerta(Sonoro).'
         self.intervalo = intervalo
@@ -48,6 +58,8 @@ class Alerta(Thread):
         thread.daemon = True # Daemonize thread
         thread.start()
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 
     def run(self):
         print "%s Rodando... " % self.name
@@ -63,7 +75,10 @@ class Alerta(Thread):
             self.solenoide.obtem_estado_solenoide(2) == 0):
             self.util.emite_beep(860, 1, 1, 15) #15 = 1.5 seg
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
             

@@ -95,8 +95,14 @@ class Display(object):
             sleep(0.5)
             self.lcd.move_left()
 <<<<<<< HEAD
+<<<<<<< HEAD
             
     def limpa_lcd(self):
         self.lcd.clear()
 =======
 >>>>>>> remotes/origin/web_backend
+=======
+            
+    def limpa_lcd(self):
+        self.lcd.clear()
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4

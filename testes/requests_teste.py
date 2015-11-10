@@ -16,6 +16,9 @@ import datetime
 import requests
 import json
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 from catraca.controle.recursos.tipo_json import TipoJson
 from catraca.controle.recursos.turno_json import TurnoJson
 from catraca.controle.recursos.catraca_json import CatracaJson
@@ -35,6 +38,7 @@ from catraca.util import Util
 
 from catraca.modelo.dao.catraca_dao import CatracaDAO
 from catraca.modelo.dao.turno_dao import TurnoDAO
+<<<<<<< HEAD
 =======
 from catraca.visao.restful.registro_json import RegistroJson
 from catraca.visao.restful.catraca_json import CatracaJson
@@ -42,6 +46,8 @@ from catraca.visao.restful.cartao_json import CartaoJson
 from catraca.visao.restful.tipo_json import TipoJson
 from catraca.visao.restful.turno_json import TurnoJson
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 
 __author__ = "Erivando Sena"
 __copyright__ = "Copyright 2015, Unilab"
@@ -58,6 +64,9 @@ locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
 
 def main():
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
     
     pass
     
@@ -123,6 +132,7 @@ def main():
     """
 
 
+<<<<<<< HEAD
 =======
     print 'Iniciando os testes restful'
 
@@ -151,6 +161,8 @@ def main():
     
     
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 #     registro = Registro()
 #     registro_dao = RegistroDAO()
 #     cartao_dao = CartaoDAO()

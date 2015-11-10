@@ -2,9 +2,13 @@
 # -*- coding: utf-8 -*-
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> remotes/origin/web_backend
+=======
+
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 from contextlib import closing
 from catraca.modelo.dados.conexao import ConexaoFactory
 from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
@@ -13,10 +17,14 @@ from catraca.modelo.entidades.custo_refeicao import CustoRefeicao
 
 __author__ = "Erivando Sena"
 <<<<<<< HEAD
+<<<<<<< HEAD
 __copyright__ = "Copyright 2015, Unilab"
 =======
 __copyright__ = "(C) Copyright 2015, Unilab"
 >>>>>>> remotes/origin/web_backend
+=======
+__copyright__ = "Copyright 2015, Unilab"
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production
 
@@ -27,6 +35,9 @@ class CustoRefeicaoDAO(ConexaoGenerica):
         super(CustoRefeicaoDAO, self).__init__()
         ConexaoGenerica.__init__(self)
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         
     def busca(self, *arg):
         obj = CustoRefeicao()
@@ -115,6 +126,7 @@ class CustoRefeicaoDAO(ConexaoGenerica):
             return False
         finally:
             pass
+<<<<<<< HEAD
         
 =======
 
@@ -125,3 +137,6 @@ class CustoRefeicaoDAO(ConexaoGenerica):
         pass
     
 >>>>>>> remotes/origin/web_backend
+=======
+        
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4

@@ -3,6 +3,9 @@
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 from time import sleep
 from catraca.logs import Logs
 from catraca.util import Util
@@ -11,6 +14,7 @@ from catraca.visao.interface.acesso import Acesso
 from catraca.visao.interface.alerta import Alerta
 from catraca.controle.restful.controle_restful import ControleRestful
 from catraca.controle.restful.cliente_restful import ClienteRestful
+<<<<<<< HEAD
 =======
 import os
 from time import sleep
@@ -20,6 +24,8 @@ from catraca.visao.interface.acesso import Acesso
 from catraca.visao.interface.alerta import Alerta
 from catraca.visao.restful.cliente_restful import ClienteRestful
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 
 
 __author__ = "Erivando Sena"
@@ -33,9 +39,13 @@ class Painel(object):
     log = Logs()
     aviso = Aviso() 
 <<<<<<< HEAD
+<<<<<<< HEAD
     util = Util()
 =======
 >>>>>>> remotes/origin/web_backend
+=======
+    util = Util()
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
     
     def __init__(self):
         super(Painel, self).__init__()
@@ -45,6 +55,9 @@ class Painel(object):
         self.log.logger.info('Iniciando aplicacao...')
         self.aviso.exibir_inicializacao()
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         self.aviso.exibir_datahora(self.util.obtem_datahora_display(), 4)
         self.aviso.exibir_saldacao()
         self.aviso.exibir_estatus_catraca()
@@ -64,6 +77,7 @@ class Painel(object):
         finally:
             pass
         
+<<<<<<< HEAD
 =======
         self.aviso.exibir_datahora()
         self.aviso.exibir_saldacao()
@@ -87,4 +101,6 @@ class Painel(object):
         finally:
             pass
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         

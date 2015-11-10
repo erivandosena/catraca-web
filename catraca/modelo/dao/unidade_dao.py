@@ -21,10 +21,14 @@ class UnidadeDAO(ConexaoGenerica):
 
     def busca(self, *arg):
 <<<<<<< HEAD
+<<<<<<< HEAD
         obj = Unidade()
 =======
         obj = Tipo()
 >>>>>>> remotes/origin/web_backend
+=======
+        obj = Unidade()
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         id = None
         for i in arg:
             id = i
@@ -32,10 +36,14 @@ class UnidadeDAO(ConexaoGenerica):
             sql = "SELECT unid_id, unid_nome FROM unidade WHERE unid_id = " + str(id)
         elif id is None:
 <<<<<<< HEAD
+<<<<<<< HEAD
             sql = "SELECT unid_id, unid_nome FROM unidade ORDER BY unid_id"
 =======
             sql = "SELECT unid_id, unid_nome FROM unidade"
 >>>>>>> remotes/origin/web_backend
+=======
+            sql = "SELECT unid_id, unid_nome FROM unidade ORDER BY unid_id"
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -59,6 +67,9 @@ class UnidadeDAO(ConexaoGenerica):
         finally:
             pass
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         
     def insere(self, obj):
         try:
@@ -105,6 +116,7 @@ class UnidadeDAO(ConexaoGenerica):
             return False
         finally:
             pass
+<<<<<<< HEAD
         
 =======
 
@@ -137,3 +149,6 @@ class UnidadeDAO(ConexaoGenerica):
         finally:
             pass
 >>>>>>> remotes/origin/web_backend
+=======
+        
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4

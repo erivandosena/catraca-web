@@ -7,11 +7,17 @@ from catraca.modelo.dados.conexao import ConexaoFactory
 from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
 from catraca.modelo.entidades.registro import Registro
 <<<<<<< HEAD
+<<<<<<< HEAD
 from catraca.modelo.dao.cartao_dao import CartaoDAO
 from catraca.modelo.dao.turno_dao import TurnoDAO
 from catraca.modelo.dao.catraca_dao import CatracaDAO
 =======
 >>>>>>> remotes/origin/web_backend
+=======
+from catraca.modelo.dao.cartao_dao import CartaoDAO
+from catraca.modelo.dao.turno_dao import TurnoDAO
+from catraca.modelo.dao.catraca_dao import CatracaDAO
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 
 
 __author__ = "Erivando Sena"
@@ -26,6 +32,9 @@ class RegistroDAO(ConexaoGenerica):
         super(RegistroDAO, self).__init__()
         ConexaoGenerica.__init__(self)
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         
     def busca(self, *arg):
         obj = Registro()
@@ -63,6 +72,7 @@ class RegistroDAO(ConexaoGenerica):
         except Exception, e:
             self.aviso = str(e)
             self.log.logger.error('Erro ao realizar SELECT na tabela cartao.', exc_info=True)
+<<<<<<< HEAD
 =======
 
     def busca(self):
@@ -87,11 +97,16 @@ class RegistroDAO(ConexaoGenerica):
             self.aviso = str(e)
             self.log.logger.error('Erro ao realizar SELECT na tabela registro.', exc_info=True)
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         finally:
             pass
   
     def busca_por_cartao(self, obj):
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         return CartaoDAO().busca(obj.id)
         
     def busca_por_turno(self, obj):
@@ -101,9 +116,12 @@ class RegistroDAO(ConexaoGenerica):
         return CatracaDAO().busca(obj.id)
     
     def busca_por_periodo(self, data_ini, data_fim):
+<<<<<<< HEAD
 =======
         obj = Registro()
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         sql = "SELECT regi_id, "\
               "regi_data, "\
               "regi_valor_pago, "\
@@ -113,11 +131,16 @@ class RegistroDAO(ConexaoGenerica):
               "catr_id "\
               "FROM registro WHERE "\
 <<<<<<< HEAD
+<<<<<<< HEAD
               "regi_data BETWEEN " + str(data_ini) +\
               " AND " + str(data_fim) +\
 =======
               "cart_id = " + str(obj.id) +\
 >>>>>>> remotes/origin/web_backend
+=======
+              "regi_data BETWEEN " + str(data_ini) +\
+              " AND " + str(data_fim) +\
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
               " ORDER BY regi_data DESC"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
@@ -134,6 +157,9 @@ class RegistroDAO(ConexaoGenerica):
             pass
         
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
     def busca_utilizacao(self, data_ini, data_fim, id_cartao):
         sql = "SELECT count(regi_id) FROM registro " +\
             "WHERE (regi_data BETWEEN '"+ str(data_ini) +"' AND '"+ str(data_fim) +"') AND " +\
@@ -234,6 +260,7 @@ class RegistroDAO(ConexaoGenerica):
                               "reof_data = '" + str(obj.data) + "', " +\
                               "reof_valor_pago = " + str(obj.pago) + ", " +\
                               "reof_valor_custo = " + str(obj.custo) + ", " +\
+<<<<<<< HEAD
 =======
     def busca_por_turno(self, obj):
         obj = Registro()
@@ -327,11 +354,16 @@ class RegistroDAO(ConexaoGenerica):
                               "regi_valor_pago = " + str(obj.pago) + ", " +\
                               "regi_valor_custo = " + str(obj.custo) + ", " +\
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
                               "cart_id = " + str(obj.cartao) + ", " +\
                               "turn_id = " + str(obj.turno) + ", " +\
                               "catr_id = " + str(obj.catraca) +\
                               " WHERE "\
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
                               "reof_id = " + str(obj.id)
                         self.aviso = "Alterado com sucesso!"
                     else:
@@ -343,6 +375,7 @@ class RegistroDAO(ConexaoGenerica):
                               "turn_id, "\
                               "catr_id) VALUES (" +\
                               str(obj.id) + ", '" +\
+<<<<<<< HEAD
 =======
                               "regi_id = " + str(obj.id)
                         self.aviso = "Alterado com sucesso!"
@@ -355,6 +388,8 @@ class RegistroDAO(ConexaoGenerica):
                               "turn_id, "\
                               "catr_id) VALUES ('" +\
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
                               str(obj.data) + "', " +\
                               str(obj.pago) + ", " +\
                               str(obj.custo) + ", " +\
@@ -372,10 +407,14 @@ class RegistroDAO(ConexaoGenerica):
         except Exception, e:
             self.aviso = str(e)
 <<<<<<< HEAD
+<<<<<<< HEAD
             self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela registro_off.', exc_info=True)
 =======
             self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela registro.', exc_info=True)
 >>>>>>> remotes/origin/web_backend
+=======
+            self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela registro_off.', exc_info=True)
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
             return False
         finally:
             pass

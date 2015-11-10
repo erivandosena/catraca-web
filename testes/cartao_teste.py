@@ -1,9 +1,13 @@
 #!/usr/bin/env python
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 # -*- coding: utf-8 -*-
 
 from catraca.modelo.dao.cartao_dao import CartaoDAO
 from catraca.modelo.dao.registro_dao import RegistroDAO
+<<<<<<< HEAD
 =======
 # -*- coding: latin-1 -*-
 
@@ -12,6 +16,8 @@ from catraca.dao.cartao import Cartao
 from catraca.dao.cartaodao import CartaoDAO
 from catraca.dao.perfildao import PerfilDAO
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 
 
 __author__ = "Erivando Sena"
@@ -26,6 +32,9 @@ def main():
     # Estudante = 1 | Tecnico = 2 | Professor = 3 | Visitante = 4
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 
     print "=" * 20 + " Cartao ativo"
     
@@ -60,6 +69,7 @@ def main():
         print obj
      
     
+<<<<<<< HEAD
 =======
     cartao = Cartao()
     cartao_dao = CartaoDAO()
@@ -78,6 +88,8 @@ def main():
         print cartao_dao.aviso
 
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 #     if cartao.id:
 #         if cartao_dao.altera(cartao):
 #             print "Alterado com sucesso!"

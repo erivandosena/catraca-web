@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 import csv
 import locale
 =======
@@ -12,6 +13,10 @@ import socket
 import locale
 import calendar
 >>>>>>> remotes/origin/web_backend
+=======
+import csv
+import locale
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 import datetime
 from time import sleep
 from catraca.logs import Logs
@@ -27,6 +32,9 @@ from catraca.modelo.dao.turno_dao import TurnoDAO
 from catraca.modelo.dao.giro_dao import GiroDAO
 from catraca.modelo.dao.registro_dao import RegistroDAO
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 from catraca.modelo.dao.custo_refeicao_dao import CustoRefeicaoDAO
 from catraca.modelo.entidades.cartao import Cartao
 from catraca.modelo.entidades.registro import Registro
@@ -36,11 +44,14 @@ from catraca.controle.recursos.cartao_json import CartaoJson
 from catraca.controle.recursos.registro_json import RegistroJson
 from catraca.modelo.dados.servidor_restful import ServidorRestful
 from catraca.controle.restful.recursos_restful import RecursosRestful
+<<<<<<< HEAD
 =======
 from catraca.modelo.entidades.cartao import Cartao
 from catraca.modelo.entidades.registro import Registro
 from catraca.modelo.entidades.giro import Giro
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 
 
 __author__ = "Erivando Sena" 
@@ -57,6 +68,9 @@ class LeitorCartao(object):
     util = Util()
     aviso = Aviso()
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
     rpi = PinoControle()
     solenoide = Solenoide()
     pictograma = Pictograma()
@@ -90,6 +104,7 @@ class LeitorCartao(object):
         #self.obtem_recursos_do_servidor()
         #self.obtem_catraca()
         #self.obtem_turno()
+<<<<<<< HEAD
 =======
     solenoide = Solenoide()
     pictograma = Pictograma()
@@ -132,6 +147,8 @@ class LeitorCartao(object):
         self.cartoes = self.verifica_cartoes()
         self.giro = self.giro_dao.busca(self.catraca.id)
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         self.aviso.exibir_aguarda_cartao()
     
     def zero(self, obj):
@@ -154,13 +171,19 @@ class LeitorCartao(object):
                     self.numero_cartao = int(str(self.bits), 2)
                     self.bits = ''
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
                     csv = self.obtem_csv(self.numero_cartao)
                     if csv == "Reiniciar Catraca":
                         self.util.reinicia_raspberrypi()
                     if csv == "Desligar Catraca":
                         self.util.desliga_raspberrypi()
+<<<<<<< HEAD
 =======
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
                     self.valida_cartao(self.numero_cartao)
                 elif (len(self.bits) > 0) or (len(self.bits) > 32):
                     self.util.emite_beep(250, .1, 3, 0) #0 seg.
@@ -177,6 +200,7 @@ class LeitorCartao(object):
             self.bits = ''
             self.numero_cartao = 0
 <<<<<<< HEAD
+<<<<<<< HEAD
 
     def valida_cartao(self, id_cartao):
         self.hora_atual = self.util.obtem_hora()
@@ -187,6 +211,11 @@ class LeitorCartao(object):
         #self.aviso.exibir_aguarda_liberacao()
         self.hora_atual = self.obtem_hora()
 >>>>>>> remotes/origin/web_backend
+=======
+
+    def valida_cartao(self, id_cartao):
+        self.hora_atual = self.util.obtem_hora()
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         try:
             ##############################################################
             ## VERIFICA SE HOUVE ATUALIZACAO NOS CARTOES DURANTE O TURNO
@@ -204,9 +233,12 @@ class LeitorCartao(object):
             ##############################################################
             if not (((self.hora_atual >= self.hora_inicio) and (self.hora_atual <= self.hora_fim)) or ((self.hora_atual >= self.hora_inicio) and (self.hora_atual <= self.hora_fim))):
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
                 #self.util.beep_buzzer(750, .1, 2)
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
                 self.aviso.exibir_horario_invalido()
                 self.util.emite_beep(250, .1, 3, 0) #0 seg.
                 self.aviso.exibir_acesso_bloqueado()
@@ -215,11 +247,16 @@ class LeitorCartao(object):
                 ## VERIFICA ATUALIZACOES NO TURNO DE FUNCIONAMENTO
                 ##############################################################
 <<<<<<< HEAD
+<<<<<<< HEAD
                 self.obtem_catraca()
                 self.obtem_turno()
 =======
                 self.verifica_turnos()
 >>>>>>> remotes/origin/web_backend
+=======
+                self.obtem_catraca()
+                self.obtem_turno()
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
                 return None
             ##############################################################
             ## VERIFICA SE EXISTE TURNO NO HORARIO DE FUNCIONAMENTO
@@ -248,12 +285,17 @@ class LeitorCartao(object):
                 ## CONSULTA SE O CARTAO ESTA CADASTRADO NO BANCO DE DADOS
                 ##############################################################
 <<<<<<< HEAD
+<<<<<<< HEAD
                 self.CARTAO = self.obtem_cartao(id_cartao)
                 if self.CARTAO is []:
 =======
                 self.cartao_ativo = self.pesquisa_id(self.cartoes, id_cartao)
                 if self.cartao_ativo is None:
 >>>>>>> remotes/origin/web_backend
+=======
+                self.CARTAO = self.obtem_cartao(id_cartao)
+                if self.CARTAO is []:
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
                     self.util.emite_beep(250, .1, 3, 0) #0 seg.
                     self.aviso.exibir_cartao_nao_cadastrado()
                     self.aviso.exibir_aguarda_cartao()
@@ -264,6 +306,9 @@ class LeitorCartao(object):
                     ## OBTEM AS INFORMACOES DO CARTAO CONSULTADO NO BANCO DE DADOS
                     ##############################################################
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
                     cartao_id = self.CARTAO[0]
                     cartao_numero = self.CARTAO[1]
                     cartao_total_creditos = self.CARTAO[2]
@@ -287,6 +332,7 @@ class LeitorCartao(object):
 #                         month=databd.month,
 #                         year=databd.year, 
 #                     ).strptime(databd.strftime('%d/%m/%Y'),'%d/%m/%Y')
+<<<<<<< HEAD
 =======
                     creditos = self.cartao_ativo[2]
                     hora_ultimo_acesso = datetime.datetime.strptime(self.cartao_ativo[3].strftime('%H:%M:%S'),'%H:%M:%S').time()
@@ -306,6 +352,8 @@ class LeitorCartao(object):
                         year=databd.year, 
                     ).strptime(databd.strftime('%d/%m/%Y'),'%d/%m/%Y')
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
                     """
                     -> VERIFICACAO DESATIVADA TEMPORARIAMENTE DURANTE OS TESTES
                     if ((hora_atual >= p1_hora_inicio) and (hora_atual <= p1_hora_fim)):
@@ -318,6 +366,9 @@ class LeitorCartao(object):
                     ## VERIFICA SE O CARTAO POSSUI CREDITO(S) PARA UTILIZACAO
                     ##############################################################
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
                     if (float(cartao_total_creditos) < float(cartao_valor_tipo)):
                         self.aviso.exibir_cartao_sem_saldo()
                         self.util.emite_beep(250, .1, 3, 0) #0 seg.
@@ -335,6 +386,7 @@ class LeitorCartao(object):
                         self.util.emite_beep(250, .1, 3, 0) #0 seg.
                         self.aviso.exibir_acesso_bloqueado()
                         self.log.logger.error('Limite de uso por turno ID:'+ str(cartao_numero))
+<<<<<<< HEAD
 =======
                     if (creditos == 0):
                         self.aviso.exibir_cartao_sem_saldo()
@@ -342,6 +394,8 @@ class LeitorCartao(object):
                         self.aviso.exibir_acesso_bloqueado()
                         self.log.logger.error('Cartao sem credito ID:'+ str(id_cartao))
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
                         return None
                     else:
                         """
@@ -354,6 +408,9 @@ class LeitorCartao(object):
                         self.log.logger.info('Saldo atual do cartao ID:'+ str(id_cartao) + ' - ' + saldo)
                         """
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
                         self.aviso.exibir_cartao_valido("  R$ "+str(float(cartao_total_creditos))+"")
                         ##############################################################
                         ## INICIA A OPERACAO DE DECREMENTO DE CREDITO DO CARTAO
@@ -371,6 +428,7 @@ class LeitorCartao(object):
                         self.cartao.creditos = saldo_creditos
                         self.cartao.tipo = cartao_id_tipo
                         #self.cartao.data = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+<<<<<<< HEAD
 =======
                         self.aviso.exibir_cartao_valido("  R$ <TESTE>")
                         ##############################################################
@@ -386,6 +444,8 @@ class LeitorCartao(object):
                         else:
                             self.log.logger.info("[Cartao] " + self.cartao_dao.aviso)
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
                         self.aviso.exibir_aguarda_liberacao()
                         ##############################################################
                         ## LIBERA O ACESSO E SINALIZA O MESMO AO UTILIZADOR
@@ -400,6 +460,9 @@ class LeitorCartao(object):
 #                             break
                             print self.sensor_optico.finaliza_giro
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
                             if self.sensor_optico.registra_giro(self.CATRACA.tempo, self.CATRACA):                                
                                 self.log.logger.info('Utilizador REALIZOU GIRO na catraca.')
 #                                 ############################################################
@@ -498,6 +561,7 @@ class LeitorCartao(object):
 #                                         #raise Exception('Erro inserindo valores no registro.')
 #                                     else:
 #                                         self.log.logger.info('[Registro] ' + self.registro_dao.aviso)
+<<<<<<< HEAD
 =======
                             if self.sensor_optico.registra_giro(self.catraca.tempo, self.catraca):                                
                                 self.log.logger.info('Utilizador REALIZOU GIRO na catraca.')
@@ -559,6 +623,8 @@ class LeitorCartao(object):
                                     else:
                                         self.log.logger.info('[Registro] ' + self.registro_dao.aviso)
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
                                 break
                             print self.sensor_optico.finaliza_giro
                         ##############################################################
@@ -569,6 +635,9 @@ class LeitorCartao(object):
                         ## VERIFICA ATUALIZACOES NO TURNO DE FUNCIONAMENTO
                         ##############################################################
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
                         self.obtem_catraca()
                         self.obtem_turno()
                         UsuarioJson().usuario_get()
@@ -576,9 +645,12 @@ class LeitorCartao(object):
                         CartaoJson().cartao_get()
                         VinculoJson().vinculo_get()
                         
+<<<<<<< HEAD
 =======
                         self.verifica_turnos()
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
             else:
                 ##############################################################
                 ## CANCELA ACESSO PELA INVALIDADE DO ID DO CARTAO APRESENTADO
@@ -615,6 +687,9 @@ class LeitorCartao(object):
                 self.giro_dao.fecha_conexao()
                 self.log.logger.debug('[Giro] Conexao finalizada com o BD.')
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
                      
     def obtem_recursos_do_servidor(self):
         RecursosRestful().obtem_recursos()
@@ -652,6 +727,7 @@ class LeitorCartao(object):
             self.pictograma.seta_esquerda(0)
             self.pictograma.xis(0)
         if self.CATRACA.operacao == 2:
+<<<<<<< HEAD
 =======
                       
     def pesquisa_id(self, lista, id):
@@ -752,6 +828,8 @@ class LeitorCartao(object):
             self.pictograma.xis(0)
         if self.catraca.operacao == 2:
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
             self.solenoide.ativa_solenoide(2,0)
             self.pictograma.seta_direita(0)
             self.pictograma.xis(0)
@@ -763,24 +841,35 @@ class LeitorCartao(object):
     def desbroqueia_acesso(self):
         self.util.beep_buzzer(950, .1, 2)
 <<<<<<< HEAD
+<<<<<<< HEAD
         if self.CATRACA.operacao == 1:
 =======
         if self.catraca.operacao == 1:
 >>>>>>> remotes/origin/web_backend
+=======
+        if self.CATRACA.operacao == 1:
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
             self.solenoide.ativa_solenoide(1,1)
             self.pictograma.seta_esquerda(1)
             self.pictograma.xis(1)
             self.aviso.exibir_acesso_liberado()
 <<<<<<< HEAD
+<<<<<<< HEAD
         if self.CATRACA.operacao == 2:
 =======
         if self.catraca.operacao == 2:
 >>>>>>> remotes/origin/web_backend
+=======
+        if self.CATRACA.operacao == 2:
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
             self.solenoide.ativa_solenoide(2,1)
             self.pictograma.seta_direita(1)
             self.pictograma.xis(1)
             self.aviso.exibir_acesso_liberado()
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
             
     def obtem_csv(self, numero_cartao):
         with open(Util().obtem_path('cartao.csv')) as csvfile:
@@ -790,7 +879,11 @@ class LeitorCartao(object):
                     if row[0] == str(numero_cartao):
                         print row[1]
                         return row[1]
+<<<<<<< HEAD
                     
 =======
             
 >>>>>>> remotes/origin/web_backend
+=======
+                    
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4

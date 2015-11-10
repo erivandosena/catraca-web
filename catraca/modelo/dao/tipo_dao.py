@@ -29,10 +29,14 @@ class TipoDAO(ConexaoGenerica):
             sql = "SELECT tipo_id, tipo_nome, tipo_valor FROM tipo WHERE tipo_id = " + str(id)
         elif id is None:
 <<<<<<< HEAD
+<<<<<<< HEAD
             sql = "SELECT tipo_id, tipo_nome, tipo_valor FROM tipo ORDER BY tipo_id"
 =======
             sql = "SELECT tipo_id, tipo_nome, tipo_valor FROM tipo"
 >>>>>>> remotes/origin/web_backend
+=======
+            sql = "SELECT tipo_id, tipo_nome, tipo_valor FROM tipo ORDER BY tipo_id"
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -78,10 +82,14 @@ class TipoDAO(ConexaoGenerica):
         except Exception, e:
             self.aviso = str(e)
 <<<<<<< HEAD
+<<<<<<< HEAD
             self.log.logger.error('Erro realizando INSERT na tabela tipo.', exc_info=True)
 =======
             self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela tipo.', exc_info=True)
 >>>>>>> remotes/origin/web_backend
+=======
+            self.log.logger.error('Erro realizando INSERT na tabela tipo.', exc_info=True)
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
             return False
         finally:
             pass
@@ -91,13 +99,19 @@ class TipoDAO(ConexaoGenerica):
             if obj:
                 if delete:
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
                     if obj.id:
                         sql = "DELETE FROM tipo WHERE tipo_id = " + str(obj.id)
                     else:
                         sql = "DELETE FROM tipo"
+<<<<<<< HEAD
 =======
                     sql = "DELETE FROM tipo WHERE tipo_id = " + str(obj.id)
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
                     self.aviso = "Excluido com sucesso!"
                 else:
                     sql = "UPDATE tipo SET " +\
@@ -116,10 +130,14 @@ class TipoDAO(ConexaoGenerica):
         except Exception, e:
             self.aviso = str(e)
 <<<<<<< HEAD
+<<<<<<< HEAD
             self.log.logger.error('Erro realizando DELETE/UPDATE na tabela tipo.', exc_info=True)
 =======
             self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela tipo.', exc_info=True)
 >>>>>>> remotes/origin/web_backend
+=======
+            self.log.logger.error('Erro realizando DELETE/UPDATE na tabela tipo.', exc_info=True)
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
             return False
         finally:
             pass

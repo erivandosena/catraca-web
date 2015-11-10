@@ -1,33 +1,47 @@
 #!/usr/bin/env python
 <<<<<<< HEAD
+<<<<<<< HEAD
 # -*- coding: latin-1 -*-
 
 =======
 # -*- coding: utf-8 -*-
 >>>>>>> remotes/origin/web_backend
+=======
+# -*- coding: latin-1 -*-
+
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 
 from contextlib import closing
 from catraca.modelo.dados.conexao import ConexaoFactory
 from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
 from catraca.modelo.entidades.isencao import Isencao
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 from catraca.modelo.dao.cartao_dao import CartaoDAO
 
 
 __author__ = "Erivando Sena"
 __copyright__ = "Copyright 2015, Unilab"
+<<<<<<< HEAD
 =======
 
 
 __author__ = "Erivando Sena"
 __copyright__ = "(C) Copyright 2015, Unilab"
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production
 
 
 class IsencaoDAO(ConexaoGenerica):
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 
     def __init__(self):
         super(IsencaoDAO, self).__init__()
@@ -130,6 +144,7 @@ class IsencaoDAO(ConexaoGenerica):
 #             return False
         finally:
             pass
+<<<<<<< HEAD
         
 =======
     
@@ -144,3 +159,6 @@ class IsencaoDAO(ConexaoGenerica):
         pass
     
 >>>>>>> remotes/origin/web_backend
+=======
+        
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4

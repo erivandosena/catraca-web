@@ -40,10 +40,14 @@ class CatracaDAO(ConexaoGenerica):
                   "catr_operacao, "\
                   "catr_nome "\
 <<<<<<< HEAD
+<<<<<<< HEAD
                   "FROM catraca ORDER BY catr_id"
 =======
                   "FROM catraca"
 >>>>>>> remotes/origin/web_backend
+=======
+                  "FROM catraca ORDER BY catr_id"
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -132,13 +136,19 @@ class CatracaDAO(ConexaoGenerica):
             if obj:
                 if delete:
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
                     if obj.id:
                         sql = "DELETE FROM catraca WHERE catr_id = " + str(obj.id)
                     else:
                         sql = "DELETE FROM catraca"
+<<<<<<< HEAD
 =======
                     sql = "DELETE FROM catraca WHERE catr_id = " + str(obj.id)
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
                     self.aviso = "Excluido com sucesso!"
                 else:
                     sql = "UPDATE catraca SET " +\

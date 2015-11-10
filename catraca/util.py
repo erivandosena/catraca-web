@@ -4,24 +4,35 @@
 
 import os
 <<<<<<< HEAD
+<<<<<<< HEAD
 import sys
 import pwd
 =======
 >>>>>>> remotes/origin/web_backend
+=======
+import sys
+import pwd
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 import time
 import socket
 import locale
 import calendar
 import datetime
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 import subprocess
 from time import sleep
 from catraca.logs import Logs
 from catraca.visao.interface.aviso import Aviso
+<<<<<<< HEAD
 =======
 from time import sleep
 from catraca.logs import Logs
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 from catraca.controle.raspberrypi.pinos import PinoControle
 
 
@@ -37,6 +48,9 @@ class Util(object):
     
     log = Logs()
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
     aviso = Aviso()
     rpi = PinoControle()
     
@@ -44,17 +58,23 @@ class Util(object):
     cronometro = 0
     hora_stop = None
     
+<<<<<<< HEAD
 =======
     rpi = PinoControle()
     pino_buzzer = rpi.ler(21)['gpio']
     cronometro = 0
 
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
     def __init__(self):
         super(Util, self).__init__()
         
     def obtem_ip(self):
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             s.connect(('unilab.edu.br', 0))
@@ -76,12 +96,15 @@ class Util(object):
     
     def obtem_path(self, arquivo):
         return "%s" % (os.path.join(os.path.dirname(os.path.abspath(__file__)), arquivo))
+<<<<<<< HEAD
 =======
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.connect(('unilab.edu.br', 0))
         ip = '%s' % ( s.getsockname()[0] )
         return ip
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         
     def buzzer(self, frequencia, intensidade):
         period = 1.0 / frequencia
@@ -120,14 +143,20 @@ class Util(object):
     def obtem_datahora(self):
         return datetime.datetime.now()
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
     
     def obtem_datahora_display(self):
         return datetime.datetime.now().strftime('%d/%B/%Y\n    %H:%M:%S')
     
     def obtem_datahora_postgresql(self):
         return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+<<<<<<< HEAD
 =======
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
      
     def obtem_dia_util(self):
         dia_util = True
@@ -149,6 +178,9 @@ class Util(object):
                 weekday_count += 1
         return dia_util
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
     
     def reinicia_raspberrypi(self):
         self.aviso.exibir_reinicia_catraca()
@@ -174,6 +206,9 @@ class Util(object):
             return False
         else:
             return True
+<<<<<<< HEAD
 =======
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         

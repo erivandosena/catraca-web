@@ -4,9 +4,13 @@
 
 from contextlib import closing
 <<<<<<< HEAD
+<<<<<<< HEAD
 from catraca.util import Util
 =======
 >>>>>>> remotes/origin/web_backend
+=======
+from catraca.util import Util
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 from catraca.modelo.dados.conexao import ConexaoFactory
 from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
 from catraca.modelo.entidades.cartao import Cartao
@@ -35,10 +39,14 @@ class CartaoDAO(ConexaoGenerica):
                 "WHERE cart_id = " + str(id)
         elif id is None:
 <<<<<<< HEAD
+<<<<<<< HEAD
             sql = "SELECT cart_id, cart_numero, cart_creditos, tipo_id FROM cartao ORDER BY cart_id"
 =======
             sql = "SELECT cart_id, cart_numero, cart_creditos, tipo_id FROM cartao"
 >>>>>>> remotes/origin/web_backend
+=======
+            sql = "SELECT cart_id, cart_numero, cart_creditos, tipo_id FROM cartao ORDER BY cart_id"
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -49,10 +57,14 @@ class CartaoDAO(ConexaoGenerica):
                         obj.numero = dados[1]
                         obj.creditos = dados[2]
 <<<<<<< HEAD
+<<<<<<< HEAD
                         obj.tipo = self.busca_por_tipo(obj)
 =======
                         obj.tipo = TipoDAO().busca(dados[3])
 >>>>>>> remotes/origin/web_backend
+=======
+                        obj.tipo = self.busca_por_tipo(obj)
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
                         return obj
                     else:
                         return None
@@ -63,6 +75,9 @@ class CartaoDAO(ConexaoGenerica):
                     else:
                         return None
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 #         except Exception, e:
 #             self.aviso = str(e)
 #             self.log.logger.error('Erro ao realizar SELECT na tabela cartao.', exc_info=True)
@@ -138,6 +153,7 @@ class CartaoDAO(ConexaoGenerica):
         finally:
             pass
   
+<<<<<<< HEAD
 =======
         except Exception, e:
             self.aviso = str(e)
@@ -181,6 +197,8 @@ class CartaoDAO(ConexaoGenerica):
             pass
         
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
     def insere(self, obj):
         try:
             if obj:
@@ -202,16 +220,22 @@ class CartaoDAO(ConexaoGenerica):
                 self.aviso = "Objeto inexistente!"
                 return False
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 #         except Exception, e:
 #             self.aviso = str(e)
 #             self.log.logger.error('Erro realizando INSERT na tabela cartao.', exc_info=True)
 #             return False
+<<<<<<< HEAD
 =======
         except Exception, e:
             self.aviso = str(e)
             self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela cartao.', exc_info=True)
             return False
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         finally:
             pass
         
@@ -220,13 +244,19 @@ class CartaoDAO(ConexaoGenerica):
             if obj:
                 if delete:
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
                     if obj.id:
                         sql = "DELETE FROM cartao WHERE cart_id = " + str(obj.id)
                     else:
                         sql = "DELETE FROM cartao"
+<<<<<<< HEAD
 =======
                     sql = "DELETE FROM cartao WHERE cart_id = " + str(obj.id)
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
                     self.aviso = "Excluido com sucesso!"
                 else:
                     sql = "UPDATE cartao SET " +\
@@ -244,6 +274,9 @@ class CartaoDAO(ConexaoGenerica):
                 self.aviso = "Objeto inexistente!"
                 return False
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 #         except Exception, e:
 #             self.aviso = str(e)
 #             self.log.logger.error('Erro realizando DELETE/UPDATE na tabela cartao.', exc_info=True)
@@ -285,11 +318,14 @@ class CartaoDAO(ConexaoGenerica):
         except Exception, e:
             self.aviso = str(e)
             self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela cartao_off.', exc_info=True)
+<<<<<<< HEAD
 =======
         except Exception, e:
             self.aviso = str(e)
             self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela cartao.', exc_info=True)
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
             return False
         finally:
             pass

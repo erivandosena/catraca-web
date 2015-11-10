@@ -7,9 +7,13 @@ from catraca.modelo.dados.conexao import ConexaoFactory
 from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
 from catraca.modelo.entidades.mensagem import Mensagem
 <<<<<<< HEAD
+<<<<<<< HEAD
 from catraca.modelo.dao.catraca_dao import CatracaDAO
 =======
 >>>>>>> remotes/origin/web_backend
+=======
+from catraca.modelo.dao.catraca_dao import CatracaDAO
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 
 
 __author__ = "Erivando Sena"
@@ -41,10 +45,14 @@ class MensagemDAO(ConexaoGenerica):
             "mens_semcadastro, mens_cartaoinvalido, mens_turnoinvalido, mens_datainvalida, "\
             "mens_cartaoutilizado, mens_institucional1, mens_institucional2, "\
 <<<<<<< HEAD
+<<<<<<< HEAD
             "mens_institucional3, mens_institucional4, catr_id FROM mensagem ORDER BY mens_id"
 =======
             "mens_institucional3, mens_institucional4, catr_id FROM mensagem"
 >>>>>>> remotes/origin/web_backend
+=======
+            "mens_institucional3, mens_institucional4, catr_id FROM mensagem ORDER BY mens_id"
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -69,10 +77,14 @@ class MensagemDAO(ConexaoGenerica):
                         obj.msg_institucional3 = dados[15]
                         obj.msg_institucional4 = dados[16]
 <<<<<<< HEAD
+<<<<<<< HEAD
                         obj.catraca = self.busca_por_catraca(obj)
 =======
                         obj.catraca = dados[17]
 >>>>>>> remotes/origin/web_backend
+=======
+                        obj.catraca = self.busca_por_catraca(obj)
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
                         return obj
                     else:
                         return None
@@ -89,6 +101,9 @@ class MensagemDAO(ConexaoGenerica):
             pass
         
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
     def busca_por_catraca(self, obj):
         return CatracaDAO().busca(obj.id)
     
@@ -188,6 +203,7 @@ class MensagemDAO(ConexaoGenerica):
         except Exception, e:
             self.aviso = str(e)
             self.log.logger.error('Erro realizando DELETE/UPDATE na tabela mensagem.', exc_info=True)
+<<<<<<< HEAD
 =======
     def busca_por_catraca(self, id):
         sql = "SELECT mens_id, mens_inicializacao, mens_saldacao, mens_aguardacartao, "\
@@ -288,6 +304,8 @@ class MensagemDAO(ConexaoGenerica):
             self.aviso = str(e)
             self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela mensagem.', exc_info=True)
 >>>>>>> remotes/origin/web_backend
+=======
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
             return False
         finally:
             pass

@@ -4,10 +4,14 @@
 # from testes import tipo_teste
 # from testes import perfil_teste
 <<<<<<< HEAD
+<<<<<<< HEAD
 from testes import cartao_teste
 =======
 # from testes import cartao_teste
 >>>>>>> remotes/origin/web_backend
+=======
+from testes import cartao_teste
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 # from testes import registro_teste
 # from testes import catraca_teste
 # from testes import giro_teste
@@ -20,18 +24,26 @@ from testes import requests_teste
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 
 =======
 >>>>>>> remotes/origin/web_backend
+=======
+
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 __author__ = "Erivando Sena" 
 
 
 if __name__ == '__main__':
     
 <<<<<<< HEAD
+<<<<<<< HEAD
     
 =======
 >>>>>>> remotes/origin/web_backend
+=======
+    
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
     requests_teste.main()
     
     #usuario_teste.main()

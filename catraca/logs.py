@@ -33,10 +33,14 @@ class Logs(object):
         LOG_FILENAME = '/home/pi/CatracaEletronica/log/catraca.log'
         logging.basicConfig(
 <<<<<<< HEAD
+<<<<<<< HEAD
                             level=logging.ERROR, 
 =======
                             level=logging.DEBUG, 
 >>>>>>> remotes/origin/web_backend
+=======
+                            level=logging.ERROR, 
+>>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
                             filename= LOG_FILENAME, 
                             #filemode='w',
                             handler = logging.handlers.RotatingFileHandler(LOG_FILENAME, maxBytes=20, backupCount=5),
