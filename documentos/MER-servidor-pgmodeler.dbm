@@ -1,0 +1,947 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel pgmodeler-ver="0.8.0-beta1" last-position="70,0" last-zoom="0.85"
+	 default-schema="public" default-owner="postgres">
+<database name="bd_teste" encoding="UTF8" lc-collate="en_US" lc-ctype="en_US">
+	<role name="postgres"/>
+	<tablespace name="pg_default"/>
+	<comment><![CDATA[Bando de dados de teste.]]></comment>
+</database>
+
+<schema name="public" protected="true" rect-visible="true" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<sequence name="usuario_usua_id_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="usuario">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Tabela que armazena as informacoes externas de usuarios do sistema provenientes do SIG.]]></comment>
+	<position x="148.571" y="343.714"/>
+	<column name="usua_id" not-null="true" default-value="nextval('usuario_usua_id_seq'::regclass)">
+		<type name="integer"/>
+		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
+	</column>
+	<column name="usua_nome">
+		<type name="character varying" length="150"/>
+		<comment><![CDATA[Nome completo do usuario no SIG.]]></comment>
+	</column>
+	<column name="usua_email">
+		<type name="character varying" length="150"/>
+		<comment><![CDATA[Endereco de e-mail do usuario no SIG.]]></comment>
+	</column>
+	<column name="usua_login">
+		<type name="character varying" length="25"/>
+		<comment><![CDATA[Nome de usuario no SIG.]]></comment>
+	</column>
+	<column name="usua_senha">
+		<type name="character varying" length="50"/>
+		<comment><![CDATA[Senha cadastrada no SIG.]]></comment>
+	</column>
+	<column name="usua_nivel">
+		<type name="integer"/>
+		<comment><![CDATA[Status atual do usuario no SIG.]]></comment>
+	</column>
+	<column name="id_base_externa">
+		<type name="integer"/>
+		<comment><![CDATA[Campo da chave primaria (uid) no sistema SIG.]]></comment>
+	</column>
+	<constraint name="pk_usua" type="pk-constr" table="public.usuario">
+		<columns names="usua_id" ref-type="src-columns"/>
+		<comment><![CDATA[Chave primaria da tabela usuario.]]></comment>
+	</constraint>
+</table>
+
+<sequence name="transacao_tran_id_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="transacao">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Tabela que armazena a contabilidade do guiche durante o turno.]]></comment>
+	<position x="626.143" y="21"/>
+	<column name="tran_id" not-null="true" default-value="nextval('transacao_tran_id_seq'::regclass)">
+		<type name="integer"/>
+		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
+	</column>
+	<column name="tran_valor">
+		<type name="numeric" length="8" precision="2"/>
+		<comment><![CDATA[Valor total em R$ contabil do turno.]]></comment>
+	</column>
+	<column name="tran_descricao">
+		<type name="character varying" length="150"/>
+		<comment><![CDATA[Descricao referente a transacao contabilizada do turno.]]></comment>
+	</column>
+	<column name="tran_data">
+		<type name="timestamp"/>
+		<comment><![CDATA[Data e hora da execucao.]]></comment>
+	</column>
+	<column name="usua_id" not-null="true">
+		<type name="integer"/>
+		<comment><![CDATA[Campo para chave estrangeira da tabela usuario.(Usuario responsavel por realizar a operacao de transacao).]]></comment>
+	</column>
+	<constraint name="pk_tran_id" type="pk-constr" table="public.transacao">
+		<columns names="tran_id" ref-type="src-columns"/>
+		<comment><![CDATA[Chave primaria da tabela transacao.]]></comment>
+	</constraint>
+</table>
+
+<sequence name="tipo_tipo_id_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="tipo">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Tabela que armazena os tipos de usuarios da catraca, ex. estudante, professor, visitante ...]]></comment>
+	<position x="1498" y="324.286"/>
+	<column name="tipo_id" not-null="true" default-value="nextval('tipo_tipo_id_seq'::regclass)">
+		<type name="integer"/>
+		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
+	</column>
+	<column name="tipo_nome">
+		<type name="character varying" length="25"/>
+		<comment><![CDATA[Nome do tipo de utilizador: Estudante, Professor, Visitante, Servidor, Terceirizado, Isento, Operador, Administrador, Suporte.]]></comment>
+	</column>
+	<column name="tipo_valor">
+		<type name="numeric" length="8" precision="2"/>
+		<comment><![CDATA[Valor em R$ da refeição de acordo com o tipo de utilizador.]]></comment>
+	</column>
+	<constraint name="pk_tipo_id" type="pk-constr" table="public.tipo">
+		<columns names="tipo_id" ref-type="src-columns"/>
+		<comment><![CDATA[Chave primaria da tabela tipo.]]></comment>
+	</constraint>
+</table>
+
+<sequence name="cartao_cart_id_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="cartao">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Tabela que armazena os registros de uso do cartao RFID.]]></comment>
+	<position x="1164.57" y="107.143"/>
+	<column name="cart_id" not-null="true" default-value="nextval('cartao_cart_id_seq'::regclass)">
+		<type name="integer"/>
+		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
+	</column>
+	<column name="cart_numero">
+		<type name="bigint"/>
+		<comment><![CDATA[Numero ID do cartao Smart Card sem permissao de duplicidade.]]></comment>
+	</column>
+	<column name="cart_creditos">
+		<type name="numeric" length="8" precision="2"/>
+		<comment><![CDATA[Total de creditos em R$ para uso do cartao.]]></comment>
+	</column>
+	<column name="tipo_id" not-null="true">
+		<type name="integer"/>
+		<comment><![CDATA[Campo para chave estrangeira da tabela tipo.]]></comment>
+	</column>
+	<constraint name="pk_cart_id" type="pk-constr" table="public.cartao">
+		<columns names="cart_id" ref-type="src-columns"/>
+		<comment><![CDATA[Chave primaria da tabela cartao.]]></comment>
+	</constraint>
+	<constraint name="uk_cart_numero" type="uq-constr" table="public.cartao">
+		<columns names="cart_numero" ref-type="src-columns"/>
+		<comment><![CDATA[Restricao de duplicidades para o campo cart_numero.]]></comment>
+	</constraint>
+</table>
+
+<sequence name="vinculo_vinc_id_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="vinculo">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Tabela que armazena as informacoes de vinculo entre o usuario e o tipo de cartao.]]></comment>
+	<position x="682.714" y="245.714"/>
+	<column name="vinc_id" not-null="true" default-value="nextval('vinculo_vinc_id_seq'::regclass)">
+		<type name="integer"/>
+		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
+	</column>
+	<column name="vinc_avulso">
+		<type name="boolean"/>
+		<comment><![CDATA[Status que informa se o vinculo esta ativo.]]></comment>
+	</column>
+	<column name="vinc_inicio">
+		<type name="timestamp"/>
+		<comment><![CDATA[Data e hora de inicio da validade do vinculo.]]></comment>
+	</column>
+	<column name="vinc_fim">
+		<type name="timestamp"/>
+		<comment><![CDATA[Data e hora de fim da validade do vinculo.]]></comment>
+	</column>
+	<column name="vinc_descricao">
+		<type name="character varying" length="150"/>
+		<comment><![CDATA[Descricao sobre a finalidade do vinculo.]]></comment>
+	</column>
+	<column name="vinc_refeicoes">
+		<type name="integer"/>
+		<comment><![CDATA[Quantidade de uso do cartao por refeicao.]]></comment>
+	</column>
+	<column name="cart_id" not-null="true">
+		<type name="integer"/>
+		<comment><![CDATA[Campo para chave estrangeira da tabela cartao.]]></comment>
+	</column>
+	<column name="usua_id" not-null="true">
+		<type name="integer"/>
+		<comment><![CDATA[Campo para chave estrangeira da tabela usuario.(Usuario responsavel por realizar a operacao de vinculo).]]></comment>
+	</column>
+	<constraint name="pk_vinc_id" type="pk-constr" table="public.vinculo">
+		<columns names="vinc_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="isencao_isen_id_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="isencao">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Tabela que armazena as validades para isencao das refeicoes.]]></comment>
+	<position x="1676.43" y="14.6857"/>
+	<column name="isen_id" not-null="true" default-value="nextval('isencao_isen_id_seq'::regclass)">
+		<type name="integer"/>
+		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
+	</column>
+	<column name="isen_inicio">
+		<type name="timestamp"/>
+		<comment><![CDATA[Data e hora do inico da validade para isencao de pagamento.]]></comment>
+	</column>
+	<column name="isen_fim">
+		<type name="timestamp"/>
+		<comment><![CDATA[Data e hora do fim da validade para isencao de pagamento.]]></comment>
+	</column>
+	<column name="cart_id" not-null="true">
+		<type name="integer"/>
+		<comment><![CDATA[Campo para chave estrangeira da tabela cartao.]]></comment>
+	</column>
+	<constraint name="pk_isen_id" type="pk-constr" table="public.isencao">
+		<columns names="isen_id" ref-type="src-columns"/>
+		<comment><![CDATA[Chave primaria da tabela isencao.]]></comment>
+	</constraint>
+</table>
+
+<sequence name="unidade_unid_id_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="unidade">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Tabela que armazena o local fisico de funcionamento das catracas.]]></comment>
+	<position x="1096.57" y="814.971"/>
+	<column name="unid_id" not-null="true" default-value="nextval('unidade_unid_id_seq'::regclass)">
+		<type name="integer"/>
+		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
+	</column>
+	<column name="unid_nome">
+		<type name="character varying" length="50"/>
+		<comment><![CDATA[Nome do local de funcionamento da catraca.]]></comment>
+	</column>
+	<constraint name="pk_unid_id" type="pk-constr" table="public.unidade">
+		<columns names="unid_id" ref-type="src-columns"/>
+		<comment><![CDATA[Chave primaria da tabela unidade.]]></comment>
+	</constraint>
+</table>
+
+<sequence name="catraca_catr_id_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="catraca">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Tabela que armazena as predefinicoes e configuracoes para o funcionamento da catraca.]]></comment>
+	<position x="1899.1" y="726.661"/>
+	<column name="catr_id" not-null="true" default-value="nextval('catraca_catr_id_seq'::regclass)">
+		<type name="integer"/>
+		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
+	</column>
+	<column name="catr_ip">
+		<type name="character varying" length="12"/>
+		<comment><![CDATA[Numero IP da catraca.]]></comment>
+	</column>
+	<column name="catr_nome">
+		<type name="character varying" length="25"/>
+	</column>
+	<column name="catr_tempo_giro">
+		<type name="integer"/>
+		<comment><![CDATA[Tempo para o giro na catraca em segundos.]]></comment>
+	</column>
+	<column name="catr_operacao">
+		<type name="integer"/>
+		<comment><![CDATA[1=Giro Horario(Entrada controlada com saida bloqueada),2=Giros Horario/Anti-horario(Entrada controlada com saida liberada),3=Giros Horario/Anti-horario(Entrada e saida liberadas).]]></comment>
+	</column>
+	<constraint name="pk_catr_id" type="pk-constr" table="public.catraca">
+		<columns names="catr_id" ref-type="src-columns"/>
+		<comment><![CDATA[Chave primaria da tabela catraca.]]></comment>
+	</constraint>
+</table>
+
+<sequence name="giro_giro_id_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="giro">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Tabela que armazena a contabilizacao de giros da catraca.]]></comment>
+	<position x="2541.43" y="466.829"/>
+	<column name="giro_id" not-null="true" default-value="nextval('giro_giro_id_seq'::regclass)">
+		<type name="integer"/>
+		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
+	</column>
+	<column name="giro_giros_horario" default-value="0">
+		<type name="integer"/>
+		<comment><![CDATA[Contador de giros no sentido horario.]]></comment>
+	</column>
+	<column name="giro_giros_antihorario" default-value="0">
+		<type name="integer"/>
+		<comment><![CDATA[Contador de giros no sentido anti-horario.]]></comment>
+	</column>
+	<column name="giro_data_giros" not-null="true" default-value="now()">
+		<type name="date"/>
+		<comment><![CDATA[Registro de data e hora da ocorrencia dos giros.]]></comment>
+	</column>
+	<column name="catr_id" not-null="true">
+		<type name="integer"/>
+		<comment><![CDATA[Campo para chave estrangeira da tabela catraca.]]></comment>
+	</column>
+	<constraint name="pk_giro_id" type="pk-constr" table="public.giro">
+		<columns names="giro_id" ref-type="src-columns"/>
+		<comment><![CDATA[Chave primaria da tabela giro.]]></comment>
+	</constraint>
+</table>
+
+<sequence name="mensagem_mens_id_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="mensagem">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Tabela que armazena as mensagens para exibicao em display LCD de 2 linhas de 16 caracteres.]]></comment>
+	<position x="2452.29" y="651.543"/>
+	<column name="mens_id" not-null="true" default-value="nextval('mensagem_mens_id_seq'::regclass)">
+		<type name="integer"/>
+		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
+	</column>
+	<column name="mens_inicializacao">
+		<type name="character varying" length="35"/>
+		<comment><![CDATA[Texto de inicializacao da catraca.]]></comment>
+	</column>
+	<column name="mens_saldacao">
+		<type name="character varying" length="35"/>
+		<comment><![CDATA[Texto de saldacao na catraca.]]></comment>
+	</column>
+	<column name="mens_aguardacartao">
+		<type name="character varying" length="35"/>
+		<comment><![CDATA[Texto solicitando o uso do cartao na catraca.]]></comment>
+	</column>
+	<column name="mens_erroleitor">
+		<type name="character varying" length="35"/>
+		<comment><![CDATA[Texto de erro na leitura do cartao na catraca.]]></comment>
+	</column>
+	<column name="mens_bloqueioacesso">
+		<type name="character varying" length="35"/>
+		<comment><![CDATA[Texto de acesso bloqueado na catraca.]]></comment>
+	</column>
+	<column name="mens_liberaacesso">
+		<type name="character varying" length="35"/>
+		<comment><![CDATA[Texto de acesso liberado na catraca.]]></comment>
+	</column>
+	<column name="mens_semcredito">
+		<type name="character varying" length="35"/>
+		<comment><![CDATA[Texto de cartao sem creditos.]]></comment>
+	</column>
+	<column name="mens_semcadastro">
+		<type name="character varying" length="35"/>
+		<comment><![CDATA[Texto de cartao nao cadastrado no sistema.]]></comment>
+	</column>
+	<column name="mens_cartaoinvalido">
+		<type name="character varying" length="35"/>
+		<comment><![CDATA[Texto de cartao que nao atende a todos os criterios de uso na catraca.]]></comment>
+	</column>
+	<column name="mens_turnoinvalido">
+		<type name="character varying" length="35"/>
+		<comment><![CDATA[Texto de uso do cartao fora da faixa de horarios do turno.]]></comment>
+	</column>
+	<column name="mens_datainvalida">
+		<type name="character varying" length="35"/>
+		<comment><![CDATA[Texto de dias nao uteis para uso da catraca.]]></comment>
+	</column>
+	<column name="mens_cartaoutilizado">
+		<type name="character varying" length="35"/>
+		<comment><![CDATA[Texto para cartao ja utilizado na catraca dentro do turno.]]></comment>
+	</column>
+	<column name="mens_institucional1">
+		<type name="character varying" length="35"/>
+		<comment><![CDATA[Texto 01 livre para avisos, informes, etc.]]></comment>
+	</column>
+	<column name="mens_institucional2">
+		<type name="character varying" length="35"/>
+		<comment><![CDATA[Texto 02 livre para avisos, informes, etc.]]></comment>
+	</column>
+	<column name="mens_institucional3">
+		<type name="character varying" length="35"/>
+		<comment><![CDATA[Texto 03 livre para avisos, informes, etc.]]></comment>
+	</column>
+	<column name="mens_institucional4">
+		<type name="character varying" length="35"/>
+		<comment><![CDATA[Texto 04 livre para avisos, informes, etc.]]></comment>
+	</column>
+	<column name="catr_id" not-null="true">
+		<type name="integer"/>
+		<comment><![CDATA[Campo para chave estrangeira da tabela catraca.]]></comment>
+	</column>
+	<constraint name="pk_mens_id" type="pk-constr" table="public.mensagem">
+		<columns names="mens_id" ref-type="src-columns"/>
+		<comment><![CDATA[Chave primaria da tabela mensagem.]]></comment>
+	</constraint>
+</table>
+
+<sequence name="guiche_guic_id_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="guiche">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Tabela que armazena as infiomacoes do guiche que ira realizar as operacoes financeiras.]]></comment>
+	<position x="628.571" y="585.086"/>
+	<column name="guic_id" not-null="true" default-value="nextval('guiche_guic_id_seq'::regclass)">
+		<type name="integer"/>
+		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
+	</column>
+	<column name="guic_abertura">
+		<type name="timestamp"/>
+		<comment><![CDATA[Data e hora do inicio de funcionamento do guiche.]]></comment>
+	</column>
+	<column name="guic_encerramento">
+		<type name="timestamp"/>
+		<comment><![CDATA[Data e hora do fim de funcionamento do guiche.]]></comment>
+	</column>
+	<column name="guic_ativo">
+		<type name="boolean"/>
+		<comment><![CDATA[Status de atividade atual do guiche.]]></comment>
+	</column>
+	<column name="unid_id" not-null="true">
+		<type name="integer"/>
+		<comment><![CDATA[Campo para chave estrangeira da tabela unidade.]]></comment>
+	</column>
+	<column name="usua_id" not-null="true">
+		<type name="integer"/>
+		<comment><![CDATA[Campo para chave estrangeira da tabela usuario.]]></comment>
+	</column>
+	<constraint name="pk_guic_id" type="pk-constr" table="public.guiche">
+		<columns names="guic_id" ref-type="src-columns"/>
+		<comment><![CDATA[Chave primaria da tabela guiche.]]></comment>
+	</constraint>
+</table>
+
+<sequence name="fluxo_flux_id_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="fluxo">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Tabela que armazena os registros dos fluxos de caixa.]]></comment>
+	<position x="1158.71" y="527.943"/>
+	<column name="flux_id" not-null="true" default-value="nextval('fluxo_flux_id_seq'::regclass)">
+		<type name="integer"/>
+		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
+	</column>
+	<column name="flux_data">
+		<type name="timestamp"/>
+		<comment><![CDATA[Registro de data e hora do cadastro.]]></comment>
+	</column>
+	<column name="flux_valor">
+		<type name="numeric" length="8" precision="2"/>
+		<comment><![CDATA[Valor em R$ da receita ou despesa.]]></comment>
+	</column>
+	<column name="flux_descricao">
+		<type name="character varying" length="200"/>
+		<comment><![CDATA[Descricao para o historio do fluxo de caixa.]]></comment>
+	</column>
+	<column name="guic_id" not-null="true">
+		<type name="integer"/>
+		<comment><![CDATA[Campo para chave estrengeira da tabela guiche.]]></comment>
+	</column>
+	<constraint name="pk_flux_id" type="pk-constr" table="public.fluxo">
+		<columns names="flux_id" ref-type="src-columns"/>
+		<comment><![CDATA[Chave primaria da tabela fluxo.]]></comment>
+	</constraint>
+</table>
+
+<sequence name="turno_turn_id_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="turno">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Tabela que armazena os horarios de inicio e fim de funcionamento dos turnos.]]></comment>
+	<position x="1945.29" y="319.371"/>
+	<column name="turn_id" not-null="true" default-value="nextval('turno_turn_id_seq'::regclass)">
+		<type name="integer"/>
+		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
+	</column>
+	<column name="turn_hora_inicio">
+		<type name="time"/>
+		<comment><![CDATA[Hora inicio do periodo para liberacao da catraca.]]></comment>
+	</column>
+	<column name="turn_hora_fim">
+		<type name="time"/>
+		<comment><![CDATA[Hora final do periodo para liberacao da catraca.]]></comment>
+	</column>
+	<column name="turn_descricao">
+		<type name="character varying" length="25"/>
+		<comment><![CDATA[Descricao da refeicao disponibilizada durante o turno. Ex.: Cafe, Almoco, Janta.]]></comment>
+	</column>
+	<constraint name="pk_turn_id" type="pk-constr" table="public.turno">
+		<columns names="turn_id" ref-type="src-columns"/>
+		<comment><![CDATA[Chave primaria da tabela turno.]]></comment>
+	</constraint>
+</table>
+
+<sequence name="registro_regi_id_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="registro">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Tabela que armazena os registros de uso do cartao na catraca.]]></comment>
+	<position x="2533.29" y="254.657"/>
+	<column name="regi_id" not-null="true" default-value="nextval('registro_regi_id_seq'::regclass)">
+		<type name="bigint"/>
+	</column>
+	<column name="regi_data">
+		<type name="timestamp"/>
+		<comment><![CDATA[Data e hora que efetivou o giro na catraca.]]></comment>
+	</column>
+	<column name="regi_valor_pago">
+		<type name="numeric" length="8" precision="2"/>
+		<comment><![CDATA[Valor em R$ da refeicao.]]></comment>
+	</column>
+	<column name="regi_valor_custo">
+		<type name="numeric" length="8" precision="2"/>
+		<comment><![CDATA[Valor em R$ do custo da refeicao.]]></comment>
+	</column>
+	<column name="cart_id" not-null="true">
+		<type name="integer"/>
+		<comment><![CDATA[Campo para chave estrangeira da tabela cartao.]]></comment>
+	</column>
+	<column name="turn_id" not-null="true">
+		<type name="integer"/>
+		<comment><![CDATA[Campo para chave estrangeira da tabela turno.]]></comment>
+	</column>
+	<column name="catr_id" not-null="true">
+		<type name="integer"/>
+		<comment><![CDATA[Campo para chave estrangeira da tabela catraca.]]></comment>
+	</column>
+	<constraint name="pk_regi" type="pk-constr" table="public.registro">
+		<columns names="regi_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<sequence name="unidade_turno_untu_id_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="unidade_turno">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Tabela que armazena o local fisico de funcionamento das catracas para o turno.]]></comment>
+	<position x="1637.43" y="545.086"/>
+	<column name="untu_id" not-null="true" default-value="nextval('unidade_turno_untu_id_seq'::regclass)">
+		<type name="integer"/>
+		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
+	</column>
+	<column name="turn_id" not-null="true">
+		<type name="integer"/>
+		<comment><![CDATA[Campo para chave estrangeira da tabela turno.]]></comment>
+	</column>
+	<column name="unid_id" not-null="true">
+		<type name="integer"/>
+		<comment><![CDATA[Campo para chave estrangeira da tabela unidade.]]></comment>
+	</column>
+	<constraint name="pk_untu_id" type="pk-constr" table="public.unidade_turno">
+		<columns names="untu_id" ref-type="src-columns"/>
+		<comment><![CDATA[Chave primaria da tabela unidade_turno.]]></comment>
+	</constraint>
+</table>
+
+<sequence name="custo_cartao_cuca_id_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="custo_cartao">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Tabela que armazena os registros de custo do cartao.]]></comment>
+	<position x="162.857" y="659.343"/>
+	<column name="cuca_id" not-null="true" default-value="nextval('custo_cartao_cuca_id_seq'::regclass)">
+		<type name="integer"/>
+		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
+	</column>
+	<column name="cuca_valor">
+		<type name="numeric" length="8" precision="2"/>
+		<comment><![CDATA[Valor em R$ do custo do cartao.]]></comment>
+	</column>
+	<column name="cuca_data">
+		<type name="date"/>
+		<comment><![CDATA[Data de cadastro do custo.]]></comment>
+	</column>
+	<constraint name="pk_cuca_id" type="pk-constr" table="public.custo_cartao">
+		<columns names="cuca_id" ref-type="src-columns"/>
+		<comment><![CDATA[Chave primaria da tabela custo_cartao.]]></comment>
+	</constraint>
+</table>
+
+<sequence name="custo_refeicao_cure_id_seq"
+	 start="1" increment="1"
+	 min-value="1" max-value="9223372036854775807"
+	 cache="1" cycle="false">
+	<schema name="public"/>
+	<role name="postgres"/>
+</sequence>
+
+<table name="custo_refeicao">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<comment><![CDATA[Tabela que armazena os registros de custo da refeicao.]]></comment>
+	<position x="164.857" y="776.486"/>
+	<column name="cure_id" not-null="true" default-value="nextval('custo_refeicao_cure_id_seq'::regclass)">
+		<type name="integer"/>
+		<comment><![CDATA[Campo autoincremento para chave primaria da tabela.]]></comment>
+	</column>
+	<column name="cure_valor">
+		<type name="numeric" length="8" precision="2"/>
+		<comment><![CDATA[Valor em R$ do custo da refeicao.]]></comment>
+	</column>
+	<column name="cure_data">
+		<type name="date"/>
+		<comment><![CDATA[Data e hora de cadastro do custo.]]></comment>
+	</column>
+	<constraint name="pk_cure_id" type="pk-constr" table="public.custo_refeicao">
+		<columns names="cure_id" ref-type="src-columns"/>
+		<comment><![CDATA[Chave primaria da tabela custo_refeicao.]]></comment>
+	</constraint>
+</table>
+
+<table name="catraca_unidade">
+	<schema name="public"/>
+	<role name="postgres"/>
+	<position x="1563.28" y="861.681"/>
+	<column name="caun_id" not-null="true">
+		<type name="serial"/>
+	</column>
+	<column name="catr_id">
+		<type name="integer"/>
+	</column>
+	<column name="unid_id">
+		<type name="integer"/>
+	</column>
+	<constraint name="pk_caun_id" type="pk-constr" table="public.catraca_unidade">
+		<columns names="caun_id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<constraint name="fk_usua_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.usuario" table="public.transacao">
+	<columns names="usua_id" ref-type="src-columns"/>
+	<columns names="usua_id" ref-type="dst-columns"/>
+		<comment><![CDATA[Chave estrangeira da tabela usuario.]]></comment>
+</constraint>
+
+<constraint name="fk_tipo_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.tipo" table="public.cartao">
+	<columns names="tipo_id" ref-type="src-columns"/>
+	<columns names="tipo_id" ref-type="dst-columns"/>
+		<comment><![CDATA[Chave estrangeira da tabelatipo.]]></comment>
+</constraint>
+
+<constraint name="fk_cart_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.cartao" table="public.vinculo">
+	<columns names="cart_id" ref-type="src-columns"/>
+	<columns names="cart_id" ref-type="dst-columns"/>
+		<comment><![CDATA[Chave estrangeira da tabela cartao.]]></comment>
+</constraint>
+
+<constraint name="fk_usua_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.usuario" table="public.vinculo">
+	<columns names="usua_id" ref-type="src-columns"/>
+	<columns names="usua_id" ref-type="dst-columns"/>
+		<comment><![CDATA[Chave estrangeira da tabela usuario.]]></comment>
+</constraint>
+
+<constraint name="fk_cart_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.cartao" table="public.isencao">
+	<columns names="cart_id" ref-type="src-columns"/>
+	<columns names="cart_id" ref-type="dst-columns"/>
+		<comment><![CDATA[Chave estrangeira da tabela cartao. ]]></comment>
+</constraint>
+
+<constraint name="pk_catr_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.catraca" table="public.giro">
+	<columns names="catr_id" ref-type="src-columns"/>
+	<columns names="catr_id" ref-type="dst-columns"/>
+		<comment><![CDATA[Chave estrangeira da tabela catraca.]]></comment>
+</constraint>
+
+<constraint name="fk_catr_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.catraca" table="public.mensagem">
+	<columns names="catr_id" ref-type="src-columns"/>
+	<columns names="catr_id" ref-type="dst-columns"/>
+		<comment><![CDATA[Chave estrangeira da tabela catraca.]]></comment>
+</constraint>
+
+<constraint name="fk_unid_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.unidade" table="public.guiche">
+	<columns names="unid_id" ref-type="src-columns"/>
+	<columns names="unid_id" ref-type="dst-columns"/>
+		<comment><![CDATA[Chave estrangeira da tabela unidade.]]></comment>
+</constraint>
+
+<constraint name="fk_usua_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.usuario" table="public.guiche">
+	<columns names="usua_id" ref-type="src-columns"/>
+	<columns names="usua_id" ref-type="dst-columns"/>
+		<comment><![CDATA[Chave estrangeira da tabela usuario.]]></comment>
+</constraint>
+
+<constraint name="fk_guic_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.guiche" table="public.fluxo">
+	<columns names="guic_id" ref-type="src-columns"/>
+	<columns names="guic_id" ref-type="dst-columns"/>
+		<comment><![CDATA[Chave estrangeira da tabela guiche.]]></comment>
+</constraint>
+
+<constraint name="fk_cart_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.cartao" table="public.registro">
+	<columns names="cart_id" ref-type="src-columns"/>
+	<columns names="cart_id" ref-type="dst-columns"/>
+		<comment><![CDATA[Chave estrangeira da tabela cartao.]]></comment>
+</constraint>
+
+<constraint name="fk_turn_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.turno" table="public.registro">
+	<columns names="turn_id" ref-type="src-columns"/>
+	<columns names="turn_id" ref-type="dst-columns"/>
+		<comment><![CDATA[Chave estrangeira da tabela turno.]]></comment>
+</constraint>
+
+<constraint name="fk_catr_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.catraca" table="public.registro">
+	<columns names="catr_id" ref-type="src-columns"/>
+	<columns names="catr_id" ref-type="dst-columns"/>
+		<comment><![CDATA[Chave estrangeira da tabela catraca.]]></comment>
+</constraint>
+
+<constraint name="fk_turn_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.turno" table="public.unidade_turno">
+	<columns names="turn_id" ref-type="src-columns"/>
+	<columns names="turn_id" ref-type="dst-columns"/>
+		<comment><![CDATA[Chave estrangeira da tabela turno.]]></comment>
+</constraint>
+
+<constraint name="fk_unid_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.unidade" table="public.unidade_turno">
+	<columns names="unid_id" ref-type="src-columns"/>
+	<columns names="unid_id" ref-type="dst-columns"/>
+		<comment><![CDATA[Chave estrangeira da tabela unidade.]]></comment>
+</constraint>
+
+<constraint name="fk_catr_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.catraca" table="public.catraca_unidade">
+	<columns names="catr_id" ref-type="src-columns"/>
+	<columns names="catr_id" ref-type="dst-columns"/>
+</constraint>
+
+<constraint name="fk_unid_id" type="fk-constr" comparison-type="MATCH SIMPLE"
+	 upd-action="NO ACTION" del-action="NO ACTION" ref-table="public.unidade" table="public.catraca_unidade">
+	<columns names="unid_id" ref-type="src-columns"/>
+	<columns names="unid_id" ref-type="dst-columns"/>
+</constraint>
+
+<relationship name="rel_transacao_usuario" type="relfk"
+	 custom-color="#83af1f"
+	 src-table="public.transacao"
+	 dst-table="public.usuario"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_cartao_tipo" type="relfk"
+	 custom-color="#5aa578"
+	 src-table="public.cartao"
+	 dst-table="public.tipo"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_vinculo_cartao" type="relfk"
+	 custom-color="#4b3e56"
+	 src-table="public.vinculo"
+	 dst-table="public.cartao"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_vinculo_usuario" type="relfk"
+	 custom-color="#9ac721"
+	 src-table="public.vinculo"
+	 dst-table="public.usuario"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_isencao_cartao" type="relfk"
+	 custom-color="#249b49"
+	 src-table="public.isencao"
+	 dst-table="public.cartao"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_giro_catraca" type="relfk"
+	 custom-color="#abb258"
+	 src-table="public.giro"
+	 dst-table="public.catraca"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_mensagem_catraca" type="relfk"
+	 custom-color="#94e1e5"
+	 src-table="public.mensagem"
+	 dst-table="public.catraca"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_guiche_unidade" type="relfk"
+	 custom-color="#a239f5"
+	 src-table="public.guiche"
+	 dst-table="public.unidade"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_guiche_usuario" type="relfk"
+	 custom-color="#4e132e"
+	 src-table="public.guiche"
+	 dst-table="public.usuario"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_fluxo_guiche" type="relfk"
+	 custom-color="#081cb1"
+	 src-table="public.fluxo"
+	 dst-table="public.guiche"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_registro_cartao" type="relfk"
+	 custom-color="#87ec86"
+	 src-table="public.registro"
+	 dst-table="public.cartao"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_registro_turno" type="relfk"
+	 custom-color="#63e1f3"
+	 src-table="public.registro"
+	 dst-table="public.turno"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_registro_catraca" type="relfk"
+	 custom-color="#e41bea"
+	 src-table="public.registro"
+	 dst-table="public.catraca"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_unidade_turno_turno" type="relfk"
+	 custom-color="#36beed"
+	 src-table="public.unidade_turno"
+	 dst-table="public.turno"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_unidade_turno_unidade" type="relfk"
+	 custom-color="#871fa4"
+	 src-table="public.unidade_turno"
+	 dst-table="public.unidade"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_catraca_unidade_catraca" type="relfk"
+	 src-table="public.catraca_unidade"
+	 dst-table="public.catraca"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="rel_catraca_unidade_unidade" type="relfk"
+	 src-table="public.catraca_unidade"
+	 dst-table="public.unidade"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="-24.6215" y="0.872663"/>
+	</label>
+</relationship>
+
+</dbmodel>

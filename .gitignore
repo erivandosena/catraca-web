@@ -1,0 +1,18 @@
+# Fontes compilados #
+#####################
+*.pyc
+*.autosave
+	
+# Documentacao      #
+#####################
+!/documentos
+web/
+
+# Logs              #
+#####################
+*.log
+
+# Temp              #
+#####################
+*~
+
