@@ -75,6 +75,8 @@ if ($sessao->getNivelAcesso () == Sessao::NIVEL_SUPER) {
 		print_r($linha);
 	}
 	
+	VinculoController::main($sessao->getNivelAcesso());
+	//Vamos pesq
 } else {
 	
 	UsuarioController::main($sessao->getNivelAcesso());
