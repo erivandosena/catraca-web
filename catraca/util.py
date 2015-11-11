@@ -30,6 +30,7 @@ class Util(object):
     log = Logs()
     aviso = Aviso()
     rpi = PinoControle()
+    
     pino_buzzer = rpi.ler(21)['gpio']
     cronometro = 0
     hora_stop = None
@@ -44,6 +45,7 @@ class Util(object):
             ip = '%s' % ( s.getsockname()[0] )
             return ip
         except Exception as excecao:
+            print excecao
             ip = '%s' % "127.0.0.1"
             print "Erro obtendo IP local"
             self.log.logger.error('Erro obtendo IP local', exc_info=True)

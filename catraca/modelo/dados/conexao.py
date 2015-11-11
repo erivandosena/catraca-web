@@ -20,7 +20,7 @@ __status__ = "Prototype" # Prototype | Development | Production
 class ConexaoFactory(object):
     
     log = Logs()
-    #util = Util()
+    util = Util()
     
     def __init__(self):
         super(ConexaoFactory, self).__init__()
@@ -84,11 +84,11 @@ class ConexaoFactory(object):
     def obtem_dns(self, bd = None, usuario = None, host = None, senha = None, tipo_banco = 1):
         try:
             if bd == None:
-                bd = Util().obtem_nome_rpi()
+                bd = self.util.obtem_nome_rpi()
             if usuario == None:
-                usuario = Util().obtem_nome_root_rpi()
+                usuario = self.util.obtem_nome_root_rpi()
             if host == None:
-                host = Util().obtem_ip()
+                host = self.util.obtem_ip()
             if senha == None:
                 senha = 'postgres'
             if tipo_banco == 1:
@@ -96,7 +96,7 @@ class ConexaoFactory(object):
             elif tipo_banco == 2:
                 dns = "user='%s' password='%s' host='%s' database='%s'" % (usuario, senha, host, bd)
             elif tipo_banco == 3:
-                dns = Util().obtem_path(str(bd)+".db")
+                dns = self.util.obtem_path(str(bd)+".db")
         except Exception as excecao:
             self.aviso = str(excecao)
             self.log.logger.error('Erro ao obter string de conexao.', exc_info=True)

@@ -2,14 +2,13 @@
 # -*- coding: latin-1 -*-
 
 
-import os
 from time import sleep
 from catraca.logs import Logs
 from catraca.util import Util
 from catraca.visao.interface.aviso import Aviso
 from catraca.visao.interface.acesso import Acesso
 from catraca.visao.interface.alerta import Alerta
-from catraca.visao.interface.relogio import Relogio
+from catraca.controle.restful.controle_restful import ControleRestful
 from catraca.controle.restful.cliente_restful import ClienteRestful
 
 
@@ -41,10 +40,8 @@ class Painel(object):
         #os.system("echo 'Sistema da Catraca iniciado!' | mail -s 'Raspberry Pi B' erivandoramos@bol.com.br")
         try:
             Alerta().start()
-            relogio = Relogio()
-            relogio.start()
-            #ClienteRestful().start()
-            #sleep(60)
+            ControleRestful().start()
+            ClienteRestful().start()
             #Acesso().start()
 #         except (SystemExit, KeyboardInterrupt):
 #             raise

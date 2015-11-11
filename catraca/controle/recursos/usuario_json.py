@@ -74,8 +74,6 @@ class UsuarioJson(ServidorRestful):
                 usuario.senha = self.dict_obj(formato_json[item])
             if item == "usua_nivel":
                 usuario.nivel = self.dict_obj(formato_json[item])
-#             if item == "id_base_externa":
-#                 usuario.id_externo = self.dict_obj(formato_json[item])
                 
         return usuario
     

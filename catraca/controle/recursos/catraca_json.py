@@ -51,17 +51,42 @@ class CatracaJson(ServidorRestful):
                                 self.catraca_dao.atualiza_exclui(obj, False)
                                 print self.catraca_dao.aviso
                         
-                    lista = self.catraca_dao.busca_por_ip(IP)
-                    if lista is None:
-                        print "nao cadastrado " + str(IP)
-                        catraca = Catraca()
-                        catraca.ip = IP
-                        catraca.tempo = 20
-                        catraca.operacao = 1
-                        catraca.nome = Util().obtem_nome_rpi().upper()
-                        self.objeto_json(catraca)
-                        #self.catraca_get()
-                         
+#                     lista = self.catraca_dao.busca_por_ip(IP)
+#                     if lista is None:
+#                         print "nao cadastrado " + str(IP)
+#                         catraca = Catraca()
+#                         catraca.ip = IP
+#                         catraca.tempo = 20
+#                         catraca.operacao = 1
+#                         catraca.nome = Util().obtem_nome_rpi().upper()
+#                         self.objeto_json(catraca)
+#                         #self.catraca_get()
+                else:
+                    print "limpa tabela"
+                    self.catraca_dao.atualiza_exclui(None,True)
+                    print self.catraca_dao.aviso
+                    
+                    catraca = Catraca()
+                    catraca.ip = IP
+                    catraca.tempo = 20
+                    catraca.operacao = 1
+                    catraca.nome = Util().obtem_nome_rpi().upper()
+                    self.objeto_json(catraca)
+                    
+                    
+                    for item in dados["catracas"]:
+                        obj = self.dict_obj(item)
+                        if obj.id:
+                            lista = self.catraca_dao.busca(obj.id)
+                            if lista is None:
+                                print "nao existe - insert " + str(obj.nome)
+                                self.catraca_dao.insere(obj)
+                                print self.catraca_dao.aviso
+                            else:
+                                print "existe - update " + str(obj.nome)
+                                self.catraca_dao.atualiza_exclui(obj, False)
+                                print self.catraca_dao.aviso
+       
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json catraca.', exc_info=True)

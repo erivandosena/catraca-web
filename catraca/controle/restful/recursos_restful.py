@@ -33,12 +33,12 @@ class RecursosRestful(object):
         super(RecursosRestful, self).__init__()
 
     def obtem_recursos(self):
+        CatracaJson().catraca_get()
         TipoJson().tipo_get()
         TurnoJson().turno_get()
         UnidadeJson().unidade_get()
         CustoRefeicaoJson().custo_refeicao_get()
         UsuarioJson().usuario_get()
-        CatracaJson().catraca_get()
         GiroJson().giro_get()
         MensagemJson().mensagem_get()
         CartaoJson().cartao_get()

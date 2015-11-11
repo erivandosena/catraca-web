@@ -3,10 +3,12 @@
 
 
 from contextlib import closing
+from catraca.util import Util
 from catraca.modelo.dados.conexao import ConexaoFactory
 from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
 from catraca.modelo.entidades.turno import Turno
-
+from catraca.modelo.dao.catraca_dao import CatracaDAO
+from catraca.controle.recursos.catraca_json import CatracaJson
 
 __author__ = "Erivando Sena"
 __copyright__ = "Copyright 2015, Unilab"
@@ -15,6 +17,8 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 
 class TurnoDAO(ConexaoGenerica):
+    
+    util = Util()
 
     def __init__(self):
         super(TurnoDAO, self).__init__()
@@ -64,13 +68,24 @@ class TurnoDAO(ConexaoGenerica):
             pass
         
     def busca_por_catraca(self, obj, hora_atual):
-        sql = "SELECT turno.turn_id, turno.turn_hora_inicio, turno.turn_hora_fim, turno.turn_descricao FROM turno "\
-                "INNER JOIN unidade_turno ON turno.turn_id = unidade_turno.turn_id "\
-                "INNER JOIN catraca_unidade ON unidade_turno.unid_id = catraca_unidade.unid_id "\
-                "INNER JOIN catraca ON catraca_unidade.catr_id = catraca.catr_id "\
-                "WHERE catraca.catr_ip = '"+str(obj.ip)+"' "+\
-                "AND turno.turn_hora_inicio <= '" + str(hora_atual) +"'"+\
-                "AND turno.turn_hora_fim >= '" + str(hora_atual) + "'";
+        if obj.ip:
+            sql = "SELECT turno.turn_id, turno.turn_hora_inicio, turno.turn_hora_fim, turno.turn_descricao FROM turno "\
+                    "INNER JOIN unidade_turno ON turno.turn_id = unidade_turno.turn_id "\
+                    "INNER JOIN catraca_unidade ON unidade_turno.unid_id = catraca_unidade.unid_id "\
+                    "INNER JOIN catraca ON catraca_unidade.catr_id = catraca.catr_id "\
+                    "WHERE catraca.catr_ip = '"+str(obj.ip)+"' "\
+                    "AND turno.turn_hora_inicio <= '" + str(hora_atual) +"' "\
+                    "AND turno.turn_hora_fim >= '" + str(hora_atual) + "'"
+        else:
+            ip = self.util.obtem_ip()
+            sql = "SELECT turno.turn_id, turno.turn_hora_inicio, turno.turn_hora_fim, turno.turn_descricao FROM turno "\
+                    "INNER JOIN unidade_turno ON turno.turn_id = unidade_turno.turn_id "\
+                    "INNER JOIN catraca_unidade ON unidade_turno.unid_id = catraca_unidade.unid_id "\
+                    "INNER JOIN catraca ON catraca_unidade.catr_id = catraca.catr_id "\
+                    "WHERE catraca.catr_ip = '"+str(ip)+"' "\
+                    "AND turno.turn_hora_inicio <= '" + str(hora_atual) +"' "\
+                    "AND turno.turn_hora_fim >= '" + str(hora_atual) + "'"
+ 
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -84,6 +99,24 @@ class TurnoDAO(ConexaoGenerica):
             self.log.logger.error('Erro ao realizar SELECT na tabela turno.', exc_info=True)
         finally:
             pass
+        
+    def obtem_catraca(self):
+        catraca = CatracaDAO().busca_por_ip(self.util.obtem_ip())
+        if catraca:
+            return catraca
+        else:
+            CatracaJson().catraca_get()
+            catraca = CatracaDAO().busca_por_ip(self.util.obtem_ip())
+            return catraca
+        
+        
+    def obtem_turno(self):
+        turno = self.busca_por_catraca(self.obtem_catraca(), self.util.obtem_hora())
+        print "select no BD!"
+        if turno:      
+            return turno
+        else:
+            return None
    
     def insere(self, obj):
         try:

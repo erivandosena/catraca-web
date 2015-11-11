@@ -17,7 +17,6 @@ class Usuario(object):
         self.__usua_login = None
         self.__usua_senha = None
         self.__usua_nivel = None
-        self.__id_base_externa = None
     
     @property
     def id(self):
@@ -67,11 +66,4 @@ class Usuario(object):
     def nivel(self, valor):
         self.__usua_nivel = valor
         
-    @property
-    def id_externo(self):
-        return self.__id_base_externa
-    
-    @id_externo.setter
-    def id_externo(self, valor):
-        self.__id_base_externa = valor
         

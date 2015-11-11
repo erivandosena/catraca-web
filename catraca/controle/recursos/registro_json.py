@@ -10,8 +10,6 @@ from catraca.util import Util
 from catraca.modelo.dados.servidor_restful import ServidorRestful
 from catraca.modelo.dao.registro_dao import RegistroDAO
 from catraca.modelo.entidades.registro import Registro
-from catraca.modelo.dao.catraca_dao import CatracaDAO
-from catraca.modelo.dao.turno_dao import TurnoDAO
 
 
 __author__ = "Erivando Sena" 
@@ -33,7 +31,6 @@ class RegistroJson(ServidorRestful):
     def __init__(self, ):
         super(RegistroJson, self).__init__()
         ServidorRestful.__init__(self)
-        self.obtem_turno()
         
     def registro_get(self):
         servidor = self.obter_servidor()
@@ -134,18 +131,4 @@ class RegistroJson(ServidorRestful):
             self.log.logger.error('Erro enviando json registro.', exc_info=True)
         finally:
             pass
-        
-    def obtem_turno(self):   
-        catraca = CatracaDAO().busca_por_ip(Util().obtem_ip())
-        turnos = TurnoDAO().busca_por_catraca(catraca, self.util.obtem_hora())
-        if turnos:
-            turnos.sort()
-            for turno in turnos:
-                self.hora_atual = Util().obtem_hora()
-                self.hora_inicio = datetime.datetime.strptime(str(turno[1]),'%H:%M:%S').time()
-                self.hora_fim = datetime.datetime.strptime(str(turno[2]),'%H:%M:%S').time()
-                if ((self.hora_atual >= self.hora_inicio) and (self.hora_atual <= self.hora_fim)):
-                    return turno
-                    break
-            return None
         

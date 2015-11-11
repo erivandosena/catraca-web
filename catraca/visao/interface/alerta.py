@@ -27,15 +27,14 @@ class Alerta(Thread):
     def __init__(self, intervalo=1):
         super(Alerta, self).__init__()
         Thread.__init__(self)
-        self.name = 'Thread Alerta(Sonoro).'
         self.intervalo = intervalo
+        self.name = 'Thread Alerta(Sonoro).'
         thread = Thread(target=self.run, args=())
         thread.daemon = True # Daemonize thread
         #thread.start()
-        print "%s Rodando... " % self.name
 
     def run(self):
-        #print "%s Rodando... " % self.name
+        print "%s Rodando... " % self.name
         while True:
             self.verifica_giro_irregular()
             sleep(self.intervalo)
@@ -47,5 +46,4 @@ class Alerta(Thread):
             (self.sensor_optico.obtem_direcao_giro() == 'antihorario' and \
             self.solenoide.obtem_estado_solenoide(2) == 0):
             self.util.emite_beep(860, 1, 1, 15) #15 = 1.5 seg
-
             
