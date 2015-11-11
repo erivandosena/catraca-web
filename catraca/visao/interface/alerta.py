@@ -8,6 +8,10 @@ from time import sleep
 from threading import Thread
 from catraca.logs import Logs
 from catraca.util import Util
+<<<<<<< HEAD
+=======
+from catraca.controle.dispositivos.leitorcartao import LeitorCartao
+>>>>>>> remotes/origin/web_backend
 from catraca.controle.dispositivos.solenoide import Solenoide
 from catraca.controle.dispositivos.sensoroptico import SensorOptico
 
@@ -23,15 +27,27 @@ class Alerta(Thread):
     util = Util()
     solenoide = Solenoide()
     sensor_optico = SensorOptico()
+<<<<<<< HEAD
+=======
+    leitor = LeitorCartao()
+>>>>>>> remotes/origin/web_backend
  
     def __init__(self, intervalo=1):
         super(Alerta, self).__init__()
         Thread.__init__(self)
+<<<<<<< HEAD
         self.intervalo = intervalo
         self.name = 'Thread Alerta(Sonoro).'
         thread = Thread(target=self.run, args=())
         thread.daemon = True # Daemonize thread
         #thread.start()
+=======
+        self.name = 'Thread Alerta(Sonoro).'
+        self.intervalo = intervalo
+        thread = Thread(target=self.run, args=())
+        thread.daemon = True # Daemonize thread
+        thread.start()
+>>>>>>> remotes/origin/web_backend
 
     def run(self):
         print "%s Rodando... " % self.name
@@ -46,4 +62,8 @@ class Alerta(Thread):
             (self.sensor_optico.obtem_direcao_giro() == 'antihorario' and \
             self.solenoide.obtem_estado_solenoide(2) == 0):
             self.util.emite_beep(860, 1, 1, 15) #15 = 1.5 seg
+<<<<<<< HEAD
+=======
+
+>>>>>>> remotes/origin/web_backend
             

@@ -3,7 +3,11 @@
 
 # from testes import tipo_teste
 # from testes import perfil_teste
+<<<<<<< HEAD
 from testes import cartao_teste
+=======
+# from testes import cartao_teste
+>>>>>>> remotes/origin/web_backend
 # from testes import registro_teste
 # from testes import catraca_teste
 # from testes import giro_teste
@@ -15,13 +19,19 @@ from testes import cartao_teste
 from testes import requests_teste
 
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> remotes/origin/web_backend
 __author__ = "Erivando Sena" 
 
 
 if __name__ == '__main__':
     
+<<<<<<< HEAD
     
+=======
+>>>>>>> remotes/origin/web_backend
     requests_teste.main()
     
     #usuario_teste.main()

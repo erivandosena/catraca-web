@@ -1,22 +1,34 @@
 #!/usr/bin/env python
+<<<<<<< HEAD
 # -*- coding: latin-1 -*-
 
+=======
+# -*- coding: utf-8 -*-
+>>>>>>> remotes/origin/web_backend
 
 from contextlib import closing
 from catraca.modelo.dados.conexao import ConexaoFactory
 from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
 from catraca.modelo.entidades.vinculo import Vinculo
+<<<<<<< HEAD
 from catraca.modelo.dao.cartao_dao import CartaoDAO
 from catraca.modelo.dao.usuario_dao import UsuarioDAO
 
 
 __author__ = "Erivando Sena"
 __copyright__ = "Copyright 2015, Unilab"
+=======
+
+
+__author__ = "Erivando Sena"
+__copyright__ = "(C) Copyright 2015, Unilab"
+>>>>>>> remotes/origin/web_backend
 __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production
 
 
 class VinculoDAO(ConexaoGenerica):
+<<<<<<< HEAD
 
     def __init__(self):
         super(VinculoDAO, self).__init__()
@@ -158,3 +170,16 @@ class VinculoDAO(ConexaoGenerica):
         finally:
             pass
         
+=======
+    
+    def __init__(self):
+        super(VinculoDAO, self).__init__()
+        ConexaoGenerica.__init__(self)
+
+    def busca(self, *arg):
+        pass
+        
+    def mantem(self, obj, delete):
+        pass
+    
+>>>>>>> remotes/origin/web_backend

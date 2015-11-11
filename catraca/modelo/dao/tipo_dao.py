@@ -28,7 +28,11 @@ class TipoDAO(ConexaoGenerica):
         if id:
             sql = "SELECT tipo_id, tipo_nome, tipo_valor FROM tipo WHERE tipo_id = " + str(id)
         elif id is None:
+<<<<<<< HEAD
             sql = "SELECT tipo_id, tipo_nome, tipo_valor FROM tipo ORDER BY tipo_id"
+=======
+            sql = "SELECT tipo_id, tipo_nome, tipo_valor FROM tipo"
+>>>>>>> remotes/origin/web_backend
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -73,7 +77,11 @@ class TipoDAO(ConexaoGenerica):
                 return False
         except Exception, e:
             self.aviso = str(e)
+<<<<<<< HEAD
             self.log.logger.error('Erro realizando INSERT na tabela tipo.', exc_info=True)
+=======
+            self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela tipo.', exc_info=True)
+>>>>>>> remotes/origin/web_backend
             return False
         finally:
             pass
@@ -82,10 +90,14 @@ class TipoDAO(ConexaoGenerica):
         try:
             if obj:
                 if delete:
+<<<<<<< HEAD
                     if obj.id:
                         sql = "DELETE FROM tipo WHERE tipo_id = " + str(obj.id)
                     else:
                         sql = "DELETE FROM tipo"
+=======
+                    sql = "DELETE FROM tipo WHERE tipo_id = " + str(obj.id)
+>>>>>>> remotes/origin/web_backend
                     self.aviso = "Excluido com sucesso!"
                 else:
                     sql = "UPDATE tipo SET " +\
@@ -103,7 +115,11 @@ class TipoDAO(ConexaoGenerica):
                 return False
         except Exception, e:
             self.aviso = str(e)
+<<<<<<< HEAD
             self.log.logger.error('Erro realizando DELETE/UPDATE na tabela tipo.', exc_info=True)
+=======
+            self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela tipo.', exc_info=True)
+>>>>>>> remotes/origin/web_backend
             return False
         finally:
             pass

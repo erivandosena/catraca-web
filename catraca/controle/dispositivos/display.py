@@ -94,6 +94,9 @@ class Display(object):
         for i in range(lcd_columns-len(texto)):
             sleep(0.5)
             self.lcd.move_left()
+<<<<<<< HEAD
             
     def limpa_lcd(self):
         self.lcd.clear()
+=======
+>>>>>>> remotes/origin/web_backend

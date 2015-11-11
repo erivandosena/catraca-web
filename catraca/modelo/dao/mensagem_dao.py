@@ -6,7 +6,10 @@ from contextlib import closing
 from catraca.modelo.dados.conexao import ConexaoFactory
 from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
 from catraca.modelo.entidades.mensagem import Mensagem
+<<<<<<< HEAD
 from catraca.modelo.dao.catraca_dao import CatracaDAO
+=======
+>>>>>>> remotes/origin/web_backend
 
 
 __author__ = "Erivando Sena"
@@ -37,7 +40,11 @@ class MensagemDAO(ConexaoGenerica):
             "mens_erroleitor, mens_bloqueioacesso, mens_liberaacesso, mens_semcredito, "\
             "mens_semcadastro, mens_cartaoinvalido, mens_turnoinvalido, mens_datainvalida, "\
             "mens_cartaoutilizado, mens_institucional1, mens_institucional2, "\
+<<<<<<< HEAD
             "mens_institucional3, mens_institucional4, catr_id FROM mensagem ORDER BY mens_id"
+=======
+            "mens_institucional3, mens_institucional4, catr_id FROM mensagem"
+>>>>>>> remotes/origin/web_backend
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -61,7 +68,11 @@ class MensagemDAO(ConexaoGenerica):
                         obj.msg_institucional2 = dados[14]
                         obj.msg_institucional3 = dados[15]
                         obj.msg_institucional4 = dados[16]
+<<<<<<< HEAD
                         obj.catraca = self.busca_por_catraca(obj)
+=======
+                        obj.catraca = dados[17]
+>>>>>>> remotes/origin/web_backend
                         return obj
                     else:
                         return None
@@ -77,6 +88,7 @@ class MensagemDAO(ConexaoGenerica):
         finally:
             pass
         
+<<<<<<< HEAD
     def busca_por_catraca(self, obj):
         return CatracaDAO().busca(obj.id)
     
@@ -176,6 +188,106 @@ class MensagemDAO(ConexaoGenerica):
         except Exception, e:
             self.aviso = str(e)
             self.log.logger.error('Erro realizando DELETE/UPDATE na tabela mensagem.', exc_info=True)
+=======
+    def busca_por_catraca(self, id):
+        sql = "SELECT mens_id, mens_inicializacao, mens_saldacao, mens_aguardacartao, "\
+        "mens_erroleitor, mens_bloqueioacesso, mens_liberaacesso, mens_semcredito, "\
+        "mens_semcadastro, mens_cartaoinvalido, mens_turnoinvalido, mens_datainvalida, "\
+        "mens_cartaoutilizado, mens_institucional1, mens_institucional2, "\
+        "mens_institucional3, mens_institucional4, catr_id FROM mensagem WHERE catr_id = " + str(id)
+        try:
+            with closing(self.abre_conexao().cursor()) as cursor:
+                cursor.execute(sql)
+                list = cursor.fetchall()
+                if list != []:
+                    return list
+                else:
+                    return None
+        except Exception, e:
+            self.aviso = str(e)
+            self.log.logger.error('Erro ao realizar SELECT na tabela mensagem.', exc_info=True)
+        finally:
+            pass
+
+    def mantem(self, obj, delete):
+        try:
+            if obj is not None:
+                if delete:
+                    sql = "DELETE FROM mensagem WHERE mens_id = " + str(obj.id)
+                    msg = "Excluido com sucesso!"
+                else:
+                    if obj.id:
+                        sql = "UPDATE mensagem SET " +\
+                             "mens_inicializacao = '" + str(obj.msg_inicializacao) + "', " +\
+                             "mens_saldacao = '" + str(obj.msg_saldacao) + "', " +\
+                             "mens_aguardacartao = '" + str(obj.msg_aguardacartao) + "', " +\
+                             "mens_erroleitor = '" + str(obj.msg_erroleitor) + "', " +\
+                             "mens_bloqueioacesso = '" + str(obj.msg_bloqueioacesso) + "', " +\
+                             "mens_liberaacesso = '" + str(obj.msg_liberaacesso) + "', " +\
+                             "mens_semcredito = '" + str(obj.msg_semcredito) + "', " +\
+                             "mens_semcadastro = '" + str(obj.msg_semcadastro) + "', " +\
+                             "mens_cartaoinvalido = '" + str(obj.msg_cartaoinvalido) + "', " +\
+                             "mens_turnoinvalido = '" + str(obj.msg_turnoinvalido) + "', " +\
+                             "mens_datainvalida = '" + str(obj.msg_datainvalida) + "', " +\
+                             "mens_cartaoutilizado = '" + str(obj.msg_cartaoutilizado) + "', " +\
+                             "mens_institucional1 = '" + str(obj.msg_institucional1) + "', " +\
+                             "mens_institucional2 = '" + str(obj.msg_institucional2) + "', " +\
+                             "mens_institucional3 = '" + str(obj.msg_institucional3) + "', " +\
+                             "mens_institucional4 = '" + sstr(obj.msg_institucional4) + "', " +\
+                             "catr_id = '" + str(obj.catraca.id) +\
+                             "' WHERE "\
+                             "mens_id = " + str(obj.id)
+                        msg = "Alterado com sucesso!"
+                    else:
+                        sql = "INSERT INTO mensagem("\
+                              "mens_inicializacao, "\
+                              "mens_saldacao, "\
+                              "mens_aguardacartao, "\
+                              "mens_erroleitor, "\
+                              "mens_bloqueioacesso, "\
+                              "mens_liberaacesso, "\
+                              "mens_semcredito, "\
+                              "mens_semcadastro, "\
+                              "mens_cartaoinvalido, "\
+                              "mens_turnoinvalido, "\
+                              "mens_datainvalida, "\
+                              "mens_cartaoutilizado, "\
+                              "mens_institucional1, "\
+                              "mens_institucional2, "\
+                              "mens_institucional3, "\
+                              "mens_institucional4, "\
+                              "catr_id) VALUES ('" +\
+                              str(obj.msg_inicializacao) + "', '" +\
+                              str(obj.msg_saldacao) + "', '" +\
+                              str(obj.msg_aguardacartao) + "', '" +\
+                              str(obj.msg_erroleitor) + "', '" +\
+                              str(obj.msg_bloqueioacesso) + "', '" +\
+                              str(obj.msg_liberaacesso) + "', '" +\
+                              str(obj.msg_semcredito) + "', '" +\
+                              str(obj.msg_semcadastro) + "', '" +\
+                              str(obj.msg_cartaoinvalido) + "', '" +\
+                              str(obj.msg_turnoinvalido) + "', '" +\
+                              str(obj.msg_datainvalida) + "', '" +\
+                              str(obj.msg_cartaoutilizado) + "', '" +\
+                              str(obj.msg_institucional1) + "', '" +\
+                              str(obj.msg_institucional2) + "', '" +\
+                              str(obj.msg_institucional3) + "', '" +\
+                              str(obj.msg_institucional4) + "', '" +\
+                              str(obj.catraca.id) + "')"
+                        msg = "Inserido com sucesso!"
+                with closing(self.abre_conexao().cursor()) as cursor:
+                    cursor.execute(sql)
+                    self.commit()
+                    self.aviso = msg
+                    return True
+            else:
+                msg = "Objeto inexistente!"
+                self.aviso = msg
+                return False
+        except Exception, e:
+            self.aviso = str(e)
+            self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela mensagem.', exc_info=True)
+>>>>>>> remotes/origin/web_backend
             return False
         finally:
             pass

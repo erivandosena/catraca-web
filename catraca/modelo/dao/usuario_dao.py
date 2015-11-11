@@ -14,6 +14,11 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 
 class UsuarioDAO(ConexaoGenerica):
+<<<<<<< HEAD
+=======
+    
+    #log = Logs()
+>>>>>>> remotes/origin/web_backend
 
     def __init__(self):
         super(UsuarioDAO, self).__init__()
@@ -40,7 +45,11 @@ class UsuarioDAO(ConexaoGenerica):
                   "usua_login, "\
                   "usua_senha, "\
                   "usua_nivel "\
+<<<<<<< HEAD
                   "FROM usuario ORDER BY usua_id"
+=======
+                  "FROM usuario"
+>>>>>>> remotes/origin/web_backend
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -68,6 +77,7 @@ class UsuarioDAO(ConexaoGenerica):
         finally:
             pass
         
+<<<<<<< HEAD
     def insere(self, obj):
         try:
             if obj:
@@ -128,6 +138,50 @@ class UsuarioDAO(ConexaoGenerica):
         except Exception, e:
             self.aviso = str(e)
             self.log.logger.error('Erro realizando DELETE/UPDATE na tabela usuario.', exc_info=True)
+=======
+    def mantem(self, obj, delete):
+        try:
+            if obj is not None:
+                if delete:
+                    sql = "DELETE FROM usuario WHERE usua_id = " + str(obj.id)
+                    msg = "Excluido com sucesso!"
+                else:
+                    if obj.id:
+                        sql = "UPDATE usuario SET " +\
+                              "usua_nome = " + str(obj.nome) + ", " +\
+                              "usua_email = " + str(obj.email) + ", " +\
+                              "usua_login = " + str(obj.login) + ", " +\
+                              "usua_senha = " + str(obj.senha) + ", " +\
+                              "usua_nivel = " + str(obj.nivel) +\
+                              " WHERE "\
+                              "usua_id = " + str(obj.id)
+                        msg = "Alterado com sucesso!"
+                    else:
+                        sql = "INSERT INTO usuario("\
+                              "usua_nome, "\
+                              "usua_email, "\
+                              "usua_login, "\
+                              "usua_senha "\
+                              "usua_nivel) VALUES (" +\
+                              str(obj.nome) + ", " +\
+                              str(obj.email) + ", " +\
+                              str(obj.login) + ", " +\
+                              str(obj.senha) + ", " +\
+                              str(obj.nivel) + ")"
+                        msg = "Inserido com sucesso!"
+                with closing(self.abre_conexao().cursor()) as cursor:
+                    cursor.execute(sql)
+                    self.commit()
+                    self.aviso = msg
+                    return True
+            else:
+                msg = "Objeto inexistente!"
+                self.aviso = msg
+                return False
+        except Exception, e:
+            self.aviso = str(e)
+            self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela usuario.', exc_info=True)
+>>>>>>> remotes/origin/web_backend
             return False
         finally:
             pass

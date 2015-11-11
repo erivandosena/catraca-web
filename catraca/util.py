@@ -3,17 +3,25 @@
 
 
 import os
+<<<<<<< HEAD
 import sys
 import pwd
+=======
+>>>>>>> remotes/origin/web_backend
 import time
 import socket
 import locale
 import calendar
 import datetime
+<<<<<<< HEAD
 import subprocess
 from time import sleep
 from catraca.logs import Logs
 from catraca.visao.interface.aviso import Aviso
+=======
+from time import sleep
+from catraca.logs import Logs
+>>>>>>> remotes/origin/web_backend
 from catraca.controle.raspberrypi.pinos import PinoControle
 
 
@@ -28,6 +36,7 @@ class Util(object):
     locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
     
     log = Logs()
+<<<<<<< HEAD
     aviso = Aviso()
     rpi = PinoControle()
     
@@ -35,10 +44,17 @@ class Util(object):
     cronometro = 0
     hora_stop = None
     
+=======
+    rpi = PinoControle()
+    pino_buzzer = rpi.ler(21)['gpio']
+    cronometro = 0
+
+>>>>>>> remotes/origin/web_backend
     def __init__(self):
         super(Util, self).__init__()
         
     def obtem_ip(self):
+<<<<<<< HEAD
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             s.connect(('unilab.edu.br', 0))
@@ -60,6 +76,12 @@ class Util(object):
     
     def obtem_path(self, arquivo):
         return "%s" % (os.path.join(os.path.dirname(os.path.abspath(__file__)), arquivo))
+=======
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(('unilab.edu.br', 0))
+        ip = '%s' % ( s.getsockname()[0] )
+        return ip
+>>>>>>> remotes/origin/web_backend
         
     def buzzer(self, frequencia, intensidade):
         period = 1.0 / frequencia
@@ -97,12 +119,15 @@ class Util(object):
     
     def obtem_datahora(self):
         return datetime.datetime.now()
+<<<<<<< HEAD
     
     def obtem_datahora_display(self):
         return datetime.datetime.now().strftime('%d/%B/%Y\n    %H:%M:%S')
     
     def obtem_datahora_postgresql(self):
         return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+=======
+>>>>>>> remotes/origin/web_backend
      
     def obtem_dia_util(self):
         dia_util = True
@@ -123,6 +148,7 @@ class Util(object):
                     pass
                 weekday_count += 1
         return dia_util
+<<<<<<< HEAD
     
     def reinicia_raspberrypi(self):
         self.aviso.exibir_reinicia_catraca()
@@ -148,4 +174,6 @@ class Util(object):
             return False
         else:
             return True
+=======
+>>>>>>> remotes/origin/web_backend
         

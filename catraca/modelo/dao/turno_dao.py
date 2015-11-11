@@ -3,12 +3,19 @@
 
 
 from contextlib import closing
+<<<<<<< HEAD
 from catraca.util import Util
 from catraca.modelo.dados.conexao import ConexaoFactory
 from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
 from catraca.modelo.entidades.turno import Turno
 from catraca.modelo.dao.catraca_dao import CatracaDAO
 from catraca.controle.recursos.catraca_json import CatracaJson
+=======
+from catraca.modelo.dados.conexao import ConexaoFactory
+from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
+from catraca.modelo.entidades.turno import Turno
+
+>>>>>>> remotes/origin/web_backend
 
 __author__ = "Erivando Sena"
 __copyright__ = "Copyright 2015, Unilab"
@@ -17,8 +24,11 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 
 class TurnoDAO(ConexaoGenerica):
+<<<<<<< HEAD
     
     util = Util()
+=======
+>>>>>>> remotes/origin/web_backend
 
     def __init__(self):
         super(TurnoDAO, self).__init__()
@@ -41,7 +51,11 @@ class TurnoDAO(ConexaoGenerica):
                    "turn_hora_inicio, "\
                    "turn_hora_fim, "\
                    "turn_descricao "\
+<<<<<<< HEAD
                    "FROM turno ORDER BY turn_id"
+=======
+                   "FROM turno"
+>>>>>>> remotes/origin/web_backend
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -67,6 +81,7 @@ class TurnoDAO(ConexaoGenerica):
         finally:
             pass
         
+<<<<<<< HEAD
     def busca_por_catraca(self, obj, hora_atual):
         if obj:
             print "passou >>> if obj:"
@@ -122,6 +137,8 @@ class TurnoDAO(ConexaoGenerica):
         else:
             return None
    
+=======
+>>>>>>> remotes/origin/web_backend
     def insere(self, obj):
         try:
             if obj:
@@ -144,7 +161,11 @@ class TurnoDAO(ConexaoGenerica):
                 return False
         except Exception, e:
             self.__aviso = str(e)
+<<<<<<< HEAD
             self.log.logger.error('Erro realizando INSERT na tabela turno.', exc_info=True)
+=======
+            self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela turno.', exc_info=True)
+>>>>>>> remotes/origin/web_backend
             return False
         finally:
             pass
@@ -153,11 +174,16 @@ class TurnoDAO(ConexaoGenerica):
         try:
             if obj:
                 if delete:
+<<<<<<< HEAD
                     if obj.id:
                         sql = "DELETE FROM turno WHERE turn_id = " + str(obj.id)
                     else:
                         sql = "DELETE FROM turno"
                     self.aviso = "Excluido com sucesso!"
+=======
+                    sql = "DELETE FROM turno WHERE turn_id = " + str(obj.id)
+                    msg = "Excluido com sucesso!"
+>>>>>>> remotes/origin/web_backend
                 else:
                     sql = "UPDATE turno SET " +\
                           "turn_hora_inicio = '" + str(obj.inicio) + "', " +\
@@ -175,7 +201,11 @@ class TurnoDAO(ConexaoGenerica):
                 return False
         except Exception, e:
             self.__aviso = str(e)
+<<<<<<< HEAD
             self.log.logger.error('Erro realizando DELETE/UPDATE na tabela turno.', exc_info=True)
+=======
+            self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela turno.', exc_info=True)
+>>>>>>> remotes/origin/web_backend
             return False
         finally:
             pass
