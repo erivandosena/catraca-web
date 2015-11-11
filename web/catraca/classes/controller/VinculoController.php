@@ -72,11 +72,27 @@ class VinculoController{
 		if(isset($_GET['selecionado'])){
 			if(is_int(intval($_GET['selecionado'])))
 			{
-				echo 'Selecionou '.$_GET['selecionado'];
-				/*
-				 * Vamos aqui verificar os vinculos desse usuario. 
-				 * 
-				 */
+				$dao = new DAO(null, DAO::TIPO_PG_SIGAAA);
+				$id = intval($_GET['selecionado']);
+				$sql = "SELECT * FROM vw_usuarios_catraca WHERE id_usuario = $id";
+				$result = $dao->getConexao()->query($sql);
+				foreach($result as $row){
+					echo $row['nome'];
+					break;
+					
+				}
+				$dao->fazerConexao();
+				$dao= new DAO(null, DAO::TIPO_PG_LOCAL);
+				//Agora vamos pegar os vinculos ativos desse usuario. 
+				$sql = "SELECT * FROM vinculo INNER JOIN usuario ON vinculo.usua_id = usuario.usua_id 
+						WHERE usuario.usua_id = $id";
+				$result = $dao->getConexao()->query($sql);
+				foreach ($result as $row){
+					print_r($row);
+					
+				}
+			
+
 			}
 		}
 	}

@@ -27,7 +27,7 @@ class DAO {
 				$this->conexao = new PDO ( "pgsql:host=200.129.19.80 dbname=sistemas_comum user=catraca password=c4Tr@3a" );
 				break;
 			case self::TIPO_PG_CATRACA_TESTE://Maquina do GIO. Banco de dados local. 
-				$this->conexao = new PDO ("pgsql:host=10.5.0.15 dbname=bd_teste user=postgres password=postgres");
+				$this->conexao = new PDO ("pgsql:host=10.5.0.15 dbname=desenvolvimento user=postgres password=postgres");
 				break;
 			default :
 				$this->conexao = new PDO ( "pgsql:host=10.5.1.8 dbname=unicafe user=unicafe password=unicafe@unilab" );

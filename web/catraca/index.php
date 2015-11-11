@@ -64,12 +64,12 @@ if (isset ( $_GET ["sair"] )) {
 if ($sessao->getNivelAcesso () == Sessao::NIVEL_SUPER) {
 	UsuarioController::main ( $sessao->getNivelAcesso() );
 	echo 'Teste da view:<br>';
-	$dao = new DAO ( null, DAO::TIPO_PG_LOCAL);
+	$dao = new DAO ( null, DAO::TIPO_PG_CATRACA_TESTE);
 	$novoNivel = Sessao::NIVEL_SUPER;
 	
 // 	$result = $dao->getConexao ()->exec( "UPDATE usuario set usua_nivel = $novoNivel WHERE usua_login = 'erivando'" );
 // 	echo $result;
-	$result = $dao->getConexao ()->query ( "SELECT * FROM usuario" );
+	$result = $dao->getConexao ()->query ( "SELECT * FROM catraca" );
 	
 	foreach ( $result as $linha ) {
 		print_r($linha);
