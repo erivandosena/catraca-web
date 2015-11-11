@@ -1,0 +1,73 @@
+#!/bin/sh
+# /etc/init.d/Catraca
+
+### BEGIN INIT INFO
+# Provides: 			Catraca
+# Required-Start: 		$local_fs $remote_fs $syslog
+# Required-Stop: 		$local_fs $remote_fs $syslog
+# Default-Start: 		2 3 4 5
+# Default-Stop: 		0 1 6
+# Short-Description: 		Inicia aplicacao e api da catraca
+# Description: 			Inicia aplicacao da catraca de baixo nivel e a API cliente RESTful.
+### END INIT INFO
+
+# Script de inicialização LSB (https://wiki.debian.org/LSBInitScripts)
+# Autor: Erivando Sena
+# Copyright: © 2015 Unilab
+# Email: erivandoramos@unilab.edu.br
+# Data: 22/07/2015
+# Status: Prototype  (Prototype | Development | Production)
+
+# Para INSTALAR:
+# (DESCONTINUADO partir do Debian 6.0) sudo update-rc.d Catraca defaults
+# (DESCONTINUADO partir do Debian 6.0) sudo update-rc.d -f Catraca remove
+# sudo insserv -v Catraca
+# sudo insserv -v Catraca -r
+# Verificar na lista de servicos ativos: sudo service --status-all
+
+DIR=/home/pi/CatracaEletronica
+DAEMON=$DIR/run.py
+DAEMON_NAME=Catraca
+DAEMON_USER=root
+PIDFILE=/var/run/$DAEMON_NAME.pid
+DAEMON_OPTS=""
+
+. /lib/lsb/init-functions
+
+do_start() {
+  log_daemon_msg "Iniciando $DAEMON_NAME"
+  start-stop-daemon --verbose --start --pidfile $PIDFILE --make-pidfile --user $DAEMON_USER --chuid $DAEMON_USER --startas $DAEMON -- $DAEMON_OPTS
+  log_end_msg $?                     #--background
+}
+do_stop() {
+  log_daemon_msg "Parando $DAEMON_NAME"
+  start-stop-daemon --stop --pidfile $PIDFILE --retry 10
+  log_end_msg $?
+}
+case "$1" in
+
+  start|stop)
+    do_${1}
+    ;;
+
+  restart|reload|force-reload)
+    do_stop
+    do_start
+    ;;
+
+  status)
+    status_of_proc "$DAEMON_NAME" "$DAEMON" && exit 0 || exit $?
+    ;;
+
+  *)
+    echo "Use: /etc/init.d/$DEAMON_NAME {start|stop|restart|status}"
+    echo "Ou use:"
+    echo "service Catraca start"
+    echo "service Catraca stop"
+    echo "service Catraca restart"
+    echo "service Catraca status"
+    exit 1
+    ;;
+
+esac
+exit 0
