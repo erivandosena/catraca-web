@@ -1,48 +1,22 @@
 #!/usr/bin/env python
-<<<<<<< HEAD
-<<<<<<< HEAD
 # -*- coding: latin-1 -*-
 
-=======
-# -*- coding: utf-8 -*-
->>>>>>> remotes/origin/web_backend
-=======
-# -*- coding: latin-1 -*-
-
->>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 
 from contextlib import closing
 from catraca.modelo.dados.conexao import ConexaoFactory
 from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
 from catraca.modelo.entidades.vinculo import Vinculo
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 from catraca.modelo.dao.cartao_dao import CartaoDAO
 from catraca.modelo.dao.usuario_dao import UsuarioDAO
 
 
 __author__ = "Erivando Sena"
 __copyright__ = "Copyright 2015, Unilab"
-<<<<<<< HEAD
-=======
-
-
-__author__ = "Erivando Sena"
-__copyright__ = "(C) Copyright 2015, Unilab"
->>>>>>> remotes/origin/web_backend
-=======
->>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production
 
 
 class VinculoDAO(ConexaoGenerica):
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 
     def __init__(self):
         super(VinculoDAO, self).__init__()
@@ -184,19 +158,3 @@ class VinculoDAO(ConexaoGenerica):
         finally:
             pass
         
-<<<<<<< HEAD
-=======
-    
-    def __init__(self):
-        super(VinculoDAO, self).__init__()
-        ConexaoGenerica.__init__(self)
-
-    def busca(self, *arg):
-        pass
-        
-    def mantem(self, obj, delete):
-        pass
-    
->>>>>>> remotes/origin/web_backend
-=======
->>>>>>> 148eaee1089907e52c4801e9755f71d977892af4

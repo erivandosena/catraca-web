@@ -1,37 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-<<<<<<< HEAD
-<<<<<<< HEAD
 
-=======
->>>>>>> remotes/origin/web_backend
-=======
-
->>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 from contextlib import closing
 from catraca.modelo.dados.conexao import ConexaoFactory
 from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
 from catraca.modelo.entidades.unidade_turno import UnidadeTurno
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 from catraca.modelo.dao.turno_dao import TurnoDAO
 from catraca.modelo.dao.unidade_dao import UnidadeDAO
 
 
 __author__ = "Erivando Sena"
 __copyright__ = "Copyright 2015, Unilab"
-<<<<<<< HEAD
-=======
-
-
-__author__ = "Erivando Sena"
-__copyright__ = "(C) Copyright 2015, Unilab"
->>>>>>> remotes/origin/web_backend
-=======
->>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
 __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production
 
@@ -41,10 +21,6 @@ class UnidadeTurnoDAO(ConexaoGenerica):
     def __init__(self):
         super(UnidadeTurnoDAO, self).__init__()
         ConexaoGenerica.__init__(self)
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         
     def busca(self, *arg):
         obj = UnidadeTurno()
@@ -139,17 +115,4 @@ class UnidadeTurnoDAO(ConexaoGenerica):
             return False
         finally:
             pass
-<<<<<<< HEAD
         
-=======
-
-    def busca(self, *arg):
-        pass
-        
-    def mantem(self, obj, delete):
-        pass
-    
->>>>>>> remotes/origin/web_backend
-=======
-        
->>>>>>> 148eaee1089907e52c4801e9755f71d977892af4

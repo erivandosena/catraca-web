@@ -17,13 +17,6 @@ class Usuario(object):
         self.__usua_login = None
         self.__usua_senha = None
         self.__usua_nivel = None
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-        self.__id_base_externa = None
->>>>>>> remotes/origin/web_backend
-=======
->>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
     
     @property
     def id(self):
@@ -73,17 +66,4 @@ class Usuario(object):
     def nivel(self, valor):
         self.__usua_nivel = valor
         
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-    @property
-    def id_externo(self):
-        return self.__id_base_externa
-    
-    @id_externo.setter
-    def id_externo(self, valor):
-        self.__id_base_externa = valor
->>>>>>> remotes/origin/web_backend
-=======
->>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         

@@ -2,11 +2,11 @@
 #####################
 *.pyc
 *.autosave
-*.dia
 	
 # Documentacao      #
 #####################
-web/**/*
+!/documentos
+web/
 
 # Logs              #
 #####################

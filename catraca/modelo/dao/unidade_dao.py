@@ -20,30 +20,14 @@ class UnidadeDAO(ConexaoGenerica):
         ConexaoGenerica.__init__(self)
 
     def busca(self, *arg):
-<<<<<<< HEAD
-<<<<<<< HEAD
         obj = Unidade()
-=======
-        obj = Tipo()
->>>>>>> remotes/origin/web_backend
-=======
-        obj = Unidade()
->>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         id = None
         for i in arg:
             id = i
         if id:
             sql = "SELECT unid_id, unid_nome FROM unidade WHERE unid_id = " + str(id)
         elif id is None:
-<<<<<<< HEAD
-<<<<<<< HEAD
             sql = "SELECT unid_id, unid_nome FROM unidade ORDER BY unid_id"
-=======
-            sql = "SELECT unid_id, unid_nome FROM unidade"
->>>>>>> remotes/origin/web_backend
-=======
-            sql = "SELECT unid_id, unid_nome FROM unidade ORDER BY unid_id"
->>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -66,10 +50,6 @@ class UnidadeDAO(ConexaoGenerica):
             self.log.logger.error('Erro ao realizar SELECT na tabela unidade.', exc_info=True)
         finally:
             pass
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
         
     def insere(self, obj):
         try:
@@ -116,39 +96,4 @@ class UnidadeDAO(ConexaoGenerica):
             return False
         finally:
             pass
-<<<<<<< HEAD
         
-=======
-
-    def mantem(self, obj, delete):
-        try:
-            if obj is not None:
-                if delete:
-                    sql = "DELETE FROM unidade WHERE unid_id = " + str(obj.id)
-                    msg = "Excluido com sucesso!"
-                else:
-                    if obj.id:
-                        sql = "UPDATE unidade SET unid_nome = " + str(obj.nome) + " WHERE unid_id = " + str(obj.id)
-                        msg = "Alterado com sucesso!"
-                    else:
-                        sql = "INSERT INTO unidade(unid_nome) VALUES (" + str(obj.nome) + ")"
-                        msg = "Inserido com sucesso!"
-                with closing(self.abre_conexao().cursor()) as cursor:
-                    cursor.execute(sql)
-                    self.commit()
-                    self.aviso = msg
-                    return True
-            else:
-                msg = "Objeto inexistente!"
-                self.aviso = msg
-                return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela unidade.', exc_info=True)
-            return False
-        finally:
-            pass
->>>>>>> remotes/origin/web_backend
-=======
-        
->>>>>>> 148eaee1089907e52c4801e9755f71d977892af4
