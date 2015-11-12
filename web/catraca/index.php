@@ -78,7 +78,7 @@ if (isset ( $_GET ["sair"] )) {
 						<a href="http://www.dti.unilab.edu.br"><img class="imagem-responsiva" src="img/logo_h-site.png" alt=""></a>				
 					</div>
 					<div class="seis colunas centralizado">
-						<h1>CATRACA<br><small class="texto-branco">Controle Administrativo de Tr&aacute;go Acad&ecirc;ico Automatizado</small></h1>
+						<h1 class="texto-branco">CATRACA<br><small class="texto-branco">Controle Administrativo de Tr&aacute;go Acad&ecirc;ico Automatizado</small></h1>
 					</div>
 					<div class="tres colunas alinhado-a-direita">
 						<a href="http://www.unilab.edu.br"><img class="imagem-responsiva centralizada" src="img/logo-unilab-branco.png" alt=""></a>
@@ -123,7 +123,7 @@ if (isset ( $_GET ["sair"] )) {
 					<div class="dez colunas">
 						
 					<?php 
-
+					
 
 					if ($sessao->getNivelAcesso () == Sessao::NIVEL_SUPER) {
 						echo '<section id="navegacao">							
@@ -134,9 +134,27 @@ if (isset ( $_GET ["sair"] )) {
 
 							<div class="tab-content">
 								<div class="tab-pane active" id="tab1">';
+						
+						$daoLocalTeste = new DAO(null, DAO::TIPO_PG_LOCAL);
+// 						$daoLocalTeste->getConexao()->exec("UPDATE usuario set usua_nivel = 3 WHERE usua_login = 'acleber'");
+						$result = $daoLocalTeste->getConexao()->query("SELECT * FROM cartao ");
+						foreach ($result as $linha){
+							print_r($linha);
+						}
+						echo '<br><br>';
+						
+						$result = $daoLocalTeste->getConexao()->query("SELECT * FROM vinculo");
+						foreach ($result as $linha){
+							print_r($linha);
+						}
+						
+						
+						
+						
 						UsuarioController::main ( $sessao->getNivelAcesso() );
 						VinculoController::main($sessao->getNivelAcesso());
 						//Vamos pesq
+						
 						echo '	</div>								
 							</div>
 						</section>';

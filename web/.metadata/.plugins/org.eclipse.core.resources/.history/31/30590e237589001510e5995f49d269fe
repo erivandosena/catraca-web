@@ -1,0 +1,104 @@
+<?php
+/**
+ *
+ * Cadastro de vinculo será feito por dois usuarios diferetnes.
+ * Administração ou Guiche. Com suas particularidades.
+ *
+ * A seguir o cadastro de vinculo pelo usuario administrador.
+ *
+ * 1- Verificação de Id de usuario de base externa.
+ * Esse usuario existe na base local? Captura-se o Id da base local para: $idUsuarioBaseLocal;
+ * Não existe na base local: Cadastra-se e captura-se o id da base local para: $idUsuarioBaseLocal;
+ *
+ *
+ *
+ *
+ * 2- Verificação de cartão.
+ *
+ *
+ *
+ *
+ * 3 - Verificação de vinculos do usuario.
+ *
+ *
+ *
+ * 4 - Verificação de vinculos do Cartão.
+ *
+ *
+ *
+ * 5 - Adicionar vinculo.
+ *
+ *
+ *
+ */
+class VinculoDAO extends DAO {
+	
+	
+	public function adicionaVinculo($idUsuarioBaseExterna, $numeroCartao, $dataDeValidade, $tipoCartao) {
+		$idBaseLocal = $this->verificarUsuario($idUsuarioBaseExterna);
+		if(!$idBaseLocal)
+			return 0;
+		
+		echo 'Base Local'.$idBaseLocal;
+		
+		$numeroCartao = intval ( $numeroCartao);
+		$result = $this->getConexao()->query("SELECT * FROM cartao WHERE cart_numero = $numeroCartao");
+		foreach ($result as $linha){
+			echo 'Cartao Existe na base local';
+			
+			return;
+		}
+		echo 'Cartao Nao existe na base local';
+		
+	}
+	/**
+	 * Através de um numero de cartão iremos retornar seu verdadeiro ID. 
+	 * Mas antes iremos alterar seu tipo. 
+	 *  
+	 * @param int $numeroCartao
+	 * @param int $idTipo
+	 */
+	public function verificaCartao($numeroCartao, $idTipo){
+			
+	}
+	/**
+	 * 
+	 * @param int $idBaseExterna
+	 * @return int
+	 */
+	public function verificarUsuario($idBaseExterna){
+		$idBaseExterna = intval ( $idBaseExterna );
+		$result = $this->getConexao()->query("SELECT id_base_externa, usua_id FROM usuario WHERE id_base_externa = $idBaseExterna");
+		foreach ($result as $linha){
+			return $linha['usua_id'];
+		}
+		//Vamos pegar da base exter a ecopiar para a base local. 
+		//Se Nem existir na base externa, é o usuario frescando. Preciso dar nem resposta pra ele. Aborto tudo logo.
+		$daoSistemasComum = new DAO(null, DAO::TIPO_PG_SISTEMAS_COMUM);
+		$result2 = 	$daoSistemasComum->getConexao()->query("SELECT * FROM vw_usuarios_autenticacao_catraca WHERE id_usuario = $idBaseExterna");
+		foreach($result2 as $linha){
+			//Façamos um insert aqui. 
+			//Apos esse insert iremos pegar o id inserido na base e retornalo. 
+			$nivel = Sessao::NIVEL_COMUM;
+			$nome = $linha['nome'];
+			$email = $linha['email'];
+			$login = $linha['login'];
+			$senha = $linha['senha'];
+			$idBaseExterna = $linha['id_usuario'];
+			if($this->getConexao()->exec("INSERT into usuario(usua_login,usua_senha, usua_nome,usua_email, usua_nivel, id_base_externa)
+					VALUES	('$login', '$senha', '$nome','$email', $nivel, $idBaseExterna)")){
+					
+				return $this->getConexao()->lastInsertId();
+				
+			}
+		}
+		return 0;	
+		//Retorna 0, deu nada certo. Essa parada acaba aqui. 
+		
+		
+	}
+	
+	
+}
+
+?>

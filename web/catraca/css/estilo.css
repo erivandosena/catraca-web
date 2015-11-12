@@ -138,7 +138,21 @@ div#alerta{
 	margin-top: 0 auto;
 	margin: 0 auto;
 	max-width: 1200px;
-	color: #fff;	
+
+}
+
+
+
+input{
+	color: #000;
+}
+
+.config label{
+	color: #000;
+}
+
+.config h1{
+	color: #000;
 }
 
 .banner{
