@@ -3,39 +3,23 @@
 
 class VinculoDAO extends DAO{
 	
+	
 	/**
+	 *
+	 *Cadastro de vinculo será feito por dois usuarios diferetnes. 
+	 *Administração ou Guiche. Com suas particularidades. 
+	 *
+	 *A seguir o cadastro de vinculo pelo usuario administrador. 
+	 *
+	 * 1-  Verificação de Id de usuario de base externa.
 	 * 
-	 * Pega-se o Id da base do SIG. Antes vamos verificar se existe na base local. 
-	 * Se existe pega seu id: $idUsuarioBaseLocal
-	 * 
-	 * Se não existir, pegamos da base do SIG e adicionamos na base local. Capturando id inserido em 
-	 * $idUsuarioBaseLocal; 
-	 *  
-	 * 
-	 * Verificação de numero de cartão. 
-	 * 
-	 * 
-	 * Adicionar Vinculo
-	 * Vai ser o seguinte, acabamos de adicionar um usuario na base local. Utilizaremos o id inserido. 
-	 * Iremos adicionar o vinculo para esse usuario com dados de cartao e vinculo. 
+	 * Esse usuario existe na base local? Captura-se o Id da base local para: $idUsuarioBaseLocal;
+	 * Não existe na base local: Cadastra-se e captura-se o id da base local para: $idUsuarioBaseLocal;
+	 *
+	 * 2- Verificação de cartão. 
 	 * 
 	 * 
-	 * Mas antes não sabemos se o cartão já é cadastrado. 
-	 * Caso o cartão seja cadastrado, fazemos um Update para que o tipo seja adequado a este. 
-	 * Caso contrario, cadastramos o cartão. 
-	 * Ao cadastrar o cartão ainda precisamos do ID do cartão.  
-	 * Temos o ID do usuario adicionado e o ID do cartão adicionado. Façamos adição de vinculo. 
 	 * 
-	 * Opa, mas tem algo que deve ser visto. Se o cartão ja estava cadastrado e tinha vinculo? 
-	 * Temos que alterar esse vinculo para que deixe de valer a partir de agora, e então continuar o processo. ]
-	 * 
-	 * Mais uma coisa, se o usuario já existia cadastrado e também tinha cartão vinculado a ele. 
-	 * Algum não era avulso? Faça o processo de substituição de vinculo. Vinculo de cartão anterior 
-	 * é atualizado para que tenha vinculo vencido e o novo vinculo será finalmente adicionado. 
-	 * 
-	 *  Caso vinculo seja avulso não se leve em consideração vinculos do usuario. 
-	 *  
-
 	 * @param int $idUsuarioBaseExterna
 	 * @param Vinculo $vinculo
 	 */
