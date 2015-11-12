@@ -69,6 +69,7 @@ class UsuarioDAO extends DAO {
 		
 		return false;
 	}
+	
 	/**
 	 * Pesquisaremos primeiro o Login do usuario e depois o nome do laboratorio.
 	 * Apos isso pegaremos o Id de cada um e usaremos numa operacao de insert.

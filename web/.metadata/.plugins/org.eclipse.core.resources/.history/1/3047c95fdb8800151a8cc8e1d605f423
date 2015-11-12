@@ -1,0 +1,22 @@
+<?php
+
+
+class VinculoDAO extends DAO{
+	
+	/**
+	 * 
+	 * @param int $idUsuarioBaseExterna
+	 * @param Vinculo $vinculo
+	 */
+	public function adicionaVinculo($idUsuarioBaseExterna, Vinculo $vinculo){
+		
+		$idUsuarioBaseExterna = intval($idUsuarioBaseExterna);
+		
+		
+		
+	}
+	
+	
+}
+
+?>

@@ -6,7 +6,6 @@ class VinculoController{
 	public static function main($tela){
 		switch ($tela){
 			case Sessao::NIVEL_SUPER:
-				echo 'Vinculo controller';
 				$controller = new VinculoController();
 				$controller->telaVinculo();
 				/*
@@ -30,44 +29,67 @@ class VinculoController{
 	
 	}
 	public function telaVinculo(){
-		echo '<form action=\'\' method=\'post\'>
-				<input type="text" name="nome" placeholder="Pesquisar Pessoa">
-				</form>';
+		
+		echo '								
+									<form method="post" action="" class="formulario em-linha" >
+										<div class="borda">
+										<label for="opcoes-1">
+											<object class="rotulo texto-preto">Buscar por: </object>
+											<select name="opcoes-1" id="opcoes-1" class="texto-preto">
+												<option value="1">Nome</option>
+												<option value="2">CPF</option>
+												<option value="3">RG</option>
+												<option value="3">Matrícula</option>							            										            
+												<option value="3">Vinculo</option>
+												<option value="3">SIAPE</option>
+											</select>
+											<input class="texto-preto" type="text" name="nome" id="campo-texto-2" /><br>
+											<input type="submit" />											    
+										</label>
+									</form>';
+		
+		
+		
 		if(isset($_POST['nome'])){
 			$pesquisa = preg_replace('/[^[:alnum:]]/', '',$_POST['nome']);
 			$pesquisa = strtoupper($pesquisa);
 			$sql = "SELECT * FROM vw_usuarios_catraca WHERE nome LIKE '%$pesquisa%'";
 			$dao = new DAO(null, DAO::TIPO_PG_SIGAAA);
 			$result = $dao->getConexao()->query($sql);
-			
-			echo '<table border="1">';
-			echo '<tr>';
-			echo '<th>Nome: </th>';
-			echo '<th>CPF: </th>';
-			echo '<th>Identidade: </th>';
+			echo '
+											<div class="doze linhas">
+												<br><h2 class="texto-preto">Resultado da busca:</h2><br><br>
+											</div>
+											<table class="tabela borda-vertical zebrada texto-preto">
+												<thead>
+											        <tr>
+											            <th>Nome</th>
+											            <th>CPF</th>
+											            <th>Passaporte</th>
+											            <th>Matrícula</th>
+														<th>SIAPE</th>
+											            <th>Selecionar</th>
+											        </tr>
+											    </thead>
+												<tbody>';
+												foreach($result as $linha){
+													echo '<tr>';
+													echo '<td>'.$linha['nome'].'</a></td>';
+													echo '<td>'.$linha['cpf_cnpj'].'</td>';
+													echo '<td>'.$linha['passaporte'].'</td>';
+													echo '<td>'.$linha['matricula_disc'].'</td>';
+													echo '<td>'.$linha['siape'].'</td>';
+													echo '<td class="centralizado">
+											            	<a href="?selecionado='.$linha['id_usuario'].'"><span class="icone-checkmark texto-verde2 botao" title="Selecionar"></span></a>
+											            </td>';
+													echo '</tr>';
+												}
+			echo '<br><br><br>
+											    </tbody>
+											</table>
+										</div>';
 				
-			echo '<th>Tipo: </th>';
-			echo '<th>SIAPE: </th>';
-			echo '<th>Status Servidor: </th>';
-			echo '<th>Matricula Discente: </th>';
-			echo '<th>Status Discente: </th>';
-			echo '<th>Passaporte: </th>';
-				
-			echo '</tr>';
-			foreach($result as $linha){
-				echo '<tr>';
-				echo '<td><a href="?selecionado='.$linha['id_usuario'].'">'.$linha['nome'].'</a></td>';
-				echo '<td>'.$linha['cpf_cnpj'].'</td>';
-				echo '<td>'.$linha['identidade'].'</td>';
-				echo '<td>'.$linha['tipo_usuario'].'</td>';
-				echo '<td>'.$linha['siape'].'</td>';
-				echo '<td>'.$linha['status_servidor'].'</td>';
-				echo '<td>'.$linha['matricula_disc'].'</td>';
-				echo '<td>'.$linha['status_discente'].'</td>';
-				echo '<td>'.$linha['passaporte'].'</td>';
-				echo '</tr>';
-			}
-			echo '</table>';
+
 		}
 		if(isset($_GET['selecionado'])){
 			if(is_int(intval($_GET['selecionado'])))
@@ -77,7 +99,11 @@ class VinculoController{
 				$sql = "SELECT * FROM vw_usuarios_catraca WHERE id_usuario = $id";
 				$result = $dao->getConexao()->query($sql);
 				foreach($result as $row){
-					echo $row['nome'];
+					echo '<div class="borda">
+									        Nome: '.$row['nome'].' CPF: '.$row['cpf_cnpj'].'
+									        		</div>
+									        		';
+					
 					break;
 					
 				}
@@ -91,8 +117,36 @@ class VinculoController{
 					print_r($row);
 					
 				}
-			
+				if(isset($_GET['cartao']))
+				{
+					echo '<form method="post" action="" class="formulario texto-preto" >
+										<div class="borda">										
+									    <label for="campo-texto-1">
+									        Cartão: <input type="text" name="cartao" id="cartao" />
+									    </label>
+									    <label for="campo-texto-1">
+									        Validade: <input type="date" name="validade" id="validade" />
+									    </label>
+									    <fieldset>
+									        <legend>Cartão Avulso:</legend>
+									        <label for="checkbox-1.1">
+									            <input type="checkbox" name="checkbox-1" id="checkbox-1.1" value="1" /> Sim
+									        </label>									        
+									    </fieldset><br>
+										
+										<label for="campo-texto-1">
+									        Quantidade de refeições: <input type="text" name="periodo" id="periodo" />
+									    </label><br>
 
+									   	<input type="submit" name="salvar" value="Salvar"/>
+									   								    
+									</form>';
+				}
+				else{
+					echo '<a href="?selecionado='.$_GET['selecionado'].'&cartao=add">Adicionar</a>';
+				}
+				
+				
 			}
 		}
 	}

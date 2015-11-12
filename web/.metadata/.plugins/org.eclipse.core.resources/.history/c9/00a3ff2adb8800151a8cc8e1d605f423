@@ -1,0 +1,15 @@
+<?php
+
+
+class VinculoDAO extends DAO{
+	
+	
+	public function adicionaVinculo($idUsuarioBaseExterna, Vinculo $vinculo){
+		
+		
+	}
+	
+	
+}
+
+?>
