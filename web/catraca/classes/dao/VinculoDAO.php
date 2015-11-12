@@ -30,7 +30,7 @@
  *
  *
  *
- * 5 - Adicionar vinculo.
+ * 5 - Adicionar vinculo novo vinculo. 
  *
  *
  *
@@ -52,8 +52,15 @@ class VinculoDAO extends DAO {
 		echo 'Id Cartao: '.$idBaseLocal.'<br>';
 		
 		
+	}
+	public function verificarVinculoUsuario($idUsuario){
 		
 	}
+	public function verificarVinculoCartao($idCartao){
+		
+	}
+	
+	
 	/**
 	 * Através de um numero de cartão iremos retornar seu verdadeiro ID. 
 	 * Mas antes iremos alterar seu tipo. 
@@ -70,11 +77,11 @@ class VinculoDAO extends DAO {
 		$result = $this->getConexao()->query("SELECT * FROM cartao WHERE cart_numero = $numeroCartao");
 		foreach($result as $linha){
 			if($linha['tipo_id'] != $idTipo)
-				if(!$this->getConexao()->query("UPDATE cartao set tipo_id = $idTipo"))
+				if(!$this->getConexao()->exec("UPDATE cartao set tipo_id = $idTipo WHERE cart_numero = $numeroCartao"))
 					return false;
 			return $linha['cart_id'];
 		}
-		if($this->getConexao()->query("INSERT INTO cartao(cart_numero, cart_creditos, tipo_id) VALUES($numero, 0, $idTipo)"))
+		if($this->getConexao()->query("INSERT INTO cartao(cart_numero, cart_creditos, tipo_id) VALUES($numeroCartao, 0, $idTipo)"))
 			return $this->getConexao()->lastInsertId();
 		return false;
 		
