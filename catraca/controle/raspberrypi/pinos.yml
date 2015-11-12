@@ -3,28 +3,28 @@
     nome: SDA1_I2C
     modo: IN
     estado: LOW
-    resistor: PUD_UP
+    #resistor: PUD_UP
  
 3:  
     gpio: 3
     nome: SCL1_I2C
     modo: IN
     estado: LOW
-    resistor: PUD_UP
+    #resistor: PUD_UP
 
 4:  
     gpio: 4
     nome: GpioPuro
     modo: IN
     estado: LOW
-    resistor: PUD_UP
+    #resistor: PUD_UP
 
 5:  
     gpio: 5
     nome: GpioPuro
     modo: IN
     estado: LOW
-    resistor: PUD_UP
+    #resistor: PUD_UP
 
 6:  
     gpio: 6
@@ -38,28 +38,28 @@
     nome: SPI0_CE0_N
     modo: IN
     estado: LOW
-    resistor: PUD_UP
+    #resistor: PUD_UP
 
 8:  
     gpio: 8
     nome: SPI0_CE1_N
     modo: IN
     estado: LOW
-    resistor: PUD_UP
+    #resistor: PUD_UP
 
 9:  
     gpio: 9
     nome: SPI0_MISO
     modo: IN
     estado: LOW
-    resistor: PUD_UP
+    #resistor: PUD_UP
 
 10: 
     gpio: 10
     nome: SPI0_MOSI
     modo: IN
     estado: LOW
-    resistor: PUD_UP
+    #resistor: PUD_UP
 
 11: 
     gpio: 11
@@ -87,14 +87,14 @@
     nome: UART0_TXD
     modo: IN
     estado: LOW
-    resistor: PUD_UP
+    #resistor: PUD_UP
 
 15: 
     gpio: 15
     nome: UART0_RXD
     modo: IN
     estado: LOW
-    resistor: PUD_UP
+    #resistor: PUD_UP
 
 16: 
     gpio: 16
@@ -108,8 +108,8 @@
     nome: RFID_D0
     modo: IN
     estado: LOW
+    evento: BOTH
     resistor: PUD_UP
-    evento: FALLING
 
 18: 
     gpio: 18
@@ -179,5 +179,5 @@
     nome: RFID_D1
     modo: IN
     estado: LOW
+    evento: BOTH
     resistor: PUD_UP
-    evento: FALLING

@@ -10,6 +10,7 @@ from catraca.visao.interface.acesso import Acesso
 from catraca.visao.interface.alerta import Alerta
 from catraca.controle.restful.controle_restful import ControleRestful
 from catraca.controle.restful.cliente_restful import ClienteRestful
+from catraca.controle.dispositivos.leitorcartao import LeitorCartao
 
 
 __author__ = "Erivando Sena"
@@ -40,9 +41,10 @@ class Painel(object):
         #os.system("echo 'Sistema da Catraca iniciado!' | mail -s 'Raspberry Pi B' erivandoramos@bol.com.br")
         try:
             Alerta().start()
+            LeitorCartao().start()
             ControleRestful().start()
             ClienteRestful().start()
-            #Acesso().start()
+            
 #         except (SystemExit, KeyboardInterrupt):
 #             raise
 #         except Exception:

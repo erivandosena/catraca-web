@@ -85,7 +85,7 @@ class Aviso(object):
         self.display.mensagem("     CARTAO\n NAO CADASTRADO!",1,False,False)
         
     def exibir_cartao_valido(self, saldo):
-        self.display.mensagem("SALDO DO CARTAO:\n"+saldo,0,True,False)
+        self.display.mensagem("SALDO DO CARTAO:\n"+saldo,1,True,False)
         
     def exibir_cartao_invalido(self):
         self.display.mensagem("     CARTAO\n  INVALIDO!",1,False,False)

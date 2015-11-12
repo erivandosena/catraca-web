@@ -33,6 +33,7 @@ class Relogio(object):
         super(Relogio, self).__init__()
         self.__periodo_ativo = None
         self.__turno_ativo = None
+        self.__catraca_local = None
         self.hora_atual = self.util.obtem_hora()
 
     @property
@@ -40,6 +41,11 @@ class Relogio(object):
         self.hora_atual = self.util.obtem_hora()
         self.__periodo_ativo = self.obtem_periodo()
         return self.__periodo_ativo
+    
+    @property
+    def catraca(self):
+        self.__catraca_local = self.turno_dao.obtem_catraca()
+        return self.__catraca_local
         
     @property
     def turno(self):
@@ -54,7 +60,8 @@ class Relogio(object):
 #         if (self.hora_atual > self.p1) and (self.hora_atual < self.p2):
         if self.contador >= 30:
             print "passando... --> self.turno = self.turno_dao.obtem_turno() "
-            self.turno = self.turno_dao.obtem_turno()
+            #self.turno = self.turno_dao.obtem_turno()
+            self.turno = self.turno_dao.obtem_turno(self.catraca, self.hora_atual)
             self.contador = 0
             if self.turno:
                 self.hora_inicio = datetime.datetime.strptime(str(self.turno[1]),'%H:%M:%S').time()

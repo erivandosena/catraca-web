@@ -21,7 +21,7 @@ class ClienteRestful(threading.Thread, Relogio):
     recursos_restful = RecursosRestful()
     intervalo_recursos = 15
 
-    def __init__(self, intervalo=1.5):
+    def __init__(self, intervalo=1.6):
         super(ClienteRestful, self).__init__()
         Relogio.__init__(self)
         threading.Thread.__init__(self)

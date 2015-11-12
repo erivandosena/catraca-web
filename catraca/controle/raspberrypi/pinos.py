@@ -20,44 +20,55 @@ class PinoControle(PinosGPIO):
 
     def __init__(self):
         super(PinoControle, self).__init__()
+        self.gpio.setmode(self.gpio.BCM)
+        self.gpio.setwarnings(False)
+        print "GPIO v." + str(self.gpio.VERSION)
         self.carrega_yaml()
 
     def carrega_yaml(self):
-        with open(PINOS_YML) as file_data:
-            self.pins = yaml.safe_load(file_data)
+        try:
+            with open(PINOS_YML) as file_data:
+                self.pins = yaml.safe_load(file_data)
+        except Exception as excecao:
+            print excecao
 
     def pino_response(self, numero, config):
-        output = {
-            'nome': config.get('nome'),
-            'gpio': numero,
-            'modo': config.get('modo'),
-            'estado': self.gpio.input(numero) # 1 if config.get('modo') == 'OUT' else 0
-        }
-        resistor = config.get('resistor')
-        if resistor:
-            output['resistor'] = resistor
-        #inicial = config.get('inicial')
-        #if inicial:
-        #    output['inicial'] = inicial
-        evento = config.get('evento')
-        if evento:
-            output['evento'] = evento
-        ressalto = config.get('ressalto')
-        if ressalto:
-            output['ressalto'] = ressalto
-        return output
+        try:
+            output = {
+                'nome': config.get('nome'),
+                'gpio': numero,
+                'modo': config.get('modo'),
+                'estado': self.gpio.input(numero) # 1 if config.get('modo') == 'OUT' else 0
+            }
+            resistor = config.get('resistor')
+            if resistor:
+                output['resistor'] = resistor
+            #inicial = config.get('inicial')
+            #if inicial:
+            #    output['inicial'] = inicial
+            evento = config.get('evento')
+            if evento:
+                output['evento'] = evento
+            ressalto = config.get('ressalto')
+            if ressalto:
+                output['ressalto'] = ressalto
+            return output
+        except Exception as excecao:
+            print excecao
 
     def configura(self, numero, valor):
+        pino_habilitado = None
         pino_numero = int(numero)
         try:
             self.pins[pino_numero]
             self.gpio.setup(pino_numero, valor)
-            return self.pins[pino_numero]['modo']
-        except KeyError:
-            return None
-        except Exception:
-            self.gpio.cleanup()
-
+            pino_habilitado = self.pins[pino_numero]['modo']
+        except Exception as excecao:
+            print excecao
+        finally:
+            return pino_habilitado
+            self.gpio.limpa()
+            
     def atualiza(self, numero, valor):
         pino_numero = int(numero)
         try:
@@ -65,20 +76,16 @@ class PinoControle(PinosGPIO):
             self.gpio.output(pino_numero, valor)
             estado = self.gpio.input(pino_numero)
             return estado
-        except KeyError:
-            return None
-        except Exception:
-            self.gpio.cleanup()
+        except Exception as excecao:
+            print excecao
             
     def estado(self, numero):
         pino_numero = int(numero)
         try:
             estado = self.gpio.input(pino_numero)
             return estado
-        except KeyError:
-            return None
-        except Exception:
-            self.gpio.cleanup()
+        except Exception as excecao:
+            print excecao
             
     def ler_pwm(self, numero, frequencia):
         pwm = self.gpio.PWM(numero, frequencia) 
@@ -86,34 +93,36 @@ class PinoControle(PinosGPIO):
         
     def ler(self, numero):
         pino_numero = int(numero)
+        pino_habilitado = None
         try:
             pino_config = self.pins[pino_numero]
             if pino_config['modo'] == 'OUT':
-                self.gpio.setup(pino_config['gpio'], False)
+                self.gpio.setup(pino_config['gpio'], self.gpio.OUT)
             if pino_config['modo'] == 'IN':
-                self.gpio.setup(pino_config['gpio'], True, pull_up_down= self.gpio.PUD_UP if pino_config['resistor'] == 'PUD_UP' else self.gpio.PUD_DOWN)
-            return self.pino_response(pino_numero, pino_config)
-        except KeyError:
-            return None
-        except Exception:
-            self.gpio.cleanup()
-
+                self.gpio.setup(pino_config['gpio'], self.gpio.IN, pull_up_down= self.gpio.PUD_UP if pino_config['resistor'] == 'PUD_UP' else self.gpio.PUD_DOWN)
+            pino_habilitado = self.pino_response(pino_numero, pino_config)
+        except Exception as excecao:
+            print excecao
+        finally:
+            return pino_habilitado
+            self.gpio.limpa()
+            
     def ler_todos(self):
-        results = []
+        resultados = []
         try:
             for pino_numero, pino_config in self.pins.items():
                 if pino_config['modo'] == 'OUT':
-                    self.gpio.setup(pino_config['gpio'], False)
+                    self.gpio.setup(pino_config['gpio'], self.gpio.OUT)
                 if pino_config['modo'] == 'IN':
-                    self.gpio.setup(pino_config['gpio'], True, pull_up_down= self.gpio.PUD_UP if pino_config['resistor'] == 'PUD_UP' else self.gpio.PUD_DOWN)
-                data = self.pino_response(pino_numero, pino_config)
-                results.append(data)
-            return results
-        except KeyError:
-            return None
-        except Exception:
-            self.gpio.cleanup()
-
+                     self.gpio.setup(pino_config['gpio'], self.gpio.IN, pull_up_down= self.gpio.PUD_UP if pino_config['resistor'] == 'PUD_UP' else self.gpio.PUD_DOWN)
+                pino_habilitado = self.pino_response(pino_numero, pino_config)
+                resultados.append(pino_habilitado)
+        except Exception as excecao:
+            print excecao
+        finally:
+            return resultados
+            self.gpio.limpa()
+            
     def entrada(self):
         return self.gpio.IN
 
@@ -133,11 +142,43 @@ class PinoControle(PinosGPIO):
         return self.gpio.cleanup()
 
     def entrada_up(self, num_pino):
-        return self.gpio.setup(num_pino, self.gpio.IN, pull_up_down=self.gpio.PUD_UP)
+        pino_habilitado = None
+        try:
+            pino_habilitado = self.gpio.setup(num_pino, self.gpio.IN, pull_up_down=self.gpio.PUD_UP)
+        except Exception as excecao:
+            print excecao
+        finally:
+            return pino_habilitado
+            self.gpio.limpa()
 
     def entrada_down(self, num_pino):
-        return self.gpio.setup(num_pino, self.gpio.IN, pull_up_down=self.gpio.PUD_DOWN)
+        pino_habilitado = None
+        try:
+            pino_habilitado = self.gpio.setup(num_pino, self.gpio.IN, pull_up_down=self.gpio.PUD_DOWN)
+        except Exception as excecao:
+            print excecao
+        finally:
+            return pino_habilitado
+            self.gpio.limpa()
 
     def evento_falling(self, num_pino, obj):
-        return self.gpio.add_event_detect(num_pino, self.gpio.FALLING, callback=obj)
-
+        try:
+            return self.gpio.add_event_detect(num_pino, self.gpio.FALLING, callback=obj)
+        except Exception as excecao:
+            print excecao
+            
+    def evento_rising(self, num_pino, obj):
+        try:
+            return self.gpio.add_event_detect(num_pino, self.gpio.RISING, callback=obj)
+        except Exception as excecao:
+            print excecao
+            
+    def evento_rising_ou_falling(self, num_pino, obj):
+        try:
+            return self.gpio.add_event_detect(num_pino, self.gpio.BOTH, callback=obj, bouncetime=1)
+        except Exception as excecao:
+            print excecao
+            
+    def __del__(self):
+        self.limpa()
+        

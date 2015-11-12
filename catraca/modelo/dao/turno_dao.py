@@ -10,6 +10,7 @@ from catraca.modelo.entidades.turno import Turno
 from catraca.modelo.dao.catraca_dao import CatracaDAO
 from catraca.controle.recursos.catraca_json import CatracaJson
 
+
 __author__ = "Erivando Sena"
 __copyright__ = "Copyright 2015, Unilab"
 __email__ = "erivandoramos@unilab.edu.br"
@@ -114,8 +115,11 @@ class TurnoDAO(ConexaoGenerica):
         return CatracaDAO().busca_por_ip(self.util.obtem_ip())
         
         
-    def obtem_turno(self):
-        turno = self.busca_por_catraca(self.obtem_catraca(), self.util.obtem_hora())
+    def obtem_turno(self, catraca=None, hora=None):
+        if (catraca is None) or (hora is None):
+            turno = self.busca_por_catraca(self.obtem_catraca(), self.util.obtem_hora())
+        else:
+            turno = self.busca_por_catraca(catraca, hora)
         print "select no BD!"
         if turno:      
             return turno

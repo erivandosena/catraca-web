@@ -9,11 +9,10 @@ __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production
 
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(False)
-
-
 class PinosGPIO(object):
+    
+    gpio = None
 
     def __init__(self):
         self.gpio = GPIO
+        
