@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename source module &apos;index.php&apos; to &apos;outro.php&apos;&#x0D;&#x0A;- Original element: &apos;(default package)\index.php&apos;&#x0D;&#x0A;- Renamed element: &apos;(default package)\outro.php&apos;" description="Rename source module &apos;index.php&apos;" flags="589830" id="org.eclipse.dltk.ui.rename.sourcemodule" input="/&lt;{index.php" name="outro.php" stamp="1447077953177" version="1.0"/>
-</session>

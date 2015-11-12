@@ -1,24 +1,18 @@
-# Fontes compilados #
+# Fontes            #
 #####################
 *.pyc
 *.autosave
-	
-# Documentacao      #
+*.dia
+
+# Documentos        #
 #####################
 !/documentos
-<<<<<<< HEAD
-web/
-=======
->>>>>>> remotes/origin/web_backend
+web/**/*
 
 # Logs              #
 #####################
 *.log
-<<<<<<< HEAD
 
 # Temp              #
 #####################
 *~
-
-=======
->>>>>>> remotes/origin/web_backend
