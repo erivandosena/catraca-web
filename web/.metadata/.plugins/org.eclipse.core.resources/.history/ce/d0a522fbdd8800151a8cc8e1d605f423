@@ -12,7 +12,6 @@ class VinculoDAO extends DAO{
 	 * $idUsuarioBaseLocal; 
 	 *  
 	 * 
-	 * Verificação de numero de cartão. 
 	 * 
 	 * 
 	 * Adicionar Vinculo

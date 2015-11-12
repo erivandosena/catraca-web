@@ -4,7 +4,6 @@
 class VinculoDAO extends DAO{
 	
 	/**
-	 * 
 	 * Pega-se o Id da base do SIG. Antes vamos verificar se existe na base local. 
 	 * Se existe pega seu id: $idUsuarioBaseLocal
 	 * 
@@ -12,10 +11,9 @@ class VinculoDAO extends DAO{
 	 * $idUsuarioBaseLocal; 
 	 *  
 	 * 
-	 * Verificação de numero de cartão. 
-	 * 
 	 * 
 	 * Adicionar Vinculo
+	 *
 	 * Vai ser o seguinte, acabamos de adicionar um usuario na base local. Utilizaremos o id inserido. 
 	 * Iremos adicionar o vinculo para esse usuario com dados de cartao e vinculo. 
 	 * 
