@@ -128,68 +128,27 @@ if (isset ( $_GET ["sair"] )) {
 					
 
 					if ($sessao->getNivelAcesso () == Sessao::NIVEL_SUPER) {
-						echo '<section id="navegacao">							
-							<!--Tabs-->	
-							<ul class="nav nav-tabs">
-								<li role="presentation" class="active"><a href="#tab1" data-toggle="tab">Cadastro</a></li>																
-							</ul>						
-
-							<div class="tab-content">
-								<div class="tab-pane active" id="tab1">';
-						
-						$daoLocalTeste = new DAO(null, DAO::TIPO_PG_LOCAL);
-						
-						$dataAtual =  date("Y-m-d H:i:s");
-						$result = $daoLocalTeste->getConexao()->query("SELECT * FROM usuario INNER JOIN vinculo
-								ON vinculo.usua_id = usuario.usua_id
-								INNER JOIN cartao ON cartao.cart_id = vinculo.cart_id
-								INNER JOIN tipo ON cartao.tipo_id = tipo.tipo_id 
-								WHERE '$dataAtual' BETWEEN vinc_inicio AND vinc_fim
-								");
-						echo '<table border="1">';
-						echo '<tr>
-								<th>ID usuario</th>
-								<th>Nome</th>
-								<th>Tipo</th>
-								<th>Cartao</th>
-								<th>Inicio</th>
-								<th>Vencimento</th>
-							</tr>';
-						
-						foreach ($result as $linha){
-							echo '
-							<tr><td>'.$linha['id_base_externa'].'</td>
-							<td>'.$linha['usua_nome'].'</td>
-							<td>'.$linha['tipo_nome'].'</td>
-							<td>'.$linha['cart_numero'].'</td>
-							<td>'.$linha['vinc_inicio'].'</td>
-							<td>'.$linha['vinc_fim'].'</td>
-				</tr>';
-						}
-						echo '</table>';
-						echo '<br><br>';
-						
-						$result = $daoLocalTeste->getConexao()->query("SELECT * FROM usuario ");
-						foreach ($result as $linha){
-							print_r($linha);
-						}
-						echo '<br><br>';
-						
-						$result = $daoLocalTeste->getConexao()->query("SELECT * FROM vinculo");
-						foreach ($result as $linha){
-							print_r($linha);
+						if(isset($_GET['pagina'])){
+							switch ($_GET['pagina']){
+								case 'vinculo':
+									echo '<section id="navegacao"><!--Tabs-->';
+									echo '<ul class="nav nav-tabs">';
+									echo '<li role="presentation" class="active"><a href="#tab1" data-toggle="tab">Cadastro</a></li>';
+									echo '</ul><div class="tab-content">';
+									echo '<div class="tab-pane active" id="tab1">';
+									VinculoController::main($sessao->getNivelAcesso());
+									echo '	</div></div></section>';
+									break;
+								default:
+									echo '404 NOT FOUND';
+									break;
+									
+							}
+						}else{
+							
+							echo 'Inicio';
 						}
 						
-						
-						
-						
-						UsuarioController::main ( $sessao->getNivelAcesso() );
-						VinculoController::main($sessao->getNivelAcesso());
-						//Vamos pesq
-						
-						echo '	</div>								
-							</div>
-						</section>';
 					} else {
 					
 						UsuarioController::main($sessao->getNivelAcesso());
