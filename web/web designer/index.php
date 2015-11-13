@@ -36,16 +36,7 @@
 			    </div>
 			</div>
 
-			<div class="doze colunas banner gradiente">
-					
-				<div id="acessibilidade" class="">
-				    <div class="resolucao config">
-				        <a href="#conteudo" tabindex="1" accesskey="1">Ir para o conteúdo <b>1</b></a>
-				        <a href="#menu" tabindex="2" accesskey="2">Ir para o menu <b>2</b></a>
-				        <a href="#busca" tabindex="3" accesskey="3">Ir para a busca <b>3</b></a>
-				        <a href="#rodape" tabindex="4" accesskey="4"><span>Ir para o rodapé <b>4</b></a>
-				    </div>
-				</div>
+			<div class="doze colunas banner gradiente">				
 
 				<div id="topo" class="resolucao config">
 					<div class="tres colunas">
