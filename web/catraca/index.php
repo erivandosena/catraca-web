@@ -1,4 +1,6 @@
 <?php
+date_default_timezone_set('America/Araguaina');
+
 ini_set ( 'display_errors', 1 );
 ini_set ( 'display_startup_erros', 1 );
 error_reporting ( E_ALL );
@@ -137,19 +139,32 @@ if (isset ( $_GET ["sair"] )) {
 						
 						$daoLocalTeste = new DAO(null, DAO::TIPO_PG_LOCAL);
 						
+						$dataAtual =  date("Y-m-d H:i:s");
 						$result = $daoLocalTeste->getConexao()->query("SELECT * FROM usuario INNER JOIN vinculo
 								ON vinculo.usua_id = usuario.usua_id
-								LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
-								LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id");
+								INNER JOIN cartao ON cartao.cart_id = vinculo.cart_id
+								INNER JOIN tipo ON cartao.tipo_id = tipo.tipo_id 
+								WHERE '$dataAtual' BETWEEN vinc_inicio AND vinc_fim
+								");
 						echo '<table border="1">';
 						echo '<tr>
 								<th>ID usuario</th>
 								<th>Nome</th>
 								<th>Tipo</th>
 								<th>Cartao</th>
+								<th>Inicio</th>
+								<th>Vencimento</th>
 							</tr>';
+						
 						foreach ($result as $linha){
-							echo '<tr><td>'.$linha['usua_id'].'</td><td>'.$linha['usua_nome'].'</td><td>'.$linha['tipo_nome'].'</td><td>'.$linha['cart_numero'].'</td></tr>';
+							echo '
+							<tr><td>'.$linha['id_base_externa'].'</td>
+							<td>'.$linha['usua_nome'].'</td>
+							<td>'.$linha['tipo_nome'].'</td>
+							<td>'.$linha['cart_numero'].'</td>
+							<td>'.$linha['vinc_inicio'].'</td>
+							<td>'.$linha['vinc_fim'].'</td>
+				</tr>';
 						}
 						echo '</table>';
 						echo '<br><br>';

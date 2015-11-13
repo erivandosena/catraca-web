@@ -42,15 +42,18 @@ class VinculoDAO extends DAO {
 		$idBaseLocal = $this->verificarUsuario($idUsuarioBaseExterna);
 		if(!$idBaseLocal)
 			return 0;
-		
-		echo 'Base Local'.$idBaseLocal.'<br>';
 		$numeroCartao = intval ( $numeroCartao);
 		$tipoCartao = intval($tipoCartao);
 		$idCartao = $this->verificaCartao($numeroCartao, $tipoCartao);
 		if(!$idCartao)
 			return 0;
-		echo 'Id Cartao: '.$idBaseLocal.'<br>';
 		
+		$dataDeHoje = date("Y-m-d H:i:s");
+		if($this->getConexao()->exec("INSERT into vinculo (usua_id, cart_id, vinc_inicio, vinc_fim) VALUES($idBaseLocal, $idCartao,'$dataDeHoje', '$dataDeValidade')")){
+			echo 'Vinculo adicionado com sucesso ';
+		}
+	}
+	public function adicionarVinculo($idUsuario, $idCartao, $dataValidade){
 		
 	}
 	public function verificarVinculoUsuario($idUsuario){

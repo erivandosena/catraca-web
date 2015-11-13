@@ -124,24 +124,36 @@ class VinculoController{
 				//Agora vamos pegar os vinculos ativos desse usuario. 
 				$dao = new DAO(null, DAO::TIPO_PG_LOCAL);
 				// 						$daoLocalTeste->getConexao()->exec("UPDATE usuario set usua_nivel = 3 WHERE usua_login = 'acleber'");
+				
+				$dataTimeAtual = date("Y-m-d G:i:s");
 				$result = $dao->getConexao()->query("SELECT * FROM usuario INNER JOIN vinculo
 								ON vinculo.usua_id = usuario.usua_id
 								LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
-								LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id");
+								LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id WHERE (usuario.id_base_externa = $id) 
+						AND ('$dataTimeAtual' BETWEEN vinc_inicio AND vinc_fim)");
 				echo '<table border="1">';
 				echo '<tr>
 								<th>ID usuario</th>
 								<th>Nome</th>
 								<th>Tipo</th>
 								<th>Cartao</th>
+								<th>Inicio</th>
+								<th>Fim</th>
+						
 							</tr>';
 				foreach ($result as $linha){
-					echo '<tr><td>'.$linha['id_base_externa'].'</td><td>'.$linha['usua_nome'].'</td><td>'.$linha['tipo_nome'].'</td><td>'.$linha['cart_numero'].'</td></tr>';
+					echo '<tr>
+							<td>'.$linha['id_base_externa'].'</td>
+							<td>'.$linha['usua_nome'].'</td><td>'.$linha['tipo_nome'].'</td>
+							<td>'.$linha['cart_numero'].'</td>
+							<td>'.$linha['vinc_inicio'].'</td>
+							<td>'.$linha['vinc_fim'].'</td>
+									</tr>';
 				}
 				echo '</table>';
 				if(isset($_GET['cartao']) && isset($_GET['selecionado']))
 				{
-					$daqui3Meses = date('Y-m-d',strtotime("+60 days")).'T'.date('h:00:01', strtotime("+60 days"));
+					$daqui3Meses = date('Y-m-d',strtotime("+60 days")).'T'.date('H:00:01');
 					
 					echo '<form method="post" action="" class="formulario texto-preto" >
 										<div class="borda">										
@@ -188,7 +200,7 @@ class VinculoController{
 					$vinculoDao = new  VinculoDAO($dao->getConexao());
 					$vinculoDao->adicionaVinculo($usuarioBaseExterna, $numeroCartao, $validade, $tipoCartao);
 					//No final eu redireciono para a pagina de selecao do usuario. 
-					echo '<meta http-equiv="refresh" content="3; url=.\?selecionado='.$_POST['id_base_externa'].'">';
+					echo '<meta http-equiv="refresh" content="10; url=.\?selecionado='.$_POST['id_base_externa'].'">';
 				}
 				
 				
