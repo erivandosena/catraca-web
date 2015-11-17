@@ -112,7 +112,7 @@ class VinculoController {
 													<li><a href="#">Próximo</a></li>
 												</ul>
 											</nav>
-										</div>';
+										';
 		}
 		if (isset ( $_GET ['selecionado'] )) {
 			

@@ -122,10 +122,10 @@ if (isset ( $_GET ["sair"] )) {
 						
 						$dao = new DAO(null, DAO::TIPO_PG_LOCAL);
 						//$dao->getConexao()->exec("DELETE FROM vinculo");
-						$result = $dao->getConexao()->query("SELECT * FROM vinculo");
-						foreach($result as $row){
-							print_r($row);
-						}
+// 						$result = $dao->getConexao()->query("SELECT * FROM vinculo");
+// 						foreach($result as $row){
+// 							print_r($row);
+// 						}
 						
 						
 						if(isset($_GET['pagina'])){
