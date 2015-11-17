@@ -53,33 +53,31 @@ class VinculoController {
 		echo '<br><br>';
 	}
 	public function telaVinculo() {
-		echo '								
+		echo '					<div class="borda">
 									<form method="post" action="" class="formulario em-linha" >
-										<div class="borda">
+										
 										<label for="opcoes-1">
 											<object class="rotulo texto-preto">Buscar por: </object>
 											<select name="opcoes-1" id="opcoes-1" class="texto-preto">
 												<option value="1">Nome</option>
-												<option value="2">CPF</option>
-												<option value="3">RG</option>
-												<option value="3">Matrícula</option>							            										            
-												<option value="3">Vinculo</option>
-												<option value="3">SIAPE</option>
+												
 											</select>
 											<input class="texto-preto" type="text" name="nome" id="campo-texto-2" /><br>
 											<input type="submit" />											    
 										</label>
-									</form>';
+										
+									</form>									
+									</div>';
 		
 		if (isset ( $_POST ['nome'] )) {
-			$pesquisa = preg_replace ( '/[^[:alnum:]]/', '', $_POST ['nome'] );
+			$pesquisa = preg_replace ('/[^a-zA-Z0-9\s]/', '', $_POST ['nome'] );
 			$pesquisa = strtoupper ( $pesquisa );
 			$sql = "SELECT * FROM vw_usuarios_catraca WHERE nome LIKE '%$pesquisa%'";
 			$dao = new DAO ( null, DAO::TIPO_PG_SIGAAA );
 			$result = $dao->getConexao ()->query ( $sql );
 			echo '
 											<div class="doze linhas">
-												<br><h2 class="texto-preto">Resultado da busca:</h2><br><br>
+												<br><h2 class="texto-preto">Resultado da busca:</h2>
 											</div>
 											<table class="tabela borda-vertical zebrada texto-preto">
 												<thead>
@@ -105,9 +103,15 @@ class VinculoController {
 											            </td>';
 				echo '</tr>';
 			}
-			echo '<br><br><br>
+			echo '<br>
 											    </tbody>
 											</table>
+											<nav>
+												<ul class="pager">
+													<li><a href="#">Anterior</a></li>
+													<li><a href="#">Próximo</a></li>
+												</ul>
+											</nav>
 										</div>';
 		}
 		if (isset ( $_GET ['selecionado'] )) {
@@ -148,7 +152,8 @@ class VinculoController {
 								LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
 								LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id WHERE (usuario.id_base_externa = $id) 
 						AND ('$dataTimeAtual' BETWEEN vinc_inicio AND vinc_fim)" );
-				echo '<table border="1">';
+				echo '<div class="borda">
+						<table class="tabela borda-vertical zebrada texto-preto">';
 				echo '<tr>
 								<th>ID usuario</th>
 								<th>Nome</th>
@@ -167,12 +172,13 @@ class VinculoController {
 							<td>' . $linha ['vinc_fim'] . '</td>
 									</tr>';
 				}
-				echo '</table>';
+				echo '</table>
+						</div>';
 				if (isset ( $_GET ['cartao'] ) && isset ( $_GET ['selecionado'] )) {
 					$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'H:00:01' );
 					
-					echo '<form method="post" action="" class="formulario texto-preto" >
-										<div class="borda">										
+					echo '<div class="borda">
+							<form method="post" action="" class="formulario sequencial texto-preto" >																				
 									    <label for="campo-texto-1">
 									        Cartão: <input type="text" name="numero_cartao" id="cartao" />
 									    </label>
@@ -188,26 +194,27 @@ class VinculoController {
 					
 					echo '
 									        			
-									        </select>
+									        </select><br>
 									    
 									    <fieldset>
 									        <legend>Cartão Avulso:</legend>
 									        <label for="checkbox-1.1">
 									            <input type="checkbox" name="checkbox-1" id="checkbox-1.1" value="1" /> Sim
 									        </label>									        
-									    </fieldset><br>
+									    </fieldset>
 										<label for="campo-texto-1">
 									        Quantidade de refeições: <input type="text" name="quantidade_refeicoes" id="periodo" />
 									    </label><br>
 										<input type="hidden" name="id_base_externa"  value="' . $_GET ['selecionado'] . '"/>
 									   	<input type="submit"  name="salvar" value="Salvar"/>
-									</form>';
+									</form>
+									</div>';
 				} else {
-					echo '<a href="?pagina=vinculo&selecionado=' . $_GET ['selecionado'] . '&cartao=add">Adicionar</a>';
+					echo '<a class="botao" href="?pagina=vinculo&selecionado=' . $_GET ['selecionado'] . '&cartao=add">Adicionar</a>';
 				}
 				if (isset ( $_POST ['salvar'] )) {
 					
-					// Todos os cadastros inicialmente ser�o n�o avulsos.
+					// Todos os cadastros inicialmente ser�o n�o avulsos.
 					$validade = $_POST ['data_validade'];
 					$numeroCartao = $_POST ['numero_cartao'];
 					$usuarioBaseExterna = $_POST ['id_base_externa'];
@@ -215,7 +222,7 @@ class VinculoController {
 					$vinculoDao = new VinculoDAO ( $dao->getConexao () );
 					$vinculoDao->adicionaVinculo ( $usuarioBaseExterna, $numeroCartao, $validade, $tipoCartao );
 					// No final eu redireciono para a pagina de selecao do usuario.
-					echo '<meta http-equiv="refresh" content="10; url=.\?pagina=vinculo&selecionado=' . $_POST ['id_base_externa'] . '">';
+					echo '<meta http-equiv="refresh" content="3; url=.\?pagina=vinculo&selecionado=' . $_POST ['id_base_externa'] . '">';
 				}
 			}
 		}

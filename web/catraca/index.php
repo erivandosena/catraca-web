@@ -41,8 +41,8 @@ if (isset ( $_GET ["sair"] )) {
 		<link rel="stylesheet" href="css/estilo.css" type="text/css" media="screen">
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
 		<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>		
-		<script>window.jQuery || document.write('<script src="js/jquery-1.7.1.min.js"><\/script>')</script>
-		<script src="js/bootstrap.js"></script>		
+		<script>window.jQuery || document.write('<script src="js/jquery-1.7.1.min.js"><\/script>')</script>		
+		<script src="js/bootstrap.js"></script>
 
 	</head>
 
@@ -52,7 +52,7 @@ if (isset ( $_GET ["sair"] )) {
 			    <div class="resolucao config">
 			       <div class="a-esquerda">
 			          <a href="http://brasil.gov.br/" target="_blank"><span id="bandeira"></span><span>BRASIL</span></a>
-			          <a href="http://acessoainformacao.unilab.edu.br/" target="_blank">Acesso à  informa&ccedil;&atilde;o</a>
+			          <a href="http://acessoainformacao.unilab.edu.br/" target="_blank">Acesso &agrave;  informa&ccedil;&atilde;o</a>
 			       </div>
 			       <div class="a-direita"><a href="#"><i class="icone-menu"></i></a></div>
 			       <ul>
@@ -65,25 +65,16 @@ if (isset ( $_GET ["sair"] )) {
 			</div>
 
 			<div class="doze colunas banner gradiente">
-					
-				<div id="acessibilidade" class="">
-				    <div class="resolucao config">
-				        <a href="#conteudo" tabindex="1" accesskey="1">Ir para o conte&ccedil;o <b>1</b></a>
-				        <a href="#menu" tabindex="2" accesskey="2">Ir para o menu <b>2</b></a>
-				        <a href="#busca" tabindex="3" accesskey="3">Ir para a busca <b>3</b></a>
-				        <a href="#rodape" tabindex="4" accesskey="4"><span>Ir para o rodap&eacute; <b>4</b></a>
-				    </div>
-				</div>
-
+			
 				<div id="topo" class="resolucao config">
 					<div class="tres colunas">
-						<a href="http://www.dti.unilab.edu.br"><img class="imagem-responsiva" src="img/logo_h-site.png" alt=""></a>				
+						<a href="http://www.dti.unilab.edu.br"><img class="imagem-responsiva" src="http://dti.unilab.edu.br/wp-content/themes/dti/img/logo_h-site.png" alt=""></a>				
 					</div>
 					<div class="seis colunas centralizado">
-						<h1 class="texto-branco">CATRACA<br><small class="texto-branco">Controle Administrativo de Tr&aacute;go Acad&ecirc;ico Automatizado</small></h1>
+						<h1>CATRACA<br><small class="texto-branco">Controle Administrativo de Tr&aacute;fego Acad&eacute;mico Automatizado</small></h1>
 					</div>
 					<div class="tres colunas alinhado-a-direita">
-						<a href="http://www.unilab.edu.br"><img class="imagem-responsiva centralizada" src="img/logo-unilab-branco.png" alt=""></a>
+						<a href="http://www.unilab.edu.br"><img class="imagem-responsiva centralizada" src="http://200.129.19.10/pub/templates_dti/img/logo-unilab-branco.png" alt=""></a>
 					</div>			
 				</div>
 			</div>
@@ -94,50 +85,68 @@ if (isset ( $_GET ["sair"] )) {
 					<a href="#"><span>Contato |</span></a>
 					<a href="#"><span>Servi&ccedil;os |</span></a>
 					<a href="#"><span>Dados Abertos |</span></a>
-					<a href="#"><span>&Aacute;rea de Imprensa|</span></a>
+					<a href="#"><span>&Aacute;rea de Imprensa |</span></a>
 				</div>
-			</div>		
-						
+			</div>
+					
 			<div class="doze colunas">
 				<div class="resolucao config">
-				
-				<?php 
-				if($sessao->getNivelAcesso() == SESSAO::NIVEL_SUPER){
-					echo '<div class="duas colunas">					
+					<?php 
+					if($sessao->getNivelAcesso() == Sessao::NIVEL_SUPER){
+					?>
+					<div class="duas colunas">					
 						<div class="padding">
-						    <a href="#expandir_menu" title="Clique para expandir o menu" class="menu-resp icone-menu2"> Menu vertical</a>
+						    <a href="#expandir_menu" title="Clique para expandir o menu" class="menu-resp icone-menu2"> Menu Catraca</a>
 						    <div id="expandir_menu" class="menu-vertical">
 						        <a href="#ocultar_menu" class="fechar-menu icone-cross"></a>
 						        <ol>
-						            <li><a href="index.php" class="item-vertical-ativo"><span class="icone-home3"></span> <span class="item-vertical-texto">In&iacute;</span></a></li>
-						            <li><a href="cadastro.php" class="item-vertical"><span class="icone-drawer"></span> <span class="item-vertical-texto">Cadastro</span></a></li>						            					            
-						            <li><a href="cartao.php" class="item-vertical"><span class="icone-profile"></span> <span class="item-vertical-texto">Cart&atilde;o</span></a></li>
-						            <li><a href="relatorios.php" class="item-vertical"><span class="icone-file-text2"></span> <span class="item-vertical-texto">Relat&oacute;rio</span></a></li>
-						         	<li><a href="?sair=1" class="item-vertical"><span class="icone-exit"></span> <span class="item-vertical-texto">Sair</span></a></li>
+						            <li><a href="index.php" class="item-vertical-ativo"><span class="icone-home3"></span> <span class="item-vertical-texto">In&iacute;cio</span></a></li>
+						            <li><a href="?pagina=catraca" class="item-vertical"><span class="icone-drawer"></span> <span class="item-vertical-texto">Catraca</span></a></li>						            					            
+						            <li><a href="?pagina=vinculo" class="item-vertical"><span class="icone-profile"></span> <span class="item-vertical-texto">Cart&atilde;o</span></a></li>
+						            <li><a href="?pagina=isencao" class="item-vertical"><span class="icone-file-text2"></span> <span class="item-vertical-texto">Isen&ccedil;&atilde;o</span></a></li>
+						         	<li><a href="?sair=sair" class="item-vertical"><span class="icone-exit"></span> <span class="item-vertical-texto">Sair</span></a></li>
 						        </ol>
 						    </div>
 						</div>
-					</div>';
-				}
-				
-				?>
-					
+					</div>
+					<?php 
+					}
+					?>
 					<div class="dez colunas">
+					
 						
 					<?php 
 					
 
 					if ($sessao->getNivelAcesso () == Sessao::NIVEL_SUPER) {
+						
+						$dao = new DAO(null, DAO::TIPO_PG_LOCAL);
+						//$dao->getConexao()->exec("DELETE FROM vinculo");
+						$result = $dao->getConexao()->query("SELECT * FROM vinculo");
+						foreach($result as $row){
+							print_r($row);
+						}
+						
+						
 						if(isset($_GET['pagina'])){
 							switch ($_GET['pagina']){
 								case 'vinculo':
-									echo '<section id="navegacao"><!--Tabs-->';
-									echo '<ul class="nav nav-tabs">';
-									echo '<li role="presentation" class="active"><a href="#tab1" data-toggle="tab">Cadastro</a></li>';
-									echo '</ul><div class="tab-content">';
-									echo '<div class="tab-pane active" id="tab1">';
+									echo '<section id="navegacao">							
+							<!--Tabs-->	
+							<ul class="nav nav-tabs">
+								<li role="presentation" class="active"><a href="#tab1" data-toggle="tab">Adicionar</a></li>
+								<li role="presentation" class=""><a href="#tab2" data-toggle="tab">Mostrar Cart&otilde;es</a></li>								
+							</ul><div class="tab-content">';
+									
+									echo '<div class="tab-pane active" id="tab1">			';
 									VinculoController::main($sessao->getNivelAcesso());
-									echo '	</div></div></section>';
+									echo '</div>';
+									
+									echo '<div class="tab-pane" id="tab2">		Teste</div>';
+									
+									echo '</div>';
+									
+									
 									break;
 								default:
 									echo '404 NOT FOUND';

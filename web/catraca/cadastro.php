@@ -96,8 +96,6 @@
 							<div class="tab-content">
 								<div class="tab-pane active" id="tab1">									
 									<form method="post" action="" class="formulario sequencial" >
-										<div class="borda">
-										<!--<?php include ("../templates/alertas.php") ?>-->
 										<label for="campo-texto-2" class="texto-preto">
 									        Unidade Acadêmica: <input type="text" name="unidade" id="unidade" />
 									    </label>
@@ -126,7 +124,7 @@
 									    </tbody>
 									</table>
 									</div>
-									</div>
+
 									<div class="tab-pane" id="tab2">									
 
 									<form method="post" action="" class="formulario-organizado" >
