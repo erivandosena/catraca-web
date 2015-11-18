@@ -145,6 +145,12 @@
 										</div>
 								</div>								
 							</div>
+							<nav>
+								<ul class="pager">
+									<li><a href="#">Anterior</a></li>
+									<li><a href="#">Próximo</a></li>
+								</ul>
+							</nav>
 						</section>
 					</div>
 				</div>

@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 
@@ -19,7 +21,7 @@
 	</head>
 
 	<body >
-		<div class="pagina fundo-cinza1">
+		<div class="pagina">			
 			<div id="barra-governo">
 			    <div class="resolucao config">
 			       <div class="a-esquerda">
@@ -36,17 +38,26 @@
 			    </div>
 			</div>
 
-			<div class="doze colunas banner gradiente">				
+			<div class="doze colunas banner gradiente">
+					
+				<div id="acessibilidade" class="">
+				    <div class="resolucao config">
+				        <a href="#conteudo" tabindex="1" accesskey="1">Ir para o conteúdo <b>1</b></a>
+				        <a href="#menu" tabindex="2" accesskey="2">Ir para o menu <b>2</b></a>
+				        <a href="#busca" tabindex="3" accesskey="3">Ir para a busca <b>3</b></a>
+				        <a href="#rodape" tabindex="4" accesskey="4"><span>Ir para o rodapé <b>4</b></a>
+				    </div>
+				</div>
 
 				<div id="topo" class="resolucao config">
 					<div class="tres colunas">
-						<a href="http://www.dti.unilab.edu.br"><img class="imagem-responsiva" src="img/logo_h-site.png" alt=""></a>				
+						<a href="http://www.dti.unilab.edu.br"><img class="imagem-responsiva" src="http://dti.unilab.edu.br/wp-content/themes/dti/img/logo_h-site.png" alt=""></a>				
 					</div>
 					<div class="seis colunas centralizado">
-						<h1>CATRACA<br><small class="texto-branco">Controle Administrativo de Tráfego Acadêmico Automatizado</small></h1>
+						<h1 class="texto-branco">CATRACA<br><small class="texto-branco">Controle Administrativo de Tráfego Acadêmico Automatizado</small></h1>
 					</div>
 					<div class="tres colunas alinhado-a-direita">
-						<a href="http://www.unilab.edu.br"><img class="imagem-responsiva centralizada" src="img/logo-unilab-branco.png" alt=""></a>
+						<a href="http://www.unilab.edu.br"><img class="imagem-responsiva centralizada" src="http://200.129.19.10/pub/templates_dti/img/logo-unilab-branco.png" alt=""></a>
 					</div>			
 				</div>
 			</div>
@@ -61,26 +72,30 @@
 				</div>
 			</div>		
 						
-			<div class="doze colunas">
-				<div class="resolucao config ">
-					<div class="duas colunas">						
-						<div class="padding">
-						    <a href="#expandir_menu" title="Clique para expandir o menu" class="menu-resp icone-menu2"> Menu vertical</a>
-						    <div id="expandir_menu" class="menu-vertical">
-						        <a href="#ocultar_menu" class="fechar-menu icone-cross"></a>
-						        <ol>
-						            <li><a href="index.php" class="item-vertical-ativo"><span class="icone-home3"></span> <span class="item-vertical-texto">Início</span></a></li>
-						            <li><a href="cadastro.php" class="item-vertical"><span class="icone-drawer"></span> <span class="item-vertical-texto">Cadastro</span></a></li>						            					            
-						            <li><a href="cartao.php" class="item-vertical"><span class="icone-profile"></span> <span class="item-vertical-texto">Cartão</span></a></li>
-						            <li><a href="relatorios.php" class="item-vertical"><span class="icone-file-text2"></span> <span class="item-vertical-texto">Relatório</span></a></li>
-						         	<li><a href="" class="item-vertical"><span class="icone-exit"></span> <span class="item-vertical-texto">Sair</span></a></li>
-						        </ol>
-						    </div>
-						</div>
-					</div>
-					<div class="sete colunas"></div>
-					<div class="tres colunas"></div>
-				</div>
+			<div class="doze colunas centralizado">
+				<img class="fundo" src="https://upload.wikimedia.org/wikipedia/commons/0/07/S%C3%ADmbolo_da_UNILAB.png" alt="">
+				<div class="duas colunas no-meio borda fundo-branco">					
+			            <div class="no-centro">
+			                <h1>Catraca</h1>
+			            </div>
+			            <div class="linha com-bordas alinhado-a-esquerda">
+			                <div class="conteudo"><form method="post" action="" class="formulario-organizado">
+									
+			                       <label for="idTextLogin">
+			                           Login
+			                           <input type="text" name="login" id="idTextLogin" class="doze" placeholder="Digite seu Usuário"/>
+			                        </label>
+			                        <label for="idTextSenha">
+			                            Senha
+			                            <input type="password" name="senha" id="idTextSenha" class="doze" placeholder="Digite sua Senha" />
+			                        </label>
+			                       <button type="submit" name="formlogin" class="botao b-primario doze"><span class="icone-redo2"></span> Entrar </button>                
+			                    </form>
+			                    <a href="http://sigadmin.unilab.edu.br/admin/public/recuperar_login.jsf" class="medio centralizado doze colunas">Não consegue acessar o sistema?</a>                 
+			                </div>
+			            </div>		            
+			     	</div>
+					
 			</div>
 			<div id="rodape" class="doze colunas fundo-azul1 centralizado rodape">
 				<p>CATRACA todos os direitos reservados</p>

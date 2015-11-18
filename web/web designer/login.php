@@ -13,7 +13,8 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
 		<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>		
 		<script>window.jQuery || document.write('<script src="js/jquery-1.7.1.min.js"><\/script>')</script>
-		<script src="js/bootstrap.js"></script>
+		<script type="text/javascript" src="js/bootstrap.js"></script>
+		<script type="text/javascript" src="js/script.js"></script>
 
 	</head>
 
@@ -21,29 +22,70 @@
 
 		<div class="pagina fundo-cinza1">			
 
-			<?php include ("templates/topo.php") ?>
-			
-			<div class="doze colunas">
-				<div class="resolucao config">					
+			<div id="barra-governo">
+			    <div class="resolucao config">
+			       <div class="a-esquerda">
+			          <a href="http://brasil.gov.br/" target="_blank"><span id="bandeira"></span><span>BRASIL</span></a>
+			          <a href="http://acessoainformacao.unilab.edu.br/" target="_blank">Acesso à informação</a>
+			       </div>
+			       <div class="a-direita"><a href="#"><i class="icone-menu"></i></a></div>
+			       <ul>
+			          <li><a href="http://brasil.gov.br/barra#participe" target="_blank">Participe</a></li>
+			          <li><a href="http://www.servicos.gov.br/" target="_blank">Serviços</a></li>
+			          <li><a href="http://www.planalto.gov.br/legislacao" target="_blank">Legislação</a></li>
+			          <li><a href="http://brasil.gov.br/barra#orgaos-atuacao-canais" target="_blank">Canais</a></li>
+			       </ul>
+			    </div>
+			</div>
 
-					<div class="nove colunas">
-						<h1 class="texto-preto">Conteúdo</h1>						
+			<div class="doze colunas banner gradiente">
+				<div id="topo" class="resolucao config">
+					<div class="tres colunas">
+						<a href="http://www.dti.unilab.edu.br"><img class="imagem-responsiva" src="img/logo_h-site.png" alt=""></a>				
 					</div>
-
-					<div id="login" class="tres colunas texto-preto">
-						<h3>Acesso ao Sistema</h3>
-						<form method="post" action="" class="formulario sequencial">
-							<label for="campo-texto-2">
-						        Usuario: <input type="text" name="usuario" id="campo-texto-2" />
-						    </label>
-						    <label for="campo-senha-2">
-						        Senha: <input type="password" name="senha" id="campo-senha-2" />
-						    </label>
-						    <input type="submit" value="Entrar" />
-						</form>
+					<div class="seis colunas centralizado">
+						<h1 class="texto-branco">CATRACA<br><small class="texto-branco">Controle Administrativo de Tráfego Acadêmico Automatizado</small></h1>
 					</div>
+					<div class="tres colunas alinhado-a-direita">
+						<a href="http://www.unilab.edu.br"><img class="imagem-responsiva centralizada" src="img/logo-unilab-branco.png" alt=""></a>
+					</div>			
 				</div>
 			</div>
+
+			<div id="barra" class="doze colunas fundo-azul3 alinhado-a-direita">
+				<div class="config">
+					<a href="#"><span>Perguntas frequentes |</span></a>
+					<a href="#"><span>Contato |</span></a>
+					<a href="#"><span>Serviços |</span></a>
+					<a href="#"><span>Dados Abertos |</span></a>
+					<a href="#"><span>Área de Imprensa |</span></a>
+				</div>
+			</div>			
+			
+				<div class="resolucao config">
+					<div class="duas colunas no-meio borda fundo-branco">
+			            <div class="no-centro">
+			                <h1>Catraca</h1>
+			            </div>
+			            <div class="linha com-bordas">
+			                <div class="conteudo"><form method="post" action="" class="formulario-organizado">
+
+			                       <label for="idTextLogin">
+			                           Login
+			                           <input type="text" name="login" id="idTextLogin" class="doze" placeholder="Digite seu Usuário"/>
+			                        </label>
+			                        <label for="idTextSenha">
+			                            Senha
+			                            <input type="password" name="senha" id="idTextSenha" class="doze" placeholder="Digite sua Senha" />
+			                        </label>
+			                       <button type="submit" name="formlogin" class="botao b-primario doze"><span class="icone-redo2"></span> Entrar </button>                
+			                    </form>
+			                    <a href="http://sigadmin.unilab.edu.br/admin/public/recuperar_login.jsf" class="medio centralizado doze colunas">Não consegue acessar o sistema?</a>                 
+			                </div>
+			            </div>		            
+			     	</div>
+				</div>
+			
 			<div id="rodape" class="doze colunas fundo-azul1 centralizado rodape">
 				<p>CATRACA todos os direitos reservados</p>
 			</div>			
