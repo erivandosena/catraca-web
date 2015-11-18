@@ -71,7 +71,7 @@
 						            <li><a href="" class="item-vertical-ativo"><span class="icone-home3"></span> <span class="item-vertical-texto">Início</span></a></li>
 						            <li><a href="" class="item-vertical"><span class="icone-cogs"></span> <span class="item-vertical-texto">Definições</span></a></li>						            					            
 						            <li><a href="" class="item-vertical"><span class="icone-loop2"></span> <span class="item-vertical-texto">Catraca</span></a></li>
-						            <li><a href="" class="item-vertical"><span class="icone-profile"></span> <span class="item-vertical-texto">Cartão</span></a></li>
+						            <li><a href="" class="item-vertical"><span class="icone-credit-card"></span> <span class="item-vertical-texto">Cartão</span></a></li>
 						            <li><a href="" class="item-vertical"><span class="icone-user"></span> <span class="item-vertical-texto">Guichê</span></a></li>
 						            <li><a href="" class="item-vertical"><span class="icone-file-text2"></span> <span class="item-vertical-texto">Relatório</span></a></li>
 						         	<li><a href="" class="item-vertical"><span class="icone-exit"></span> <span class="item-vertical-texto">Sair</span></a></li>
