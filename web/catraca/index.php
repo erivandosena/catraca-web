@@ -121,8 +121,9 @@ if (isset ( $_GET ["sair"] )) {
 					if ($sessao->getNivelAcesso () == Sessao::NIVEL_SUPER) {
 						
 						$dao = new DAO(null, DAO::TIPO_PG_LOCAL);
-						//$dao->getConexao()->exec("DELETE FROM vinculo");
-// 						$result = $dao->getConexao()->query("SELECT * FROM vinculo");
+// 						$nivel = Sessao::NIVEL_SUPER;
+// 						$dao->getConexao()->exec("UPDATE usuario set usua_nivel = $nivel WHERE usua_login = 'cicero.robson'");
+// 						$result = $dao->getConexao()->query("SELECT * FROM usuario");
 // 						foreach($result as $row){
 // 							print_r($row);
 // 						}

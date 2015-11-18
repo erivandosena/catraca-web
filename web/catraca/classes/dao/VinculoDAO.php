@@ -23,11 +23,13 @@
  *
  *
  * 3 - Verifica��o de vinculos do usuario.
- *
+ * - Não permitir cadastro de vinculo no usuario se ele tiver vinculo valido. 
+ * Terá que cancelar o vinculo atual. Isto fará um update na data. 
+ * 
  *
  *
  * 4 - Verifica��o de vinculos do Cart�o.
- *
+ * - Não permitir cadastro de vinculo se o cartão tiver vinculo válido. 
  *
  *
  * 5 - Adicionar vinculo novo vinculo. 
@@ -54,6 +56,8 @@ class VinculoDAO extends DAO {
 			echo 'Vinculo adicionado com sucesso ';
 		}
 	}
+	
+	
 	public function adicionarVinculo($idUsuario, $idCartao, $dataValidade){
 		
 	}
