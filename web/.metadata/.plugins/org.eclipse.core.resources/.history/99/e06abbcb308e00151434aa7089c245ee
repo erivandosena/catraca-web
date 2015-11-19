@@ -1,0 +1,16 @@
+<?php
+
+
+
+class CatracaController{
+	
+	
+	public static function main(){
+		
+		
+	}
+	
+}
+
+
+?>

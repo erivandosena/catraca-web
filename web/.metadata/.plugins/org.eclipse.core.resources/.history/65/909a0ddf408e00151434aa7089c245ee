@@ -1,0 +1,18 @@
+<?php
+
+
+class HomeController{
+	
+	public static function main($nivelDeAcesso){
+		switch ($nivelDeAcesso){
+			default:
+				break;
+		}
+		
+	}
+	
+	
+}
+
+
+?>

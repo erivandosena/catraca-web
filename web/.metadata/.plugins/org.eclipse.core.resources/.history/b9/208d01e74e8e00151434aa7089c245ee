@@ -1,0 +1,16 @@
+<?php
+
+
+class CartaoController{
+	
+	public static function main($nivelDeAcesso){
+		
+		
+	}
+	
+	
+}
+
+
+
+?>

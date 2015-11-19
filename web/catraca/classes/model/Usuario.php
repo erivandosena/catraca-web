@@ -3,7 +3,9 @@
 
 class Usuario{
 	private $id;
+	
 	private $nome;
+	
 	private $email;
 	private $login;
 	private $senha;
@@ -11,8 +13,13 @@ class Usuario{
 	
 	
 	
+	
+	
+	
 	public function setId($id){
-		$this->id = $id;
+		$idBaseExterna = intval ( $id) ;
+		if(is_int($id))
+			$this->id = $id;
 	}
 	
 	public function getId(){
@@ -63,6 +70,96 @@ class Usuario{
 		return $strUsuario;
 	}
 	
+	
+	//Documentos
+	private $idBaseExterna;
+	private $cpf;
+	private $identidade;
+	private $passaporte;
+	
+	
+	private $matricula;
+	private $nivelDiscente;
+	private $statusDiscente;
+	
+	
+	private $siape;
+	private $categoria;
+	private $tipoDeUsuario;
+	private $statusServidor;
+	
+	public function setStatusServidor($statusServidor){
+		$this->statusServidor = $statusServidor;
+	}
+	public function getStatusServidor(){
+		return $this->statusServidor;
+	}
+	
+	public function setIdBaseExterna($idBaseExterna){
+		$idBaseExterna = intval ( $idBaseExterna ) ;
+		if(is_int($idBaseExterna))
+			$this->idBaseExterna = $idBaseExterna;
+	}
+	public function  getIdBaseExterna(){
+		return $this->idBaseExterna;
+	}
+	public function setCpf($cpf){
+		$this->cpf = $cpf;
+	}
+	public function getCpf(){
+		return $this->cpf;
+	}
+	public function setIdentidade($identidade){
+		$this->identidade = $identidade;
+	}
+	public function getIdentidade(){
+		return $this->identidade;
+	}
+	public function setPassaporte($passaporte){
+		$this->passaporte = $passaporte;
+	}
+	public function getPassaporte(){
+		return $this->passaporte;
+	}
+	public function setMatricula($matricula){
+		$this->matricula = $matricula;
+	}
+	public function getMatricula(){
+		return $this->matricula;
+	}
+	public function setNivelDiscente($nivelDiscente){
+		$this->nivelDiscente = $nivelDiscente;
+	}
+	public function getNivelDiscente(){
+		return $this->nivelDiscente;
+		
+	}
+	
+	public function setStatusDiscente($statusDiscente){
+		$this->statusDiscente = $statusDiscente;
+	}
+	public function getStatusDiscente(){
+		return $this->statusDiscente;
+		
+	}
+	public function setSiape($siape){
+		$this->siape = $siape;
+	}
+	public function getSiape(){
+		return $this->siape;
+	}
+	public function setCategoria($categoria){
+		$this->categoria = $categoria;
+	}
+	public function getCategoria(){
+		return $this->categoria;
+	}
+	public function setTipoDeUsuario($tipoDeUsuario){
+		$this->tipoDeUsuario = $tipoDeUsuario;
+	}
+	public function getTipodeUsuario(){
+		return $this->tipoDeUsuario;
+	}
 	
 	
 }

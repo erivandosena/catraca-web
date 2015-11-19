@@ -1,0 +1,72 @@
+<?php
+
+class CartaoView{
+	
+	
+	public function mostraLista(){
+
+		
+	}
+	
+	
+	public function formBuscaUsuarios(){
+		echo '					<div class="borda">
+									<form method="post" action="" class="formulario em-linha" >
+		
+										<label for="opcoes-1">
+											<object class="rotulo texto-preto">Buscar por: </object>
+											<select name="opcoes-1" id="opcoes-1" class="texto-preto">
+												<option value="1">Nome</option>
+		
+											</select>
+											<input class="texto-preto" type="text" name="nome" id="campo-texto-2" /><br>
+											<input type="submit" />
+										</label>
+		
+									</form>
+									</div>';
+	}
+	public function mostraResultadoBuscaDeUsuarios($usuarios){
+		echo '<div class="doze linhas">';
+		echo '<br><h2 class="texto-preto">Resultado da busca:</h2>';
+		echo '</div>
+				<table class="tabela borda-vertical zebrada texto-preto">
+				<thead>
+					<tr>
+											            <th>Nome</th>
+											            <th>CPF</th>
+											            <th>Passaporte</th>
+											            <th>Matrícula</th>
+														<th>SIAPE</th>
+											            <th>Selecionar</th>
+											        </tr>
+											    </thead>
+												<tbody>';
+		foreach ( $lista as $linha ) {
+			echo '<tr>';
+			echo '<td>' . $linha ['nome'] . '</a></td>';
+			echo '<td>' . $linha ['cpf_cnpj'] . '</td>';
+			echo '<td>' . $linha ['passaporte'] . '</td>';
+			echo '<td>' . $linha ['matricula_disc'] . '</td>';
+			echo '<td>' . $linha ['siape'] . '</td>';
+			echo '<td class="centralizado">
+											            	<a href="?pagina=cartao&selecionado=' . $linha ['id_usuario'] . '"><span class="icone-checkmark texto-verde2 botao" title="Selecionar"></span></a>
+											            </td>';
+			echo '</tr>';
+		}
+		
+		
+	}
+	public function cadastroSucesso(){
+	}
+	public function deleteSucesso(){
+	}
+	public function deleteFracasso(){
+	}
+	public function cadastroFracasso(){
+	}
+	
+}
+
+
+?>

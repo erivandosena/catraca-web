@@ -1,0 +1,26 @@
+<?php
+
+class CartaoView{
+	
+	
+	public function mostraLista($lista){
+
+		
+	}
+	
+	
+	public function mostraFormulario($listaDeTipos){
+	}
+	public function cadastroSucesso(){
+	}
+	public function deleteSucesso(){
+	}
+	public function deleteFracasso(){
+	}
+	public function cadastroFracasso(){
+	}
+	
+}
+
+
+?>

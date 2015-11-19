@@ -3,6 +3,7 @@ class VinculoController {
 	public static function main($tela) {
 		switch ($tela) {
 			case Sessao::NIVEL_SUPER :
+				
 				$controller = new VinculoController ();
 				$controller->telaVinculo ();
 				/*
@@ -53,21 +54,16 @@ class VinculoController {
 		echo '<br><br>';
 	}
 	public function telaVinculo() {
-		echo '					<div class="borda">
-									<form method="post" action="" class="formulario em-linha" >
-										
-										<label for="opcoes-1">
-											<object class="rotulo texto-preto">Buscar por: </object>
-											<select name="opcoes-1" id="opcoes-1" class="texto-preto">
-												<option value="1">Nome</option>
-												
-											</select>
-											<input class="texto-preto" type="text" name="nome" id="campo-texto-2" /><br>
-											<input type="submit" />											    
-										</label>
-										
-									</form>									
-									</div>';
+		echo '<section id="navegacao">
+										<!--Tabs-->
+										<ul class="nav nav-tabs">
+											<li role="presentation" class="active"><a href="#tab1" data-toggle="tab">Usu&aacute;rios</a></li>
+											<li role="presentation" class=""><a href="#tab2" data-toggle="tab">Cart&otilde;es</a></li>
+										</ul><div class="tab-content">';
+		
+		echo '<div class="tab-pane active" id="tab1">';
+		
+
 		
 		if (isset ( $_POST ['nome'] )) {
 			$pesquisa = preg_replace ('/[^a-zA-Z0-9\s]/', '', $_POST ['nome'] );
@@ -99,7 +95,7 @@ class VinculoController {
 				echo '<td>' . $linha ['matricula_disc'] . '</td>';
 				echo '<td>' . $linha ['siape'] . '</td>';
 				echo '<td class="centralizado">
-											            	<a href="?pagina=vinculo&selecionado=' . $linha ['id_usuario'] . '"><span class="icone-checkmark texto-verde2 botao" title="Selecionar"></span></a>
+											            	<a href="?pagina=cartao&selecionado=' . $linha ['id_usuario'] . '"><span class="icone-checkmark texto-verde2 botao" title="Selecionar"></span></a>
 											            </td>';
 				echo '</tr>';
 			}
@@ -166,7 +162,8 @@ class VinculoController {
 				foreach ( $result as $linha ) {
 					echo '<tr>
 							<td>' . $linha ['id_base_externa'] . '</td>
-							<td>' . $linha ['usua_nome'] . '</td><td>' . $linha ['tipo_nome'] . '</td>
+							<td>' . $linha ['usua_nome'] . '</td>
+							<td>' . $linha ['tipo_nome'] . '</td>
 							<td>' . $linha ['cart_numero'] . '</td>
 							<td>' . $linha ['vinc_inicio'] . '</td>
 							<td>' . $linha ['vinc_fim'] . '</td>
@@ -210,7 +207,7 @@ class VinculoController {
 									</form>
 									</div>';
 				} else {
-					echo '<a class="botao" href="?pagina=vinculo&selecionado=' . $_GET ['selecionado'] . '&cartao=add">Adicionar</a>';
+					echo '<a class="botao" href="?pagina=cartao&selecionado=' . $_GET ['selecionado'] . '&cartao=add">Adicionar</a>';
 				}
 				if (isset ( $_POST ['salvar'] )) {
 					
@@ -222,10 +219,16 @@ class VinculoController {
 					$vinculoDao = new VinculoDAO ( $dao->getConexao () );
 					$vinculoDao->adicionaVinculo ( $usuarioBaseExterna, $numeroCartao, $validade, $tipoCartao );
 					// No final eu redireciono para a pagina de selecao do usuario.
-					echo '<meta http-equiv="refresh" content="3; url=.\?pagina=vinculo&selecionado=' . $_POST ['id_base_externa'] . '">';
+					echo '<meta http-equiv="refresh" content="3; url=.\?pagina=cartao&selecionado=' . $_POST ['id_base_externa'] . '">';
 				}
 			}
 		}
+		
+		echo '</div>';
+		
+		echo '<div class="tab-pane" id="tab2">		Teste</div>';
+		
+		echo '</div>';
 	}
 }
 

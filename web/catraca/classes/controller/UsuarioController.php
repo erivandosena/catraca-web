@@ -3,8 +3,8 @@
 
 class UsuarioController{
 	
-	public static function main($tela){
-		switch ($tela){
+	public static function main($nivelDeAcesso){
+		switch ($nivelDeAcesso){
 			case Sessao::NIVEL_SUPER:
 				break;
 			case Sessao::NIVEL_DESLOGADO:

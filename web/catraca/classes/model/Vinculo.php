@@ -13,8 +13,20 @@ class Vinculo{
 	private $quantidadeDeAlimentosPorTurno;
 	private $descricao;
 	private $cartao;	
+
 	
-	
+	public function setInicioValidade($inicioValidade){
+		$this->inicioValidade = $inicioValidade;
+	}
+	public function getInicioValidade(){
+		return $this->inicioValidade;
+	}
+	public function setFinalValidade($finalValidade){
+		$this->finalValidade = $finalValidade;
+	}
+	public function getFinalValidade(){
+		return $this->finalValidade;
+	}
 	public function setId($id){
 		$this->id = $id;
 	}

@@ -39,6 +39,32 @@
  */
 class VinculoDAO extends DAO {
 	
+	public function retornaVinculosValidosDeUsuario(Usuario $usuario){
+		$lista = array();
+		$idUsuario = $usuario->getIdBaseExterna();
+		$dataTimeAtual = date ( "Y-m-d G:i:s" );
+		$sql =  "SELECT * FROM usuario INNER JOIN vinculo
+				ON vinculo.usua_id = usuario.usua_id
+				LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
+				LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id WHERE (usuario.id_base_externa = $idUsuario)
+				AND ('$dataTimeAtual' BETWEEN vinc_inicio AND vinc_fim)";
+		$result = $this->getConexao ()->query ($sql );
+		
+		foreach($result as $linha){
+			$vinculo = new Vinculo();
+			$vinculo->setResponsavel($usuario);
+			$vinculo->setCartao(new Cartao());
+			$vinculo->getCartao()->setTipo(new Tipo());
+			$vinculo->getCartao()->getTipo()->setNome($linha ['tipo_nome']);
+			$vinculo->getCartao()->setNumero($linha ['cart_numero']);
+			$vinculo->setInicioValidade($linha ['vinc_inicio']);
+			$vinculo->setFinalValidade($linha['vinc_fim']);
+			$lista[] = $vinculo;
+						
+
+		}
+		return $lista;
+	}
 	
 	public function adicionaVinculo($idUsuarioBaseExterna, $numeroCartao, $dataDeValidade, $tipoCartao) {
 		$idBaseLocal = $this->verificarUsuario($idUsuarioBaseExterna);
