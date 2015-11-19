@@ -10,10 +10,16 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
 		<link rel="stylesheet" href="http://spa.dsi.unilab.edu.br/spa/css/spa.css" />		
 		<link rel="stylesheet" href="css/estilo.css" type="text/css" media="screen">
+		<link rel="stylesheet" href="css/bootstrap.css" type="text/css" media="screen">
+		<link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" media="screen">
+		<link rel="stylesheet" href="css/bootstrap-theme.min.css" type="text/css" media="screen">
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js" integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ==" crossorigin="anonymous"></script>
+		<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
 		<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>		
 		<script>window.jQuery || document.write('<script src="js/jquery-1.7.1.min.js"><\/script>')</script>		
-		<script src="js/bootstrap.js"></script>
+		<script type="text/javascript" src="js/bootstrap.js"></script>
+		<script type="text/javascript" src="js/bootstrap.min.js"></script>
+		
 
 	</head>
 
@@ -78,8 +84,10 @@
 						        <a href="#ocultar_menu" class="fechar-menu icone-cross"></a>
 						        <ol>
 						            <li><a href="index.php" class="item-vertical-ativo"><span class="icone-home3"></span> <span class="item-vertical-texto">Início</span></a></li>
-						            <li><a href="cadastro.php" class="item-vertical"><span class="icone-drawer"></span> <span class="item-vertical-texto">Cadastro</span></a></li>						            					            
-						            <li><a href="cartao.php" class="item-vertical"><span class="icone-profile"></span> <span class="item-vertical-texto">Cartão</span></a></li>
+						            <li><a href="cadastro.php" class="item-vertical"><span class="icone-cogs"></span> <span class="item-vertical-texto">Definições</span></a></li>						            					            
+						            <li><a href="cartao.php" class="item-vertical"><span class="icone-profile"></span> <span class="item-vertical-texto">Catraca</span></a></li>
+						            <li><a href="relatorios.php" class="item-vertical"><span class="icone-loop2"></span> <span class="item-vertical-texto">Cartão</span></a></li>
+						            <li><a href="relatorios.php" class="item-vertical"><span class="icone-user"></span> <span class="item-vertical-texto">Guichê</span></a></li>
 						            <li><a href="relatorios.php" class="item-vertical"><span class="icone-file-text2"></span> <span class="item-vertical-texto">Relatório</span></a></li>
 						         	<li><a href="" class="item-vertical"><span class="icone-exit"></span> <span class="item-vertical-texto">Sair</span></a></li>
 						        </ol>
@@ -94,8 +102,7 @@
 								<li role="presentation" class="active"><a href="#tab1" data-toggle="tab">Unidades Acadêmicas</a></li>
 								<li role="presentation" class=""><a href="#tab2" data-toggle="tab">Turnos</a></li>
 								<li role="presentation" class=""><a href="#tab3" data-toggle="tab">Tipos de Usuários</a></li>								
-								<li role="presentation" class=""><a href="#tab4" data-toggle="tab">Custo Refeição</a></li>								
-								<li role="presentation" class=""><a href="#tab5" data-toggle="tab">Custo Cartão</a></li>							
+								<li role="presentation" class=""><a href="#tab4" data-toggle="tab">Custos</a></li>															
 							</ul>
 							<div class="tab-content">
 								<div class="tab-pane active" id="tab1">
@@ -104,7 +111,7 @@
 											<label for="campo-texto-2" class="texto-preto">
 										        Unidade Acadêmica: <input type="text" name="unidade" id="unidade" />
 										    </label>										    
-										    <input id="nome" type="submit" value="Salvar" />
+										    <input type="submit" value="Salvar" />
 										</form>
 									</div>
 										<div class="doze linhas borda">										
@@ -125,22 +132,23 @@
 											            <td class="centralizado">
 											            	<a href=""><span class="icone-pencil2 texto-amarelo2 botao" title="Editar"></span></a>
 											            	<a href=""><span class="icone-cross botao texto-vermelho2" title="Excluir"></span></a>
-											            	<a href=""><span class="icone-cross botao texto-vermelho2" title="Adicionar Turno"></span></a>											            	
+											            	<a href=""><span class="icone-plus botao texto-verde2" title="Adicionar Turno"></span></a>											            	
 											            </td>
 											        </tr>								        
 											    </tbody>
-											</table>
-											<div>
-										<form action="">
-											<label for="opcoes-1">
-											<object class="rotulo texto-preto">Turno: </object>
-											<select name="opcoes-1" id="opcoes-1" class="texto-preto">
-												<option value="1"></option>												
-											</select>																					    
-										</label>
-										</form>
-									</div>	
-										</div>								
+											</table>												
+										</div>
+										<div class="formulario sequencial borda">
+											<form action="">
+												<label for="opcoes-1">
+												<object class="rotulo texto-preto">Turno: </object>
+												<select name="opcoes-1" id="opcoes-1" class="texto-preto">
+													<option value="1">Almoço</option>												
+												</select>																					    
+											</label>
+											<input type="submit" value="Adicionar" />
+											</form>
+										</div>						
 								</div>
 									<div class="tab-pane" id="tab2">
 										<div class="borda">
@@ -186,14 +194,56 @@
 																															
 							</div>
 							<div class="tab-pane" id="tab3">
-								tab3
+
+								<div class="borda">
+									<form action="" class="formulario sequencial">
+										<label for="campo-texto-2" class="">
+										    Tipo Usuario: <input type="text" name="tipo_usuario" id="tipo_usuario" />
+										</label>
+										<label for="campo-texto-2" class="">
+										    Valor por Refeição : <input type="text" name="valor_refeicao" id="valor_refeicao" />
+										</label>
+										<input type="submit" value="Salvar" />
+									</form>
+								</div>				
+
+								<div class="doze linhas borda">										
+									<table class="tabela borda-vertical zebrada texto-preto no-centro">
+										<thead>
+									        <tr>
+									            <th>ID</th>
+									            <th>Tipo de Usuario</th>
+									            <th>Vavor por refeição</th>								            
+									            <th>Ações</th>				            				            
+									        </tr>
+									    </thead>				
+										<tbody>
+									        <tr>
+									            <td>1</td>
+									            <td>Aluno</td>
+									            <td>$R 1,10</td>								           					            
+									            <td class="centralizado">
+									            	<a href=""><span class="icone-pencil2 botao texto-amarelo2" title="Editar"></span></a>
+									            	<a href=""><span class="icone-cross botao texto-vermelho2" title="Excluir"></span></a>
+									            </td>
+									        </tr>									       
+									    </tbody>
+									</table>																			
+								</div>
 							</div>
 							<div class="tab-pane" id="tab4">
-								tab4
-							</div>
-							<div class="tab-pane" id="tab5">
-								tab5
-							</div>
+								<div class="borda">
+									<form action="" class="formulario sequencial">
+										<label for="campo-texto-2" class="">
+										    Valor de Custo Refeição: <input type="text" name="custo_refeicao" id="tipo_usuario" />
+										</label>
+										<label for="campo-texto-2" class="">
+										    Valor de Custo Cartão: <input type="text" name="valor_refeicao" id="valor_refeicao" />
+										</label>
+										<input type="submit" value="Salvar" />
+									</form>
+								</div>	
+							</div>							
 						</section>
 					
 					</div>
