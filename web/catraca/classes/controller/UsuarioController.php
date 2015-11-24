@@ -1,6 +1,9 @@
 <?php
 
 
+
+
+
 class UsuarioController{
 	
 	public static function main($nivelDeAcesso){

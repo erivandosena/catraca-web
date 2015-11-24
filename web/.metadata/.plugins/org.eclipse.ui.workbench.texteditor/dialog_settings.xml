@@ -2,12 +2,13 @@
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
 		<item value="false" key="isRegEx"/>
-		<item value="CartaoController" key="selection"/>
+		<item value="view" key="selection"/>
 		<item value="false" key="casesensitive"/>
 		<item value="false" key="incremental"/>
 		<item value="true" key="wrap"/>
 		<item value="false" key="wholeword"/>
 		<list key="findhistory">
+			<item value="view"/>
 			<item value="VinculoController"/>
 			<item value="pagina=vinculo"/>
 			<item value="static"/>
@@ -15,9 +16,10 @@
 			<item value="inser"/>
 			<item value="insert"/>
 			<item value="limit"/>
-			<item value="div"/>
 		</list>
 		<list key="replacehistory">
+			<item value="this-&gt;view"/>
+			<item value="this-&gt;"/>
 			<item value="CartaoController"/>
 			<item value="pagina=cartao"/>
 			<item value="çã"/>
