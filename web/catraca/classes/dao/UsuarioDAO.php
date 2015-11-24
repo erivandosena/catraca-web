@@ -75,9 +75,8 @@ class UsuarioDAO extends DAO {
 
 	public function pesquisaNoSigaa($pesquisa){
 		$lista = array();
-		$pesquisa = preg_replace ('/[^a-zA-Z0-9\s]/', '', $_POST ['nome'] );
+		$pesquisa = preg_replace ('/[^a-zA-Z0-9\s]/', '', $pesquisa );
 		$pesquisa = strtoupper ( $pesquisa );
-		
 		$sql = "SELECT * FROM vw_usuarios_catraca WHERE nome LIKE '%$pesquisa%' LIMIT 30";
 		foreach($this->getConexao()->query($sql) as $linha){
 			$usuario = new Usuario();

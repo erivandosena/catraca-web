@@ -65,37 +65,87 @@ class VinculoDAO extends DAO {
 		}
 		return $lista;
 	}
+	public function retornaVinculosValidosDeCartao(Cartao $cartao){
+		$lista = array();
+		$idCartao = $cartao->getId();
+		$dataTimeAtual = date ( "Y-m-d G:i:s" );
+		$sql =  "SELECT * FROM usuario INNER JOIN vinculo
+		ON vinculo.usua_id = usuario.usua_id
+		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
+		LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id WHERE (cartao.cart_id = $idCartao)
+		AND ('$dataTimeAtual' BETWEEN vinc_inicio AND vinc_fim)";
+		$result = $this->getConexao ()->query ($sql );
 	
+		foreach($result as $linha){
+			$vinculo = new Vinculo();
+			$vinculo->setResponsavel(new Usuario());
+			$vinculo->getResponsavel()->setIdBaseExterna($linha['id_base_externa']);
+			$vinculo->setCartao(new Cartao());
+			$vinculo->getCartao()->setTipo(new Tipo());
+			$vinculo->getCartao()->getTipo()->setNome($linha ['tipo_nome']);
+			$vinculo->getCartao()->setNumero($linha ['cart_numero']);
+			$vinculo->setInicioValidade($linha ['vinc_inicio']);
+			$vinculo->setFinalValidade($linha['vinc_fim']);
+			$lista[] = $vinculo;
+	
+	
+		}
+		return $lista;
+	}
 	public function adicionaVinculo(Vinculo $vinculo) {
 		
 		$usuarioBaseExterna = $vinculo->getResponsavel()->getIdBaseExterna();
 		$numeroCartao = $vinculo->getCartao()->getNumero();
-		$validade = $vinculo->getFinalValidade();
+		$dataDeValidade = $vinculo->getFinalValidade();
 		$tipoCartao = $vinculo->getCartao()->getTipo()->getId();
 		$this->verificarUsuario($vinculo->getResponsavel());
 		echo'User'.$vinculo->getResponsavel()->getId();
 		if(!$vinculo->getResponsavel()->getId())
 			return 0;
+		$idBaseLocal = $vinculo->getResponsavel()->getId();
 		$this->verificaCartao($vinculo->getCartao());
 		if(!$vinculo->getCartao()->getId())
 			return 0;
+		$idCartao = $vinculo->getCartao()->getId();
 		echo 'Card: '.$vinculo->getCartao()->getId();
 		$dataDeHoje = date("Y-m-d H:i:s");
-		if($this->getConexao()->exec("INSERT into vinculo (usua_id, cart_id, vinc_refeicoes, vinc_avulso, vinc_inicio, vinc_fim) VALUES($idBaseLocal, $idCartao, 1,FALSE,'$dataDeHoje', '$dataDeValidade')")){
-			echo 'Vinculo adicionado com sucesso ';
+		if(!$this->getConexao()->exec("INSERT into vinculo (usua_id, cart_id, vinc_refeicoes, vinc_avulso, vinc_inicio, vinc_fim) VALUES($idBaseLocal, $idCartao, 1,FALSE,'$dataDeHoje', '$dataDeValidade')"))
+			return 0;
+		$idVinculo = $this->getConexao()->lastInsertId('vinculo_vinc_id_seq');
+		if(!$this->getConexao()->exec("INSERT into vinculo_tipo (vinc_id, tipo_id) VALUES($idVinculo, $tipoCartao)")){
+			$this->getConexao()->rollBack();
+			return 0;
 		}
+		echo 'Vinculo adicionado com sucesso';
+		return true;
 	}
 	
 	
-	public function adicionarVinculo($idUsuario, $idCartao, $dataValidade){
-		
+
+	/**
+	 * 
+	/**
+	 * Retorna true se o cartão possuir vinculo válido. 
+	 * Retorna false se o cartão não possui um vinculo válido. 
+	 * 
+	 * @param Cartao $cartao
+	 * @return boolean
+	 */
+	public function cartaoTemVinculo(Cartao $cartao){
+		$numero = $cartao->getNumero();
+		$dataTimeAtual = date ( "Y-m-d G:i:s" );
+		$sql =  "SELECT * FROM vinculo
+		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
+		WHERE (cartao.cart_numero = $numero)
+		AND ('$dataTimeAtual' BETWEEN vinc_inicio AND vinc_fim) LIMIT 1";
+		$resultSet = $this->getConexao()->query($sql);
+		foreach($resultSet as $linha){
+			$cartao->setId($linha['cart_id']);
+			return true;
+		}
+		return false;
 	}
-	public function verificarVinculoUsuario($idUsuario){
-		
-	}
-	public function verificarVinculoCartao($idCartao){
-		
-	}
+	
 	
 	
 	/**
