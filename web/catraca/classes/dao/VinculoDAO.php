@@ -66,17 +66,20 @@ class VinculoDAO extends DAO {
 		return $lista;
 	}
 	
-	public function adicionaVinculo($idUsuarioBaseExterna, $numeroCartao, $dataDeValidade, $tipoCartao) {
-		$idBaseLocal = $this->verificarUsuario($idUsuarioBaseExterna);
-		echo'User'.$idBaseLocal;
-		if(!$idBaseLocal)
+	public function adicionaVinculo(Vinculo $vinculo) {
+		
+		$usuarioBaseExterna = $vinculo->getResponsavel()->getIdBaseExterna();
+		$numeroCartao = $vinculo->getCartao()->getNumero();
+		$validade = $vinculo->getFinalValidade();
+		$tipoCartao = $vinculo->getCartao()->getTipo()->getId();
+		$this->verificarUsuario($vinculo->getResponsavel());
+		echo'User'.$vinculo->getResponsavel()->getId();
+		if(!$vinculo->getResponsavel()->getId())
 			return 0;
-		$numeroCartao = intval ( $numeroCartao);
-		$tipoCartao = intval($tipoCartao);
-		$idCartao = $this->verificaCartao($numeroCartao, $tipoCartao);
-		if(!$idCartao)
+		$this->verificaCartao($vinculo->getCartao());
+		if(!$vinculo->getCartao()->getId())
 			return 0;
-		echo 'Card: '.$idCartao;
+		echo 'Card: '.$vinculo->getCartao()->getId();
 		$dataDeHoje = date("Y-m-d H:i:s");
 		if($this->getConexao()->exec("INSERT into vinculo (usua_id, cart_id, vinc_refeicoes, vinc_avulso, vinc_inicio, vinc_fim) VALUES($idBaseLocal, $idCartao, 1,FALSE,'$dataDeHoje', '$dataDeValidade')")){
 			echo 'Vinculo adicionado com sucesso ';
@@ -104,19 +107,23 @@ class VinculoDAO extends DAO {
 	 * @param int $numeroCartao
 	 * @param int $idTipo
 	 */
-	public function verificaCartao($numeroCartao, $idTipo){
-		$numeroCartao = intval($numeroCartao);
-		$idTipo = intval($idTipo);
+	public function verificaCartao(Cartao $cartao){
+		$numeroCartao = $cartao->getNumero();
+		$idTipo = $cartao->getTipo()->getId();
 		
 		$result = $this->getConexao()->query("SELECT * FROM cartao WHERE cart_numero = $numeroCartao");
 		foreach($result as $linha){
-			if($linha['tipo_id'] != $idTipo)
+			if($linha['tipo_id'] != $idTipo){
 				if(!$this->getConexao()->exec("UPDATE cartao set tipo_id = $idTipo WHERE cart_numero = $numeroCartao"))
 					return false;
+			}
+			$cartao->getTipo()->setId($linha['tipo_id']);
+			$cartao->setId($linha['cart_id']);
 			return $linha['cart_id'];
 		}
 		if($this->getConexao()->query("INSERT INTO cartao(cart_numero, cart_creditos, tipo_id) VALUES($numeroCartao, 0, $idTipo)")){
 			foreach($this->getConexao()->query("SELECT * FROM cartao WHERE cart_numero = $numeroCartao") as $otraLinha){
+				$cartao->setId($otraLinha['cart_id']);
 				return $otraLinha['cart_id'];
 			}
 		}
@@ -125,23 +132,25 @@ class VinculoDAO extends DAO {
 		
 	}
 	/**
-	 * 
+	 * Vamos pegar da base exter a ecopiar para a base local.
+	 * Se Nem existir na base externa, � o usuario frescando. Preciso dar nem resposta pra ele. Aborto tudo logo.
+	 * Fa�amos um insert aqui.
+	 * Apos esse insert iremos pegar o id inserido na base e retornalo. 
 	 * @param int $idBaseExterna
 	 * @return int
 	 */
-	public function verificarUsuario($idBaseExterna){
-		$idBaseExterna = intval ( $idBaseExterna );
+	public function verificarUsuario(Usuario $usuario){
+		
+		$idBaseExterna = $usuario->getIdBaseExterna();
+		
 		$result = $this->getConexao()->query("SELECT id_base_externa, usua_id FROM usuario WHERE id_base_externa = $idBaseExterna");
 		foreach ($result as $linha){
+			$usuario->setId($linha['usua_id']);
 			return $linha['usua_id'];
 		}
-		//Vamos pegar da base exter a ecopiar para a base local. 
-		//Se Nem existir na base externa, � o usuario frescando. Preciso dar nem resposta pra ele. Aborto tudo logo.
 		$daoSistemasComum = new DAO(null, DAO::TIPO_PG_SISTEMAS_COMUM);
 		$result2 = 	$daoSistemasComum->getConexao()->query("SELECT * FROM vw_usuarios_autenticacao_catraca WHERE id_usuario = $idBaseExterna");
 		foreach($result2 as $linha){
-			//Fa�amos um insert aqui. 
-			//Apos esse insert iremos pegar o id inserido na base e retornalo. 
 			$nivel = Sessao::NIVEL_COMUM;
 			$nome = $linha['nome'];
 			$email = $linha['email'];
@@ -152,9 +161,9 @@ class VinculoDAO extends DAO {
 					VALUES	('$login', '$senha', '$nome','$email', $nivel, $idBaseExterna)"))
 			{
 				foreach($this->getConexao()->query("SELECT * FROM usuario WHERE id_base_externa = $idBaseExterna") as $linha3){
+					$usuario->setId($linha3['usua_id']);
 					return $linha3['usua_id'];
 				}
-				
 			}
 		}
 		return 0;	

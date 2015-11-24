@@ -18,7 +18,7 @@ class TurnoController{
 	
 	}
 	/**
-	 * @var DAO
+	 * @var TurnoDAO
 	 */
 	private $dao;
 	

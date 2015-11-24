@@ -6,6 +6,9 @@ class Cartao{
 	private $creditos;
 	private $tipo;
 	
+	public function Cartao(){
+		$this->tipo = new Tipo();
+	}
 	
 	public function setId($id){
 		$this->id = $id;

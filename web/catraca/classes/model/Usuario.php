@@ -11,7 +11,9 @@ class Usuario{
 	private $senha;
 	private $nivelAcesso;
 	
-	
+	public function Usuario(){
+		$this->id = 0;
+	}
 	
 	
 	

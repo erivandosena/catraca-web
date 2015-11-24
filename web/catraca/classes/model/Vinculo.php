@@ -14,6 +14,11 @@ class Vinculo{
 	private $descricao;
 	private $cartao;	
 
+	public function Vinculo(){
+		$this->responsavel = new Usuario();
+		$this->cartao= new Cartao();
+		
+	}
 	
 	public function setInicioValidade($inicioValidade){
 		$this->inicioValidade = $inicioValidade;
