@@ -59,9 +59,10 @@ foreach($result as $linha){
 	foreach ($resultDasColunas as $linhaDasColunas){
 		echo $linhaDasColunas['column'].' | '.$linhaDasColunas['datatype'].'<br>';
 	}
+	$n = 10;
 	
-	echo '<br>5 primeiros dados<br>';
-	$sqlPrimeirosDados = "SELECT * FROM $nomeDaTabela LIMIT 5";
+	echo '<br>'.$n.' primeiros dados<br>';
+	$sqlPrimeirosDados = "SELECT * FROM $nomeDaTabela LIMIT $n";
 	$resultPrimeirosDados = $dao->getConexao()->query($sqlPrimeirosDados);
 	$i = 0;
 	echo '<table border=1>';
@@ -80,7 +81,7 @@ foreach($result as $linha){
 		echo '<tr>';
 		foreach ($linhaPrimeirosDados as $chave => $valor){
 			if(!is_int($chave))
-				echo '<th>'.$valor.'</th>';
+				echo '<td>'.$valor.'</td>';
 		}
 		echo '</tr>';
 		

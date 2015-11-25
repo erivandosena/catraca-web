@@ -91,17 +91,6 @@ class CartaoView {
 		}
 		echo '</tbody></table>';
 	}
-	public function mostraLinhaDaBuscaCartao(Cartao $cartao) {
-		echo '<tr>';
-		echo '<td>' . $cartao->getId() . '</a></td>';
-		echo '<td>' . $cartao->getNumero(). '</td>';
-		echo '<td>' . $cartao->getCreditos() . '</td>';
-		echo '<td>' . $cartao->getTipo()->getNome() . '</td>';
-		echo '<td></td>';
-		echo '<td></td>';
-		echo '<td class="centralizado"><a href="?pagina=cartao&cartaoselecionado=' . $cartao->getId() . '"><span class="icone-checkmark texto-verde2 botao" title="Selecionar"></span></a></td>';
-		echo '</tr>';
-	}
 	public function mostraLinhaDaBusca(Usuario $usuario) {
 		echo '<tr>';
 		echo '<td>' . $usuario->getNome () . '</a></td>';
@@ -113,6 +102,18 @@ class CartaoView {
 		echo '<td class="centralizado"><a href="?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna () . '"><span class="icone-checkmark texto-verde2 botao" title="Selecionar"></span></a></td>';
 		echo '</tr>';
 	}
+	public function mostraLinhaDaBuscaCartao(Cartao $cartao) {
+		echo '<tr>';
+		echo '<td>' . $cartao->getId() . '</a></td>';
+		echo '<td>' . $cartao->getNumero(). '</td>';
+		echo '<td>' . $cartao->getCreditos() . '</td>';
+		echo '<td>' . $cartao->getTipo()->getNome() . '</td>';
+		echo '<td></td>';
+		echo '<td></td>';
+		echo '<td class="centralizado"><a href="?pagina=cartao&cartaoselecionado=' . $cartao->getId() . '"><span class="icone-checkmark texto-verde2 botao" title="Selecionar"></span></a></td>';
+		echo '</tr>';
+	}
+
 	public function mostraSelecionado(Usuario $usuario) {
 		echo '<div class="borda">
 				Nome: ' . $usuario->getNome () . '
