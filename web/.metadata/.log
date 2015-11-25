@@ -227,7 +227,7 @@ Binding(CTRL+SHIFT+H,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.php.ui.phpEditorScope,,,system)
-!SESSION 2015-11-13 09:52:25.996 -----------------------------------------------
+!SESSION 2015-11-25 10:20:32.532 -----------------------------------------------
 eclipse.buildId=4.4.1.M20140925-0400
 java.version=1.8.0_31
 java.vendor=Oracle Corporation
@@ -235,7 +235,7 @@ BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=pt_BR
 Framework arguments:  -product org.eclipse.epp.package.php.product
 Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.php.product
 
-!ENTRY org.eclipse.egit.ui 2 0 2015-11-13 09:52:45.603
+!ENTRY org.eclipse.egit.ui 2 0 2015-11-25 10:21:01.721
 !MESSAGE Warning: EGit couldn't detect the installation path "gitPrefix" of native Git. Hence EGit can't respect system level
 Git settings which might be configured in ${gitPrefix}/etc/gitconfig under the native Git installation directory.
 The most important of these settings is core.autocrlf. Git for Windows by default sets this parameter to true in
@@ -243,84 +243,22 @@ this system level configuration. The Git installation location can be configured
 Team > Git > Configuration preference page's 'System Settings' tab.
 This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
 
-!ENTRY org.eclipse.egit.ui 2 0 2015-11-13 09:52:45.636
+!ENTRY org.eclipse.egit.ui 2 0 2015-11-25 10:21:01.725
 !MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
 user global configuration and to define the default location to store repositories: 'C:\Users\dtiusr'. If this is
 not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
 EGit might behave differently since they see different configuration options.
 This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
 
-!ENTRY org.eclipse.jface 2 0 2015-11-13 11:01:26.882
+!ENTRY org.eclipse.jface 2 0 2015-11-25 10:21:42.068
 !MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-13 11:01:26.882
-!MESSAGE A conflict occurred for CTRL+N:
-Binding(CTRL+N,
-	ParameterizedCommand(Command(org.eclipse.php.ui.newWizard,New,
-		Open the New item wizard,
-		Category(org.eclipse.ui.category.file,File,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@52d1600c,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+N,
-	ParameterizedCommand(Command(org.eclipse.php.ui.newWizard,New,
-		Open the New item wizard,
-		Category(org.eclipse.ui.category.file,File,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@52d1600c,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(CTRL+N,
-	ParameterizedCommand(Command(org.eclipse.ui.newWizard,New,
-		Open the New item wizard,
-		Category(org.eclipse.ui.category.file,File,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5c5c7cc4,
-		[Lorg.eclipse.e4.ui.internal.workbench.Parameter;@6c27e700,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.ui.contexts.window,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-13 11:01:26.882
-!MESSAGE A conflict occurred for CTRL+SHIFT+T:
-Binding(CTRL+SHIFT+T,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type,Open Type,
-		Opens a type in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5bdd3b29,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+SHIFT+T,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type,Open Type,
-		Opens a type in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5bdd3b29,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-13 11:01:26.882
-!MESSAGE A conflict occurred for F4:
-Binding(F4,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.type.hierarchy,Open Type Hierarchy,
-		Opens a type hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@1878a144,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(F4,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.type.hierarchy,Open Type Hierarchy,
-		Opens a type hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@1878a144,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-13 11:01:26.882
+!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-25 10:21:42.068
 !MESSAGE A conflict occurred for ALT+SHIFT+R:
 Binding(ALT+SHIFT+R,
 	ParameterizedCommand(Command(org.eclipse.dltk.ui.edit.text.script.rename.element,Rename - Refactoring ,
 		Rename the selected element,
 		Category(org.eclipse.dltk.ui.category.refactoring,Refactor - DLTK,DLTK Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5690126f,
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@e14559e,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.dltk.ui.context.views,,,system)
@@ -328,17 +266,89 @@ Binding(ALT+SHIFT+R,
 	ParameterizedCommand(Command(org.eclipse.dltk.ui.edit.text.script.rename.element,Rename - Refactoring ,
 		Rename the selected element,
 		Category(org.eclipse.dltk.ui.category.refactoring,Refactor - DLTK,DLTK Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5690126f,
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@e14559e,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-13 11:01:26.882
+!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-25 10:21:42.068
+!MESSAGE A conflict occurred for F4:
+Binding(F4,
+	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.type.hierarchy,Open Type Hierarchy,
+		Opens a type hierarchy for the selected element,
+		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@7a0eb939,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.dltk.ui.context.views,,,system)
+Binding(F4,
+	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.type.hierarchy,Open Type Hierarchy,
+		Opens a type hierarchy for the selected element,
+		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@7a0eb939,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.php.ui.phpEditorScope,,,system)
+!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-25 10:21:42.068
+!MESSAGE A conflict occurred for ALT+SHIFT+V:
+Binding(ALT+SHIFT+V,
+	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.move.element,Move - Refactoring ,
+		Moves the selected element to a new location,
+		Category(org.eclipse.php.ui.category.refactoring,Refactor - PHP,PHP Refactoring Actions,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@54a7d1b9,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.dltk.ui.context.views,,,system)
+Binding(ALT+SHIFT+V,
+	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.move.element,Move - Refactoring ,
+		Moves the selected element to a new location,
+		Category(org.eclipse.php.ui.category.refactoring,Refactor - PHP,PHP Refactoring Actions,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@54a7d1b9,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.php.ui.phpEditorScope,,,system)
+!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-25 10:21:42.068
+!MESSAGE A conflict occurred for CTRL+SHIFT+T:
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type,Open Type,
+		Opens a type in a PHP editor,
+		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@209f0986,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.php.ui.phpEditorScope,,,system)
+Binding(CTRL+SHIFT+T,
+	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type,Open Type,
+		Opens a type in a PHP editor,
+		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@209f0986,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.dltk.ui.context.views,,,system)
+!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-25 10:21:42.068
+!MESSAGE A conflict occurred for CTRL+SHIFT+M:
+Binding(CTRL+SHIFT+M,
+	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.method,Opens a method in a PHP editor,
+		Opens a method in a PHP editor,
+		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@c0b10ae,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.php.ui.phpEditorScope,,,system)
+Binding(CTRL+SHIFT+M,
+	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.method,Opens a method in a PHP editor,
+		Opens a method in a PHP editor,
+		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@c0b10ae,
+		,,true),null),
+	org.eclipse.ui.defaultAcceleratorConfiguration,
+	org.eclipse.dltk.ui.context.views,,,system)
+!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-25 10:21:42.068
 !MESSAGE A conflict occurred for F3:
 Binding(F3,
 	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.open.editor,Open Selection,
 		Opens an editor with the selected element,
 		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@f98d9b1,
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@3c3a767,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.php.ui.phpEditorScope,,,system)
@@ -346,7 +356,7 @@ Binding(F3,
 	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.open.editor,Open Selection,
 		Opens an editor with the selected element,
 		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@f98d9b1,
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@3c3a767,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.dltk.ui.context.views,,,system)
@@ -354,140 +364,17 @@ Binding(F3,
 	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.open.file.from.source,Open Selection,
 		Open an editor on the selected link,
 		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@3daeaf18,
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@698394bf,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.wst.sse.ui.structuredTextEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-13 11:01:26.882
-!MESSAGE A conflict occurred for ALT+SHIFT+V:
-Binding(ALT+SHIFT+V,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.move.element,Move - Refactoring ,
-		Moves the selected element to a new location,
-		Category(org.eclipse.php.ui.category.refactoring,Refactor - PHP,PHP Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@60015b68,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(ALT+SHIFT+V,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.move.element,Move - Refactoring ,
-		Moves the selected element to a new location,
-		Category(org.eclipse.php.ui.category.refactoring,Refactor - PHP,PHP Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@60015b68,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-13 11:01:26.882
-!MESSAGE A conflict occurred for CTRL+SHIFT+M:
-Binding(CTRL+SHIFT+M,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.method,Opens a method in a PHP editor,
-		Opens a method in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@36542e6d,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+SHIFT+M,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.method,Opens a method in a PHP editor,
-		Opens a method in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@36542e6d,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-13 11:01:26.882
-!MESSAGE A conflict occurred for CTRL+SHIFT+F:
-Binding(CTRL+SHIFT+F,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.format.document,Format,
-		Format selection,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@578b2dec,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+SHIFT+F,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.format.document,Format,
-		Format selection,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@578b2dec,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(CTRL+SHIFT+F,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.format.document,Format,
-		Format selection,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@578b2dec,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.wst.sse.ui.structuredTextEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-13 11:01:26.882
-!MESSAGE A conflict occurred for ALT+CTRL+H:
-Binding(ALT+CTRL+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.call.hierarchy,Open Call Hierarchy,
-		Opens a call hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@7fc83c47,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(ALT+CTRL+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.call.hierarchy,Open Call Hierarchy,
-		Opens a call hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@7fc83c47,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-13 11:01:26.882
-!MESSAGE A conflict occurred for CTRL+SHIFT+H:
-Binding(CTRL+SHIFT+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type.in.hierarchy,Open Type in Hierarchy,
-		Opens a type in the type hierarchy view,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@37568ac9,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(CTRL+SHIFT+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type.in.hierarchy,Open Type in Hierarchy,
-		Opens a type in the type hierarchy view,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@37568ac9,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SESSION 2015-11-16 15:23:23.945 -----------------------------------------------
-eclipse.buildId=4.4.1.M20140925-0400
-java.version=1.8.0_31
-java.vendor=Oracle Corporation
-BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=pt_BR
-Framework arguments:  -product org.eclipse.epp.package.php.product -product org.eclipse.epp.package.php.product
-Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.php.product -data C:\projetos\catraca2\web -product org.eclipse.epp.package.php.product
-
-!ENTRY org.eclipse.egit.ui 2 0 2015-11-16 15:23:29.886
-!MESSAGE Warning: EGit couldn't detect the installation path "gitPrefix" of native Git. Hence EGit can't respect system level
-Git settings which might be configured in ${gitPrefix}/etc/gitconfig under the native Git installation directory.
-The most important of these settings is core.autocrlf. Git for Windows by default sets this parameter to true in
-this system level configuration. The Git installation location can be configured on the
-Team > Git > Configuration preference page's 'System Settings' tab.
-This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
-
-!ENTRY org.eclipse.egit.ui 2 0 2015-11-16 15:23:29.936
-!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
-user global configuration and to define the default location to store repositories: 'C:\Users\dtiusr'. If this is
-not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
-EGit might behave differently since they see different configuration options.
-This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
-
-!ENTRY org.eclipse.jface 2 0 2015-11-16 15:30:11.272
-!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-16 15:30:11.272
+!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-25 10:21:42.068
 !MESSAGE A conflict occurred for CTRL+N:
 Binding(CTRL+N,
 	ParameterizedCommand(Command(org.eclipse.php.ui.newWizard,New,
 		Open the New item wizard,
 		Category(org.eclipse.ui.category.file,File,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@557f0a39,
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@31887330,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.php.ui.phpEditorScope,,,system)
@@ -495,7 +382,7 @@ Binding(CTRL+N,
 	ParameterizedCommand(Command(org.eclipse.php.ui.newWizard,New,
 		Open the New item wizard,
 		Category(org.eclipse.ui.category.file,File,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@557f0a39,
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@31887330,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.dltk.ui.context.views,,,system)
@@ -503,133 +390,17 @@ Binding(CTRL+N,
 	ParameterizedCommand(Command(org.eclipse.ui.newWizard,New,
 		Open the New item wizard,
 		Category(org.eclipse.ui.category.file,File,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@69ba3f4e,
-		[Lorg.eclipse.e4.ui.internal.workbench.Parameter;@579846cc,,true),null),
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@30c01c37,
+		[Lorg.eclipse.e4.ui.internal.workbench.Parameter;@39a7eca5,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.ui.contexts.window,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-16 15:30:11.272
-!MESSAGE A conflict occurred for ALT+SHIFT+V:
-Binding(ALT+SHIFT+V,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.move.element,Move - Refactoring ,
-		Moves the selected element to a new location,
-		Category(org.eclipse.php.ui.category.refactoring,Refactor - PHP,PHP Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@50508ed3,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(ALT+SHIFT+V,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.move.element,Move - Refactoring ,
-		Moves the selected element to a new location,
-		Category(org.eclipse.php.ui.category.refactoring,Refactor - PHP,PHP Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@50508ed3,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-16 15:30:11.273
-!MESSAGE A conflict occurred for F4:
-Binding(F4,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.type.hierarchy,Open Type Hierarchy,
-		Opens a type hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@d319d2c,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(F4,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.type.hierarchy,Open Type Hierarchy,
-		Opens a type hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@d319d2c,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-16 15:30:11.273
-!MESSAGE A conflict occurred for CTRL+SHIFT+T:
-Binding(CTRL+SHIFT+T,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type,Open Type,
-		Opens a type in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@23acd55e,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+SHIFT+T,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type,Open Type,
-		Opens a type in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@23acd55e,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-16 15:30:11.273
-!MESSAGE A conflict occurred for ALT+SHIFT+R:
-Binding(ALT+SHIFT+R,
-	ParameterizedCommand(Command(org.eclipse.dltk.ui.edit.text.script.rename.element,Rename - Refactoring ,
-		Rename the selected element,
-		Category(org.eclipse.dltk.ui.category.refactoring,Refactor - DLTK,DLTK Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@eaf3dd0,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(ALT+SHIFT+R,
-	ParameterizedCommand(Command(org.eclipse.dltk.ui.edit.text.script.rename.element,Rename - Refactoring ,
-		Rename the selected element,
-		Category(org.eclipse.dltk.ui.category.refactoring,Refactor - DLTK,DLTK Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@eaf3dd0,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-16 15:30:11.273
-!MESSAGE A conflict occurred for F3:
-Binding(F3,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.open.editor,Open Selection,
-		Opens an editor with the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5add0cc0,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(F3,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.open.editor,Open Selection,
-		Opens an editor with the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5add0cc0,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(F3,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.open.file.from.source,Open Selection,
-		Open an editor on the selected link,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5b04224a,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.wst.sse.ui.structuredTextEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-16 15:30:11.273
-!MESSAGE A conflict occurred for CTRL+SHIFT+M:
-Binding(CTRL+SHIFT+M,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.method,Opens a method in a PHP editor,
-		Opens a method in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@1e470a51,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+SHIFT+M,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.method,Opens a method in a PHP editor,
-		Opens a method in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@1e470a51,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-16 15:30:11.273
+!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-25 10:21:42.068
 !MESSAGE A conflict occurred for CTRL+SHIFT+F:
 Binding(CTRL+SHIFT+F,
 	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.format.document,Format,
 		Format selection,
 		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@4c8d45cf,
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@210c1b9d,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.php.ui.phpEditorScope,,,system)
@@ -637,7 +408,7 @@ Binding(CTRL+SHIFT+F,
 	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.format.document,Format,
 		Format selection,
 		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@4c8d45cf,
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@210c1b9d,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.dltk.ui.context.views,,,system)
@@ -645,17 +416,17 @@ Binding(CTRL+SHIFT+F,
 	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.format.document,Format,
 		Format selection,
 		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@4c8d45cf,
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@210c1b9d,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.wst.sse.ui.structuredTextEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-16 15:30:11.273
+!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-25 10:21:42.068
 !MESSAGE A conflict occurred for ALT+CTRL+H:
 Binding(ALT+CTRL+H,
 	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.call.hierarchy,Open Call Hierarchy,
 		Opens a call hierarchy for the selected element,
 		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@6971f5f4,
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@65528bcf,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.dltk.ui.context.views,,,system)
@@ -663,17 +434,17 @@ Binding(ALT+CTRL+H,
 	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.call.hierarchy,Open Call Hierarchy,
 		Opens a call hierarchy for the selected element,
 		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@6971f5f4,
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@65528bcf,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-16 15:30:11.273
+!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-25 10:21:42.068
 !MESSAGE A conflict occurred for CTRL+SHIFT+H:
 Binding(CTRL+SHIFT+H,
 	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type.in.hierarchy,Open Type in Hierarchy,
 		Opens a type in the type hierarchy view,
 		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5b784f16,
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@7bb4f09d,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.dltk.ui.context.views,,,system)
@@ -681,1644 +452,13 @@ Binding(CTRL+SHIFT+H,
 	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type.in.hierarchy,Open Type in Hierarchy,
 		Opens a type in the type hierarchy view,
 		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5b784f16,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SESSION 2015-11-16 17:24:13.965 -----------------------------------------------
-eclipse.buildId=4.4.1.M20140925-0400
-java.version=1.8.0_31
-java.vendor=Oracle Corporation
-BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=pt_BR
-Framework arguments:  -product org.eclipse.epp.package.php.product
-Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.php.product
-
-!ENTRY org.eclipse.egit.ui 2 0 2015-11-16 17:24:23.264
-!MESSAGE Warning: EGit couldn't detect the installation path "gitPrefix" of native Git. Hence EGit can't respect system level
-Git settings which might be configured in ${gitPrefix}/etc/gitconfig under the native Git installation directory.
-The most important of these settings is core.autocrlf. Git for Windows by default sets this parameter to true in
-this system level configuration. The Git installation location can be configured on the
-Team > Git > Configuration preference page's 'System Settings' tab.
-This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
-
-!ENTRY org.eclipse.egit.ui 2 0 2015-11-16 17:24:23.283
-!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
-user global configuration and to define the default location to store repositories: 'C:\Users\dtiusr'. If this is
-not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
-EGit might behave differently since they see different configuration options.
-This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
-
-!ENTRY org.eclipse.jface 2 0 2015-11-16 17:25:04.864
-!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-16 17:25:04.864
-!MESSAGE A conflict occurred for CTRL+SHIFT+T:
-Binding(CTRL+SHIFT+T,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type,Open Type,
-		Opens a type in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5bb661e0,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+SHIFT+T,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type,Open Type,
-		Opens a type in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5bb661e0,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-16 17:25:04.865
-!MESSAGE A conflict occurred for ALT+SHIFT+R:
-Binding(ALT+SHIFT+R,
-	ParameterizedCommand(Command(org.eclipse.dltk.ui.edit.text.script.rename.element,Rename - Refactoring ,
-		Rename the selected element,
-		Category(org.eclipse.dltk.ui.category.refactoring,Refactor - DLTK,DLTK Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@18fcfe7e,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(ALT+SHIFT+R,
-	ParameterizedCommand(Command(org.eclipse.dltk.ui.edit.text.script.rename.element,Rename - Refactoring ,
-		Rename the selected element,
-		Category(org.eclipse.dltk.ui.category.refactoring,Refactor - DLTK,DLTK Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@18fcfe7e,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-16 17:25:04.865
-!MESSAGE A conflict occurred for CTRL+N:
-Binding(CTRL+N,
-	ParameterizedCommand(Command(org.eclipse.php.ui.newWizard,New,
-		Open the New item wizard,
-		Category(org.eclipse.ui.category.file,File,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@1ed0128b,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+N,
-	ParameterizedCommand(Command(org.eclipse.php.ui.newWizard,New,
-		Open the New item wizard,
-		Category(org.eclipse.ui.category.file,File,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@1ed0128b,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(CTRL+N,
-	ParameterizedCommand(Command(org.eclipse.ui.newWizard,New,
-		Open the New item wizard,
-		Category(org.eclipse.ui.category.file,File,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@4948daec,
-		[Lorg.eclipse.e4.ui.internal.workbench.Parameter;@502c2278,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.ui.contexts.window,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-16 17:25:04.865
-!MESSAGE A conflict occurred for F3:
-Binding(F3,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.open.editor,Open Selection,
-		Opens an editor with the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5319e4fc,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(F3,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.open.editor,Open Selection,
-		Opens an editor with the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5319e4fc,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(F3,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.open.file.from.source,Open Selection,
-		Open an editor on the selected link,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@3b48361e,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.wst.sse.ui.structuredTextEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-16 17:25:04.865
-!MESSAGE A conflict occurred for ALT+SHIFT+V:
-Binding(ALT+SHIFT+V,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.move.element,Move - Refactoring ,
-		Moves the selected element to a new location,
-		Category(org.eclipse.php.ui.category.refactoring,Refactor - PHP,PHP Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@44b82007,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(ALT+SHIFT+V,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.move.element,Move - Refactoring ,
-		Moves the selected element to a new location,
-		Category(org.eclipse.php.ui.category.refactoring,Refactor - PHP,PHP Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@44b82007,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-16 17:25:04.865
-!MESSAGE A conflict occurred for CTRL+SHIFT+M:
-Binding(CTRL+SHIFT+M,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.method,Opens a method in a PHP editor,
-		Opens a method in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5ae22651,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+SHIFT+M,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.method,Opens a method in a PHP editor,
-		Opens a method in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5ae22651,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-16 17:25:04.865
-!MESSAGE A conflict occurred for F4:
-Binding(F4,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.type.hierarchy,Open Type Hierarchy,
-		Opens a type hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@464017f5,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(F4,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.type.hierarchy,Open Type Hierarchy,
-		Opens a type hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@464017f5,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-16 17:25:04.865
-!MESSAGE A conflict occurred for CTRL+SHIFT+F:
-Binding(CTRL+SHIFT+F,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.format.document,Format,
-		Format selection,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@36e3321e,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+SHIFT+F,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.format.document,Format,
-		Format selection,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@36e3321e,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(CTRL+SHIFT+F,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.format.document,Format,
-		Format selection,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@36e3321e,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.wst.sse.ui.structuredTextEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-16 17:25:04.868
-!MESSAGE A conflict occurred for ALT+CTRL+H:
-Binding(ALT+CTRL+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.call.hierarchy,Open Call Hierarchy,
-		Opens a call hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@3c4231e5,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(ALT+CTRL+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.call.hierarchy,Open Call Hierarchy,
-		Opens a call hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@3c4231e5,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-16 17:25:04.868
-!MESSAGE A conflict occurred for CTRL+SHIFT+H:
-Binding(CTRL+SHIFT+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type.in.hierarchy,Open Type in Hierarchy,
-		Opens a type in the type hierarchy view,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@397f9672,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(CTRL+SHIFT+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type.in.hierarchy,Open Type in Hierarchy,
-		Opens a type in the type hierarchy view,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@397f9672,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SESSION 2015-11-17 19:31:38.811 -----------------------------------------------
-eclipse.buildId=4.4.1.M20140925-0400
-java.version=1.8.0_31
-java.vendor=Oracle Corporation
-BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=pt_BR
-Framework arguments:  -product org.eclipse.epp.package.php.product
-Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.php.product
-
-!ENTRY org.eclipse.egit.ui 2 0 2015-11-17 19:31:51.879
-!MESSAGE Warning: EGit couldn't detect the installation path "gitPrefix" of native Git. Hence EGit can't respect system level
-Git settings which might be configured in ${gitPrefix}/etc/gitconfig under the native Git installation directory.
-The most important of these settings is core.autocrlf. Git for Windows by default sets this parameter to true in
-this system level configuration. The Git installation location can be configured on the
-Team > Git > Configuration preference page's 'System Settings' tab.
-This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
-
-!ENTRY org.eclipse.egit.ui 2 0 2015-11-17 19:31:51.948
-!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
-user global configuration and to define the default location to store repositories: 'C:\Users\dtiusr'. If this is
-not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
-EGit might behave differently since they see different configuration options.
-This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
-
-!ENTRY org.eclipse.jface 2 0 2015-11-17 22:37:53.549
-!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-17 22:37:53.549
-!MESSAGE A conflict occurred for CTRL+N:
-Binding(CTRL+N,
-	ParameterizedCommand(Command(org.eclipse.php.ui.newWizard,New,
-		Open the New item wizard,
-		Category(org.eclipse.ui.category.file,File,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@60566cc2,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+N,
-	ParameterizedCommand(Command(org.eclipse.php.ui.newWizard,New,
-		Open the New item wizard,
-		Category(org.eclipse.ui.category.file,File,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@60566cc2,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(CTRL+N,
-	ParameterizedCommand(Command(org.eclipse.ui.newWizard,New,
-		Open the New item wizard,
-		Category(org.eclipse.ui.category.file,File,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@6903ed0e,
-		[Lorg.eclipse.e4.ui.internal.workbench.Parameter;@e154848,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.ui.contexts.window,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-17 22:37:53.549
-!MESSAGE A conflict occurred for CTRL+SHIFT+M:
-Binding(CTRL+SHIFT+M,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.method,Opens a method in a PHP editor,
-		Opens a method in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@7559188a,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+SHIFT+M,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.method,Opens a method in a PHP editor,
-		Opens a method in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@7559188a,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-17 22:37:53.549
-!MESSAGE A conflict occurred for F4:
-Binding(F4,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.type.hierarchy,Open Type Hierarchy,
-		Opens a type hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@75c58ea5,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(F4,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.type.hierarchy,Open Type Hierarchy,
-		Opens a type hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@75c58ea5,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-17 22:37:53.549
-!MESSAGE A conflict occurred for F3:
-Binding(F3,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.open.editor,Open Selection,
-		Opens an editor with the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@59bc2190,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(F3,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.open.editor,Open Selection,
-		Opens an editor with the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@59bc2190,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(F3,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.open.file.from.source,Open Selection,
-		Open an editor on the selected link,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@adf6619,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.wst.sse.ui.structuredTextEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-17 22:37:53.549
-!MESSAGE A conflict occurred for CTRL+SHIFT+T:
-Binding(CTRL+SHIFT+T,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type,Open Type,
-		Opens a type in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@37ffb280,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+SHIFT+T,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type,Open Type,
-		Opens a type in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@37ffb280,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-17 22:37:53.549
-!MESSAGE A conflict occurred for ALT+SHIFT+R:
-Binding(ALT+SHIFT+R,
-	ParameterizedCommand(Command(org.eclipse.dltk.ui.edit.text.script.rename.element,Rename - Refactoring ,
-		Rename the selected element,
-		Category(org.eclipse.dltk.ui.category.refactoring,Refactor - DLTK,DLTK Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@6e16b27c,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(ALT+SHIFT+R,
-	ParameterizedCommand(Command(org.eclipse.dltk.ui.edit.text.script.rename.element,Rename - Refactoring ,
-		Rename the selected element,
-		Category(org.eclipse.dltk.ui.category.refactoring,Refactor - DLTK,DLTK Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@6e16b27c,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-17 22:37:53.549
-!MESSAGE A conflict occurred for ALT+SHIFT+V:
-Binding(ALT+SHIFT+V,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.move.element,Move - Refactoring ,
-		Moves the selected element to a new location,
-		Category(org.eclipse.php.ui.category.refactoring,Refactor - PHP,PHP Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@561ebe8f,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(ALT+SHIFT+V,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.move.element,Move - Refactoring ,
-		Moves the selected element to a new location,
-		Category(org.eclipse.php.ui.category.refactoring,Refactor - PHP,PHP Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@561ebe8f,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-17 22:37:53.549
-!MESSAGE A conflict occurred for CTRL+SHIFT+F:
-Binding(CTRL+SHIFT+F,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.format.document,Format,
-		Format selection,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@75a9cc24,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+SHIFT+F,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.format.document,Format,
-		Format selection,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@75a9cc24,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(CTRL+SHIFT+F,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.format.document,Format,
-		Format selection,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@75a9cc24,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.wst.sse.ui.structuredTextEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-17 22:37:53.549
-!MESSAGE A conflict occurred for ALT+CTRL+H:
-Binding(ALT+CTRL+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.call.hierarchy,Open Call Hierarchy,
-		Opens a call hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@2700f5fb,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(ALT+CTRL+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.call.hierarchy,Open Call Hierarchy,
-		Opens a call hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@2700f5fb,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-17 22:37:53.549
-!MESSAGE A conflict occurred for CTRL+SHIFT+H:
-Binding(CTRL+SHIFT+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type.in.hierarchy,Open Type in Hierarchy,
-		Opens a type in the type hierarchy view,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@6d213829,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(CTRL+SHIFT+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type.in.hierarchy,Open Type in Hierarchy,
-		Opens a type in the type hierarchy view,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@6d213829,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SESSION 2015-11-18 10:31:25.223 -----------------------------------------------
-eclipse.buildId=4.4.1.M20140925-0400
-java.version=1.8.0_31
-java.vendor=Oracle Corporation
-BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=pt_BR
-Framework arguments:  -product org.eclipse.epp.package.php.product
-Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.php.product
-
-!ENTRY org.eclipse.egit.ui 2 0 2015-11-18 10:32:03.924
-!MESSAGE Warning: EGit couldn't detect the installation path "gitPrefix" of native Git. Hence EGit can't respect system level
-Git settings which might be configured in ${gitPrefix}/etc/gitconfig under the native Git installation directory.
-The most important of these settings is core.autocrlf. Git for Windows by default sets this parameter to true in
-this system level configuration. The Git installation location can be configured on the
-Team > Git > Configuration preference page's 'System Settings' tab.
-This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
-
-!ENTRY org.eclipse.egit.ui 2 0 2015-11-18 10:32:04.004
-!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
-user global configuration and to define the default location to store repositories: 'C:\Users\dtiusr'. If this is
-not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
-EGit might behave differently since they see different configuration options.
-This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
-
-!ENTRY org.eclipse.jface 2 0 2015-11-18 10:33:19.764
-!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 10:33:19.764
-!MESSAGE A conflict occurred for F3:
-Binding(F3,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.open.editor,Open Selection,
-		Opens an editor with the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@2086f336,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(F3,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.open.editor,Open Selection,
-		Opens an editor with the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@2086f336,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(F3,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.open.file.from.source,Open Selection,
-		Open an editor on the selected link,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@19a799cb,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.wst.sse.ui.structuredTextEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 10:33:19.764
-!MESSAGE A conflict occurred for CTRL+SHIFT+M:
-Binding(CTRL+SHIFT+M,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.method,Opens a method in a PHP editor,
-		Opens a method in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@4d50f682,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+SHIFT+M,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.method,Opens a method in a PHP editor,
-		Opens a method in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@4d50f682,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 10:33:19.764
-!MESSAGE A conflict occurred for ALT+SHIFT+R:
-Binding(ALT+SHIFT+R,
-	ParameterizedCommand(Command(org.eclipse.dltk.ui.edit.text.script.rename.element,Rename - Refactoring ,
-		Rename the selected element,
-		Category(org.eclipse.dltk.ui.category.refactoring,Refactor - DLTK,DLTK Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@3445341,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(ALT+SHIFT+R,
-	ParameterizedCommand(Command(org.eclipse.dltk.ui.edit.text.script.rename.element,Rename - Refactoring ,
-		Rename the selected element,
-		Category(org.eclipse.dltk.ui.category.refactoring,Refactor - DLTK,DLTK Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@3445341,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 10:33:19.764
-!MESSAGE A conflict occurred for F4:
-Binding(F4,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.type.hierarchy,Open Type Hierarchy,
-		Opens a type hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@14cc1f5c,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(F4,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.type.hierarchy,Open Type Hierarchy,
-		Opens a type hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@14cc1f5c,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 10:33:19.764
-!MESSAGE A conflict occurred for CTRL+SHIFT+T:
-Binding(CTRL+SHIFT+T,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type,Open Type,
-		Opens a type in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@3100b5cf,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+SHIFT+T,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type,Open Type,
-		Opens a type in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@3100b5cf,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 10:33:19.764
-!MESSAGE A conflict occurred for ALT+SHIFT+V:
-Binding(ALT+SHIFT+V,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.move.element,Move - Refactoring ,
-		Moves the selected element to a new location,
-		Category(org.eclipse.php.ui.category.refactoring,Refactor - PHP,PHP Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@7baea18b,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(ALT+SHIFT+V,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.move.element,Move - Refactoring ,
-		Moves the selected element to a new location,
-		Category(org.eclipse.php.ui.category.refactoring,Refactor - PHP,PHP Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@7baea18b,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 10:33:19.764
-!MESSAGE A conflict occurred for CTRL+N:
-Binding(CTRL+N,
-	ParameterizedCommand(Command(org.eclipse.php.ui.newWizard,New,
-		Open the New item wizard,
-		Category(org.eclipse.ui.category.file,File,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5ad13be4,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+N,
-	ParameterizedCommand(Command(org.eclipse.php.ui.newWizard,New,
-		Open the New item wizard,
-		Category(org.eclipse.ui.category.file,File,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5ad13be4,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(CTRL+N,
-	ParameterizedCommand(Command(org.eclipse.ui.newWizard,New,
-		Open the New item wizard,
-		Category(org.eclipse.ui.category.file,File,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@77c23d90,
-		[Lorg.eclipse.e4.ui.internal.workbench.Parameter;@6d17914a,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.ui.contexts.window,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 10:33:19.764
-!MESSAGE A conflict occurred for CTRL+SHIFT+F:
-Binding(CTRL+SHIFT+F,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.format.document,Format,
-		Format selection,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@7df3da0b,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+SHIFT+F,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.format.document,Format,
-		Format selection,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@7df3da0b,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(CTRL+SHIFT+F,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.format.document,Format,
-		Format selection,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@7df3da0b,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.wst.sse.ui.structuredTextEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 10:33:19.764
-!MESSAGE A conflict occurred for ALT+CTRL+H:
-Binding(ALT+CTRL+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.call.hierarchy,Open Call Hierarchy,
-		Opens a call hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@2e93f91d,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(ALT+CTRL+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.call.hierarchy,Open Call Hierarchy,
-		Opens a call hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@2e93f91d,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 10:33:19.764
-!MESSAGE A conflict occurred for CTRL+SHIFT+H:
-Binding(CTRL+SHIFT+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type.in.hierarchy,Open Type in Hierarchy,
-		Opens a type in the type hierarchy view,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@1a899fcd,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(CTRL+SHIFT+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type.in.hierarchy,Open Type in Hierarchy,
-		Opens a type in the type hierarchy view,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@1a899fcd,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SESSION 2015-11-18 13:59:09.511 -----------------------------------------------
-eclipse.buildId=4.4.1.M20140925-0400
-java.version=1.8.0_31
-java.vendor=Oracle Corporation
-BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=pt_BR
-Framework arguments:  -product org.eclipse.epp.package.php.product
-Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.php.product
-
-!ENTRY org.eclipse.core.resources 2 10035 2015-11-18 13:59:12.534
-!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
-
-!ENTRY org.eclipse.egit.ui 2 0 2015-11-18 13:59:17.356
-!MESSAGE Warning: EGit couldn't detect the installation path "gitPrefix" of native Git. Hence EGit can't respect system level
-Git settings which might be configured in ${gitPrefix}/etc/gitconfig under the native Git installation directory.
-The most important of these settings is core.autocrlf. Git for Windows by default sets this parameter to true in
-this system level configuration. The Git installation location can be configured on the
-Team > Git > Configuration preference page's 'System Settings' tab.
-This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
-
-!ENTRY org.eclipse.egit.ui 2 0 2015-11-18 13:59:17.356
-!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
-user global configuration and to define the default location to store repositories: 'C:\Users\dtiusr'. If this is
-not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
-EGit might behave differently since they see different configuration options.
-This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
-
-!ENTRY org.eclipse.jface 2 0 2015-11-18 13:59:30.256
-!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 13:59:30.256
-!MESSAGE A conflict occurred for CTRL+SHIFT+M:
-Binding(CTRL+SHIFT+M,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.method,Opens a method in a PHP editor,
-		Opens a method in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@684eb4a0,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+SHIFT+M,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.method,Opens a method in a PHP editor,
-		Opens a method in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@684eb4a0,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 13:59:30.256
-!MESSAGE A conflict occurred for ALT+SHIFT+V:
-Binding(ALT+SHIFT+V,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.move.element,Move - Refactoring ,
-		Moves the selected element to a new location,
-		Category(org.eclipse.php.ui.category.refactoring,Refactor - PHP,PHP Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@19a4cdea,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(ALT+SHIFT+V,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.move.element,Move - Refactoring ,
-		Moves the selected element to a new location,
-		Category(org.eclipse.php.ui.category.refactoring,Refactor - PHP,PHP Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@19a4cdea,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 13:59:30.256
-!MESSAGE A conflict occurred for F4:
-Binding(F4,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.type.hierarchy,Open Type Hierarchy,
-		Opens a type hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@434a2a10,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(F4,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.type.hierarchy,Open Type Hierarchy,
-		Opens a type hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@434a2a10,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 13:59:30.256
-!MESSAGE A conflict occurred for ALT+SHIFT+R:
-Binding(ALT+SHIFT+R,
-	ParameterizedCommand(Command(org.eclipse.dltk.ui.edit.text.script.rename.element,Rename - Refactoring ,
-		Rename the selected element,
-		Category(org.eclipse.dltk.ui.category.refactoring,Refactor - DLTK,DLTK Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@6debf1b8,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(ALT+SHIFT+R,
-	ParameterizedCommand(Command(org.eclipse.dltk.ui.edit.text.script.rename.element,Rename - Refactoring ,
-		Rename the selected element,
-		Category(org.eclipse.dltk.ui.category.refactoring,Refactor - DLTK,DLTK Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@6debf1b8,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 13:59:30.256
-!MESSAGE A conflict occurred for F3:
-Binding(F3,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.open.editor,Open Selection,
-		Opens an editor with the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@701da311,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(F3,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.open.editor,Open Selection,
-		Opens an editor with the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@701da311,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(F3,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.open.file.from.source,Open Selection,
-		Open an editor on the selected link,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@4fe9fb65,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.wst.sse.ui.structuredTextEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 13:59:30.256
-!MESSAGE A conflict occurred for CTRL+SHIFT+T:
-Binding(CTRL+SHIFT+T,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type,Open Type,
-		Opens a type in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5de14222,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+SHIFT+T,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type,Open Type,
-		Opens a type in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5de14222,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 13:59:30.256
-!MESSAGE A conflict occurred for CTRL+N:
-Binding(CTRL+N,
-	ParameterizedCommand(Command(org.eclipse.php.ui.newWizard,New,
-		Open the New item wizard,
-		Category(org.eclipse.ui.category.file,File,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@6fb51e17,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+N,
-	ParameterizedCommand(Command(org.eclipse.php.ui.newWizard,New,
-		Open the New item wizard,
-		Category(org.eclipse.ui.category.file,File,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@6fb51e17,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(CTRL+N,
-	ParameterizedCommand(Command(org.eclipse.ui.newWizard,New,
-		Open the New item wizard,
-		Category(org.eclipse.ui.category.file,File,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@44abdb1f,
-		[Lorg.eclipse.e4.ui.internal.workbench.Parameter;@62108cd3,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.ui.contexts.window,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 13:59:30.256
-!MESSAGE A conflict occurred for CTRL+SHIFT+F:
-Binding(CTRL+SHIFT+F,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.format.document,Format,
-		Format selection,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@2c54c497,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+SHIFT+F,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.format.document,Format,
-		Format selection,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@2c54c497,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(CTRL+SHIFT+F,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.format.document,Format,
-		Format selection,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@2c54c497,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.wst.sse.ui.structuredTextEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 13:59:30.256
-!MESSAGE A conflict occurred for ALT+CTRL+H:
-Binding(ALT+CTRL+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.call.hierarchy,Open Call Hierarchy,
-		Opens a call hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@722d3ddb,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(ALT+CTRL+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.call.hierarchy,Open Call Hierarchy,
-		Opens a call hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@722d3ddb,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 13:59:30.256
-!MESSAGE A conflict occurred for CTRL+SHIFT+H:
-Binding(CTRL+SHIFT+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type.in.hierarchy,Open Type in Hierarchy,
-		Opens a type in the type hierarchy view,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@721fc228,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(CTRL+SHIFT+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type.in.hierarchy,Open Type in Hierarchy,
-		Opens a type in the type hierarchy view,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@721fc228,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SESSION 2015-11-18 14:00:17.431 -----------------------------------------------
-eclipse.buildId=4.4.1.M20140925-0400
-java.version=1.8.0_31
-java.vendor=Oracle Corporation
-BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=pt_BR
-Framework arguments:  -product org.eclipse.epp.package.php.product
-Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.php.product
-
-!ENTRY org.eclipse.egit.ui 2 0 2015-11-18 14:00:24.775
-!MESSAGE Warning: EGit couldn't detect the installation path "gitPrefix" of native Git. Hence EGit can't respect system level
-Git settings which might be configured in ${gitPrefix}/etc/gitconfig under the native Git installation directory.
-The most important of these settings is core.autocrlf. Git for Windows by default sets this parameter to true in
-this system level configuration. The Git installation location can be configured on the
-Team > Git > Configuration preference page's 'System Settings' tab.
-This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
-
-!ENTRY org.eclipse.egit.ui 2 0 2015-11-18 14:00:24.785
-!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
-user global configuration and to define the default location to store repositories: 'C:\Users\dtiusr'. If this is
-not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
-EGit might behave differently since they see different configuration options.
-This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
-
-!ENTRY org.eclipse.jface 2 0 2015-11-18 14:41:30.572
-!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 14:41:30.572
-!MESSAGE A conflict occurred for CTRL+SHIFT+T:
-Binding(CTRL+SHIFT+T,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type,Open Type,
-		Opens a type in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@164500f9,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+SHIFT+T,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type,Open Type,
-		Opens a type in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@164500f9,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 14:41:30.572
-!MESSAGE A conflict occurred for F3:
-Binding(F3,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.open.editor,Open Selection,
-		Opens an editor with the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@7060b10e,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(F3,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.open.editor,Open Selection,
-		Opens an editor with the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@7060b10e,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(F3,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.open.file.from.source,Open Selection,
-		Open an editor on the selected link,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@565e7091,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.wst.sse.ui.structuredTextEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 14:41:30.572
-!MESSAGE A conflict occurred for ALT+SHIFT+R:
-Binding(ALT+SHIFT+R,
-	ParameterizedCommand(Command(org.eclipse.dltk.ui.edit.text.script.rename.element,Rename - Refactoring ,
-		Rename the selected element,
-		Category(org.eclipse.dltk.ui.category.refactoring,Refactor - DLTK,DLTK Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@3269a5c3,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(ALT+SHIFT+R,
-	ParameterizedCommand(Command(org.eclipse.dltk.ui.edit.text.script.rename.element,Rename - Refactoring ,
-		Rename the selected element,
-		Category(org.eclipse.dltk.ui.category.refactoring,Refactor - DLTK,DLTK Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@3269a5c3,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 14:41:30.572
-!MESSAGE A conflict occurred for ALT+SHIFT+V:
-Binding(ALT+SHIFT+V,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.move.element,Move - Refactoring ,
-		Moves the selected element to a new location,
-		Category(org.eclipse.php.ui.category.refactoring,Refactor - PHP,PHP Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@c1539bf,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(ALT+SHIFT+V,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.move.element,Move - Refactoring ,
-		Moves the selected element to a new location,
-		Category(org.eclipse.php.ui.category.refactoring,Refactor - PHP,PHP Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@c1539bf,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 14:41:30.572
-!MESSAGE A conflict occurred for CTRL+N:
-Binding(CTRL+N,
-	ParameterizedCommand(Command(org.eclipse.php.ui.newWizard,New,
-		Open the New item wizard,
-		Category(org.eclipse.ui.category.file,File,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@790801f2,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+N,
-	ParameterizedCommand(Command(org.eclipse.php.ui.newWizard,New,
-		Open the New item wizard,
-		Category(org.eclipse.ui.category.file,File,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@790801f2,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(CTRL+N,
-	ParameterizedCommand(Command(org.eclipse.ui.newWizard,New,
-		Open the New item wizard,
-		Category(org.eclipse.ui.category.file,File,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@3c09a350,
-		[Lorg.eclipse.e4.ui.internal.workbench.Parameter;@592a1882,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.ui.contexts.window,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 14:41:30.572
-!MESSAGE A conflict occurred for CTRL+SHIFT+M:
-Binding(CTRL+SHIFT+M,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.method,Opens a method in a PHP editor,
-		Opens a method in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5c772cba,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+SHIFT+M,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.method,Opens a method in a PHP editor,
-		Opens a method in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5c772cba,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 14:41:30.572
-!MESSAGE A conflict occurred for F4:
-Binding(F4,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.type.hierarchy,Open Type Hierarchy,
-		Opens a type hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@23cfcd4a,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(F4,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.type.hierarchy,Open Type Hierarchy,
-		Opens a type hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@23cfcd4a,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 14:41:30.572
-!MESSAGE A conflict occurred for CTRL+SHIFT+F:
-Binding(CTRL+SHIFT+F,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.format.document,Format,
-		Format selection,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@1a336906,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+SHIFT+F,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.format.document,Format,
-		Format selection,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@1a336906,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(CTRL+SHIFT+F,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.format.document,Format,
-		Format selection,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@1a336906,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.wst.sse.ui.structuredTextEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 14:41:30.572
-!MESSAGE A conflict occurred for ALT+CTRL+H:
-Binding(ALT+CTRL+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.call.hierarchy,Open Call Hierarchy,
-		Opens a call hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@632d04d,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(ALT+CTRL+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.call.hierarchy,Open Call Hierarchy,
-		Opens a call hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@632d04d,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-18 14:41:30.572
-!MESSAGE A conflict occurred for CTRL+SHIFT+H:
-Binding(CTRL+SHIFT+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type.in.hierarchy,Open Type in Hierarchy,
-		Opens a type in the type hierarchy view,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@3f0c46e8,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(CTRL+SHIFT+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type.in.hierarchy,Open Type in Hierarchy,
-		Opens a type in the type hierarchy view,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@3f0c46e8,
+		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@7bb4f09d,
 		,,true),null),
 	org.eclipse.ui.defaultAcceleratorConfiguration,
 	org.eclipse.php.ui.phpEditorScope,,,system)
 
-!ENTRY org.eclipse.php.ui 4 10001 2015-11-18 21:58:19.089
-!MESSAGE PHP ui plugin internal error
-!STACK 1
-org.eclipse.dltk.core.ModelException: $usuario [in mostraResultadoBuscaDeUsuarios [in CartaoView [in CartaoView.php [in classes/view [in <project root> [in catraca]]]]]] does not exist
-	at org.eclipse.dltk.internal.core.ModelElement.newNotPresentException(ModelElement.java:270)
-	at org.eclipse.dltk.internal.core.ModelElement.openWhenClosed(ModelElement.java:208)
-	at org.eclipse.dltk.internal.core.ModelElement.getElementInfo(ModelElement.java:183)
-	at org.eclipse.dltk.internal.core.ModelElement.getElementInfo(ModelElement.java:165)
-	at org.eclipse.dltk.internal.core.Member.getFlags(Member.java:50)
-	at org.eclipse.php.internal.ui.documentation.PHPDocumentationProvider.isFinal(PHPDocumentationProvider.java:274)
-	at org.eclipse.php.internal.ui.documentation.PHPDocumentationProvider.getConstantValue(PHPDocumentationProvider.java:233)
-	at org.eclipse.php.internal.ui.documentation.PHPDocumentationProvider.getInfo(PHPDocumentationProvider.java:94)
-	at org.eclipse.dltk.ui.documentation.ScriptDocumentationAccess$2.getInfo(ScriptDocumentationAccess.java:158)
-	at org.eclipse.dltk.ui.documentation.ScriptDocumentationAccess.merge(ScriptDocumentationAccess.java:88)
-	at org.eclipse.dltk.ui.documentation.ScriptDocumentationAccess.getHTMLContentReader(ScriptDocumentationAccess.java:150)
-	at org.eclipse.dltk.ui.text.completion.ProposalInfo.getHTMLContentReader(ProposalInfo.java:182)
-	at org.eclipse.dltk.ui.text.completion.ProposalInfo.extractScriptdoc(ProposalInfo.java:154)
-	at org.eclipse.dltk.ui.text.completion.ProposalInfo.computeInfo(ProposalInfo.java:94)
-	at org.eclipse.dltk.ui.text.completion.ProposalInfo.getInfo(ProposalInfo.java:71)
-	at org.eclipse.dltk.ui.text.completion.AbstractScriptCompletionProposal.getAdditionalProposalInfo(AbstractScriptCompletionProposal.java:471)
-	at org.eclipse.jface.text.contentassist.AdditionalInfoController$3.run(AdditionalInfoController.java:106)
-	at org.eclipse.core.internal.jobs.Worker.run(Worker.java:54)
-!SUBENTRY 1 org.eclipse.dltk.core 4 969 2015-11-18 21:58:19.089
-!MESSAGE $usuario [in mostraResultadoBuscaDeUsuarios [in CartaoView [in CartaoView.php [in classes/view [in <project root> [in catraca]]]]]] does not exist
-!SESSION 2015-11-23 20:54:29.698 -----------------------------------------------
-eclipse.buildId=4.4.1.M20140925-0400
-java.version=1.8.0_31
-java.vendor=Oracle Corporation
-BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=pt_BR
-Framework arguments:  -product org.eclipse.epp.package.php.product
-Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.php.product
-
-!ENTRY org.eclipse.egit.ui 2 0 2015-11-23 20:55:06.025
-!MESSAGE Warning: EGit couldn't detect the installation path "gitPrefix" of native Git. Hence EGit can't respect system level
-Git settings which might be configured in ${gitPrefix}/etc/gitconfig under the native Git installation directory.
-The most important of these settings is core.autocrlf. Git for Windows by default sets this parameter to true in
-this system level configuration. The Git installation location can be configured on the
-Team > Git > Configuration preference page's 'System Settings' tab.
-This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
-
-!ENTRY org.eclipse.egit.ui 2 0 2015-11-23 20:55:06.092
-!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
-user global configuration and to define the default location to store repositories: 'C:\Users\dtiusr'. If this is
-not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
-EGit might behave differently since they see different configuration options.
-This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
-
-!ENTRY org.eclipse.jface 2 0 2015-11-23 21:29:05.507
-!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-23 21:29:05.507
-!MESSAGE A conflict occurred for ALT+SHIFT+R:
-Binding(ALT+SHIFT+R,
-	ParameterizedCommand(Command(org.eclipse.dltk.ui.edit.text.script.rename.element,Rename - Refactoring ,
-		Rename the selected element,
-		Category(org.eclipse.dltk.ui.category.refactoring,Refactor - DLTK,DLTK Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@2012ed86,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(ALT+SHIFT+R,
-	ParameterizedCommand(Command(org.eclipse.dltk.ui.edit.text.script.rename.element,Rename - Refactoring ,
-		Rename the selected element,
-		Category(org.eclipse.dltk.ui.category.refactoring,Refactor - DLTK,DLTK Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@2012ed86,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-23 21:29:05.507
-!MESSAGE A conflict occurred for ALT+SHIFT+V:
-Binding(ALT+SHIFT+V,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.move.element,Move - Refactoring ,
-		Moves the selected element to a new location,
-		Category(org.eclipse.php.ui.category.refactoring,Refactor - PHP,PHP Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5c512d91,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(ALT+SHIFT+V,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.move.element,Move - Refactoring ,
-		Moves the selected element to a new location,
-		Category(org.eclipse.php.ui.category.refactoring,Refactor - PHP,PHP Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5c512d91,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-23 21:29:05.507
-!MESSAGE A conflict occurred for CTRL+SHIFT+M:
-Binding(CTRL+SHIFT+M,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.method,Opens a method in a PHP editor,
-		Opens a method in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@6022a4c4,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+SHIFT+M,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.method,Opens a method in a PHP editor,
-		Opens a method in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@6022a4c4,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-23 21:29:05.507
-!MESSAGE A conflict occurred for F3:
-Binding(F3,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.open.editor,Open Selection,
-		Opens an editor with the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@11092844,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(F3,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.open.editor,Open Selection,
-		Opens an editor with the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@11092844,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(F3,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.open.file.from.source,Open Selection,
-		Open an editor on the selected link,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@2640893e,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.wst.sse.ui.structuredTextEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-23 21:29:05.507
-!MESSAGE A conflict occurred for CTRL+N:
-Binding(CTRL+N,
-	ParameterizedCommand(Command(org.eclipse.php.ui.newWizard,New,
-		Open the New item wizard,
-		Category(org.eclipse.ui.category.file,File,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@73a815c2,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+N,
-	ParameterizedCommand(Command(org.eclipse.php.ui.newWizard,New,
-		Open the New item wizard,
-		Category(org.eclipse.ui.category.file,File,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@73a815c2,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(CTRL+N,
-	ParameterizedCommand(Command(org.eclipse.ui.newWizard,New,
-		Open the New item wizard,
-		Category(org.eclipse.ui.category.file,File,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@1214d23c,
-		[Lorg.eclipse.e4.ui.internal.workbench.Parameter;@41582899,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.ui.contexts.window,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-23 21:29:05.507
-!MESSAGE A conflict occurred for F4:
-Binding(F4,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.type.hierarchy,Open Type Hierarchy,
-		Opens a type hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@6d98bf7,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(F4,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.type.hierarchy,Open Type Hierarchy,
-		Opens a type hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@6d98bf7,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-23 21:29:05.507
-!MESSAGE A conflict occurred for CTRL+SHIFT+T:
-Binding(CTRL+SHIFT+T,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type,Open Type,
-		Opens a type in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5ecad860,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+SHIFT+T,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type,Open Type,
-		Opens a type in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5ecad860,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-23 21:29:05.507
-!MESSAGE A conflict occurred for CTRL+SHIFT+F:
-Binding(CTRL+SHIFT+F,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.format.document,Format,
-		Format selection,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@1ff542a3,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+SHIFT+F,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.format.document,Format,
-		Format selection,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@1ff542a3,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(CTRL+SHIFT+F,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.format.document,Format,
-		Format selection,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@1ff542a3,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.wst.sse.ui.structuredTextEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-23 21:29:05.507
-!MESSAGE A conflict occurred for ALT+CTRL+H:
-Binding(ALT+CTRL+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.call.hierarchy,Open Call Hierarchy,
-		Opens a call hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@7ce1b3fe,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(ALT+CTRL+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.call.hierarchy,Open Call Hierarchy,
-		Opens a call hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@7ce1b3fe,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-23 21:29:05.507
-!MESSAGE A conflict occurred for CTRL+SHIFT+H:
-Binding(CTRL+SHIFT+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type.in.hierarchy,Open Type in Hierarchy,
-		Opens a type in the type hierarchy view,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@4f54afa5,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(CTRL+SHIFT+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type.in.hierarchy,Open Type in Hierarchy,
-		Opens a type in the type hierarchy view,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@4f54afa5,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-
-!ENTRY org.eclipse.php.debug.core 4 4 2015-11-23 21:30:36.220
+!ENTRY org.eclipse.php.debug.core 4 4 2015-11-25 10:48:59.257
 !MESSAGE The debug port 10000 is in use. Please select a different port for the debugger.
 
-!ENTRY org.eclipse.php.debug.core 4 4 2015-11-23 21:30:36.220
+!ENTRY org.eclipse.php.debug.core 4 4 2015-11-25 10:48:59.257
 !MESSAGE The debug port 9000 is in use. Please select a different port for the debugger.
-!SESSION 2015-11-24 08:26:22.312 -----------------------------------------------
-eclipse.buildId=4.4.1.M20140925-0400
-java.version=1.8.0_31
-java.vendor=Oracle Corporation
-BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=pt_BR
-Framework arguments:  -product org.eclipse.epp.package.php.product
-Command-line arguments:  -os win32 -ws win32 -arch x86_64 -product org.eclipse.epp.package.php.product
-
-!ENTRY org.eclipse.egit.ui 2 0 2015-11-24 08:26:41.092
-!MESSAGE Warning: EGit couldn't detect the installation path "gitPrefix" of native Git. Hence EGit can't respect system level
-Git settings which might be configured in ${gitPrefix}/etc/gitconfig under the native Git installation directory.
-The most important of these settings is core.autocrlf. Git for Windows by default sets this parameter to true in
-this system level configuration. The Git installation location can be configured on the
-Team > Git > Configuration preference page's 'System Settings' tab.
-This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
-
-!ENTRY org.eclipse.egit.ui 2 0 2015-11-24 08:26:41.239
-!MESSAGE Warning: The environment variable HOME is not set. The following directory will be used to store the Git
-user global configuration and to define the default location to store repositories: 'C:\Users\dtiusr'. If this is
-not correct please set the HOME environment variable and restart Eclipse. Otherwise Git for Windows and
-EGit might behave differently since they see different configuration options.
-This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
-
-!ENTRY org.eclipse.jface 2 0 2015-11-24 09:47:38.134
-!MESSAGE Keybinding conflicts occurred.  They may interfere with normal accelerator operation.
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-24 09:47:38.134
-!MESSAGE A conflict occurred for CTRL+N:
-Binding(CTRL+N,
-	ParameterizedCommand(Command(org.eclipse.php.ui.newWizard,New,
-		Open the New item wizard,
-		Category(org.eclipse.ui.category.file,File,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@8b3c5a0,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+N,
-	ParameterizedCommand(Command(org.eclipse.php.ui.newWizard,New,
-		Open the New item wizard,
-		Category(org.eclipse.ui.category.file,File,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@8b3c5a0,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(CTRL+N,
-	ParameterizedCommand(Command(org.eclipse.ui.newWizard,New,
-		Open the New item wizard,
-		Category(org.eclipse.ui.category.file,File,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@d62472f,
-		[Lorg.eclipse.e4.ui.internal.workbench.Parameter;@63a84bb6,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.ui.contexts.window,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-24 09:47:38.134
-!MESSAGE A conflict occurred for F4:
-Binding(F4,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.type.hierarchy,Open Type Hierarchy,
-		Opens a type hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@10e94abd,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(F4,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.type.hierarchy,Open Type Hierarchy,
-		Opens a type hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@10e94abd,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-24 09:47:38.134
-!MESSAGE A conflict occurred for ALT+SHIFT+R:
-Binding(ALT+SHIFT+R,
-	ParameterizedCommand(Command(org.eclipse.dltk.ui.edit.text.script.rename.element,Rename - Refactoring ,
-		Rename the selected element,
-		Category(org.eclipse.dltk.ui.category.refactoring,Refactor - DLTK,DLTK Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@4513f28f,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(ALT+SHIFT+R,
-	ParameterizedCommand(Command(org.eclipse.dltk.ui.edit.text.script.rename.element,Rename - Refactoring ,
-		Rename the selected element,
-		Category(org.eclipse.dltk.ui.category.refactoring,Refactor - DLTK,DLTK Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@4513f28f,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-24 09:47:38.134
-!MESSAGE A conflict occurred for CTRL+SHIFT+T:
-Binding(CTRL+SHIFT+T,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type,Open Type,
-		Opens a type in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@441bf3e1,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+SHIFT+T,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type,Open Type,
-		Opens a type in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@441bf3e1,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-24 09:47:38.134
-!MESSAGE A conflict occurred for CTRL+SHIFT+M:
-Binding(CTRL+SHIFT+M,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.method,Opens a method in a PHP editor,
-		Opens a method in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5293b007,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+SHIFT+M,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.method,Opens a method in a PHP editor,
-		Opens a method in a PHP editor,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5293b007,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-24 09:47:38.134
-!MESSAGE A conflict occurred for ALT+SHIFT+V:
-Binding(ALT+SHIFT+V,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.move.element,Move - Refactoring ,
-		Moves the selected element to a new location,
-		Category(org.eclipse.php.ui.category.refactoring,Refactor - PHP,PHP Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@8f5b44a,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(ALT+SHIFT+V,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.move.element,Move - Refactoring ,
-		Moves the selected element to a new location,
-		Category(org.eclipse.php.ui.category.refactoring,Refactor - PHP,PHP Refactoring Actions,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@8f5b44a,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-24 09:47:38.134
-!MESSAGE A conflict occurred for F3:
-Binding(F3,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.open.editor,Open Selection,
-		Opens an editor with the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5228b851,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(F3,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.open.editor,Open Selection,
-		Opens an editor with the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@5228b851,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(F3,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.open.file.from.source,Open Selection,
-		Open an editor on the selected link,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@49b7cd0e,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.wst.sse.ui.structuredTextEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-24 09:47:38.134
-!MESSAGE A conflict occurred for CTRL+SHIFT+F:
-Binding(CTRL+SHIFT+F,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.format.document,Format,
-		Format selection,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@3ba97962,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-Binding(CTRL+SHIFT+F,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.format.document,Format,
-		Format selection,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@3ba97962,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(CTRL+SHIFT+F,
-	ParameterizedCommand(Command(org.eclipse.wst.sse.ui.format.document,Format,
-		Format selection,
-		Category(org.eclipse.ui.category.edit,Edit,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@3ba97962,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.wst.sse.ui.structuredTextEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-24 09:47:38.134
-!MESSAGE A conflict occurred for ALT+CTRL+H:
-Binding(ALT+CTRL+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.call.hierarchy,Open Call Hierarchy,
-		Opens a call hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@6eb5fb7,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(ALT+CTRL+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.edit.text.php.open.call.hierarchy,Open Call Hierarchy,
-		Opens a call hierarchy for the selected element,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@6eb5fb7,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
-!SUBENTRY 1 org.eclipse.jface 2 0 2015-11-24 09:47:38.134
-!MESSAGE A conflict occurred for CTRL+SHIFT+H:
-Binding(CTRL+SHIFT+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type.in.hierarchy,Open Type in Hierarchy,
-		Opens a type in the type hierarchy view,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@2319ecc4,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.dltk.ui.context.views,,,system)
-Binding(CTRL+SHIFT+H,
-	ParameterizedCommand(Command(org.eclipse.php.ui.navigate.open.type.in.hierarchy,Open Type in Hierarchy,
-		Opens a type in the type hierarchy view,
-		Category(org.eclipse.ui.category.navigate,Navigate,null,true),
-		org.eclipse.ui.internal.WorkbenchHandlerServiceHandler@2319ecc4,
-		,,true),null),
-	org.eclipse.ui.defaultAcceleratorConfiguration,
-	org.eclipse.php.ui.phpEditorScope,,,system)
