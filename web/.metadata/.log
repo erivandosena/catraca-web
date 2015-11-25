@@ -462,3 +462,8 @@ Binding(CTRL+SHIFT+H,
 
 !ENTRY org.eclipse.php.debug.core 4 4 2015-11-25 10:48:59.257
 !MESSAGE The debug port 9000 is in use. Please select a different port for the debugger.
+
+!ENTRY org.eclipse.core.resources 2 2 2015-11-25 13:58:28.429
+!MESSAGE Save operation warnings.
+!SUBENTRY 1 org.eclipse.core.resources 2 234 2015-11-25 13:58:28.429
+!MESSAGE The project description file (.project) for '.org.eclipse.dltk.core.external.folders' was missing.  This file contains important information about the project.  A new project description file has been created, but some information about the project may have been lost.
