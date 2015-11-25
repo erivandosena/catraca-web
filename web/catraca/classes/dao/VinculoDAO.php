@@ -86,6 +86,22 @@ class VinculoDAO extends DAO {
 		}
 		return $lista;
 	}
+	public function usuarioJaTemVinculo(Usuario $usuario){
+		$idBaseExterna = $usuario->getIdBaseExterna();
+		$dataTimeAtual = date ( "Y-m-d G:i:s" );
+		$sql =  "SELECT * FROM usuario INNER JOIN vinculo
+		ON vinculo.usua_id = usuario.usua_id
+		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
+		LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id WHERE (usuario.id_base_externa = $idBaseExterna)
+		AND ('$dataTimeAtual' BETWEEN vinc_inicio AND vinc_fim)";
+		$result = $this->getConexao ()->query ($sql );
+		foreach($result as $linha){
+			
+			return true;
+		}
+		return false;
+		
+	}
 	public function adicionaVinculo(Vinculo $vinculo) {
 		$dataDeHoje = date("Y-m-d H:i:s");
 		$usuarioBaseExterna = $vinculo->getResponsavel()->getIdBaseExterna();
@@ -100,7 +116,13 @@ class VinculoDAO extends DAO {
 		if(!$vinculo->getCartao()->getId())
 			return 0;
 		$idCartao = $vinculo->getCartao()->getId();
-		if(!$this->getConexao()->exec("INSERT into vinculo (usua_id, cart_id, vinc_refeicoes, vinc_avulso, vinc_inicio, vinc_fim) VALUES($idBaseLocal, $idCartao, 1,FALSE,'$dataDeHoje', '$dataDeValidade')"))
+		$refeicoes = $vinculo->getQuantidadeDeAlimentosPorTurno();
+		$descricao = $vinculo->getDescricao();
+		if($vinculo->isAvulso())
+			$sqlInsertVinculo = "INSERT into vinculo (usua_id, cart_id, vinc_refeicoes, vinc_avulso, vinc_inicio, vinc_fim, vinc_descricao) VALUES($idBaseLocal, $idCartao, $refeicoes,TRUE,'$dataDeHoje', '$dataDeValidade', '$descricao')";
+		else
+			$sqlInsertVinculo = "INSERT into vinculo (usua_id, cart_id, vinc_refeicoes, vinc_avulso, vinc_inicio, vinc_fim) VALUES($idBaseLocal, $idCartao, 1,FALSE,'$dataDeHoje', '$dataDeValidade')";
+		if(!$this->getConexao()->exec($sqlInsertVinculo))
 			return 0;
 		$idVinculo = $this->getConexao()->lastInsertId('vinculo_vinc_id_seq');
 		if(!$this->getConexao()->exec("INSERT into vinculo_tipo (vinc_id, tipo_id) VALUES($idVinculo, $tipoCartao)")){

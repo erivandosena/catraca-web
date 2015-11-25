@@ -136,12 +136,9 @@ if (isset ( $_GET ["sair"] )) {
 							</div>';
 					
 								         	
-// 								         	echo 'Teste de view';
-// 								         	$dao = new DAO(null, DAO::TIPO_PG_SIGAAA);
-// 								         	foreach($dao->getConexao()->query("SELECT * FROM vw_usuarios_catraca") as $linha){
-// 								         		print_r($linha);
-// 								         		echo '<hr>';
-// 								         	}
+// 								         	$dao = new DAO(null, DAO::TIPO_PG_LOCAL);
+// 								         	echo $dao->getConexao()->exec("DELETE FROM vinculo");
+								         	
 					}
 					?>
 					

@@ -109,11 +109,28 @@ class CartaoController{
 				$vinculo->getCartao()->getTipo()->setId(intval($_POST ['tipo']));
 				$vinculo->getCartao()->setNumero(intval($_POST ['numero_cartao']));
 				$vinculo->getResponsavel()->setIdBaseExterna(intval($_POST ['id_base_externa']));
+				
+				if(isset($_POST['avulso'])){
+					if($_POST['avulso'] == "sim"){
+						$vinculo->setAvulso(true);
+						$vinculo->setQuantidadeDeAlimentosPorTurno($_POST['quantidade_refeicoes']);
+						$vinculo->setDescricao($_POST['descricao']);
+						
+					}
+				}else{
+					if($vinculoDao->usuarioJaTemVinculo($vinculo->getResponsavel())){
+						echo '<div class="borda">';
+						echo '<p>Esse usuário já possui vínculos Não Avulsos. Adicione um vínculo avulso ou elmimine um não avulso.</p><br>';
+						//echo '<a href="?pagina=cartao&cartaoselecionado=' .$vinculo->getCartao()->getId().'">Clique aqui para ver</a>';
+						echo '</div>';
+						return;
+					}
+				}
 				//Só vai permitir que chame o adicionaVinculo se o cartão não possuir vinculo valido.
 			
 				if($vinculoDao->cartaoTemVinculo($vinculo->getCartao())){
 					echo '<div class="borda">';
-					echo 'O numero do cartão digitado já possui vinculo<br>';
+					echo '<p>O numero do cartão digitado já possui vinculo</p><br>';
 					echo '<a href="?pagina=cartao&cartaoselecionado=' .$vinculo->getCartao()->getId().'">Clique aqui para ver</a>';
 					echo '</div>';
 					
