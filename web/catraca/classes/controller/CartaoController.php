@@ -9,7 +9,6 @@ class CartaoController{
 			case Sessao::NIVEL_SUPER:
 				$controller = new CartaoController();
 				$controller->telaCartao();
-				
 				break;
 			default:
 				UsuarioController::main ( $nivelDeAcesso );
@@ -72,10 +71,7 @@ class CartaoController{
 			$cartaoDAO = new CartaoDAO(null, DAO::TIPO_PG_LOCAL);
 			$cartao = new Cartao();
 			$cartao->setId($numeroDoSelecionado);
-			
 			$cartaoDAO->selecionaPorId($cartao);
-			
-			
 			$this->view->mostraCartaoSelecionado($cartao);
 			
  			$vinculoDao = new VinculoDAO($cartaoDAO->getConexao());
@@ -123,8 +119,9 @@ class CartaoController{
 					
 				}else{
 					$vinculoDao->adicionaVinculo ($vinculo);
+					$this->view->mostraSucesso("Vinculo Adicionado Com Sucesso. ");
 					// No final eu redireciono para a pagina de selecao do usuario.
-					echo '<meta http-equiv="refresh" content="3; url=.\?pagina=cartao&selecionado=' . $vinculo->getResponsavel()->getIdBaseExterna() . '">';
+					echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $vinculo->getResponsavel()->getIdBaseExterna() . '">';
 					return;
 				}
 				
@@ -138,7 +135,6 @@ class CartaoController{
 				$this->view->mostraFormAdicionarVinculo($listaDeTipos, $idDoSelecionado);
 		
 			}
-			
 			$usuarioDao->fechaConexao();
 			$vinculoDao->fechaConexao();
 		}

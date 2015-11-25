@@ -203,15 +203,11 @@ class CartaoView {
 			</form>
 			</div>';
 	}
+	public function mostraSucesso($mensagem){
+		echo '<div class="borda"><p>'.$mensagem.'</p></div>';
 	
-	public function cadastroSucesso() {
 	}
-	public function deleteSucesso() {
-	}
-	public function deleteFracasso() {
-	}
-	public function cadastroFracasso() {
-	}
+	
 }
 
 ?>

@@ -11,22 +11,16 @@
  * N�o existe na base local: Cadastra-se e captura-se o id da base local para: $idUsuarioBaseLocal;
  *
  *
- *
- *
  * 2- Verifica��o de cart�o.
  * O cart�o existe. Verifica se o Tipo cooresponde. Faz UPDATE no tipo. Retorne o seu ID. 
  * O cart�o n�o existe. Cadastre e Retorne o seu ID. 
  * 
  * 
  *
- *
- *
- *
  * 3 - Verifica��o de vinculos do usuario.
  * - Não permitir cadastro de vinculo no usuario se ele tiver vinculo valido. 
  * Terá que cancelar o vinculo atual. Isto fará um update na data. 
  * 
- *
  *
  * 4 - Verifica��o de vinculos do Cart�o.
  * - Não permitir cadastro de vinculo se o cartão tiver vinculo válido. 
@@ -93,13 +87,12 @@ class VinculoDAO extends DAO {
 		return $lista;
 	}
 	public function adicionaVinculo(Vinculo $vinculo) {
-		
+		$dataDeHoje = date("Y-m-d H:i:s");
 		$usuarioBaseExterna = $vinculo->getResponsavel()->getIdBaseExterna();
 		$numeroCartao = $vinculo->getCartao()->getNumero();
 		$dataDeValidade = $vinculo->getFinalValidade();
 		$tipoCartao = $vinculo->getCartao()->getTipo()->getId();
 		$this->verificarUsuario($vinculo->getResponsavel());
-		echo'User'.$vinculo->getResponsavel()->getId();
 		if(!$vinculo->getResponsavel()->getId())
 			return 0;
 		$idBaseLocal = $vinculo->getResponsavel()->getId();
@@ -107,8 +100,6 @@ class VinculoDAO extends DAO {
 		if(!$vinculo->getCartao()->getId())
 			return 0;
 		$idCartao = $vinculo->getCartao()->getId();
-		echo 'Card: '.$vinculo->getCartao()->getId();
-		$dataDeHoje = date("Y-m-d H:i:s");
 		if(!$this->getConexao()->exec("INSERT into vinculo (usua_id, cart_id, vinc_refeicoes, vinc_avulso, vinc_inicio, vinc_fim) VALUES($idBaseLocal, $idCartao, 1,FALSE,'$dataDeHoje', '$dataDeValidade')"))
 			return 0;
 		$idVinculo = $this->getConexao()->lastInsertId('vinculo_vinc_id_seq');
@@ -116,14 +107,10 @@ class VinculoDAO extends DAO {
 			$this->getConexao()->rollBack();
 			return 0;
 		}
-		echo 'Vinculo adicionado com sucesso';
 		return true;
 	}
 	
 	
-
-	/**
-	 * 
 	/**
 	 * Retorna true se o cartão possuir vinculo válido. 
 	 * Retorna false se o cartão não possui um vinculo válido. 
@@ -186,6 +173,7 @@ class VinculoDAO extends DAO {
 	 * Se Nem existir na base externa, � o usuario frescando. Preciso dar nem resposta pra ele. Aborto tudo logo.
 	 * Fa�amos um insert aqui.
 	 * Apos esse insert iremos pegar o id inserido na base e retornalo. 
+	 * Retorna 0, deu nada certo. Essa parada acaba aqui. 
 	 * @param int $idBaseExterna
 	 * @return int
 	 */
@@ -216,8 +204,7 @@ class VinculoDAO extends DAO {
 				}
 			}
 		}
-		return 0;	
-		//Retorna 0, deu nada certo. Essa parada acaba aqui. 
+		return 0;
 		
 		
 	}
