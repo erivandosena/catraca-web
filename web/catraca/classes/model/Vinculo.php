@@ -12,9 +12,29 @@ class Vinculo{
 	private $finalValidade;
 	private $quantidadeDeAlimentosPorTurno;
 	private $descricao;
-	private $cartao;	
+	private $cartao;
 
+	
+	
+	private $isento;
+	public $isencao;
+	public function setIsento($isento){
+		if($isento)
+			$this->isento = true;
+		else
+			$this->isento = false;
+	}
+	
+	public function setIsencao(Isencao $isencao){
+		$this->isencao = $isencao;
+	}
+	public function getIsencao(){
+		return $this->isencao;
+	}
+	
+	
 	public function Vinculo(){
+		$this->isencao  = new Isencao();
 		$this->setAvulso(false);
 		$this->responsavel = new Usuario();
 		$this->cartao= new Cartao();
@@ -34,7 +54,7 @@ class Vinculo{
 		return $this->finalValidade;
 	}
 	public function setId($id){
-		$this->id = $id;
+		$this->id = intval($id);
 	}
 	public function getId(){
 		return $this->id;

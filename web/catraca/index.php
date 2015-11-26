@@ -158,7 +158,7 @@ if (isset ( $_GET ["sair"] )) {
 								CartaoController::main ( $sessao->getNivelAcesso () );
 								break;
 							case 'definicoes':
-								echo 'Definicoes';
+								DefinicoesController::main($sessao->getNivelAcesso());
 								break;
 							case 'catraca':
 								echo 'Catraca';

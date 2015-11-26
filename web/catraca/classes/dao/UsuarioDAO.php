@@ -143,15 +143,16 @@ class UsuarioDAO extends DAO {
 		
 	}
 	public function preenchePorLogin(Usuario $usuario){
+		
 		$login = $usuario->getLogin();
-		$sql = "SELECT * FROM usuario WHERE login = '$login'";
-		$flag = false;
+		$login = preg_replace ('/[^a-zA-Z0-9\s]/', '', $login);
+		$sql = "SELECT * FROM usuario WHERE usua_login = '$login'";
 		foreach($this->getConexao()->query($sql) as $linha){
-			$usuario->setId($linha['id_usuario']);
-			$flag = true;
-			return $flag;
+			$usuario->setId($linha['usua_id']);
+			$usuario->setNome($linha['usua_nome']);
+			return true;
 		}
-		return $flag;
+		return false;
 		
 		
 	}

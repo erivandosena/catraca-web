@@ -48,16 +48,92 @@ class VinculoDAO extends DAO {
 			$vinculo = new Vinculo();
 			$vinculo->setResponsavel($usuario);
 			$vinculo->setCartao(new Cartao());
+			$vinculo->setId($linha['vinc_id']);
 			$vinculo->getCartao()->setTipo(new Tipo());
+			$vinculo->getCartao()->setId($linha['cart_id']);
 			$vinculo->getCartao()->getTipo()->setNome($linha ['tipo_nome']);
 			$vinculo->getCartao()->setNumero($linha ['cart_numero']);
 			$vinculo->setInicioValidade($linha ['vinc_inicio']);
 			$vinculo->setFinalValidade($linha['vinc_fim']);
+			$vinculo->setAvulso($linha['vinc_avulso']);
 			$lista[] = $vinculo;
 						
 
 		}
 		return $lista;
+	}
+
+	
+	public function invalidarVinculo(Vinculo $vinculo){
+		
+		$dataTimeAtual = date ( "Y-m-d G:i:s" );
+		
+		if($vinculo->getId()){
+			$idVinculo = $vinculo->getId();
+			$idIsencao = $vinculo->getIsencao()->getId();
+			$sql = "UPDATE isencao set isen_fim = '$dataTimeAtual' WHERE isen_id = $idIsencao";
+			$this->getConexao()->exec($sql);
+			
+		}
+		
+		$sql = "UPDATE vinculo set vinc_fim = '$dataTimeAtual' WHERE vinc_id = $idVinculo";
+		if($this->getConexao()->exec($sql))
+			return true;
+		return false;
+		
+	}
+	public function invalidarIsencaoVinculo(Vinculo $vinculo){
+		$dataTimeAtual = date ( "Y-m-d G:i:s" );
+		$idIsencao = $vinculo->getIsencao()->getId();
+		$sql = "UPDATE isencao set isen_fim = '$dataTimeAtual' WHERE isen_id = $idIsencao";
+		if($this->getConexao()->exec($sql))
+			return true;
+		else
+			return false;
+	}
+	public function vinculoPorId(Vinculo $vinculo){
+		$idVinculo = $vinculo->getId();
+		$sql = 	"SELECT * FROM vinculo
+		INNER JOIN usuario ON vinculo.usua_id = usuario.usua_id
+		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
+		LEFT JOIN vinculo_tipo ON vinculo.vinc_id = vinculo_tipo.vinc_id
+		LEFT JOIN tipo ON vinculo_tipo.tipo_id = tipo.tipo_id
+		WHERE vinculo.vinc_id = $idVinculo";
+		$result = $this->getConexao ()->query ($sql);
+		foreach($result as $linha){
+
+			$vinculo->setId($linha['vinc_id']);
+			$vinculo->getResponsavel()->setNome($linha['usua_nome']);
+			$vinculo->getResponsavel()->setIdBaseExterna($linha['id_base_externa']);
+			$vinculo->getCartao()->setId($linha['cart_id']);
+			$vinculo->getCartao()->getTipo()->setNome($linha ['tipo_nome']);
+			$vinculo->getCartao()->setNumero($linha ['cart_numero']);
+			$vinculo->setInicioValidade($linha ['vinc_inicio']);
+			$vinculo->setFinalValidade($linha['vinc_fim']);
+			$vinculo->setAvulso($linha['vinc_avulso']);
+			return $vinculo;
+			
+		}
+	}
+	public function isencaoValidaDoVinculo(Vinculo $vinculo){
+		$dataTimeAtual = date ( "Y-m-d G:i:s" );
+		$idVinculo = $vinculo->getId();
+		$sql = 	"SELECT * FROM vinculo
+		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
+		INNER JOIN isencao ON cartao.cart_id = isencao.cart_id
+		WHERE (vinculo.vinc_id = $idVinculo) AND  ('$dataTimeAtual' BETWEEN isencao.isen_inicio AND isencao.isen_fim);";
+		$result = $this->getConexao ()->query ($sql);
+		foreach($result as $linha){
+			if(isset($linha['isen_id'])){
+				$vinculo->setIsencao(new Isencao());
+				$vinculo->getIsencao()->setId($linha['isen_id']);
+				$vinculo->getIsencao()->setDataDeInicio($linha['isen_inicio']);
+				$vinculo->getIsencao()->setDataFinal($linha['isen_fim']);
+		
+			}
+			return $vinculo;
+				
+		}
 	}
 	public function retornaVinculosValidosDeCartao(Cartao $cartao){
 		$lista = array();
@@ -66,20 +142,22 @@ class VinculoDAO extends DAO {
 		$sql =  "SELECT * FROM usuario INNER JOIN vinculo
 		ON vinculo.usua_id = usuario.usua_id
 		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
-		LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id WHERE (cartao.cart_id = $idCartao)
+		LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id
+		WHERE (cartao.cart_id = $idCartao)
 		AND ('$dataTimeAtual' BETWEEN vinc_inicio AND vinc_fim)";
 		$result = $this->getConexao ()->query ($sql );
 	
 		foreach($result as $linha){
 			$vinculo = new Vinculo();
-			$vinculo->setResponsavel(new Usuario());
+			$vinculo->setId($linha['vinc_id']);
+			$vinculo->getResponsavel()->setNome($linha['usua_nome']);
 			$vinculo->getResponsavel()->setIdBaseExterna($linha['id_base_externa']);
-			$vinculo->setCartao(new Cartao());
-			$vinculo->getCartao()->setTipo(new Tipo());
+			$vinculo->getCartao()->setId($linha['cart_id']);
 			$vinculo->getCartao()->getTipo()->setNome($linha ['tipo_nome']);
 			$vinculo->getCartao()->setNumero($linha ['cart_numero']);
 			$vinculo->setInicioValidade($linha ['vinc_inicio']);
 			$vinculo->setFinalValidade($linha['vinc_fim']);
+			$vinculo->setAvulso($linha['vinc_avulso']);
 			$lista[] = $vinculo;
 	
 	
@@ -118,17 +196,21 @@ class VinculoDAO extends DAO {
 		$idCartao = $vinculo->getCartao()->getId();
 		$refeicoes = $vinculo->getQuantidadeDeAlimentosPorTurno();
 		$descricao = $vinculo->getDescricao();
+		$this->getConexao()->beginTransaction();
 		if($vinculo->isAvulso())
 			$sqlInsertVinculo = "INSERT into vinculo (usua_id, cart_id, vinc_refeicoes, vinc_avulso, vinc_inicio, vinc_fim, vinc_descricao) VALUES($idBaseLocal, $idCartao, $refeicoes,TRUE,'$dataDeHoje', '$dataDeValidade', '$descricao')";
 		else
 			$sqlInsertVinculo = "INSERT into vinculo (usua_id, cart_id, vinc_refeicoes, vinc_avulso, vinc_inicio, vinc_fim) VALUES($idBaseLocal, $idCartao, 1,FALSE,'$dataDeHoje', '$dataDeValidade')";
-		if(!$this->getConexao()->exec($sqlInsertVinculo))
+		if(!$this->getConexao()->exec($sqlInsertVinculo)){
+			$this->getConexao()->rollBack();
 			return 0;
+		}
 		$idVinculo = $this->getConexao()->lastInsertId('vinculo_vinc_id_seq');
 		if(!$this->getConexao()->exec("INSERT into vinculo_tipo (vinc_id, tipo_id) VALUES($idVinculo, $tipoCartao)")){
 			$this->getConexao()->rollBack();
 			return 0;
 		}
+		$this->getConexao()->commit();
 		return true;
 	}
 	
@@ -230,6 +312,7 @@ class VinculoDAO extends DAO {
 		
 		
 	}
+	
 	
 	
 }

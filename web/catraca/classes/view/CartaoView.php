@@ -19,8 +19,6 @@ class CartaoView {
 									</div>';
 	}
 	
-	public function mostraLista() {
-	}
 	public function formBuscaUsuarios() {
 		echo '					<div class="borda">
 									<form method="get" action="" class="formulario em-linha" >
@@ -45,7 +43,7 @@ class CartaoView {
 	public function mostraResultadoBuscaDeUsuarios($usuarios) {
 		echo '<div class="doze linhas">';
 		echo '<br><h2 class="texto-preto">Resultado da busca:</h2>';
-		echo '</div>
+		echo '</div><div class="borda">
 				<table class="tabela borda-vertical zebrada texto-preto">
 				<thead>
 					<tr>
@@ -62,7 +60,7 @@ class CartaoView {
 		foreach ( $usuarios as $usuario ) {
 			$this->mostraLinhaDaBusca ( $usuario );
 		}
-		echo '</tbody></table>';
+		echo '</tbody></table></div>';
 	}
 	
 	/**
@@ -71,25 +69,26 @@ class CartaoView {
 	 */
 	public function mostraResultadoBuscaDeCartoes($cartoes) {
 		echo '<div class="doze linhas">';
-		echo '<br><h2 class="texto-preto">Resultado da busca:</h2>';
-		echo '</div>
+		echo '<br><h2 class="texto-preto">Busca de Cartões:</h2>';
+		echo '</div>';
+		echo '<div class="borda">
 				<table class="tabela borda-vertical zebrada texto-preto">
 				<thead>
 					<tr>
-											            <th>Nome</th>
-											            <th>CPF</th>
-											            <th>Passaporte</th>
-											            <th>Status Discente</th>
-														<th>Status Servidor</th>
-														<th>Tipo de Usuario</th>
-											            <th>Selecionar</th>
-											        </tr>
-											    </thead>
-												<tbody>';
+			            <th>Nome</th>
+			            <th>CPF</th>
+			            <th>Passaporte</th>
+			            <th>Status Discente</th>
+						<th>Status Servidor</th>
+						<th>Tipo de Usuario</th>
+			            <th>Selecionar</th>
+			        </tr>
+			    </thead>
+			<tbody>';
 		foreach ( $cartoes as $cartao) {
 			$this->mostraLinhaDaBuscaCartao ( $cartao);
 		}
-		echo '</tbody></table>';
+		echo '</tbody></table></div>';
 	}
 	public function mostraLinhaDaBusca(Usuario $usuario) {
 		echo '<tr>';
@@ -143,13 +142,13 @@ class CartaoView {
 		echo '<div class="borda">
 						<table class="tabela borda-vertical zebrada texto-preto">';
 		echo '<tr>
-								<th>ID usuario</th>
-								<th>Nome</th>
+								<th>Avulso</th>
+								<th>Responsável</th>
 								<th>Tipo</th>
-								<th>Cartao</th>
-								<th>Inicio</th>
-								<th>Fim</th>
-		
+								<th>Cartão</th>
+								<th>Validade</th>
+								<th>Isento</th>
+								<th>Detalhes</th>
 							</tr>';
 		foreach ( $lista as $vinculo) {
 			$this->mostraLinhaVinculo($vinculo);
@@ -159,13 +158,19 @@ class CartaoView {
 		
 	}
 	public function mostraLinhaVinculo(Vinculo $vinculo){
-		echo '<tr>
-				<td>' . $vinculo->getResponsavel()->getIdBaseExterna() . '</td>
+		echo '<tr>';
+		if($vinculo->isAvulso())
+			echo 	'<td>Sim</td>';
+		else 
+			echo 	'<td>Não</td>';
+		
+		echo '
 				<td>' . $vinculo->getResponsavel()->getNome(). '</td>
 				<td>' .$vinculo->getCartao()->getTipo()->getNome() . '</td>
-				<td>' . $vinculo->getCartao()->getNumero() . '</td>
-				<td>' . $vinculo->getInicioValidade() . '</td>
+				<td><a href="?pagina=cartao&cartaoselecionado='.$vinculo->getCartao()->getId().'">' . $vinculo->getCartao()->getNumero() . '</a></td>
 				<td>' . $vinculo->getFinalValidade() . '</td>
+				<td>Não</td>
+				<td><a href="?pagina=cartao&vinculoselecionado='.$vinculo->getId().'">Detalhes</a></td>
 			</tr>';
 	}
 	public function mostraFormAdicionarVinculo($listaDeTipos, $idSelecionado){
@@ -217,6 +222,54 @@ class CartaoView {
 	public function mostraSucesso($mensagem){
 		echo '<div class="borda"><p>'.$mensagem.'</p></div>';
 	
+	}
+	public function mostrarVinculoDetalhe(Vinculo $vinculo){
+		echo '<div class="doze linhas">';
+		echo '<br><h2 class="texto-preto">Vinculo Selecionado:</h2>';
+		echo '</div>';
+		echo '<div class="borda">';
+		if($vinculo->isAvulso())
+			echo '<p>Avulso</p>';
+		echo '<p>Responsável: '.ucwords(strtolower($vinculo->getResponsavel()->getNome())).'</p>';
+		echo '<p>Cartão: '.$vinculo->getCartao()->getNumero().'</p>';
+		echo '<p>Tipo de Vínculo: '.$vinculo->getCartao()->getTipo()->getNome().'</p>';
+		
+		$tempoA = strtotime($vinculo->getInicioValidade());
+		$tempoB = strtotime($vinculo->getFinalValidade());
+		$tempoAgora = time();
+		if($tempoAgora > $tempoA && $tempoAgora < $tempoB)
+			echo '<p>Vinculo ativo</p>';
+		else
+			echo '<p>Vinculo inativo</p>';
+		
+		echo '<p>Início do Vínculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getInicioValidade())).'</p>';
+		echo '<p>Fim do Vínculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getFinalValidade())).'</p>';
+		
+		echo '<p><a href="?pagina=cartao&vinculoselecionado='.$vinculo->getId().'&deletar=1">Eliminar Vinculo</a></p>';
+		
+		
+		echo '</div>';
+		
+	}
+	public function mostraIsencaoDoVinculo(Vinculo $vinculo){
+		echo '<div class="doze linhas">';
+		echo '<br><h2 class="texto-preto">Vinculo Selecionado:</h2>';
+		echo '</div>';
+		echo '<div class="borda">';
+		if($vinculo->getIsencao()->getId())
+		{
+			$tempoA = strtotime($vinculo->getIsencao()->getDataDeInicio());
+			$tempoB = strtotime($vinculo->getIsencao()->getDataFinal());
+			if($tempoAgora > $tempoA && $tempoAgora < $tempoB)
+				echo '<p>Isenção ativa</p>';
+			else
+				echo '<p>Isenção inativa</p>';
+			echo '<p>Início da Isenção: '.date('d/m/Y H:i:s', strtotime($vinculo->getIsencao()->getDataDeInicio())).'</p>';
+			echo '<p>Fim da Isenção: '.date('d/m/Y H:i:s', strtotime($vinculo->getIsencao()->getDataFinal())).'</p>';
+			echo '<p><a href="?pagina=cartao&vinculoselecionado='.$vinculo->getId().'&delisencao=1">Eliminar Isenção</a></p>';
+				
+		}
+		echo '</div>';
 	}
 	
 }

@@ -4,7 +4,9 @@ class Isencao{
 	private $id;
 	private $dataDeInicio;
 	private $dataFinal;
-	private $cartao;
+	public function Isencao(){
+		$this->id = 0;
+	}
 	
 	public function setId($id){
 		$this->id = $id;
@@ -17,17 +19,13 @@ class Isencao{
 	}
 	public function getDataDeInicio(){
 		return $this->dataDeInicio;
-		
 	}
-	public function setCartao(Cartao $cartao){
-		$this->cartao = $cartao;
+	public function setDataFinal($dataFinal){
+		$this->dataFinal = $dataFinal;
 	}
-	public function getCartao(){
-		return $this->cartao;
+	public function getDataFinal(){
+		return $this->dataFinal;
 	}
-	
-	
-	
 	
 }
 

@@ -27,7 +27,7 @@ class CartaoController{
 		$selecaoCartoes = "";
 		$selecaoIsentos = "";
 		
-		if(isset($_GET['selecionado']) || isset ( $_GET ['nome'] )){
+		if(isset($_GET['selecionado']) || isset ( $_GET ['nome'] ) || isset($_GET['vinculoselecionado'])){
 			$selecaoUsuarios = "active";
 			$selecaoCartoes = "";
 			$selecaoIsentos = "";
@@ -57,6 +57,7 @@ class CartaoController{
 	}
 	public function pesquisaCartaoCancelarVinculo(){
 		$this->view->formBuscaCartao();
+		
 		if(isset($_GET['numero'])){
 			$cartaoDAO = new CartaoDAO(null, DAO::TIPO_PG_LOCAL);
 			$listaDeCartoes = $cartaoDAO->pesquisaPorNumero($_GET['numero']);
@@ -84,7 +85,92 @@ class CartaoController{
 	}
 	public function pesquisaUsuarioAdicionarVinculo(){
 		$this->view->formBuscaUsuarios();
+		if(isset($_GET['vinculoselecionado'])){
+			
+			$vinculoDao = new VinculoDAO(null, DAO::TIPO_PG_LOCAL);
+			$vinculoDetalhe = new Vinculo();
+			$vinculoDetalhe->setId($_GET['vinculoselecionado']);
+			$vinculoDao->vinculoPorId($vinculoDetalhe);
+			$vinculoDao->isencaoValidaDoVinculo($vinculoDetalhe);
+			$this->view->mostrarVinculoDetalhe($vinculoDetalhe);
+			if($vinculoDetalhe->getIsencao()->getId()){
+				$this->view->mostraIsencaoDoVinculo($vinculoDetalhe);
+				
+			}else{
+				if(isset($_GET['addisencao'])){
+					
+					echo 'Form add isenção';
+					
+				}else{
+					echo '<a href="?pagina=cartao&vinculoselecionado='.$vinculoDetalhe->getId().'&addisencao=1">Adicionar Isenção</a>';
+					
+				}
+			}
+			
+			
+			if(isset($_POST['certeza_isencao'])){
+				echo '<div class="borda">';
+				echo '</p>Ok, vou deletar</p>';
+				if($vinculoDao->invalidarIsencaoVinculo($vinculoDetalhe))
+					echo 'Isenção Eliminada com sucesso';
+				$vinculoDao->fechaConexao();
+				echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&vinculoselecionado=' .$_POST['vinculoselecionado']. '">';
+				echo '</div>';
+				return;
+			
+			}
+			if(isset($_POST['certeza'])){
+				
+				
+				echo '<div class="borda">';
+				echo '</p>Ok, vou deletar</p>';
+				if($vinculoDao->invalidarVinculo($vinculoDetalhe))
+					echo 'Eliminado com sucesso';
+				
+				$vinculoDao->fechaConexao();
+				echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&vinculoselecionado=' .$_POST['vinculoselecionado']. '">';
+				echo '</div>';
+				
+				return;
+				
+			}
+			if(isset($_GET['deletar'])){
+				
+				echo '<div class="borda">';
+				$usuario = new Usuario();
+				$sessao = new Sessao();
+				$usuario->setLogin($sessao->getLoginUsuario());
+				$usuarioDao = new UsuarioDAO($vinculoDao->getConexao());
+				$usuarioDao->preenchePorLogin($usuario);
+				echo '<p>'.ucwords(strtolower($usuario->getNome())).', você tem certeza que quer eliminar este vínculo?</p><br>';
+				echo '<form action="" method="post" class="formulario sequencial texto-preto">
+						<input type="hidden" name="vinculoselecionado" value="'.$_GET['vinculoselecionado'].'" />
+						<input  type="submit"  name="certeza" value="Tenho Certeza"/></form>';
+				
+				echo '</div>';
+			}
+			if(isset($_GET['delisencao'])){
+			
+				echo '<div class="borda">';
+				$usuario = new Usuario();
+				$sessao = new Sessao();
+				$usuario->setLogin($sessao->getLoginUsuario());
+				$usuarioDao = new UsuarioDAO($vinculoDao->getConexao());
+				$usuarioDao->preenchePorLogin($usuario);
+				echo '<p>'.ucwords(strtolower($usuario->getNome())).', você tem certeza que quer eliminar esta isenção?</p><br>';
+				echo '<form action="" method="post" class="formulario sequencial texto-preto">
+						<input type="hidden" name="vinculoselecionado" value="'.$_GET['vinculoselecionado'].'" />
+						<input  type="submit"  name="certeza_isencao" value="Tenho Certeza"/></form>';
+			
+				echo '</div>';
+			}
+			
+			$vinculoDao->fechaConexao();
+			return;
+			
+		}
 		if (isset ( $_GET ['nome'] )) {
+			
 			$usuarioDao = new UsuarioDAO(null, DAO::TIPO_PG_SIGAAA);
 			$listaDeUsuarios = $usuarioDao->pesquisaNoSigaa( $_GET ['nome']);
 			$this->view->mostraResultadoBuscaDeUsuarios($listaDeUsuarios);
