@@ -95,7 +95,14 @@ class Vinculo{
 		return $this->cartao;
 	}
 	
-	
+	public function isActive(){
+		$tempoA = strtotime($this->getInicioValidade());
+		$tempoB = strtotime($this->getFinalValidade());
+		$tempoAgora = time();
+		if($tempoAgora > $tempoA && $tempoAgora < $tempoB)
+			return true;
+		return false;
+	}
 	
 }
 

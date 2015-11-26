@@ -112,12 +112,13 @@ class CartaoController{
 						}
 						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&vinculoselecionado=' .$_GET['vinculoselecionado']. '">';
 					}
-					
-					
 				}else{
-					
-					echo '<a href="?pagina=cartao&vinculoselecionado='.$vinculoDetalhe->getId().'&addisencao=1">Adicionar Isenção</a>';
-					
+					$tempoA = strtotime($vinculoDetalhe->getInicioValidade());
+					$tempoB = strtotime($vinculoDetalhe->getFinalValidade());
+					$tempoAgora = time();
+					if($tempoAgora > $tempoA && $tempoAgora < $tempoB){
+						echo '<a href="?pagina=cartao&vinculoselecionado='.$vinculoDetalhe->getId().'&addisencao=1">Adicionar Isenção</a>';
+					}
 				}
 			}
 			

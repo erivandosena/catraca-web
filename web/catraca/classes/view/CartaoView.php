@@ -234,18 +234,21 @@ class CartaoView {
 		echo '<p>Cartão: '.$vinculo->getCartao()->getNumero().'</p>';
 		echo '<p>Tipo de Vínculo: '.$vinculo->getCartao()->getTipo()->getNome().'</p>';
 		
-		$tempoA = strtotime($vinculo->getInicioValidade());
-		$tempoB = strtotime($vinculo->getFinalValidade());
-		$tempoAgora = time();
-		if($tempoAgora > $tempoA && $tempoAgora < $tempoB)
+		if($vinculo->isActive()){
 			echo '<p>Vinculo ativo</p>';
-		else
+			echo '<p>Início do Vínculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getInicioValidade())).'</p>';
+			echo '<p>Fim do Vínculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getFinalValidade())).'</p>';
+			
+			echo '<p><a class="botao b-erro" href="?pagina=cartao&vinculoselecionado='.$vinculo->getId().'&deletar=1">Eliminar Vinculo</a></p>';
+		}
+		else{
 			echo '<p>Vinculo inativo</p>';
+			echo '<p>Início do Vínculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getInicioValidade())).'</p>';
+			echo '<p>Fim do Vínculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getFinalValidade())).'</p>';
+		}
 		
-		echo '<p>Início do Vínculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getInicioValidade())).'</p>';
-		echo '<p>Fim do Vínculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getFinalValidade())).'</p>';
 		
-		echo '<p><a href="?pagina=cartao&vinculoselecionado='.$vinculo->getId().'&deletar=1">Eliminar Vinculo</a></p>';
+		
 		
 		
 		echo '</div>';
@@ -261,13 +264,24 @@ class CartaoView {
 			$tempoA = strtotime($vinculo->getIsencao()->getDataDeInicio());
 			$tempoB = strtotime($vinculo->getIsencao()->getDataFinal());
 			$tempoAgora = time();
-			if($tempoAgora > $tempoA && $tempoAgora < $tempoB)
+			if($tempoAgora > $tempoA && $tempoAgora < $tempoB){
 				echo '<p>Isenção ativa</p>';
-			else
+				echo '<p>Início da Isenção: '.date('d/m/Y H:i:s', strtotime($vinculo->getIsencao()->getDataDeInicio())).'</p>';
+				echo '<p>Fim da Isenção: '.date('d/m/Y H:i:s', strtotime($vinculo->getIsencao()->getDataFinal())).'</p>';
+				echo '<p><a href="?pagina=cartao&vinculoselecionado='.$vinculo->getId().'&delisencao=1">Eliminar Isenção</a></p>';
+				
+			}
+			else if($tempoAgora < $tempoB){
+				echo '<p>Isenção no Futuro</p>';
+				echo '<p>Início da Isenção: '.date('d/m/Y H:i:s', strtotime($vinculo->getIsencao()->getDataDeInicio())).'</p>';
+				echo '<p>Fim da Isenção: '.date('d/m/Y H:i:s', strtotime($vinculo->getIsencao()->getDataFinal())).'</p>';
+				echo '<p><a href="?pagina=cartao&vinculoselecionado='.$vinculo->getId().'&delisencao=1">Eliminar Isenção</a></p>';
+			}else
+			{
 				echo '<p>Isenção inativa</p>';
-			echo '<p>Início da Isenção: '.date('d/m/Y H:i:s', strtotime($vinculo->getIsencao()->getDataDeInicio())).'</p>';
-			echo '<p>Fim da Isenção: '.date('d/m/Y H:i:s', strtotime($vinculo->getIsencao()->getDataFinal())).'</p>';
-			echo '<p><a href="?pagina=cartao&vinculoselecionado='.$vinculo->getId().'&delisencao=1">Eliminar Isenção</a></p>';
+			}
+				
+			
 				
 		}
 		echo '</div>';

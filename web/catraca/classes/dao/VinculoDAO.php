@@ -95,6 +95,23 @@ class VinculoDAO extends DAO {
 		$idCartao = $vinculo->getCartao()->getId();
 		$inicio = $vinculo->getIsencao()->getDataDeInicio();
 		$fim = $vinculo->getIsencao()->getDataFinal();
+		if(!$vinculo->isActive()){
+			echo '1';
+			return false;
+		}
+		$tempoA = strtotime($vinculo->getIsencao()->getDataDeInicio());
+		$tempoB = strtotime($vinculo->getIsencao()->getDataFinal());
+		$tempoAgora = time();
+		//Não adicionar isenção para o passado. 
+		if($tempoA < strtotime ( "-5 days" )){
+			echo '<p>Não é possível adicionar isenção para o passado</p>';
+			return false;
+		}
+		//Não adicionar caso o usuário inverta as datas. 
+		if($tempoB <= $tempoA){
+			echo '<p>Talvez você tenha trocado as datas. </p>';
+			return false;	
+		}
 		$sql = "INSERT into isencao(isen_inicio,isen_fim,cart_id) VALUES('$inicio', '$fim', $idCartao)";
 		if($this->getConexao()->exec($sql))
 			return true;
@@ -131,7 +148,7 @@ class VinculoDAO extends DAO {
 		$sql = 	"SELECT * FROM vinculo
 		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
 		INNER JOIN isencao ON cartao.cart_id = isencao.cart_id
-		WHERE (vinculo.vinc_id = $idVinculo) AND  ('$dataTimeAtual' BETWEEN isencao.isen_inicio AND isencao.isen_fim);";
+		WHERE (vinculo.vinc_id = $idVinculo) AND  ('$dataTimeAtual' < isencao.isen_fim);";
 		$result = $this->getConexao ()->query ($sql);
 		foreach($result as $linha){
 			if(isset($linha['isen_id'])){

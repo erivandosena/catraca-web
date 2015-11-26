@@ -26,7 +26,15 @@ class Isencao{
 	public function getDataFinal(){
 		return $this->dataFinal;
 	}
-	
+	public function isActive(){
+		$tempoA = strtotime($this->getDataDeInicio());
+		$tempoB = strtotime($this->getDataFinal());
+		$tempoAgora = time();
+		if($tempoAgora < $tempoB)
+			return true;
+		return false;
+		
+	}
 }
 
 ?>
