@@ -260,6 +260,7 @@ class CartaoView {
 		{
 			$tempoA = strtotime($vinculo->getIsencao()->getDataDeInicio());
 			$tempoB = strtotime($vinculo->getIsencao()->getDataFinal());
+			$tempoAgora = time();
 			if($tempoAgora > $tempoA && $tempoAgora < $tempoB)
 				echo '<p>Isenção ativa</p>';
 			else
@@ -270,6 +271,27 @@ class CartaoView {
 				
 		}
 		echo '</div>';
+	}
+	
+	public function formAdicionarIsencao($idSelecionado){
+		
+		$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'H:00:01' );
+		$hoje = date ('Y-m-d') . 'T' . date ( 'H:00:01' );
+		
+		
+		
+		echo '<div class="borda">
+				<form method="post" action="" class="formulario sequencial texto-preto" >
+					
+						    <label for="isen_inicio">Início:</label>
+						         <input id="isen_inicio" type="datetime-local" name="isen_inicio" value="' . $hoje . '" />
+				    	    <label for="isen_fim">Fim:</label>
+						         <input id="isen_fim" type="datetime-local" name="isen_fim" value="' . $daqui3Meses . '" />
+							<input type="hidden" name="id_card"  value="' . $idSelecionado . '"/>
+			   <br> <br>	<input  type="submit"  name="salve_isencao" value="Salvar"/>
+			</form>
+			</div>';
+		
 	}
 	
 }

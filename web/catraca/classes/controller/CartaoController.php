@@ -98,8 +98,22 @@ class CartaoController{
 				
 			}else{
 				if(isset($_GET['addisencao'])){
+					if(!isset($_POST['salve_isencao']))
+						$this->view->formAdicionarIsencao($vinculoDetalhe->getCartao()->getId());
+					else 
+					{
+						$vinculoDetalhe->getCartao()->setId($_POST['id_card']);
+						$vinculoDetalhe->getIsencao()->setDataDeInicio($_POST['isen_inicio']);
+						$vinculoDetalhe->getIsencao()->setDataFinal($_POST['isen_fim']);
+						if($vinculoDao->adicionarIsencaoNoVinculo($vinculoDetalhe))
+							$this->view->mostraSucesso("Isenção Inserida Com sucesso!");
+						else{
+							$this->view->mostraSucesso("Erro na tentativa de Inserir Isenção!");
+						}
+						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&vinculoselecionado=' .$_GET['vinculoselecionado']. '">';
+					}
 					
-					echo 'Form add isenção';
+					
 				}else{
 					
 					echo '<a href="?pagina=cartao&vinculoselecionado='.$vinculoDetalhe->getId().'&addisencao=1">Adicionar Isenção</a>';

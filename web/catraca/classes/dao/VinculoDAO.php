@@ -91,6 +91,16 @@ class VinculoDAO extends DAO {
 		else
 			return false;
 	}
+	public function adicionarIsencaoNoVinculo(Vinculo $vinculo){
+		$idCartao = $vinculo->getCartao()->getId();
+		$inicio = $vinculo->getIsencao()->getDataDeInicio();
+		$fim = $vinculo->getIsencao()->getDataFinal();
+		$sql = "INSERT into isencao(isen_inicio,isen_fim,cart_id) VALUES('$inicio', '$fim', $idCartao)";
+		if($this->getConexao()->exec($sql))
+			return true;
+		return false;
+		
+	}
 	public function vinculoPorId(Vinculo $vinculo){
 		$idVinculo = $vinculo->getId();
 		$sql = 	"SELECT * FROM vinculo
