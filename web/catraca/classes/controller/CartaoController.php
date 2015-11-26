@@ -100,8 +100,8 @@ class CartaoController{
 				if(isset($_GET['addisencao'])){
 					
 					echo 'Form add isenção';
-					
 				}else{
+					
 					echo '<a href="?pagina=cartao&vinculoselecionado='.$vinculoDetalhe->getId().'&addisencao=1">Adicionar Isenção</a>';
 					
 				}
