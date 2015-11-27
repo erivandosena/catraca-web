@@ -183,12 +183,32 @@ class CartaoController{
 						}
 						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&vinculoselecionado=' .$_GET['vinculoselecionado']. '">';
 					}
-				}else{
+				}else if(isset($_GET['addcreditos'])){
+					
+					if(!isset($_POST['salve_creditos']))
+						$this->view->formAdicionarCreditos($vinculoDetalhe->getCartao()->getId());
+					else
+					{
+						$vinculoDetalhe->getCartao()->setId($_POST['id_card']);
+						$valorVendido = floatval($_POST['valor_creditos']);
+						$vinculoDetalhe->getCartao()->adicionaCreditos($valorVendido);
+						$sessao = new Sessao();
+						if($vinculoDao->adicionarCreditos($vinculoDetalhe, $valorVendido, $sessao->getIdUsuario()))
+							$this->view->mostraSucesso("Isenção Inserida Com sucesso!");
+						else{
+							$this->view->mostraSucesso("Erro na tentativa de Inserir Isenção!");
+						}
+						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&vinculoselecionado=' .$_GET['vinculoselecionado']. '">';
+					}
+				}			
+				else{
 					$tempoA = strtotime($vinculoDetalhe->getInicioValidade());
 					$tempoB = strtotime($vinculoDetalhe->getFinalValidade());
 					$tempoAgora = time();
 					if($tempoAgora > $tempoA && $tempoAgora < $tempoB){
-						echo '<a href="?pagina=cartao&vinculoselecionado='.$vinculoDetalhe->getId().'&addisencao=1">Adicionar Isenção</a>';
+						echo '<a class="botao b-primario" href="?pagina=cartao&vinculoselecionado='.$vinculoDetalhe->getId().'&addisencao=1">Adicionar Isenção</a>';
+						echo '<a class="botao b-secundario" href="?pagina=cartao&vinculoselecionado='.$vinculoDetalhe->getId().'&addcreditos=1">Adicionar Créditos</a>';
+						
 					}
 				}
 			}

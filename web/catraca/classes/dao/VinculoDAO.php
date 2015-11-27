@@ -118,6 +118,34 @@ class VinculoDAO extends DAO {
 		return false;
 		
 	}
+	public function adicionarCreditos(Vinculo $vinculo, $valorVendido, $idUsuario){
+		$novoValor = $vinculo->getCartao()->getCreditos();
+		$idCartao = $vinculo->getCartao()->getId();
+		$valorVendido = floatval($valorVendido);
+		$dataTimeAtual = date ( "Y-m-d G:i:s" );
+		
+		$sql = "UPDATE cartao set cart_creditos = $novoValor WHERE cart_id = $idCartao";
+		
+		$sql2 = "INSERT into transacao(tran_valor, tran_descricao, tran_data, usua_id) 
+				VALUES($valorVendido, 'Venda de Créditos','$dataTimeAtual', $idUsuario)";
+		$this->getConexao()->beginTransaction();
+		
+		
+		//echo $sql;
+		if(!$this->getConexao()->exec($sql)){
+			$this->getConexao()->rollBack();
+			return false;
+		}
+		if(!$this->getConexao()->exec($sql2)){
+			$this->getConexao()->rollBack();
+			return false;
+		}
+		$this->getConexao()->commit();
+		return true;
+		
+		
+	}
+	
 	public function vinculoPorId(Vinculo $vinculo){
 		$idVinculo = $vinculo->getId();
 		$sql = 	"SELECT * FROM vinculo
@@ -135,6 +163,7 @@ class VinculoDAO extends DAO {
 			$vinculo->getCartao()->setId($linha['cart_id']);
 			$vinculo->getCartao()->getTipo()->setNome($linha ['tipo_nome']);
 			$vinculo->getCartao()->setNumero($linha ['cart_numero']);
+			$vinculo->getCartao()->setCreditos($linha['cart_creditos']);
 			$vinculo->setInicioValidade($linha ['vinc_inicio']);
 			$vinculo->setFinalValidade($linha['vinc_fim']);
 			$vinculo->setAvulso($linha['vinc_avulso']);

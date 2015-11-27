@@ -298,6 +298,7 @@ class CartaoView {
 			echo '<p>Avulso</p>';
 		echo '<p>Responsável: '.ucwords(strtolower($vinculo->getResponsavel()->getNome())).'</p>';
 		echo '<p>Cartão: '.$vinculo->getCartao()->getNumero().'</p>';
+		echo '<p>Créditos no Cartão: R$' . number_format($vinculo->getCartao()->getCreditos(), 2, ',', '.').'</p>';
 		echo '<p>Tipo de Vínculo: '.$vinculo->getCartao()->getTipo()->getNome().'</p>';
 		
 		if($vinculo->isActive()){
@@ -305,7 +306,7 @@ class CartaoView {
 			echo '<p>Início do Vínculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getInicioValidade())).'</p>';
 			echo '<p>Fim do Vínculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getFinalValidade())).'</p>';
 			
-			echo '<p><a class="botao b-erro" href="?pagina=cartao&vinculoselecionado='.$vinculo->getId().'&deletar=1">Eliminar Vinculo</a></p>';
+			echo '<a class="botao b-erro" href="?pagina=cartao&vinculoselecionado='.$vinculo->getId().'&deletar=1">Eliminar Vinculo</a>';
 		}
 		else{
 			echo '<p>Vinculo inativo</p>';
@@ -336,7 +337,7 @@ class CartaoView {
 				echo '<p>Isenção ativa</p>';
 				echo '<p>Início da Isenção: '.date('d/m/Y H:i:s', strtotime($vinculo->getIsencao()->getDataDeInicio())).'</p>';
 				echo '<p>Fim da Isenção: '.date('d/m/Y H:i:s', strtotime($vinculo->getIsencao()->getDataFinal())).'</p>';
-				echo '<p><a href="?pagina=cartao&vinculoselecionado='.$vinculo->getId().'&delisencao=1">Eliminar Isenção</a></p>';
+				echo '<a href="?pagina=cartao&vinculoselecionado='.$vinculo->getId().'&delisencao=1">Eliminar Isenção</a>';
 				
 			}
 			else if($tempoAgora < $tempoB){
@@ -374,6 +375,26 @@ class CartaoView {
 			</form>
 			</div>';
 		
+	}
+	
+	public function formAdicionarCreditos($idSelecionado){
+	
+		$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'H:00:01' );
+		$hoje = date ('Y-m-d') . 'T' . date ( 'H:00:01' );
+	
+	
+	
+		echo '<div class="borda">
+				<form method="post" action="" class="formulario sequencial texto-preto" >
+			
+						   
+				    	    <label for="valor_creditos">Valor A Adicionar:</label>
+						         <input id="valor_creditos" type="number"  max="100"  name="valor_creditos" step="0.01" value="1.6" />
+							<input type="hidden" name="id_card"  value="' . $idSelecionado . '"/>
+			   <br> <br>	<input  type="submit"  name="salve_creditos" value="Salvar"/>
+			</form>
+			</div>';
+	
 	}
 	
 }

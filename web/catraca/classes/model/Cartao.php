@@ -6,8 +6,10 @@ class Cartao{
 	private $creditos;
 	private $tipo;
 	
+	
 	public function Cartao(){
 		$this->tipo = new Tipo();
+		$this->creditos = 0;
 	}
 	
 	public function setId($id){
@@ -35,6 +37,11 @@ class Cartao{
 	}
 	public function getTipo(){
 		return $this->tipo;
+	}
+	public function adicionaCreditos($creditos){
+		if(is_numeric($creditos)){
+			$this->setCreditos($this->getCreditos()+$creditos);
+		}
 	}
 }
 
