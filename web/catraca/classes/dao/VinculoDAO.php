@@ -103,7 +103,7 @@ class VinculoDAO extends DAO {
 		$tempoB = strtotime($vinculo->getIsencao()->getDataFinal());
 		$tempoAgora = time();
 		//Não adicionar isenção para o passado. 
-		if($tempoA < strtotime ( "-5 days" )){
+		if($tempoA < strtotime ( "-1 days" )){
 			echo '<p>Não é possível adicionar isenção para o passado</p>';
 			return false;
 		}
@@ -208,26 +208,31 @@ class VinculoDAO extends DAO {
 		
 	}
 	public function adicionaVinculo(Vinculo $vinculo) {
-		$dataDeHoje = date("Y-m-d H:i:s");
+		$inicio = $vinculo->getInicioValidade();
 		$usuarioBaseExterna = $vinculo->getResponsavel()->getIdBaseExterna();
 		$numeroCartao = $vinculo->getCartao()->getNumero();
 		$dataDeValidade = $vinculo->getFinalValidade();
 		$tipoCartao = $vinculo->getCartao()->getTipo()->getId();
 		$this->verificarUsuario($vinculo->getResponsavel());
+		if($vinculo->invalidoParaAdicionar())
+			return false;
+		
 		if(!$vinculo->getResponsavel()->getId())
-			return 0;
+			return false;
+		
 		$idBaseLocal = $vinculo->getResponsavel()->getId();
 		$this->verificaCartao($vinculo->getCartao());
 		if(!$vinculo->getCartao()->getId())
-			return 0;
+			return false;
 		$idCartao = $vinculo->getCartao()->getId();
 		$refeicoes = $vinculo->getQuantidadeDeAlimentosPorTurno();
 		$descricao = $vinculo->getDescricao();
 		$this->getConexao()->beginTransaction();
+		
 		if($vinculo->isAvulso())
-			$sqlInsertVinculo = "INSERT into vinculo (usua_id, cart_id, vinc_refeicoes, vinc_avulso, vinc_inicio, vinc_fim, vinc_descricao) VALUES($idBaseLocal, $idCartao, $refeicoes,TRUE,'$dataDeHoje', '$dataDeValidade', '$descricao')";
+			$sqlInsertVinculo = "INSERT into vinculo (usua_id, cart_id, vinc_refeicoes, vinc_avulso, vinc_inicio, vinc_fim, vinc_descricao) VALUES($idBaseLocal, $idCartao, $refeicoes,TRUE,'$inicio', '$dataDeValidade', '$descricao')";
 		else
-			$sqlInsertVinculo = "INSERT into vinculo (usua_id, cart_id, vinc_refeicoes, vinc_avulso, vinc_inicio, vinc_fim) VALUES($idBaseLocal, $idCartao, 1,FALSE,'$dataDeHoje', '$dataDeValidade')";
+			$sqlInsertVinculo = "INSERT into vinculo (usua_id, cart_id, vinc_refeicoes, vinc_avulso, vinc_inicio, vinc_fim) VALUES($idBaseLocal, $idCartao, 1,FALSE,'$inicio', '$dataDeValidade')";
 		if(!$this->getConexao()->exec($sqlInsertVinculo)){
 			$this->getConexao()->rollBack();
 			return 0;
@@ -337,6 +342,86 @@ class VinculoDAO extends DAO {
 		}
 		return 0;
 		
+		
+	}
+	public function isencoesValidas($dataReferencia = null, $nomeUsuario = null){
+		$lista = array();
+		
+		if($dataReferencia == null)
+			$dataReferencia = date ( "Y-m-d G:i:s" );
+		$outroFiltro = "";
+		if($nomeUsuario != null){
+			$nomeUsuario = preg_replace ('/[^a-zA-Z0-9\s]/', '', $nomeUsuario);
+			$nomeUsuario = strtoupper ( $nomeUsuario );
+			$outroFiltro = "AND usua_nome LIKE '%$nomeUsuario%'";
+		}
+		
+		$sql =  "SELECT * FROM usuario INNER JOIN vinculo
+		ON vinculo.usua_id = usuario.usua_id
+		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
+		LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id
+		INNER JOIN isencao ON cartao.cart_id = isencao.cart_id
+		WHERE ('$dataReferencia' BETWEEN vinc_inicio AND vinc_fim) AND ('$dataReferencia' BETWEEN isen_inicio AND isen_fim) $outroFiltro LIMIT 100";
+		$result = $this->getConexao ()->query ($sql );
+		foreach($result as $linha){
+				
+			$vinculo = new Vinculo();
+			$vinculo->setId($linha['vinc_id']);
+			$vinculo->getCartao()->setTipo(new Tipo());
+			$vinculo->getResponsavel()->setId($linha['usua_id']);
+			$vinculo->getResponsavel()->setNome($linha['usua_nome']);
+		
+			$vinculo->getCartao()->setId($linha['cart_id']);
+			$vinculo->getCartao()->getTipo()->setNome($linha ['tipo_nome']);
+			$vinculo->getCartao()->setNumero($linha ['cart_numero']);
+			$vinculo->setInicioValidade($linha ['vinc_inicio']);
+			$vinculo->setFinalValidade($linha['vinc_fim']);
+			$vinculo->setAvulso($linha['vinc_avulso']);
+			$lista[] = $vinculo;
+		
+		
+		}
+		return $lista;
+	}
+	
+	public function buscaVinculos($dataReferencia = null, $nomeUsuario = null){
+		
+		$lista = array();
+		
+		if($dataReferencia == null)
+			$dataReferencia = date ( "Y-m-d G:i:s" );
+		$outroFiltro = "";
+		if($nomeUsuario != null){
+			$nomeUsuario = preg_replace ('/[^a-zA-Z0-9\s]/', '', $nomeUsuario);
+			$nomeUsuario = strtoupper ( $nomeUsuario );
+			$outroFiltro = "AND usua_nome LIKE '%$nomeUsuario%'";
+		}
+		
+		$sql =  "SELECT * FROM usuario INNER JOIN vinculo
+		ON vinculo.usua_id = usuario.usua_id
+		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
+		LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id
+		WHERE '$dataReferencia' BETWEEN vinc_inicio AND vinc_fim  $outroFiltro LIMIT 100";
+		$result = $this->getConexao ()->query ($sql );
+		foreach($result as $linha){
+			
+			$vinculo = new Vinculo();
+			$vinculo->setId($linha['vinc_id']);
+			$vinculo->getCartao()->setTipo(new Tipo());
+			$vinculo->getResponsavel()->setId($linha['usua_id']);
+			$vinculo->getResponsavel()->setNome($linha['usua_nome']);
+				
+			$vinculo->getCartao()->setId($linha['cart_id']);
+			$vinculo->getCartao()->getTipo()->setNome($linha ['tipo_nome']);
+			$vinculo->getCartao()->setNumero($linha ['cart_numero']);
+			$vinculo->setInicioValidade($linha ['vinc_inicio']);
+			$vinculo->setFinalValidade($linha['vinc_fim']);
+			$vinculo->setAvulso($linha['vinc_avulso']);
+			$lista[] = $vinculo;
+		
+		
+		}
+		return $lista;
 		
 	}
 	

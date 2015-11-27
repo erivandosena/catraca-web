@@ -18,7 +18,41 @@ class CartaoView {
 									</form>
 									</div>';
 	}
-	
+	public function mostraResultadoBuscaDeCartoes($cartoes) {
+		echo '<div class="doze linhas">';
+		echo '<br><h2 class="texto-preto">Busca de Cartões:</h2>';
+		echo '</div>';
+		echo '<div class="borda">
+				<table class="tabela borda-vertical zebrada texto-preto">
+				<thead>
+					<tr>
+			            <th>Numero</th>
+			            <th>Créditos</th>
+			            <th>Tipo de Usuário</th>
+			            <th>Selecionar</th>
+			        </tr>
+			    </thead>
+			<tbody>';
+		foreach ( $cartoes as $cartao) {
+			$this->mostraLinhaDaBuscaCartao ( $cartao);
+		}
+		echo '</tbody></table></div>';
+	}
+	public function mostraLinhaDaBuscaCartao(Cartao $cartao) {
+		echo '<tr>';
+		echo '<td>' .  $cartao->getNumero() . '</a></td>';
+		echo '<td>' .$cartao->getCreditos(). '</td>';
+		echo '<td>' . $cartao->getTipo()->getNome() . '</td>';
+		echo '<td class="centralizado"><a href="?pagina=cartao&cartaoselecionado=' . $cartao->getId() . '"><span class="icone-checkmark texto-verde2 botao" title="Selecionar"></span></a></td>';
+		echo '</tr>';
+	}
+	public function mostraCartaoSelecionado(Cartao $cartao){
+		echo '<div class="borda">
+				Nome: ' . $cartao->getNumero() . '
+				<br>Creditos: ' . $cartao->getCreditos() . '
+				<br>Nome do Tipo: ' . $cartao->getTipo()->getNome(). '
+				</div>';
+	}
 	public function formBuscaUsuarios() {
 		echo '					<div class="borda">
 									<form method="get" action="" class="formulario em-linha" >
@@ -33,6 +67,72 @@ class CartaoView {
 											<input type="submit" />
 										</label>
 		
+									</form>
+									</div>';
+	}
+	public function formBuscaVinculo() {
+		echo '					<div class="borda">
+									<form method="get" action="" class="formulario em-linha" >
+	
+										<label for="parametro">Buscar por:</label>
+											<select name="parametro" id="parametro" class="texto-preto">
+												<option value="1">Nome do Usuário</option>
+											</select>';
+		if(isset($_GET['filtro_data']))
+			echo '<input type="hidden" name="filtro_data" value="'.$_GET['filtro_data'].'"/>';
+		echo '		
+											<input class="texto-preto" type="text" name="busca_vinculos" id="busca_vinculos" /><br>
+											<input type="submit" />
+										
+	
+									</form>
+									</div>';
+	}
+	public function formBuscaVinculoIsencao() {
+		echo '					<div class="borda">
+									<form method="get" action="" class="formulario em-linha" >
+	
+										<label for="parametro">Buscar por:</label>
+											<select name="parametro" id="parametro" class="texto-preto">
+												<option value="1">Nome do Usuário</option>
+											</select>';
+		if(isset($_GET['filtro_data_isen']))
+			echo '<input type="hidden" name="filtro_data_isen" value="'.$_GET['filtro_data_isen'].'"/>';
+		echo '
+											<input class="texto-preto" type="text" name="busca_vinculos_isen" id="busca_vinculos_isen" /><br>
+											<input type="submit" />
+	
+	
+									</form>
+									</div>';
+	}
+	public function filtroData(){
+		
+		$dataHoje = date ('Y-m-d') . 'T' . date ( 'H:00:01' );
+		
+		echo '					<div class="borda">
+									<form method="get" action="" class="formulario em-linha" >
+										<label for="filtro_data">Filtro de Data:</label>
+											<input class="texto-preto" value="'.$dataHoje.'" type="datetime-local" name="filtro_data" id="filtro_data" /><br>';
+		if(isset($_GET['busca_vinculos']))
+			echo '<input type="hidden" name="busca_vinculos" value="'.$_GET['busca_vinculos'].'"/>';
+		echo '
+											<input type="submit" />
+									</form>
+									</div>';
+	}
+	public function filtroDataIsencao(){
+	
+		$dataHoje = date ('Y-m-d') . 'T' . date ( 'H:00:01' );
+	
+		echo '					<div class="borda">
+									<form method="get" action="" class="formulario em-linha" >
+										<label for="filtro_data_isen">Filtro de Data:</label>
+											<input class="texto-preto" value="'.$dataHoje.'" type="datetime-local" name="filtro_data_isen" id="filtro_data_isen" /><br>';
+		if(isset($_GET['busca_vinculos_isen']))
+			echo '<input type="hidden" name="busca_vinculos_isen" value="'.$_GET['busca_vinculos_isen'].'"/>';
+		echo '
+											<input type="submit" />
 									</form>
 									</div>';
 	}
@@ -63,33 +163,8 @@ class CartaoView {
 		echo '</tbody></table></div>';
 	}
 	
-	/**
-	 *
-	 * @param array $usuarios
-	 */
-	public function mostraResultadoBuscaDeCartoes($cartoes) {
-		echo '<div class="doze linhas">';
-		echo '<br><h2 class="texto-preto">Busca de Cartões:</h2>';
-		echo '</div>';
-		echo '<div class="borda">
-				<table class="tabela borda-vertical zebrada texto-preto">
-				<thead>
-					<tr>
-			            <th>Nome</th>
-			            <th>CPF</th>
-			            <th>Passaporte</th>
-			            <th>Status Discente</th>
-						<th>Status Servidor</th>
-						<th>Tipo de Usuario</th>
-			            <th>Selecionar</th>
-			        </tr>
-			    </thead>
-			<tbody>';
-		foreach ( $cartoes as $cartao) {
-			$this->mostraLinhaDaBuscaCartao ( $cartao);
-		}
-		echo '</tbody></table></div>';
-	}
+	
+	
 	public function mostraLinhaDaBusca(Usuario $usuario) {
 		echo '<tr>';
 		echo '<td>' . $usuario->getNome () . '</a></td>';
@@ -101,17 +176,7 @@ class CartaoView {
 		echo '<td class="centralizado"><a href="?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna () . '"><span class="icone-checkmark texto-verde2 botao" title="Selecionar"></span></a></td>';
 		echo '</tr>';
 	}
-	public function mostraLinhaDaBuscaCartao(Cartao $cartao) {
-		echo '<tr>';
-		echo '<td>' . $cartao->getId() . '</a></td>';
-		echo '<td>' . $cartao->getNumero(). '</td>';
-		echo '<td>' . $cartao->getCreditos() . '</td>';
-		echo '<td>' . $cartao->getTipo()->getNome() . '</td>';
-		echo '<td></td>';
-		echo '<td></td>';
-		echo '<td class="centralizado"><a href="?pagina=cartao&cartaoselecionado=' . $cartao->getId() . '"><span class="icone-checkmark texto-verde2 botao" title="Selecionar"></span></a></td>';
-		echo '</tr>';
-	}
+	
 
 	public function mostraSelecionado(Usuario $usuario) {
 		echo '<div class="borda">
@@ -129,13 +194,7 @@ class CartaoView {
 				<br>Nivel Discente: ' . $usuario->getNivelDiscente(). '
 				<br>Matricula Discente: ' . $usuario->getMatricula() . '</div>';
 	}
-	public function mostraCartaoSelecionado(Cartao $cartao){
-		echo '<div class="borda">
-				Nome: ' . $cartao->getNumero() . '
-				<br>Creditos: ' . $cartao->getCreditos() . '
-				<br>Nome do Tipo: ' . $cartao->getTipo()->getNome(). '
-				</div>';
-	}
+	
 	
 	
 	public function mostraVinculos($lista){
@@ -168,13 +227,18 @@ class CartaoView {
 				<td>' . $vinculo->getResponsavel()->getNome(). '</td>
 				<td>' .$vinculo->getCartao()->getTipo()->getNome() . '</td>
 				<td><a href="?pagina=cartao&cartaoselecionado='.$vinculo->getCartao()->getId().'">' . $vinculo->getCartao()->getNumero() . '</a></td>
-				<td>' . $vinculo->getFinalValidade() . '</td>
-				<td>Não</td>
+				<td>' . date("d/m/Y G:i:s", strtotime($vinculo->getFinalValidade())) . '</td>';
+		if($vinculo->getIsencao()->getId())
+			echo '<td>Sim</td>';
+		else
+			echo '<td>Não</td>';
+		echo '
 				<td><a href="?pagina=cartao&vinculoselecionado='.$vinculo->getId().'">Detalhes</a></td>
 			</tr>';
 	}
 	public function mostraFormAdicionarVinculo($listaDeTipos, $idSelecionado){
 		$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'H:00:01' );
+		$dataHoje = date ('Y-m-d') . 'T' . date ( 'H:00:01' );
 			
 		echo '<div class="borda">
 				<script type="text/javascript">
@@ -195,6 +259,8 @@ class CartaoView {
 				<form method="post" action="" class="formulario sequencial texto-preto" >
 						    <label for="numero_cartao">Número do Cartão</label>
 						        <input type="text" name="numero_cartao" id="numero_cartao" />
+							<label for="inicio_vinculo">Início:</label>
+						         <input id="inicio_vinculo" type="datetime-local" name="inicio_vinculo" value="' . $dataHoje . '" />
 						    <label for="validade">Validade:</label>
 						         <input id="validade" type="datetime-local" name="data_validade" value="' . $daqui3Meses . '" />
 						     <label for="tipo">Tipo</label>
@@ -254,6 +320,8 @@ class CartaoView {
 		echo '</div>';
 		
 	}
+	
+	
 	public function mostraIsencaoDoVinculo(Vinculo $vinculo){
 		echo '<div class="doze linhas">';
 		echo '<br><h2 class="texto-preto">Vinculo Selecionado:</h2>';

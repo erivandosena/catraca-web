@@ -103,6 +103,15 @@ class Vinculo{
 			return true;
 		return false;
 	}
+	public function invalidoParaAdicionar(){
+		$time = strtotime(date("Y-m-d 01:00:00"));
+		$tempo1 = strtotime($this->getInicioValidade());
+		$tempo2 = strtotime($this->getFinalValidade());
+		if($time > $tempo1 || $time > $tempo2)
+			return true;
+		return false;
+		
+	}
 	
 }
 

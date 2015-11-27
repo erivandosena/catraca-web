@@ -25,21 +25,36 @@ class CartaoController{
 				<ul class="nav nav-tabs">';
 		$selecaoUsuarios = "active";
 		$selecaoCartoes = "";
-		$selecaoIsentos = "";
-		
+		$selecaoVinculos = "";
+		$selecaoIsencoes = "";
 		if(isset($_GET['selecionado']) || isset ( $_GET ['nome'] ) || isset($_GET['vinculoselecionado'])){
 			$selecaoUsuarios = "active";
 			$selecaoCartoes = "";
-			$selecaoIsentos = "";
+			$selecaoVinculos = "";
+			$selecaoIsencoes = "";
 		}else if(isset($_GET['cartaoselecionado']) || isset ( $_GET ['numero'])){
 			$selecaoUsuarios = "";
 			$selecaoCartoes = "active";
-			$selecaoIsentos = "";
+			$selecaoVinculos = "";
+			$selecaoIsencoes = "";
+		}else if(isset($_GET['filtro_data']) || isset ( $_GET ['busca_vinculos']) || isset($_GET['vinculos_validos'])){
+			$selecaoUsuarios = "";
+			$selecaoCartoes = "";
+			$selecaoVinculos = "active";
+			$selecaoIsencoes = "";
+		}else if(isset($_GET['filtro_data_isen']) || isset ( $_GET ['busca_vinculos_isen']) || isset($_GET['vinculos_validos_isen'])){
+			$selecaoUsuarios = "";
+			$selecaoCartoes = "";
+			$selecaoVinculos = "";
+			$selecaoIsencoes = "active";
 		}
 		echo '
 					<li role="presentation" class="'.$selecaoUsuarios.'"><a href="#tab1" data-toggle="tab">Usu&aacute;rios</a></li>
 					<li role="presentation" class="'.$selecaoCartoes.'"><a href="#tab2" data-toggle="tab">Cart&otilde;es</a></li>
-					<li role="presentation" class="'.$selecaoIsentos.'"><a href="#tab3" data-toggle="tab">Isentos</a></li>';
+					<li role="presentation" class="'.$selecaoVinculos.'"><a href="#tab3" data-toggle="tab">Vínculos</a></li>
+					<li role="presentation" class="'.$selecaoIsencoes.'"><a href="#tab4" data-toggle="tab">Isenções</a></li>
+							
+							';
 		
 		echo '
 				</ul><div class="tab-content">';
@@ -49,10 +64,62 @@ class CartaoController{
 		echo '<div class="tab-pane '.$selecaoCartoes.'" id="tab2">';
 		$this->pesquisaCartaoCancelarVinculo();
 		echo '</div>';
-		echo '<div class="tab-pane '.$selecaoIsentos.'" id="tab3">
-				Isentos
-				</div>';
+		echo '<div class="tab-pane '.$selecaoVinculos.'" id="tab3">';
+		$this->pesquisaVinculosAtivos();
+		echo '</div>';
+		echo '<div class="tab-pane '.$selecaoIsencoes.'" id="tab4">';
+		$this->pesquisaIsencoes();
+		echo '</div>';
 		echo '</section>';
+		
+	}
+	public function pesquisaIsencoes(){
+		$this->view->formBuscaVinculoIsencao();
+		$this->view->filtroDataIsencao();
+		$vinculoDao = new VinculoDAO(null, DAO::TIPO_PG_LOCAL);
+		$data = "";
+		$nome = "";
+		if(isset($_GET['busca_vinculos_isen']))
+			$nome = $_GET['busca_vinculos_isen'];
+		if(isset($_GET['filtro_data_isen']))
+			$data = $_GET['filtro_data_isen'];
+		
+		if(isset($_GET['filtro_data_isen']) || isset($_GET['busca_vinculos_isen']) || isset($_GET['vinculos_validos_isen'])){
+			$vinculos = $vinculoDao->isencoesValidas($data, $nome);
+			foreach($vinculos as $vinculoComIsencao)
+				$vinculoDao->isencaoValidaDoVinculo($vinculoComIsencao);
+			$this->view->mostraVinculos($vinculos);
+		}else{
+			echo '<a href="?pagina=cartao&vinculos_validos_isen=1">Buscar</a>';
+		}
+		
+		
+		
+	}
+	
+	public function pesquisaVinculosAtivos(){
+		
+		$this->view->formBuscaVinculo();
+		$this->view->filtroData();
+		$vinculoDao = new VinculoDAO(null, DAO::TIPO_PG_LOCAL);
+		$data = "";
+		$nome = "";
+		if(isset($_GET['busca_vinculos']))
+			$nome = $_GET['busca_vinculos'];
+		if(isset($_GET['filtro_data']))
+			$data = $_GET['filtro_data'];
+		
+		if(isset($_GET['filtro_data']) || isset($_GET['busca_vinculos']) || isset($_GET['vinculos_validos'])){
+			$vinculos = $vinculoDao->buscaVinculos($data, $nome);
+			foreach($vinculos as $vinculoComIsencao)
+				$vinculoDao->isencaoValidaDoVinculo($vinculoComIsencao);
+			$this->view->mostraVinculos($vinculos);
+		}else{
+			echo '<a href="?pagina=cartao&vinculos_validos=1">Buscar</a>';
+		}
+		
+		
+		
 		
 	}
 	public function pesquisaCartaoCancelarVinculo(){
@@ -78,6 +145,10 @@ class CartaoController{
  			$vinculoDao = new VinculoDAO($cartaoDAO->getConexao());
  			
  			$vinculos = $vinculoDao->retornaVinculosValidosDeCartao($cartao);
+ 			
+ 			foreach($vinculos as $vinculoComIsencao)
+ 				$vinculoDao->isencaoValidaDoVinculo($vinculoComIsencao);
+ 			
  			$this->view->mostraVinculos($vinculos);
 			
 			
@@ -192,6 +263,7 @@ class CartaoController{
 			$usuarioDao->fechaConexao();
 		}
 		if (isset ( $_GET ['selecionado'] )) {
+			
 			$idDoSelecionado = intval($_GET['selecionado']);
 			$usuarioDao = new UsuarioDAO(null, DAO::TIPO_PG_SIGAAA);
 			$usuario = new Usuario();
@@ -200,6 +272,10 @@ class CartaoController{
 			$this->view->mostraSelecionado($usuario);
 			$vinculoDao = new VinculoDAO(null, DAO::TIPO_PG_LOCAL);
 			$vinculos = $vinculoDao->retornaVinculosValidosDeUsuario($usuario);
+			
+			foreach($vinculos as $vinculoComIsencao)
+				$vinculoDao->isencaoValidaDoVinculo($vinculoComIsencao);
+			
 			$this->view->mostraVinculos($vinculos);
 				
 			if (isset ( $_POST ['salvar'] )) {
@@ -210,7 +286,7 @@ class CartaoController{
 				$vinculo->getCartao()->getTipo()->setId(intval($_POST ['tipo']));
 				$vinculo->getCartao()->setNumero(intval($_POST ['numero_cartao']));
 				$vinculo->getResponsavel()->setIdBaseExterna(intval($_POST ['id_base_externa']));
-				
+				$vinculo->setInicioValidade($_POST['inicio_vinculo']);
 				if(isset($_POST['avulso'])){
 					if($_POST['avulso'] == "sim"){
 						$vinculo->setAvulso(true);
@@ -236,8 +312,12 @@ class CartaoController{
 					echo '</div>';
 					
 				}else{
-					$vinculoDao->adicionaVinculo ($vinculo);
-					$this->view->mostraSucesso("Vinculo Adicionado Com Sucesso. ");
+					if($vinculoDao->adicionaVinculo ($vinculo)){
+						$this->view->mostraSucesso("Vinculo Adicionado Com Sucesso. ");
+					}else{
+						$this->view->mostraSucesso("Erro na tentativa de Adicionar Vínculo. ");
+					}
+					
 					// No final eu redireciono para a pagina de selecao do usuario.
 					echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $vinculo->getResponsavel()->getIdBaseExterna() . '">';
 					return;
