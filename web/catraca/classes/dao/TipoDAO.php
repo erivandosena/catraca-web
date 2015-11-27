@@ -13,6 +13,7 @@ class TipoDAO extends DAO{
 			$tipo = new Tipo();
 			$tipo->setId($linha['tipo_id']);
 			$tipo->setNome($linha['tipo_nome']);
+			$tipo->setValorCobrado($linha['tipo_valor']);
 			$lista[] = $tipo;
 
 		}

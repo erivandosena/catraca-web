@@ -1,8 +1,8 @@
 <?php
 /**
- * UnidadeDAO alterações do banco de dados referentes à entidade unidade. 
+ * UnidadeDAO alteraï¿½ï¿½es do banco de dados referentes ï¿½ entidade unidade. 
  * Gera pesistencia da classe unidade. 
- * É a unidade academica. 
+ * ï¿½ a unidade academica. 
  * @author jefponte
  *
  */
@@ -14,13 +14,12 @@ class UnidadeDAO extends DAO{
 	 */
 	public function retornaLista(){
 		$lista = array();
-		$result = $this->getConexao()->query("SELECT * FROM unidade");
+		$result = $this->getConexao()->query("SELECT * FROM unidade LIMIT 100");
 
 		foreach ($result as $linha){
 			$unidade = new Unidade();
 			$unidade->setId($linha['unid_id']);
 			$unidade->setNome($linha['unid_nome']);
-				
 			$lista[] = $unidade;
 				
 		}
