@@ -137,22 +137,6 @@ if (isset ( $_GET ["sair"] )) {
 								</div>
 							</div>';
 						
-						// $dao = new DAO(null, DAO::TIPO_PG_LOCAL);
-						// echo $dao->getConexao()->exec("DELETE FROM vinculo");
-						
-// 						$dataTimeAtual = date ( "Y-m-d G:i:s" );
-// 						$sql = "SELECT isen_id, isen_inicio, isen_fim, isencao.cart_id 
-// 	FROM vinculo INNER JOIN cartao ON cartao.cart_id = vinculo.cart_id
-// 	INNER JOIN isencao ON isencao.cart_id = cartao.cart_id
-// 	WHERE ('$dataTimeAtual' BETWEEN vinc_inicio AND vinc_fim) AND 
-// 	('$dataTimeAtual' BETWEEN isen_inicio AND isen_fim)
-// 	ORDER BY isen_id;";
-						
-// 						$dao = new DAO ( null, DAO::TIPO_PG_LOCAL );
-// 						$result = $dao->getConexao ()->query ( $sql );
-// 						foreach ( $result as $linha ) {
-// 							print_r ( $linha );
-// 						}
 					}
 					?>
 					
