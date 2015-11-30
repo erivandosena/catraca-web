@@ -1,0 +1,23 @@
+# Package Files #
+*.jar
+*.war
+*.ear
+*.class
+*.metadata*
+*.project*
+*.history*
+*.fdx
+*.fdt
+*.frq
+*.fnm
+*.nrm
+*.frx
+*.prx
+*.tii
+*.tis
+*recommenders/*
+*.classpath
+/projeto/unicafeWin/.recommenders/index/http___download_eclipse_org_recommenders_models_luna_/segments_3i
+*.exe
+*.log
+/projeto/unicafeWin/.recommenders/index/http___download_eclipse_org_recommenders_models_luna_
