@@ -4,6 +4,7 @@
 
 from time import sleep
 import Adafruit_CharLCD as LCD
+from unicodedata import normalize
 from catraca.logs import Logs
 from catraca.controle.raspberrypi.pinos import PinoControle
 
@@ -45,7 +46,7 @@ class Display(object):
     lcd_d5        = rpi.ler(25)['gpio']
     lcd_d6        = rpi.ler(24)['gpio']
     lcd_d7        = rpi.ler(23)['gpio']
-    lcd_backlight = 4
+    lcd_backlight = rpi.ler(5)['gpio']
     
     # Definir quantidade da coluna e linha para LCD 16x2
     lcd_columns = 16
@@ -61,12 +62,14 @@ class Display(object):
                                lcd_d7, 
                                lcd_columns, 
                                lcd_rows, 
-                               lcd_backlight)
+                               lcd_backlight, 
+                               enable_pwm=False)
     
     def __init__(self):
         super(Display, self).__init__()
 
     def mensagem(self, texto, duracao, cursor, scroll):
+        texto = self.remove_acentos(texto).upper()
         try:
             # limpa
             self.lcd.clear()
@@ -95,5 +98,16 @@ class Display(object):
             sleep(0.5)
             self.lcd.move_left()
             
+    def lcd_retroiluminacao(self, estado):
+        if estado:
+            # Turn backlight on.
+            lcd.set_backlight(estado)
+        else:
+            # Turn backlight off.
+            lcd.set_backlight(estado)
+            
     def limpa_lcd(self):
         self.lcd.clear()
+        
+    def remove_acentos(self, texto, codif='utf-8'):
+        return normalize('NFKD', texto.decode(codif)).encode('ASCII','ignore')

@@ -49,9 +49,9 @@ class CatracaUnidadeDAO(ConexaoGenerica):
                         return list
                     else:
                         return None
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela catraca_unidade.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[catraca-unidade] Erro ao realizar SELECT.', exc_info=True)
         finally:
             pass
         
@@ -71,47 +71,47 @@ class CatracaUnidadeDAO(ConexaoGenerica):
                     str(obj.id) + ", " +\
                     str(obj.catraca) + ", " +\
                     str(obj.unidade) + ")"
-                self.aviso = "Inserido com sucesso!"
+                self.aviso = "[catraca-unidade] Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
                     return False
             else:
-                self.aviso = "Objeto inexistente!"
+                self.aviso = "[catraca-unidade] inexistente!"
                 return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT na tabela catraca_unidade.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[catraca-unidade] Erro realizando INSERT.', exc_info=True)
             return False
         finally:
             pass   
         
     def atualiza_exclui(self, obj, delete):
         try:
-            if obj:
+            if obj or delete:
                 if delete:
-                    if obj.id:
+                    if obj:
                         sql = "DELETE FROM catraca_unidade WHERE caun_id = " + str(obj.id)
                     else:
                         sql = "DELETE FROM catraca_unidade"
-                    self.aviso = "Excluido com sucesso!"
+                    self.aviso = "[catraca-unidade] Excluido com sucesso!"
                 else:
                     sql = "UPDATE catraca_unidade SET " +\
                         "catr_id = " + str(obj.catraca) + ", " +\
                         "unid_id = " + str(obj.unidade) +\
                         " WHERE "\
                         "caun_id = " + str(obj.id)
-                    self.aviso = "Alterado com sucesso!"
+                    self.aviso = "[catraca-unidade] Alterado com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
                     return False
             else:
-                self.aviso = "Objeto inexistente!"
+                self.aviso = "[catraca-unidade] inexistente!"
                 return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando DELETE/UPDATE na tabela catraca_unidade.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[catraca-unidade] Erro realizando DELETE/UPDATE.', exc_info=True)
             return False
         finally:
             pass

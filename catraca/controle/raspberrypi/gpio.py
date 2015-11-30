@@ -15,4 +15,4 @@ class PinosGPIO(object):
 
     def __init__(self):
         self.gpio = GPIO
-        
+        #print "GPIO v." + str(self.gpio.VERSION)

@@ -62,15 +62,14 @@ class TurnoDAO(ConexaoGenerica):
                         return list
                     else:
                         return None
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela turno.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[turno] Erro ao realizar SELECT.', exc_info=True)
         finally:
             pass
         
     def busca_por_catraca(self, obj, hora_atual):
         if obj:
-            print "passou >>> if obj:"
             sql = "SELECT turno.turn_id, turno.turn_hora_inicio, turno.turn_hora_fim, turno.turn_descricao FROM turno "\
                     "INNER JOIN unidade_turno ON turno.turn_id = unidade_turno.turn_id "\
                     "INNER JOIN catraca_unidade ON unidade_turno.unid_id = catraca_unidade.unid_id "\
@@ -78,8 +77,10 @@ class TurnoDAO(ConexaoGenerica):
                     "WHERE catraca.catr_ip = '"+str(obj.ip)+"' "\
                     "AND turno.turn_hora_inicio <= '" + str(hora_atual) +"' "\
                     "AND turno.turn_hora_fim >= '" + str(hora_atual) + "'"
+            print "=" * 100
+            print sql
+            print "=" * 100
         else:
-            print "passou >>> else: ip = self.util.obtem_ip()"
             ip = self.util.obtem_ip()
             sql = "SELECT turno.turn_id, turno.turn_hora_inicio, turno.turn_hora_fim, turno.turn_descricao FROM turno "\
                     "INNER JOIN unidade_turno ON turno.turn_id = unidade_turno.turn_id "\
@@ -88,7 +89,9 @@ class TurnoDAO(ConexaoGenerica):
                     "WHERE catraca.catr_ip = '"+str(ip)+"' "\
                     "AND turno.turn_hora_inicio <= '" + str(hora_atual) +"' "\
                     "AND turno.turn_hora_fim >= '" + str(hora_atual) + "'"
- 
+            print "=" * 100
+            print sql
+            print "=" * 100
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -97,21 +100,13 @@ class TurnoDAO(ConexaoGenerica):
                     return list
                 else:
                     return None
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela turno.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[turno] Erro ao realizar SELECT.', exc_info=True)
         finally:
             pass
         
     def obtem_catraca(self):
-#         catraca = CatracaDAO().busca_por_ip(self.util.obtem_ip())
-#         if catraca:
-#             print " PASSOU ==>>>> catraca"
-#             return catraca
-#         else:
-#             print " PASSOU ==>>>> else: CatracaJson().catraca_get()"
-#             CatracaJson().catraca_get()
-#             catraca = CatracaDAO().busca_por_ip(self.util.obtem_ip())
         return CatracaDAO().busca_por_ip(self.util.obtem_ip())
         
         
@@ -138,30 +133,30 @@ class TurnoDAO(ConexaoGenerica):
                         str(obj.inicio) + "', '" +\
                         str(obj.fim) + "', '" +\
                         str(obj.descricao) + "')"
-                self.aviso = "Inserido com sucesso!"
+                self.aviso = "[turno] Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
                     return True
             else:
-                self.aviso = "Objeto inexistente!"
+                self.aviso = "[turno] inexistente!"
                 return False
-        except Exception, e:
-            self.__aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT na tabela turno.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[turno] Erro realizando INSERT.', exc_info=True)
             return False
         finally:
             pass
         
     def atualiza_exclui(self, obj, delete):
         try:
-            if obj:
+            if obj or delete:
                 if delete:
-                    if obj.id:
+                    if obj:
                         sql = "DELETE FROM turno WHERE turn_id = " + str(obj.id)
                     else:
                         sql = "DELETE FROM turno"
-                    self.aviso = "Excluido com sucesso!"
+                    self.aviso = "[turno] Excluido com sucesso!"
                 else:
                     sql = "UPDATE turno SET " +\
                           "turn_hora_inicio = '" + str(obj.inicio) + "', " +\
@@ -169,17 +164,17 @@ class TurnoDAO(ConexaoGenerica):
                           "turn_descricao = '" + str(obj.descricao) +\
                           "' WHERE "\
                           "turn_id = " + str(obj.id)
-                    self.aviso = "Alterado com sucesso!"
+                    self.aviso = "[turno] Alterado com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
                     return True
             else:
-                self.aviso = "Objeto inexistente!"
+                self.aviso = "[turno] inexistente!"
                 return False
-        except Exception, e:
-            self.__aviso = str(e)
-            self.log.logger.error('Erro realizando DELETE/UPDATE na tabela turno.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[turno] Erro realizando DELETE/UPDATE.', exc_info=True)
             return False
         finally:
             pass

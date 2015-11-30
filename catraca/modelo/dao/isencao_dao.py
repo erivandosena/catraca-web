@@ -49,9 +49,9 @@ class IsencaoDAO(ConexaoGenerica):
                         return list
                     else:
                         return None
-#         except Exception, e:
-#             self.aviso = str(e)
-#             self.log.logger.error('Erro ao realizar SELECT na tabela isencao.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[isencao] Erro ao realizar SELECT.', exc_info=True)
         finally:
             pass
         
@@ -73,30 +73,30 @@ class IsencaoDAO(ConexaoGenerica):
                         str(obj.inicio) + "', '" +\
                         str(obj.fim) + "', " +\
                         str(obj.cartao) + ")"
-                self.aviso = "Inserido com sucesso!"
+                self.aviso = "[isencao] Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
                     return True
             else:
-                self.aviso = "Objeto inexistente!"
+                self.aviso = "[isencao] inexistente!"
                 return False
-#         except Exception, e:
-#             self.aviso = str(e)
-#             self.log.logger.error('Erro realizando INSERT na tabela isencao.', exc_info=True)
-#             return False
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[isencao] Erro realizando INSERT.', exc_info=True)
+            return False
         finally:
             pass
         
     def atualiza_exclui(self, obj, delete):
         try:
-            if obj:
+            if obj or delete:
                 if delete:
-                    if obj.id:
+                    if obj:
                         sql = "DELETE FROM isencao WHERE isen_id = " + str(obj.id)
                     else:
                         sql = "DELETE FROM isencao"
-                    self.aviso = "Excluido com sucesso!"
+                    self.aviso = "[isencao] Excluido com sucesso!"
                 else:
                     sql = "UPDATE isencao SET " +\
                           "isen_inicio = '" + str(obj.inicio) + "', " +\
@@ -104,18 +104,18 @@ class IsencaoDAO(ConexaoGenerica):
                           "cart_id = " + str(obj.cartao) +\
                           " WHERE "\
                           "isen_id = " + str(obj.id)
-                    self.aviso = "Alterado com sucesso!"
+                    self.aviso = "[isencao] Alterado com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
                     return True
             else:
-                self.aviso = "Objeto inexistente!"
+                self.aviso = "[isencao] inexistente!"
                 return False
-#         except Exception, e:
-#             self.aviso = str(e)
-#             self.log.logger.error('Erro realizando DELETE/UPDATE na tabela isencao.', exc_info=True)
-#             return False
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[isencao] Erro realizando DELETE/UPDATE.', exc_info=True)
+            return False
         finally:
             pass
         

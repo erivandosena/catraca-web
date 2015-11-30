@@ -31,6 +31,7 @@ class SensorOptico(object):
     tempo_decorrente = 0
     finaliza_giro = False
     
+
     def __init__(self):
         super(SensorOptico, self).__init__()
 
@@ -41,6 +42,7 @@ class SensorOptico(object):
             return self.rpi.estado(self.sensor_2)
         
     def registra_giro(self, tempo, catraca):
+        tempo = tempo*1000;
         confirma_giro_completo = ''
         codigo_giro_completo = ''
         giro = None
@@ -50,7 +52,7 @@ class SensorOptico(object):
             ##############################################################
             while self.tempo_decorrente < tempo:
                 self.cronometro_tempo(self.tempo_decorrido, tempo, 1.6)
-                self.tempo_decorrido =  self.tempo_decorrente #self.tempo_decorrente/1000
+                self.tempo_decorrido =  self.tempo_decorrente /1000
                 self.log.logger.debug(str(self.tempo_decorrido) + ' seg. restantes para expirar o tempo de giro.')
                 ##############################################################
                 ## CATRACA SEM MOVIMENTO DE GIROS HORARIO OU ANTIHORARIO
@@ -88,10 +90,9 @@ class SensorOptico(object):
                             ##############################################################
                             ## ALERTA CASO A CATRACA PARE NO MEIO DO GIRO MAIS DE 10 SEG
                             ##############################################################
-                            #if self.util.cronometro/1000 < 10:
-                            if self.util.cronometro < 10:
+                            if self.util.cronometro/1000 < 10:
                                 self.cronometro_tempo(self.tempo_decorrido, tempo, 1.6)
-                            self.util.emite_beep(860, 1, 1, 10) #10 seg. delay beep
+                            self.util.beep_buzzer_delay(860, 1, 1, 10) #10 seg. delay beep
                         codigo_giro_completo = self.obtem_codigo_sensores()
                         ##############################################################
                         ## FINALIZANDO VERIFICA SE O GIRO FOI HORARIO OU ANTIHORARIO
@@ -126,7 +127,7 @@ class SensorOptico(object):
                     else:
                         self.log.logger.info('Nao girou '+giro+ ', operacao cancelada.')
                         self.finaliza_giro = False
-                        self.tempo_decorrente = tempo #tempo/1000
+                        self.tempo_decorrente = tempo/1000
                         return self.finaliza_giro
             self.cronometro_tempo(self.tempo_decorrido, tempo, 1.6)
             self.tempo_decorrente = 0
@@ -162,7 +163,7 @@ class SensorOptico(object):
    
     def cronometro_tempo(self, tempo_decorrido, tempo, milissegundos):
         self.tempo_decorrente += milissegundos
-        if tempo_decorrido > tempo: #tempo/1000:
+        if tempo_decorrido > tempo/1000:
             self.log.logger.info('Tempo expirado em '+ str(tempo_decorrido)+' segundo(s) sem giro.')
             self.finaliza_giro = False
             return self.finaliza_giro

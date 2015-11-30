@@ -2,15 +2,11 @@
 # -*- coding: latin-1 -*-
 
 
-from time import sleep
 from catraca.logs import Logs
-from catraca.util import Util
 from catraca.visao.interface.aviso import Aviso
-from catraca.visao.interface.acesso import Acesso
 from catraca.visao.interface.alerta import Alerta
-from catraca.controle.restful.controle_restful import ControleRestful
-from catraca.controle.restful.cliente_restful import ClienteRestful
 from catraca.controle.dispositivos.leitorcartao import LeitorCartao
+from catraca.controle.restful.relogio import Relogio
 
 
 __author__ = "Erivando Sena"
@@ -23,33 +19,27 @@ class Painel(object):
     
     log = Logs()
     aviso = Aviso() 
-    util = Util()
     
     def __init__(self):
         super(Painel, self).__init__()
     
     def main(self):
-        print 'Iniciando...'
-        self.log.logger.info('Iniciando aplicacao...')
+        print '\nIniciando API...\n'
+        self.log.logger.info('Iniciando Api...')
         self.aviso.exibir_inicializacao()
-        self.aviso.exibir_datahora(self.util.obtem_datahora_display(), 4)
-        self.aviso.exibir_saldacao()
         self.aviso.exibir_estatus_catraca()
         self.threads()
     
     def threads(self):
         #os.system("echo 'Sistema da Catraca iniciado!' | mail -s 'Raspberry Pi B' erivandoramos@bol.com.br")
         try:
+            Relogio().start()
             Alerta().start()
             LeitorCartao().start()
-            ControleRestful().start()
-            ClienteRestful().start()
             
-#         except (SystemExit, KeyboardInterrupt):
-#             raise
-#         except Exception:
-#             self.log.logger.error('Erro executando thread.', exc_info=True)
+        except Exception as excecao:
+            print excecao
+            self.log.logger.error('Erro executando Painel.', exc_info=True)
         finally:
             pass
-        
         

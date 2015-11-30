@@ -21,11 +21,11 @@ class VinculoJson(ServidorRestful):
     log = Logs()
     vinculo_dao = VinculoDAO()
     
-    def __init__(self, ):
+    def __init__(self):
         super(VinculoJson, self).__init__()
         ServidorRestful.__init__(self)
         
-    def vinculo_get(self):
+    def vinculo_get(self, limpa_tabela=False):
         servidor = self.obter_servidor()
         try:
             if servidor:
@@ -34,29 +34,34 @@ class VinculoJson(ServidorRestful):
                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
                 print "status HTTP: " + str(r.status_code)
                 dados  = json.loads(r.text)
+                LISTA_JSON = dados["vinculos"]
                 
-                if dados["vinculos"] is not []:
-                    for item in dados["vinculos"]:
+                if limpa_tabela:
+                    self.atualiza_exclui(None, True)
+                
+                if LISTA_JSON is not []:
+                    for item in LISTA_JSON:
                         obj = self.dict_obj(item)
                         if obj.id:
-                            lista = self.vinculo_dao.busca(obj.id)
-                            if lista is None:
-                                print "nao existe - insert " + str(obj.descricao)
-                                self.vinculo_dao.insere(obj)
-                                print self.vinculo_dao.aviso
-                            else:
-                                print "existe - update " + str(obj.descricao)
-                                self.vinculo_dao.atualiza_exclui(obj, False)
-                                print self.vinculo_dao.aviso
-                if dados["vinculos"] == []:
-                    self.vinculo_dao.atualiza_exclui(None,True)
-                    print self.vinculo_dao.aviso
+                            self.atualiza_exclui(obj, False)
+                        else:
+                            self.insere(obj)
+                else:
+                    self.atualiza_exclui(None, True)
                     
         except Exception as excecao:
             print excecao
-            self.log.logger.error('Erro obtendo json vinculo.', exc_info=True)
+            self.log.logger.error('Erro obtendo json vinculo', exc_info=True)
         finally:
             pass
+        
+    def atualiza_exclui(self, obj, boleano):
+        self.vinculo_dao.atualiza_exclui(obj, boleano)
+        print self.vinculo_dao.aviso
+        
+    def insere(self, obj):
+        self.vinculo_dao.insere(obj)
+        print self.vinculo_dao.aviso
         
     def dict_obj(self, formato_json):
         vinculo = Vinculo()
@@ -75,10 +80,7 @@ class VinculoJson(ServidorRestful):
             if item == "vinc_fim":
                 vinculo.fim = self.dict_obj(formato_json[item])
             if item == "vinc_descricao":
-                if self.dict_obj(formato_json[item]):
-                    vinculo.descricao = self.dict_obj(formato_json[item])
-                else:
-                    vinculo.descricao = self.dict_obj(formato_json[item]).encode('utf-8')
+                    vinculo.fim = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
             if item == "vinc_refeicoes":
                 vinculo.refeicoes = self.dict_obj(formato_json[item])
             if item == "cart_id":

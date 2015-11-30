@@ -56,9 +56,9 @@ class VinculoDAO(ConexaoGenerica):
                         return list
                     else:
                         return None
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela vinculo.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[vinculo] Erro ao realizar SELECT.', exc_info=True)
         finally:
             pass
   
@@ -82,9 +82,9 @@ class VinculoDAO(ConexaoGenerica):
                     return list
                 else:
                     return None
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela vinculo.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[vinculo] Erro ao realizar SELECT.', exc_info=True)
         finally:
             pass
         
@@ -108,30 +108,30 @@ class VinculoDAO(ConexaoGenerica):
                       str(obj.refeicoes) + ", " +\
                       str(obj.cartao) + ", " +\
                       str(obj.usuario) + ")"
-                self.aviso = "Inserido com sucesso!"
+                self.aviso = "[vinculo] Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
                     return True
             else:
-                self.aviso = "Objeto inexistente!"
+                self.aviso = "[vinculo] inexistente!"
                 return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT na tabela vinculo.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[vinculo] Erro realizando INSERT.', exc_info=True)
             return False
         finally:
             pass
         
     def atualiza_exclui(self, obj, delete):
         try:
-            if obj:
+            if obj or delete:
                 if delete:
-                    if obj.id:
+                    if obj:
                         sql = "DELETE FROM vinculo WHERE vinc_id = " + str(obj.id)
                     else:
                         sql = "DELETE FROM vinculo"
-                    self.aviso = "Excluido com sucesso!"
+                    self.aviso = "[vinculo] Excluido com sucesso!"
                 else:
                     sql = "UPDATE vinculo SET " +\
                           "vinc_avulso = " + str(obj.avulso) + ", " +\
@@ -143,17 +143,17 @@ class VinculoDAO(ConexaoGenerica):
                           "usua_id = " + str(obj.usuario) +\
                           " WHERE "\
                           "vinc_id = " + str(obj.id)
-                    self.aviso = "Alterado com sucesso!"
+                    self.aviso = "[vinculo] Alterado com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
                     return True
             else:
-                self.aviso = "Objeto inexistente!"
+                self.aviso = "[vinculo] inexistente!"
                 return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando DELETE/UPDATE na tabela vinculo.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[vinculo] Erro realizando DELETE/UPDATE.', exc_info=True)
             return False
         finally:
             pass

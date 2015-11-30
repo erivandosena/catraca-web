@@ -22,7 +22,6 @@ class PinoControle(PinosGPIO):
         super(PinoControle, self).__init__()
         self.gpio.setmode(self.gpio.BCM)
         self.gpio.setwarnings(False)
-        print "GPIO v." + str(self.gpio.VERSION)
         self.carrega_yaml()
 
     def carrega_yaml(self):
@@ -98,14 +97,15 @@ class PinoControle(PinosGPIO):
             pino_config = self.pins[pino_numero]
             if pino_config['modo'] == 'OUT':
                 self.gpio.setup(pino_config['gpio'], self.gpio.OUT)
+                print pino_config['nome']
             if pino_config['modo'] == 'IN':
                 self.gpio.setup(pino_config['gpio'], self.gpio.IN, pull_up_down= self.gpio.PUD_UP if pino_config['resistor'] == 'PUD_UP' else self.gpio.PUD_DOWN)
+                print pino_config['nome']
             pino_habilitado = self.pino_response(pino_numero, pino_config)
         except Exception as excecao:
             print excecao
         finally:
-            return pino_habilitado
-            self.gpio.limpa()
+            return pino_habilitado  
             
     def ler_todos(self):
         resultados = []
@@ -121,7 +121,6 @@ class PinoControle(PinosGPIO):
             print excecao
         finally:
             return resultados
-            self.gpio.limpa()
             
     def entrada(self):
         return self.gpio.IN
@@ -139,6 +138,7 @@ class PinoControle(PinosGPIO):
         return self.gpio.setwarnings(False)
 
     def limpa(self):
+        print "Limpa GPIO!"
         return self.gpio.cleanup()
 
     def entrada_up(self, num_pino):
@@ -163,17 +163,17 @@ class PinoControle(PinosGPIO):
 
     def evento_falling(self, num_pino, obj):
         try:
-            return self.gpio.add_event_detect(num_pino, self.gpio.FALLING, callback=obj)
+            return self.gpio.add_event_detect(num_pino, self.gpio.FALLING, callback=obj, bouncetime=1)
         except Exception as excecao:
             print excecao
             
     def evento_rising(self, num_pino, obj):
         try:
-            return self.gpio.add_event_detect(num_pino, self.gpio.RISING, callback=obj)
+            return self.gpio.add_event_detect(num_pino, self.gpio.RISING, callback=obj, bouncetime=1)
         except Exception as excecao:
             print excecao
             
-    def evento_rising_ou_falling(self, num_pino, obj):
+    def evento_both(self, num_pino, obj):
         try:
             return self.gpio.add_event_detect(num_pino, self.gpio.BOTH, callback=obj, bouncetime=1)
         except Exception as excecao:

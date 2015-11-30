@@ -61,9 +61,9 @@ class GiroDAO(ConexaoGenerica):
                         return list
                     else:
                         return None
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela giro.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[giro] Erro ao realizar SELECT.', exc_info=True)
         finally:
             pass
         
@@ -89,9 +89,9 @@ class GiroDAO(ConexaoGenerica):
                     return list
                 else:
                     return None
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela registro.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[giro] Erro ao realizar SELECT.', exc_info=True)
         finally:
             pass
         
@@ -108,30 +108,30 @@ class GiroDAO(ConexaoGenerica):
                     str(obj.antihorario) + ", '" +\
                     str(obj.data) + "', " +\
                     str(obj.catraca.id) + ")"
-                self.aviso = "Inserido com sucesso!"
+                self.aviso = "[giro] Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
                     return True
             else:
-                self.aviso = "Objeto inexistente!"
+                self.aviso = "[giro] inexistente!"
                 return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT na tabela giro.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[giro] Erro realizando INSERT.', exc_info=True)
             return False
         finally:
             pass
           
     def atualiza_exclui(self, obj, delete):
         try:
-            if obj:
+            if obj or delete:
                 if delete:
-                    if obj.id:
+                    if obj:
                         sql = "DELETE FROM giro WHERE giro_id = " + str(obj.id)
                     else:
                         sql = "DELETE FROM giro"
-                    self.aviso = "Excluido com sucesso!"
+                    self.aviso = "[giro] Excluido com sucesso!"
                 else:
                     sql = "UPDATE giro SET " +\
                         "giro_giros_horario = " + str(obj.horario) + ", " +\
@@ -140,17 +140,17 @@ class GiroDAO(ConexaoGenerica):
                         "catr_id = " + str(obj.catraca.id) +\
                         " WHERE "\
                         "giro_id = " + str(obj.id)
-                    self.aviso = "Alterado com sucesso!"
+                    self.aviso = "[giro] Alterado com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
                     return True
             else:
-                self.aviso = "Objeto inexistente!"
+                self.aviso = "[giro] inexistente!"
                 return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando DELETE/UPDATE na tabela giro.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[giro] Erro realizando DELETE/UPDATE.', exc_info=True)
             return False
         finally:
             pass
@@ -160,9 +160,9 @@ class GiroDAO(ConexaoGenerica):
             if obj is not None:
                 if delete:
                     sql = "DELETE FROM giro_off WHERE giof_id = " + str(obj.id)
-                    self.aviso = "Excluido com sucesso!"
+                    self.aviso = "[giro-off] Excluido com sucesso!"
                 else:
-                    if obj.id:
+                    if obj:
                         sql = "UPDATE giro_off SET " +\
                             "giof_giros_horario = " + str(obj.horario) + ", " +\
                             "giof_giros_antihorario = " + str(obj.antihorario) + ", " +\
@@ -170,7 +170,7 @@ class GiroDAO(ConexaoGenerica):
                             "catr_id = " + str(obj.catraca.id) +\
                             " WHERE "\
                             "giof_id = " + str(obj.id)
-                        self.aviso = "Alterado com sucesso!"
+                        self.aviso = "[giro-off] Alterado com sucesso!"
                     else:
                         sql = "INSERT INTO giro_off("\
                             "giof_giros_horario, "\
@@ -180,7 +180,7 @@ class GiroDAO(ConexaoGenerica):
                             str(obj.antihorario) + ", '" +\
                             str(obj.data) + "', " +\
                             str(obj.catraca.id) + ")"
-                        self.aviso = "Inserido com sucesso!"
+                        self.aviso = "[giro-off] Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
@@ -188,9 +188,9 @@ class GiroDAO(ConexaoGenerica):
             else:
                 self.aviso = "Objeto inexistente!"
                 return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela giro_off.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[giro-off] Erro realizando INSERT/UPDATE/DELETE.', exc_info=True)
             return False
         finally:
             pass

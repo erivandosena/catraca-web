@@ -21,8 +21,8 @@
 
 5:  
     gpio: 5
-    nome: GpioPuro
-    modo: IN
+    nome: LCD_LED_ON(Backlight)
+    modo: OUT
     estado: LOW
     #resistor: PUD_UP
 

@@ -60,9 +60,9 @@ class CatracaDAO(ConexaoGenerica):
                         return list
                     else:
                         return None
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela catraca.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[catraca] Erro ao realizar SELECT.', exc_info=True)
         finally:
             pass
         
@@ -88,9 +88,9 @@ class CatracaDAO(ConexaoGenerica):
                     return obj
                 else:
                     return None
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela catraca.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[catraca] Erro ao realizar SELECT.', exc_info=True)
         finally:
             pass
         
@@ -108,30 +108,30 @@ class CatracaDAO(ConexaoGenerica):
                     str(obj.tempo) + ", " +\
                     str(obj.operacao) + ", '" +\
                     str(obj.nome) + "')"
-                self.aviso = "Inserido com sucesso!"
+                self.aviso = "[catraca] Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
                     return False
             else:
-                self.aviso = "Objeto inexistente!"
+                self.aviso = "[catraca] inexistente!"
                 return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela catraca.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[catraca] Erro realizando INSERT.', exc_info=True)
             return False
         finally:
             pass   
         
     def atualiza_exclui(self, obj, delete):
         try:
-            if obj:
+            if obj or delete:
                 if delete:
-                    if obj.id:
+                    if obj:
                         sql = "DELETE FROM catraca WHERE catr_id = " + str(obj.id)
                     else:
                         sql = "DELETE FROM catraca"
-                    self.aviso = "Excluido com sucesso!"
+                    self.aviso = "[catraca] Excluido com sucesso!"
                 else:
                     sql = "UPDATE catraca SET " +\
                         "catr_ip = '" + str(obj.ip) + "', " +\
@@ -140,17 +140,17 @@ class CatracaDAO(ConexaoGenerica):
                         "catr_nome = '" + str(obj.nome) +\
                         "' WHERE "\
                         "catr_id = " + str(obj.id)
-                    self.aviso = "Alterado com sucesso!"
+                    self.aviso = "[catraca] Alterado com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
                     return False
             else:
-                self.aviso = "Objeto inexistente!"
+                self.aviso = "[catraca] inexistente!"
                 return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela catraca.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[catraca] Erro realizando UPDATE/DELETE.', exc_info=True)
             return False
         finally:
             pass

@@ -62,9 +62,9 @@ class UsuarioDAO(ConexaoGenerica):
                         return list
                     else:
                         return None
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela usuario.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[usuario] Erro ao realizar SELECT.', exc_info=True)
         finally:
             pass
         
@@ -84,30 +84,30 @@ class UsuarioDAO(ConexaoGenerica):
                       str(obj.login) + "', '" +\
                       str(obj.senha) + "', " +\
                       str(obj.nivel) + ")"
-                self.aviso = "Inserido com sucesso!"
+                self.aviso = "[usuario] Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
                     return True
             else:
-                self.aviso = "Objeto inexistente!"
+                self.aviso = "[usuario] inexistente!"
                 return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT na tabela usuario.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[usuario] Erro realizando INSERT.', exc_info=True)
             return False
         finally:
             pass
         
     def atualiza_exclui(self, obj, delete):
         try:
-            if obj:
+            if obj or delete:
                 if delete:
-                    if obj.id:
+                    if obj:
                         sql = "DELETE FROM usuario WHERE usua_id = " + str(obj.id)
                     else:
                         sql = "DELETE FROM usuario"
-                    self.aviso = "Excluido com sucesso!"
+                    self.aviso = "[usuario] Excluido com sucesso!"
                 else:
                     sql = "UPDATE usuario SET " +\
                           "usua_nome = '" + str(obj.nome) + "', " +\
@@ -117,17 +117,17 @@ class UsuarioDAO(ConexaoGenerica):
                           "usua_nivel = " + str(obj.nivel) +\
                           " WHERE "\
                           "usua_id = " + str(obj.id)
-                    self.aviso = "Alterado com sucesso!"
+                    self.aviso = "[usuario] Alterado com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
                     return True
             else:
-                self.aviso = "Objeto inexistente!"
+                self.aviso = "[usuario] inexistente!"
                 return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando DELETE/UPDATE na tabela usuario.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[usuario] Erro realizando DELETE/UPDATE.', exc_info=True)
             return False
         finally:
             pass

@@ -21,11 +21,11 @@ class CustoRefeicaoJson(ServidorRestful):
     log = Logs()
     custo_refeicao_dao = CustoRefeicaoDAO()
     
-    def __init__(self, ):
+    def __init__(self):
         super(CustoRefeicaoJson, self).__init__()
         ServidorRestful.__init__(self)
         
-    def custo_refeicao_get(self):
+    def custo_refeicao_get(self, limpa_tabela=False):
         servidor = self.obter_servidor()
         try:
             if servidor:
@@ -34,28 +34,34 @@ class CustoRefeicaoJson(ServidorRestful):
                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
                 print "status HTTP: " + str(r.status_code)
                 dados  = json.loads(r.text)
+                LISTA_JSON = dados["custo_refeicoes"]
                 
-                if dados["custo_refeicoes"] is not []:
-                    for item in dados["custo_refeicoes"]:
+                if limpa_tabela:
+                    self.atualiza_exclui(None, True)
+                
+                if LISTA_JSON is not []:
+                    for item in LISTA_JSON:
                         obj = self.dict_obj(item)
                         if obj.id:
-                            lista = self.custo_refeicao_dao.busca(obj.id)
-                            if lista is None:
-                                print "nao existe - insert " + str(obj.valor)
-                                self.custo_refeicao_dao.insere(obj)
-                                print self.custo_refeicao_dao.aviso
-                            else:
-                                print "existe - update " + str(obj.valor)
-                                self.custo_refeicao_dao.atualiza_exclui(obj, False)
-                                print self.custo_refeicao_dao.aviso
-                if dados["custo_refeicoes"] == []:
-                    self.custo_refeicao_dao.atualiza_exclui(None,True)
-                    print self.custo_refeicao_dao.aviso
+                            self.atualiza_exclui(obj, False)
+                        else:
+                            self.insere(obj)
+                else:
+                    self.atualiza_exclui(None, True)
+                    
         except Exception as excecao:
             print excecao
-            self.log.logger.error('Erro obtendo json custo_refeicao.', exc_info=True)
+            self.log.logger.error('Erro obtendo json custo-refeicao', exc_info=True)
         finally:
             pass
+        
+    def atualiza_exclui(self, obj, boleano):
+        self.custo_refeicao_dao.atualiza_exclui(obj, boleano)
+        print self.custo_refeicao_dao.aviso
+        
+    def insere(self, obj):
+        self.custo_refeicao_dao.insere(obj)
+        print self.custo_refeicao_dao.aviso
         
     def dict_obj(self, formato_json):
         custo_refeicao = CustoRefeicao()

@@ -2,13 +2,10 @@
 # -*- coding: utf-8 -*-
 
 
+import threading
 import datetime
 from time import sleep
-from catraca.util import Util
-from catraca.logs import Logs
-from catraca.visao.interface.aviso import Aviso
-from catraca.modelo.dao.turno_dao import TurnoDAO
-
+from catraca.controle.restful.controle_api import ControleApi
 
 __author__ = "Erivando Sena" 
 __copyright__ = "Copyright 2015, Unilab" 
@@ -16,76 +13,134 @@ __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production 
 
 
-class Relogio(object):
+class Relogio(ControleApi, threading.Thread):
     
-    log = Logs()
-    util = Util()
-    aviso = Aviso()
-    turno_dao = TurnoDAO()
-    hora_atual = None
-    hora_inicio = None
-    hora_fim = None
-    contador = 30
-#     p1 = datetime.datetime.strptime('05:59:59','%H:%M:%S').time()
-#     p2 = datetime.datetime.strptime('22:29:59','%H:%M:%S').time()
-    
-    def __init__(self):
+    contador_status_recursos = 60
+
+    def __init__(self, intervalo=1):
         super(Relogio, self).__init__()
-        self.__periodo_ativo = None
-        self.__turno_ativo = None
-        self.__catraca_local = None
-        self.hora_atual = self.util.obtem_hora()
+        ControleApi.__init__(self)
+        threading.Thread.__init__(self)
+        self.intervalo = intervalo
+        self.name = 'Thread Relogio'
+        self.__hora_atual = self.util.obtem_hora()
+        self.__data_atual = self.util.obtem_data_formatada()
+        self.__data_hora_atual = self.util.obtem_datahora().strftime("%d/%m/%Y %H:%M:%S")
+        self.__status = False
+        
+    def run(self):
+        print "%s. Rodando... " % self.name
+        self.aviso.exibir_datahora(self.util.obtem_datahora_display())
+        self.aviso.exibir_aguarda_cartao()
+        while True:
+            self.hora = self.util.obtem_hora()
+            self.data = self.util.obtem_data_formatada()
+            self.datahora = self.util.obtem_datahora().strftime("%d/%m/%Y %H:%M:%S")
 
+            #print self.datahora
+
+            self.obtem_status()
+            self.obtem_atualizacao_de_turno()
+            #print self.contador
+            #print self.alarme
+
+            if (str(self.hora) == "06:00:00") or (str(self.hora) == "12:00:00") or (str(self.hora) == "18:00:00") and self.turno is None:
+                self.aviso.exibir_saldacao(self.saldacao())
+                self.aviso.exibir_aguarda_cartao()
+                
+            self.executa_controle_recursos()
+            
+            sleep(self.intervalo)
+            
     @property
-    def periodo(self):
-        self.hora_atual = self.util.obtem_hora()
-        self.__periodo_ativo = self.obtem_periodo()
-        return self.__periodo_ativo
+    def hora(self):
+        return self.__hora_atual
     
     @property
-    def catraca(self):
-        self.__catraca_local = self.turno_dao.obtem_catraca()
-        return self.__catraca_local
-        
+    def data(self):
+        return self.__data_atual
+    
     @property
-    def turno(self):
-        return self.__turno_ativo
- 
-    @turno.setter
-    def turno(self, lista):
-        self.__turno_ativo = lista
+    def datahora(self):
+        return self.__data_hora_atual
+    
+    @property
+    def status(self):
+        return self.__status
+    
+    @hora.setter
+    def hora(self, valor):
+        self.__hora_atual = valor
+    
+    @data.setter
+    def data(self, valor):
+        self.__data_atual = valor
+    
+    @datahora.setter
+    def datahora(self, valor):
+        self.__data_hora_atual = valor
+        
+    @status.setter
+    def status(self, valor):
+        self.__status = valor
+        
+    def saldacao(self):
+        hora = int(self.util.obtem_datahora().strftime('%H'))
+        periodo = 0
+        if (hora >= 0 and hora < 12):
+            periodo = 1
+        if (hora >= 12 and hora <= 17):
+            periodo = 2
+        if (hora >= 18 and hora <= 23):
+            periodo = 3
+        opcoes = {
+                   1 : 'Ola'.center(16) +'\n'+ 'Bom Dia!'.center(16),
+                   2 : 'Ola'.center(16) +'\n'+ 'Boa Tarde!'.center(16),
+                   3 : 'Ola'.center(16) +'\n'+ 'Boa Noite!'.center(16),
 
-    def obtem_turno(self):
-        self.contador += 1
-#         if (self.hora_atual > self.p1) and (self.hora_atual < self.p2):
-        if self.contador >= 30:
-            print "passando... --> self.turno = self.turno_dao.obtem_turno() "
-            #self.turno = self.turno_dao.obtem_turno()
-            self.turno = self.turno_dao.obtem_turno(self.catraca, self.hora_atual)
-            self.contador = 0
+        }
+        return opcoes.get(periodo, "Ola!".center(16) +"\n"+ self.util.obtem_data_formatada().center(16))
+    
+    def obtem_status(self):
+        self.status = self.periodo
+        return self.status
+    
+    def executa_controle_recursos(self):
+        while True:
+            
+            #print "status do relogio:-> " + str(self.status)
+
+            #print self.contador_status_recursos
+            self.contador_status_recursos += 1
             if self.turno:
-                self.hora_inicio = datetime.datetime.strptime(str(self.turno[1]),'%H:%M:%S').time()
-                self.hora_fim = datetime.datetime.strptime(str(self.turno[2]),'%H:%M:%S').time()       
-                return self.turno
+                #print "self.contador_status_recursos > 120"
+                if self.contador_status_recursos >= 90:
+                    self.obtem_recurso_servidor()
             else:
-                return None
-#         else:
-#             self.turno = None
-#             return None
-
-    def obtem_periodo(self):
-        self.obtem_turno()
+                #print "self.contador_status_recursos >= 3600"
+                if self.contador_status_recursos >= 3600:
+                    self.obtem_recurso_servidor(True)
+            break
+            
+    def obtem_recurso_servidor(self):
+        self.contador_status_recursos = 0
+        self.recursos_restful.obtem_recursos()
+        
+    def obtem_atualizacao_de_turno(self):
         if self.turno:
-            if ((self.hora_atual >= self.hora_inicio) and (self.hora_atual <= self.hora_fim)) or ((self.hora_atual >= self.hora_inicio) and (self.hora_atual <= self.hora_fim)):  
-                print "turno ativo On "
-                return True
-            else:
-                self.turno = None
-                print "turno inativo Off "
-                return False
+            # Inicia turno
+            if self.alarme:
+                self.alarme = False
+                self.aviso.exibir_turno_atual(self.turno[3])
+                #self.util.beep_buzzer(855, .5, 1)
+                #print "Turno INICIADO!"
+                self.aviso.exibir_aguarda_cartao()
+        # Finaliza turno
         else:
-#             if (self.hora_atual > self.p1) and (self.hora_atual < self.p2):
-#                 print "ATENÇÃO: Nao existem Turnos cadastrados dentro do horario comercial para funcionamento da catraca!"
-#             print "ATENÇÃO: Nao existem Turnos cadastrados para funcionamento da catraca!"
-            return False
-         
+            if not self.alarme:
+                self.alarme = True
+                self.aviso.exibir_horario_invalido()
+                #self.util.beep_buzzer(855, .5, 1)
+                #print "Turno ENCERRADO!"
+                self.aviso.exibir_aguarda_cartao()
+        

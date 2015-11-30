@@ -47,9 +47,9 @@ class TipoDAO(ConexaoGenerica):
                         return list
                     else:
                         return None
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela tipo.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[tipo] Erro ao realizar SELECT.', exc_info=True)
         finally:
             pass
         
@@ -63,47 +63,47 @@ class TipoDAO(ConexaoGenerica):
                         str(obj.id) + ", '" +\
                         str(obj.nome) + "', '" +\
                         str(obj.valor) + "')"
-                self.aviso = "Inserido com sucesso!"
+                self.aviso = "[tipo] Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
                     return True
             else:
-                self.aviso = "Objeto inexistente!"
+                self.aviso = "[tipo] inexistente!"
                 return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT na tabela tipo.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[tipo] Erro realizando INSERT.', exc_info=True)
             return False
         finally:
             pass
         
     def atualiza_exclui(self, obj, delete):
         try:
-            if obj:
+            if obj or delete:
                 if delete:
-                    if obj.id:
+                    if obj:
                         sql = "DELETE FROM tipo WHERE tipo_id = " + str(obj.id)
                     else:
                         sql = "DELETE FROM tipo"
-                    self.aviso = "Excluido com sucesso!"
+                    self.aviso = "[tipo] Excluido com sucesso!"
                 else:
                     sql = "UPDATE tipo SET " +\
                           "tipo_nome = '" + str(obj.nome) + "', " +\
                           "tipo_valor = '" + str(obj.valor) +\
                           "' WHERE "\
                           "tipo_id = " + str(obj.id)
-                    self.aviso = "Alterado com sucesso!"
+                    self.aviso = "[tipo] Alterado com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
                     return True
             else:
-                self.aviso = "Objeto inexistente!"
+                self.aviso = "[tipo] inexistente!"
                 return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando DELETE/UPDATE na tabela tipo.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[tipo] Erro realizando DELETE/UPDATE.', exc_info=True)
             return False
         finally:
             pass

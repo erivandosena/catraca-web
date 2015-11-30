@@ -71,9 +71,9 @@ class MensagemDAO(ConexaoGenerica):
                         return list
                     else:
                         return None
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela mensagem.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[mensagem] Erro ao realizar SELECT.', exc_info=True)
         finally:
             pass
         
@@ -120,30 +120,30 @@ class MensagemDAO(ConexaoGenerica):
                     str(obj.msg_institucional3) + "', '" +\
                     str(obj.msg_institucional4) + "', " +\
                     str(obj.catraca.id) + ")"
-                self.aviso = "Inserido com sucesso!"
+                self.aviso = "[mensagem] Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
                     return True
             else:
-                self.aviso = "Objeto inexistente!"
+                self.aviso = "[mensagem] inexistente!"
                 return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT na tabela mensagem.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[mensagem] Erro realizando INSERT.', exc_info=True)
             return False
         finally:
             pass
 
     def atualiza_exclui(self, obj, delete):
         try:
-            if obj:
+            if obj or delete:
                 if delete:
-                    if obj.id:
+                    if obj:
                         sql = "DELETE FROM mensagem WHERE mens_id = " + str(obj.id)
                     else:
                         sql = "DELETE FROM mensagem"
-                    msg = "Excluido com sucesso!"
+                    self.aviso = "[mensagem] Excluido com sucesso!"
                 else:
                     self.aviso = "UPDATE mensagem SET " +\
                         "mens_inicializacao = '" + str(obj.msg_inicializacao) + "', " +\
@@ -165,17 +165,17 @@ class MensagemDAO(ConexaoGenerica):
                         "catr_id = " + str(obj.catraca.id) +\
                         " WHERE "\
                         "mens_id = " + str(obj.id)
-                    self.aviso = "Alterado com sucesso!"
+                    self.aviso = "[mensagem] Alterado com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
                     return True
             else:
-                self.aviso = "Objeto inexistente!"
+                self.aviso = "[mensagem] inexistente!"
                 return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando DELETE/UPDATE na tabela mensagem.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[mensagem] Erro realizando DELETE/UPDATE.', exc_info=True)
             return False
         finally:
             pass

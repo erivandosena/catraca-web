@@ -10,8 +10,9 @@ leitor de TAGs da marca HID mod. R-640X-300 iCLASS(2kbits, 16kbits, 32Kbits)
 R10 Reader 6100.
 """
 
-import RPi.GPIO as GPIO
-from time import sleep
+import time
+#import RPi.GPIO as GPIO
+from catraca.controle.raspberrypi.pinos import PinoControle
 
 __author__ = "Erivando, Sena, e Ramos"
 __copyright__ = "Copyright 2015, Unilab"
@@ -22,46 +23,50 @@ __maintainer__ = "Erivando"
 __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Protótipo"
 
-# green/data0 is pin 11
-# white/data1 is pin 12
 
-D0 = 17
-D1 = 27
-bits = ''
+#green/data0 is pin 22
+#white/data1 is pin 7
 
+def main():
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setwarnings(True)
-
-GPIO.setup(D0, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(D1, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-
-def zero(self):
-    global bits
-    bits = bits + '0'
-
-
-def one(self):
-    global bits
-    bits = bits + '1'
-
-
-GPIO.add_event_detect(D0, GPIO.RISING, callback=zero, bouncetime=1)
-GPIO.add_event_detect(D1, GPIO.RISING, callback=one, bouncetime=1)
-
-print "Apresente o Cartão"
-
-while True:
-    if len(bits) == 32:
-        sleep(1)
-        # print 25 * "-"
-        # print "32 Bit Mifare Card"
-        print "Binário:", bits
-        print "ID: ", int(str(bits), 2)
-        # print "Hexadecimal:", hex(int(str(bits), 2))
-        bits = ''
-        # print 25 * "-"
-        # print
-        print "Apresente o Cartão"
-
-GPIO.cleanup()
+    pc = PinoControle()
+    
+    pc.gpio.setmode(pc.gpio.BCM)
+    pc.gpio.setwarnings(False)
+    
+    D0 = pc.ler(17)['gpio']
+    D1 = pc.ler(27)['gpio']
+    
+#     pc.gpio.setup(17, pc.gpio.IN)
+#     pc.gpio.setup(27, pc.gpio.IN)
+    
+    bits = ''
+    bits = '11101110000100010000010011101110'
+    
+    timeout = 5
+    def one(channel):
+        global bits
+        if channel:
+            bits += '1'
+        
+    def zero(channel):
+        global bits
+        if channel:
+            bits += '0'
+    
+    pc.evento_falling(D0, one)
+    pc.evento_falling(D1, zero)
+    
+    print "Present Card"
+    while 1:
+        if len(bits) == 32:
+            print 25 * "-"
+            print "32 Bit Mifare Card"
+            print "Binary:",bits
+            print "Decimal:",int(str(bits),2)
+            print "Hex:",hex(int(str(bits),2))
+            bits = '0'
+            print 25 * "-"
+            print 
+            print "Present Card"
+        

@@ -2,7 +2,7 @@
 -- Autor_script : Erivando Sena
 -- Copyright    : Unilab
 -- Data_criacao : 16/10/2015
--- Data_revisao : 04/11/2015
+-- Data_revisao : 23/11/2015
 -- Status       : Desenvolvimento
 ---------------------------------
 
@@ -93,11 +93,11 @@ COMMENT ON CONSTRAINT uk_cart_numero ON cartao IS 'Restricao de duplicidades par
 CREATE TABLE vinculo
 (
   vinc_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
-  vinc_avulso boolean, -- Status que informa se o vinculo esta ativo.
+  vinc_avulso boolean NOT NULL, -- Status que informa se o vinculo esta ativo.
   vinc_inicio timestamp without time zone, -- Data e hora de inicio da validade do vinculo.
   vinc_fim timestamp without time zone, -- Data e hora de fim da validade do vinculo.
-  vinc_descricao character varying(150), -- Descricao sobre a finalidade do vinculo.
-  vinc_refeicoes integer, -- Quantidade de uso do cartao por refeicao.
+  vinc_descricao character varying(150) NOT NULL, -- Descricao sobre a finalidade do vinculo.
+  vinc_refeicoes integer NOT NULL, -- Quantidade de uso do cartao por refeicao.
   cart_id integer NOT NULL, -- Campo para chave estrangeira da tabela cartao.
   usua_id integer NOT NULL, -- Campo para chave estrangeira da tabela usuario.(Usuario responsavel por realizar a operacao de vinculo).
   CONSTRAINT pk_vinc_id PRIMARY KEY (vinc_id),
@@ -397,3 +397,39 @@ COMMENT ON COLUMN custo_refeicao.cure_id IS 'Campo autoincremento para chave pri
 COMMENT ON COLUMN custo_refeicao.cure_valor IS 'Valor em R$ do custo da refeicao.';
 COMMENT ON COLUMN custo_refeicao.cure_data IS 'Data e hora de cadastro do custo.';
 COMMENT ON CONSTRAINT pk_cure_id ON custo_refeicao IS 'Chave primaria da tabela custo_refeicao.';
+
+-- Table: atividade_tipo
+CREATE TABLE atividade_tipo
+(
+  atti_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
+  atti_ativo boolean, -- Campo boleano para true/false.
+  tipo_id integer NOT NULL, -- Campo para chave estrangeira da tabela tipo.
+  CONSTRAINT pk_atti_id PRIMARY KEY (atti_id), -- Chave primaria da tabela.
+  CONSTRAINT fk_atti_id FOREIGN KEY (tipo_id) REFERENCES tipo (tipo_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION -- Chave primaria da tabela tipo.
+);
+ALTER TABLE atividade_tipo OWNER TO catraca;
+COMMENT ON TABLE atividade_tipo IS 'Tabela que armazena relacionamentos da tabela tipo para fins de relatórios.';
+COMMENT ON COLUMN atividade_tipo.atti_id IS 'Campo autoincremento para chave primaria da tabela.';
+COMMENT ON COLUMN atividade_tipo.atti_ativo IS 'Campo boleano para true/false.';
+COMMENT ON COLUMN atividade_tipo.tipo_id IS 'Campo para chave estrangeira da tabela tipo.';
+COMMENT ON CONSTRAINT pk_atti_id ON atividade_tipo IS 'Chave primaria da tabela.';
+COMMENT ON CONSTRAINT fk_atti_id ON atividade_tipo IS 'Chave primaria da tabela tipo.';
+
+-- Table: vinculo_tipo
+CREATE TABLE vinculo_tipo
+(
+  viti_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
+  vinc_id integer NOT NULL, -- Campo para chave estrangeira da tabela vinculo.
+  tipo_id integer NOT NULL, -- Campo para chave estrangeira da tabela tipo.
+  CONSTRAINT pk_viti_id PRIMARY KEY (viti_id), -- Chave primaria da tabela.
+  CONSTRAINT fk_tipo_id FOREIGN KEY (tipo_id) REFERENCES tipo (tipo_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, -- Chave estrangeira da tabela tipo.
+  CONSTRAINT fk_vinc_id FOREIGN KEY (vinc_id) REFERENCES vinculo (vinc_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION -- Chave estrangeira da tabela vinculo.
+);
+ALTER TABLE vinculo_tipo OWNER TO catraca;
+COMMENT ON TABLE vinculo_tipo IS 'Tabela que armazena relacionamentos da tabela tipo e vinculo para fins de relatórios.';
+COMMENT ON COLUMN vinculo_tipo.viti_id IS 'Campo autoincremento para chave primaria da tabela.';
+COMMENT ON COLUMN vinculo_tipo.vinc_id IS 'Campo para chave estrangeira da tabela vinculo.';
+COMMENT ON COLUMN vinculo_tipo.tipo_id IS 'Campo para chave estrangeira da tabela tipo.';
+COMMENT ON CONSTRAINT pk_viti_id ON vinculo_tipo IS 'Chave primaria da tabela.';
+COMMENT ON CONSTRAINT fk_tipo_id ON vinculo_tipo IS 'Chave estrangeira da tabela tipo.';
+COMMENT ON CONSTRAINT fk_vinc_id ON vinculo_tipo IS 'Chave estrangeira da tabela vinculo.';

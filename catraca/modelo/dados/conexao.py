@@ -74,10 +74,9 @@ class ConexaoFactory(object):
                 finally:
                     pass
             return con
-#         except Exception as excecao:
-#             self.__erroCon = str(excecao)
-#             self.log.logger.critical('Erro na string de conexao com banco de dados.', exc_info=True)
-#         
+        except Exception as excecao:
+            self.__erroCon = str(excecao)
+            self.log.logger.critical('Erro na string de conexao com banco de dados.', exc_info=True)
         finally:
             pass
         

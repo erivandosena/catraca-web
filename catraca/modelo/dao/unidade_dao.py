@@ -45,9 +45,9 @@ class UnidadeDAO(ConexaoGenerica):
                         return list
                     else:
                         return None
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela unidade.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[unidade] Erro ao realizar SELECT.', exc_info=True)
         finally:
             pass
         
@@ -55,17 +55,17 @@ class UnidadeDAO(ConexaoGenerica):
         try:
             if obj:
                 sql = "INSERT INTO unidade(unid_id, unid_nome) VALUES (" + str(obj.id) + ",'" + str(obj.nome) + "')"
-                self.aviso = "Inserido com sucesso!"
+                self.aviso = "[unidade] Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
                     return True
             else:
-                self.aviso = "Objeto inexistente!"
+                self.aviso = "[unidade] inexistente!"
                 return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT na tabela unidade.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[unidade] Erro realizando INSERT.', exc_info=True)
             return False
         finally:
             cursor.close()
@@ -73,26 +73,26 @@ class UnidadeDAO(ConexaoGenerica):
 
     def atualiza_exclui(self, obj, delete):
         try:
-            if obj:
+            if obj or delete:
                 if delete:
-                    if obj.id:
+                    if obj:
                         sql = "DELETE FROM unidade WHERE unid_id = " + str(obj.id)
                     else:
                         sql = "DELETE FROM unidade"
-                    self.aviso = "Excluido com sucesso!"
+                    self.aviso = "[unidade] Excluido com sucesso!"
                 else:
                     sql = "UPDATE unidade SET unid_nome = '" + str(obj.nome) + "' WHERE unid_id = " + str(obj.id)
-                    self.aviso = "Alterado com sucesso!"
+                    self.aviso = "[unidade] Alterado com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
                     return True
             else:
-                self.aviso = "Objeto inexistente!"
+                self.aviso = "[unidade] inexistente!"
                 return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando DELETE/UPDATE na tabela unidade.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[unidade] Erro realizando DELETE/UPDATE.', exc_info=True)
             return False
         finally:
             pass

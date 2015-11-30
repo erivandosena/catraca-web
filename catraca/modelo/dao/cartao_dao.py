@@ -51,9 +51,9 @@ class CartaoDAO(ConexaoGenerica):
                         return list
                     else:
                         return None
-#         except Exception, e:
-#             self.aviso = str(e)
-#             self.log.logger.error('Erro ao realizar SELECT na tabela cartao.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[cartao] Erro ao realizar SELECT.', exc_info=True)
         finally:
             pass
 
@@ -76,9 +76,9 @@ class CartaoDAO(ConexaoGenerica):
                     return obj
                 else:
                     return None
-#         except Exception, e:
-#             self.aviso = str(e)
-#             self.log.logger.error('Erro ao realizar SELECT na tabela cartao.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[cartao] Erro ao realizar SELECT.', exc_info=True)
         finally:
             pass
         
@@ -91,7 +91,10 @@ class CartaoDAO(ConexaoGenerica):
             "INNER JOIN tipo ON cartao.tipo_id = tipo.tipo_id " +\
             "INNER JOIN vinculo ON vinculo.cart_id = cartao.cart_id " +\
             "WHERE ('"+str(data)+"' BETWEEN vinculo.vinc_inicio AND vinculo.vinc_fim) AND "  +\
-            "(cartao.cart_numero = "+str(numero)+")"   
+            "(cartao.cart_numero = "+str(numero)+")"
+        print "=" * 100
+        print sql 
+        print "=" * 100
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -100,9 +103,9 @@ class CartaoDAO(ConexaoGenerica):
                     return obj
                 else:
                     return None
-#         except Exception, e:
-#             self.aviso = str(e)
-#             self.log.logger.error('Erro ao realizar SELECT na tabela cartao.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[cartao] Erro ao realizar SELECT.', exc_info=True)
         finally:
             pass
         
@@ -112,6 +115,9 @@ class CartaoDAO(ConexaoGenerica):
         sql = "SELECT isencao.isen_inicio, isencao.isen_fim FROM cartao " +\
         "INNER JOIN isencao ON isencao.cart_id = cartao.cart_id WHERE ('"+str(data)+"' "+\
         "BETWEEN isencao.isen_inicio AND isencao.isen_fim)" 
+        print "=" * 100
+        print sql
+        print "=" * 100
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -120,9 +126,9 @@ class CartaoDAO(ConexaoGenerica):
                     return obj
                 else:
                     return None
-#         except Exception, e:
-#             self.aviso = str(e)
-#             self.log.logger.error('Erro ao realizar SELECT na tabela cartao.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[cartao] Erro ao realizar SELECT.', exc_info=True)
         finally:
             pass
   
@@ -138,30 +144,30 @@ class CartaoDAO(ConexaoGenerica):
                         str(obj.numero) + ", " +\
                         str(obj.creditos) + ", " +\
                         str(obj.tipo) + ")"
-                self.aviso = "Inserido com sucesso!"
+                self.aviso = "[cartao] Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     #self.commit()
                     return True
             else:
-                self.aviso = "Objeto inexistente!"
+                self.aviso = "[cartao] inexistente!"
                 return False
-#         except Exception, e:
-#             self.aviso = str(e)
-#             self.log.logger.error('Erro realizando INSERT na tabela cartao.', exc_info=True)
-#             return False
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[cartao] Erro realizando INSERT.', exc_info=True)
+            return False
         finally:
             pass
         
     def atualiza_exclui(self, obj, delete):
         try:
-            if obj:
+            if obj or delete:
                 if delete:
-                    if obj.id:
+                    if obj:
                         sql = "DELETE FROM cartao WHERE cart_id = " + str(obj.id)
                     else:
                         sql = "DELETE FROM cartao"
-                    self.aviso = "Excluido com sucesso!"
+                    self.aviso = "[cartao] Excluido com sucesso!"
                 else:
                     sql = "UPDATE cartao SET " +\
                           "cart_numero = " + str(obj.numero) + ", " +\
@@ -169,18 +175,18 @@ class CartaoDAO(ConexaoGenerica):
                           "tipo_id = " + str(obj.tipo) +\
                           " WHERE "\
                           "cart_id = " + str(obj.id)
-                    self.aviso = "Alterado com sucesso!"
+                    self.aviso = "[cartao] Alterado com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     #self.commit()
                     return True
             else:
-                self.aviso = "Objeto inexistente!"
+                self.aviso = "[cartao] inexistente!"
                 return False
-#         except Exception, e:
-#             self.aviso = str(e)
-#             self.log.logger.error('Erro realizando DELETE/UPDATE na tabela cartao.', exc_info=True)
-#             return False
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[cartao] Erro realizando DELETE/UPDATE.', exc_info=True)
+            return False
         finally:
             pass
         
@@ -189,7 +195,7 @@ class CartaoDAO(ConexaoGenerica):
             if obj is not None:
                 if delete:
                     sql = "DELETE FROM cartao_off WHERE caof_id = " + str(obj.id)
-                    self.aviso = "Excluido com sucesso!"
+                    self.aviso = "[cartao-off] Excluido com sucesso!"
                 else:
                     if obj.id:
                         sql = "UPDATE cartao_off SET " +\
@@ -198,7 +204,7 @@ class CartaoDAO(ConexaoGenerica):
                               "tipo_id = " + str(obj.tipo) +\
                               " WHERE "\
                               "caof_id = " + str(obj.id)
-                        self.aviso = "Alterado com sucesso!"
+                        self.aviso = "[cartao-off] Alterado com sucesso!"
                     else:
                         sql = "INSERT INTO cartao_off("\
                                 "caof_numero, "\
@@ -207,17 +213,17 @@ class CartaoDAO(ConexaoGenerica):
                                 str(obj.numero) + ", " +\
                                 str(obj.creditos) + ", " +\
                                 str(obj.tipo) + ")"
-                        self.aviso = "Inserido com sucesso!"
+                        self.aviso = "[cartao-off] Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
                     return True
             else:
-                self.aviso = "Objeto inexistente!"
+                self.aviso = "[cartao-off] inexistente!"
                 return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela cartao_off.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[cartao-off] Erro realizando INSERT/UPDATE/DELETE.', exc_info=True)
             return False
         finally:
             pass

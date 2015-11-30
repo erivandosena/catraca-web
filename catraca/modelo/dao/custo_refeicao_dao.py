@@ -42,14 +42,14 @@ class CustoRefeicaoDAO(ConexaoGenerica):
                     else:
                         return None
                 elif id is None:
-                    list = cursor.fetchall()
+                    list = cursor.fetchone()
                     if list != []:
                         return list
                     else:
                         return None
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela custo_refeicao.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[custo-refeicao] Erro ao realizar SELECT.', exc_info=True)
         finally:
             pass
         
@@ -63,7 +63,7 @@ class CustoRefeicaoDAO(ConexaoGenerica):
                     str(obj.id) + ", " +\
                     str(obj.valor) + ", '" +\
                     str(obj.data) + "')"
-                self.aviso = "Inserido com sucesso!"
+                self.aviso = "[custo-refeicao] Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
@@ -71,39 +71,39 @@ class CustoRefeicaoDAO(ConexaoGenerica):
             else:
                 self.aviso = "Objeto inexistente!"
                 return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT na tabela custo_refeicao.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[custo-refeicao] Erro realizando INSERT.', exc_info=True)
             return False
         finally:
             pass   
         
     def atualiza_exclui(self, obj, delete):
         try:
-            if obj:
+            if obj or delete:
                 if delete:
-                    if obj.id:
+                    if obj:
                         sql = "DELETE FROM custo_refeicao WHERE caun_id = " + str(obj.id)
                     else:
                         sql = "DELETE FROM custo_refeicao"
-                    self.aviso = "Excluido com sucesso!"
+                    self.aviso = "[custo-refeicao] Excluido com sucesso!"
                 else:
                     sql = "UPDATE custo_refeicao SET " +\
                         "cure_valor = " + str(obj.valor) + ", " +\
                         "cure_data = '" + str(obj.data) +\
                         "' WHERE "\
                         "cure_id = " + str(obj.id)
-                    self.aviso = "Alterado com sucesso!"
+                    self.aviso = "[custo-refeicao] Alterado com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
                     return False
             else:
-                self.aviso = "Objeto inexistente!"
+                self.aviso = "[custo-refeicao] inexistente!"
                 return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando DELETE/UPDATE na tabela custo_refeicao.', exc_info=True)
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[custo-refeicao] Erro realizando DELETE/UPDATE.', exc_info=True)
             return False
         finally:
             pass

@@ -17,7 +17,6 @@ class Registro(object):
         self.__regi_valor_pago = None
         self.__regi_valor_custo = None
         self.__cartao = None
-        self.__turno = None
         self.__catraca = None
  
     @property
@@ -59,14 +58,6 @@ class Registro(object):
     @cartao.setter
     def cartao(self, obj):
         self.__cartao = obj
-        
-    @property
-    def turno(self):
-        return self.__turno
-
-    @turno.setter
-    def turno(self, obj):
-        self.__turno = obj
         
     @property
     def catraca(self):

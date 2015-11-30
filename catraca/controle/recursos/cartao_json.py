@@ -21,11 +21,11 @@ class CartaoJson(ServidorRestful):
     log = Logs()
     cartao_dao = CartaoDAO()
     
-    def __init__(self, ):
+    def __init__(self):
         super(CartaoJson, self).__init__()
         ServidorRestful.__init__(self)
         
-    def cartao_get(self):
+    def cartao_get(self, limpa_tabela=False):
         servidor = self.obter_servidor()
         try:
             if servidor:
@@ -34,31 +34,36 @@ class CartaoJson(ServidorRestful):
                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
                 print "status HTTP: " + str(r.status_code)
                 dados  = json.loads(r.text)
+                LISTA_JSON = dados["cartoes"]
                 
-                if dados["cartoes"] is not []:
-                    for item in dados["cartoes"]:
+                if limpa_tabela:
+                    self.atualiza_exclui(None, True)
+                
+                if LISTA_JSON is not []:
+                    for item in LISTA_JSON:
                         obj = self.dict_obj(item)
                         if obj.id:
-                            lista = self.cartao_dao.busca(obj.id)
-                            if lista is None:
-                                print "nao existe - insert " + str(obj.numero)
-                                self.cartao_dao.insere(obj)
-                                self.cartao_dao.commit()
-                                print self.cartao_dao.aviso
-                            else:
-                                print "existe - update " + str(obj.numero)
-                                self.cartao_dao.atualiza_exclui(obj, False)
-                                self.cartao_dao.commit()
-                                print self.cartao_dao.aviso
-                if dados["cartoes"] == []:
-                    self.cartao_dao.atualiza_exclui(None,True)
-                    print self.cartao_dao.aviso
+                            self.atualiza_exclui(obj, False)
+                        else:
+                            self.insere(obj)
+                else:
+                    self.atualiza_exclui(None, True)
                     
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json cartao.', exc_info=True)
         finally:
             pass
+        
+    def atualiza_exclui(self, obj, boleano):
+        self.cartao_dao.atualiza_exclui(obj, boleano)
+        self.cartao_dao.commit()
+        print self.cartao_dao.aviso
+        
+    def insere(self, obj):
+        self.cartao_dao.insere(obj)
+        self.cartao_dao.commit()
+        print self.cartao_dao.aviso
         
     def dict_obj(self, formato_json):
         cartao = Cartao()

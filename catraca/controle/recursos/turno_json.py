@@ -21,11 +21,11 @@ class TurnoJson(ServidorRestful):
     log = Logs()
     turno_dao = TurnoDAO()
     
-    def __init__(self, ):
+    def __init__(self):
         super(TurnoJson, self).__init__()
         ServidorRestful.__init__(self)
         
-    def turno_get(self):
+    def turno_get(self, limpa_tabela=False):
         servidor = self.obter_servidor()
         try:
             if servidor:
@@ -34,29 +34,34 @@ class TurnoJson(ServidorRestful):
                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
                 print "Código: " + str(r.status_code)
                 dados  = json.loads(r.text)
+                LISTA_JSON = dados["turnos"]
                 
-                if dados["turnos"] is not []:
-                    for item in dados["turnos"]:
+                if limpa_tabela:
+                    self.atualiza_exclui(None, True)
+                
+                if LISTA_JSON is not []:
+                    for item in LISTA_JSON:
                         obj = self.dict_obj(item)
                         if obj.id:
-                            lista = self.turno_dao.busca(obj.id)
-                            if lista is None:
-                                print "nao existe - insert " + str(obj.descricao)
-                                self.turno_dao.insere(obj)
-                                print self.turno_dao.aviso
-                            else:
-                                print "existe - update " + str(obj.descricao)
-                                self.turno_dao.atualiza_exclui(obj, False)
-                                print self.turno_dao.aviso
-                if dados["turnos"] == []:
-                    self.turno_dao.atualiza_exclui(None,True)
-                    print self.turno_dao.aviso
+                            self.atualiza_exclui(obj, False)
+                        else:
+                            self.insere(obj)
+                else:
+                    self.atualiza_exclui(None, True)
                     
         except Exception as excecao:
             print excecao
-            self.log.logger.error('Erro obtendo json turno.', exc_info=True)
+            self.log.logger.error('Erro obtendo json turno', exc_info=True)
         finally:
             pass
+        
+    def atualiza_exclui(self, obj, boleano):
+        self.turno_dao.atualiza_exclui(obj, boleano)
+        print self.turno_dao.aviso
+        
+    def insere(self, obj):
+        self.turno_dao.insere(obj)
+        print self.turno_dao.aviso
         
     def dict_obj(self, formato_json):
         turno = Turno()
@@ -73,7 +78,7 @@ class TurnoJson(ServidorRestful):
             if item == "turn_hora_fim":
                 turno.fim = self.dict_obj(formato_json[item])
             if item == "turn_descricao":
-                turno.descricao = self.dict_obj(formato_json[item]).encode('utf-8')
+                turno.descricao = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
                 
         return turno
     

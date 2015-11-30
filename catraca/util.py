@@ -3,7 +3,6 @@
 
 
 import os
-import sys
 import pwd
 import time
 import socket
@@ -13,7 +12,6 @@ import datetime
 import subprocess
 from time import sleep
 from catraca.logs import Logs
-from catraca.visao.interface.aviso import Aviso
 from catraca.controle.raspberrypi.pinos import PinoControle
 
 
@@ -28,7 +26,6 @@ class Util(object):
     locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
     
     log = Logs()
-    aviso = Aviso()
     rpi = PinoControle()
     
     pino_buzzer = rpi.ler(21)['gpio']
@@ -51,6 +48,9 @@ class Util(object):
             self.log.logger.error('Erro obtendo IP local', exc_info=True)
         finally:
             return ip
+        
+    def obtem_nome_sistema(self):
+        return os.name
     
     def obtem_nome_rpi(self):
         return socket.gethostname()
@@ -83,7 +83,7 @@ class Util(object):
             self.rpi.atualiza(self.pino_buzzer, False)
             quantidade_beep -= 1
             
-    def emite_beep(self, frequencia, intensidade, quantidade_beep, delay_beep):
+    def beep_buzzer_delay(self, frequencia, intensidade, quantidade_beep, delay_beep):
         self.cronometro += 1
         if self.cronometro/1000 == delay_beep:
             self.beep_buzzer(frequencia, intensidade, quantidade_beep)
@@ -97,6 +97,9 @@ class Util(object):
     
     def obtem_datahora(self):
         return datetime.datetime.now()
+    
+    def obtem_data_formatada(self):
+        return datetime.datetime.now().strftime("%d/%m/%Y")
     
     def obtem_datahora_display(self):
         return datetime.datetime.now().strftime('%d/%B/%Y\n    %H:%M:%S')
@@ -125,12 +128,10 @@ class Util(object):
         return dia_util
     
     def reinicia_raspberrypi(self):
-        self.aviso.exibir_reinicia_catraca()
         terminal = 'sudo reboot'
         subprocess.call(terminal.split())
         
     def desliga_raspberrypi(self):
-        self.aviso.exibir_desliga_catraca()
         terminal = 'sudo shutdown -h now'
         subprocess.call(terminal.split())
         
@@ -148,4 +149,11 @@ class Util(object):
             return False
         else:
             return True
+        
+    def subtrai_minuto(self, hora, minutos):
+        print hora.strftime('%H:%M:%S')
+        hora_prevista = datetime.datetime.strptime(hora.strftime('%H:%M:%S'),'%H:%M:%S') - datetime.timedelta(minutes=minutos)
+        print hora_prevista.time()
+        return hora_prevista.time()
+    
         
