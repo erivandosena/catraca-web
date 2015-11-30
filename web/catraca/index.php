@@ -124,14 +124,12 @@ if (isset ( $_GET ["sair"] )) {
 								        <ol>
 		
 										 <li><a href="?pagina=inicio" class="item-vertical-ativo"><span class="icone-home3"></span> <span class="item-vertical-texto">Início</span></a></li>
-							            <li><a href="?pagina=definicoes" class="item-vertical"><span class="icone-cogs"></span> <span class="item-vertical-texto">Definições</span></a></li>						            					            
-							            <li><a href="?pagina=catraca" class="item-vertical"><span class="icone-loop2"></span> <span class="item-vertical-texto">Catraca</span></a></li>
-							            <li><a href="?pagina=cartao" class="item-vertical"><span class="icone-credit-card"></span> <span class="item-vertical-texto">Cartão</span></a></li>
-							            <li><a href="?pagina=guiche" class="item-vertical"><span class="icone-user"></span> <span class="item-vertical-texto">Guichê</span></a></li>
-							            <li><a href="?pagina=relatorio" class="item-vertical"><span class="icone-file-text2"></span> <span class="item-vertical-texto">Relatório</span></a></li>
-							         	<li><a href="?sair=sair" class="item-vertical"><span class="icone-exit"></span> <span class="item-vertical-texto">Sair</span></a></li>
-		
-		';
+							            <li><a href="?pagina=definicoes" class="item-vertical"><span class="icone-cogs"></span> <span class="item-vertical-texto">Definições</span></a></li>';
+// 						echo '			<li><a href="?pagina=catraca" class="item-vertical"><span class="icone-loop2"></span> <span class="item-vertical-texto">Catraca</span></a></li>';
+						echo '          <li><a href="?pagina=cartao" class="item-vertical"><span class="icone-credit-card"></span> <span class="item-vertical-texto">Cartão</span></a></li>';
+// 						echo '          <li><a href="?pagina=guiche" class="item-vertical"><span class="icone-user"></span> <span class="item-vertical-texto">Guichê</span></a></li>';
+// 						echo '           <li><a href="?pagina=relatorio" class="item-vertical"><span class="icone-file-text2"></span> <span class="item-vertical-texto">Relatório</span></a></li>';
+						echo '         	<li><a href="?sair=sair" class="item-vertical"><span class="icone-exit"></span> <span class="item-vertical-texto">Sair</span></a></li>';
 						
 								         	
 								        echo '

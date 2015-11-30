@@ -121,7 +121,6 @@ class DefinicoesController{
 					<input type="hidden" name="tipo_nome" value="'.$_GET['tipo_nome'].'" />
 							<input type="hidden" name="tipo_valor" value="'.$_GET['tipo_valor'].'" />
 						<input  type="submit"  name="certeza_cadastrar_tipo" value="Tenho Certeza"/></form>';
-		
 			echo '</div>';
 		
 		}
