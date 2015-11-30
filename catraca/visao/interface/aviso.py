@@ -54,7 +54,7 @@ class Aviso(object):
         self.display.mensagem(data_hora.center(16), 3, False, False)
     
     def exibir_aguarda_cartao(self):
-        self.display.mensagem("BEM-VINDO!".center(16) +"\n"+ "APROXIME CARTAO".center(16), 0, True, False)
+        self.display.mensagem("BEM-VINDO!".center(16) +"\n"+ "APROXIME CARTAO", 0, True, False)
         
     def exibir_erro_leitura_cartao(self):
         self.display.mensagem("APROXIME CARTAO".center(16) +"\n"+ "NOVAMENTE...".center(16), 1, True, False)
@@ -90,16 +90,16 @@ class Aviso(object):
         self.display.mensagem('CONSULTANDO...'.center(16) +'\n'+ 'AGUARDE!'.center(16), 0, False, False)
         
     def exibir_aguarda_liberacao(self):
-        self.display.mensagem('AGUARDE'.center(16) +'\n'+ 'LIBERACAO!'.center(16), 0, True, False)
+        self.display.mensagem('AGUARDE'.center(16) +'\n'+ 'LIBERACAO!'.center(16), 0, False, False)
         
     def exibir_aguarda_sincronizacao(self):
-        self.display.mensagem('SINCRONIZANDO...'.center(16) +'\n'+ 'AGUARDE!'.center(16), 0, True, False)
+        self.display.mensagem('SINCRONIZANDO...'.center(16) +'\n'+ 'AGUARDE!'.center(16), 0, False, False)
 
     def exibir_reinicia_catraca(self):
-        self.display.mensagem("REINICIANDO...".center(16) +"\n"+ "CATRACA".center(16), 4, True, False)
+        self.display.mensagem("REINICIANDO...".center(16) +"\n"+ "CATRACA".center(16), 4, False, False)
         
     def exibir_desliga_catraca(self):
-        self.display.mensagem("DESLIGANDO...".center(16) +"\n"+ "CATRACA".center(16), 4, True, False)
+        self.display.mensagem("DESLIGANDO...".center(16) +"\n"+ "CATRACA".center(16), 4, False, False)
         
     def exibir_turno_atual(self, nome_turno):
         self.display.mensagem('TURNO INICIADO'.center(16) +'\n'+ nome_turno.center(16), 4, False, False)
@@ -109,4 +109,8 @@ class Aviso(object):
         
     def exibir_obtendo_recursos(self, nome_recurso):
         self.display.mensagem("OBTENDO...".center(16) +"\n"+ nome_recurso.center(16), 1, False, False)
+        
+    def exibir_uso_incorreto(self):
+        self.display.mensagem("USO INCORRETO".center(16) +"\n"+ "DA CATRACA".center(16), 0, False, False)
+        
         

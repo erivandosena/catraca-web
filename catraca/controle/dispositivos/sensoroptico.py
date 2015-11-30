@@ -87,12 +87,12 @@ class SensorOptico(object):
                         while self.obtem_codigo_sensores() == '11':
                             confirma_giro_completo = self.obtem_codigo_sensores()
                             self.log.logger.debug('No meio do giro '+giro+', codigo sensores: '+ self.obtem_codigo_sensores())
-                            ##############################################################
-                            ## ALERTA CASO A CATRACA PARE NO MEIO DO GIRO MAIS DE 10 SEG
-                            ##############################################################
-                            if self.util.cronometro/1000 < 10:
-                                self.cronometro_tempo(self.tempo_decorrido, tempo, 1.6)
-                            self.util.beep_buzzer_delay(860, 1, 1, 10) #10 seg. delay beep
+#                             ##############################################################
+#                             ## ALERTA CASO A CATRACA PARE NO MEIO DO GIRO MAIS DE 10 SEG
+#                             ##############################################################
+#                             if self.util.cronometro/1000 < 10:
+#                                 self.cronometro_tempo(self.tempo_decorrido, tempo, 1.6)
+#                             self.util.beep_buzzer_delay(860, 1, 1, 10) #10 seg. delay beep
                         codigo_giro_completo = self.obtem_codigo_sensores()
                         ##############################################################
                         ## FINALIZANDO VERIFICA SE O GIRO FOI HORARIO OU ANTIHORARIO

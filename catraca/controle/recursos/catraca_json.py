@@ -37,19 +37,34 @@ class CatracaJson(ServidorRestful):
                 print "Código: " + str(r.status_code)
                 dados  = json.loads(r.text)
                 LISTA_JSON = dados["catracas"]
-                
+
                 if limpa_tabela:
+                    print "passou por if limpa_tabela"
                     self.atualiza_exclui(None, True)
                 
                 if LISTA_JSON is not []:
+                    print "passou por if LISTA_JSON is not []:"
                     for item in LISTA_JSON:
                         obj = self.dict_obj(item)
                         if obj.id:
-                            self.atualiza_exclui(obj, False)
-                        else:
-                            self.insere(obj)
+                            resultado = self.catraca_dao.busca(obj.id)
+                            if resultado:
+                                print "passou por if obj.id:"
+                                self.atualiza_exclui(obj, False)
+                            else:
+                                print "passou por else:"
+                                self.insere(obj)
                 else:
                     self.atualiza_exclui(None, True)
+                    
+                    catraca = Catraca()
+                    catraca.ip = IP
+                    catraca.tempo = 20
+                    catraca.operacao = 1
+                    catraca.nome = Util().obtem_nome_rpi().upper()
+                    self.objeto_json(catraca)
+
+                    self.catraca_get()
                     
         except Exception as excecao:
             print excecao

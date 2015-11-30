@@ -97,7 +97,7 @@ class CustoRefeicaoDAO(ConexaoGenerica):
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
-                    return False
+                    return True
             else:
                 self.aviso = "[custo-refeicao] inexistente!"
                 return False

@@ -15,7 +15,7 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 class Relogio(ControleApi, threading.Thread):
     
-    contador_status_recursos = 60
+    contador_status_recursos = 90
 
     def __init__(self, intervalo=1):
         super(Relogio, self).__init__()
@@ -37,7 +37,7 @@ class Relogio(ControleApi, threading.Thread):
             self.data = self.util.obtem_data_formatada()
             self.datahora = self.util.obtem_datahora().strftime("%d/%m/%Y %H:%M:%S")
 
-            #print self.datahora
+            print self.datahora
 
             self.obtem_status()
             self.obtem_atualizacao_de_turno()
@@ -114,17 +114,17 @@ class Relogio(ControleApi, threading.Thread):
             self.contador_status_recursos += 1
             if self.turno:
                 #print "self.contador_status_recursos > 120"
-                if self.contador_status_recursos >= 90:
+                if self.contador_status_recursos >= 120:
                     self.obtem_recurso_servidor()
             else:
                 #print "self.contador_status_recursos >= 3600"
-                if self.contador_status_recursos >= 3600:
-                    self.obtem_recurso_servidor(True)
+                if self.contador_status_recursos >= 1800:
+                    self.obtem_recurso_servidor(False, True)
             break
             
-    def obtem_recurso_servidor(self):
+    def obtem_recurso_servidor(self, display=False, limpa_tabela=False):
         self.contador_status_recursos = 0
-        self.recursos_restful.obtem_recursos()
+        self.recursos_restful.obtem_recursos(display, limpa_tabela)
         
     def obtem_atualizacao_de_turno(self):
         if self.turno:

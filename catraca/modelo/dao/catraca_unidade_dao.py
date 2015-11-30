@@ -105,7 +105,7 @@ class CatracaUnidadeDAO(ConexaoGenerica):
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
-                    return False
+                    return True
             else:
                 self.aviso = "[catraca-unidade] inexistente!"
                 return False

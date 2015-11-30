@@ -50,9 +50,11 @@ class RegistroJson(ServidorRestful):
                     for item in LISTA_JSON:
                         obj = self.dict_obj(item)
                         if obj.id:
-                            self.atualiza_exclui(obj, False)
-                        else:
-                            self.insere(obj)
+                            resultado = self.registro_dao.busca(obj.id)
+                            if resultado:
+                                self.atualiza_exclui(obj, False)
+                            else:
+                                self.insere(obj)
                 else:
                     self.atualiza_exclui(None, True)
                     

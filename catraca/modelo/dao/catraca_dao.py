@@ -116,10 +116,10 @@ class CatracaDAO(ConexaoGenerica):
             else:
                 self.aviso = "[catraca] inexistente!"
                 return False
-        except Exception as excecao:
-            self.aviso = str(excecao)
-            self.log.logger.error('[catraca] Erro realizando INSERT.', exc_info=True)
-            return False
+#         except Exception as excecao:
+#             self.aviso = str(excecao)
+#             self.log.logger.error('[catraca] Erro realizando INSERT.', exc_info=True)
+#             return False
         finally:
             pass   
         
@@ -144,14 +144,14 @@ class CatracaDAO(ConexaoGenerica):
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
                     self.commit()
-                    return False
+                    return True
             else:
                 self.aviso = "[catraca] inexistente!"
                 return False
-        except Exception as excecao:
-            self.aviso = str(excecao)
-            self.log.logger.error('[catraca] Erro realizando UPDATE/DELETE.', exc_info=True)
-            return False
+#         except Exception as excecao:
+#             self.aviso = str(excecao)
+#             self.log.logger.error('[catraca] Erro realizando UPDATE/DELETE.', exc_info=True)
+#             return False
         finally:
             pass
         
