@@ -22,14 +22,17 @@ class DefinicoesController{
 		if(isset($_GET['cadastrar_unidade']))
 		{
 
-			echo '
-					<div class="borda">
-					<p>Você tem certeza que quer adicionar essa unidade acadêmica? </p><p>'.$_GET['cadastrar_unidade'].'</p><br>';
-			echo '<form action="" method="post" class="formulario sequencial texto-preto">
-						<input type="hidden" name="certeza_cadastrar_unidade" value="'.$_GET['cadastrar_unidade'].'" />
-						<input  type="submit"  name="certeza" value="Tenho Certeza"/></form>';
+			if($_GET['cadastrar_unidade'] != ""){
 			
-			echo '</div>';
+				echo '
+						<div class="borda">
+						<p>Você tem certeza que quer adicionar essa unidade acadêmica? </p><p>'.$_GET['cadastrar_unidade'].'</p><br>';
+				echo '<form action="" method="post" class="formulario sequencial texto-preto">
+							<input type="hidden" name="certeza_cadastrar_unidade" value="'.$_GET['cadastrar_unidade'].'" />
+							<input  type="submit"  name="certeza" value="Tenho Certeza"/></form>';
+				
+				echo '</div>';
+			}
 				
 		}
 		if(isset($_POST['certeza_cadastrar_unidade'])){

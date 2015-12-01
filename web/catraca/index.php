@@ -114,6 +114,8 @@ if (isset ( $_GET ["sair"] )) {
 			<div class="resolucao config">
 					<?php
 					if ($sessao->getNivelAcesso () == Sessao::NIVEL_SUPER) {
+						
+						
 						// exibir menu de usuario Super.
 						echo '
 							<div class="duas colunas">					
@@ -127,7 +129,7 @@ if (isset ( $_GET ["sair"] )) {
 							            <li><a href="?pagina=definicoes" class="item-vertical"><span class="icone-cogs"></span> <span class="item-vertical-texto">Definições</span></a></li>';
 						echo ' <li><a href="?pagina=catraca" class="item-vertical"><span class="icone-loop2"></span> <span class="item-vertical-texto">Catraca</span></a></li>';
 						echo '          <li><a href="?pagina=cartao" class="item-vertical"><span class="icone-credit-card"></span> <span class="item-vertical-texto">Cartão</span></a></li>';
-						// echo ' <li><a href="?pagina=guiche" class="item-vertical"><span class="icone-user"></span> <span class="item-vertical-texto">Guichê</span></a></li>';
+						echo ' <li><a href="?pagina=guiche" class="item-vertical"><span class="icone-user"></span> <span class="item-vertical-texto">Guichê</span></a></li>';
 						echo ' <li><a href="?pagina=relatorio" class="item-vertical"><span class="icone-file-text2"></span> <span class="item-vertical-texto">Relatório</span></a></li>';
 						echo '         	<li><a href="?sair=sair" class="item-vertical"><span class="icone-exit"></span> <span class="item-vertical-texto">Sair</span></a></li>';
 						
@@ -148,23 +150,49 @@ if (isset ( $_GET ["sair"] )) {
 					if (isset ( $_GET ['pagina'] )) {
 						switch ($_GET ['pagina']) {
 							case 'inicio' :
-								CartaoController::main ( $sessao->getNivelAcesso () );
+								HomeController::main ( $sessao->getNivelAcesso () );
 								break;
 							case 'definicoes' :
 								DefinicoesController::main ( $sessao->getNivelAcesso () );
 								break;
 							case 'catraca' :
-								echo 'Catraca';
+								CatracaController::main($sessao->getNivelAcesso());
 								break;
 							case 'cartao' :
 								CartaoController::main ( $sessao->getNivelAcesso () );
 								
 								break;
 							case 'guiche' :
-								echo ' Guiche';
+								echo '
+			
+									
+										<div class="borda conteudo">
+											
+										<h2> A interface do Guichê será entregue em 08/12/2015, contendo:</h2>
+											<ul class="conteudo">
+												<li>Realização de cadastro de cartões com vínculo a usuário</li>
+												<li>Venda de créditos pesquisando usuário por nome ou cartão</li>
+											</ul>
+										
+											<h2> A página Administrativa Guichê será entregue em 15/12/2015, contendo:</h2>
+											<ul class="conteudo">
+												<li>Visualização de Guichê</li>
+												<li>Realização de Sangria</li>
+												<li>Caixa administrativo</li>
+											</ul>
+							
+											<h2> A página de Usuário Padrão será entregue em 22/12/2015, contendo:</h2>
+											<ul class="conteudo">
+												<li>Histórico pessoal de cartão</li>
+												<li>Histórico de alimentação</li>
+												<li>Exibição de créditos</li>
+											</ul>
+										</div>
+			
+									';
 								break;
 							case 'relatorio' :
-								echo 'Relatorios';
+								RelatorioController::main($sessao->getNivelAcesso());
 								break;
 							default :
 								echo '404 NOT FOUND';
