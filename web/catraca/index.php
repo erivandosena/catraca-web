@@ -164,7 +164,7 @@ if (isset ( $_GET ["sair"] )) {
 								break;
 							case 'guiche' :
 								echo '
-			
+								
 									
 										<div class="borda conteudo">
 											
@@ -187,7 +187,9 @@ if (isset ( $_GET ["sair"] )) {
 												<li>Histórico de alimentação</li>
 												<li>Exibição de créditos</li>
 											</ul>
+										<p>Ver link: <a href="reuniao.php">Reunião</a></p>
 										</div>
+			
 			
 									';
 								break;
