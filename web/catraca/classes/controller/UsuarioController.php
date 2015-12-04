@@ -29,7 +29,7 @@ class UsuarioController{
 						Até lá temos apenas página de usuário administrador. Caso queira se tornar um usuário administrador peça para que o um usuário que já seja administrador mude o seu nível de acesso para usuário administrador utilizando a interface administrativa. <br>
 				
 						Caso não exista nenhum usuário administrador, peça a um administrador do banco de dados que passe a seguinte instrução SQL:
-						"UPDATE usuario set usua_nivel = '.Sessao::NIVEL_SUPER.' WHERE login = \''.$usuario->getLogin().'\';".</p>
+						"UPDATE usuario set usua_nivel = '.Sessao::NIVEL_SUPER.' WHERE usua_login = \''.$usuario->getLogin().'\';".</p>
 						<br>
 								Depois clique em sair logo abaixo:  </p><h1><a href="?sair=1">sair</a></h1> e tente logar novamente.
 								</div>

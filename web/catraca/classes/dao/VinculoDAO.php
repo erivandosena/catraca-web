@@ -260,15 +260,15 @@ class VinculoDAO extends DAO {
 		$this->getConexao()->beginTransaction();
 		
 		if($vinculo->isAvulso())
-			$sqlInsertVinculo = "INSERT into vinculo (usua_id, cart_id, vinc_refeicoes, vinc_avulso, vinc_inicio, vinc_fim, vinc_descricao) VALUES($idBaseLocal, $idCartao, $refeicoes,TRUE,'$inicio', '$dataDeValidade', '$descricao')";
+			$sqlInsertVinculo = "INSERT INTO vinculo(usua_id, cart_id, vinc_refeicoes, vinc_avulso, vinc_inicio, vinc_fim, vinc_descricao) VALUES($idBaseLocal, $idCartao, $refeicoes,TRUE,'$inicio', '$dataDeValidade', '$descricao')";
 		else
-			$sqlInsertVinculo = "INSERT into vinculo (usua_id, cart_id, vinc_refeicoes, vinc_avulso, vinc_inicio, vinc_fim) VALUES($idBaseLocal, $idCartao, 1,FALSE,'$inicio', '$dataDeValidade')";
+			$sqlInsertVinculo = "INSERT INTO vinculo(usua_id, cart_id, vinc_refeicoes, vinc_avulso, vinc_inicio, vinc_fim, vinc_descricao) VALUES($idBaseLocal, $idCartao, 1,FALSE,'$inicio', '$dataDeValidade', 'Padrão')";
 		if(!$this->getConexao()->exec($sqlInsertVinculo)){
 			$this->getConexao()->rollBack();
 			return 0;
 		}
 		$idVinculo = $this->getConexao()->lastInsertId('vinculo_vinc_id_seq');
-		if(!$this->getConexao()->exec("INSERT into vinculo_tipo (vinc_id, tipo_id) VALUES($idVinculo, $tipoCartao)")){
+		if(!$this->getConexao()->exec("INSERT INTO vinculo_tipo(vinc_id, tipo_id) VALUES($idVinculo, $tipoCartao)")){
 			$this->getConexao()->rollBack();
 			return 0;
 		}

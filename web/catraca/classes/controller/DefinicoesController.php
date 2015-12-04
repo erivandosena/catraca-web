@@ -31,8 +31,9 @@ class DefinicoesController {
 		}
 		if (isset ( $_POST ['certeza_cadastrar_unidade'] )) {
 			$unidade = $_POST ['certeza_cadastrar_unidade'];
-			$unidade = preg_replace ( '/[^a-zA-Z0-9\s]/', '', $unidade );
-			if ($this->dao->getConexao ()->exec ( "INSERT INTO unidade(unid_nome) VALUES('$unidade');" )) {
+			$stmt = $this->dao->getConexao()->prepare("INSERT INTO unidade(unid_nome) VALUES(?);");
+			$stmt->bindParam(1, $unidade);
+			if ($stmt->execute()) {
 				$this->view->mostraSucesso ( "Sucesso" );
 			} else {
 				$this->view->mostraSucesso ( "Erro ao tentar inserir unidade" );
@@ -119,11 +120,17 @@ class DefinicoesController {
 		}
 		if (isset ( $_POST ['certeza_cadastrar_turno'] )) {
 			$turnoNome = $_POST ['turno_nome'];
-			$turnoNome = preg_replace ( '/[^a-zA-Z0-9\s]/', '', $turnoNome );
+			
 			$horaInicio = $_POST ['hora_inicio'];
 			$horaFim = $_POST ['hora_fim'];
 			
-			if ($this->dao->getConexao ()->exec ( "INSERT INTO turno(turn_hora_inicio,turn_hora_fim,turn_descricao) VALUES('$horaInicio', '$horaFim', '$turnoNome');" )) {
+			$stmt = $this->dao->getConexao()->prepare( "INSERT INTO turno(turn_hora_inicio,turn_hora_fim,turn_descricao) VALUES(?, ?, ?);");
+			$stmt->bindParam(1, $horaInicio);
+			$stmt->bindParam(2, $horaFim);
+			$stmt->bindParam(3, $turnoNome);
+			
+			
+			if ($stmt->execute()) {
 				$this->view->mostraSucesso ( "Sucesso" );
 			} else {
 				$this->view->mostraSucesso ( "Erro ao tentar inserir unidade" );
@@ -155,11 +162,14 @@ class DefinicoesController {
 		}
 		if (isset ( $_POST ['certeza_cadastrar_tipo'] )) {
 			$tipoNome = $_POST ['tipo_nome'];
-			
-			$tipoNome = preg_replace ( '/[^a-zA-Z0-9\s]/', '', $tipoNome );
 			$tipoValor = floatval ( $_POST ['tipo_valor'] );
+			$stmt = $this->dao->getConexao()->prepare("INSERT INTO tipo(tipo_nome, tipo_valor) VALUES(?, ?);");
+			$stmt->bindParam(1, $tipoNome);
+			$stmt->bindParam(2, $tipoValor);
 			
-			if ($this->dao->getConexao ()->exec ( "INSERT INTO tipo(tipo_nome, tipo_valor) VALUES('$tipoNome', $tipoValor);" )) {
+			
+			if ($stmt->execute()) {
+				
 				$this->view->mostraSucesso ( "Sucesso" );
 			} else {
 				$this->view->mostraSucesso ( "Erro ao tentar inserir unidade" );
@@ -217,32 +227,38 @@ class DefinicoesController {
 		$selecaoTurnos = "";
 		$selecaoTipos = "";
 		$selecaoCustos = "";
+		$selecaoCatracas = "";
 		if (isset ( $_GET ['cadastrar_unidade'] ) || isset ( $_POST ['certeza_cadastrar_unidade'] )) {
 			$selecaoUnidade = "active";
 			$selecaoTurnos = "";
 			$selecaoTipos = "";
+			$selecaoCatracas = "";
 			$selecaoCustos = "";
 		} else if (isset ( $_POST ['certeza_cadastrar_turno'] ) || isset ( $_GET ['cadastrar_turno'] )) {
 			$selecaoUnidade = "";
 			$selecaoTurnos = "active";
 			$selecaoTipos = "";
+			$selecaoCatracas = "";
 			$selecaoCustos = "";
 		} else if (isset ( $_GET ['cadastrar_tipo'] ) || isset ( $_POST ['certeza_cadastrar_tipo'] )) {
 			$selecaoUnidade = "";
 			$selecaoTurnos = "";
+			$selecaoCatracas = "";
 			$selecaoTipos = "active";
 			$selecaoCustos = "";
 		} else if (isset ( $_GET ['custo_cartao'] ) || isset ( $_GET ['custo_refeicao'] )) {
 			$selecaoUnidade = "";
 			$selecaoTurnos = "";
+			$selecaoCatracas = "";
 			$selecaoTipos = "";
 			$selecaoCustos = "active";
 		}
 		echo '
 					<li role="presentation" class="' . $selecaoUnidade . '"><a href="#tab1" data-toggle="tab">Unidades Acadêmicas</a></li>
 					<li role="presentation" class="' . $selecaoTurnos . '"><a href="#tab2" data-toggle="tab">Turnos</a></li>
-					<li role="presentation" class="' . $selecaoTipos . '"><a href="#tab3" data-toggle="tab">Tipos de Usuários</a></li>
-					<li role="presentation" class="' . $selecaoCustos . '"><a href="#tab4" data-toggle="tab">Custos</a></li>
+					<li role="presentation" class="' . $selecaoCatracas . '"><a href="#tab3" data-toggle="tab">Tipos de Usuários</a></li>							
+					<li role="presentation" class="' . $selecaoTipos . '"><a href="#tab4" data-toggle="tab">Tipos de Usuários</a></li>
+					<li role="presentation" class="' . $selecaoCustos . '"><a href="#tab5" data-toggle="tab">Custos</a></li>
 				
 							';
 		
@@ -254,10 +270,13 @@ class DefinicoesController {
 		echo '<div class="tab-pane ' . $selecaoTurnos . '" id="tab2">';
 		$this->telaConfiguracaoDeTurnos ();
 		echo '</div>';
-		echo '<div class="tab-pane ' . $selecaoTipos . '" id="tab3">';
+		echo '<div class="tab-pane ' . $selecaoTurnos . '" id="tab3">';
+		echo 'Tela Configuração de catracas';
+		echo '</div>';
+		echo '<div class="tab-pane ' . $selecaoTipos . '" id="tab4">';
 		$this->telaTiposDeUsuarios ();
 		echo '</div>';
-		echo '<div class="tab-pane ' . $selecaoCustos . '" id="tab4">';
+		echo '<div class="tab-pane ' . $selecaoCustos . '" id="tab5">';
 		$this->telaDeCustos ();
 		echo '</div>';
 		echo '</section>';

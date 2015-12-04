@@ -58,9 +58,9 @@ class DefinicoesView{
 		}
 		echo '											</td>
 											            <td class="centralizado">
-											            	<a href="?pagina=definicoes&turno_na_unidade='.$unidade->getId().'"><span class="icone-pencil2 texto-amarelo2 botao" title="Editar"></span></a>
+											            	<a href="?pagina=definicoes&turno_na_unidade='.$unidade->getId().'"><span class="icone-plus texto-verde2 botao" title="Editar"></span></a>
 											            	<a href="?pagina=definicoes&excluir_turno_da_unidade='.$unidade->getId().'"><span class="icone-cross botao texto-vermelho2" title="Excluir"></span></a>
-											            	<a href=""><span class="icone-plus botao texto-verde2" title="Adicionar Turno"></span></a>
+
 											            </td>
 				</tr>';
 	}

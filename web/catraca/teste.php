@@ -20,29 +20,13 @@ function __autoload($classe) {
 
 $sessao = new Sessao ();
 
-if (isset ( $_GET ["sair"] )) {
 
-	$sessao->mataSessao ();
-	header ( "Location:./index.php" );
-}
+$dao = new DAO(null, DAO::TIPO_PG_LOCAL);
 
-if($sessao->getNivelAcesso() != Sessao::NIVEL_SUPER)
-	exit(0);
+echo $dao->getConexao()->exec("INSERT INTO catraca_unidade(unid_id, catr_id) VALUES(1, 1);");
 
 
- $dao = new DAO(null, DAO::TIPO_PG_LOCAL);
-$result = $dao->getConexao()->query("SELECT 
-		cartao.cart_id, cartao.cart_numero, cartao.cart_creditos, tipo.tipo_valor, vinculo.vinc_refeicoes, tipo.tipo_id 
-		FROM cartao INNER JOIN tipo ON cartao.tipo_id = tipo.tipo_id 
-		INNER JOIN vinculo
-		ON vinculo.cart_id = cartao.cart_id
-		WHERE ('2015-11-26 11:19:00' BETWEEN vinculo.vinc_inicio AND vinculo.vinc_fim) AND (cartao.cart_numero = 3995148318)");
-foreach($result as $linha){
 
-	print_r($linha);
-}
-// NOME_TABELA_NOME_CAMPO _SEQ.
-// echo 'LAST:'.$dao->getConexao()->lastInsertId('atividade_tipo_atti_id_seq');
 ?>
 
 
