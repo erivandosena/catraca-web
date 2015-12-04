@@ -9,7 +9,7 @@ class Turno{
 	
 	
 	public function setId($id){
-		$this->id = $id;
+		$this->id = intval($id);
 	}
 	public function getId(){
 		return $this->id;

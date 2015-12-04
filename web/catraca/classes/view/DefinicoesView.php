@@ -46,10 +46,20 @@ class DefinicoesView{
 											        <tr>
 											            <td>'.$unidade->getId().'</td>
 											            <td>'.$unidade->getNome().'</td>
-											            <td></td>
+
+											            		<td>';
+
+		$i = 0;
+		foreach ($unidade->getTurnosValidos() as $turno){
+			if($i)
+				echo '\ ';
+			echo $turno->getDescricao();
+			$i++;
+		}
+		echo '											</td>
 											            <td class="centralizado">
-											            	<a href=""><span class="icone-pencil2 texto-amarelo2 botao" title="Editar"></span></a>
-											            	<a href=""><span class="icone-cross botao texto-vermelho2" title="Excluir"></span></a>
+											            	<a href="?pagina=definicoes&turno_na_unidade='.$unidade->getId().'"><span class="icone-pencil2 texto-amarelo2 botao" title="Editar"></span></a>
+											            	<a href="?pagina=definicoes&excluir_turno_da_unidade='.$unidade->getId().'"><span class="icone-cross botao texto-vermelho2" title="Excluir"></span></a>
 											            	<a href=""><span class="icone-plus botao texto-verde2" title="Adicionar Turno"></span></a>
 											            </td>
 				</tr>';
@@ -215,6 +225,35 @@ class DefinicoesView{
 	}
 	public function mostraSucesso($mensagem){
 		echo '<div class="borda"><p>'.$mensagem.'</p></div>';
+	
+	}
+	public function formTurnoNaUnidade(Unidade $unidade, $listaDeTurnos){
+		
+		echo '<div class="borda">
+						Deseja adicionar um turno na unidade: '.$unidade->getNome().'
+						<form action="" method="post" class="formulario sequencial">
+								<select name="id_turno">';
+		foreach ( $listaDeTurnos as $turno ) {
+			echo '<option value="'.$turno->getId().'">' . $turno->getDescricao () . '</option>';
+		}
+		echo '<input type="hidden" name="id_unidade" value="' . $unidade->getId () . '">';
+		echo '</select><input type="submit" name="turno_na_unidade"></form></div>';
+		
+		
+	}
+	public function formExcluirTurnoDaUnidade(Unidade $unidade){
+		$listaDeTurnos = $unidade->getTurnosValidos();
+	
+		echo '<div class="borda">
+						Deseja remover um turno na unidade: '.$unidade->getNome().'
+						<form action="" method="post" class="formulario sequencial">
+								<select name="id_turno">';
+		foreach ( $listaDeTurnos as $turno ) {
+			echo '<option value="'.$turno->getId().'">' . $turno->getDescricao () . '</option>';
+		}
+		echo '<input type="hidden" name="id_unidade" value="' . $unidade->getId () . '">';
+		echo '</select><input type="submit" name="excluir_turno_da_unidade"></form></div>';
+	
 	
 	}
 }

@@ -166,6 +166,7 @@ class VinculoDAO extends DAO {
 			$vinculo->getCartao()->setCreditos($linha['cart_creditos']);
 			$vinculo->setInicioValidade($linha ['vinc_inicio']);
 			$vinculo->setFinalValidade($linha['vinc_fim']);
+			$vinculo->setQuantidadeDeAlimentosPorTurno($linha['vinc_refeicoes']);
 			$vinculo->setAvulso($linha['vinc_avulso']);
 			return $vinculo;
 			

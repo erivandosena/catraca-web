@@ -300,6 +300,7 @@ class CartaoView {
 		echo '<p>Cartão: '.$vinculo->getCartao()->getNumero().'</p>';
 		echo '<p>Créditos no Cartão: R$' . number_format($vinculo->getCartao()->getCreditos(), 2, ',', '.').'</p>';
 		echo '<p>Tipo de Vínculo: '.$vinculo->getCartao()->getTipo()->getNome().'</p>';
+		echo '<p>Refeições Por Turno: '.$vinculo->getQuantidadeDeAlimentosPorTurno().'</p>';
 		
 		if($vinculo->isActive()){
 			echo '<p>Vinculo ativo</p>';

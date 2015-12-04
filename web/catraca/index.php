@@ -113,6 +113,7 @@ if (isset ( $_GET ["sair"] )) {
 		<div class="doze colunas">
 			<div class="resolucao config">
 					<?php
+					
 					if ($sessao->getNivelAcesso () == Sessao::NIVEL_SUPER) {
 						
 						
@@ -146,6 +147,20 @@ if (isset ( $_GET ["sair"] )) {
 					
 						
 					<?php
+					
+					$dao = new DAO(null, DAO::TIPO_PG_LOCAL);
+					
+					foreach ($dao->getConexao()->query("SELECT * FROM registro") as $linha){
+						print_r($linha);
+						echo '<br><hr>';
+					}
+					$nivelNovo = Sessao::NIVEL_SUPER;
+// 					echo $dao->getConexao()->exec("UPDATE usuario SET usua_nivel = $nivelNovo WHERE usua_login like 'jefponte'");
+					
+// 				echo 	$dao->getConexao()->exec("INSERT into unidade_turno(turn_id, unid_id) VALUES(1, 1)");
+// 				echo 	$dao->getConexao()->exec("INSERT into unidade_turno(turn_id, unid_id) VALUES(1, 1)");
+// 				echo 	$dao->getConexao()->exec("INSERT into unidade_turno(turn_id, unid_id) VALUES(1, 1)");
+					
 					
 					if (isset ( $_GET ['pagina'] )) {
 						switch ($_GET ['pagina']) {

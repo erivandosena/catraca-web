@@ -67,11 +67,71 @@ class UnidadeDAO extends DAO {
 		foreach ( $this->getConexao ()->query ( $sql ) as $linha ) {
 			$catraca->setNome ( $linha ['catr_nome'] );
 			$catraca->setId ( $linha ['catr_id'] );
-			$catraca->setIp($linha['catr_ip']);
+			$catraca->setIp ( $linha ['catr_ip'] );
 			return $catraca;
 		}
 		return false;
 	}
+	public function preenchePorId(Unidade $unidade) {
+		$idUnidade = $unidade->getId ();
+		if (! is_int ( $idUnidade ) && $idUnidade <= 0)
+			return;
+		$sql = "SELECT * FROM unidade WHERE unid_id = $idUnidade";
+		foreach ( $this->getConexao ()->query ( $sql ) as $linha )
+			$unidade->setNome ( $linha ['unid_nome'] );
+		return;
+	}
+	public function turnoNaUnidade(Turno $turno, Unidade $unidade) {
+		$idTurno = $turno->getId ();
+		$idUnidade = $unidade->getId ();
+		if ($idUnidade <= 0 || $idTurno <= 0 || ! is_int ( $idUnidade ) || ! is_int ( $idTurno ))
+			return;
+			// Primeiro vamos ver se esse turno existe nessa unidade.
+		
+		$sqlExiste = "SELECT * FROM unidade_turno WHERE turn_id = $idTurno AND unid_id = $idUnidade";
+		foreach ( $this->getConexao ()->query ( $sqlExiste ) as $linha )
+			return false;
+		
+		$sqlInsert = "INSERT INTO unidade_turno(turn_id, unid_id) VALUES($idTurno, $idUnidade)";
+		if ($this->getConexao ()->exec ( $sqlInsert ))
+			return true;
+		return false;
+		
+		// Caso contrário a gente insere.
+	}
+	
+	public function excluirTurnoDaUnidade(Turno $turno, Unidade $unidade) {
+		$idTurno = $turno->getId ();
+		$idUnidade = $unidade->getId ();
+		if ($idUnidade <= 0 || $idTurno <= 0 || ! is_int ( $idUnidade ) || ! is_int ( $idTurno ))
+			return;
+		$sqlInsert = "DELETE FROM unidade_turno WHERE unid_id = $idUnidade AND  turn_id = $idTurno";
+		if ($this->getConexao ()->exec ( $sqlInsert ))
+			return true;
+		return false;
+	
+		// Caso contrário a gente insere.
+	}
+	
+	public function turnosDaUnidade(Unidade $unidade) {
+		$idUnidade = $unidade->getId ();
+		$sql = "SELECT * FROM unidade 
+				INNER JOIN 
+				unidade_turno ON unidade.unid_id = unidade_turno.unid_id 
+				INNER JOIN turno 
+				ON turno.turn_id = unidade_turno.turn_id
+				WHERE unidade.unid_id = $idUnidade";
+		foreach ( $this->getConexao ()->query ( $sql ) as $linha ) {
+			
+			$turno = new Turno ();
+			$turno->setId ( $linha ['turn_id'] );
+			$turno->setDescricao ( $linha ['turn_descricao'] );
+			$turno->setHoraFinal ( $linha ['turn_hora_fim'] );
+			$turno->setHoraInicial ( $linha ['turn_hora_inicio'] );
+			$unidade->adicionaTurno ( $turno );
+		}
+	}
+
 }
 
 ?>
