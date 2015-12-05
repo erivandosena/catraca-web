@@ -198,6 +198,11 @@ class CartaoView {
 	
 	
 	public function mostraVinculos($lista){
+		if(!count($lista))
+		{
+			echo '<div class="borda"><p>Nenhum ítem na lista</p></div>';
+			return;
+		}
 		echo '<div class="borda">
 						<table class="tabela borda-vertical zebrada texto-preto">';
 		echo '<tr>
@@ -224,7 +229,7 @@ class CartaoView {
 			echo 	'<td>Não</td>';
 		
 		echo '
-				<td>' . $vinculo->getResponsavel()->getNome(). '</td>
+				<td><a href="?pagina=cartao&selecionado='.$vinculo->getResponsavel()->getIdBaseExterna().'">' . $vinculo->getResponsavel()->getNome(). '</a></td>
 				<td>' .$vinculo->getCartao()->getTipo()->getNome() . '</td>
 				<td><a href="?pagina=cartao&cartaoselecionado='.$vinculo->getCartao()->getId().'">' . $vinculo->getCartao()->getNumero() . '</a></td>
 				<td>' . date("d/m/Y G:i:s", strtotime($vinculo->getFinalValidade())) . '</td>';
@@ -313,9 +318,10 @@ class CartaoView {
 			echo '<p>Vinculo inativo</p>';
 			echo '<p>Início do Vínculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getInicioValidade())).'</p>';
 			echo '<p>Fim do Vínculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getFinalValidade())).'</p>';
+			
+			
+			
 		}
-		
-		
 		
 		
 		

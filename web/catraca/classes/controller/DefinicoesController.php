@@ -99,6 +99,39 @@ class DefinicoesController {
 		
 		// $this->view->formAdicionarTurnoNaUnidade();
 	}
+	
+	public function telaCatracas(){
+		$unidadeDao = new UnidadeDAO($this->dao->getConexao());
+		$listaDeCatracas = $unidadeDao->retornaCatracasPorUnidade();
+		$this->view->listarCatracas($listaDeCatracas);
+	
+		if(isset($_GET['editar_catraca'])){
+			
+			$catraca = new Catraca();
+			$catraca->setId($_GET['editar_catraca']);
+			$listaDeUnidades = $unidadeDao->retornaLista();
+			$unidadeDao->preencheCatracaPorId($catraca);
+			$this->view->formEditarCatraca($catraca, $listaDeUnidades);
+			
+			if(isset($_POST['salvar'])){
+				$catraca->setId($_POST['id_catraca']);
+				$catraca->setOperacao($_POST['operacao']);
+				$catraca->setTempoDeGiro($_POST['tempo_giro']);
+				$catraca->setUnidade(new Unidade());
+				$catraca->getUnidade()->setId($_POST['id_unidade']);
+				
+				
+				if($unidadeDao->atualizarCatraca($catraca))
+					$this->view->mostraSucesso("Catraca editada com sucesso");
+				else
+					$this->view->mostraSucesso("Erro ao tentar editar catraca");
+				echo '<meta http-equiv="refresh" content="4; url=.\?pagina=definicoes&lista_catracas=1">';
+				
+			}
+		}
+	
+	
+	}
 	public function telaConfiguracaoDeTurnos() {
 		$this->view->formAdicionarTurno ();
 		$turnoDao = new TurnoDAO ( $this->dao->getConexao () );
@@ -218,6 +251,10 @@ class DefinicoesController {
 		}
 	}
 	private $dao;
+	
+
+	
+	
 	public function telaDefinicoes() {
 		$this->dao = new DAO ( null, DAO::TIPO_PG_LOCAL );
 		$this->view = new DefinicoesView ();
@@ -253,10 +290,18 @@ class DefinicoesController {
 			$selecaoTipos = "";
 			$selecaoCustos = "active";
 		}
+		
+		else if(isset($_GET['editar_catraca']) || isset($_GET['lista_catracas'])){
+			$selecaoUnidade = "";
+			$selecaoTurnos = "";
+			$selecaoCatracas = "active";
+			$selecaoTipos = "";
+			$selecaoCustos = "";
+		}
 		echo '
 					<li role="presentation" class="' . $selecaoUnidade . '"><a href="#tab1" data-toggle="tab">Unidades Acadêmicas</a></li>
 					<li role="presentation" class="' . $selecaoTurnos . '"><a href="#tab2" data-toggle="tab">Turnos</a></li>
-					<li role="presentation" class="' . $selecaoCatracas . '"><a href="#tab3" data-toggle="tab">Tipos de Usuários</a></li>							
+					<li role="presentation" class="' . $selecaoCatracas . '"><a href="#tab3" data-toggle="tab">Catracas</a></li>							
 					<li role="presentation" class="' . $selecaoTipos . '"><a href="#tab4" data-toggle="tab">Tipos de Usuários</a></li>
 					<li role="presentation" class="' . $selecaoCustos . '"><a href="#tab5" data-toggle="tab">Custos</a></li>
 				
@@ -270,8 +315,8 @@ class DefinicoesController {
 		echo '<div class="tab-pane ' . $selecaoTurnos . '" id="tab2">';
 		$this->telaConfiguracaoDeTurnos ();
 		echo '</div>';
-		echo '<div class="tab-pane ' . $selecaoTurnos . '" id="tab3">';
-		echo 'Tela Configuração de catracas';
+		echo '<div class="tab-pane ' . $selecaoCatracas . '" id="tab3">';
+		$this->telaCatracas();
 		echo '</div>';
 		echo '<div class="tab-pane ' . $selecaoTipos . '" id="tab4">';
 		$this->telaTiposDeUsuarios ();

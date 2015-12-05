@@ -49,28 +49,79 @@ class UnidadeDAO extends DAO {
 					ON unidade.unid_id = catraca_unidade.unid_id
 					WHERE unidade.unid_id = $id";
 		} else {
-			$sql = "SELECT * FROM catraca";
+			$sql = "SELECT * FROM catraca
+					LEFT JOIN catraca_unidade
+					ON catraca.catr_id = catraca_unidade.catr_id
+					LEFT JOIN unidade
+					ON unidade.unid_id = catraca_unidade.unid_id";
 		}
 		
 		foreach ( $this->getConexao ()->query ( $sql ) as $linha ) {
 			$catraca = new Catraca ();
 			$catraca->setNome ( $linha ['catr_nome'] );
 			$catraca->setId ( $linha ['catr_id'] );
+			$catraca->setOperacao($linha['catr_operacao']);
+			$catraca->setTempoDeGiro($linha['catr_tempo_giro']);
+			$catraca->setIp($linha['catr_ip']);
+			$catraca->setUnidade(new Unidade());
+			$catraca->getUnidade()->setNome($linha['unid_nome']);
+			
+			
 			$lista [] = $catraca;
 		}
 		return $lista;
 	}
-	public function detalheCatraca(Catraca $catraca) {
-		$idCatraca = $catraca->getId ();
-		$sql = "SELECT * FROM catraca WHERE catr_id = $idCatraca";
-		
+	public function preencheCatracaPorId(Catraca $catraca){
+		$idCatraca = $catraca->getId();
+		$sql = "SELECT * FROM catraca
+		LEFT JOIN catraca_unidade
+		ON catraca.catr_id = catraca_unidade.catr_id
+		LEFT JOIN unidade
+		ON unidade.unid_id = catraca_unidade.unid_id
+		WHERE catraca.catr_id = $idCatraca";
 		foreach ( $this->getConexao ()->query ( $sql ) as $linha ) {
+			
 			$catraca->setNome ( $linha ['catr_nome'] );
 			$catraca->setId ( $linha ['catr_id'] );
-			$catraca->setIp ( $linha ['catr_ip'] );
-			return $catraca;
+			$catraca->setOperacao($linha['catr_operacao']);
+			$catraca->setTempoDeGiro($linha['catr_tempo_giro']);
+			$catraca->setIp($linha['catr_ip']);
+			$catraca->setUnidade(new Unidade());
+			$catraca->getUnidade()->setNome($linha['unid_nome']);
+				
 		}
-		return false;
+		
+	}
+	/**
+	 * 
+	 * @param Catraca $catraca
+	 */
+	public function atualizarCatraca(Catraca $catraca){
+		$giro = $catraca->getTempodeGiro();
+		$id = $catraca->getId();
+		$operacao = $catraca->getOperacao();
+		$idUnidade= $catraca->getUnidade()->getId();
+		
+		
+		$this->getConexao()->beginTransaction();
+		if(!$this->getConexao()->exec("UPDATE catraca SET catr_tempo_giro = $giro, 
+						catr_operacao = $operacao
+						WHERE catr_id = $id"))
+		{
+			$this->getConexao()->rollBack();
+			return false;
+		}		
+		$this->getConexao()->exec("DELETE FROM catraca_unidade WHERE catr_id = $id");
+		if(!$this->getConexao()->exec("INSERT into catraca_unidade(catr_id, unid_id) VALUES($id, $idUnidade)"))
+		{
+			$this->getConexao()->rollBack();
+			return false;
+		}
+		$this->getConexao()->commit();
+		return true;
+		
+		
+		
 	}
 	public function preenchePorId(Unidade $unidade) {
 		$idUnidade = $unidade->getId ();

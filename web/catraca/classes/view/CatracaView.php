@@ -255,19 +255,16 @@ class CatracaView{
 									</svg>
 								</div>
 								<div class="catraca-info">
-									<span>Status: Ativo</span><br>
-									<span>Inicio do Turno: 11:00</span><br>
-									<span>Fim do Turno: 13:50</span><br>
+									<span>IP: '.$catraca->getIp().'</span><br>
+									<span>Operação: '.$catraca->getStrOperacao().'</span><br>
+									<span>Tempo de Giro: '.$catraca->getTempodeGiro().'</span><br>
 									<span>Giros Por Turno: 00</span><br>
 									<span>Total de Giros: 00</span><br>
 									<hr class="solida" />
-									<span>Unidade Acadêmica: </span><br>
+									<span>Unidade Acadêmica: '.$catraca->getUnidade()->getNome().'</span><br>
 									<span>IP: '.$catraca->getIp().'</span>						
 								</div>
-								<div class="doze colunas centralizado">
-									<hr class="solida" />
-									<a href="" class="botao texto-branco">Adicionar Unidade Acadêmica</a>
-								</div>														
+																						
 							</div>
 						</div>';
 	}

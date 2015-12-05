@@ -36,7 +36,7 @@ class CatracaController {
 			
 			$catraca = new Catraca();
 			$catraca->setId(intval($_GET['detalhe']));
-			$unidadeDao->detalheCatraca($catraca);
+			$unidadeDao->preencheCatracaPorId($catraca);
 			$this->view->detalheCatraca($catraca);
 			
 			

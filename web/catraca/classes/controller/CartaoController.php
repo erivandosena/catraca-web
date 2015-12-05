@@ -148,9 +148,21 @@ class CartaoController{
  			
  			foreach($vinculos as $vinculoComIsencao)
  				$vinculoDao->isencaoValidaDoVinculo($vinculoComIsencao);
- 			
+ 			echo '<h1>Vínculos Válidos</h1>';
  			$this->view->mostraVinculos($vinculos);
-			
+ 			
+ 			if (!isset ( $_GET ['vinculos_inativos'] )){
+ 				echo '<a class="botao" href="?pagina=cartao&cartaoselecionado=' . $numeroDoSelecionado . '&vinculos_inativos=ver">Ver Vínculos Inativos</a>';
+ 			}else
+ 			{
+ 				echo '<h1>Vínculos aguardando liberação</h1>';
+ 				$vinculosVencidosAguardando  = $vinculoDao->retornaVinculosFuturosDeCartao($cartao);
+ 				$this->view->mostraVinculos($vinculosVencidosAguardando);
+ 				echo '<h1>Vínculos vencidos</h1>';
+ 				$vinculosVencidos  = $vinculoDao->retornaVinculosVencidosDeCartao($cartao);
+ 				$this->view->mostraVinculos($vinculosVencidos);
+ 				echo '<a class="botao" href="?pagina=cartao&cartaoselecionado=' . $numeroDoSelecionado. '">Ocultar Vínculos Inativos</a>';
+ 			}
 			
 		}
 	}
@@ -164,6 +176,7 @@ class CartaoController{
 			$vinculoDao->vinculoPorId($vinculoDetalhe);
 			$vinculoDao->isencaoValidaDoVinculo($vinculoDetalhe);
 			$this->view->mostrarVinculoDetalhe($vinculoDetalhe);
+			
 			if($vinculoDetalhe->getIsencao()->getId()){
 				$this->view->mostraIsencaoDoVinculo($vinculoDetalhe);
 				
@@ -194,7 +207,7 @@ class CartaoController{
 						$vinculoDetalhe->getCartao()->adicionaCreditos($valorVendido);
 						$sessao = new Sessao();
 						if($vinculoDao->adicionarCreditos($vinculoDetalhe, $valorVendido, $sessao->getIdUsuario()))
-							$this->view->mostraSucesso("Isenção Inserida Com sucesso!");
+							$this->view->mostraSucesso("Creditos atualizados!");
 						else{
 							$this->view->mostraSucesso("Erro na tentativa de Inserir Isenção!");
 						}
@@ -296,8 +309,10 @@ class CartaoController{
 			foreach($vinculos as $vinculoComIsencao)
 				$vinculoDao->isencaoValidaDoVinculo($vinculoComIsencao);
 			
-			$this->view->mostraVinculos($vinculos);
-				
+			
+			
+
+			
 			if (isset ( $_POST ['salvar'] )) {
 			
 				// Todos os cadastros inicialmente ser�o n�o avulsos.
@@ -353,6 +368,23 @@ class CartaoController{
 				$this->view->mostraFormAdicionarVinculo($listaDeTipos, $idDoSelecionado);
 		
 			}
+			echo '<h1>Vínculos Ativos</h1>';
+			$this->view->mostraVinculos($vinculos);
+			
+			if (!isset ( $_GET ['vinculos_inativos'] )){
+				echo '<a class="botao" href="?pagina=cartao&selecionado=' . $idDoSelecionado . '&vinculos_inativos=ver">Ver Vínculos Inativos</a>';
+			}else
+			{
+				echo '<h1>Vínculos aguardando liberação</h1>';
+				$vinculosVencidosAguardando  = $vinculoDao->retornaVinculosFuturos($usuario);
+				$this->view->mostraVinculos($vinculosVencidosAguardando);
+				echo '<h1>Vínculos vencidos</h1>';
+				$vinculosVencidos  = $vinculoDao->retornaVinculosVencidos($usuario);
+				$this->view->mostraVinculos($vinculosVencidos);
+				echo '<a class="botao" href="?pagina=cartao&selecionado=' . $idDoSelecionado . '">Ocultar Vínculos Inativos</a>';
+			}
+			
+			
 			$usuarioDao->fechaConexao();
 			$vinculoDao->fechaConexao();
 		}
