@@ -47,7 +47,7 @@ class ConexaoGenerica(object):
         try:
             conexao_factory = ConexaoFactory()
             self.__con = conexao_factory.conexao(1) #use 1=PostgreSQL 2=MySQL 3=SQLite
-            self.__con.autocommit = False
+            #self.__con.autocommit = False
             self.__factory = conexao_factory.factory
             return self.__con
         except Exception, e:

@@ -9,6 +9,7 @@ from multiprocessing import Process
 from threading import Thread
 from catraca.logs import Logs
 from catraca.util import Util
+from catraca.visao.interface.aviso import Aviso
 from catraca.controle.raspberrypi.pinos import PinoControle
 from catraca.controle.dispositivos.solenoide import Solenoide
 
@@ -23,6 +24,7 @@ class SensorOptico(object):
 
     log = Logs()
     util = Util()
+    aviso = Aviso()
     rpi = PinoControle()
     sensor_1 = rpi.ler(6)['gpio']
     sensor_2 = rpi.ler(13)['gpio']
@@ -30,6 +32,7 @@ class SensorOptico(object):
     tempo_decorrido = 0
     tempo_decorrente = 0
     finaliza_giro = False
+    status_alerta = False
     
 
     def __init__(self):
@@ -87,12 +90,21 @@ class SensorOptico(object):
                         while self.obtem_codigo_sensores() == '11':
                             confirma_giro_completo = self.obtem_codigo_sensores()
                             self.log.logger.debug('No meio do giro '+giro+', codigo sensores: '+ self.obtem_codigo_sensores())
-#                             ##############################################################
-#                             ## ALERTA CASO A CATRACA PARE NO MEIO DO GIRO MAIS DE 10 SEG
-#                             ##############################################################
-#                             if self.util.cronometro/1000 < 10:
-#                                 self.cronometro_tempo(self.tempo_decorrido, tempo, 1.6)
-#                             self.util.beep_buzzer_delay(860, 1, 1, 10) #10 seg. delay beep
+                            ##############################################################
+                            ## ALERTA CASO A CATRACA PARE NO MEIO DO GIRO MAIS DE 10 SEG
+                            ##############################################################
+                            if self.status_alerta:
+                                self.status_alerta = False
+
+                            if self.util.cronometro == 0:
+                                self.aviso.exibir_uso_incorreto()
+                                self.status_alerta = True
+                                self.aviso.exibir_acesso_liberado()
+                                
+                            self.util.beep_buzzer_delay(860, 1, 1, 10) #10 = 10 seg
+                            if self.util.cronometro/1000 == 10:
+                                self.util.cronometro = 0
+
                         codigo_giro_completo = self.obtem_codigo_sensores()
                         ##############################################################
                         ## FINALIZANDO VERIFICA SE O GIRO FOI HORARIO OU ANTIHORARIO

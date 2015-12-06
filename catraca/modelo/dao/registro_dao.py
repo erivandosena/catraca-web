@@ -3,12 +3,14 @@
 
 
 from contextlib import closing
+from catraca.util import Util
 from catraca.modelo.dados.conexao import ConexaoFactory
 from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
 from catraca.modelo.entidades.registro import Registro
 from catraca.modelo.dao.cartao_dao import CartaoDAO
 from catraca.modelo.dao.turno_dao import TurnoDAO
 from catraca.modelo.dao.catraca_dao import CatracaDAO
+from catraca.modelo.dao.vinculo_dao import VinculoDAO
 
 
 __author__ = "Erivando Sena"
@@ -30,10 +32,10 @@ class RegistroDAO(ConexaoGenerica):
             id = i
         if id:
             sql = "SELECT regi_id, regi_data, regi_valor_pago, regi_valor_custo, " +\
-            "cart_id, catr_id FROM registro WHERE regi_id = " + str(id)
+            "cart_id, catr_id, vinc_id FROM registro WHERE regi_id = " + str(id)
         elif id is None:
             sql = "SELECT regi_id, regi_data, regi_valor_pago, regi_valor_custo, " +\
-            "cart_id, catr_id FROM registro ORDER BY regi_id"
+            "cart_id, catr_id, vinc_id FROM registro ORDER BY regi_id"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -46,6 +48,7 @@ class RegistroDAO(ConexaoGenerica):
                         obj.custo = dados[3]
                         obj.cartao = self.busca_por_cartao(obj)
                         obj.catraca = self.busca_por_catraca(obj)
+                        obj.vinculo = self.busca_por_vinculo(obj)
                         return obj
                     else:
                         return None
@@ -70,13 +73,42 @@ class RegistroDAO(ConexaoGenerica):
     def busca_por_catraca(self, obj):
         return CatracaDAO().busca(obj.id)
     
+    def busca_por_vinculo(self, obj):
+        return VinculoDAO().busca(obj.id)
+    
+    def busca_utilizacao(self, hora_ini, hora_fim, cartao_id):
+        data = Util().obtem_datahora()
+        data_ini = str(data.strftime("%Y-%m-%d")) + " " + str(hora_ini)
+        data_fim = str(data.strftime("%Y-%m-%d")) + " " + str(hora_fim)
+        sql = "SELECT COUNT(regi_id) FROM registro " +\
+            "WHERE (regi_data BETWEEN '"+ str(data_ini) +"' "\
+            "AND '"+ str(data_fim) +"') "\
+            "AND (cart_id = "+str(cartao_id)+")"
+        print "=" * 100
+        print sql
+        print "=" * 100
+        try:
+            with closing(self.abre_conexao().cursor()) as cursor:
+                cursor.execute(sql)
+                obj = cursor.fetchone()
+                if obj:
+                    return obj
+                else:
+                    return 0
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[registro] Erro ao realizar SELECT.', exc_info=True)
+        finally:
+            pass    
+    
     def busca_por_periodo(self, data_ini, data_fim):
         sql = "SELECT regi_id, "\
               "regi_data, "\
               "regi_valor_pago, "\
               "regi_valor_custo, "\
               "cart_id, "\
-              "catr_id "\
+              "catr_id, "\
+              "vinc_id "\
               "FROM registro WHERE "\
               "regi_data BETWEEN " + str(data_ini) +\
               " AND " + str(data_fim) +\
@@ -94,25 +126,23 @@ class RegistroDAO(ConexaoGenerica):
             self.log.logger.error('[registro] Erro ao realizar SELECT.', exc_info=True)
         finally:
             pass
-        
-    def busca_utilizacao(self, data_ini, data_fim, id_cartao):
-        sql = "SELECT count(regi_id) FROM registro " +\
-            "WHERE (regi_data BETWEEN '"+ str(data_ini) +"' AND '"+ str(data_fim) +"') AND " +\
-            "(cart_id = "+str(id_cartao)+")"
+          
+    def busca_ultimo_registro(self):
+        sql = "SELECT MAX(regi_id) FROM registro"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
                 obj = cursor.fetchone()
                 if obj:
-                    return obj
+                    return ((int)(obj[0]))
                 else:
-                    return None
+                    return 0
         except Exception as excecao:
             self.aviso = str(excecao)
             self.log.logger.error('[registro] Erro ao realizar SELECT.', exc_info=True)
         finally:
             pass
-        
+
     def insere(self, obj):
         try:
             if obj:
@@ -122,13 +152,15 @@ class RegistroDAO(ConexaoGenerica):
                       "regi_valor_pago, "\
                       "regi_valor_custo, "\
                       "cart_id, "\
-                      "catr_id) VALUES (" +\
+                      "catr_id, "\
+                      "vinc_id) VALUES (" +\
                       str(obj.id) + ", '" +\
                       str(obj.data) + "', " +\
                       str(obj.pago) + ", " +\
                       str(obj.custo) + ", " +\
                       str(obj.cartao) + ", " +\
-                      str(obj.catraca) + ")"
+                      str(obj.catraca) + ", " +\
+                      str(obj.vinculo) + ")"
                 self.aviso = "[registro] Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
@@ -159,7 +191,8 @@ class RegistroDAO(ConexaoGenerica):
                           "regi_valor_pago = " + str(obj.pago) + ", " +\
                           "regi_valor_custo = " + str(obj.custo) + ", " +\
                           "cart_id = " + str(obj.cartao) + ", " +\
-                          "catr_id = " + str(obj.catraca) +\
+                          "catr_id = " + str(obj.cartao) + ", " +\
+                          "vinc_id = " + str(obj.vinculo) +\
                           " WHERE "\
                           "regi_id = " + str(obj.id)
                     self.aviso = "[registro] Alterado com sucesso!"
@@ -190,7 +223,8 @@ class RegistroDAO(ConexaoGenerica):
                               "reof_valor_pago = " + str(obj.pago) + ", " +\
                               "reof_valor_custo = " + str(obj.custo) + ", " +\
                               "cart_id = " + str(obj.cartao) + ", " +\
-                              "catr_id = " + str(obj.catraca) +\
+                              "catr_id = " + str(obj.cartao) + ", " +\
+                              "vinc_id = " + str(obj.vinculo) +\
                               " WHERE "\
                               "reof_id = " + str(obj.id)
                         self.aviso = "[registro-off] Alterado com sucesso!"
@@ -200,13 +234,15 @@ class RegistroDAO(ConexaoGenerica):
                               "reof_valor_pago, "\
                               "reof_valor_custo, "\
                               "cart_id, "\
-                              "catr_id) VALUES (" +\
+                              "catr_id, "\
+                              "vinc_id) VALUES (" +\
                               str(obj.id) + ", '" +\
                               str(obj.data) + "', " +\
                               str(obj.pago) + ", " +\
                               str(obj.custo) + ", " +\
                               str(obj.cartao) + ", " +\
-                              str(obj.catraca) + ")"
+                              str(obj.catraca) + ", " +\
+                              str(obj.vinculo) + ")"
                         self.aviso = "[registro-off] Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)

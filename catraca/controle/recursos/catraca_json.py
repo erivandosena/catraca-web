@@ -6,6 +6,7 @@ import json
 import requests
 from catraca.logs import Logs
 from catraca.util import Util
+from catraca.visao.interface.aviso import Aviso
 from catraca.modelo.dados.servidor_restful import ServidorRestful
 from catraca.modelo.dao.catraca_dao import CatracaDAO
 from catraca.modelo.entidades.catraca import Catraca
@@ -20,13 +21,15 @@ __status__ = "Prototype" # Prototype | Development | Production
 class CatracaJson(ServidorRestful):
     
     log = Logs()
+    aviso = Aviso()
     catraca_dao = CatracaDAO()
+    contador_acesso_servidor = 0
     
     def __init__(self):
         super(CatracaJson, self).__init__()
         ServidorRestful.__init__(self)
         
-    def catraca_get(self, limpa_tabela=False):
+    def catraca_get(self):
         IP = Util().obtem_ip()
         servidor = self.obter_servidor()
         try:
@@ -34,43 +37,62 @@ class CatracaJson(ServidorRestful):
                 url = str(servidor) + "catraca/jcatraca"
                 header = {'Content-type': 'application/json'}
                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
-                print "Código: " + str(r.status_code)
-                dados  = json.loads(r.text)
-                LISTA_JSON = dados["catracas"]
+                print "Status HTTP: " + str(r.status_code)
 
-                if limpa_tabela:
-                    print "passou por if limpa_tabela"
-                    self.atualiza_exclui(None, True)
-                
-                if LISTA_JSON is not []:
-                    print "passou por if LISTA_JSON is not []:"
-                    for item in LISTA_JSON:
-                        obj = self.dict_obj(item)
-                        if obj.id:
-                            resultado = self.catraca_dao.busca(obj.id)
-                            if resultado:
-                                print "passou por if obj.id:"
-                                self.atualiza_exclui(obj, False)
-                            else:
-                                print "passou por else:"
-                                self.insere(obj)
+                if r.text == '':
+                    self.contador_acesso_servidor += 1
+                    if self.contador_acesso_servidor < 4:
+                        self.aviso.exibir_falha_servidor()
+                        self.aviso.exibir_saldacao(self.aviso.saldacao())
+                        self.aviso.exibir_aguarda_cartao()
+                    else:
+                        self.contador_acesso_servidor = 0
                 else:
-                    self.atualiza_exclui(None, True)
-                    
-                    catraca = Catraca()
-                    catraca.ip = IP
-                    catraca.tempo = 20
-                    catraca.operacao = 1
-                    catraca.nome = Util().obtem_nome_rpi().upper()
-                    self.objeto_json(catraca)
-
-                    self.catraca_get()
-                    
+                    dados  = json.loads(r.text)
+                    LISTA_JSON = dados["catracas"]
+                    if LISTA_JSON != []:
+                        for item in LISTA_JSON:
+                            obj = self.dict_obj(item)
+                            if obj:
+                                return obj
+                            else:
+                                return None
+                    else:
+                        self.contador_acesso_servidor += 1
+                        if self.contador_acesso_servidor < 4:
+                            catraca = Catraca()
+                            catraca.ip = IP
+                            catraca.tempo = 20
+                            catraca.operacao = 1
+                            catraca.nome = Util().obtem_nome_rpi().upper()
+                            self.objeto_json(catraca)
+                            
+                            return self.catraca_get()
+                        else:
+                            self.aviso.exibir_falha_servidor()
+                            self.aviso.exibir_saldacao(self.aviso.saldacao())
+                            self.aviso.exibir_aguarda_cartao()
+                            self.contador_acesso_servidor = 0
+                            
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json catraca', exc_info=True)
         finally:
             pass
+        
+    def mantem_tabela_local(self, limpa_tabela=False):
+        if limpa_tabela:
+            self.atualiza_exclui(None, True)
+            
+        obj = self.catraca_get()
+        if obj:
+            resultado = self.catraca_dao.busca(obj.id)
+            if resultado:
+                self.atualiza_exclui(obj, False)
+            else:
+                self.insere(obj)
+        else:
+            return None
         
     def atualiza_exclui(self, obj, boleano):
         self.catraca_dao.atualiza_exclui(obj, boleano)

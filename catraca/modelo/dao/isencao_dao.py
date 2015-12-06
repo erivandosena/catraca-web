@@ -3,6 +3,7 @@
 
 
 from contextlib import closing
+from catraca.util import Util
 from catraca.modelo.dados.conexao import ConexaoFactory
 from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
 from catraca.modelo.entidades.isencao import Isencao
@@ -60,6 +61,33 @@ class IsencaoDAO(ConexaoGenerica):
         
     def busca_por_isencao(self, obj):
         return CartaoDAO().busca_por_numero(obj.numero)
+    
+    def busca_isencao(self, numero_cartao=None, data=None):
+        obj = Isencao()
+        if data is None:
+            data = Util().obtem_datahora_postgresql()
+        sql = "SELECT isencao.isen_inicio, isencao.isen_fim, cartao.cart_id FROM cartao "\
+        "INNER JOIN isencao ON isencao.cart_id = cartao.cart_id WHERE cartao.cart_numero = "+str(numero_cartao)+" AND ('"+str(data)+"' "\
+        "BETWEEN isencao.isen_inicio AND isencao.isen_fim)" 
+        print "=" * 100
+        print sql
+        print "=" * 100
+        try:
+            with closing(self.abre_conexao().cursor()) as cursor:
+                cursor.execute(sql)
+                dados = cursor.fetchone()
+                if dados is not None:
+                    obj.inicio = dados[0]
+                    obj.fim = dados[1]
+                    obj.cartao = self.busca_por_cartao(obj)
+                    return obj
+                else:
+                    return None
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[isencao] Erro ao realizar SELECT.', exc_info=True)
+        finally:
+            pass
         
     def insere(self, obj):
         try:

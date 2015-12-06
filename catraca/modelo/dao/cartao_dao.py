@@ -83,54 +83,54 @@ class CartaoDAO(ConexaoGenerica):
             pass
         
         
-    def busca_cartao_valido(self, numero, data = None):
-        if data is None:
-            data = Util().obtem_datahora_postgresql()
-        sql = "SELECT cartao.cart_id, cartao.cart_numero, cartao.cart_creditos, "+\
-            "tipo.tipo_valor, vinculo.vinc_refeicoes, tipo.tipo_id FROM cartao " +\
-            "INNER JOIN tipo ON cartao.tipo_id = tipo.tipo_id " +\
-            "INNER JOIN vinculo ON vinculo.cart_id = cartao.cart_id " +\
-            "WHERE ('"+str(data)+"' BETWEEN vinculo.vinc_inicio AND vinculo.vinc_fim) AND "  +\
-            "(cartao.cart_numero = "+str(numero)+")"
-        print "=" * 100
-        print sql 
-        print "=" * 100
-        try:
-            with closing(self.abre_conexao().cursor()) as cursor:
-                cursor.execute(sql)
-                obj = cursor.fetchone()
-                if obj:
-                    return obj
-                else:
-                    return None
-        except Exception as excecao:
-            self.aviso = str(excecao)
-            self.log.logger.error('[cartao] Erro ao realizar SELECT.', exc_info=True)
-        finally:
-            pass
+#     def busca_cartao_valido(self, data=None, numero):
+#         if data is None:
+#             data = Util().obtem_datahora_postgresql()
+#         sql = "SELECT cartao.cart_id, cartao.cart_numero, cartao.cart_creditos, "+\
+#             "tipo.tipo_valor, vinculo.vinc_refeicoes, tipo.tipo_id, vinculo.vinc_id FROM cartao " +\
+#             "INNER JOIN tipo ON cartao.tipo_id = tipo.tipo_id " +\
+#             "INNER JOIN vinculo ON vinculo.cart_id = cartao.cart_id " +\
+#             "WHERE ('"+str(data)+"' BETWEEN vinculo.vinc_inicio AND vinculo.vinc_fim) AND "  +\
+#             "(cartao.cart_numero = "+str(numero)+")"
+#         print "=" * 100
+#         print sql 
+#         print "=" * 100
+#         try:
+#             with closing(self.abre_conexao().cursor()) as cursor:
+#                 cursor.execute(sql)
+#                 obj = cursor.fetchone()
+#                 if obj:
+#                     return obj
+#                 else:
+#                     return None
+#         except Exception as excecao:
+#             self.aviso = str(excecao)
+#             self.log.logger.error('[cartao] Erro ao realizar SELECT.', exc_info=True)
+#         finally:
+#             pass
         
-    def busca_isencao(self, data = None):
-        if data is None:
-            data = Util().obtem_datahora_postgresql()
-        sql = "SELECT isencao.isen_inicio, isencao.isen_fim FROM cartao " +\
-        "INNER JOIN isencao ON isencao.cart_id = cartao.cart_id WHERE ('"+str(data)+"' "+\
-        "BETWEEN isencao.isen_inicio AND isencao.isen_fim)" 
-        print "=" * 100
-        print sql
-        print "=" * 100
-        try:
-            with closing(self.abre_conexao().cursor()) as cursor:
-                cursor.execute(sql)
-                obj = cursor.fetchone()
-                if obj:
-                    return obj
-                else:
-                    return None
-        except Exception as excecao:
-            self.aviso = str(excecao)
-            self.log.logger.error('[cartao] Erro ao realizar SELECT.', exc_info=True)
-        finally:
-            pass
+#     def busca_isencao(self, data=None, numero):
+#         if data is None:
+#             data = Util().obtem_datahora_postgresql()
+#         sql = "SELECT isencao.isen_inicio, isencao.isen_fim, cartao.cart_id FROM cartao " +\
+#         "INNER JOIN isencao ON isencao.cart_id = cartao.cart_id WHERE cartao.cart_numero = "+str(numero)+" AND ('"+str(data)+"' "+\
+#         "BETWEEN isencao.isen_inicio AND isencao.isen_fim)" 
+#         print "=" * 100
+#         print sql
+#         print "=" * 100
+#         try:
+#             with closing(self.abre_conexao().cursor()) as cursor:
+#                 cursor.execute(sql)
+#                 obj = cursor.fetchone()
+#                 if obj:
+#                     return obj
+#                 else:
+#                     return None
+#         except Exception as excecao:
+#             self.aviso = str(excecao)
+#             self.log.logger.error('[cartao] Erro ao realizar SELECT.', exc_info=True)
+#         finally:
+#             pass
   
     def insere(self, obj):
         try:

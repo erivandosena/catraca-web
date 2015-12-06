@@ -5,6 +5,7 @@ import csv
 import locale
 import threading
 from time import sleep
+from contextlib import closing
 from catraca.controle.raspberrypi.pinos import PinoControle
 from catraca.controle.dispositivos.solenoide import Solenoide
 from catraca.controle.dispositivos.pictograma import Pictograma
@@ -16,11 +17,12 @@ from catraca.modelo.dao.custo_refeicao_dao import CustoRefeicaoDAO
 from catraca.modelo.entidades.cartao import Cartao
 from catraca.modelo.entidades.registro import Registro
 from catraca.modelo.entidades.registro_off import RegistroOff
-from catraca.modelo.entidades.giro import Giro
 from catraca.controle.recursos.cartao_json import CartaoJson
 from catraca.controle.recursos.registro_json import RegistroJson
 from catraca.controle.restful.controle_api import ControleApi
 from catraca.controle.restful.relogio import Relogio
+from catraca.modelo.dao.cartao_valido_dao import CartaoValidoDAO
+from catraca.modelo.dao.isencao_dao import IsencaoDAO
 
 
 __author__ = "Erivando Sena" 
@@ -40,12 +42,14 @@ class LeitorCartao(Relogio):
 
     giro_dao = GiroDAO()
     cartao_dao = CartaoDAO()
+    cartao_valido_dao = CartaoValidoDAO()
+    isencao_dao = IsencaoDAO()
     registro_dao = RegistroDAO()
     D0 = pino_controle.ler(17)['gpio']
     D1 = pino_controle.ler(27)['gpio']
-    bits = '' #11101110000100010000010011101110
+    bits = '11101110000100010000010011101110' #11101110000100010000010011101110
     numero_cartao = None
-    CARTAO = []
+    CARTAO = None
     contador_local = 0
     
     def __init__(self, intervalo=1):
@@ -62,10 +66,14 @@ class LeitorCartao(Relogio):
 
         self.pino_controle.evento_both(self.D0, self.zero)
         self.pino_controle.evento_both(self.D1, self.um)
-
+        
         while True:
-            self.obtem_status()
-            self.ler()
+            global contador
+            self.contador += 1
+            if self.contador == 10:
+                if self.catraca:
+                    if self.obtem_status():
+                        self.ler()
             sleep(self.intervalo)
 
     def zero(self, obj):
@@ -82,24 +90,24 @@ class LeitorCartao(Relogio):
             while True:
                 if self.bits:
                     print self.bits
-                    self.log.logger.info('Binario obtido corretamente: '+str(self.bits))
+                    self.aviso.exibir_aguarda_consulta()
+                    self.log.logger.info('Binario obtido corretamente. [Cartao n.] '+str(self.bits))
                     id = int(str(self.bits), 2)
                     if (len(self.bits) == 32) and (len(str(id)) == 10):
-                        self.aviso.exibir_aguarda_consulta()
                         self.numero_cartao = id
                         self.util.beep_buzzer(860, .1, 1)
                         return self.numero_cartao
                     else:
                         self.util.beep_buzzer(250, .1, 3) #0 seg.
                         self.aviso.exibir_erro_leitura_cartao()
-                        self.aviso.exibir_aguarda_cartao()
+                        self.bloqueia_acesso()
                         id = None
                         return id
                 else:
                     return id
         except Exception as excecao:
             print excecao
-            self.log.logger.error('Erro lendo cartao rfid.', exc_info=True)
+            self.log.logger.error('Erro ao obter binario. [cartao n.] ' + str(self.bits), exc_info=True)
         finally:
             self.bits = ''
            
@@ -116,164 +124,189 @@ class LeitorCartao(Relogio):
                     self.util.desliga_raspberrypi()
                 if csv == "Liberar Catraca":
                     self.aviso.exibir_acesso_livre()
-                    self.desbroqueia_acesso()
+                    self.desbloqueia_acesso()
                     sleep(4)
-                    self.broqueia_acesso()
+                    self.bloqueia_acesso()
                     return None
-                print self.turno
                 if self.turno:
                     self.valida_cartao(self.numero_cartao)
                 else:
                     self.aviso.exibir_horario_invalido()
-                    self.broqueia_acesso()
+                    self.bloqueia_acesso()
                     return None
             else:
                 return None
         except Exception as excecao:
             print excecao
-            self.log.logger.error('Erro consultando numero do cartao.', exc_info=True)
+            self.log.logger.error('Erro ao ler. [cartao n.] ' + str(self.numero_cartao), exc_info=True)
         finally:
             pass
         
-    def valida_cartao(self, id_cartao):
+    def valida_cartao(self, numero):
+        cartao = Cartao()
+        registro = Registro()
+
+        cartao_json = CartaoJson()
+        registro_json = RegistroJson()
+
+        giro_completo = False
         try:
             ##############################################################
             ## CONSULTA SE O CARTAO ESTA CADASTRADO NO BANCO DE DADOS
             ##############################################################
-            self.CARTAO = self.obtem_cartao(id_cartao)
+            self.CARTAO = self.obtem_cartao(numero)
             if self.CARTAO is None:
+                self.log.logger.info('Identificacao invalida. [cartao n.] ' + str(numero))
                 self.util.beep_buzzer(250, .1, 3) #0 seg.
                 self.aviso.exibir_cartao_nao_cadastrado()
-                self.log.logger.info('Cartao nao cadastrado ID:'+ str(id_cartao))
                 return None
             else:
                 ##############################################################
                 ## OBTEM AS INFORMACOES DO CARTAO CONSULTADO NO BANCO DE DADOS
                 ##############################################################
-                cartao_id = self.CARTAO[0]
-                cartao_numero = self.CARTAO[1]
-                cartao_total_creditos = self.CARTAO[2]
-                cartao_valor_tipo = self.CARTAO[3]
-                cartao_limite_utilizacao = self.CARTAO[4]
-                cartao_id_tipo = self.CARTAO[5]
-                
-#                         print ">=<>=<" * 10
-#                         print cartao_id
-#                         print cartao_numero
-#                         print cartao_total_creditos
-#                         print cartao_valor_tipo
-#                         print cartao_limite_utilizacao
-#                         print cartao_id_tipo
-#                         print ")=<>=(" * 10
-
+                self.log.logger.info('Identificacao valida. [cartao n.] ' + str(numero))
+                cartao_id = self.CARTAO.id
+                self.numero_cartao = self.CARTAO.numero
+                cartao_total_creditos = self.CARTAO.creditos
+                cartao_valor_tipo = self.CARTAO.valor
+                cartao_limite_utilizacao = self.CARTAO.refeicoes
+                cartao_tipo_id = self.CARTAO.tipo
+                cartao_vinculo_id = self.CARTAO.vinculo
                 ##############################################################
-                ## VERIFICA SE O CARTAO POSSUI CREDITO(S) PARA UTILIZACAO
+                ## VERIFICA SE O CARTAO POSSUI ISENCAO DE PAGAMENTO
                 ##############################################################
-                if (float(cartao_total_creditos) < float(cartao_valor_tipo)):
-                    self.aviso.exibir_saldo_insuficiente()
-                    self.aviso.exibir_saldo_cartao(locale.currency(float(cartao_total_creditos)).format())
-                    self.util.beep_buzzer(250, .1, 3) #0 seg.
-                    self.aviso.exibir_acesso_bloqueado()
-                    self.log.logger.error('Cartao sem credito ID:'+ str(cartao_numero))
-                    return None
+                self.aviso.exibir_saldo_cartao(locale.currency(float(cartao_total_creditos)).format())
+                saldo_creditos = 0.00
+                cartao_isento = False
+                if self.obtem_isencao(self.numero_cartao) is None:
+                    ##############################################################
+                    ## VERIFICA SE O CARTAO POSSUI CREDITO(S) PARA UTILIZACAO
+                    ##############################################################
+                    if (float(cartao_total_creditos) < float(cartao_valor_tipo)):
+                        self.log.logger.info('Credito invalido. [cartao n.] ' + str(self.numero_cartao))
+                        self.aviso.exibir_saldo_insuficiente()
+                        self.util.beep_buzzer(250, .1, 3)
+                        return None
+                    else:
+                        self.log.logger.info('Credito valido. [cartao n.] ' + str(self.numero_cartao))
+                        saldo_creditos = float(cartao_total_creditos) - float(cartao_valor_tipo)
+                else:
+                    self.log.logger.info('Isento. [cartao n.] ' + str(self.numero_cartao))
+                    cartao_isento = True
+                    self.aviso.exibir_cartao_isento()
                 ##############################################################
                 ## VERIFICA O LIMITE PERMITIDO DE USO DO CARTAO DURANTE TURNO
                 ##############################################################
-                elif int(self.registro_dao.busca_utilizacao(str(self.util.obtem_data()) + " " + str(self.hora_inicio), str(self.util.obtem_data()) + " " + str(self.hora_fim), cartao_id)[0]) > int(cartao_limite_utilizacao):
-                    self.util.beep_buzzer(250, .1, 3) #0 seg.
+                if self.obtem_limite_utilizacao(cartao_id) >= cartao_limite_utilizacao:
+                    self.log.logger.info('Limite de uso atingido. [cartao n.] ' + str(self.numero_cartao))
+                    self.util.beep_buzzer(250, .1, 3)
                     self.aviso.exibir_cartao_utilizado()
-                    self.aviso.exibir_acesso_bloqueado()
-                    self.log.logger.error('Limite de uso por turno ID:'+ str(cartao_numero))
                     return None
                 else:
-                    ##############################################################
-                    ## EXIBE O SALDO DOS CREDITOS PARA O UTILIZADOR DO CARTAO
-                    ##############################################################
-                    self.aviso.exibir_saldo_cartao(locale.currency(float(cartao_total_creditos)).format())
-                    ##############################################################
-                    ## VERIFICA SE O CARTAO POSSUI ISENCAO DE PAGAMENTO
-                    ##############################################################
-                    saldo_creditos = 0.00
-                    if self.cartao_dao.busca_isencao():
-                        self.log.logger.info('Cartao isento ID:'+ str(cartao_numero))
-                        saldo_creditos = float(cartao_total_creditos)
-                    else:
-                        saldo_creditos = float(cartao_total_creditos) - float(cartao_valor_tipo)
-                    cartao = Cartao()
-                    cartao.numero = cartao_numero
-                    cartao.creditos = saldo_creditos
-                    cartao.tipo = cartao_id_tipo
+                    #cartao
+                    cartao.id = cartao_id
+                    cartao.numero = self.numero_cartao
+                    cartao.creditos =  cartao_total_creditos if cartao_isento else saldo_creditos
+                    cartao.tipo = cartao_tipo_id
+                    #registro
+                    registro.data = self.util.obtem_datahora_postgresql()
+                    registro.pago = 0.00 if cartao_isento else float(cartao_valor_tipo)
+                    registro.custo = float(CustoRefeicaoDAO().busca()[1])
+                    registro.cartao = cartao_id
+                    registro.catraca = self.catraca.id
+                    registro.vinculo = cartao_vinculo_id
                     ##############################################################
                     ## LIBERA O ACESSO E SINALIZA O MESMO AO UTILIZADOR
                     ##############################################################
-                    self.desbroqueia_acesso()
+                    self.desbloqueia_acesso()
                     while True:
-                        print "STATUS >>>> " + str( self.sensor_optico.registra_giro(self.catraca.tempo, self.catraca) )
-                        if self.sensor_optico.registra_giro(self.catraca.tempo, self.catraca):                         
-                            self.log.logger.info('Girou a catraca.')
-                            print 'Utilizador >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> GIROU catraca.'
-                            
-#                             registro = Registro()
-#                             registro.data = self.util.obtem_datahora_postgresql()
-#                             registro.pago = float(cartao_valor_tipo)
-#                             print float(CustoRefeicaoDAO().busca()[1])
-#                             registro.custo = float(CustoRefeicaoDAO().busca()[1])
-#                             registro.cartao = cartao_id
-#                             registro.catraca = self.catraca.id
-#                             
-#                             print ">=<>=<" * 10
-#                             print registro.data
-#                             print registro.pago 
-#                             print registro.custo
-#                             print registro.cartao
-#                             print registro.catraca
-#                             print ">=<>=<" * 10
-#                             
-#                             giro = Giro()
-#                             giro.horario = 1 if self.catraca.operacao == 1 else 0
-#                             giro.antihorario = 1 if self.catraca.operacao == 2 else 0
-#                             giro.data = registro.data
-#                             giro.catraca = registro.catraca
-#                             
-#                             print ")=[]=(" * 10
-#                             print giro.horario
-#                             print giro.antihorario
-#                             print giro.data
-#                             print giro.catraca
-#                             print ")=[]=(" * 10
-                            
-                            self.broqueia_acesso()
-                            break
+                        if self.sensor_optico.registra_giro(self.catraca.tempo, self.catraca):
+                            self.log.logger.info('Girou catraca. [cartao n.] ' + str(self.numero_cartao))
+                            giro_completo = True
+                            return None
                         else:
-                            self.log.logger.info('Nao girou a catraca.')
-                            print "Utilizador >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> NAO girou catraca."
-                            
-                            self.broqueia_acesso()
-                            break
+                            self.log.logger.info('Nao girou catraca. [cartao n.] ' + str(self.numero_cartao))
+                            return None
         except Exception as excecao:
             print excecao
-            self.log.logger.error('Erro realizando operacoes de validacao no acesso.')
+            self.log.logger.error('Erro ao validar informacoes. [cartao n.] ' + str(self.numero_cartao), exc_info=True)
         finally:
+            print "FINALIZOU valida_cartao"
             ##############################################################
             ## BLOQUEIA O ACESSO E SINALIZA O MESMO AO UTILIZADOR
             ##############################################################
-            self.broqueia_acesso()
-
+            self.bloqueia_acesso()
+            if giro_completo:
+                # atualiza cartao local
+                if self.cartao_dao.busca(cartao.id):
+                    self.cartao_dao.atualiza_exclui(cartao, False)
+                    self.cartao_dao.commit()
+                    print self.cartao_dao.aviso
+                # atualiza cartao remoto
+                cartao_json.objeto_json(cartao)
+                
+                # atualiza registro local
+                registro_id = self.registro_dao.busca_ultimo_registro()
+                if registro_id == 0:
+                    registro_id = 1
+                else:
+                    registro_id += 1
+                
+                registro.id = registro_id
+                self.registro_dao.insere(registro)
+                print self.registro_dao.aviso
+                
+                # atualiza registro remoto
+                registro_json.objeto_json(registro)
+                giro_completo = False
+            else:
+                cartao = None
+                registro = None
+            
     def obtem_csv(self, numero_cartao):
         with open(self.util.obtem_path('cartao.csv')) as csvfile:
             reader = csv.reader(csvfile)
             if reader:
                 for row in reader:
                     if row[0] == str(numero_cartao):
-                        print row[1]
+                        self.log.logger.info('Solicitacao de '+str(row[1])+'. [cartao n.] ' + str(numero_cartao))
                         return row[1]
                 
     def obtem_cartao(self, numero):
-        lista = self.cartao_dao.busca_cartao_valido(numero)
-        self.CARTAO = lista
-        return lista
+        #remoto
+        cartao_valido = self.recursos_restful.cartao_json.cartao_valido_get(numero)
+        if cartao_valido is None:
+            #local
+            cartao_valido = self.cartao_valido_dao.busca_cartao_valido(numero)
+        if cartao_valido:
+            self.CARTAO = cartao_valido
+            return cartao_valido
+        else:
+            return None
+        
+    def obtem_isencao(self, numero_cartao):
+        #remoto
+        isencao_ativa = self.recursos_restful.isencao_json.isencao_ativa_get(numero_cartao)
+        if isencao_ativa is None:
+            #local
+            isencao_ativa = self.isencao_dao.busca_isencao(numero_cartao)
+        if isencao_ativa:
+            return isencao_ativa
+        else:
+            return None
+        
+    def obtem_limite_utilizacao(self, cartao_id):
+        #remoto
+        limite_utilizacao = self.recursos_restful.registro_json.registro_utilizacao_get(self.hora_inicio, self.hora_fim, cartao_id)
+        if limite_utilizacao is None:
+            #local
+            limite_utilizacao = self.registro_dao.busca_utilizacao(self.hora_inicio, self.hora_fim, cartao_id)
+        if limite_utilizacao:
+            return ((int)(limite_utilizacao[0]))
+        else:
+            return None
 
-    def broqueia_acesso(self):
+    def bloqueia_acesso(self):
         if self.catraca.operacao == 1:
             self.solenoide.ativa_solenoide(1,0)
             self.pictograma.seta_esquerda(0)
@@ -282,9 +315,11 @@ class LeitorCartao(Relogio):
             self.solenoide.ativa_solenoide(2,0)
             self.pictograma.seta_direita(0)
             self.pictograma.xis(0)
+        self.log.logger.info('Bloqueia. [cartao n.] ' + str(self.numero_cartao))
+        self.aviso.exibir_acesso_bloqueado()
         self.aviso.exibir_aguarda_cartao()
     
-    def desbroqueia_acesso(self):
+    def desbloqueia_acesso(self):
         self.util.beep_buzzer(860, .2, 1)
         if self.catraca.operacao == 1:
             self.solenoide.ativa_solenoide(1,1)
@@ -295,6 +330,6 @@ class LeitorCartao(Relogio):
             self.solenoide.ativa_solenoide(2,1)
             self.pictograma.seta_direita(1)
             self.pictograma.xis(1)
+        self.log.logger.info('Libera. [cartao n.] ' + str(self.numero_cartao))
         self.aviso.exibir_acesso_liberado()
         
-                    

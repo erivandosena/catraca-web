@@ -156,4 +156,13 @@ class Util(object):
         print hora_prevista.time()
         return hora_prevista.time()
     
+    def converte_ip_para_long(self, ip):
+        ip2int = lambda ip: reduce(lambda a, b: (a << 8) + b, map(int, ip.split('.')), 0)
+        return ip2int(ip)
+    
+    def converte_long_para_ip(self, long):
+        int2ip = lambda long: '.'.join([str(nlong >> (i << 3) & 0xFF) for i in range(0, 4)[::-1]])
+        return int2ip(long)
+    
+    
         

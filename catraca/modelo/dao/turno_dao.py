@@ -95,9 +95,14 @@ class TurnoDAO(ConexaoGenerica):
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
-                list = cursor.fetchone()
-                if list != []:
-                    return list
+                dados = cursor.fetchone()
+                if dados:
+                    obj = Turno()
+                    obj.id = dados[0]
+                    obj.inicio = dados[1]
+                    obj.fim = dados[2]
+                    obj.descricao = dados[3]
+                    return obj
                 else:
                     return None
         except Exception as excecao:
@@ -115,7 +120,6 @@ class TurnoDAO(ConexaoGenerica):
             turno = self.busca_por_catraca(self.obtem_catraca(), self.util.obtem_hora())
         else:
             turno = self.busca_por_catraca(catraca, hora)
-        print "select no BD!"
         if turno:      
             return turno
         else:

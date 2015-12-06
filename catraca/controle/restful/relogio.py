@@ -15,7 +15,7 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 class Relogio(ControleApi, threading.Thread):
     
-    contador_status_recursos = 90
+    contador_status_recursos = 0
 
     def __init__(self, intervalo=1):
         super(Relogio, self).__init__()
@@ -32,6 +32,7 @@ class Relogio(ControleApi, threading.Thread):
         print "%s. Rodando... " % self.name
         self.aviso.exibir_datahora(self.util.obtem_datahora_display())
         self.aviso.exibir_aguarda_cartao()
+        
         while True:
             self.hora = self.util.obtem_hora()
             self.data = self.util.obtem_data_formatada()
@@ -39,15 +40,17 @@ class Relogio(ControleApi, threading.Thread):
 
             print self.datahora
 
-            self.obtem_status()
-            self.obtem_atualizacao_de_turno()
-            #print self.contador
-            #print self.alarme
-
             if (str(self.hora) == "06:00:00") or (str(self.hora) == "12:00:00") or (str(self.hora) == "18:00:00") and self.turno is None:
                 self.aviso.exibir_saldacao(self.saldacao())
                 self.aviso.exibir_aguarda_cartao()
                 
+            global contador
+            self.contador += 1
+            
+            if self.contador == 5:
+                self.obtem_status()
+                
+            self.obtem_atualizacao_de_turno()
             self.executa_controle_recursos()
             
             sleep(self.intervalo)
@@ -83,23 +86,6 @@ class Relogio(ControleApi, threading.Thread):
     @status.setter
     def status(self, valor):
         self.__status = valor
-        
-    def saldacao(self):
-        hora = int(self.util.obtem_datahora().strftime('%H'))
-        periodo = 0
-        if (hora >= 0 and hora < 12):
-            periodo = 1
-        if (hora >= 12 and hora <= 17):
-            periodo = 2
-        if (hora >= 18 and hora <= 23):
-            periodo = 3
-        opcoes = {
-                   1 : 'Ola'.center(16) +'\n'+ 'Bom Dia!'.center(16),
-                   2 : 'Ola'.center(16) +'\n'+ 'Boa Tarde!'.center(16),
-                   3 : 'Ola'.center(16) +'\n'+ 'Boa Noite!'.center(16),
-
-        }
-        return opcoes.get(periodo, "Ola!".center(16) +"\n"+ self.util.obtem_data_formatada().center(16))
     
     def obtem_status(self):
         self.status = self.periodo
@@ -107,17 +93,11 @@ class Relogio(ControleApi, threading.Thread):
     
     def executa_controle_recursos(self):
         while True:
-            
-            #print "status do relogio:-> " + str(self.status)
-
-            #print self.contador_status_recursos
             self.contador_status_recursos += 1
             if self.turno:
-                #print "self.contador_status_recursos > 120"
                 if self.contador_status_recursos >= 120:
                     self.obtem_recurso_servidor()
             else:
-                #print "self.contador_status_recursos >= 3600"
                 if self.contador_status_recursos >= 1800:
                     self.obtem_recurso_servidor(False, True)
             break
@@ -127,20 +107,21 @@ class Relogio(ControleApi, threading.Thread):
         self.recursos_restful.obtem_recursos(display, limpa_tabela)
         
     def obtem_atualizacao_de_turno(self):
+        global alarme
         if self.turno:
             # Inicia turno
             if self.alarme:
                 self.alarme = False
-                self.aviso.exibir_turno_atual(self.turno[3])
-                #self.util.beep_buzzer(855, .5, 1)
-                #print "Turno INICIADO!"
+                self.aviso.exibir_turno_atual(self.turno.descricao)
+                self.util.beep_buzzer(855, .5, 1)
+                print "Turno INICIADO!"
                 self.aviso.exibir_aguarda_cartao()
         # Finaliza turno
         else:
             if not self.alarme:
                 self.alarme = True
                 self.aviso.exibir_horario_invalido()
-                #self.util.beep_buzzer(855, .5, 1)
-                #print "Turno ENCERRADO!"
+                self.util.beep_buzzer(855, .5, 1)
+                print "Turno ENCERRADO!"
                 self.aviso.exibir_aguarda_cartao()
-        
+                

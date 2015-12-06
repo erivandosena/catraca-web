@@ -2,7 +2,7 @@
 -- Autor_script : Erivando Sena
 -- Copyright    : Unilab
 -- Data_criacao : 16/10/2015
--- Data_revisao : 23/11/2015
+-- Data_revisao : 02/12/2015
 -- Status       : Desenvolvimento
 ---------------------------------
 
@@ -189,27 +189,6 @@ COMMENT ON CONSTRAINT pk_caun_id ON catraca_unidade IS 'Chave primaria da tabela
 COMMENT ON CONSTRAINT fk_catr_id ON catraca_unidade IS 'Chave estrangeira da tabela catraca.';
 COMMENT ON CONSTRAINT fk_unid_id ON catraca_unidade IS 'Chave estrangeira da tabela unidade.';
 
--- Table: giro
-CREATE TABLE giro
-(
-  giro_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
-  giro_giros_horario integer DEFAULT 0, -- Contador de giros no sentido horario.
-  giro_giros_antihorario integer DEFAULT 0, -- Contador de giros no sentido anti-horario.
-  giro_data_giros timestamp without time zone NOT NULL DEFAULT now(), -- Registro de data e hora da ocorrencia dos giros.
-  catr_id integer NOT NULL, -- Campo para chave estrangeira da tabela catraca.
-  CONSTRAINT pk_giro_id PRIMARY KEY (giro_id), -- Chave primaria da tabela giro.
-  CONSTRAINT pk_catr_id FOREIGN KEY (catr_id) REFERENCES catraca (catr_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION -- Chave estrangeira da tabela catraca.
-);
-ALTER TABLE giro OWNER TO catraca;
-COMMENT ON TABLE giro IS 'Tabela que armazena a contabilizacao de giros da catraca.';
-COMMENT ON COLUMN giro.giro_id IS 'Campo autoincremento para chave primaria da tabela.';
-COMMENT ON COLUMN giro.giro_giros_horario IS 'Contador de giros no sentido horario.';
-COMMENT ON COLUMN giro.giro_giros_antihorario IS 'Contador de giros no sentido anti-horario.';
-COMMENT ON COLUMN giro.giro_data_giros IS 'Registro de data e hora da ocorrencia dos giros.';
-COMMENT ON COLUMN giro.catr_id IS 'Campo para chave estrangeira da tabela catraca.';
-COMMENT ON CONSTRAINT pk_giro_id ON giro IS 'Chave primaria da tabela giro.';
-COMMENT ON CONSTRAINT pk_catr_id ON giro IS 'Chave estrangeira da tabela catraca.';
-
 -- Table: mensagem
 CREATE TABLE mensagem
 (
@@ -324,30 +303,31 @@ COMMENT ON CONSTRAINT pk_turn_id ON turno IS 'Chave primaria da tabela turno.';
 -- Table: registro
 CREATE TABLE registro
 (
-  regi_id bigserial NOT NULL,
+  regi_id bigint NOT NULL, -- Campo para chave primaria da tabela.
   regi_data timestamp without time zone, -- Data e hora que efetivou o giro na catraca.
   regi_valor_pago numeric(8,2), -- Valor em R$ da refeicao.
   regi_valor_custo numeric(8,2), -- Valor em R$ do custo da refeicao.
   cart_id integer NOT NULL, -- Campo para chave estrangeira da tabela cartao.
-  turn_id integer NOT NULL, -- Campo para chave estrangeira da tabela turno.
   catr_id integer NOT NULL, -- Campo para chave estrangeira da tabela catraca.
-  CONSTRAINT pk_regi_id PRIMARY KEY (regi_id),
+  vinc_id integer NOT NULL, -- Campo para chave estrangeira da tabela vinculo.
+  CONSTRAINT pk_regi_id PRIMARY KEY (regi_id), -- Chave primaria da tabela registro.
   CONSTRAINT fk_cart_id FOREIGN KEY (cart_id) REFERENCES cartao (cart_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, -- Chave estrangeira da tabela cartao.
   CONSTRAINT fk_catr_id FOREIGN KEY (catr_id) REFERENCES catraca (catr_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, -- Chave estrangeira da tabela catraca.
-  CONSTRAINT fk_turn_id FOREIGN KEY (turn_id) REFERENCES turno (turn_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION -- Chave estrangeira da tabela turno.
+  CONSTRAINT fk_vinc_id FOREIGN KEY (vinc_id) REFERENCES vinculo (vinc_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION -- Chave estrangeira da tabela vinculo.
 );
 ALTER TABLE registro OWNER TO catraca;
 COMMENT ON TABLE registro IS 'Tabela que armazena os registros de uso do cartao na catraca.';
+COMMENT ON COLUMN registro.regi_id IS 'Campo para chave primaria da tabela.';
 COMMENT ON COLUMN registro.regi_data IS 'Data e hora que efetivou o giro na catraca.';
 COMMENT ON COLUMN registro.regi_valor_pago IS 'Valor em R$ da refeicao.';
 COMMENT ON COLUMN registro.regi_valor_custo IS 'Valor em R$ do custo da refeicao.';
 COMMENT ON COLUMN registro.cart_id IS 'Campo para chave estrangeira da tabela cartao.';
-COMMENT ON COLUMN registro.turn_id IS 'Campo para chave estrangeira da tabela turno.';
 COMMENT ON COLUMN registro.catr_id IS 'Campo para chave estrangeira da tabela catraca.';
+COMMENT ON COLUMN registro.vinc_id IS 'Campo para chave estrangeira da tabela vinculo.';
+COMMENT ON CONSTRAINT pk_regi_id ON registro IS 'Chave primaria da tabela registro.';
 COMMENT ON CONSTRAINT fk_cart_id ON registro IS 'Chave estrangeira da tabela cartao.';
 COMMENT ON CONSTRAINT fk_catr_id ON registro IS 'Chave estrangeira da tabela catraca.';
-COMMENT ON CONSTRAINT fk_turn_id ON registro IS 'Chave estrangeira da tabela turno.';
-COMMENT ON CONSTRAINT pk_regi_id ON registro IS 'Chave primaria da tabela registro.';
+COMMENT ON CONSTRAINT fk_vinc_id ON registro IS 'Chave estrangeira da tabela vinculo.';
 
 -- Table: unidade_turno
 CREATE TABLE unidade_turno

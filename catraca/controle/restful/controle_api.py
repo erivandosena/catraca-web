@@ -11,6 +11,8 @@ import datetime
 # from catraca.modelo.dao.catraca_dao import CatracaDAO
 # from catraca.controle.restful.recursos_restful import RecursosRestful
 from catraca.controle.restful.controle_generico import ControleGenerico
+# from catraca.controle.recursos.catraca_json import CatracaJson
+# from catraca.controle.recursos.turno_json import TurnoJson
 
 
 __author__ = "Erivando Sena" 
@@ -21,7 +23,7 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 class ControleApi(ControleGenerico):
     
-    contador = 14
+    contador = 0
     alarme = True
     
     def __init__(self):
@@ -53,33 +55,57 @@ class ControleApi(ControleGenerico):
         self.__turno_ativo = lista
 
     def obtem_turno(self):
-        self.contador += 1
-        if self.contador >= 15:
+        global contador
+        print "[CONTROLE-API]" + str(self.contador)
+        if self.contador == 5 or self.contador == 10:
+            self.contador = 0
             return self.obtem_turno_valido()
             
     def obtem_turno_valido(self):
-        self.turno = self.turno_dao.obtem_turno(self.catraca, self.hora_atual)
-        self.contador = 0
-        if self.turno:
-            self.hora_inicio = datetime.datetime.strptime(str(self.turno[1]),'%H:%M:%S').time()
-            self.hora_fim = datetime.datetime.strptime(str(self.turno[2]),'%H:%M:%S').time()
-            return self.turno
+        # verifica se existem CATRACA,TURNO,UNIDADE,CATRACA-UNIDADE,UNIDADE-TURNO, cadastrados
+        if self.recursos_restful.catraca_json.catraca_get() is None:
+            self.aviso.exibir_catraca_nao_cadastrada()
+            self.recursos_restful.obtem_catraca(True, False)
+            self.recursos_restful.catraca_json.mantem_tabela_local(True)
+            
+        elif self.recursos_restful.unidade_json.unidade_get() is None:
+            self.aviso.exibir_unidade_nao_cadastrada()
+            
+        elif self.recursos_restful.catraca_unidade_json.catraca_unidade_get() is None:
+            self.aviso.exibir_catraca_unidade_nao_cadastrada()
+            
+        elif self.recursos_restful.turno_json.turno_get() is None:
+            self.aviso.exibir_turno_nao_cadastrado()
+            
+        elif self.recursos_restful.unidade_turno_json.unidade_turno_get() is None:
+            self.aviso.exibir_unidade_turno_nao_cadastrada()
+            
         else:
-            self.alarme = True
-            return None
+            global alarme
+            #remoto
+            turno_ativo = self.recursos_restful.turno_json.turno_funcionamento_get()
+            if turno_ativo is None:
+                #local
+                turno_ativo = self.turno_dao.obtem_turno(self.catraca, self.hora_atual)
+            #self.contador = 0
+            if turno_ativo:
+                self.hora_inicio = datetime.datetime.strptime(str(turno_ativo.inicio),'%H:%M:%S').time()
+                self.hora_fim = datetime.datetime.strptime(str(turno_ativo.fim),'%H:%M:%S').time()
+                self.turno = turno_ativo
+                self.alarme = False
+                return self.turno
+            else:
+                self.alarme = True
+                return None
 
     def obtem_periodo(self):
-        # verifica se existe catraca cadastrada
-        if self.catraca_dao.busca_por_ip(self.util.obtem_ip()) is None:
-            self.aviso.exibir_catraca_nao_cadastrada()
-            self.recursos_restful.obtem_recursos(True)
-            self.aviso.exibir_aguarda_cartao()
-        self.obtem_turno()
-        if self.turno:
-            if ((self.hora_atual >= self.hora_inicio) and (self.hora_atual <= self.hora_fim)) or ((self.hora_atual >= self.hora_inicio) and (self.hora_atual <= self.hora_fim)):
-                return True
+            self.obtem_turno()
+            if self.turno:
+                if ((self.hora_atual >= self.hora_inicio) and (self.hora_atual <= self.hora_fim)) or ((self.hora_atual >= self.hora_inicio) and (self.hora_atual <= self.hora_fim)):
+                    return True
+                else:
+                    self.turno = None
+                    return False
             else:
-                self.turno = None
                 return False
-        else:
-            return False
+            

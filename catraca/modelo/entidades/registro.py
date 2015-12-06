@@ -18,6 +18,7 @@ class Registro(object):
         self.__regi_valor_custo = None
         self.__cartao = None
         self.__catraca = None
+        self.__vinculo = None
  
     @property
     def id(self):
@@ -66,4 +67,12 @@ class Registro(object):
     @catraca.setter
     def catraca(self, obj):
         self.__catraca = obj
+        
+    @property
+    def vinculo(self):
+        return self.__vinculo
+
+    @vinculo.setter
+    def vinculo(self, obj):
+        self.__vinculo = obj
         

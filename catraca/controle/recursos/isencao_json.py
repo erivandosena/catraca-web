@@ -25,37 +25,74 @@ class IsencaoJson(ServidorRestful):
         super(IsencaoJson, self).__init__()
         ServidorRestful.__init__(self)
         
-    def isencao_get(self, limpa_tabela=False):
+    def isencao_get(self):
         servidor = self.obter_servidor()
         try:
             if servidor:
                 url = str(servidor) + "isencao/jisencao"
                 header = {'Content-type': 'application/json'}
                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
-                print "status HTTP: " + str(r.status_code)
-                dados  = json.loads(r.text)
-                LISTA_JSON = dados["isencoes"]
+                print "Status HTTP: " + str(r.status_code)
 
-                if limpa_tabela:
-                    self.atualiza_exclui(None, True)
-                
-                if LISTA_JSON is not []:
-                    for item in LISTA_JSON:
-                        obj = self.dict_obj(item)
-                        if obj.id:
-                            resultado = self.isencao_dao.busca(obj.id)
-                            if resultado:
-                                self.atualiza_exclui(obj, False)
+                if r.text != '':
+                    dados  = json.loads(r.text)
+                    LISTA_JSON = dados["isencoes"]
+                    if LISTA_JSON != []:
+                        for item in LISTA_JSON:
+                            obj = self.dict_obj(item)
+                            if obj:
+                                return obj
                             else:
-                                self.insere(obj)
+                                return None
                 else:
-                    self.atualiza_exclui(None, True)
-                    
+                    return None
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json isencao', exc_info=True)
         finally:
             pass
+        
+    def isencao_ativa_get(self, numero_cartao):
+        servidor = self.obter_servidor()
+        try:
+            if servidor:
+                url = str(servidor) + "isencao/jisencao/" + str(numero_cartao)
+                header = {'Content-type': 'application/json'}
+                r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
+                print "Status HTTP: " + str(r.status_code)
+                
+                print r.text
+
+                if r.text != '':
+                    dados  = json.loads(r.text)
+                    LISTA_JSON = dados["isencao"]
+                    if LISTA_JSON != []:
+                        for item in LISTA_JSON:
+                            obj = self.dict_obj_isencao_ativa(item)
+                            if obj:
+                                return obj
+                            else:
+                                return None
+                else:
+                    return None
+        except Exception as excecao:
+            print excecao
+            self.log.logger.error('Erro obtendo json isencao', exc_info=True)
+        finally:
+            pass
+        
+    def mantem_tabela_local(self, limpa_tabela=False):
+        if limpa_tabela:
+            self.atualiza_exclui(None, True)
+        obj = self.isencao_get()
+        if obj:
+            resultado = self.isencao_dao.busca(obj.id)
+            if resultado:
+                self.atualiza_exclui(obj, False)
+            else:
+                self.insere(obj)
+        else:
+            return None
         
     def atualiza_exclui(self, obj, boleano):
         self.isencao_dao.atualiza_exclui(obj, boleano)
@@ -72,7 +109,6 @@ class IsencaoJson(ServidorRestful):
         if not isinstance(formato_json, dict):
             return formato_json
         for item in formato_json:
-            
             if item == "isen_id":
                 isencao.id = self.dict_obj(formato_json[item])
             if item == "isen_inicio":
@@ -81,6 +117,20 @@ class IsencaoJson(ServidorRestful):
                 isencao.fim = self.dict_obj(formato_json[item])
             if item == "cart_id":
                 isencao.cartao = self.dict_obj(formato_json[item])
-                
+        return isencao
+    
+    def dict_obj_isencao_ativa(self, formato_json):
+        isencao = Isencao()
+        if isinstance(formato_json, list):
+            formato_json = [self.dict_obj_isencao_ativa(x) for x in formato_json]
+        if not isinstance(formato_json, dict):
+            return formato_json
+        for item in formato_json:
+            if item == "isen_inicio":
+                isencao.inicio = self.dict_obj_isencao_ativa(formato_json[item])
+            if item == "isen_fim":
+                isencao.fim = self.dict_obj_isencao_ativa(formato_json[item])
+            if item == "cart_id":
+                isencao.cartao = self.dict_obj_isencao_ativa(formato_json[item])
         return isencao
     

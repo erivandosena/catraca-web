@@ -8,7 +8,7 @@ from catraca.logs import Logs
 from catraca.modelo.dados.servidor_restful import ServidorRestful
 from catraca.modelo.dao.cartao_dao import CartaoDAO
 from catraca.modelo.entidades.cartao import Cartao
-
+from catraca.modelo.entidades.cartao_valido import CartaoValido
 
 __author__ = "Erivando Sena" 
 __copyright__ = "(C) Copyright 2015, Unilab" 
@@ -25,37 +25,75 @@ class CartaoJson(ServidorRestful):
         super(CartaoJson, self).__init__()
         ServidorRestful.__init__(self)
         
-    def cartao_get(self, limpa_tabela=False):
+    def cartao_get(self):
         servidor = self.obter_servidor()
         try:
             if servidor:
                 url = str(servidor) + "cartao/jcartao"
                 header = {'Content-type': 'application/json'}
                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
-                print "status HTTP: " + str(r.status_code)
-                dados  = json.loads(r.text)
-                LISTA_JSON = dados["cartoes"]
-                
-                if limpa_tabela:
-                    self.atualiza_exclui(None, True)
-                
-                if LISTA_JSON is not []:
-                    for item in LISTA_JSON:
-                        obj = self.dict_obj(item)
-                        if obj.id:
-                            resultado = self.cartao_dao.busca(obj.id)
-                            if resultado:
-                                self.atualiza_exclui(obj, False)
+                print "Status HTTP: " + str(r.status_code)
+
+                if r.text != '':
+                    dados  = json.loads(r.text)
+                    LISTA_JSON = dados["cartoes"]
+                    if LISTA_JSON != []:
+                        for item in LISTA_JSON:
+                            obj = self.dict_obj(item)
+                            if obj:
+                                return obj
                             else:
-                                self.insere(obj)
+                                return None
                 else:
-                    self.atualiza_exclui(None, True)
-                    
+                    return None
         except Exception as excecao:
             print excecao
-            self.log.logger.error('Erro obtendo json cartao.', exc_info=True)
+            self.log.logger.error('Erro obtendo json cartao', exc_info=True)
         finally:
             pass
+        
+    def cartao_valido_get(self, numero_cartao):
+        servidor = self.obter_servidor()
+        try:
+            if servidor:
+                url = str(servidor) + "cartao/jcartao/" + str(numero_cartao)
+                print url
+                header = {'Content-type': 'application/json'}
+                r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
+                print "Status HTTP: " + str(r.status_code)
+                
+                print r.text
+
+                if r.text != '':
+                    dados  = json.loads(r.text)
+                    LISTA_JSON = dados["cartao"]
+                    if LISTA_JSON != []:
+                        for item in LISTA_JSON:
+                            obj = self.dict_obj_cartao_valido(item)
+                            if obj:
+                                return obj
+                            else:
+                                return None
+                else:
+                    return None
+        except Exception as excecao:
+            print excecao
+            self.log.logger.error('Erro obtendo json cartao', exc_info=True)
+        finally:
+            pass
+        
+    def mantem_tabela_local(self, limpa_tabela=False):
+        if limpa_tabela:
+            self.atualiza_exclui(None, True)
+        obj = self.cartao_get()
+        if obj:
+            resultado = self.cartao_dao.busca(obj.id)
+            if resultado:
+                self.atualiza_exclui(obj, False)
+            else:
+                self.insere(obj)
+        else:
+            return None
         
     def atualiza_exclui(self, obj, boleano):
         self.cartao_dao.atualiza_exclui(obj, boleano)
@@ -82,7 +120,29 @@ class CartaoJson(ServidorRestful):
                 cartao.creditos = self.dict_obj(formato_json[item])
             if item == "tipo_id":
                 cartao.tipo = self.dict_obj(formato_json[item])
-                
+        return cartao
+
+    def dict_obj_cartao_valido(self, formato_json):
+        cartao = CartaoValido()
+        if isinstance(formato_json, list):
+            formato_json = [self.dict_obj_cartao_valido(x) for x in formato_json]
+        if not isinstance(formato_json, dict):
+            return formato_json
+        for item in formato_json:
+            if item == "cart_id":
+                cartao.id = self.dict_obj_cartao_valido(formato_json[item])
+            if item == "cart_numero":
+                cartao.numero = self.dict_obj_cartao_valido(formato_json[item])
+            if item == "cart_creditos":
+                cartao.creditos = self.dict_obj_cartao_valido(formato_json[item])
+            if item == "tipo_valor":
+                cartao.valor = self.dict_obj_cartao_valido(formato_json[item])
+            if item == "vinc_refeicoes":
+                cartao.refeicoes = self.dict_obj_cartao_valido(formato_json[item])
+            if item == "tipo_id":
+                cartao.tipo = self.dict_obj_cartao_valido(formato_json[item])
+            if item == "vinc_id":
+                cartao.vinculo = self.dict_obj_cartao_valido(formato_json[item])
         return cartao
     
     def lista_json(self, lista):
@@ -96,7 +156,7 @@ class CartaoJson(ServidorRestful):
                 }
                 self.cartao_put(cartao, item[0])
                 #self.registro_dao.mantem(self.registro_dao.busca(item[0]),True)
-
+                
     def objeto_json(self, obj):
         if obj:
             cartao = {

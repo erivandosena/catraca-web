@@ -86,3 +86,40 @@ class GiroJson(ServidorRestful):
                 
         return giro
     
+    def lista_json(self, lista):
+        if lista:
+            for item in lista:
+                giro = {
+                    "giro_giros_horario":item[1],
+                    "giro_giros_antihorario":item[2],
+                    "giro_data_giros":str(item[3]),
+                    "catr_id":item[4]
+                }
+                self.giro_post(giro)
+
+    def objeto_json(self, obj):
+        if obj:
+            giro = {
+                "giro_giros_horario":str(obj.horario),
+                "giro_giros_antihorario":float(obj.antihorario),
+                "giro_data_giros":str(obj.data),
+                "catr_id":obj.catraca
+            }
+            self.giro_post(giro)
+            
+    def giro_post(self, formato_json):
+        servidor = self.obter_servidor()
+        try:
+            if servidor:
+                url = str(servidor) + "giro/insere"
+                print url
+                header = {'Content-type': 'application/json'}
+                r = requests.post(url, auth=(self.usuario, self.senha), headers=header, data=json.dumps(formato_json))
+                print r.text
+                print r.status_code
+        except Exception as excecao:
+            print excecao
+            self.log.logger.error('Erro enviando json giro.', exc_info=True)
+        finally:
+            pass
+        

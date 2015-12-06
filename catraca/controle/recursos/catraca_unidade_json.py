@@ -24,38 +24,48 @@ class CatracaUnidadeJson(ServidorRestful):
     def __init__(self):
         super(CatracaUnidadeJson, self).__init__()
         ServidorRestful.__init__(self)
-        
-    def catraca_unidade_get(self, limpa_tabela=False):
+
+    def catraca_unidade_get(self):
         servidor = self.obter_servidor()
         try:
             if servidor:
                 url = str(servidor) + "catraca_unidade/jcatraca_unidade"
                 header = {'Content-type': 'application/json'}
                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
-                print "status HTTP: " + str(r.status_code)
-                dados  = json.loads(r.text)
-                LISTA_JSON = dados["catraca_unidades"]
-                
-                if limpa_tabela:
-                    self.atualiza_exclui(None, True)
-                
-                if LISTA_JSON is not []:
-                    for item in LISTA_JSON:
-                        obj = self.dict_obj(item)
-                        if obj.id:
-                            resultado = self.catraca_unidade_dao.busca(obj.id)
-                            if resultado:
-                                self.atualiza_exclui(obj, False)
+                print "Status HTTP: " + str(r.status_code)
+
+                if r.text != '':
+                    dados  = json.loads(r.text)
+                    LISTA_JSON = dados["catraca_unidades"]
+                    if LISTA_JSON != []:
+                        for item in LISTA_JSON:
+                            obj = self.dict_obj(item)
+                            if obj:
+                                return obj
                             else:
-                                self.insere(obj)
+                                return None
                 else:
-                    self.atualiza_exclui(None, True)
-                    
+                    return None
+
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json catraca-unidade', exc_info=True)
         finally:
             pass
+        
+    def mantem_tabela_local(self, limpa_tabela=False):
+        if limpa_tabela:
+            self.atualiza_exclui(None, True)
+
+        obj = self.catraca_unidade_get()
+        if obj:
+            resultado = self.catraca_unidade_dao.busca(obj.id)
+            if resultado:
+                self.atualiza_exclui(obj, False)
+            else:
+                self.insere(obj)
+        else:
+            return None
         
     def atualiza_exclui(self, obj, boleano):
         self.catraca_unidade_dao.atualiza_exclui(obj, boleano)

@@ -57,7 +57,7 @@ class Aviso(object):
         self.display.mensagem("BEM-VINDO!".center(16) +"\n"+ "APROXIME CARTAO", 0, True, False)
         
     def exibir_erro_leitura_cartao(self):
-        self.display.mensagem("APROXIME CARTAO".center(16) +"\n"+ "NOVAMENTE...".center(16), 1, True, False)
+        self.display.mensagem("APROXIME CARTAO".center(16) +"\n"+ "NOVAMENTE...".center(16), 0, True, False)
         
     def exibir_acesso_bloqueado(self):
         self.display.mensagem("ACESSO".center(16) +"\n"+ "BLOQUEADO!".center(16), 0, False, False)
@@ -71,6 +71,9 @@ class Aviso(object):
     def exibir_cartao_nao_cadastrado(self):
         self.display.mensagem("CARTAO".center(16) +"\n"+ "NAO CADASTRADO!".center(16), 1, False, False)
         
+    def exibir_cartao_isento(self):
+        self.display.mensagem("CARTAO ISENTO".center(16) +"\n"+ "DE PAGAMENTO!".center(16), 0, False, False)
+        
     def exibir_saldo_cartao(self, saldo):
         self.display.mensagem("SALDO DO CARTAO:".center(16) +"\n"+ saldo.center(16), 1, False, False)
         
@@ -81,7 +84,7 @@ class Aviso(object):
         self.display.mensagem("DIA NAO UTIL".center(16) +"\n"+ "PARA ATENDIMENTO".center(16), 1, False, False)
         
     def exibir_cartao_utilizado(self):
-        self.display.mensagem("CARTAO JA USADO" +"\n"+ "PARA ESTE TURNO".center(16), 1, False, False)
+        self.display.mensagem("CARTAO JA USADO" +"\n"+ "PARA ESTE TURNO".center(16), 2, False, False)
         
     def exibir_acesso_livre(self):
         self.display.mensagem("BEM-VINDO!".center(16) +"\n"+ "ACESSO LIVRE".center(16), 1, False, False)
@@ -105,7 +108,24 @@ class Aviso(object):
         self.display.mensagem('TURNO INICIADO'.center(16) +'\n'+ nome_turno.center(16), 4, False, False)
         
     def exibir_catraca_nao_cadastrada(self):
-        self.display.mensagem("CATRACA AUSENTE!".center(16) +"\n"+ "AGUARDE RECURSOS".center(16), 4, False, False)
+        self.display.mensagem("FAVOR CADASTRAR!".center(16) +"\n"+ "CATRACA".center(16), 4, False, False)
+        self.display.limpa_lcd()
+
+    def exibir_unidade_nao_cadastrada(self):
+        self.display.mensagem("FAVOR CADASTRAR!".center(16) +"\n"+ "UNIDADE".center(16), 4, False, False)
+        self.display.limpa_lcd()
+        
+    def exibir_catraca_unidade_nao_cadastrada(self):
+        self.display.mensagem("FAVOR CADASTRAR!".center(16) +"\n"+ "CATRACA UNIDADE".center(16), 4, False, False) 
+        self.display.limpa_lcd()
+        
+    def exibir_turno_nao_cadastrado(self):
+        self.display.mensagem("FAVOR CADASTRAR!".center(16) +"\n"+ "TURNO".center(16), 4, False, False)
+        self.display.limpa_lcd()
+        
+    def exibir_unidade_turno_nao_cadastrada(self):
+        self.display.mensagem("FAVOR CADASTRAR!".center(16) +"\n"+ "UNIDADE TURNO".center(16), 4, False, False)
+        self.display.limpa_lcd()
         
     def exibir_obtendo_recursos(self, nome_recurso):
         self.display.mensagem("OBTENDO...".center(16) +"\n"+ nome_recurso.center(16), 1, False, False)
@@ -113,4 +133,6 @@ class Aviso(object):
     def exibir_uso_incorreto(self):
         self.display.mensagem("USO INCORRETO".center(16) +"\n"+ "DA CATRACA".center(16), 0, False, False)
         
+    def exibir_falha_servidor(self):
+        self.display.mensagem('ERRO NO SERVIDOR'.center(16) +'\n'+ 'WEB SERVICE'.center(16), 6, False, False)
         
