@@ -29,7 +29,7 @@ class CatracaJson(ServidorRestful):
         super(CatracaJson, self).__init__()
         ServidorRestful.__init__(self)
         
-    def catraca_get(self):
+    def catraca_get(self, limpa_tabela=False):
         IP = Util().obtem_ip()
         servidor = self.obter_servidor()
         try:
@@ -43,21 +43,33 @@ class CatracaJson(ServidorRestful):
                     self.contador_acesso_servidor += 1
                     if self.contador_acesso_servidor < 4:
                         self.aviso.exibir_falha_servidor()
-                        self.aviso.exibir_saldacao(self.aviso.saldacao())
                         self.aviso.exibir_aguarda_cartao()
                     else:
                         self.contador_acesso_servidor = 0
                 else:
                     dados  = json.loads(r.text)
                     LISTA_JSON = dados["catracas"]
+                    
                     if LISTA_JSON != []:
+                        lista = []
                         for item in LISTA_JSON:
                             obj = self.dict_obj(item)
                             if obj:
-                                return obj
-                            else:
-                                return None
+                                lista.append(obj)
+                                self.mantem_tabela_local(obj, limpa_tabela)
+                        return lista
                     else:
+                        self.atualiza_exclui(None, True)
+                        #return None
+                    
+#                     if LISTA_JSON != []:
+#                         for item in LISTA_JSON:
+#                             obj = self.dict_obj(item)
+#                             if obj:
+#                                 return obj
+#                             else:
+#                                 return None
+                    #else:
                         self.contador_acesso_servidor += 1
                         if self.contador_acesso_servidor < 4:
                             catraca = Catraca()
@@ -70,21 +82,17 @@ class CatracaJson(ServidorRestful):
                             return self.catraca_get()
                         else:
                             self.aviso.exibir_falha_servidor()
-                            self.aviso.exibir_saldacao(self.aviso.saldacao())
                             self.aviso.exibir_aguarda_cartao()
                             self.contador_acesso_servidor = 0
-                            
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json catraca', exc_info=True)
         finally:
             pass
         
-    def mantem_tabela_local(self, limpa_tabela=False):
+    def mantem_tabela_local(self, obj, limpa_tabela=False):
         if limpa_tabela:
-            self.atualiza_exclui(None, True)
-            
-        obj = self.catraca_get()
+            self.atualiza_exclui(None, limpa_tabela)
         if obj:
             resultado = self.catraca_dao.busca(obj.id)
             if resultado:

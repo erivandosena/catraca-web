@@ -25,7 +25,7 @@ class UsuarioJson(ServidorRestful):
         super(UsuarioJson, self).__init__()
         ServidorRestful.__init__(self)
         
-    def usuario_get(self):
+    def usuario_get(self, limpa_tabela=False):
         servidor = self.obter_servidor()
         try:
             if servidor:
@@ -38,26 +38,27 @@ class UsuarioJson(ServidorRestful):
                     dados  = json.loads(r.text)
                     LISTA_JSON = dados["usuarios"]
                     if LISTA_JSON != []:
+                        lista = []
                         for item in LISTA_JSON:
                             obj = self.dict_obj(item)
                             if obj:
-                                return obj
-                            else:
-                                return None
+                                lista.append(obj)
+                                self.mantem_tabela_local(obj, limpa_tabela)
+                        return lista
+                    else:
+                        self.atualiza_exclui(None, True)
+                        return None
                 else:
                     return None
-
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json usuario', exc_info=True)
         finally:
             pass
         
-    def mantem_tabela_local(self, limpa_tabela=False):
+    def mantem_tabela_local(self, obj, limpa_tabela=False):
         if limpa_tabela:
-            self.atualiza_exclui(None, True)
-
-        obj = self.usuario_get()
+            self.atualiza_exclui(None, limpa_tabela)
         if obj:
             resultado = self.usuario_dao.busca(obj.id)
             if resultado:

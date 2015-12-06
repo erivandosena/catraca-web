@@ -92,10 +92,10 @@ class ControleApi(ControleGenerico):
                 self.hora_inicio = datetime.datetime.strptime(str(turno_ativo.inicio),'%H:%M:%S').time()
                 self.hora_fim = datetime.datetime.strptime(str(turno_ativo.fim),'%H:%M:%S').time()
                 self.turno = turno_ativo
-                self.alarme = False
+                #self.alarme = False
                 return self.turno
             else:
-                self.alarme = True
+                #self.alarme = True
                 return None
 
     def obtem_periodo(self):
@@ -108,4 +108,23 @@ class ControleApi(ControleGenerico):
                     return False
             else:
                 return False
+            
+    def obtem_atualizacao_de_turno(self):
+        global alarme
+        if self.turno:
+            # Inicia turno
+            if self.alarme:
+                self.alarme = False
+                self.aviso.exibir_turno_atual(self.turno.descricao)
+                self.util.beep_buzzer(855, .5, 1)
+                print "Turno INICIADO!"
+                self.aviso.exibir_aguarda_cartao()
+        # Finaliza turno
+        else:
+            if not self.alarme:
+                self.alarme = True
+                self.aviso.exibir_horario_invalido()
+                self.util.beep_buzzer(855, .5, 1)
+                print "Turno ENCERRADO!"
+                self.aviso.exibir_aguarda_cartao()
             

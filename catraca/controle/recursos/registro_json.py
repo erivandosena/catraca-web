@@ -34,7 +34,7 @@ class RegistroJson(ServidorRestful):
         super(RegistroJson, self).__init__()
         ServidorRestful.__init__(self)
         
-    def registro_get(self):
+    def registro_get(self, limpa_tabela=False):
         servidor = self.obter_servidor()
         turno = self.obtem_turno_valido()
         if turno:
@@ -51,15 +51,18 @@ class RegistroJson(ServidorRestful):
                     dados  = json.loads(r.text)
                     LISTA_JSON = dados["registros"]
                     if LISTA_JSON != []:
+                        lista = []
                         for item in LISTA_JSON:
                             obj = self.dict_obj(item)
                             if obj:
-                                return obj
-                            else:
-                                return None
+                                lista.append(obj)
+                                self.mantem_tabela_local(obj, limpa_tabela)
+                        return lista
+                    else:
+                        self.atualiza_exclui(None, True)
+                        return None
                 else:
                     return None
-
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json registro', exc_info=True)
@@ -95,10 +98,9 @@ class RegistroJson(ServidorRestful):
         finally:
             pass
         
-    def mantem_tabela_local(self, limpa_tabela=False):
+    def mantem_tabela_local(self, obj, limpa_tabela=False):
         if limpa_tabela:
-            self.atualiza_exclui(None, True)
-        obj = self.registro_get()
+            self.atualiza_exclui(None, limpa_tabela)
         if obj:
             resultado = self.registro_dao.busca(obj.id)
             if resultado:

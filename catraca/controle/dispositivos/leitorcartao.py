@@ -11,12 +11,10 @@ from catraca.controle.dispositivos.solenoide import Solenoide
 from catraca.controle.dispositivos.pictograma import Pictograma
 from catraca.controle.dispositivos.sensoroptico import SensorOptico
 from catraca.modelo.dao.cartao_dao import CartaoDAO
-from catraca.modelo.dao.giro_dao import GiroDAO
 from catraca.modelo.dao.registro_dao import RegistroDAO
 from catraca.modelo.dao.custo_refeicao_dao import CustoRefeicaoDAO
 from catraca.modelo.entidades.cartao import Cartao
 from catraca.modelo.entidades.registro import Registro
-from catraca.modelo.entidades.registro_off import RegistroOff
 from catraca.controle.recursos.cartao_json import CartaoJson
 from catraca.controle.recursos.registro_json import RegistroJson
 from catraca.controle.restful.controle_api import ControleApi
@@ -40,14 +38,13 @@ class LeitorCartao(Relogio):
     sensor_optico = SensorOptico()
     pino_controle = PinoControle()
 
-    giro_dao = GiroDAO()
     cartao_dao = CartaoDAO()
     cartao_valido_dao = CartaoValidoDAO()
     isencao_dao = IsencaoDAO()
     registro_dao = RegistroDAO()
     D0 = pino_controle.ler(17)['gpio']
     D1 = pino_controle.ler(27)['gpio']
-    bits = '11101110000100010000010011101110' #11101110000100010000010011101110
+    bits = '' #11101110000100010000010011101110
     numero_cartao = None
     CARTAO = None
     contador_local = 0
