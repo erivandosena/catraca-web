@@ -36,17 +36,24 @@ class Util(object):
         super(Util, self).__init__()
         
     def obtem_ip(self):
+        exibe = False
+        ip = None
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         try:
-            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            s.connect(('unilab.edu.br', 0))
+            s.settimeout(2)
+            s.connect(('unilab.edu.br',0))
             ip = '%s' % ( s.getsockname()[0] )
-            return ip
+            #return ip
         except Exception as excecao:
-            print excecao
-            ip = '%s' % "127.0.0.1"
-            print "Erro obtendo IP local"
-            self.log.logger.error('Erro obtendo IP local', exc_info=True)
+            exibe = True
+            self.aviso.exibir_estatus_catraca(None)
+            print "Erro obtendo unilab.edu.br"
+            self.log.logger.error('Erro obtendo conexao!', exc_info=True)
         finally:
+            if exibe:
+                from catraca.visao.interface.aviso import Aviso
+                Aviso().exibir_estatus_catraca(ip)
+            s.close()
             return ip
         
     def obtem_nome_sistema(self):

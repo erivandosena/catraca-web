@@ -44,9 +44,12 @@ class Aviso(object):
     def exibir_inicializacao(self):
         self.display.mensagem('Iniciando...\n'+self.util.obtem_nome_sistema(), 3, False, False)
         
-    def exibir_estatus_catraca(self):
-        self.display.mensagem(self.util.obtem_nome_rpi().center(16) +"\n"+ 'ON-LINE!'.center(16), 3, False, False)
-
+    def exibir_estatus_catraca(self, status_rede):
+        if status_rede:
+            self.display.mensagem(self.util.obtem_nome_rpi().center(16) +"\n"+ 'ON-LINE!'.center(16), 3, False, False)
+        else:
+            self.display.mensagem(self.util.obtem_nome_rpi().center(16) +"\n"+ 'OFF-LINE!'.center(16), 3, False, False)
+            
     def exibir_saldacao(self, saldacao):
         self.display.mensagem(saldacao, 3, False, False)
 
@@ -135,4 +138,8 @@ class Aviso(object):
         
     def exibir_falha_servidor(self):
         self.display.mensagem('ERRO NO SERVIDOR'.center(16) +'\n'+ 'WEB SERVICE'.center(16), 6, False, False)
+        
+    def exibir_falha_rede(self):
+        self.display.mensagem('ERRO DE REDE LAN'.center(16) +'\n'+ 'VERIFICAR SWITCH'.center(16), 1, False, False)
+        self.display.limpa_lcd()
         

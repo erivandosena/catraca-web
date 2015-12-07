@@ -47,147 +47,147 @@ class RecursosRestful(object):
     def __init__(self, ):
         super(RecursosRestful, self).__init__()
         
-    def obtem_recursos(self, display=False, limpa_tabela=False):
-        #self.obtem_catraca(display, limpa_tabela)
-        self.obtem_mensagem(display, limpa_tabela)
-        #self.obtem_unidade(display, limpa_tabela)
-        #self.obtem_catraca_unidade(display, limpa_tabela)
-        #self.obtem_turno(display, limpa_tabela)
-        #self.obtem_unidade_turno(display, limpa_tabela)
-        self.obtem_tipo(display, limpa_tabela)
-        self.obtem_usuario(display, limpa_tabela)
-        self.obtem_custo_refeicao(display, limpa_tabela)
-        self.obtem_cartao(display, limpa_tabela)
-        self.obtem_isencao(display, limpa_tabela)
-        self.obtem_vinculo(display, limpa_tabela)
-        self.obtem_registro(display, limpa_tabela)
+    def obtem_recursos(self, display=False, mantem_tabela=False, limpa_tabela=False):
+        self.obtem_catraca(display, mantem_tabela, limpa_tabela)
+        self.obtem_mensagem(display, mantem_tabela, limpa_tabela)
+        self.obtem_unidade(display, mantem_tabela, limpa_tabela)
+        self.obtem_catraca_unidade(display, mantem_tabela, limpa_tabela)
+        self.obtem_turno(display, mantem_tabela, limpa_tabela)
+        self.obtem_unidade_turno(display, mantem_tabela, limpa_tabela)
+        self.obtem_tipo(display, mantem_tabela, limpa_tabela)
+        self.obtem_usuario(display, mantem_tabela, limpa_tabela)
+        self.obtem_custo_refeicao(display, mantem_tabela, limpa_tabela)
+        self.obtem_cartao(display, mantem_tabela, limpa_tabela)
+        self.obtem_isencao(display, mantem_tabela, limpa_tabela)
+        self.obtem_vinculo(display, mantem_tabela, limpa_tabela)
+        self.obtem_registro(display, mantem_tabela, limpa_tabela)
         
-    def obtem_catraca(self, display=False, limpa_tabela=False):
+    def obtem_catraca(self, display=False, mantem_tabela=False, limpa_tabela=False):
         print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CATRACA"
         try:
             if display:
                 self.aviso.exibir_obtendo_recursos("Catraca")
-            self.catraca_json.catraca_get(limpa_tabela)
+            self.catraca_json.catraca_get(mantem_tabela, limpa_tabela)
         finally:
             if display:
                 self.aviso.exibir_aguarda_cartao()
                 
-    def obtem_mensagem(self, display=False, limpa_tabela=False):
+    def obtem_mensagem(self, display=False, mantem_tabela=False, limpa_tabela=False):
         print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> MENSAGEM"
         try:
             if display:
                 self.aviso.exibir_obtendo_recursos("Mensagem")
-            self.mensagem_json.mensagem_get(limpa_tabela)
+            self.mensagem_json.mensagem_get(mantem_tabela, limpa_tabela)
         finally:
             if display:
                 self.aviso.exibir_aguarda_cartao()
                 
-    def obtem_unidade(self, display=False, limpa_tabela=False):
+    def obtem_unidade(self, display=False, mantem_tabela=False, limpa_tabela=False):
         print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> UNIDADE"
         try:
             if display:
                 self.aviso.exibir_obtendo_recursos("Unidade")
-            self.unidade_json.unidade_get(limpa_tabela)
+            self.unidade_json.unidade_get(mantem_tabela, limpa_tabela)
         finally:
             if display:
                 self.aviso.exibir_aguarda_cartao()
                 
-    def obtem_catraca_unidade(self, display=False, limpa_tabela=False):
+    def obtem_catraca_unidade(self, display=False, mantem_tabela=False, limpa_tabela=False):
         print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CATRACA UNIDADE"
         try:
             if display:
                 self.aviso.exibir_obtendo_recursos("Catraca Unidade")
-            self.catraca_unidade_json.catraca_unidade_get(limpa_tabela)
+            self.catraca_unidade_json.catraca_unidade_get(mantem_tabela, limpa_tabela)
         finally:
             if display:
                 self.aviso.exibir_aguarda_cartao()
                 
-    def obtem_turno(self, display=False, limpa_tabela=False):
+    def obtem_turno(self, display=False, mantem_tabela=False, limpa_tabela=False):
         print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> TURNO"
         try:
             if display:
                 self.aviso.exibir_obtendo_recursos("Turno")
-            self.turno_json.turno_get(limpa_tabela)
+            self.turno_json.turno_get(mantem_tabela, limpa_tabela)
         finally:
             if display:
                 self.aviso.exibir_aguarda_cartao()
                 
-    def obtem_unidade_turno(self, display=False, limpa_tabela=False):
+    def obtem_unidade_turno(self, display=False, mantem_tabela=False, limpa_tabela=False):
         print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> UNIDADE TURNO"
         try:
             if display:
                 self.aviso.exibir_obtendo_recursos("Unidade Turno")
-            self.unidade_turno_json.unidade_turno_get(limpa_tabela)
+            self.unidade_turno_json.unidade_turno_get(mantem_tabela, limpa_tabela)
         finally:
             if display:
                 self.aviso.exibir_aguarda_cartao()
                 
-    def obtem_tipo(self, display=False, limpa_tabela=False):
+    def obtem_tipo(self, display=False, mantem_tabela=False, limpa_tabela=False):
         print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> TIPO"
         try:
             if display:
                 self.aviso.exibir_obtendo_recursos("Tipo")
-            self.tipo_json.tipo_get(limpa_tabela)
+            self.tipo_json.tipo_get(mantem_tabela, limpa_tabela)
         finally:
             if display:
                 self.aviso.exibir_aguarda_cartao()
                 
-    def obtem_usuario(self, display=False, limpa_tabela=False):
+    def obtem_usuario(self, display=False, mantem_tabela=False, limpa_tabela=False):
         print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> USUARIO"
         try:
             if display:
                 self.aviso.exibir_obtendo_recursos("Usuario")
-            self.usuario_json.usuario_get(limpa_tabela)
+            self.usuario_json.usuario_get(mantem_tabela, limpa_tabela)
         finally:
             if display:
                 self.aviso.exibir_aguarda_cartao()
                 
-    def obtem_custo_refeicao(self, display=False, limpa_tabela=False):
+    def obtem_custo_refeicao(self, display=False, mantem_tabela=False, limpa_tabela=False):
         print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CUSTO REFEICAO"
         try:
             if display:
                 self.aviso.exibir_obtendo_recursos("Custo Refeicao")
-            self.custo_refeicao_json.custo_refeicao_get(limpa_tabela)
+            self.custo_refeicao_json.custo_refeicao_get(mantem_tabela, limpa_tabela)
         finally:
             if display:
                 self.aviso.exibir_aguarda_cartao()
                 
-    def obtem_cartao(self, display=False, limpa_tabela=False):
+    def obtem_cartao(self, display=False, mantem_tabela=False, limpa_tabela=False):
         print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CARTAO"
         try:
             if display:
                 self.aviso.exibir_obtendo_recursos("Cartao")
-            self.cartao_json.cartao_get(limpa_tabela)
+            self.cartao_json.cartao_get(mantem_tabela, limpa_tabela)
         finally:
             if display:
                 self.aviso.exibir_aguarda_cartao()
                 
-    def obtem_vinculo(self, display=False, limpa_tabela=False):
+    def obtem_vinculo(self, display=False, mantem_tabela=False, limpa_tabela=False):
         print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> VINCULO"
         try:
             if display:
                 self.aviso.exibir_obtendo_recursos("Vinculo")
-            self.vinculo_json.vinculo_get(limpa_tabela)
+            self.vinculo_json.vinculo_get(mantem_tabela, limpa_tabela)
         finally:
             if display:
                 self.aviso.exibir_aguarda_cartao()
                 
-    def obtem_isencao(self, display=False, limpa_tabela=False):
+    def obtem_isencao(self, display=False, mantem_tabela=False, limpa_tabela=False):
         print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ISENCAO"
         try:
             if display:
                 self.aviso.exibir_obtendo_recursos("Isencao")
-            self.isencao_json.isencao_get(limpa_tabela)
+            self.isencao_json.isencao_get(mantem_tabela, limpa_tabela)
         finally:
             if display:
                 self.aviso.exibir_aguarda_cartao()
                 
-    def obtem_registro(self, display=False, limpa_tabela=False):
+    def obtem_registro(self, display=False, mantem_tabela=False, limpa_tabela=False):
         print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> REGISTRO"
         try:
             if display:
                 self.aviso.exibir_obtendo_recursos("Registro")
-            self.registro_json.registro_get(limpa_tabela)
+            self.registro_json.registro_get(mantem_tabela, limpa_tabela)
         finally:
             if display:
                 self.aviso.exibir_aguarda_cartao()

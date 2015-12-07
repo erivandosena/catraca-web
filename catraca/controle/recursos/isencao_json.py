@@ -25,7 +25,7 @@ class IsencaoJson(ServidorRestful):
         super(IsencaoJson, self).__init__()
         ServidorRestful.__init__(self)
         
-    def isencao_get(self, limpa_tabela=False):
+    def isencao_get(self, mantem_tabela=False, limpa_tabela=False):
         servidor = self.obter_servidor()
         try:
             if servidor:
@@ -43,7 +43,8 @@ class IsencaoJson(ServidorRestful):
                             obj = self.dict_obj(item)
                             if obj:
                                 lista.append(obj)
-                                self.mantem_tabela_local(obj, limpa_tabela)
+                                if mantem_tabela:
+                                    self.mantem_tabela_local(obj, limpa_tabela)
                         return lista
                     else:
                         self.atualiza_exclui(None, True)

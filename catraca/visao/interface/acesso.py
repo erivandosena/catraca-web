@@ -4,7 +4,6 @@
 
 import time
 import threading
-from threading import Thread
 from catraca.logs import Logs
 from catraca.controle.dispositivos.leitorcartao import LeitorCartao
 
@@ -15,13 +14,13 @@ __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production 
 
 
-class Acesso(Thread):
+class Acesso(threading.Thread):
     
     log = Logs()
  
     def __init__(self):
         super(Acesso, self).__init__()
-        Thread.__init__(self)
+        threading.Thread.__init__(self)
         self.name = 'Thread Leitor RFID.'
 
     def run(self):

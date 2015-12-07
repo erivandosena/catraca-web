@@ -3,6 +3,7 @@
 
 
 import threading
+from multiprocessing import Process
 from time import sleep
 from catraca.logs import Logs
 from catraca.util import Util
@@ -31,6 +32,9 @@ class Alerta(threading.Thread):
         threading.Thread.__init__(self)
         self.intervalo = intervalo
         self.name = 'Thread Alerta(Sonoro).'
+#         thread = threading.Thread(group=None, target=self.run(), name=None, args=(), kwargs={})
+#         thread.daemon = False
+#         thread.start()
         
     def run(self):
         print "%s Rodando... " % self.name

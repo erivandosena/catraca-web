@@ -4,6 +4,7 @@
 import csv
 import locale
 import threading
+from multiprocessing import Process
 from time import sleep
 from contextlib import closing
 from catraca.controle.raspberrypi.pinos import PinoControle
@@ -55,8 +56,9 @@ class LeitorCartao(Relogio):
         Relogio.__init__(self)
         self.intervalo = intervalo
         self.name = 'Thread LeitorCartao'
-        thread = threading.Thread(group=None, target=self.run(), args=())
-        thread.daemon = True
+#         thread = threading.Thread(group=None, target=self.run(), name=None, args=(), kwargs={})
+#         thread.daemon = True
+#         thread.start()
         
     def run(self):
         print "%s. Rodando... " % self.name
@@ -65,12 +67,18 @@ class LeitorCartao(Relogio):
         self.pino_controle.evento_both(self.D1, self.um)
         
         while True:
-            global contador
-            self.contador += 1
-            if self.contador == 10:
-                if self.catraca:
-                    if self.obtem_status():
-                        self.ler()
+            #global contador
+            #self.contador += 1
+            #if self.contador == 10:
+            #if self.catraca:
+            #    self.obtem_status()
+            
+            #self.periodo
+            
+            #global turno_valido
+            #print ">>> LEITOR RFID >> " + str(self.turno_valido)
+            
+            self.ler()
             sleep(self.intervalo)
 
     def zero(self, obj):
@@ -125,7 +133,10 @@ class LeitorCartao(Relogio):
                     sleep(4)
                     self.bloqueia_acesso()
                     return None
-                if self.turno:
+#                 global turno_valido
+#                 print self.turno_valido
+                #print self.periodo
+                if self.periodo:
                     self.valida_cartao(self.numero_cartao)
                 else:
                     self.aviso.exibir_horario_invalido()

@@ -29,7 +29,7 @@ class CatracaJson(ServidorRestful):
         super(CatracaJson, self).__init__()
         ServidorRestful.__init__(self)
         
-    def catraca_get(self, limpa_tabela=False):
+    def catraca_get(self, mantem_tabela=False, limpa_tabela=False):
         IP = Util().obtem_ip()
         servidor = self.obter_servidor()
         try:
@@ -38,6 +38,8 @@ class CatracaJson(ServidorRestful):
                 header = {'Content-type': 'application/json'}
                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
                 print "Status HTTP: " + str(r.status_code)
+                
+                print r.text
 
                 if r.text == '':
                     self.contador_acesso_servidor += 1
@@ -56,7 +58,8 @@ class CatracaJson(ServidorRestful):
                             obj = self.dict_obj(item)
                             if obj:
                                 lista.append(obj)
-                                self.mantem_tabela_local(obj, limpa_tabela)
+                                if mantem_tabela:
+                                    self.mantem_tabela_local(obj, limpa_tabela)
                         return lista
                     else:
                         self.atualiza_exclui(None, True)
