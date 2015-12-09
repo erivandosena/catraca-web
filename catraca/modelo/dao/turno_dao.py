@@ -96,8 +96,8 @@ class TurnoDAO(ConexaoGenerica):
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
                 dados = cursor.fetchone()
+                obj = Turno()
                 if dados:
-                    obj = Turno()
                     obj.id = dados[0]
                     obj.inicio = dados[1]
                     obj.fim = dados[2]
@@ -116,15 +116,13 @@ class TurnoDAO(ConexaoGenerica):
         
         
     def obtem_turno(self, catraca=None, hora=None):
+        turno = None
         if (catraca is None) or (hora is None):
             turno = self.busca_por_catraca(self.obtem_catraca(), self.util.obtem_hora())
         else:
             turno = self.busca_por_catraca(catraca, hora)
-        if turno:      
-            return turno
-        else:
-            return None
-   
+        return turno
+
     def insere(self, obj):
         try:
             if obj:

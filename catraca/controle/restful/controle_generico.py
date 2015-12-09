@@ -34,5 +34,4 @@ class ControleGenerico(object):
     
     def __init__(self):
         super(ControleGenerico, self).__init__()
-        self.hora_atual = self.util.obtem_hora()
         

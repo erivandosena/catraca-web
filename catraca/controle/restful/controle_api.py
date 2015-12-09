@@ -3,16 +3,7 @@
 
 
 import datetime
-#from time import sleep
-# from catraca.util import Util
-# from catraca.logs import Logs
-# from catraca.visao.interface.aviso import Aviso
-# from catraca.modelo.dao.turno_dao import TurnoDAO
-# from catraca.modelo.dao.catraca_dao import CatracaDAO
-# from catraca.controle.restful.recursos_restful import RecursosRestful
 from catraca.controle.restful.controle_generico import ControleGenerico
-# from catraca.controle.recursos.catraca_json import CatracaJson
-# from catraca.controle.recursos.turno_json import TurnoJson
 
 
 __author__ = "Erivando Sena" 
@@ -37,7 +28,7 @@ class ControleApi(ControleGenerico):
 
     @property
     def periodo(self):
-        self.periodo = self.obtem_periodo()
+        #self.periodo = self.obtem_periodo()
         return self.__periodo_ativo
     
     @periodo.setter
@@ -51,11 +42,12 @@ class ControleApi(ControleGenerico):
     @catraca.setter
     def catraca(self, valor):
         self.__catraca_local = valor
-         
+
     @property
     def turno(self):
         return self.__turno_ativo
     
+    @classmethod
     @turno.setter
     def turno(self, valor):
         self.__turno_ativo = valor
@@ -76,141 +68,69 @@ class ControleApi(ControleGenerico):
     def datahora(self, valor):
         self.datahora_atual = valor
     
-    def obtem_catraca(self):
-        # verifica se existem CATRACA,TURNO,UNIDADE,CATRACA-UNIDADE,UNIDADE-TURNO, cadastrados
-        if self.recursos_restful.catraca_json.catraca_get() is None:
-            self.aviso.exibir_catraca_nao_cadastrada()
-            self.recursos_restful.obtem_catraca(True, True, False)
-            
-        elif self.recursos_restful.unidade_json.unidade_get() is None:
-            self.aviso.exibir_unidade_nao_cadastrada()
-             
-        elif self.recursos_restful.catraca_unidade_json.catraca_unidade_get() is None:
-            self.aviso.exibir_catraca_unidade_nao_cadastrada()
-             
-        elif self.recursos_restful.turno_json.turno_get() is None:
-            self.aviso.exibir_turno_nao_cadastrado()
-             
-        elif self.recursos_restful.unidade_turno_json.unidade_turno_get() is None:
-            self.aviso.exibir_unidade_turno_nao_cadastrada()
-            
-        else:
-            self.catraca = self.turno_dao.obtem_catraca()
-            return self.catraca
-        
-    def obtem_turno(self):
-#         global contador
-#         print "[CONTROLE-API]" + str(self.contador)
-#         #if self.contador == 5 or self.contador == 10:
-#         self.contador = 0
-#         return self.obtem_turno_valido()
-        if self.obtem_catraca():
-            global alarme
-            
-            #remoto
-            turno_ativo = self.recursos_restful.turno_json.turno_funcionamento_get()
-            if turno_ativo is None:
-                #local
-                turno_ativo = self.turno_dao.obtem_turno(self.catraca, self.hora)
-            #self.contador = 0
-            if turno_ativo:
-                self.hora_inicio = datetime.datetime.strptime(str(turno_ativo.inicio),'%H:%M:%S').time()
-                self.hora_fim = datetime.datetime.strptime(str(turno_ativo.fim),'%H:%M:%S').time()
-                self.turno = turno_ativo
-                return self.turno
-            else:
-                return None
-        else:
-            return None
-    
-#     def obtem_turno_valido(self):
+#     def obtem_catraca(self):
 #         # verifica se existem CATRACA,TURNO,UNIDADE,CATRACA-UNIDADE,UNIDADE-TURNO, cadastrados
 #         if self.recursos_restful.catraca_json.catraca_get() is None:
 #             self.aviso.exibir_catraca_nao_cadastrada()
-#             self.recursos_restful.obtem_catraca(True, True)
-#             #self.recursos_restful.catraca_json.mantem_tabela_local(True)
+#             self.recursos_restful.obtem_catraca(True, True, False)
 #             
 #         elif self.recursos_restful.unidade_json.unidade_get() is None:
 #             self.aviso.exibir_unidade_nao_cadastrada()
-#             
+#              
 #         elif self.recursos_restful.catraca_unidade_json.catraca_unidade_get() is None:
 #             self.aviso.exibir_catraca_unidade_nao_cadastrada()
-#             
+#              
 #         elif self.recursos_restful.turno_json.turno_get() is None:
 #             self.aviso.exibir_turno_nao_cadastrado()
-#             
+#              
 #         elif self.recursos_restful.unidade_turno_json.unidade_turno_get() is None:
 #             self.aviso.exibir_unidade_turno_nao_cadastrada()
 #             
 #         else:
+#             self.catraca = self.turno_dao.obtem_catraca()
+#             return self.catraca
+#         
+#     def obtem_turno(self):
+#         if self.obtem_catraca():
 #             global alarme
-#             
 #             #remoto
 #             turno_ativo = self.recursos_restful.turno_json.turno_funcionamento_get()
 #             if turno_ativo is None:
 #                 #local
-#                 turno_ativo = self.turno_dao.obtem_turno(self.catraca, self.hora_atual)
-#             #self.contador = 0
+#                 turno_ativo = self.turno_dao.obtem_turno(self.catraca, self.hora)
 #             if turno_ativo:
 #                 self.hora_inicio = datetime.datetime.strptime(str(turno_ativo.inicio),'%H:%M:%S').time()
 #                 self.hora_fim = datetime.datetime.strptime(str(turno_ativo.fim),'%H:%M:%S').time()
 #                 self.turno = turno_ativo
-#                 #global turno_valido
-#                 self.turno_valido = self.turno
 #                 return self.turno
 #             else:
 #                 return None
-
-    def obtem_periodo(self):
-            self.obtem_turno()
-            if self.turno:
-                
-                #lobal alarme
-     
-                # Inicia turno
-                if self.alarme:
-                    self.alarme = False
-                    self.aviso.exibir_turno_atual(self.turno.descricao)
-                    self.util.beep_buzzer(855, .5, 1)
-                    print "Turno INICIADO!"
-                    self.aviso.exibir_aguarda_cartao()
-
-                
-                if ((self.hora_atual >= self.hora_inicio) and (self.hora_atual <= self.hora_fim)) or ((self.hora_atual >= self.hora_inicio) and (self.hora_atual <= self.hora_fim)):
-                    return True
-                else:
-
-                    self.turno = None
-                    return False
-            else:
-                
-                # Finaliza turno
-                if not self.alarme:
-                    self.alarme = True
-                    self.aviso.exibir_horario_invalido()
-                    self.util.beep_buzzer(855, .5, 1)
-                    print "Turno ENCERRADO!"
-                    self.aviso.exibir_aguarda_cartao()
-                
-                
-                return False
-            
-#     def obtem_atualizacao_de_turno(self):
-#         global alarme
-#         if self.turno:
-#             # Inicia turno
-#             if self.alarme:
-#                 self.alarme = False
-#                 self.aviso.exibir_turno_atual(self.turno.descricao)
-#                 #self.util.beep_buzzer(855, .5, 1)
-#                 print "Turno INICIADO!"
-#                 self.aviso.exibir_aguarda_cartao()
-#         # Finaliza turno
 #         else:
-#             if not self.alarme:
-#                 self.alarme = True
-#                 self.aviso.exibir_horario_invalido()
-#                 #self.util.beep_buzzer(855, .5, 1)
-#                 print "Turno ENCERRADO!"
-#                 self.aviso.exibir_aguarda_cartao()
-            
+#             return None
+#         
+#     def obtem_periodo(self):
+#             self.obtem_turno()
+#             print "passou"
+#             print self.turno
+#             if self.turno:
+#                 # Inicia turno
+#                 if self.alarme:
+#                     self.alarme = False
+#                     self.aviso.exibir_turno_atual(self.turno.descricao)
+#                     self.util.beep_buzzer(855, .5, 1)
+#                     print "Turno INICIADO!"
+#                     self.aviso.exibir_aguarda_cartao()
+#                 if ((self.hora_atual >= self.hora_inicio) and (self.hora_atual <= self.hora_fim)) or ((self.hora_atual >= self.hora_inicio) and (self.hora_atual <= self.hora_fim)):
+#                     return True
+#                 else:
+#                     self.turno = None
+#                     return False
+#             else:
+#                 # Finaliza turno
+#                 if not self.alarme:
+#                     self.alarme = True
+#                     self.aviso.exibir_horario_invalido()
+#                     self.util.beep_buzzer(855, .5, 1)
+#                     print "Turno ENCERRADO!"
+#                     self.aviso.exibir_aguarda_cartao()
+#                 return False

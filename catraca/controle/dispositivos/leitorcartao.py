@@ -52,8 +52,8 @@ class LeitorCartao(Relogio):
     
     def __init__(self, intervalo=1):
         super(LeitorCartao, self).__init__()
-        threading.Thread.__init__(self)
         Relogio.__init__(self)
+        threading.Thread.__init__(self)
         self.intervalo = intervalo
         self.name = 'Thread LeitorCartao'
 #         thread = threading.Thread(group=None, target=self.run(), name=None, args=(), kwargs={})
@@ -67,17 +67,9 @@ class LeitorCartao(Relogio):
         self.pino_controle.evento_both(self.D1, self.um)
         
         while True:
-            #global contador
-            #self.contador += 1
-            #if self.contador == 10:
-            #if self.catraca:
-            #    self.obtem_status()
-            
-            #self.periodo
-            
-            #global turno_valido
-            #print ">>> LEITOR RFID >> " + str(self.turno_valido)
-            
+            #print "turno --------<leitor>------ "+str(Relogio.turno_ativo)
+            self.catraca = Relogio.catraca_ativa
+            self.turno = Relogio.turno_ativo
             self.ler()
             sleep(self.intervalo)
 
@@ -133,10 +125,7 @@ class LeitorCartao(Relogio):
                     sleep(4)
                     self.bloqueia_acesso()
                     return None
-#                 global turno_valido
-#                 print self.turno_valido
-                #print self.periodo
-                if self.periodo:
+                if self.turno:
                     self.valida_cartao(self.numero_cartao)
                 else:
                     self.aviso.exibir_horario_invalido()
@@ -313,7 +302,7 @@ class LeitorCartao(Relogio):
             return ((int)(limite_utilizacao[0]))
         else:
             return None
-
+        
     def bloqueia_acesso(self):
         if self.catraca.operacao == 1:
             self.solenoide.ativa_solenoide(1,0)

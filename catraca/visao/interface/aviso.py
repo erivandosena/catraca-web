@@ -60,7 +60,7 @@ class Aviso(object):
         self.display.mensagem("BEM-VINDO!".center(16) +"\n"+ "APROXIME CARTAO", 0, True, False)
         
     def exibir_erro_leitura_cartao(self):
-        self.display.mensagem("APROXIME CARTAO".center(16) +"\n"+ "NOVAMENTE...".center(16), 0, True, False)
+        self.display.mensagem("APROXIME CARTAO".center(16) +"\n"+ "NOVAMENTE...".center(16), 1, True, False)
         
     def exibir_acesso_bloqueado(self):
         self.display.mensagem("ACESSO".center(16) +"\n"+ "BLOQUEADO!".center(16), 0, False, False)

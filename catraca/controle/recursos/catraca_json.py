@@ -38,8 +38,6 @@ class CatracaJson(ServidorRestful):
                 header = {'Content-type': 'application/json'}
                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
                 print "Status HTTP: " + str(r.status_code)
-                
-                print r.text
 
                 if r.text == '':
                     self.contador_acesso_servidor += 1
@@ -63,16 +61,6 @@ class CatracaJson(ServidorRestful):
                         return lista
                     else:
                         self.atualiza_exclui(None, True)
-                        #return None
-                    
-#                     if LISTA_JSON != []:
-#                         for item in LISTA_JSON:
-#                             obj = self.dict_obj(item)
-#                             if obj:
-#                                 return obj
-#                             else:
-#                                 return None
-                    #else:
                         self.contador_acesso_servidor += 1
                         if self.contador_acesso_servidor < 4:
                             catraca = Catraca()
