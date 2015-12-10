@@ -329,6 +329,12 @@ COMMENT ON CONSTRAINT fk_cart_id ON registro IS 'Chave estrangeira da tabela car
 COMMENT ON CONSTRAINT fk_catr_id ON registro IS 'Chave estrangeira da tabela catraca.';
 COMMENT ON CONSTRAINT fk_vinc_id ON registro IS 'Chave estrangeira da tabela vinculo.';
 
+--Sequence: registro_regi_id_seq
+CREATE SEQUENCE registro_regi_id_seq INCREMENT 1 MINVALUE 1 MAXVALUE 9223372036854775807 START 1 CACHE 1;
+ALTER TABLE registro_regi_id_seq OWNER TO catraca;
+ALTER TABLE registro ALTER COLUMN regi_id SET DEFAULT nextval('registro_regi_id_seq'::regclass);
+COMMENT ON COLUMN registro.regi_id IS 'Campo para chave primaria da tabela.';
+
 -- Table: unidade_turno
 CREATE TABLE unidade_turno
 (

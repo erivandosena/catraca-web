@@ -32,11 +32,11 @@ class CustoRefeicaoJson(ServidorRestful):
                 url = str(servidor) + "custo_refeicao/jcusto_refeicao"
                 header = {'Content-type': 'application/json'}
                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
-                print "Status HTTP: " + str(r.status_code)
+                #print "Status HTTP: " + str(r.status_code)
 
                 if r.text != '':
                     dados  = json.loads(r.text)
-                    LISTA_JSON = dados["custo_refeicoes"]
+                    LISTA_JSON = dados["custo_refeicao"]
                     if LISTA_JSON != []:
                         lista = []
                         for item in LISTA_JSON:
@@ -61,7 +61,7 @@ class CustoRefeicaoJson(ServidorRestful):
         servidor = self.obter_servidor()
         try:
             if servidor:
-                url = str(servidor) + "custo_refeicao/jcusto_refeicao/atual"
+                url = str(servidor) + "custo_refeicao/jcusto_refeicao"
                 print url
                 header = {'Content-type': 'application/json'}
                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
@@ -71,7 +71,7 @@ class CustoRefeicaoJson(ServidorRestful):
 
                 if r.text != '':
                     dados  = json.loads(r.text)
-                    LISTA_JSON = dados["custo"]
+                    LISTA_JSON = dados["custo_refeicao"]
                     if LISTA_JSON != []:
                         for item in LISTA_JSON:
                             obj = self.dict_obj(item)

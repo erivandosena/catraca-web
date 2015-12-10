@@ -32,7 +32,7 @@ class CatracaUnidadeJson(ServidorRestful):
                 url = str(servidor) + "catraca_unidade/jcatraca_unidade"
                 header = {'Content-type': 'application/json'}
                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
-                print "Status HTTP: " + str(r.status_code)
+                #print "Status HTTP: " + str(r.status_code)
 
                 if r.text != '':
                     dados  = json.loads(r.text)

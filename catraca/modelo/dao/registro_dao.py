@@ -91,10 +91,10 @@ class RegistroDAO(ConexaoGenerica):
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
                 obj = cursor.fetchone()
-                if obj:
+                if obj != (0L,):
                     return obj
                 else:
-                    return 0
+                    return None
         except Exception as excecao:
             self.aviso = str(excecao)
             self.log.logger.error('[registro] Erro ao realizar SELECT.', exc_info=True)
@@ -133,7 +133,7 @@ class RegistroDAO(ConexaoGenerica):
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
                 obj = cursor.fetchone()
-                if obj:
+                if obj != (None,):
                     return ((int)(obj[0]))
                 else:
                     return 0

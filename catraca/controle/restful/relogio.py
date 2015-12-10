@@ -51,7 +51,7 @@ class Relogio(ControleGenerico, threading.Thread):
                 self.contador = 0
                 Relogio.catraca = self.obtem_catraca()
                 Relogio.turno = self.obtem_turno()
-                self.aviso.exibir_aguarda_cartao()
+                #self.aviso.exibir_aguarda_cartao()
                 
             print "periodo --------<RELOGIO>------ "+str(Relogio.periodo)
             sleep(self.intervalo)
@@ -73,6 +73,9 @@ class Relogio(ControleGenerico, threading.Thread):
         #unidade-turno
         elif self.recursos_restful.unidade_turno_json.unidade_turno_get() is None:
             self.aviso.exibir_unidade_turno_nao_cadastrada()
+        #custo-refeicao
+        elif self.recursos_restful.custo_refeicao_json.custo_refeicao_get() is None:
+            self.aviso.exibir_custo_refeicao_nao_cadastrado()
         else:
             return self.turno_dao.obtem_catraca()
         
@@ -92,6 +95,7 @@ class Relogio(ControleGenerico, threading.Thread):
                     Relogio.periodo = True
                     self.aviso.exibir_turno_atual(turno_ativo.descricao)
                     self.util.beep_buzzer(855, .5, 1)
+                    self.aviso.exibir_aguarda_cartao()
                     print "Turno >> INICIADO!"
 #                 if ((self.hora_atual >= self.hora_inicio) and (self.hora_atual <= self.hora_fim)) or ((self.hora_atual >= self.hora_inicio) and (self.hora_atual <= self.hora_fim)):
 #                     Relogio.periodo = True
@@ -106,6 +110,7 @@ class Relogio(ControleGenerico, threading.Thread):
                     self.aviso.exibir_horario_invalido()
                     self.util.beep_buzzer(855, .5, 1)
                     print "Turno >> FINALIZADO!"
+                    self.aviso.exibir_aguarda_cartao()
                 return None
         else:
             return None

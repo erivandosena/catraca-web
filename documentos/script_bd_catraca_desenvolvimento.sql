@@ -316,6 +316,7 @@ COMMENT ON CONSTRAINT fk_cart_id ON registro IS 'Chave estrangeira da tabela car
 COMMENT ON CONSTRAINT fk_catr_id ON registro IS 'Chave estrangeira da tabela catraca.';
 
 -- Table: registro_off
+/*
 CREATE TABLE registro_off
 (
   reof_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
@@ -337,8 +338,10 @@ COMMENT ON COLUMN registro_off.cart_id IS 'Campo para chave estrangeira da tabel
 COMMENT ON COLUMN registro_off.turn_id IS 'Campo para chave estrangeira da tabela turno (chave nao relacionada).';
 COMMENT ON COLUMN registro_off.catr_id IS 'Campo para chave estrangeira da tabela catraca (chave nao relacionada).';
 COMMENT ON CONSTRAINT pk_reof_id ON registro_off IS 'Chave primaria da tabela registro_off.';
+*/
 
 -- Table: cartao_off
+/*
 CREATE TABLE cartao_off
 (
   caof_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
@@ -356,8 +359,10 @@ COMMENT ON COLUMN cartao_off.caof_creditos IS 'Total de creditos em R$ para uso 
 COMMENT ON COLUMN cartao_off.tipo_id IS 'Campo para chave estrangeira da tabela tipo (Chave nao relacionada).';
 COMMENT ON CONSTRAINT pk_caof_id ON cartao_off IS 'Chave primaria da tabela cartao_off.';
 COMMENT ON CONSTRAINT uk_caof_numero ON cartao_off IS 'Restricao de duplicidades para o campo caof_numero.';
+*/
 
 -- Table: giro_off
+/*
 CREATE TABLE giro_off
 (
   giof_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
@@ -376,3 +381,4 @@ COMMENT ON COLUMN giro_off.giof_giros_antihorario IS 'Contador de giro_offs no s
 COMMENT ON COLUMN giro_off.giof_data_giros IS 'Registro de data e hora da ocorrencia dos giro_offs.';
 COMMENT ON COLUMN giro_off.catr_id IS 'Campo para chave estrangeira da tabela catraca.';
 COMMENT ON CONSTRAINT pk_giof_id ON giro_off IS 'Chave primaria da tabela giro_off.';
+*/

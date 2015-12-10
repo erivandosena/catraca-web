@@ -45,7 +45,7 @@ class RegistroJson(ServidorRestful):
                 url = str(servidor) + "registro/jregistro/" + str(self.hora_inicio) + "/" +str(self.hora_fim)
                 header = {'Content-type': 'application/json'}
                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
-                print "Status HTTP: " + str(r.status_code)
+                #print "Status HTTP: " + str(r.status_code)
                 
                 if r.text != '':
                     dados  = json.loads(r.text)
@@ -174,7 +174,7 @@ class RegistroJson(ServidorRestful):
                 "regi_valor_pago":float(obj.pago),
                 "regi_valor_custo":float(obj.custo),
                 "cart_id":obj.cartao,
-                "catr_id":obj.cartao,
+                "catr_id":obj.catraca,
                 "vinc_id":obj.vinculo
             }
             self.registro_post(registro)

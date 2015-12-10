@@ -44,7 +44,7 @@ class LeitorCartao(Relogio):
     custo_refeicao_dao = CustoRefeicaoDAO()
     D0 = pino_controle.ler(17)['gpio']
     D1 = pino_controle.ler(27)['gpio']
-    bits = '11101110000100010000010011101110' #11101110000100010000010011101110
+    bits = '' #11101110000100010000010011101110
     numero_cartao = None
     CATRACA = None
     #TURNO = None
@@ -61,7 +61,7 @@ class LeitorCartao(Relogio):
         
     def run(self):
         print "%s. Rodando... " % self.name
-
+        
         self.pino_controle.evento_both(self.D0, self.zero)
         self.pino_controle.evento_both(self.D1, self.um)
         
@@ -232,28 +232,31 @@ class LeitorCartao(Relogio):
             ##############################################################
             self.bloqueia_acesso()
             if giro_completo:
-                # atualiza cartao local
-                if self.cartao_dao.busca(cartao.id):
-                    self.cartao_dao.atualiza_exclui(cartao, False)
-                    self.cartao_dao.commit()
-                    print self.cartao_dao.aviso
-                # atualiza cartao remoto
-                cartao_json.objeto_json(cartao)
-                
-                # atualiza registro local
-                registro_id = self.registro_dao.busca_ultimo_registro()
-                if registro_id == 0:
-                    registro_id = 1
-                else:
-                    registro_id += 1
-                
-                registro.id = registro_id
-                self.registro_dao.insere(registro)
-                print self.registro_dao.aviso
-                
+
                 # atualiza registro remoto
                 registro_json.objeto_json(registro)
                 giro_completo = False
+                
+                # atualiza cartao remoto
+                cartao_json.objeto_json(cartao)
+                
+#                 # atualiza cartao local
+#                 if self.cartao_dao.busca(cartao.id):
+#                     self.cartao_dao.atualiza_exclui(cartao, False)
+#                     self.cartao_dao.commit()
+#                     print self.cartao_dao.aviso
+#                     
+
+
+#                 # atualiza registro local
+#                 registro_id = self.registro_dao.busca_ultimo_registro()
+#                 if registro_id == 0:
+#                     registro_id = 1
+#                 else:
+#                     registro_id += 1
+#                 registro.id = registro_id
+#                 self.registro_dao.insere(registro)
+#                 print self.registro_dao.aviso
             else:
                 cartao = None
                 registro = None
@@ -297,9 +300,9 @@ class LeitorCartao(Relogio):
             #local
             limite_utilizacao = self.registro_dao.busca_utilizacao(Relogio.hora_inicio, Relogio.hora_fim, cartao_id)
         if limite_utilizacao:
-            return ((int)(limite_utilizacao[0]))
+            return ((int)(limite_utilizacao))
         else:
-            return None
+            return 0
         
     def obtem_custo_refeicao(self):
         #remoto
@@ -314,6 +317,7 @@ class LeitorCartao(Relogio):
         
         
     def bloqueia_acesso(self):
+        self.aviso.exibir_acesso_bloqueado()
         if self.CATRACA.operacao == 1:
             self.solenoide.ativa_solenoide(1,0)
             self.pictograma.seta_esquerda(0)
@@ -323,20 +327,19 @@ class LeitorCartao(Relogio):
             self.pictograma.seta_direita(0)
             self.pictograma.xis(0)
         self.log.logger.info('Bloqueia. [cartao n.] ' + str(self.numero_cartao))
-        self.aviso.exibir_acesso_bloqueado()
         self.aviso.exibir_aguarda_cartao()
     
     def desbloqueia_acesso(self):
+        self.aviso.exibir_acesso_liberado()
         self.util.beep_buzzer(860, .2, 1)
         if self.CATRACA.operacao == 1:
             self.solenoide.ativa_solenoide(1,1)
             self.pictograma.seta_esquerda(1)
             self.pictograma.xis(1)
-            self.aviso.exibir_acesso_liberado()
         if self.CATRACA.operacao == 2:
             self.solenoide.ativa_solenoide(2,1)
             self.pictograma.seta_direita(1)
             self.pictograma.xis(1)
         self.log.logger.info('Libera. [cartao n.] ' + str(self.numero_cartao))
-        self.aviso.exibir_acesso_liberado()
+        
         

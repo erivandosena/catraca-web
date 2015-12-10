@@ -164,6 +164,7 @@ $app->get('/turno/jturno','obterTurno');
 $app->get('/turno/jturno/(:ip)/(:hora)','obterTurnoFuncionamento');
 $app->get('/unidade/junidade','obterUnidade');
 $app->get('/custo_refeicao/jcusto_refeicao','obterCustoRefeicao');
+$app->get('/custo_refeicao/jcusto_refeicao/atual','obterCustoRefeicaoAtual');
 $app->get('/usuario/jusuario','obterUsuario');
 $app->get('/catraca/jcatraca','obterCatraca');
 $app->get('/mensagem/jmensagem','obterMensagem');
@@ -261,6 +262,20 @@ function obterCustoRefeicao() {
 		$dados = $stmt->fetchAll(PDO::FETCH_OBJ);
 		$db = null;
 		echo '{"custo_refeicoes": ' . json_encode($dados) . '}';
+	} catch(PDOException $e) {
+		echo '{"erro":{"text":'. $e->getMessage() .'}}';
+	}
+}
+
+function obterCustoRefeicaoAtual() {
+	$sql = "SELECT cure_id, cure_valor, cure_data FROM custo_refeicao ORDER BY cure_id DESC LIMIT 1;";
+
+	try {
+		$db = getDB();
+		$stmt = $db->query($sql);
+		$dados = $stmt->fetchAll(PDO::FETCH_OBJ);
+		$db = null;
+		echo '{"custo": ' . json_encode($dados) . '}';
 	} catch(PDOException $e) {
 		echo '{"erro":{"text":'. $e->getMessage() .'}}';
 	}
