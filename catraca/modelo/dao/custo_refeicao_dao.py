@@ -32,21 +32,14 @@ class CustoRefeicaoDAO(ConexaoGenerica):
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
-                if id:
-                    dados = cursor.fetchone()
-                    if dados is not None:
-                        obj.id = dados[0]
-                        obj.valor = dados[1]
-                        obj.data = dados[2]
-                        return obj
-                    else:
-                        return None
-                elif id is None:
-                    list = cursor.fetchone()
-                    if list != []:
-                        return list
-                    else:
-                        return None
+                dados = cursor.fetchone()
+                if dados:
+                    obj.id = dados[0]
+                    obj.valor = dados[1]
+                    obj.data = dados[2]
+                    return obj
+                else:
+                    return None
         except Exception as excecao:
             self.aviso = str(excecao)
             self.log.logger.error('[custo-refeicao] Erro ao realizar SELECT.', exc_info=True)

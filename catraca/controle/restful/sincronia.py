@@ -15,7 +15,7 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 class Sincronia(Relogio):
     
-    contador_status_recursos = 15
+    contador_status_recursos = 10
 
     def __init__(self, intervalo=1):
         super(Sincronia, self).__init__()
@@ -27,17 +27,14 @@ class Sincronia(Relogio):
     def run(self):
         print "%s. Rodando... " % self.name
         while True:
-            print "alarme --------<sincronia>------ "+str(Relogio.alarme)
+            print "periodo --------<SINCRONIA>------ "+str(Relogio.periodo)
             self.executa_controle_recursos()
             sleep(self.intervalo)
 
     def executa_controle_recursos(self):
         while True:
             self.contador_status_recursos += 1
-            print self.contador_status_recursos
-            #print self.alarme 
-            
-            if not Relogio.alarme:
+            if Relogio.periodo:
                 if self.contador_status_recursos >= 30:
                     self.obtem_recurso_servidor(False, True, False)
             else:

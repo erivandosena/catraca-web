@@ -57,6 +57,36 @@ class CustoRefeicaoJson(ServidorRestful):
         finally:
             pass
         
+    def custo_refeicao_atual_get(self):
+        servidor = self.obter_servidor()
+        try:
+            if servidor:
+                url = str(servidor) + "custo_refeicao/jcusto_refeicao/atual"
+                print url
+                header = {'Content-type': 'application/json'}
+                r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
+                print "Status HTTP: " + str(r.status_code)
+                
+                print r.text
+
+                if r.text != '':
+                    dados  = json.loads(r.text)
+                    LISTA_JSON = dados["custo"]
+                    if LISTA_JSON != []:
+                        for item in LISTA_JSON:
+                            obj = self.dict_obj(item)
+                            if obj:
+                                return obj
+                            else:
+                                return None
+                else:
+                    return None
+        except Exception as excecao:
+            print excecao
+            self.log.logger.error('Erro obtendo json custo-refeicao', exc_info=True)
+        finally:
+            pass
+        
     def mantem_tabela_local(self, obj, limpa_tabela=False):
         if limpa_tabela:
             self.atualiza_exclui(None, limpa_tabela)
@@ -84,14 +114,11 @@ class CustoRefeicaoJson(ServidorRestful):
         if not isinstance(formato_json, dict):
             return formato_json
         for item in formato_json:
-            
             if item == "cure_id":
                 custo_refeicao.id = self.dict_obj(formato_json[item])
             if item == "cure_valor":
                 custo_refeicao.valor = self.dict_obj(formato_json[item])
             if item == "cure_data":
                 custo_refeicao.data = self.dict_obj(formato_json[item])
-
-                
         return custo_refeicao
     

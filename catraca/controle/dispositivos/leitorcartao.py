@@ -4,7 +4,6 @@
 import csv
 import locale
 import threading
-from multiprocessing import Process
 from time import sleep
 from contextlib import closing
 from catraca.controle.raspberrypi.pinos import PinoControle
@@ -18,7 +17,6 @@ from catraca.modelo.entidades.cartao import Cartao
 from catraca.modelo.entidades.registro import Registro
 from catraca.controle.recursos.cartao_json import CartaoJson
 from catraca.controle.recursos.registro_json import RegistroJson
-from catraca.controle.restful.controle_api import ControleApi
 from catraca.controle.restful.relogio import Relogio
 from catraca.modelo.dao.cartao_valido_dao import CartaoValidoDAO
 from catraca.modelo.dao.isencao_dao import IsencaoDAO
@@ -43,10 +41,14 @@ class LeitorCartao(Relogio):
     cartao_valido_dao = CartaoValidoDAO()
     isencao_dao = IsencaoDAO()
     registro_dao = RegistroDAO()
+    custo_refeicao_dao = CustoRefeicaoDAO()
     D0 = pino_controle.ler(17)['gpio']
     D1 = pino_controle.ler(27)['gpio']
-    bits = '' #11101110000100010000010011101110
+    bits = '11101110000100010000010011101110' #11101110000100010000010011101110
     numero_cartao = None
+    CATRACA = None
+    #TURNO = None
+    #PERIODO = False
     CARTAO = None
     contador_local = 0
     
@@ -56,9 +58,6 @@ class LeitorCartao(Relogio):
         threading.Thread.__init__(self)
         self.intervalo = intervalo
         self.name = 'Thread LeitorCartao'
-#         thread = threading.Thread(group=None, target=self.run(), name=None, args=(), kwargs={})
-#         thread.daemon = True
-#         thread.start()
         
     def run(self):
         print "%s. Rodando... " % self.name
@@ -67,10 +66,10 @@ class LeitorCartao(Relogio):
         self.pino_controle.evento_both(self.D1, self.um)
         
         while True:
-            #print "turno --------<leitor>------ "+str(Relogio.turno_ativo)
-            self.catraca = Relogio.catraca_ativa
-            self.turno = Relogio.turno_ativo
-            self.ler()
+            print "periodo --------<LEITOR>------ "+str(Relogio.periodo)
+            self.CATRACA = Relogio.catraca
+            if self.CATRACA:
+                self.ler()
             sleep(self.intervalo)
 
     def zero(self, obj):
@@ -125,7 +124,7 @@ class LeitorCartao(Relogio):
                     sleep(4)
                     self.bloqueia_acesso()
                     return None
-                if self.turno:
+                if Relogio.periodo:
                     self.valida_cartao(self.numero_cartao)
                 else:
                     self.aviso.exibir_horario_invalido()
@@ -142,7 +141,6 @@ class LeitorCartao(Relogio):
     def valida_cartao(self, numero):
         cartao = Cartao()
         registro = Registro()
-
         cartao_json = CartaoJson()
         registro_json = RegistroJson()
 
@@ -208,16 +206,16 @@ class LeitorCartao(Relogio):
                     #registro
                     registro.data = self.util.obtem_datahora_postgresql()
                     registro.pago = 0.00 if cartao_isento else float(cartao_valor_tipo)
-                    registro.custo = float(CustoRefeicaoDAO().busca()[1])
+                    registro.custo = self.obtem_custo_refeicao()
                     registro.cartao = cartao_id
-                    registro.catraca = self.catraca.id
+                    registro.catraca = self.CATRACA.id
                     registro.vinculo = cartao_vinculo_id
                     ##############################################################
                     ## LIBERA O ACESSO E SINALIZA O MESMO AO UTILIZADOR
                     ##############################################################
                     self.desbloqueia_acesso()
                     while True:
-                        if self.sensor_optico.registra_giro(self.catraca.tempo, self.catraca):
+                        if self.sensor_optico.registra_giro(self.CATRACA.tempo, self.CATRACA):
                             self.log.logger.info('Girou catraca. [cartao n.] ' + str(self.numero_cartao))
                             giro_completo = True
                             return None
@@ -294,21 +292,33 @@ class LeitorCartao(Relogio):
         
     def obtem_limite_utilizacao(self, cartao_id):
         #remoto
-        limite_utilizacao = self.recursos_restful.registro_json.registro_utilizacao_get(self.hora_inicio, self.hora_fim, cartao_id)
+        limite_utilizacao = self.recursos_restful.registro_json.registro_utilizacao_get(Relogio.hora_inicio, Relogio.hora_fim, cartao_id)
         if limite_utilizacao is None:
             #local
-            limite_utilizacao = self.registro_dao.busca_utilizacao(self.hora_inicio, self.hora_fim, cartao_id)
+            limite_utilizacao = self.registro_dao.busca_utilizacao(Relogio.hora_inicio, Relogio.hora_fim, cartao_id)
         if limite_utilizacao:
             return ((int)(limite_utilizacao[0]))
         else:
             return None
         
+    def obtem_custo_refeicao(self):
+        #remoto
+        custo_refeicao_atual = self.recursos_restful.custo_refeicao_json.custo_refeicao_atual_get()
+        if custo_refeicao_atual is None:
+            #local
+            custo_refeicao_atual = self.custo_refeicao_dao.busca()
+        if custo_refeicao_atual:
+            return float(custo_refeicao_atual.valor)
+        else:
+            return None
+        
+        
     def bloqueia_acesso(self):
-        if self.catraca.operacao == 1:
+        if self.CATRACA.operacao == 1:
             self.solenoide.ativa_solenoide(1,0)
             self.pictograma.seta_esquerda(0)
             self.pictograma.xis(0)
-        if self.catraca.operacao == 2:
+        if self.CATRACA.operacao == 2:
             self.solenoide.ativa_solenoide(2,0)
             self.pictograma.seta_direita(0)
             self.pictograma.xis(0)
@@ -318,12 +328,12 @@ class LeitorCartao(Relogio):
     
     def desbloqueia_acesso(self):
         self.util.beep_buzzer(860, .2, 1)
-        if self.catraca.operacao == 1:
+        if self.CATRACA.operacao == 1:
             self.solenoide.ativa_solenoide(1,1)
             self.pictograma.seta_esquerda(1)
             self.pictograma.xis(1)
             self.aviso.exibir_acesso_liberado()
-        if self.catraca.operacao == 2:
+        if self.CATRACA.operacao == 2:
             self.solenoide.ativa_solenoide(2,1)
             self.pictograma.seta_direita(1)
             self.pictograma.xis(1)

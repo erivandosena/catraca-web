@@ -34,4 +34,22 @@ class ControleGenerico(object):
     
     def __init__(self):
         super(ControleGenerico, self).__init__()
+        self.__hora_atual = self.util.obtem_hora()
+        self.__datahora_atual = self.util.obtem_datahora().strftime("%d/%m/%Y %H:%M:%S")
+    
+    @property
+    def hora(self):
+        return self.__hora_atual
+    
+    @hora.setter
+    def hora(self, valor):
+        self.__hora_atual = valor
+    
+    @property
+    def datahora(self):
+        return self.__datahora_atual
+    
+    @datahora.setter
+    def datahora(self, valor):
+        self.__datahora_atual = valor
         

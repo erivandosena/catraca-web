@@ -38,6 +38,8 @@ class CatracaJson(ServidorRestful):
                 header = {'Content-type': 'application/json'}
                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
                 print "Status HTTP: " + str(r.status_code)
+                
+                print r.text
 
                 if r.text == '':
                     self.contador_acesso_servidor += 1
