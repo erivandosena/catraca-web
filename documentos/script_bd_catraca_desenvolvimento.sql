@@ -2,7 +2,7 @@
 -- Autor_script : Erivando Sena
 -- Copyright    : Unilab
 -- Data_criacao : 16/10/2015
--- Data_revisao : 02/12/2015
+-- Data_revisao : 12/12/2015
 -- Status       : Desenvolvimento
 ---------------------------------
 
@@ -184,7 +184,7 @@ COMMENT ON CONSTRAINT fk_catr_id ON mensagem IS 'Chave estrangeira da tabela cat
 CREATE TABLE cartao
 (
   cart_id integer NOT NULL, -- Campo para chave primaria da tabela.
-  cart_numero bigint, -- Numero ID do cartao Smart Card sem permissao de duplicidade.
+  cart_numero character varying(10), -- Numero ID do cartao Smart Card sem permissao de duplicidade.
   cart_creditos numeric(8,2), -- Total de creditos em R$ para uso do cartao.
   tipo_id integer NOT NULL, -- Campo para chave estrangeira da tabela tipo.
   CONSTRAINT pk_cart_id PRIMARY KEY (cart_id), -- Chave primaria da tabela cartao.
@@ -314,71 +314,3 @@ COMMENT ON COLUMN registro.vinc_id IS 'Campo para chave estrangeira da tabela vi
 COMMENT ON CONSTRAINT pk_regi_id ON registro IS 'Chave primaria da tabela registro.';
 COMMENT ON CONSTRAINT fk_cart_id ON registro IS 'Chave estrangeira da tabela cartao.';
 COMMENT ON CONSTRAINT fk_catr_id ON registro IS 'Chave estrangeira da tabela catraca.';
-
--- Table: registro_off
-/*
-CREATE TABLE registro_off
-(
-  reof_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
-  reof_data timestamp without time zone, -- Data e hora que efetivou o giro na catraca.
-  reof_valor_pago numeric(8,2), -- Valor em R$ da refeicao.
-  reof_valor_custo numeric(8,2), -- Valor em R$ do custo da refeicao.
-  cart_id integer NOT NULL, -- Campo para chave estrangeira da tabela cartao (chave nao relacionada).
-  turn_id integer NOT NULL, -- Campo para chave estrangeira da tabela turno (chave nao relacionada).
-  catr_id integer NOT NULL, -- Campo para chave estrangeira da tabela catraca (chave nao relacionada).
-  CONSTRAINT pk_reof_id PRIMARY KEY (reof_id) -- Chave primaria da tabela registro_off.
-);
-ALTER TABLE registro_off OWNER TO postgres;
-COMMENT ON TABLE registro_off IS 'Tabela que armazena os registros de uso do cartao na catraca durante modo offline';
-COMMENT ON COLUMN registro_off.reof_id IS 'Campo autoincremento para chave primaria da tabela.';
-COMMENT ON COLUMN registro_off.reof_data IS 'Data e hora que efetivou o giro na catraca.';
-COMMENT ON COLUMN registro_off.reof_valor_pago IS 'Valor em R$ da refeicao.';
-COMMENT ON COLUMN registro_off.reof_valor_custo IS 'Valor em R$ do custo da refeicao.';
-COMMENT ON COLUMN registro_off.cart_id IS 'Campo para chave estrangeira da tabela cartao (chave nao relacionada).';
-COMMENT ON COLUMN registro_off.turn_id IS 'Campo para chave estrangeira da tabela turno (chave nao relacionada).';
-COMMENT ON COLUMN registro_off.catr_id IS 'Campo para chave estrangeira da tabela catraca (chave nao relacionada).';
-COMMENT ON CONSTRAINT pk_reof_id ON registro_off IS 'Chave primaria da tabela registro_off.';
-*/
-
--- Table: cartao_off
-/*
-CREATE TABLE cartao_off
-(
-  caof_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
-  caof_numero bigint, -- Numero ID do cartao_off Smart Card sem permissao de duplicidade.
-  caof_creditos numeric(8,2), -- Total de creditos em R$ para uso do cartao_off.
-  tipo_id integer NOT NULL, -- Campo para chave estrangeira da tabela tipo (Chave nao relacionada).
-  CONSTRAINT pk_caof_id PRIMARY KEY (caof_id), -- Chave primaria da tabela cartao_off.
-  CONSTRAINT uk_caof_numero UNIQUE (caof_numero) -- Restricao de duplicidades para o campo caof_numero.
-);
-ALTER TABLE cartao_off OWNER TO postgres;
-COMMENT ON TABLE cartao_off IS 'Tabela que armazena os registros de uso do cartao_off RFID em modo offline.';
-COMMENT ON COLUMN cartao_off.caof_id IS 'Campo autoincremento para chave primaria da tabela.';
-COMMENT ON COLUMN cartao_off.caof_numero IS 'Numero ID do cartao_off Smart Card sem permissao de duplicidade.';
-COMMENT ON COLUMN cartao_off.caof_creditos IS 'Total de creditos em R$ para uso do cartao_off.';
-COMMENT ON COLUMN cartao_off.tipo_id IS 'Campo para chave estrangeira da tabela tipo (Chave nao relacionada).';
-COMMENT ON CONSTRAINT pk_caof_id ON cartao_off IS 'Chave primaria da tabela cartao_off.';
-COMMENT ON CONSTRAINT uk_caof_numero ON cartao_off IS 'Restricao de duplicidades para o campo caof_numero.';
-*/
-
--- Table: giro_off
-/*
-CREATE TABLE giro_off
-(
-  giof_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
-  giof_giros_horario integer DEFAULT 0, -- Contador de giro_offs no sentido horario.
-  giof_giros_antihorario integer DEFAULT 0, -- Contador de giro_offs no sentido anti-horario.
-  giof_data_giros timestamp without time zone NOT NULL DEFAULT now(), -- Registro de data e hora da ocorrencia dos giro_offs.
-  catr_id integer NOT NULL, -- Campo para chave estrangeira da tabela catraca.
-  CONSTRAINT pk_giof_id PRIMARY KEY (giof_id), -- Chave primaria da tabela giro_off.
-  CONSTRAINT pk_catr_id FOREIGN KEY (catr_id) REFERENCES catraca (catr_id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE -- Chave estrangeira da tabela catraca.
-);
-ALTER TABLE giro_off OWNER TO postgres;
-COMMENT ON TABLE giro_off IS 'Tabela que armazena a contabilizacao de giros da catraca em modo offline.';
-COMMENT ON COLUMN giro_off.giof_id IS 'Campo autoincremento para chave primaria da tabela.';
-COMMENT ON COLUMN giro_off.giof_giros_horario IS 'Contador de giro_offs no sentido horario.';
-COMMENT ON COLUMN giro_off.giof_giros_antihorario IS 'Contador de giro_offs no sentido anti-horario.';
-COMMENT ON COLUMN giro_off.giof_data_giros IS 'Registro de data e hora da ocorrencia dos giro_offs.';
-COMMENT ON COLUMN giro_off.catr_id IS 'Campo para chave estrangeira da tabela catraca.';
-COMMENT ON CONSTRAINT pk_giof_id ON giro_off IS 'Chave primaria da tabela giro_off.';
-*/

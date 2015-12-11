@@ -53,14 +53,17 @@ class CatracaJson(ServidorRestful):
                     LISTA_JSON = dados["catracas"]
                     
                     if LISTA_JSON != []:
-                        lista = []
+                        #lista = []
+                        catraca_local = None
                         for item in LISTA_JSON:
                             obj = self.dict_obj(item)
                             if obj:
-                                lista.append(obj)
+                                #lista.append(obj)
+                                if IP == obj.ip:
+                                    catraca_local = obj
                                 if mantem_tabela:
                                     self.mantem_tabela_local(obj, limpa_tabela)
-                        return lista
+                        return catraca_local
                     else:
                         self.atualiza_exclui(None, True)
                         self.contador_acesso_servidor += 1
@@ -71,8 +74,8 @@ class CatracaJson(ServidorRestful):
                             catraca.operacao = 1
                             catraca.nome = Util().obtem_nome_rpi().upper()
                             self.objeto_json(catraca)
-                            
-                            return self.catraca_get()
+
+                            return self.catraca_get(True,True)
                         else:
                             self.aviso.exibir_falha_servidor()
                             self.aviso.exibir_aguarda_cartao()

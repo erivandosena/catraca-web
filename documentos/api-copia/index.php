@@ -164,7 +164,6 @@ $app->get('/turno/jturno','obterTurno');
 $app->get('/turno/jturno/(:ip)/(:hora)','obterTurnoFuncionamento');
 $app->get('/unidade/junidade','obterUnidade');
 $app->get('/custo_refeicao/jcusto_refeicao','obterCustoRefeicao');
-$app->get('/custo_refeicao/jcusto_refeicao/atual','obterCustoRefeicaoAtual');
 $app->get('/usuario/jusuario','obterUsuario');
 $app->get('/catraca/jcatraca','obterCatraca');
 $app->get('/mensagem/jmensagem','obterMensagem');
@@ -185,6 +184,39 @@ $app->put('/cartao/atualiza/:id','atualizaCartao');
 //----------------------------------DELETE--------------------------------------------
 //$app->response()->header("Content-Type", "application/json");
 $app->run();
+
+
+/*
+2015-12-11 11:06:59,748 catraca.logs.Logs ERROR    [vinculo] Erro realizando INSERT.
+Traceback (most recent call last):
+  File "/home/pi/CatracaEletronica/catraca/modelo/dao/vinculo_dao.py", line 113, in insere cursor.execute(sql)
+IntegrityError: ERRO:  inserção ou atualização em tabela "vinculo" viola restrição de chave estrangeira "fk_usua_id"
+DETALHE:  Chave (usua_id)=(5) não está presente na tabela "usuario".
+
+2015-12-11 23:00:58,164 catraca.logs.Logs ERROR    [unidade-turno] Erro realizando INSERT.
+Traceback (most recent call last):
+  File "/home/pi/CatracaEletronica/catraca/modelo/dao/unidade_turno_dao.py", line 76, in insere cursor.execute(sql)
+IntegrityError: ERRO:  inserção ou atualização em tabela "unidade_turno" viola restrição de chave estrangeira "fk_turn_id"
+DETALHE:  Chave (turn_id)=(1) não está presente na tabela "turno".
+
+2015-12-11 23:01:29,264 catraca.logs.Logs ERROR    [cartao] Erro realizando INSERT.
+Traceback (most recent call last):
+  File "/home/pi/CatracaEletronica/catraca/modelo/dao/cartao_dao.py", line 99, in insere cursor.execute(sql)
+IntegrityError: ERRO:  inserção ou atualização em tabela "cartao" viola restrição de chave estrangeira "fk_tipo_id"
+DETALHE:  Chave (tipo_id)=(1) não está presente na tabela "tipo".
+
+2015-12-11 23:01:40,111 catraca.logs.Logs ERROR    [isencao] Erro realizando INSERT.
+Traceback (most recent call last):
+  File "/home/pi/CatracaEletronica/catraca/modelo/dao/isencao_dao.py", line 106, in insere cursor.execute(sql)
+IntegrityError: ERRO:  inserção ou atualização em tabela "isencao" viola restrição de chave estrangeira "fk_cart_id"
+DETALHE:  Chave (cart_id)=(8) não está presente na tabela "cartao".
+
+2015-12-11 23:01:53,680 catraca.logs.Logs ERROR    [registro] Erro realizando INSERT.
+Traceback (most recent call last):
+  File "/home/pi/CatracaEletronica/catraca/modelo/dao/registro_dao.py", line 166, in insere cursor.execute(sql)
+IntegrityError: ERRO:  inserção ou atualização em tabela "registro" viola restrição de chave estrangeira "fk_cart_id"
+DETALHE:  Chave (cart_id)=(9) não está presente na tabela "cartao".
+ */
 
 
 //----------------------------------GET-----------------------------------------------
@@ -254,28 +286,14 @@ function obterUnidade() {
 }
 
 function obterCustoRefeicao() {
-	$sql = "SELECT cure_id, cure_valor, cure_data FROM custo_refeicao ORDER BY cure_id;";
+	$sql = "SELECT cure_id, cure_valor, cure_data FROM custo_refeicao ORDER BY cure_id DESC LIMIT 1;";
 	
 	try {
 		$db = getDB();
 		$stmt = $db->query($sql);
 		$dados = $stmt->fetchAll(PDO::FETCH_OBJ);
 		$db = null;
-		echo '{"custo_refeicoes": ' . json_encode($dados) . '}';
-	} catch(PDOException $e) {
-		echo '{"erro":{"text":'. $e->getMessage() .'}}';
-	}
-}
-
-function obterCustoRefeicaoAtual() {
-	$sql = "SELECT cure_id, cure_valor, cure_data FROM custo_refeicao ORDER BY cure_id DESC LIMIT 1;";
-
-	try {
-		$db = getDB();
-		$stmt = $db->query($sql);
-		$dados = $stmt->fetchAll(PDO::FETCH_OBJ);
-		$db = null;
-		echo '{"custo": ' . json_encode($dados) . '}';
+		echo '{"custo_refeicao": ' . json_encode($dados) . '}';
 	} catch(PDOException $e) {
 		echo '{"erro":{"text":'. $e->getMessage() .'}}';
 	}
@@ -283,10 +301,16 @@ function obterCustoRefeicaoAtual() {
 
 function obterUsuario() {
 	$dataTimeAtual = date ("Y-m-d G:i:s");
+
+	$sql = "SELECT usuario.usua_id, usua_nome, usua_email, usua_login, usua_senha, usua_nivel, id_base_externa
+	FROM usuario INNER JOIN vinculo ON usuario.usua_id = vinculo.usua_id;";
 	
-	$sql = "SELECT usuario.usua_id, usua_nome, usua_email, usua_login, usua_senha, usua_nivel, id_base_externa 
-	FROM usuario INNER JOIN vinculo ON usuario.usua_id = vinculo.usua_id 
+	$sql = "SELECT usuario.usua_id, usua_nome, usua_email, usua_login, usua_senha, usua_nivel, id_base_externa
+	FROM usuario INNER JOIN vinculo ON usuario.usua_id = vinculo.usua_id
 	WHERE '$dataTimeAtual' BETWEEN vinc_inicio AND vinc_fim ORDER BY usuario.usua_id;";
+	
+	$sql = "SELECT usua_id, usua_nome, usua_email, usua_login, usua_senha, usua_nivel, id_base_externa 
+	FROM usuario ORDER BY usua_id;";
 	
 	try {
 		$db = getDB();
@@ -300,6 +324,10 @@ function obterUsuario() {
 }
 
 function obterCatraca() {
+	
+	$sql = "SELECT DISTINCT catraca.catr_id, catraca.catr_ip, catraca.catr_tempo_giro, catraca.catr_operacao, catraca.catr_nome FROM catraca 
+			INNER JOIN registro ON registro.catr_id = catraca.catr_id;";
+	
 	$sql = "SELECT catr_id, catr_ip, catr_tempo_giro, catr_operacao, catr_nome FROM catraca ORDER BY catr_id;";
 	
 	try {
@@ -334,10 +362,15 @@ function obterMensagem() {
 
 function obterCartao() {
 	$dataTimeAtual = date ("Y-m-d G:i:s");
-	
+
+	$sql = "SELECT cartao.cart_id, cart_numero, cart_creditos, tipo_id FROM cartao 
+	INNER JOIN vinculo ON cartao.cart_id = vinculo.cart_id;";
+
 	$sql = "SELECT cartao.cart_id, cart_numero, cart_creditos, tipo_id FROM cartao 
 	INNER JOIN vinculo ON cartao.cart_id = vinculo.cart_id 
-	WHERE '$dataTimeAtual' BETWEEN vinc_inicio AND vinc_fim	ORDER BY cart_id;";
+	WHERE '$dataTimeAtual' BETWEEN vinculo.vinc_inicio AND vinculo.vinc_fim;";
+	
+	$sql = "SELECT cart_id, cart_numero, cart_creditos, tipo_id FROM cartao ORDER BY cart_id;";
 	
 	try {
 		$db = getDB();
@@ -376,13 +409,15 @@ function obterCartaoValido($numero) {
 
 function obterVinculo() {
 	$dataTimeAtual = date ("Y-m-d G:i:s");
-	
+
 	$sql = "SELECT vinc_id, vinc_avulso, vinc_inicio, vinc_fim, vinc_descricao, vinc_refeicoes, cart_id, usua_id FROM vinculo 
 	WHERE '$dataTimeAtual' < vinc_fim ORDER BY vinc_id;";
 	
 	$sql = "SELECT vinculo.vinc_id, vinculo.vinc_avulso, vinculo.vinc_inicio, vinculo.vinc_fim, vinculo.vinc_descricao, 
-	vinculo.vinc_refeicoes, vinculo.cart_id, vinculo.usua_id FROM vinculo INNER JOIN isencao ON isencao.cart_id = vinculo.cart_id
-	WHERE '$dataTimeAtual' < vinculo.vinc_fim;";
+	vinculo.vinc_refeicoes, vinculo.cart_id, vinculo.usua_id FROM vinculo 
+	WHERE '$dataTimeAtual' BETWEEN vinculo.vinc_inicio AND vinculo.vinc_fim;";
+	
+	$sql = "SELECT vinc_id, vinc_avulso, vinc_inicio, vinc_fim, vinc_descricao, vinc_refeicoes, cart_id, usua_id FROM vinculo ORDER BY vinc_id;";
 
 	try {
 		$db = getDB();
@@ -403,6 +438,14 @@ function obterIsencao() {
 	INNER JOIN isencao ON isencao.cart_id = cartao.cart_id 
 	WHERE ('$dataTimeAtual' BETWEEN vinc_inicio AND vinc_fim) AND 
 	('$dataTimeAtual' BETWEEN isen_inicio AND isen_fim) ORDER BY isen_id;";
+	
+	$sql = "SELECT isen_id, isen_inicio, isen_fim, isencao.cart_id 
+	FROM vinculo INNER JOIN cartao ON cartao.cart_id = vinculo.cart_id 
+	INNER JOIN isencao ON isencao.cart_id = cartao.cart_id 
+	WHERE ('$dataTimeAtual' BETWEEN vinculo.vinc_inicio AND vinculo.vinc_fim) AND 
+	('$dataTimeAtual' BETWEEN isencao.isen_inicio AND isencao.isen_fim);";
+	
+	$sql = "SELECT isen_id, isen_inicio, isen_fim, cart_id FROM isencao ORDER BY isen_id;";
 	
 	try {
 		$db = getDB();
@@ -471,7 +514,7 @@ function obterRegistro($horaini, $horafim) {
 	$datahorafim = $dataTimeAtual.$horafim;
 
 	$sql = "SELECT regi_id, regi_data, regi_valor_pago, regi_valor_custo, cart_id, catr_id, vinc_id 
-	FROM registro WHERE regi_data BETWEEN :datahora_ini AND :datahora_fim ORDER BY regi_data DESC;";
+	FROM registro WHERE regi_data BETWEEN :datahora_ini AND :datahora_fim ORDER BY regi_id;";
 	
 	try {
 		$db = getDB();

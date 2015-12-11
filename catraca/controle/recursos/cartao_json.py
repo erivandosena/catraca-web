@@ -153,7 +153,6 @@ class CartaoJson(ServidorRestful):
         if lista:
             for item in lista:
                 cartao = {
-                    #"cart_id":item[0],
                     "cart_numero":item[1],
                     "cart_creditos":float(item[2]),
                     "tipo_id":item[3]
@@ -164,7 +163,6 @@ class CartaoJson(ServidorRestful):
     def objeto_json(self, obj):
         if obj:
             cartao = {
-                #"cart_id":obj.id,
                 "cart_numero":obj.numero,
                 "cart_creditos":float(obj.creditos),
                 "tipo_id":obj.tipo

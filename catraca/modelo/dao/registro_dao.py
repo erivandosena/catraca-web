@@ -91,8 +91,8 @@ class RegistroDAO(ConexaoGenerica):
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
                 obj = cursor.fetchone()
-                if obj != (0L,):
-                    return obj
+                if obj[0] > 0:
+                    return obj[0]
                 else:
                     return None
         except Exception as excecao:
@@ -110,9 +110,7 @@ class RegistroDAO(ConexaoGenerica):
               "catr_id, "\
               "vinc_id "\
               "FROM registro WHERE "\
-              "regi_data BETWEEN " + str(data_ini) +\
-              " AND " + str(data_fim) +\
-              " ORDER BY regi_data DESC"
+              "regi_data BETWEEN " + str(data_ini) + " AND " + str(data_fim)
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -133,10 +131,12 @@ class RegistroDAO(ConexaoGenerica):
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
                 obj = cursor.fetchone()
-                if obj != (None,):
-                    return ((int)(obj[0]))
+#                 if obj != (None,):
+                if obj[0] > 0:
+                    return obj[0]
                 else:
                     return 0
+                
         except Exception as excecao:
             self.aviso = str(excecao)
             self.log.logger.error('[registro] Erro ao realizar SELECT.', exc_info=True)
@@ -191,7 +191,7 @@ class RegistroDAO(ConexaoGenerica):
                           "regi_valor_pago = " + str(obj.pago) + ", " +\
                           "regi_valor_custo = " + str(obj.custo) + ", " +\
                           "cart_id = " + str(obj.cartao) + ", " +\
-                          "catr_id = " + str(obj.cartao) + ", " +\
+                          "catr_id = " + str(obj.catraca) + ", " +\
                           "vinc_id = " + str(obj.vinculo) +\
                           " WHERE "\
                           "regi_id = " + str(obj.id)

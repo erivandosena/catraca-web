@@ -2,7 +2,7 @@
 -- Autor_script : Erivando Sena
 -- Copyright    : Unilab
 -- Data_criacao : 16/10/2015
--- Data_revisao : 02/12/2015
+-- Data_revisao : 12/12/2015
 -- Status       : Desenvolvimento
 ---------------------------------
 
@@ -72,7 +72,7 @@ COMMENT ON CONSTRAINT pk_tipo_id ON tipo IS 'Chave primaria da tabela tipo.';
 CREATE TABLE cartao
 (
   cart_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
-  cart_numero bigint, -- Numero ID do cartao Smart Card sem permissao de duplicidade.
+  cart_numero character varying(10), -- Numero ID do cartao Smart Card sem permissao de duplicidade.
   cart_creditos numeric(8,2), -- Total de creditos em R$ para uso do cartao.
   tipo_id integer NOT NULL, -- Campo para chave estrangeira da tabela tipo.
   CONSTRAINT pk_cart_id PRIMARY KEY (cart_id), -- Chave primaria da tabela cartao.

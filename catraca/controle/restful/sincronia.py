@@ -27,20 +27,33 @@ class Sincronia(Relogio):
     def run(self):
         print "%s. Rodando... " % self.name
         while True:
-            print "periodo --------<SINCRONIA>------ "+str(Relogio.periodo)
+            print "|-------------<SINCRONIA "+str(Relogio.periodo)+">---------o"
             self.executa_controle_recursos()
             sleep(self.intervalo)
 
     def executa_controle_recursos(self):
-        #while True:
         self.contador_status_recursos += 1
-        print self.contador_status_recursos
+        print "|-------------<RECURSOS "+str(Relogio.hora)+">---------o"
         if (Relogio.periodo == True) and (self.contador_status_recursos >= 10):
-            self.obtem_recurso_servidor(False, True, False)
-        elif (Relogio.periodo == False) and (self.contador_status_recursos >= 1800):
-            self.obtem_recurso_servidor(False, True, True)
-              
-    def obtem_recurso_servidor(self, display=False, mantem_tabela=False, limpa_tabela=False):
-        self.contador_status_recursos = 0
-        self.recursos_restful.obtem_recursos(display, mantem_tabela, limpa_tabela)
-        
+            self.contador_status_recursos = 0
+            self.recursos_restful.obtem_recursos(False, True, False)
+        elif (Relogio.periodo == False) and (str(Relogio.hora) == "00:00:01"):
+            self.util.beep_buzzer(855, .5, 1)
+            #self.obtem_recurso_servidor(False, False, True)
+            self.aviso.exibir_aguarda_sincronizacao()
+            self.recursos_restful.catraca_json.mantem_tabela_local(None, True)
+            #self.recursos_restful.mensagem_json.mantem_tabela_local(None, True)
+            self.recursos_restful.unidade_json.mantem_tabela_local(None, True)
+            #self.recursos_restful.catraca_unidade_json.mantem_tabela_local(None, True)
+            self.recursos_restful.turno_json.mantem_tabela_local(None, True)
+            #self.recursos_restful.unidade_turno_json.mantem_tabela_local(None, True)
+            self.recursos_restful.tipo_json.mantem_tabela_local(None, True)
+            self.recursos_restful.usuario_json.mantem_tabela_local(None, True)
+            self.recursos_restful.custo_refeicao_json.mantem_tabela_local(None, True)
+            #self.recursos_restful.cartao_json.mantem_tabela_local(None, True)
+            #self.recursos_restful.isencao_json.mantem_tabela_local(None, True)
+            #self.recursos_restful.vinculo_json.mantem_tabela_local(None, True)
+            #self.recursos_restful.registro_json.mantem_tabela_local(None, True)
+            sleep(2)
+            self.recursos_restful.obtem_recursos(True, True, False)
+            

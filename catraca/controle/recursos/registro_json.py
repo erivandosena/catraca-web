@@ -88,9 +88,9 @@ class RegistroJson(ServidorRestful):
                         for item in LISTA_JSON:
                             obj = self.dict_obj_utilizacao(item)
                             if obj:
-                                return obj
+                                return int(obj)
                             else:
-                                return None
+                                return 0
                 else:
                     return None
         except Exception as excecao:

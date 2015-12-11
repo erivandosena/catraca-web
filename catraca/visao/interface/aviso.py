@@ -99,7 +99,7 @@ class Aviso(object):
         self.display.mensagem('AGUARDE'.center(16) +'\n'+ 'LIBERACAO!'.center(16), 0, False, False)
         
     def exibir_aguarda_sincronizacao(self):
-        self.display.mensagem('SINCRONIZANDO...'.center(16) +'\n'+ 'AGUARDE!'.center(16), 0, False, False)
+        self.display.mensagem('SINCRONIZANDO...'.center(16) +'\n'+ 'AGUARDE!'.center(16), 1, False, False)
 
     def exibir_reinicia_catraca(self):
         self.display.mensagem("REINICIANDO...".center(16) +"\n"+ "CATRACA".center(16), 4, False, False)

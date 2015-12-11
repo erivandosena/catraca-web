@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
 import csv
 import locale
 import threading
@@ -44,11 +45,9 @@ class LeitorCartao(Relogio):
     custo_refeicao_dao = CustoRefeicaoDAO()
     D0 = pino_controle.ler(17)['gpio']
     D1 = pino_controle.ler(27)['gpio']
-    bits = '' #11101110000100010000010011101110
+    bits = '' #11101110000100010000010011101110 #10111111010000100010001101010
     numero_cartao = None
     CATRACA = None
-    #TURNO = None
-    #PERIODO = False
     CARTAO = None
     contador_local = 0
     
@@ -66,7 +65,7 @@ class LeitorCartao(Relogio):
         self.pino_controle.evento_both(self.D1, self.um)
         
         while True:
-            print "periodo --------<LEITOR>------ "+str(Relogio.periodo)
+            print "|-------------<LEITOR "+str(Relogio.periodo)+">---------o"
             self.CATRACA = Relogio.catraca
             if self.CATRACA:
                 self.ler()
@@ -88,17 +87,20 @@ class LeitorCartao(Relogio):
                     print self.bits
                     self.aviso.exibir_aguarda_consulta()
                     self.log.logger.info('Binario obtido corretamente. [Cartao n.] '+str(self.bits))
-                    id = int(str(self.bits), 2)
-                    if (len(self.bits) == 32) and (len(str(id)) == 10):
+                    id = str(int(self.bits, 2))
+                    id = id.zfill(10)
+                    print id
+                    if (len(self.bits) == 32) and (len(id) == 10):
                         self.numero_cartao = id
                         self.util.beep_buzzer(860, .1, 1)
                         return self.numero_cartao
                     else:
+                        self.log.logger.warn('Binario ou inteiro obtido incorretamente. [cartao n.] ' + str(self.bits), exc_info=True)
                         self.util.beep_buzzer(250, .1, 3) #0 seg.
                         self.aviso.exibir_erro_leitura_cartao()
                         self.bloqueia_acesso()
                         id = None
-                        return id
+                        return None
                 else:
                     return id
         except Exception as excecao:
@@ -239,24 +241,6 @@ class LeitorCartao(Relogio):
                 
                 # atualiza cartao remoto
                 cartao_json.objeto_json(cartao)
-                
-#                 # atualiza cartao local
-#                 if self.cartao_dao.busca(cartao.id):
-#                     self.cartao_dao.atualiza_exclui(cartao, False)
-#                     self.cartao_dao.commit()
-#                     print self.cartao_dao.aviso
-#                     
-
-
-#                 # atualiza registro local
-#                 registro_id = self.registro_dao.busca_ultimo_registro()
-#                 if registro_id == 0:
-#                     registro_id = 1
-#                 else:
-#                     registro_id += 1
-#                 registro.id = registro_id
-#                 self.registro_dao.insere(registro)
-#                 print self.registro_dao.aviso
             else:
                 cartao = None
                 registro = None
@@ -300,7 +284,7 @@ class LeitorCartao(Relogio):
             #local
             limite_utilizacao = self.registro_dao.busca_utilizacao(Relogio.hora_inicio, Relogio.hora_fim, cartao_id)
         if limite_utilizacao:
-            return ((int)(limite_utilizacao))
+            return limite_utilizacao
         else:
             return 0
         
@@ -313,8 +297,7 @@ class LeitorCartao(Relogio):
         if custo_refeicao_atual:
             return float(custo_refeicao_atual.valor)
         else:
-            return None
-        
+            return 0.00
         
     def bloqueia_acesso(self):
         self.aviso.exibir_acesso_bloqueado()

@@ -63,17 +63,17 @@ class RecursosRestful(object):
         self.obtem_registro(display, mantem_tabela, limpa_tabela)
         
     def obtem_catraca(self, display=False, mantem_tabela=False, limpa_tabela=False):
-        print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CATRACA"
-        try:
-            if display:
-                self.aviso.exibir_obtendo_recursos("Catraca")
-            self.catraca_json.catraca_get(mantem_tabela, limpa_tabela)
-        finally:
-            if display:
-                self.aviso.exibir_aguarda_cartao()
+        print "|---------------------------------------------------------------<CATRACA>---------o"
+        catraca = None
+        if display:
+            self.aviso.exibir_obtendo_recursos("Catraca")
+        catraca = self.catraca_json.catraca_get(mantem_tabela, limpa_tabela)
+        if display:
+            self.aviso.exibir_aguarda_cartao()
+        return catraca
                 
     def obtem_mensagem(self, display=False, mantem_tabela=False, limpa_tabela=False):
-        print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> MENSAGEM"
+        print "|---------------------------------------------------------------<MENSAGEM>---------o"
         try:
             if display:
                 self.aviso.exibir_obtendo_recursos("Mensagem")
@@ -83,7 +83,7 @@ class RecursosRestful(object):
                 self.aviso.exibir_aguarda_cartao()
                 
     def obtem_unidade(self, display=False, mantem_tabela=False, limpa_tabela=False):
-        print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> UNIDADE"
+        print "|---------------------------------------------------------------<UNIDADE>---------o"
         try:
             if display:
                 self.aviso.exibir_obtendo_recursos("Unidade")
@@ -93,7 +93,7 @@ class RecursosRestful(object):
                 self.aviso.exibir_aguarda_cartao()
                 
     def obtem_catraca_unidade(self, display=False, mantem_tabela=False, limpa_tabela=False):
-        print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CATRACA UNIDADE"
+        print "|---------------------------------------------------------------<CATRACA UNIDADE>---------o"
         try:
             if display:
                 self.aviso.exibir_obtendo_recursos("Catraca Unidade")
@@ -103,7 +103,7 @@ class RecursosRestful(object):
                 self.aviso.exibir_aguarda_cartao()
                 
     def obtem_turno(self, display=False, mantem_tabela=False, limpa_tabela=False):
-        print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> TURNO"
+        print "|---------------------------------------------------------------<TURNO>---------o"
         try:
             if display:
                 self.aviso.exibir_obtendo_recursos("Turno")
@@ -113,7 +113,7 @@ class RecursosRestful(object):
                 self.aviso.exibir_aguarda_cartao()
                 
     def obtem_unidade_turno(self, display=False, mantem_tabela=False, limpa_tabela=False):
-        print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> UNIDADE TURNO"
+        print "|---------------------------------------------------------------<UNIDADE TURNO>---------o"
         try:
             if display:
                 self.aviso.exibir_obtendo_recursos("Unidade Turno")
@@ -123,7 +123,7 @@ class RecursosRestful(object):
                 self.aviso.exibir_aguarda_cartao()
                 
     def obtem_tipo(self, display=False, mantem_tabela=False, limpa_tabela=False):
-        print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> TIPO"
+        print "|---------------------------------------------------------------<TIPO>---------o"
         try:
             if display:
                 self.aviso.exibir_obtendo_recursos("Tipo")
@@ -133,7 +133,7 @@ class RecursosRestful(object):
                 self.aviso.exibir_aguarda_cartao()
                 
     def obtem_usuario(self, display=False, mantem_tabela=False, limpa_tabela=False):
-        print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> USUARIO"
+        print "|---------------------------------------------------------------<USUARIO>---------o"
         try:
             if display:
                 self.aviso.exibir_obtendo_recursos("Usuario")
@@ -143,7 +143,7 @@ class RecursosRestful(object):
                 self.aviso.exibir_aguarda_cartao()
                 
     def obtem_custo_refeicao(self, display=False, mantem_tabela=False, limpa_tabela=False):
-        print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CUSTO REFEICAO"
+        print "|---------------------------------------------------------------<CUSTO REFEICAO>---------o"
         try:
             if display:
                 self.aviso.exibir_obtendo_recursos("Custo Refeicao")
@@ -153,7 +153,7 @@ class RecursosRestful(object):
                 self.aviso.exibir_aguarda_cartao()
                 
     def obtem_cartao(self, display=False, mantem_tabela=False, limpa_tabela=False):
-        print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> CARTAO"
+        print "|---------------------------------------------------------------<CARTAO>---------o"
         try:
             if display:
                 self.aviso.exibir_obtendo_recursos("Cartao")
@@ -163,7 +163,7 @@ class RecursosRestful(object):
                 self.aviso.exibir_aguarda_cartao()
                 
     def obtem_vinculo(self, display=False, mantem_tabela=False, limpa_tabela=False):
-        print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> VINCULO"
+        print "|---------------------------------------------------------------<VINCULO>---------o"
         try:
             if display:
                 self.aviso.exibir_obtendo_recursos("Vinculo")
@@ -173,7 +173,7 @@ class RecursosRestful(object):
                 self.aviso.exibir_aguarda_cartao()
                 
     def obtem_isencao(self, display=False, mantem_tabela=False, limpa_tabela=False):
-        print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ISENCAO"
+        print "|---------------------------------------------------------------<ISENCAO>---------o"
         try:
             if display:
                 self.aviso.exibir_obtendo_recursos("Isencao")
@@ -183,7 +183,7 @@ class RecursosRestful(object):
                 self.aviso.exibir_aguarda_cartao()
                 
     def obtem_registro(self, display=False, mantem_tabela=False, limpa_tabela=False):
-        print ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> REGISTRO"
+        print "|---------------------------------------------------------------<REGISTRO>---------o"
         try:
             if display:
                 self.aviso.exibir_obtendo_recursos("Registro")
