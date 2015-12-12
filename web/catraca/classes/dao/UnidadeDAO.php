@@ -93,18 +93,37 @@ class UnidadeDAO extends DAO {
 	}
 	
 	public function totalDeGirosDaCatracaTurnoAtual(Catraca $catraca){
-		$dataTimeAtual = date ( "G:i:s" );
-		$idCatraca = $catraca->getId();
-		$sql = "SELECT sum(1) as resultado FROM registro INNER JOIN catraca ON registro.catr_id = catraca.catr_id
-		WHERE catraca.catr_id = $idCatraca  AND '$dataTimeAtual' BETWEEN turno.turn_hora_inicio AND turno.turn_hora_fim";
-	
 		$resultado = 0;
-		foreach ($this->getConexao()->query($sql) as $linha){
-			$resultado = $linha['resultado'];
+		$idCatraca = $catraca->getId();
+		$turno = $this->pegaTurnoAtualSeExistir();
+		if($turno){
+			$horaInicial = $turno->getHoraInicial();
+			$horaFinal = $turno->getHoraFinal();
+			$sql = "SELECT sum(1) as resultado FROM registro INNER JOIN catraca ON registro.catr_id = catraca.catr_id
+			WHERE catraca.catr_id = $idCatraca AND registro.regi_data BETWEEN '$horaInicial' AND '$horaFinal'";
+			foreach ($this->getConexao()->query($sql) as $linha){
+				$resultado = $linha['resultado'];
+			}
 		}
+		
+	
+		
+		
 		return $resultado;
 	}
-	
+	public function pegaTurnoAtualSeExistir(){
+		$dataTimeAtual = date ( "G:i:s" );
+		$sql = "Select * FROM turno WHERE '$dataTimeAtual' BETWEEN turno.turn_hora_inicio AND turno.turn_hora_fim";
+		$result = $this->conexao->query($sql);
+		$turno = null;
+		foreach ($result as $linha){
+			$turno = new Turno();
+			$turno->setHoraInicial($linha['turn_hora_inicio']);
+			$turno->setHoraFinal($linha['turn_hora_fim']);
+			
+		}
+		return $turno;
+	}
 	public function preencheCatracaPorId(Catraca $catraca){
 		$idCatraca = $catraca->getId();
 		$sql = "

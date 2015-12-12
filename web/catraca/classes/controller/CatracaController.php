@@ -43,7 +43,8 @@ class CatracaController {
 			$listaDeCatracas = $unidadeDao->retornaCatracasPorUnidade($unidade);
 			foreach ($listaDeCatracas as $catraca){
 				$valor = $unidadeDao->totalDeGirosDaCatraca($catraca);
-				$this->view->mostraCatraca($catraca, 0, $valor);
+				$outroValor = $unidadeDao->totalDeGirosDaCatracaTurnoAtual($catraca);
+				$this->view->mostraCatraca($catraca, $outroValor, $valor);
 				
 			}
 			$this->view->fechaContainer();
@@ -67,7 +68,7 @@ class CatracaController {
 			$unidadeDao->preencheCatracaPorId($catraca);
 			$valor = $unidadeDao->totalDeGirosDaCatraca($catraca);
 			$outroValor = $unidadeDao->totalDeGirosDaCatracaTurnoAtual($catraca);
-			$this->view->detalheCatraca($catraca, $valor, $outroValor);
+			$this->view->detalheCatraca($catraca, $outroValor, $valor);
 			
 		}
 		
