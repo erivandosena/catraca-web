@@ -177,7 +177,7 @@ class CatracaView{
 	
 	
 	
-	public function detalheCatraca(Catraca $catraca){
+	public function detalheCatraca(Catraca $catraca, $valor = 0, $outroValor= 0){
 		echo '<div class="doze colunas">
 							<div id="titulo" class="doze colunas fundo-azul2 centralizado ">
 								<h1 class="texto-branco">Visualização de Catracas</h1>
@@ -248,8 +248,8 @@ class CatracaView{
 									<span>IP: '.$catraca->getIp().'</span><br>
 									<span>Operação: '.$catraca->getStrOperacao().'</span><br>
 									<span>Tempo de Giro: '.$catraca->getTempodeGiro().'</span><br>
-									<span>Giros Por Turno: 00</span><br>
-									<span>Total de Giros: 00</span><br>
+									<span>Giros Por Turno: '.$valor.'</span><br>
+									<span>Total de Giros: '.$outroValor.'</span><br>
 									<hr class="solida" />
 									<span>Unidade Acadêmica: '.$catraca->getUnidade()->getNome().'</span><br>
 									<span>IP: '.$catraca->getIp().'</span>						

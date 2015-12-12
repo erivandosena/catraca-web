@@ -25,8 +25,10 @@ class CatracaController {
 			foreach ($lista as $unidadeAcademica){
 				$catracasDessaUnidade = $unidadeDao->retornaCatracasPorUnidade($unidadeAcademica);
 				$i = 0;
+				$j = 0;
 				foreach ($catracasDessaUnidade as $catracaDessaUnidade){
-					$i += $unidadeDao->totalDeGirosDaCatraca($catracaDessaUnidade);					
+					$i += $unidadeDao->totalDeGirosDaCatraca($catracaDessaUnidade);
+					$j += $unidadeDao->totalDeGirosDaCatracaTurnoAtual($catracaDessaUnidade);				
 				}
 				$this->view->mostrarUnidade($unidadeAcademica, count($catracasDessaUnidade) , $i);
 				
@@ -50,9 +52,11 @@ class CatracaController {
 			$this->view->abreContainer();
 			//Script do Ajax pra atualizar a lista de catracas.
 			$listaDeCatracas = $unidadeDao->retornaCatracasPorUnidade();
+			
 			foreach ($listaDeCatracas as $catraca){
 				$valor = $unidadeDao->totalDeGirosDaCatraca($catraca);
-				$this->view->mostraCatraca($catraca, 0, $valor);
+				$outroValor = $unidadeDao->totalDeGirosDaCatracaTurnoAtual($catraca);
+				$this->view->mostraCatraca($catraca, $outroValor, $valor);
 				
 			}
 			$this->view->fechaContainer();
@@ -61,7 +65,9 @@ class CatracaController {
 			$catraca = new Catraca();
 			$catraca->setId(intval($_GET['detalhe']));
 			$unidadeDao->preencheCatracaPorId($catraca);
-			$this->view->detalheCatraca($catraca);
+			$valor = $unidadeDao->totalDeGirosDaCatraca($catraca);
+			$outroValor = $unidadeDao->totalDeGirosDaCatracaTurnoAtual($catraca);
+			$this->view->detalheCatraca($catraca, $valor, $outroValor);
 			
 		}
 		

@@ -80,13 +80,31 @@ class UnidadeDAO extends DAO {
 
 	public function totalDeGirosDaCatraca(Catraca $catraca){
 		$idCatraca = $catraca->getId();
-		$sql = "SELECT sum(1) as resultado FROM registro INNER JOIN catraca ON registro.catr_id = catraca.catr_id";
+		$filtro = "";
+		
+		$sql = "SELECT sum(1) as resultado FROM registro INNER JOIN catraca ON registro.catr_id = catraca.catr_id
+				WHERE catraca.catr_id = $idCatraca $filtro";
+		
 		$resultado = 0;
 		foreach ($this->getConexao()->query($sql) as $linha){
 			$resultado = $linha['resultado'];
 		}
 		return $resultado;
 	}
+	
+	public function totalDeGirosDaCatracaTurnoAtual(Catraca $catraca){
+		$dataTimeAtual = date ( "G:i:s" );
+		$idCatraca = $catraca->getId();
+		$sql = "SELECT sum(1) as resultado FROM registro INNER JOIN catraca ON registro.catr_id = catraca.catr_id
+		WHERE catraca.catr_id = $idCatraca  AND '$dataTimeAtual' BETWEEN turno.turn_hora_inicio AND turno.turn_hora_fim";
+	
+		$resultado = 0;
+		foreach ($this->getConexao()->query($sql) as $linha){
+			$resultado = $linha['resultado'];
+		}
+		return $resultado;
+	}
+	
 	public function preencheCatracaPorId(Catraca $catraca){
 		$idCatraca = $catraca->getId();
 		$sql = "
@@ -101,7 +119,8 @@ class UnidadeDAO extends DAO {
 			$catraca->setId ( $linha ['catraca_id'] );
 			$catraca->setOperacao($linha['catr_operacao']);
 			$catraca->setTempoDeGiro($linha['catr_tempo_giro']);
-			$catraca->setIp($linha['catraca_id']);
+			$catraca->setIp($linha['catr_ip']);
+			
 			$catraca->setUnidade(new Unidade());
 			$catraca->getUnidade()->setNome($linha['unid_nome']);
 				
