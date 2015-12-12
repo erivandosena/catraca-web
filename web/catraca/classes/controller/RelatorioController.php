@@ -18,14 +18,7 @@ class RelatorioController{
 	
 	
 	public function relatorio(){
-		echo '<section id="navegacao">							
-							<!--Tabs-->	
-							<ul class="nav nav-tabs">
-								<li role="presentation" class="active"><a href="#tab1" data-toggle="tab">Relatórios</a></li>								
-							</ul>
-							<div class="tab-content">
-								<div class="tab-pane active" id="tab1">									
-									<div class="borda">
+		echo '<div class="borda">
 									<form action="" class="formulario sequencial">									
 											<div id="data">
 												<label for="opcoes-1">

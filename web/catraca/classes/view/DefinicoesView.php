@@ -273,6 +273,7 @@ class DefinicoesView{
 	}
 	public function formEditarCatraca(Catraca $catraca, $listaDeUnidades){
 	
+		
 		echo '<div class="borda">
 						Editar Catraca : '.$catraca->getNome().' IP: '.$catraca->getIp().'
 						<form action="" method="post" class="formulario sequencial">';

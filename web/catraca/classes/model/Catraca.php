@@ -8,6 +8,10 @@ class Catraca{
 	private $tempoDeGiro;
 	private $operacao;
 	private $unidade;
+	public function Catraca(){
+		$this->unidade = new Unidade();
+	}
+	
 	public function setUnidade(Unidade $unidade){
 		$this->unidade = $unidade;
 	}

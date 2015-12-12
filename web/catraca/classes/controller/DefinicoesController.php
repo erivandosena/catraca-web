@@ -110,7 +110,11 @@ class DefinicoesController {
 			$catraca = new Catraca();
 			$catraca->setId($_GET['editar_catraca']);
 			$listaDeUnidades = $unidadeDao->retornaLista();
+
+			
+			
 			$unidadeDao->preencheCatracaPorId($catraca);
+			
 			$this->view->formEditarCatraca($catraca, $listaDeUnidades);
 			
 			if(isset($_POST['salvar'])){
@@ -258,73 +262,45 @@ class DefinicoesController {
 	public function telaDefinicoes() {
 		$this->dao = new DAO ( null, DAO::TIPO_PG_LOCAL );
 		$this->view = new DefinicoesView ();
-		echo '<section id="navegacao">
-				<ul class="nav nav-tabs">';
-		$selecaoUnidade = "active";
-		$selecaoTurnos = "";
-		$selecaoTipos = "";
-		$selecaoCustos = "";
-		$selecaoCatracas = "";
-		if (isset ( $_GET ['cadastrar_unidade'] ) || isset ( $_POST ['certeza_cadastrar_unidade'] )) {
-			$selecaoUnidade = "active";
-			$selecaoTurnos = "";
-			$selecaoTipos = "";
-			$selecaoCatracas = "";
-			$selecaoCustos = "";
-		} else if (isset ( $_POST ['certeza_cadastrar_turno'] ) || isset ( $_GET ['cadastrar_turno'] )) {
-			$selecaoUnidade = "";
-			$selecaoTurnos = "active";
-			$selecaoTipos = "";
-			$selecaoCatracas = "";
-			$selecaoCustos = "";
-		} else if (isset ( $_GET ['cadastrar_tipo'] ) || isset ( $_POST ['certeza_cadastrar_tipo'] )) {
-			$selecaoUnidade = "";
-			$selecaoTurnos = "";
-			$selecaoCatracas = "";
-			$selecaoTipos = "active";
-			$selecaoCustos = "";
-		} else if (isset ( $_GET ['custo_cartao'] ) || isset ( $_GET ['custo_refeicao'] )) {
-			$selecaoUnidade = "";
-			$selecaoTurnos = "";
-			$selecaoCatracas = "";
-			$selecaoTipos = "";
-			$selecaoCustos = "active";
-		}
 		
-		else if(isset($_GET['editar_catraca']) || isset($_GET['lista_catracas'])){
-			$selecaoUnidade = "";
-			$selecaoTurnos = "";
-			$selecaoCatracas = "active";
-			$selecaoTipos = "";
-			$selecaoCustos = "";
-		}
-		echo '
-					<li role="presentation" class="' . $selecaoUnidade . '"><a href="#tab1" data-toggle="tab">Unidades Acadêmicas</a></li>
-					<li role="presentation" class="' . $selecaoTurnos . '"><a href="#tab2" data-toggle="tab">Turnos</a></li>
-					<li role="presentation" class="' . $selecaoCatracas . '"><a href="#tab3" data-toggle="tab">Catracas</a></li>							
-					<li role="presentation" class="' . $selecaoTipos . '"><a href="#tab4" data-toggle="tab">Tipos de Usuários</a></li>
-					<li role="presentation" class="' . $selecaoCustos . '"><a href="#tab5" data-toggle="tab">Custos</a></li>
+		
+		echo '<div class="borda conteudo"> <div class = "simpleTabs">
+		        <ul class = "simpleTabsNavigation">
+		            <li><a href="#">Unidades Acadêmicas</a></li>
+					<li><a href="#">Turnos</a></li>
+					<li><a href="#">Catracas</a></li>							
+					<li><a href="#">Tipos de Usuários</a></li>
+					<li><a href="#">Custos</a></li>
+		        </ul>
+		        
 				
-							';
+				<div class = "simpleTabsContent"> ';
+		  $this->telaConfiguracaoUnidadeAcademica ();
+		  
+		  echo ' 
+		  		</div>
+		        <div class = "simpleTabsContent">';
+		  		
+		  
+		  $this->telaConfiguracaoDeTurnos ();
+		  
+		  echo '</div>
+		        <div class = "simpleTabsContent">';
+		  $this->telaCatracas();
+		  echo '</div>   		
+		  		<div class = "simpleTabsContent">';
+		   
+		  $this->telaTiposDeUsuarios ();
+		  		
+		  echo '	</div>
+		        	<div class = "simpleTabsContent">';
+		  $this->telaDeCustos ();
+		  
+		 echo '
+		 	 </div>
+		 			
+			</div>';
 		
-		echo '
-				</ul><div class="tab-content">';
-		echo '<div class="tab-pane ' . $selecaoUnidade . '" id="tab1">';
-		$this->telaConfiguracaoUnidadeAcademica ();
-		echo '</div>';
-		echo '<div class="tab-pane ' . $selecaoTurnos . '" id="tab2">';
-		$this->telaConfiguracaoDeTurnos ();
-		echo '</div>';
-		echo '<div class="tab-pane ' . $selecaoCatracas . '" id="tab3">';
-		$this->telaCatracas();
-		echo '</div>';
-		echo '<div class="tab-pane ' . $selecaoTipos . '" id="tab4">';
-		$this->telaTiposDeUsuarios ();
-		echo '</div>';
-		echo '<div class="tab-pane ' . $selecaoCustos . '" id="tab5">';
-		$this->telaDeCustos ();
-		echo '</div>';
-		echo '</section>';
 	}
 }
 

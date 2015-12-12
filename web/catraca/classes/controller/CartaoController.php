@@ -19,58 +19,40 @@ class CartaoController{
 	
 	public function telaCartao(){
 		
+
 		$this->view = new CartaoView();
+		echo '<div class="borda conteudo"> <div class = "simpleTabs">
+		        <ul class = "simpleTabsNavigation">
+				
+					<li><a href="#">Usu&aacute;rios</a></li>
+					<li><a href="#">Cart&otilde;es</a></li>
+					<li><a href="#">Vínculos</a></li>
+					<li><a href="#">Isenções</a></li>
+				
+
+		        </ul>
+		        <div class = "simpleTabsContent">';
 		
-		echo '<section id="navegacao">
-				<ul class="nav nav-tabs">';
-		$selecaoUsuarios = "active";
-		$selecaoCartoes = "";
-		$selecaoVinculos = "";
-		$selecaoIsencoes = "";
-		if(isset($_GET['selecionado']) || isset ( $_GET ['nome'] ) || isset($_GET['vinculoselecionado'])){
-			$selecaoUsuarios = "active";
-			$selecaoCartoes = "";
-			$selecaoVinculos = "";
-			$selecaoIsencoes = "";
-		}else if(isset($_GET['cartaoselecionado']) || isset ( $_GET ['numero'])){
-			$selecaoUsuarios = "";
-			$selecaoCartoes = "active";
-			$selecaoVinculos = "";
-			$selecaoIsencoes = "";
-		}else if(isset($_GET['filtro_data']) || isset ( $_GET ['busca_vinculos']) || isset($_GET['vinculos_validos'])){
-			$selecaoUsuarios = "";
-			$selecaoCartoes = "";
-			$selecaoVinculos = "active";
-			$selecaoIsencoes = "";
-		}else if(isset($_GET['filtro_data_isen']) || isset ( $_GET ['busca_vinculos_isen']) || isset($_GET['vinculos_validos_isen'])){
-			$selecaoUsuarios = "";
-			$selecaoCartoes = "";
-			$selecaoVinculos = "";
-			$selecaoIsencoes = "active";
-		}
-		echo '
-					<li role="presentation" class="'.$selecaoUsuarios.'"><a href="#tab1" data-toggle="tab">Usu&aacute;rios</a></li>
-					<li role="presentation" class="'.$selecaoCartoes.'"><a href="#tab2" data-toggle="tab">Cart&otilde;es</a></li>
-					<li role="presentation" class="'.$selecaoVinculos.'"><a href="#tab3" data-toggle="tab">Vínculos</a></li>
-					<li role="presentation" class="'.$selecaoIsencoes.'"><a href="#tab4" data-toggle="tab">Isenções</a></li>
-							
-							';
+				$this->pesquisaUsuarioAdicionarVinculo();
+				echo '</div>
+		        <div class = "simpleTabsContent">';
+
+				$this->pesquisaCartaoCancelarVinculo();
+				echo '
+						
+						</div>
+		        <div class = "simpleTabsContent">'; 
+				$this->pesquisaVinculosAtivos();
+				echo '</div>
+						
+						
+						
+				 <div class = "simpleTabsContent">'; 
+					$this->pesquisaIsencoes();
+				echo '</div>
+		    </div></div>';
 		
-		echo '
-				</ul><div class="tab-content">';
-		echo '<div class="tab-pane '.$selecaoUsuarios.'" id="tab1">';
-		$this->pesquisaUsuarioAdicionarVinculo();
-		echo '</div>';
-		echo '<div class="tab-pane '.$selecaoCartoes.'" id="tab2">';
-		$this->pesquisaCartaoCancelarVinculo();
-		echo '</div>';
-		echo '<div class="tab-pane '.$selecaoVinculos.'" id="tab3">';
-		$this->pesquisaVinculosAtivos();
-		echo '</div>';
-		echo '<div class="tab-pane '.$selecaoIsencoes.'" id="tab4">';
-		$this->pesquisaIsencoes();
-		echo '</div>';
-		echo '</section>';
+		
 		
 	}
 	public function pesquisaIsencoes(){
@@ -318,6 +300,7 @@ class CartaoController{
 				// Todos os cadastros inicialmente ser�o n�o avulsos.
 				$vinculo = new Vinculo();
 				$vinculo->setFinalValidade($_POST ['data_validade']);
+				$_SESSION['ultima_hora_inserida'] = $_POST ['data_validade'];
 				$vinculo->getCartao()->getTipo()->setId(intval($_POST ['tipo']));
 				$vinculo->getCartao()->setNumero(intval($_POST ['numero_cartao']));
 				$vinculo->getResponsavel()->setIdBaseExterna(intval($_POST ['id_base_externa']));

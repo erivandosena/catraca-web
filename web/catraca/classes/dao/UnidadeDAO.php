@@ -42,14 +42,20 @@ class UnidadeDAO extends DAO {
 		$lista = array ();
 		if ($unidade != null) {
 			$id = $unidade->getId ();
-			$sql = "SELECT * FROM catraca 
+			$sql = "SELECT 
+			
+					*, catraca.catr_id as catraca_id
+					 
+					FROM catraca 
 					INNER JOIN catraca_unidade
 					ON catraca.catr_id = catraca_unidade.catr_id
 					INNER JOIN unidade
 					ON unidade.unid_id = catraca_unidade.unid_id
 					WHERE unidade.unid_id = $id";
 		} else {
-			$sql = "SELECT * FROM catraca
+			$sql = "SELECT *, catraca.catr_id as 
+					catraca_id
+					 FROM catraca
 					LEFT JOIN catraca_unidade
 					ON catraca.catr_id = catraca_unidade.catr_id
 					LEFT JOIN unidade
@@ -59,10 +65,10 @@ class UnidadeDAO extends DAO {
 		foreach ( $this->getConexao ()->query ( $sql ) as $linha ) {
 			$catraca = new Catraca ();
 			$catraca->setNome ( $linha ['catr_nome'] );
-			$catraca->setId ( $linha ['catr_id'] );
 			$catraca->setOperacao($linha['catr_operacao']);
 			$catraca->setTempoDeGiro($linha['catr_tempo_giro']);
 			$catraca->setIp($linha['catr_ip']);
+			$catraca->setId($linha['catraca_id']);
 			$catraca->setUnidade(new Unidade());
 			$catraca->getUnidade()->setNome($linha['unid_nome']);
 			
@@ -71,21 +77,31 @@ class UnidadeDAO extends DAO {
 		}
 		return $lista;
 	}
+
+	public function totalDeGirosDaCatraca(Catraca $catraca){
+		$idCatraca = $catraca->getId();
+		$sql = "SELECT sum(1) as resultado FROM registro INNER JOIN catraca ON registro.catr_id = catraca.catr_id";
+		$resultado = 0;
+		foreach ($this->getConexao()->query($sql) as $linha){
+			$resultado = $linha['resultado'];
+		}
+		return $resultado;
+	}
 	public function preencheCatracaPorId(Catraca $catraca){
 		$idCatraca = $catraca->getId();
-		$sql = "SELECT * FROM catraca
+		$sql = "
+				SELECT *, catraca.catr_id as catraca_id FROM catraca
 		LEFT JOIN catraca_unidade
 		ON catraca.catr_id = catraca_unidade.catr_id
 		LEFT JOIN unidade
 		ON unidade.unid_id = catraca_unidade.unid_id
 		WHERE catraca.catr_id = $idCatraca";
 		foreach ( $this->getConexao ()->query ( $sql ) as $linha ) {
-			
 			$catraca->setNome ( $linha ['catr_nome'] );
-			$catraca->setId ( $linha ['catr_id'] );
+			$catraca->setId ( $linha ['catraca_id'] );
 			$catraca->setOperacao($linha['catr_operacao']);
 			$catraca->setTempoDeGiro($linha['catr_tempo_giro']);
-			$catraca->setIp($linha['catr_ip']);
+			$catraca->setIp($linha['catraca_id']);
 			$catraca->setUnidade(new Unidade());
 			$catraca->getUnidade()->setNome($linha['unid_nome']);
 				
@@ -104,17 +120,20 @@ class UnidadeDAO extends DAO {
 		
 		
 		$this->getConexao()->beginTransaction();
-		if(!$this->getConexao()->exec("UPDATE catraca SET catr_tempo_giro = $giro, 
+		$sqlUpdate = "UPDATE catraca SET catr_tempo_giro = $giro, 
 						catr_operacao = $operacao
-						WHERE catr_id = $id"))
+						WHERE catr_id = $id";
+		if(!$this->getConexao()->exec($sqlUpdate))
 		{
 			$this->getConexao()->rollBack();
+			echo $sqlUpdate;
 			return false;
 		}		
 		$this->getConexao()->exec("DELETE FROM catraca_unidade WHERE catr_id = $id");
 		if(!$this->getConexao()->exec("INSERT into catraca_unidade(catr_id, unid_id) VALUES($id, $idUnidade)"))
 		{
 			$this->getConexao()->rollBack();
+
 			return false;
 		}
 		$this->getConexao()->commit();

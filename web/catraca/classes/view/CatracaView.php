@@ -2,31 +2,30 @@
 
 
 class CatracaView{
-	
-	
-	public function listaDeUnidadesAcademicas($unidades){
-		
+	public function abreContainer($mensagem = "Selecione uma Catraca"){
 		echo '
 		
-				<div class="doze colunas">
+				<div class="doze colunas"  id="olinda">
 					<div id="titulo" class="doze colunas fundo-azul2 centralizado ">
-						<h1 class="texto-branco">Selecione uma Unidade Acadêmica</h1>
+						<h1 class="texto-branco">'.$mensagem.'</h1>
 					</div>
 		
 					<div class="doze colunas catraca">';
 		
-		foreach ($unidades as $unidade)
-			$this->mostrarUnidade($unidade);
-			
-			
 		
+	}
+	public function fechaContainer(){
 		echo '</div>
-				</div>
-		
-		';
+				</div>';
 	}
 	
-	public function mostrarUnidade(Unidade $unidade){
+	public function listaDeUnidadesAcademicas($unidades){
+		foreach ($unidades as $unidade)
+			$this->mostrarUnidade($unidade);
+		
+	}
+	
+	public function mostrarUnidade(Unidade $unidade, $quantidadeDeCatracas = 0, $catracasFuncionando = 0){
 		
 		echo '<a href="?pagina=catraca&unidade='.$unidade->getId().'"><div class="tres colunas borda fundo-branco catraca-pequeno">
 										<div class="doze colunas">
@@ -80,8 +79,8 @@ class CatracaView{
 												</svg>
 											</div>
 											<div class="oito colunas direita f12">
-												<span class="icone-loop2"> Qnt. Catracas: 0</span>
-												<span class="icone-loop2"> Funcionando: 0</span>
+												<span class="icone-loop2"> Qnt. Catracas: '.$quantidadeDeCatracas.'</span>
+												<span class="icone-loop2"> Registros: '.$catracasFuncionando.'</span>
 											</div>
 										</div>
 									</div>	';
@@ -91,28 +90,19 @@ class CatracaView{
 	
 	
 	public function listaDeCatracas($lista){
-		echo '
 		
-				<div class="doze colunas">
-					<div id="titulo" class="doze colunas fundo-azul2 centralizado ">
-						<h1 class="texto-branco">Selecione uma Catraca</h1>
-					</div>
-		
-					<div class="doze colunas catraca">';
 		
 		foreach ($lista as $catraca)
 			$this->mostraCatraca($catraca);
 			
 			
 		
-		echo '</div>
-				</div>
 		
-		';
 		
 		
 	}
-	public function mostraCatraca(Catraca $catraca){
+	public function mostraCatraca(Catraca $catraca, $girosTurno = 0, $totalDeGiros = 0){
+		
 		echo '<a href="?pagina=catraca&detalhe='.$catraca->getId().'"><div class="tres colunas borda fundo-branco catraca-medio">
 									<div class="doze colunas">
 										<h3 class="centralizado negrito">'.$catraca->getNome().'</h2>
@@ -177,8 +167,8 @@ class CatracaView{
 											</svg>
 										</div>									
 								    	<div class="oito colunas direita f14">
-									    	<span>Giros Por Turno: 00</span>
-									    	<span>Total de Giros: 00</span>
+									    	<span>Giros Por Turno: '.$girosTurno.'</span>
+									    	<span>Total de Giros: '.$totalDeGiros.'</span>
 								    	</div>
 							    	</div>															
 								</div></a>';
@@ -264,9 +254,12 @@ class CatracaView{
 									<span>Unidade Acadêmica: '.$catraca->getUnidade()->getNome().'</span><br>
 									<span>IP: '.$catraca->getIp().'</span>						
 								</div>
-																						
-							</div>
-						</div>';
+
+											
+											
+						</div>
+						</div>													
+							';
 	}
 	
 	

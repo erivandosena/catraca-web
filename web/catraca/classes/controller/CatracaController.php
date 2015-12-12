@@ -17,28 +17,51 @@ class CatracaController {
 		$this->view = new CatracaView ();
 	}
 	public function controlar() {
+		
 		$unidadeDao = new UnidadeDAO ( null, DAO::TIPO_PG_LOCAL );
 		if(!isset($_GET['unidade']) && !isset($_GET['completo']) && !isset($_GET['detalhe'])){
+			$this->view->abreContainer("Selecione uma Unidade Acadêmica");
 			$lista = $unidadeDao->retornaLista ();
-			$this->view->listaDeUnidadesAcademicas ( $lista );
+			foreach ($lista as $unidadeAcademica){
+				$catracasDessaUnidade = $unidadeDao->retornaCatracasPorUnidade($unidadeAcademica);
+				$i = 0;
+				foreach ($catracasDessaUnidade as $catracaDessaUnidade){
+					$i += $unidadeDao->totalDeGirosDaCatraca($catracaDessaUnidade);					
+				}
+				$this->view->mostrarUnidade($unidadeAcademica, count($catracasDessaUnidade) , $i);
+				
+			}
+			$this->view->fechaContainer();
 		}
 		if(isset($_GET['unidade'])){
+			$this->view->abreContainer();
+			
 			$unidade = new Unidade();
 			$unidade->setId(intval($_GET['unidade']));
 			$listaDeCatracas = $unidadeDao->retornaCatracasPorUnidade($unidade);
-			$this->view->listaDeCatracas($listaDeCatracas);
+			foreach ($listaDeCatracas as $catraca){
+				$valor = $unidadeDao->totalDeGirosDaCatraca($catraca);
+				$this->view->mostraCatraca($catraca, 0, $valor);
+				
+			}
+			$this->view->fechaContainer();
 			
 		}else if(isset($_GET['completo'])){
+			$this->view->abreContainer();
+			//Script do Ajax pra atualizar a lista de catracas.
 			$listaDeCatracas = $unidadeDao->retornaCatracasPorUnidade();
-			$this->view->listaDeCatracas($listaDeCatracas);
+			foreach ($listaDeCatracas as $catraca){
+				$valor = $unidadeDao->totalDeGirosDaCatraca($catraca);
+				$this->view->mostraCatraca($catraca, 0, $valor);
+				
+			}
+			$this->view->fechaContainer();
 		}
 		else if(isset($_GET['detalhe'])){
-			
 			$catraca = new Catraca();
 			$catraca->setId(intval($_GET['detalhe']));
 			$unidadeDao->preencheCatracaPorId($catraca);
 			$this->view->detalheCatraca($catraca);
-			
 			
 		}
 		

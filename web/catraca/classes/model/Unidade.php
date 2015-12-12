@@ -14,6 +14,7 @@ class Unidade {
 	private $catracas;
 	public function Unidade() {
 		$this->turnosValidos = array();
+		
 	}
 	
 

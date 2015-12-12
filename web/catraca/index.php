@@ -32,27 +32,20 @@ if (isset ( $_GET ["sair"] )) {
 <head>
 
 <meta charset="UTF-8">
-<meta name="description" content="Curso Bootstrap - PontoCanal" />
 <meta name="viewport"
 	content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no" />
 
 <title>Projeto Catraca</title>
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"
-	integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ=="
-	crossorigin="anonymous">
+
+<script type="text/javascript" src="js/simpletabs_1.3.js"></script>
+
+<link rel="stylesheet" href="css/simpletabs.css" />
 <link rel="stylesheet"
 	href="http://spa.dsi.unilab.edu.br/spa/css/spa.css" />
 <link rel="stylesheet" href="css/estilo.css" type="text/css"
 	media="screen">
-<script
-	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"
-	integrity="sha512-K1qjQ+NcF2TYO/eI3M6v8EiNYZfA95pQumfvcVrTHtwQVDG+aHRqLi/ETn2uB+1JqwYqVG3LIvdm9lj6imS/pQ=="
-	crossorigin="anonymous"></script>
-<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-<script>window.jQuery || document.write('<script src="js/jquery-1.7.1.min.js"><\/script>')</script>
-<script src="js/bootstrap.js"></script>
 
+<script type="text/javascript" src="js/jquery.min.js"></script>
 </head>
 
 <body>
@@ -130,7 +123,7 @@ if (isset ( $_GET ["sair"] )) {
 							            <li><a href="?pagina=definicoes" class="item-vertical"><span class="icone-cogs"></span> <span class="item-vertical-texto">Definições</span></a></li>';
 						echo ' <li><a href="?pagina=catraca" class="item-vertical"><span class="icone-loop2"></span> <span class="item-vertical-texto">Catraca</span></a></li>';
 						echo '          <li><a href="?pagina=cartao" class="item-vertical"><span class="icone-credit-card"></span> <span class="item-vertical-texto">Cartão</span></a></li>';
-						echo ' <li><a href="?pagina=guiche" class="item-vertical"><span class="icone-user"></span> <span class="item-vertical-texto">Guichê</span></a></li>';
+// 						echo ' <li><a href="?pagina=guiche" class="item-vertical"><span class="icone-user"></span> <span class="item-vertical-texto">Guichê</span></a></li>';
 						echo ' <li><a href="?pagina=relatorio" class="item-vertical"><span class="icone-file-text2"></span> <span class="item-vertical-texto">Relatório</span></a></li>';
 						echo '         	<li><a href="?sair=sair" class="item-vertical"><span class="icone-exit"></span> <span class="item-vertical-texto">Sair</span></a></li>';
 						
@@ -148,18 +141,7 @@ if (isset ( $_GET ["sair"] )) {
 						
 					<?php
 					
-					$dao = new DAO(null, DAO::TIPO_PG_LOCAL);
-					
-					foreach ($dao->getConexao()->query("SELECT * FROM registro") as $linha){
-						print_r($linha);
-						echo '<br><hr>';
-					}
 					$nivelNovo = Sessao::NIVEL_SUPER;
-// 					echo $dao->getConexao()->exec("UPDATE usuario SET usua_nivel = $nivelNovo WHERE usua_login like 'jefponte'");
-					
-// 				echo 	$dao->getConexao()->exec("INSERT into unidade_turno(turn_id, unid_id) VALUES(1, 1)");
-// 				echo 	$dao->getConexao()->exec("INSERT into unidade_turno(turn_id, unid_id) VALUES(1, 1)");
-// 				echo 	$dao->getConexao()->exec("INSERT into unidade_turno(turn_id, unid_id) VALUES(1, 1)");
 					
 					
 					if (isset ( $_GET ['pagina'] )) {
@@ -171,43 +153,50 @@ if (isset ( $_GET ["sair"] )) {
 								DefinicoesController::main ( $sessao->getNivelAcesso () );
 								break;
 							case 'catraca' :
+								
+								$filtroIdCatraca = "";
+								if(isset($_GET['unidade'])){
+									$filtroIdCatraca = "unidade=".$_GET['unidade'];
+								}
+								else if(isset($_GET['completo'])){
+									$filtroIdCatraca = "completo=1";
+								}
+								echo '
+		
+										<script>
+											var auto_refresh = setInterval (
+												function () {
+													$.ajax({
+														url: \'catracas.php?'.$filtroIdCatraca.'\',
+														success: function (response) {
+														$(\'#olinda\').html(response);
+													}
+												});
+											}, 1000);
+										</script>
+								';
 								CatracaController::main($sessao->getNivelAcesso());
 								break;
 							case 'cartao' :
+
+				
+								
 								CartaoController::main ( $sessao->getNivelAcesso () );
 								
 								break;
-							case 'guiche' :
-								echo '
+// 							case 'guiche' :
+// 								echo '
 								
 									
-										<div class="borda conteudo">
+// 										<div class="borda conteudo">
 											
-										<h2> A interface do Guichê será entregue em 08/12/2015, contendo:</h2>
-											<ul class="conteudo">
-												<li>Realização de cadastro de cartões com vínculo a usuário</li>
-												<li>Venda de créditos pesquisando usuário por nome ou cartão</li>
-											</ul>
-										
-											<h2> A página Administrativa Guichê será entregue em 15/12/2015, contendo:</h2>
-											<ul class="conteudo">
-												<li>Visualização de Guichê</li>
-												<li>Realização de Sangria</li>
-												<li>Caixa administrativo</li>
-											</ul>
-							
-											<h2> A página de Usuário Padrão será entregue em 22/12/2015, contendo:</h2>
-											<ul class="conteudo">
-												<li>Histórico pessoal de cartão</li>
-												<li>Histórico de alimentação</li>
-												<li>Exibição de créditos</li>
-											</ul>
-										<p>Ver link: <a href="reuniao.php">Reunião</a></p>
-										</div>
+// 										<h2> Ainda não desenvolvida.</h2>
+											
+// 										</div>
 			
 			
-									';
-								break;
+// 									';
+// 								break;
 							case 'relatorio' :
 								RelatorioController::main($sessao->getNivelAcesso());
 								break;

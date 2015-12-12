@@ -244,7 +244,10 @@ class CartaoView {
 	public function mostraFormAdicionarVinculo($listaDeTipos, $idSelecionado){
 		$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'H:00:01' );
 		$dataHoje = date ('Y-m-d') . 'T' . date ( 'H:00:01' );
-			
+		if(isset($_SESSION['ultima_hora_inserida'])){
+			$daqui3Meses = $_SESSION['ultima_hora_inserida'];
+		}
+		
 		echo '<div class="borda">
 				<script type="text/javascript">
 				function modificaForm(campoCheck){
