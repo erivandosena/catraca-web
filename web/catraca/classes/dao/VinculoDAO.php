@@ -402,10 +402,11 @@ class VinculoDAO extends DAO {
 	 */
 	public function cartaoTemVinculo(Cartao $cartao){
 		$numero = $cartao->getNumero();
+		
 		$dataTimeAtual = date ( "Y-m-d G:i:s" );
 		$sql =  "SELECT * FROM vinculo
 		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
-		WHERE (cartao.cart_numero = $numero)
+		WHERE (cartao.cart_numero = '$numero')
 		AND ('$dataTimeAtual' BETWEEN vinc_inicio AND vinc_fim) LIMIT 1";
 		$resultSet = $this->getConexao()->query($sql);
 		foreach($resultSet as $linha){
@@ -430,18 +431,18 @@ class VinculoDAO extends DAO {
 		$numeroCartao = $cartao->getNumero();
 		$idTipo = $cartao->getTipo()->getId();
 		
-		$result = $this->getConexao()->query("SELECT * FROM cartao WHERE cart_numero = $numeroCartao");
+		$result = $this->getConexao()->query("SELECT * FROM cartao WHERE cart_numero = '$numeroCartao'");
 		foreach($result as $linha){
 			if($linha['tipo_id'] != $idTipo){
-				if(!$this->getConexao()->exec("UPDATE cartao set tipo_id = $idTipo, cart_creditos = 0 WHERE cart_numero = $numeroCartao"))
+				if(!$this->getConexao()->exec("UPDATE cartao set tipo_id = $idTipo, cart_creditos = 0 WHERE cart_numero = '$numeroCartao'"))
 					return false;
 			}
 			$cartao->getTipo()->setId($linha['tipo_id']);
 			$cartao->setId($linha['cart_id']);
 			return $linha['cart_id'];
 		}
-		if($this->getConexao()->query("INSERT INTO cartao(cart_numero, cart_creditos, tipo_id) VALUES($numeroCartao, 0, $idTipo)")){
-			foreach($this->getConexao()->query("SELECT * FROM cartao WHERE cart_numero = $numeroCartao") as $otraLinha){
+		if($this->getConexao()->query("INSERT INTO cartao(cart_numero, cart_creditos, tipo_id) VALUES('$numeroCartao', 0, $idTipo)")){
+			foreach($this->getConexao()->query("SELECT * FROM cartao WHERE cart_numero = '$numeroCartao'") as $otraLinha){
 				$cartao->setId($otraLinha['cart_id']);
 				return $otraLinha['cart_id'];
 			}

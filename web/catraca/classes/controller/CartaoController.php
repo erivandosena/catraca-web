@@ -115,8 +115,8 @@ class CartaoController{
 			$cartaoDAO->fechaConexao();
 			
 		}
-		if(isset($_GET['cartaoselecionado'])){
-			
+		if(isset($_GET['cartaoselecionado']))
+		{
 			$numeroDoSelecionado = intval($_GET['cartaoselecionado']);
 			$cartaoDAO = new CartaoDAO(null, DAO::TIPO_PG_LOCAL);
 			$cartao = new Cartao();

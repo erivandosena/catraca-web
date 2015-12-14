@@ -20,7 +20,7 @@ class Cartao{
 		return $this->id;
 	}
 	public function setNumero($numero){
-		$this->numero = $numero;
+		$this->numero = preg_replace ('/[^0-9]/', '', $numero);
 		
 	}
 	public function getNumero(){
