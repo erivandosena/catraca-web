@@ -3,6 +3,7 @@
 
 
 from contextlib import closing
+from catraca.util import Util
 from catraca.modelo.dados.conexao import ConexaoFactory
 from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
 from catraca.modelo.entidades.catraca import Catraca
@@ -15,6 +16,8 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 
 class CatracaDAO(ConexaoGenerica):
+    
+    util = Util()
 
     def __init__(self):
         super(CatracaDAO, self).__init__()
@@ -93,6 +96,9 @@ class CatracaDAO(ConexaoGenerica):
             self.log.logger.error('[catraca] Erro ao realizar SELECT.', exc_info=True)
         finally:
             pass
+        
+    def obtem_catraca(self):
+        return self.busca_por_ip(self.util.obtem_ip())
         
     def insere(self, obj):
         try:

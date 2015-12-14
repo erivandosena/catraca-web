@@ -9,6 +9,7 @@ from catraca.visao.interface.alerta import Alerta
 from catraca.controle.dispositivos.leitorcartao import LeitorCartao
 from catraca.controle.restful.relogio import Relogio
 from catraca.controle.restful.sincronia import Sincronia
+from catraca.visao.interface.mensagem import Mensagem
 
 
 __author__ = "Erivando Sena"
@@ -30,16 +31,18 @@ class Painel(object):
         print '\nIniciando API...\n'
         self.log.logger.info('Iniciando Api...')
         self.aviso.exibir_inicializacao()
-        self.aviso.exibir_estatus_catraca(self.util.obtem_ip())
+#         self.aviso.exibir_estatus_catraca(self.util.obtem_ip())
         self.threads()
             
     def threads(self):
         #os.system("echo 'Sistema da Catraca iniciado!' | mail -s 'Raspberry Pi B' erivandoramos@bol.com.br")
         try:
+            Mensagem().start()
             Alerta().start()
             Relogio().start()
             Sincronia().start()
             LeitorCartao().start()
+            
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro executando Painel.', exc_info=True)

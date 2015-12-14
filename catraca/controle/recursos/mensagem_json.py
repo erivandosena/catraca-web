@@ -8,6 +8,7 @@ from catraca.logs import Logs
 from catraca.modelo.dados.servidor_restful import ServidorRestful
 from catraca.modelo.dao.mensagem_dao import MensagemDAO
 from catraca.modelo.entidades.mensagem import Mensagem
+from catraca.modelo.dao.catraca_dao import CatracaDAO
 
 
 __author__ = "Erivando Sena" 
@@ -29,11 +30,12 @@ class MensagemJson(ServidorRestful):
         servidor = self.obter_servidor()
         try:
             if servidor:
-                url = str(servidor) + "mensagem/jmensagem"
+                url = str(servidor) + "mensagem/jmensagem/" + str(CatracaDAO().obtem_catraca().id)
+                print url 
                 header = {'Content-type': 'application/json'}
                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
                 #print "Status HTTP: " + str(r.status_code)
-
+                
                 if r.text != '':
                     dados  = json.loads(r.text)
                     LISTA_JSON = dados["mensagens"]
@@ -87,28 +89,6 @@ class MensagemJson(ServidorRestful):
             
             if item == "mens_id":
                 mensagem.id = self.dict_obj(formato_json[item])
-            if item == "mens_inicializacao":
-                mensagem.inicializacao = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
-            if item == "mens_saldacao":
-                mensagem.saldacao = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
-            if item == "mens_aguardacartao":
-                mensagem.aguardacartao = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
-            if item == "mens_erroleitor":
-                mensagem.erroleitor = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
-            if item == "mens_bloqueioacesso":
-                mensagem.bloqueioacesso = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
-            if item == "mens_liberaacesso":
-                mensagem.liberaacesso = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
-            if item == "mens_semcredito":
-                mensagem.semcredito = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
-            if item == "mens_semcadastro":
-                mensagem.semcadastro = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
-            if item == "mens_turnoinvalido":
-                mensagem.turnoinvalido = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
-            if item == "mens_datainvalida":
-                mensagem.datainvalida = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
-            if item == "mens_cartaoutilizado":
-                mensagem.cartaoutilizado = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
             if item == "mens_institucional1":
                 mensagem.institucional1 = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
             if item == "mens_institucional2":
@@ -117,6 +97,8 @@ class MensagemJson(ServidorRestful):
                 mensagem.institucional3 = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
             if item == "mens_institucional4":
                 mensagem.institucional4 = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
+            if item == "catr_id":
+                mensagem.catraca = self.dict_obj(formato_json[item])
 
         return mensagem
     

@@ -21,6 +21,7 @@ from catraca.controle.recursos.registro_json import RegistroJson
 from catraca.controle.restful.relogio import Relogio
 from catraca.modelo.dao.cartao_valido_dao import CartaoValidoDAO
 from catraca.modelo.dao.isencao_dao import IsencaoDAO
+#from catraca.visao.interface.mensagem import Mensagem
 
 
 __author__ = "Erivando Sena" 
@@ -37,6 +38,7 @@ class LeitorCartao(Relogio):
     pictograma = Pictograma()
     sensor_optico = SensorOptico()
     pino_controle = PinoControle()
+    #mensagens = Mensagem()
 
     cartao_dao = CartaoDAO()
     cartao_valido_dao = CartaoValidoDAO()
@@ -50,6 +52,7 @@ class LeitorCartao(Relogio):
     CATRACA = None
     CARTAO = None
     contador_local = 0
+    uso_do_cartao = False
     
     def __init__(self, intervalo=1):
         super(LeitorCartao, self).__init__()
@@ -60,10 +63,11 @@ class LeitorCartao(Relogio):
         
     def run(self):
         print "%s. Rodando... " % self.name
-        
+
         self.pino_controle.evento_both(self.D0, self.zero)
         self.pino_controle.evento_both(self.D1, self.um)
         
+        #self.mensagens.start()
         while True:
             print "|-------------<LEITOR "+str(Relogio.periodo)+">---------o"
             self.CATRACA = Relogio.catraca
@@ -84,6 +88,10 @@ class LeitorCartao(Relogio):
         try:
             while True:
                 if self.bits:
+                    LeitorCartao.uso_do_cartao = True
+                    
+                    #self.mensagens.pausa()
+                    
                     print self.bits
                     self.aviso.exibir_aguarda_consulta()
                     self.log.logger.info('Binario obtido corretamente. [Cartao n.] '+str(self.bits))
@@ -108,8 +116,7 @@ class LeitorCartao(Relogio):
             self.log.logger.error('Erro ao obter binario. [cartao n.] ' + str(self.bits), exc_info=True)
         finally:
             self.bits = ''
-           
-        
+            
     def ler(self):
         try:
             if self.obtem_numero_cartao_rfid():
@@ -138,7 +145,8 @@ class LeitorCartao(Relogio):
             print excecao
             self.log.logger.error('Erro ao ler. [cartao n.] ' + str(self.numero_cartao), exc_info=True)
         finally:
-            pass
+            LeitorCartao.uso_do_cartao = False
+            #self.mensagens.unpausa()
         
     def valida_cartao(self, numero):
         cartao = Cartao()
@@ -218,17 +226,18 @@ class LeitorCartao(Relogio):
                     self.desbloqueia_acesso()
                     while True:
                         if self.sensor_optico.registra_giro(self.CATRACA.tempo, self.CATRACA):
+                            print "|------------------------------------------------------------------< GIROU >---------o"
                             self.log.logger.info('Girou catraca. [cartao n.] ' + str(self.numero_cartao))
                             giro_completo = True
                             return None
                         else:
+                            print "|------------------------------------------------------------------< NAO GIROU >---------o"
                             self.log.logger.info('Nao girou catraca. [cartao n.] ' + str(self.numero_cartao))
                             return None
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro ao validar informacoes. [cartao n.] ' + str(self.numero_cartao), exc_info=True)
         finally:
-            print "FINALIZOU valida_cartao"
             ##############################################################
             ## BLOQUEIA O ACESSO E SINALIZA O MESMO AO UTILIZADOR
             ##############################################################

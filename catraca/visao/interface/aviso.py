@@ -34,27 +34,27 @@ class Aviso(object):
         if (hora >= 18 and hora <= 23):
             periodo = 3
         opcoes = {
-                   1 : 'OLA'.center(16) +'\n'+ 'BOM DIA!'.center(16),
-                   2 : 'OLA'.center(16) +'\n'+ 'BOA TARDE!'.center(16),
-                   3 : 'OLA'.center(16) +'\n'+ 'BOA NOITE!'.center(16),
+                   1 : 'BOM DIA!',
+                   2 : 'BOA TARDE!',
+                   3 : 'BOA NOITE!',
 
         }
-        return opcoes.get(periodo, "Ola!".center(16) +"\n"+ self.util.obtem_data_formatada().center(16))
+        return opcoes.get(periodo, "Ola!")
 
     def exibir_inicializacao(self):
-        self.display.mensagem('Iniciando...\n'+self.util.obtem_nome_sistema(), 3, False, False)
-        
+        self.display.mensagem('Iniciando...\n'+self.util.obtem_nome_sistema(), 5, False, False)
+
     def exibir_estatus_catraca(self, status_rede):
         if status_rede:
-            self.display.mensagem(self.util.obtem_nome_rpi().center(16) +"\n"+ 'ON-LINE!'.center(16), 3, False, False)
+            self.display.mensagem(self.util.obtem_nome_rpi().center(16) +"\n"+ 'ON-LINE!'.center(16), 5, False, False)
         else:
-            self.display.mensagem(self.util.obtem_nome_rpi().center(16) +"\n"+ 'OFF-LINE!'.center(16), 3, False, False)
-            
-    def exibir_saldacao(self, saldacao):
-        self.display.mensagem(saldacao, 3, False, False)
+            self.display.mensagem(self.util.obtem_nome_rpi().center(16) +"\n"+ 'OFF-LINE!'.center(16), 5, False, False)
 
-    def exibir_datahora(self, data_hora):
-        self.display.mensagem(data_hora.center(16), 3, False, False)
+    def exibir_saldacao(self, saldacao, mensagem):
+        self.display.mensagem(saldacao.center(16) + "\n"+ mensagem.center(16), 5, False, False)
+
+    def exibir_mensagem_institucional(self, texto1, text2, cursor=False, scroll=False):
+        self.display.mensagem(texto1.center(16) + "\n"+ text2.center(16), 5, cursor, scroll)
     
     def exibir_aguarda_cartao(self):
         self.display.mensagem("BEM-VINDO!".center(16) +"\n"+ "APROXIME CARTAO", 0, True, False)
@@ -75,17 +75,14 @@ class Aviso(object):
         self.display.mensagem("CARTAO".center(16) +"\n"+ "NAO CADASTRADO!".center(16), 1, False, False)
         
     def exibir_cartao_isento(self):
-        self.display.mensagem("CARTAO ISENTO".center(16) +"\n"+ "DE PAGAMENTO!".center(16), 0, False, False)
+        self.display.mensagem("CARTAO ISENTO".center(16) +"\n"+ "DE PAGAMENTO!".center(16), 1, False, False)
         
     def exibir_saldo_cartao(self, saldo):
         self.display.mensagem("SALDO DO CARTAO:".center(16) +"\n"+ saldo.center(16), 1, False, False)
         
     def exibir_horario_invalido(self):
         self.display.mensagem("FORA DO HORARIO".center(16) +"\n"+ "DE ATENDIMENTO".center(16), 1, False, False)  
-        
-    def exibir_dia_invalido(self):
-        self.display.mensagem("DIA NAO UTIL".center(16) +"\n"+ "PARA ATENDIMENTO".center(16), 1, False, False)
-        
+
     def exibir_cartao_utilizado(self):
         self.display.mensagem("CARTAO JA USADO" +"\n"+ "PARA ESTE TURNO".center(16), 2, False, False)
         
@@ -146,4 +143,7 @@ class Aviso(object):
     def exibir_falha_rede(self):
         self.display.mensagem('ERRO DE REDE LAN'.center(16) +'\n'+ 'VERIFICAR SWITCH'.center(16), 1, False, False)
         self.display.limpa_lcd()
+        
+#     def exibir_dia_invalido(self):
+#         self.display.mensagem("DIA NAO UTIL".center(16) +"\n"+ "PARA ATENDIMENTO".center(16), 1, False, False)
         

@@ -109,7 +109,7 @@ class Util(object):
         return datetime.datetime.now().strftime("%d/%m/%Y")
     
     def obtem_datahora_display(self):
-        return datetime.datetime.now().strftime('%d/%B/%Y\n    %H:%M:%S')
+        return datetime.datetime.now().strftime('%d/%m/%Y %H:%M') # %d/%B/%Y
     
     def obtem_datahora_postgresql(self):
         return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -171,5 +171,24 @@ class Util(object):
         int2ip = lambda long: '.'.join([str(nlong >> (i << 3) & 0xFF) for i in range(0, 4)[::-1]])
         return int2ip(long)
     
+    def obtem_cpu_temp(self):
+        tempFile = open("/sys/class/thermal/thermal_zone0/temp")
+        cpu_temp = tempFile.read()
+        tempFile.close()
+        return str(float(cpu_temp)/1000.0) #(Fahrenheit) 1000.0 * 9/5 + 32
+
+#         tempFile = open("/sys/class/thermal/thermal_zone0/temp")
+#         cpuTemp0 = tempFile.read()
+#         cpuTemp1 = float(cpuTemp0)/1000.0
+#         cpuTemp2 = float(cpuTemp0)/100
+#         cpuTempM = (cpuTemp2 % cpuTemp1)
+#         return str(cpuTemp1)+"."+str(cpuTempM)
+    
+    def obtem_cpu_speed(self):
+        tempFile = open("/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq")
+        cpu_speed = tempFile.read()
+        tempFile.close()
+        return str(float(cpu_speed)/1000)
+
     
         

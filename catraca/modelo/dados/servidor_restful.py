@@ -3,8 +3,6 @@
 
 
 import requests
-from catraca.util import Util
-from catraca.visao.interface.aviso import Aviso
 
 
 __author__ = "Erivando Sena" 
@@ -15,8 +13,6 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 class ServidorRestful(object):
     
-    util = Util()
-    aviso = Aviso()
     
     URL = 'http://200.129.19.65:27289/api/'
     #URL = 'http://10.5.0.15:27289/api/'
@@ -44,19 +40,13 @@ class ServidorRestful(object):
         self.__senha = valor
         
     def obter_servidor(self):
-        #status = self.util.obtem_ip()
         try:
             response = requests.get(url=self.URL, timeout=(self.timeout_conexao, 10.0))
         except requests.exceptions.ConnectTimeout as excecao:
-            print "rede off"
-            #self.aviso.exibir_estatus_catraca(None)
             return None
         except Exception as excecao:
-            print "rede off"
-            #self.aviso.exibir_estatus_catraca(None)
             return None
         else:
-            print "rede ok"
             return self.URL
         finally:
             pass

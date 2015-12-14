@@ -83,28 +83,27 @@ class Display(object):
                 self.lcd_scroll(texto)
             # tempo de exibicao
             sleep(duracao)
-        except SystemExit, KeyboardInterrupt:
-            raise
-        except Exception:
-            Logs().logger.error('Erro escrevendo no display.')
+        except Exception as excecao:
+            print excecao
+            Logs().logger.error('Erro escrevendo no display.', exc_info=True)
         finally:
             Logs().logger.debug('Tempo de display finalizado.')
     
-    def lcd_scroll(texto):
+    def lcd_scroll(self, texto):
         for i in range(self.lcd_columns-len(texto)):
             sleep(0.5)
             self.lcd.move_right()
-        for i in range(lcd_columns-len(texto)):
+        for i in range(self.lcd_columns-len(texto)):
             sleep(0.5)
             self.lcd.move_left()
             
     def lcd_retroiluminacao(self, estado):
         if estado:
             # Turn backlight on.
-            lcd.set_backlight(estado)
+            self.lcd.set_backlight(estado)
         else:
             # Turn backlight off.
-            lcd.set_backlight(estado)
+            self.lcd.set_backlight(estado)
             
     def limpa_lcd(self):
         self.lcd.clear()

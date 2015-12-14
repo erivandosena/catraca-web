@@ -8,7 +8,6 @@ from catraca.modelo.dados.conexao import ConexaoFactory
 from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
 from catraca.modelo.entidades.turno import Turno
 from catraca.modelo.dao.catraca_dao import CatracaDAO
-from catraca.controle.recursos.catraca_json import CatracaJson
 
 
 __author__ = "Erivando Sena"
@@ -112,7 +111,7 @@ class TurnoDAO(ConexaoGenerica):
             pass
         
     def obtem_catraca(self):
-        return CatracaDAO().busca_por_ip(self.util.obtem_ip())
+        return CatracaDAO().obtem_catraca()
         
         
     def obtem_turno(self, catraca=None, hora=None):
