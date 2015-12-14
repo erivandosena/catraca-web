@@ -28,27 +28,72 @@ class CartaoController{
 					<li><a href="#">Cart&otilde;es</a></li>
 					<li><a href="#">Vínculos</a></li>
 					<li><a href="#">Isenções</a></li>
-				
-
 		        </ul>
 		        <div class = "simpleTabsContent">';
-		
-				$this->pesquisaUsuarioAdicionarVinculo();
+				
+				if(isset($_GET['selecionado']) || isset ( $_GET ['nome'] ) || isset($_GET['vinculoselecionado'])){
+					$this->pesquisaUsuarioAdicionarVinculo();
+				}else if(isset($_GET['cartaoselecionado']) || isset ( $_GET ['numero'])){
+					$this->pesquisaCartaoCancelarVinculo();
+				}else if(isset($_GET['filtro_data']) || isset ( $_GET ['busca_vinculos']) || isset($_GET['vinculos_validos'])){
+					$this->pesquisaVinculosAtivos();
+				}else if(isset($_GET['filtro_data_isen']) || isset ( $_GET ['busca_vinculos_isen']) || isset($_GET['vinculos_validos_isen'])){
+					$this->pesquisaIsencoes();
+				}
+				else{
+					$this->pesquisaUsuarioAdicionarVinculo();
+				}
+				
 				echo '</div>
 		        <div class = "simpleTabsContent">';
-
-				$this->pesquisaCartaoCancelarVinculo();
+				if(isset($_GET['selecionado']) || isset ( $_GET ['nome'] ) || isset($_GET['vinculoselecionado'])){
+					$this->pesquisaUsuarioAdicionarVinculo();
+				}else if(isset($_GET['cartaoselecionado']) || isset ( $_GET ['numero'])){
+					$this->pesquisaCartaoCancelarVinculo();
+				}else if(isset($_GET['filtro_data']) || isset ( $_GET ['busca_vinculos']) || isset($_GET['vinculos_validos'])){
+					$this->pesquisaVinculosAtivos();
+				}else if(isset($_GET['filtro_data_isen']) || isset ( $_GET ['busca_vinculos_isen']) || isset($_GET['vinculos_validos_isen'])){
+					$this->pesquisaIsencoes();
+				}
+				else{
+					$this->pesquisaCartaoCancelarVinculo();
+				}
+				
 				echo '
 						
 						</div>
 		        <div class = "simpleTabsContent">'; 
-				$this->pesquisaVinculosAtivos();
+				if(isset($_GET['selecionado']) || isset ( $_GET ['nome'] ) || isset($_GET['vinculoselecionado'])){
+					$this->pesquisaUsuarioAdicionarVinculo();
+				}else if(isset($_GET['cartaoselecionado']) || isset ( $_GET ['numero'])){
+					$this->pesquisaCartaoCancelarVinculo();
+				}else if(isset($_GET['filtro_data']) || isset ( $_GET ['busca_vinculos']) || isset($_GET['vinculos_validos'])){
+					$this->pesquisaVinculosAtivos();
+				}else if(isset($_GET['filtro_data_isen']) || isset ( $_GET ['busca_vinculos_isen']) || isset($_GET['vinculos_validos_isen'])){
+					$this->pesquisaIsencoes();
+				}
+				else{
+					$this->pesquisaVinculosAtivos();
+				}
+				
 				echo '</div>
 						
 						
 						
 				 <div class = "simpleTabsContent">'; 
+				if(isset($_GET['selecionado']) || isset ( $_GET ['nome'] ) || isset($_GET['vinculoselecionado'])){
+					$this->pesquisaUsuarioAdicionarVinculo();
+				}else if(isset($_GET['cartaoselecionado']) || isset ( $_GET ['numero'])){
+					$this->pesquisaCartaoCancelarVinculo();
+				}else if(isset($_GET['filtro_data']) || isset ( $_GET ['busca_vinculos']) || isset($_GET['vinculos_validos'])){
+					$this->pesquisaVinculosAtivos();
+				}else if(isset($_GET['filtro_data_isen']) || isset ( $_GET ['busca_vinculos_isen']) || isset($_GET['vinculos_validos_isen'])){
 					$this->pesquisaIsencoes();
+				}
+				else{
+					$this->pesquisaIsencoes();
+				}
+					
 				echo '</div>
 		    </div></div>';
 		
@@ -115,9 +160,9 @@ class CartaoController{
 			$cartaoDAO->fechaConexao();
 			
 		}
-		if(isset($_GET['cartaoselecionado']))
-		{
-			$numeroDoSelecionado = intval($_GET['cartaoselecionado']);
+		if(isset($_GET['cartaoselecionado'])){
+			
+			$numeroDoSelecionado = $_GET['cartaoselecionado'];
 			$cartaoDAO = new CartaoDAO(null, DAO::TIPO_PG_LOCAL);
 			$cartao = new Cartao();
 			$cartao->setId($numeroDoSelecionado);
@@ -279,7 +324,7 @@ class CartaoController{
 		}
 		if (isset ( $_GET ['selecionado'] )) {
 			
-			$idDoSelecionado = intval($_GET['selecionado']);
+			$idDoSelecionado = $_GET['selecionado'];
 			$usuarioDao = new UsuarioDAO(null, DAO::TIPO_PG_SIGAAA);
 			$usuario = new Usuario();
 			$usuario->setIdBaseExterna($idDoSelecionado);

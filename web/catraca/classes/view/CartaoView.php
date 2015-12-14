@@ -321,7 +321,7 @@ class CartaoView {
 			echo '<p>Vinculo inativo</p>';
 			echo '<p>Início do Vínculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getInicioValidade())).'</p>';
 			echo '<p>Fim do Vínculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getFinalValidade())).'</p>';
-			
+			echo '<a class="botao b-erro" href="?pagina=cartao&vinculoselecionado='.$vinculo->getId().'&reativar=1">Reativar Vinculo</a>';
 			
 			
 		}

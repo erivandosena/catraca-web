@@ -433,8 +433,10 @@ class VinculoDAO extends DAO {
 		
 		$result = $this->getConexao()->query("SELECT * FROM cartao WHERE cart_numero = '$numeroCartao'");
 		foreach($result as $linha){
+			if($linha['cart_creditos'] > 0)
+				return false;
 			if($linha['tipo_id'] != $idTipo){
-				if(!$this->getConexao()->exec("UPDATE cartao set tipo_id = $idTipo, cart_creditos = 0 WHERE cart_numero = '$numeroCartao'"))
+				if(!$this->getConexao()->exec("UPDATE cartao set tipo_id = $idTipo WHERE cart_numero = '$numeroCartao'"))
 					return false;
 			}
 			$cartao->getTipo()->setId($linha['tipo_id']);
