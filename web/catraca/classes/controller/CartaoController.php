@@ -24,7 +24,7 @@ class CartaoController{
 		
 		
 		
-		echo '<div class="borda conteudo"> <div class = "simpleTabs">
+		echo '<div class="navegacao"> <div class = "simpleTabs">
 		        <ul class = "simpleTabsNavigation">
 				
 					<li><a href="#">Usu&aacute;rios</a></li>
@@ -79,13 +79,6 @@ class CartaoController{
 			echo '<a href="?pagina=cartao&vinculos_validos_isen=1">Buscar</a>';
 		}
 		
-		if(isset($_GET['selecionado']) || isset ( $_GET ['nome'] ) || isset($_GET['vinculoselecionado'])){
-			$this->pesquisaUsuarioAdicionarVinculo();
-		}else if(isset($_GET['cartaoselecionado']) || isset ( $_GET ['numero'])){
-			$this->pesquisaCartaoCancelarVinculo();
-		}else if(isset($_GET['filtro_data']) || isset ( $_GET ['busca_vinculos']) || isset($_GET['vinculos_validos'])){
-			$this->pesquisaVinculosAtivos();
-		}
 		
 		
 		
@@ -113,13 +106,6 @@ class CartaoController{
 			echo '<a href="?pagina=cartao&vinculos_validos=1">Buscar</a>';
 		}
 		
-		if(isset($_GET['selecionado']) || isset ( $_GET ['nome'] ) || isset($_GET['vinculoselecionado'])){
-			$this->pesquisaUsuarioAdicionarVinculo();
-		}else if(isset($_GET['cartaoselecionado']) || isset ( $_GET ['numero'])){
-			$this->pesquisaCartaoCancelarVinculo();
-		}else if(isset($_GET['filtro_data_isen']) || isset ( $_GET ['busca_vinculos_isen']) || isset($_GET['vinculos_validos_isen'])){
-			$this->pesquisaIsencoes();
-		}
 		
 		
 	}
@@ -166,13 +152,6 @@ class CartaoController{
  				echo '<a class="botao" href="?pagina=cartao&cartaoselecionado=' . $numeroDoSelecionado. '">Ocultar Vínculos Inativos</a>';
  			}
 			
-		}
-		if(isset($_GET['selecionado']) || isset ( $_GET ['nome'] ) || isset($_GET['vinculoselecionado'])){
-			$this->pesquisaUsuarioAdicionarVinculo();
-		}else if(isset($_GET['filtro_data']) || isset ( $_GET ['busca_vinculos']) || isset($_GET['vinculos_validos'])){
-			$this->pesquisaVinculosAtivos();
-		}else if(isset($_GET['filtro_data_isen']) || isset ( $_GET ['busca_vinculos_isen']) || isset($_GET['vinculos_validos_isen'])){
-			$this->pesquisaIsencoes();
 		}
 	}
 	public function pesquisaUsuarioAdicionarVinculo(){
@@ -337,7 +316,7 @@ class CartaoController{
 				$vinculo->setFinalValidade($_POST ['data_validade']);
 				$_SESSION['ultima_hora_inserida'] = $_POST ['data_validade'];
 				$vinculo->getCartao()->getTipo()->setId(intval($_POST ['tipo']));
-				$vinculo->getCartao()->setNumero(intval($_POST ['numero_cartao']));
+				$vinculo->getCartao()->setNumero($_POST ['numero_cartao']);
 				$vinculo->getResponsavel()->setIdBaseExterna(intval($_POST ['id_base_externa']));
 				$vinculo->setInicioValidade($_POST['inicio_vinculo']);
 				if(isset($_POST['avulso'])){

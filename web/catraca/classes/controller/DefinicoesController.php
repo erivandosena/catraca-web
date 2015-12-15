@@ -264,7 +264,7 @@ class DefinicoesController {
 		$this->view = new DefinicoesView ();
 		
 		
-		echo '<div class="borda conteudo"> <div class = "simpleTabs">
+		echo '<div class="navegacao"> <div class = "simpleTabs">
 		        <ul class = "simpleTabsNavigation">
 		            <li><a href="#">Unidades Acadêmicas</a></li>
 					<li><a href="#">Turnos</a></li>

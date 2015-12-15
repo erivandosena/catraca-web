@@ -3,12 +3,39 @@
 	padding: 0;
 }
 
+body{
+	font-family: sans-serif;
+}
+
 hr{
+	margin-top: 10px;
+	margin-bottom: 10px;
 	margin-right: 5px;
 }
 
 input{
 	color: #000;
+}
+
+h1{
+	font-family:inherit;
+	font-weight:500;
+	line-height:1.1;
+	color:inherit;
+}
+
+h1 small{
+	font-weight:400;
+	line-height:1;
+	color:#777;
+}
+
+h1{
+	font-size:30px;
+}
+
+small{
+	font-size: 65%;
 }
 
 .f8{
@@ -117,7 +144,6 @@ input{
 }
 
 .borda {
-	border: 1px solid #CCC;	
 	padding-top: 10px;
 	padding-left: 10px;
 	padding-bottom: 10px;
@@ -128,6 +154,8 @@ input{
 	box-shadow: 0 1px 3px #000;
 	background-color: #fff;
 }
+
+
 
 .a-direita{
 	margin-right: 10px;
@@ -171,6 +199,7 @@ input{
 }
 
 .catraca a{
+	cursor: default;
 	color: #000;
 }
 
@@ -185,6 +214,10 @@ input{
 .catraca span{
 	font-weight: bold;
 	color: #ccc;
+}
+
+.fechar:active{
+	display: none;
 }
 
 #formcatraca{
@@ -255,11 +288,53 @@ color: #fff;
 }
 
 #titulo{
+	margin-right: 10px;
 	margin-top: 20px;
 	margin-left: 10px;
 }
 
-section#navegacao{
+#titulo-caixa{
+	margin-right: 10px;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+#relatorio span{
+	padding-left: 40px;
+}
+
+#caixa span{
+	font-size: 18px;
+	display: block;
+	font-weight: bold;
+}
+
+#caixa h2{
+	margin-bottom: 20px;
+	margin-top: 20px;
+	color: #0000FF;
+	font-weight: bold;
+}
+
+#caixa h3{
+	font-weight: bold;
+}
+
+#operador span{
+	
+}
+
+#infovenda{
+	margin-right: 20px;
+	height: 320px;
+}
+
+#infovenda td{
+	font-size: 14px;
+}
+
+.navegacao{
+	height: 100%;
 	padding-left: 30px;
 	padding-top: 20px;
 }
