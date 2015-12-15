@@ -21,6 +21,9 @@ class CartaoController{
 		
 
 		$this->view = new CartaoView();
+		
+		
+		
 		echo '<div class="borda conteudo"> <div class = "simpleTabs">
 		        <ul class = "simpleTabsNavigation">
 				
@@ -31,68 +34,24 @@ class CartaoController{
 		        </ul>
 		        <div class = "simpleTabsContent">';
 				
-				if(isset($_GET['selecionado']) || isset ( $_GET ['nome'] ) || isset($_GET['vinculoselecionado'])){
 					$this->pesquisaUsuarioAdicionarVinculo();
-				}else if(isset($_GET['cartaoselecionado']) || isset ( $_GET ['numero'])){
-					$this->pesquisaCartaoCancelarVinculo();
-				}else if(isset($_GET['filtro_data']) || isset ( $_GET ['busca_vinculos']) || isset($_GET['vinculos_validos'])){
-					$this->pesquisaVinculosAtivos();
-				}else if(isset($_GET['filtro_data_isen']) || isset ( $_GET ['busca_vinculos_isen']) || isset($_GET['vinculos_validos_isen'])){
-					$this->pesquisaIsencoes();
-				}
-				else{
-					$this->pesquisaUsuarioAdicionarVinculo();
-				}
 				
 				echo '</div>
 		        <div class = "simpleTabsContent">';
-				if(isset($_GET['selecionado']) || isset ( $_GET ['nome'] ) || isset($_GET['vinculoselecionado'])){
-					$this->pesquisaUsuarioAdicionarVinculo();
-				}else if(isset($_GET['cartaoselecionado']) || isset ( $_GET ['numero'])){
 					$this->pesquisaCartaoCancelarVinculo();
-				}else if(isset($_GET['filtro_data']) || isset ( $_GET ['busca_vinculos']) || isset($_GET['vinculos_validos'])){
-					$this->pesquisaVinculosAtivos();
-				}else if(isset($_GET['filtro_data_isen']) || isset ( $_GET ['busca_vinculos_isen']) || isset($_GET['vinculos_validos_isen'])){
-					$this->pesquisaIsencoes();
-				}
-				else{
-					$this->pesquisaCartaoCancelarVinculo();
-				}
 				
 				echo '
 						
 						</div>
 		        <div class = "simpleTabsContent">'; 
-				if(isset($_GET['selecionado']) || isset ( $_GET ['nome'] ) || isset($_GET['vinculoselecionado'])){
-					$this->pesquisaUsuarioAdicionarVinculo();
-				}else if(isset($_GET['cartaoselecionado']) || isset ( $_GET ['numero'])){
-					$this->pesquisaCartaoCancelarVinculo();
-				}else if(isset($_GET['filtro_data']) || isset ( $_GET ['busca_vinculos']) || isset($_GET['vinculos_validos'])){
 					$this->pesquisaVinculosAtivos();
-				}else if(isset($_GET['filtro_data_isen']) || isset ( $_GET ['busca_vinculos_isen']) || isset($_GET['vinculos_validos_isen'])){
-					$this->pesquisaIsencoes();
-				}
-				else{
-					$this->pesquisaVinculosAtivos();
-				}
 				
 				echo '</div>
 						
 						
 						
 				 <div class = "simpleTabsContent">'; 
-				if(isset($_GET['selecionado']) || isset ( $_GET ['nome'] ) || isset($_GET['vinculoselecionado'])){
-					$this->pesquisaUsuarioAdicionarVinculo();
-				}else if(isset($_GET['cartaoselecionado']) || isset ( $_GET ['numero'])){
-					$this->pesquisaCartaoCancelarVinculo();
-				}else if(isset($_GET['filtro_data']) || isset ( $_GET ['busca_vinculos']) || isset($_GET['vinculos_validos'])){
-					$this->pesquisaVinculosAtivos();
-				}else if(isset($_GET['filtro_data_isen']) || isset ( $_GET ['busca_vinculos_isen']) || isset($_GET['vinculos_validos_isen'])){
 					$this->pesquisaIsencoes();
-				}
-				else{
-					$this->pesquisaIsencoes();
-				}
 					
 				echo '</div>
 		    </div></div>';
@@ -120,6 +79,15 @@ class CartaoController{
 			echo '<a href="?pagina=cartao&vinculos_validos_isen=1">Buscar</a>';
 		}
 		
+		if(isset($_GET['selecionado']) || isset ( $_GET ['nome'] ) || isset($_GET['vinculoselecionado'])){
+			$this->pesquisaUsuarioAdicionarVinculo();
+		}else if(isset($_GET['cartaoselecionado']) || isset ( $_GET ['numero'])){
+			$this->pesquisaCartaoCancelarVinculo();
+		}else if(isset($_GET['filtro_data']) || isset ( $_GET ['busca_vinculos']) || isset($_GET['vinculos_validos'])){
+			$this->pesquisaVinculosAtivos();
+		}
+		
+		
 		
 		
 	}
@@ -145,7 +113,13 @@ class CartaoController{
 			echo '<a href="?pagina=cartao&vinculos_validos=1">Buscar</a>';
 		}
 		
-		
+		if(isset($_GET['selecionado']) || isset ( $_GET ['nome'] ) || isset($_GET['vinculoselecionado'])){
+			$this->pesquisaUsuarioAdicionarVinculo();
+		}else if(isset($_GET['cartaoselecionado']) || isset ( $_GET ['numero'])){
+			$this->pesquisaCartaoCancelarVinculo();
+		}else if(isset($_GET['filtro_data_isen']) || isset ( $_GET ['busca_vinculos_isen']) || isset($_GET['vinculos_validos_isen'])){
+			$this->pesquisaIsencoes();
+		}
 		
 		
 	}
@@ -158,6 +132,7 @@ class CartaoController{
 			
 			$this->view->mostraResultadoBuscaDeCartoes($listaDeCartoes);
 			$cartaoDAO->fechaConexao();
+			
 			
 		}
 		if(isset($_GET['cartaoselecionado'])){
@@ -191,6 +166,13 @@ class CartaoController{
  				echo '<a class="botao" href="?pagina=cartao&cartaoselecionado=' . $numeroDoSelecionado. '">Ocultar Vínculos Inativos</a>';
  			}
 			
+		}
+		if(isset($_GET['selecionado']) || isset ( $_GET ['nome'] ) || isset($_GET['vinculoselecionado'])){
+			$this->pesquisaUsuarioAdicionarVinculo();
+		}else if(isset($_GET['filtro_data']) || isset ( $_GET ['busca_vinculos']) || isset($_GET['vinculos_validos'])){
+			$this->pesquisaVinculosAtivos();
+		}else if(isset($_GET['filtro_data_isen']) || isset ( $_GET ['busca_vinculos_isen']) || isset($_GET['vinculos_validos_isen'])){
+			$this->pesquisaIsencoes();
 		}
 	}
 	public function pesquisaUsuarioAdicionarVinculo(){
@@ -310,6 +292,14 @@ class CartaoController{
 			
 				echo '</div>';
 			}
+			if(isset($_GET['cartaoselecionado']) || isset ( $_GET ['numero'])){
+				$this->pesquisaCartaoCancelarVinculo();
+			}else if(isset($_GET['filtro_data']) || isset ( $_GET ['busca_vinculos']) || isset($_GET['vinculos_validos'])){
+				$this->pesquisaVinculosAtivos();
+			}else if(isset($_GET['filtro_data_isen']) || isset ( $_GET ['busca_vinculos_isen']) || isset($_GET['vinculos_validos_isen'])){
+				$this->pesquisaIsencoes();
+			}
+			
 			
 			$vinculoDao->fechaConexao();
 			return;
