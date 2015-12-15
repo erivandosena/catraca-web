@@ -53,9 +53,29 @@ class Aviso(object):
     def exibir_saldacao(self, saldacao, mensagem):
         self.display.mensagem(saldacao.center(16) + "\n"+ mensagem.center(16), 5, False, False)
 
-    def exibir_mensagem_institucional(self, texto1, text2, cursor=False, scroll=False):
-        self.display.mensagem(texto1.center(16) + "\n"+ text2.center(16), 5, cursor, scroll)
-    
+    def exibir_mensagem_institucional_fixa(self, texto1, text2, tempo=0, cursor=False, scroll=False, limpa=True):
+        self.display.mensagem(texto1.center(16) +"\n"+ text2.center(16), tempo, cursor, scroll, limpa)
+        
+    def exibir_mensagem_institucional_scroll(self, texto, tempo=0, limpa=True):
+        tempo_padrao = tempo
+        soma = 0
+        for i in range (len(texto) - 16 + 1):
+            texto_scroll = "{}{}".format(texto[i:i+16], texto[i:i+16])
+            if i == 0:
+                tempo = 3
+            else:
+                tempo = tempo_padrao
+            print texto_scroll
+            self.display.mensagem("\n"+texto_scroll, tempo, False, False, limpa)
+            
+            if i == 16:
+                soma += i
+                
+            if soma >= len(texto):
+                break
+#             if i == len(texto) - 16:
+#                 break
+            
     def exibir_aguarda_cartao(self):
         self.display.mensagem("BEM-VINDO!".center(16) +"\n"+ "APROXIME CARTAO", 0, True, False)
         

@@ -67,12 +67,28 @@ class Display(object):
     
     def __init__(self):
         super(Display, self).__init__()
+        # print help(LCD.Adafruit_CharLCD)
 
-    def mensagem(self, texto, duracao, cursor, scroll):
+    def mensagem(self, texto, duracao, cursor, scroll, limpa=True):
         texto = self.remove_acentos(texto).upper()
+        
+#         if texto1:
+#             texto1 = self.remove_acentos(texto1).upper()
+#         else:
+#             texto1 = "\n"
+#         if texto2:    
+#             texto1 = self.remove_acentos(texto2).upper()
+#         
+#         texto = texto1 +" "+ texto2
+#             
+#         for char in texto:
+#             # Advance to next line if character is a new line.
+#             if char == '\n':
+
         try:
             # limpa
-            self.lcd.clear()
+            if limpa:
+                self.lcd.clear()
             # exibe cursores
             self.lcd.show_cursor(cursor)
             self.lcd.blink(cursor)
@@ -110,3 +126,5 @@ class Display(object):
         
     def remove_acentos(self, texto, codif='utf-8'):
         return normalize('NFKD', texto.decode(codif)).encode('ASCII','ignore')
+    
+    

@@ -85,6 +85,7 @@ class CartaoDAO(ConexaoGenerica):
     def insere(self, obj):
         try:
             if obj:
+                obj.numero = obj.numero.zfill(10)
                 sql = "INSERT INTO cartao("\
                         "cart_id, "\
                         "cart_numero, "\
@@ -119,6 +120,7 @@ class CartaoDAO(ConexaoGenerica):
                         sql = "DELETE FROM cartao"
                     self.aviso = "[cartao] Excluido com sucesso!"
                 else:
+                    obj.numero = obj.numero.zfill(10)
                     sql = "UPDATE cartao SET " +\
                           "cart_numero = " + str(obj.numero) + ", " +\
                           "cart_creditos = " + str(obj.creditos) + ", " +\

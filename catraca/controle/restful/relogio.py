@@ -99,7 +99,7 @@ class Relogio(ControleGenerico, threading.Thread):
                     self.status = False
                     Relogio.periodo = True
                     self.aviso.exibir_turno_atual(turno_ativo.descricao)
-                    #self.util.beep_buzzer(855, .5, 1)
+                    self.util.beep_buzzer(855, .5, 1)
                     self.aviso.exibir_aguarda_cartao()
                     print "|-------------< Turno INICIADO! >---------o"
                 return turno_ativo
@@ -109,7 +109,7 @@ class Relogio(ControleGenerico, threading.Thread):
                     self.status = True
                     Relogio.periodo = False
                     self.aviso.exibir_horario_invalido()
-                    #self.util.beep_buzzer(855, .5, 1)
+                    self.util.beep_buzzer(855, .5, 1)
                     print "|-------------< Turno FINALIZADO! >---------o"
                     self.aviso.exibir_aguarda_cartao()
                 return None

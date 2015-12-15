@@ -9,6 +9,7 @@ from catraca.util import Util
 from catraca.visao.interface.aviso import Aviso
 from catraca.controle.dispositivos.leitorcartao import LeitorCartao
 from catraca.modelo.dao.mensagem_dao import MensagemDAO
+from catraca.controle.restful.relogio import Relogio
 
 
 __author__ = "Erivando Sena" 
@@ -39,13 +40,12 @@ class Mensagem(threading.Thread):
 #         self.aviso.exibir_aguarda_cartao()
         while True:
             print "|-----------------------------------------------<Mensagem DISPLAY "+str(LeitorCartao.uso_do_cartao)+">---------o"
-              
             if not LeitorCartao.uso_do_cartao:
+                if Relogio.periodo:
+                    time.sleep(60)
                 self.exibe_mensagem()
-                
             if self.pause:
                 self.unpause.wait()
-                
             time.sleep(1)
             
     def pausa(self):
@@ -59,17 +59,18 @@ class Mensagem(threading.Thread):
     def exibe_mensagem(self):
         mensagens = self.mensagem_dao.busca()
         try:
-            self.aviso.exibir_saldacao(self.aviso.saldacao(), self.util.obtem_datahora_display())
-            self.aviso.exibir_mensagem_institucional("Temperatura CPU", self.util.obtem_cpu_temp() +" C", True)
-            self.aviso.exibir_mensagem_institucional("Desempenho CPU", self.util.obtem_cpu_speed() +" RPM", True)
-            if mensagens:
+            self.aviso.exibir_mensagem_institucional_fixa(self.aviso.saldacao(), self.util.obtem_datahora_display(), 5)
+            if mensagens is not []:
                 for msg in mensagens:
-                    self.aviso.exibir_mensagem_institucional(msg[1], msg[2])
-                    self.aviso.exibir_mensagem_institucional(msg[3], msg[4])
-            
+                    for i in range (len(msg)-2):
+                        print msg[i+1]
+                        self.aviso.exibir_mensagem_institucional_scroll(str(msg[i+1]), 0.5, False)
+#             else:
+#                 self.aviso.exibir_saldacao(self.aviso.saldacao(), self.util.obtem_datahora_display())
+            self.aviso.exibir_mensagem_institucional_fixa("Temperatura CPU", self.util.obtem_cpu_temp() +" C", 5)
+            self.aviso.exibir_mensagem_institucional_fixa("Desempenho CPU", self.util.obtem_cpu_speed() +" RPM", 5)
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro exibindo mensagem no display', exc_info=True)
         finally:
             pass
-        
