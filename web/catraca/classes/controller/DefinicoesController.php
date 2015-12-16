@@ -263,6 +263,44 @@ class DefinicoesController {
 		$this->dao = new DAO ( null, DAO::TIPO_PG_LOCAL );
 		$this->view = new DefinicoesView ();
 		
+		$selecaoUnidade = "active";
+		$selecaoTurnos = "";
+		$selecaoTipos = "";
+		$selecaoCustos = "";
+		$selecaoCatracas = "";
+		if (isset ( $_GET ['cadastrar_unidade'] ) || isset ( $_POST ['certeza_cadastrar_unidade'] )) {
+			$selecaoUnidade = "active";
+			$selecaoTurnos = "";
+			$selecaoTipos = "";
+			$selecaoCatracas = "";
+			$selecaoCustos = "";
+		} else if (isset ( $_POST ['certeza_cadastrar_turno'] ) || isset ( $_GET ['cadastrar_turno'] )) {
+			$selecaoUnidade = "";
+			$selecaoTurnos = "active";
+			$selecaoTipos = "";
+			$selecaoCatracas = "";
+			$selecaoCustos = "";
+		} else if (isset ( $_GET ['cadastrar_tipo'] ) || isset ( $_POST ['certeza_cadastrar_tipo'] )) {
+			$selecaoUnidade = "";
+			$selecaoTurnos = "";
+			$selecaoCatracas = "";
+			$selecaoTipos = "active";
+			$selecaoCustos = "";
+		} else if (isset ( $_GET ['custo_cartao'] ) || isset ( $_GET ['custo_refeicao'] )) {
+			$selecaoUnidade = "";
+			$selecaoTurnos = "";
+			$selecaoCatracas = "";
+			$selecaoTipos = "";
+			$selecaoCustos = "active";
+		}
+		
+		else if(isset($_GET['editar_catraca']) || isset($_GET['lista_catracas'])){
+			$selecaoUnidade = "";
+			$selecaoTurnos = "";
+			$selecaoCatracas = "active";
+			$selecaoTipos = "";
+			$selecaoCustos = "";
+		}
 		
 		echo '<div class="navegacao"> <div class = "simpleTabs">
 		        <ul class = "simpleTabsNavigation">
