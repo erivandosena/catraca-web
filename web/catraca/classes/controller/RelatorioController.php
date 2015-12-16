@@ -287,18 +287,76 @@ class RelatorioController {
 			$listaDeDados ['total'] ['custo'] = $totalPratos * $ultimoCusto;
 		}
 		
-		echo '<div class=" doze colunas borda">';
 		
-		echo '<table class="tabela quadro no-centro fundo-branco">';
-		echo '<tr><th colspan="4">Restaurante Universitário de Liberdade -  Todos os turnos</th></tr>';
-		echo '<tr><th>Data:</th><td colspan="3">Entre ' . date ( 'd/m/Y', strtotime ( $data1 ) ) . ' e ' . date ( 'd/m/Y', strtotime ( $data2 ) ) . '</td></trt>';
-		echo '<tr><td>-</td><th>Pratos</th><th>Valores Arrecadados</th><th>Valores de Custo</th></tr>';
+		echo '<div class=" doze colunas borda relatorio">';		
+		echo '<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>
+				<hr class="um">
+				<h3>RESTAURANTE UNIVERSITÁRIO</h3>
+				<span>Data: '. date ( 'd/m/Y', strtotime ( $data1 ) ) . ' e ' . date ( 'd/m/Y', strtotime ( $data2 ) ) .'</span>
+				<span>Unidade Acadêmica:</span>
+				<span>Turno:</span>
+				<hr class="dois">		
+				<div class="doze colunas cab-relatorio">											
+					<div class="quatro colunas">
+						<span>Tipo Usuário</span>
+					</div>
+					<div class="quatro colunas">
+						<span>Pratos</span>
+					</div>
+					<div class="duas colunas">
+						<span>Valor</span>
+					</div>
+					<div class="duas colunas">
+						<span>Custo</span>
+					</div>
+				</div>';
+		echo '<div class="quatro colunas">';		
+		foreach ( $tipos as $tipo ) {	
+		echo'	<span>'. $tipo->getNome () .'</span>';
+		}		
+		echo'	</div>
+				<div class="quatro colunas relatorio-pratos">';									
 		foreach ( $tipos as $tipo ) {
-			echo '<tr><th>' . $tipo->getNome () . '</th><td>' . $listaDeDados [$tipo->getId ()] ['pratos'] . '</td><td>R$ ' . number_format ( $listaDeDados [$tipo->getId ()] ['valor'], 2, ',', '.' ) . '</td><td>R$ ' . number_format ( $listaDeDados [$tipo->getId ()] ['custo'], 2, ',', '.' ) . '</td></tr>';
-		}
-		echo '<tr><th>Somatório</th><td>' . $listaDeDados ['total'] ['pratos'] . '</td><td>R$ ' . number_format ( $listaDeDados ['total'] ['valor'], 2, ',', '.' ) . '</td><td>R$ ' . number_format ( $listaDeDados ['total'] ['custo'], 2, ',', '.' ) . '</td></tr>';
-		echo '</table>';
-		echo '</div>';
+		echo'	<span>'. $listaDeDados [$tipo->getId ()] ['pratos'] .'</span>';
+		}																				
+		echo'	</div>
+				<div class="quatro colunas relatorio-valores">											
+					<div class="doze colunas">
+						<div class="seis colunas">';												
+		foreach ( $tipos as $tipo ) {
+		echo	'<span class="centralizado">R$ '. number_format ( $listaDeDados [$tipo->getId ()] ['valor'], 2, ',', '.' ) .'</span>';
+				}
+		echo'				</div>
+						<div class="seis colunas">';
+		foreach ( $tipos as $tipo ) {
+		echo			'<span class="centralizado">R$ '. number_format ( $listaDeDados [$tipo->getId ()] ['custo'], 2, ',', '.' ) .'</span>';
+				}
+		echo'			</div>
+					</div>
+				</div>
+				<div class="doze colunas relatorio-soma">
+				<hr class="um">
+				<div class="quatro colunas">
+				<span>SOMATÓRIO</span>
+				</div>
+				<div class="quatro colunas">
+				<span>'. $listaDeDados ['total'] ['pratos'] .'</span>
+				</div>
+				<div class="duas colunas">
+				<span>R$ '. number_format ( $listaDeDados ['total'] ['valor'], 2, ',', '.' ) .'</span>
+				</div>
+				<div class="duas colunas">
+				<span> R$ '. number_format ( $listaDeDados ['total'] ['custo'], 2, ',', '.' ) .'</span>
+				</div>
+				<hr class="dois">
+				</div>';	
+		
+		echo'<div class="doze colunas relatorio-rodape">
+			<span>CATRACA | Copyright © 2015 - DTI</span>
+			<span>Relatório Emitido em:</span>
+			<a class="botao icone-printer"> Imprimir</a>
+			</div>	
+				</div>';		
 		
 		$turnoDao = new TurnoDAO ( $this->dao->getConexao () );
 		$listaDeTurnos = $turnoDao->retornaLista ();

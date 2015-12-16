@@ -8,9 +8,7 @@ body{
 }
 
 hr{
-	margin-top: 10px;
-	margin-bottom: 10px;
-	margin-right: 5px;
+	
 }
 
 input{
@@ -38,6 +36,14 @@ small{
 	font-size: 65%;
 }
 
+td{
+	font-size: 12px !important;
+}
+
+th{
+	font-size: 12px !important;
+}
+
 .f8{
 	font-size: 8px;
 }
@@ -52,18 +58,6 @@ small{
 
 .f16{
 	font-size: 16px;
-}
-
-.relatorio hr{
-	padding: 0;
-}
-
-.relatorio span{
-	display: block;
-}
-
-.relatorio div span{
-	float: 
 }
 
 .fundo {	
@@ -146,6 +140,7 @@ small{
 .borda {
 	padding-top: 10px;
 	padding-left: 10px;
+	padding-right: 10px;
 	padding-bottom: 10px;
 	border-radius: 10px;
 	margin-top: 10px;
@@ -154,8 +149,6 @@ small{
 	box-shadow: 0 1px 3px #000;
 	background-color: #fff;
 }
-
-
 
 .a-direita{
 	margin-right: 10px;
@@ -214,10 +207,64 @@ small{
 .catraca span{
 	font-weight: bold;
 	color: #ccc;
+
 }
 
-.fechar:active{
-	display: none;
+.relatorio hr{
+	margin: 10px;
+}
+
+.relatorio h2, h3{
+	font-weight: bold;
+	text-align: center;
+	margin: 10px;
+}
+
+.relatorio span{
+	display: block;
+	font-weight: bold;
+	padding: 5px;
+}
+
+.cab-relatorio{
+	background-color: #CCC;
+	margin-top: 5px;
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+.cab-relatorio span{
+	font-size: 20px;
+}
+
+.relatorio-pratos span, .relatorio-valores span, .relatorio-rodape span{
+	font-weight: normal;
+	text-align: center;
+}
+
+.relatorio-soma span{
+	text-align: center;
+}
+
+.relatorio-rodape{
+	bottom: 0;
+	padding-top: 20px;
+}
+
+.relatorio-rodape a{
+	float: right;
+}
+
+hr.um{
+	border: 1px solid #CCC;
+	margin: 0;
+	padding: 0;
+}
+
+hr.dois{
+	margin: 0;
+	padding: 0;
+	border: 2px solid #CCC;
 }
 
 #formcatraca{
@@ -381,19 +428,40 @@ div ul li a:hover{
   visibility: hidden;
 }
  
-/* Abas */
+/*Abas*/
+
+a:focus {	
+  outline: none;
+}
+
+.conteiner {
+  margin: 20px;
+  overflow: auto;
+}
+
+.limpar:after {
+  content: '.';
+  height: 0;
+  font-size: 0;
+  line-height: 0;
+  display: block;
+  clear: both;
+  overflow: hidden;
+  visibility: hidden;
+}
+ 
+/* ---- Abas ----- */
 .tabs-conteiner {
   background: transparent;  
-  font-size: 14px;
-
 }
  
 /* Menu das abas */
 .tabs-abas {
-	border-bottom: 1px solid #ccc; 
+	border-bottom: ; 
 	float: none;
 	background: transparent;
 	opacity: 3;
+	border-bottom: 1px solid #ddd;
 }
 
 .tabs-abas ul {
@@ -417,23 +485,33 @@ div ul li a:hover{
   border-top-right-radius: 5px;
 }
 
+.tabs-abas ul li a:hover{	
+	background-color: #FFFAFA;	
+}
+
 .tabs-abas ul li a.activo-tab-abas{
   background-color: #fff;  
   border: 1px solid #ddd;
   border-top-color: rgb(221, 221, 221);
   border-top-style: solid;
   border-top-width: 1px;
-  border-bottom: transparent;  
+  border-bottom: none;  
   cursor: default;
   text-decoration: none;
 }
  
 /* Conteúdo das abas */
-.tabs {
-  display: none;
-  padding: 30px;  
-  border-bottom-color: #666;
-  background: #fff;  
+.tabs {	
+  	display: none;
+ 	padding: 10px;  
+  	border-bottom-color: #666;
+  	background: #fff;  
+}
+
+.tabs:before,
+.tabs:after{
+	content: " ";
+  	display: ;
 }
 
 .first-tab {
@@ -442,6 +520,11 @@ div ul li a:hover{
 
 
 /*paginação*/
+.paginacao{
+
+	
+}
+
 .paginacao ul {
 	list-style: none;	
 }
@@ -450,7 +533,7 @@ div ul li a:hover{
 	float: left;
 }
 
-.paginacao ul li a{
+.paginacao ul li a{	
 	background: #fff;
 	padding: 5px 10px;	
 	text-decoration: none;
