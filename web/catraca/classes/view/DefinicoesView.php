@@ -14,6 +14,50 @@ class DefinicoesView{
 									</div>';
 		
 	}
+	public function listarCatracas($catracas){
+		
+		echo '<div class="doze linhas borda">
+							<table id="turno" class="tabela borda-vertical zebrada texto-preto no-centro">
+							<thead>
+							<tr>
+							<th>ID</th>
+							<th>IP</th>
+							<th>Tempo De Giro</th>
+							<th>Operação</th>
+							<th>Nome</th>
+							<th>Unidade Acadêmica</th>
+							<th class="centralizado">Ações</th>
+							</tr>
+							</thead>
+							<tbody>';
+		
+		foreach ($catracas as $catraca){
+			$this->linhaCatraca($catraca);
+		}
+		
+		echo '
+											       
+											    </tbody>
+											</table>
+										</div>';
+		
+	}
+
+	public function linhaCatraca(Catraca $catraca){
+		echo '<tr>';
+		echo '<td>'.$catraca->getId().'</td>';
+		echo '<td>'.$catraca->getIp().'</td>';
+		echo '<td>'.$catraca->getTempodeGiro().'</td>';
+		echo '<td>'.$catraca->getStrOperacao().'</td>';
+		echo '<td>'.$catraca->getNome().'</td>';
+		echo '<td>'.$catraca->getUnidade()->getNome().'</td>';
+		echo '<td>
+				
+			<a href="?pagina=definicoes&editar_catraca='.$catraca->getId().'"><span class="icone-pencil2 botao texto-amarelo2" title="Editar"></span></a>
+			</td>';
+		echo '</tr>';
+	}
+	
 	public function listarUnidadesAcademicas($unidadesAcademicas){
 		echo '		
 										<div class="doze linhas borda">										
@@ -46,11 +90,21 @@ class DefinicoesView{
 											        <tr>
 											            <td>'.$unidade->getId().'</td>
 											            <td>'.$unidade->getNome().'</td>
-											            <td></td>
+
+											            		<td>';
+
+		$i = 0;
+		foreach ($unidade->getTurnosValidos() as $turno){
+			if($i)
+				echo '\ ';
+			echo $turno->getDescricao();
+			$i++;
+		}
+		echo '											</td>
 											            <td class="centralizado">
-											            	<a href=""><span class="icone-pencil2 texto-amarelo2 botao" title="Editar"></span></a>
-											            	<a href=""><span class="icone-cross botao texto-vermelho2" title="Excluir"></span></a>
-											            	<a href=""><span class="icone-plus botao texto-verde2" title="Adicionar Turno"></span></a>
+											            	<a href="?pagina=definicoes&turno_na_unidade='.$unidade->getId().'"><span class="icone-plus texto-verde2 botao" title="Editar"></span></a>
+											            	<a href="?pagina=definicoes&excluir_turno_da_unidade='.$unidade->getId().'"><span class="icone-cross botao texto-vermelho2" title="Excluir"></span></a>
+
 											            </td>
 				</tr>';
 	}
@@ -215,6 +269,92 @@ class DefinicoesView{
 	}
 	public function mostraSucesso($mensagem){
 		echo '<div class="borda"><p>'.$mensagem.'</p></div>';
+	
+	}
+	public function formEditarCatraca(Catraca $catraca, $listaDeUnidades){
+	
+		
+		echo '<div class="borda">
+						Editar Catraca : '.$catraca->getNome().' IP: '.$catraca->getIp().'
+						<form action="" method="post" class="formulario sequencial">';
+		
+		
+		
+		echo '<label for="unidade_academica">Unidade Acadêmica</label>';					
+		echo '<select name="id_unidade" id="unidade_academica">';
+		foreach ($listaDeUnidades as $unidade){
+			$atributo = "";
+			if($unidade->getId() == $catraca->getUnidade()->getId())
+				$atributo = "selected";
+			echo '<option value="'.$unidade->getId().'"'.$atributo.'>'.$unidade->getNome().'</option>';
+		}
+		echo '</select>';
+	
+		switch ($catraca->getOperacao()){
+			case Catraca::GIRO_ANTI_HORARIO:
+				$horario = "";
+				$anti = "selected";
+				$livre = "";
+			break;
+			case Catraca::GIRO_HORARIO:
+				$horario = "selected";
+				$anti = "";
+				$livre = "";
+				break;
+			case Catraca::GIRO_LIVRE:
+				$horario = "";
+				$anti = "";
+				$livre = "selected";
+				break;
+			default:
+				$horario = "selected";
+				$anti = "";
+				$livre = "";
+			break;
+			
+		}
+		echo '<label for="operacao">Operação</label>';
+		echo '<select name="operacao" id="operacao">';
+		echo '<option '.$horario.' value="'.Catraca::GIRO_HORARIO.'" '.$horario.'>Sentido Horário</option>';
+		echo '<option '.$anti.' value="'.Catraca::GIRO_ANTI_HORARIO.'" '.$anti.'>Sentido Anti-Horário</option>';
+		echo '<option  '.$livre.' value="'.Catraca::GIRO_LIVRE.'" '.$livre.'>Livre</option>';
+		echo '</select>';
+		echo '<label for="tempo_giro">Tempo De Giro</label>';
+		echo '<input type="number" min="0" max="100" step="1" name="tempo_giro" id="tempo_giro" value="'.$catraca->getTempodeGiro().'"/>';
+		
+		echo '<input type="hidden" name="id_catraca" value="' . $catraca->getId() . '"><br>';
+		echo '<input type="submit" name="salvar" value="Salvar"></form></div>';
+	
+	
+	}
+	
+	public function formTurnoNaUnidade(Unidade $unidade, $listaDeTurnos){
+		
+		echo '<div class="borda">
+						Deseja adicionar um turno na unidade: '.$unidade->getNome().'
+						<form action="" method="post" class="formulario sequencial">
+								<select name="id_turno">';
+		foreach ( $listaDeTurnos as $turno ) {
+			echo '<option value="'.$turno->getId().'">' . $turno->getDescricao () . '</option>';
+		}
+		echo '</select><input type="hidden" name="id_unidade" value="' . $unidade->getId () . '">';
+		echo '<input type="submit" name="turno_na_unidade"></form></div>';
+		
+		
+	}
+	public function formExcluirTurnoDaUnidade(Unidade $unidade){
+		$listaDeTurnos = $unidade->getTurnosValidos();
+	
+		echo '<div class="borda">
+						Deseja remover um turno na unidade: '.$unidade->getNome().'
+						<form action="" method="post" class="formulario sequencial">
+								<select name="id_turno">';
+		foreach ( $listaDeTurnos as $turno ) {
+			echo '<option value="'.$turno->getId().'">' . $turno->getDescricao () . '</option>';
+		}
+		echo '<input type="hidden" name="id_unidade" value="' . $unidade->getId () . '">';
+		echo '</select><input type="submit" name="excluir_turno_da_unidade"></form></div>';
+	
 	
 	}
 }

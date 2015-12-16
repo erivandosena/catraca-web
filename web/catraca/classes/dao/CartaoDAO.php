@@ -2,11 +2,13 @@
 class CartaoDAO extends DAO{
 
 	public function pesquisaPorNumero($numero){
-		
+		$numero = preg_replace ('/[^0-9]/', '', $numero);
 		$lista = array();
-		$numero = intval($numero);
 		
-		$sql = "SELECT * FROM cartao INNER JOIN tipo ON cartao.tipo_id = tipo.tipo_id WHERE cart_numero = $numero LIMIT 100";
+		$sql = "SELECT * FROM cartao 
+		INNER JOIN tipo ON 
+		cartao.tipo_id = tipo.tipo_id 
+		WHERE cart_numero = '$numero' LIMIT 100";
 		foreach($this->getConexao()->query($sql) as $linha){
 			$cartao = new Cartao();
 			$cartao->setId($linha['cart_id']);

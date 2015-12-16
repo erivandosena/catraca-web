@@ -47,6 +47,7 @@ class VinculoDAO extends DAO {
 		foreach($result as $linha){
 			$vinculo = new Vinculo();
 			$vinculo->setResponsavel($usuario);
+
 			$vinculo->setCartao(new Cartao());
 			$vinculo->setId($linha['vinc_id']);
 			$vinculo->getCartao()->setTipo(new Tipo());
@@ -63,7 +64,64 @@ class VinculoDAO extends DAO {
 		return $lista;
 	}
 
+	public function retornaVinculosVencidos(Usuario $usuario){
+		$lista = array();
+		$idUsuario = $usuario->getIdBaseExterna();
+		$dataTimeAtual = date ( "Y-m-d G:i:s" );
+		$sql =  "SELECT * FROM usuario INNER JOIN vinculo
+		ON vinculo.usua_id = usuario.usua_id
+		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
+		LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id WHERE (usuario.id_base_externa = $idUsuario)
+		AND ('$dataTimeAtual' > vinc_fim)";
+		$result = $this->getConexao ()->query ($sql );
 	
+		foreach($result as $linha){
+			$vinculo = new Vinculo();
+			$vinculo->setResponsavel($usuario);
+			$vinculo->setCartao(new Cartao());
+			$vinculo->setId($linha['vinc_id']);
+			$vinculo->getCartao()->setTipo(new Tipo());
+			$vinculo->getCartao()->setId($linha['cart_id']);
+			$vinculo->getCartao()->getTipo()->setNome($linha ['tipo_nome']);
+			$vinculo->getCartao()->setNumero($linha ['cart_numero']);
+			$vinculo->setInicioValidade($linha ['vinc_inicio']);
+			$vinculo->setFinalValidade($linha['vinc_fim']);
+			$vinculo->setAvulso($linha['vinc_avulso']);
+			$lista[] = $vinculo;
+	
+	
+		}
+		return $lista;
+	}
+	public function retornaVinculosFuturos(Usuario $usuario){
+		$lista = array();
+		$idUsuario = $usuario->getIdBaseExterna();
+		$dataTimeAtual = date ( "Y-m-d G:i:s" );
+		$sql =  "SELECT * FROM usuario INNER JOIN vinculo
+		ON vinculo.usua_id = usuario.usua_id
+		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
+		LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id WHERE (usuario.id_base_externa = $idUsuario)
+		AND ('$dataTimeAtual' < vinc_fim AND '$dataTimeAtual' < vinc_inicio)";
+		$result = $this->getConexao ()->query ($sql );
+	
+		foreach($result as $linha){
+			$vinculo = new Vinculo();
+			$vinculo->setResponsavel($usuario);
+			$vinculo->setCartao(new Cartao());
+			$vinculo->setId($linha['vinc_id']);
+			$vinculo->getCartao()->setTipo(new Tipo());
+			$vinculo->getCartao()->setId($linha['cart_id']);
+			$vinculo->getCartao()->getTipo()->setNome($linha ['tipo_nome']);
+			$vinculo->getCartao()->setNumero($linha ['cart_numero']);
+			$vinculo->setInicioValidade($linha ['vinc_inicio']);
+			$vinculo->setFinalValidade($linha['vinc_fim']);
+			$vinculo->setAvulso($linha['vinc_avulso']);
+			$lista[] = $vinculo;
+	
+	
+		}
+		return $lista;
+	}
 	public function invalidarVinculo(Vinculo $vinculo){
 		
 		$dataTimeAtual = date ( "Y-m-d G:i:s" );
@@ -166,6 +224,7 @@ class VinculoDAO extends DAO {
 			$vinculo->getCartao()->setCreditos($linha['cart_creditos']);
 			$vinculo->setInicioValidade($linha ['vinc_inicio']);
 			$vinculo->setFinalValidade($linha['vinc_fim']);
+			$vinculo->setQuantidadeDeAlimentosPorTurno($linha['vinc_refeicoes']);
 			$vinculo->setAvulso($linha['vinc_avulso']);
 			return $vinculo;
 			
@@ -201,6 +260,64 @@ class VinculoDAO extends DAO {
 		LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id
 		WHERE (cartao.cart_id = $idCartao)
 		AND ('$dataTimeAtual' BETWEEN vinc_inicio AND vinc_fim)";
+		$result = $this->getConexao ()->query ($sql );
+	
+		foreach($result as $linha){
+			$vinculo = new Vinculo();
+			$vinculo->setId($linha['vinc_id']);
+			$vinculo->getResponsavel()->setNome($linha['usua_nome']);
+			$vinculo->getResponsavel()->setIdBaseExterna($linha['id_base_externa']);
+			$vinculo->getCartao()->setId($linha['cart_id']);
+			$vinculo->getCartao()->getTipo()->setNome($linha ['tipo_nome']);
+			$vinculo->getCartao()->setNumero($linha ['cart_numero']);
+			$vinculo->setInicioValidade($linha ['vinc_inicio']);
+			$vinculo->setFinalValidade($linha['vinc_fim']);
+			$vinculo->setAvulso($linha['vinc_avulso']);
+			$lista[] = $vinculo;
+	
+	
+		}
+		return $lista;
+	}
+	public function retornaVinculosVencidosDeCartao(Cartao $cartao){
+		$lista = array();
+		$idCartao = $cartao->getId();
+		$dataTimeAtual = date ( "Y-m-d G:i:s" );
+		$sql =  "SELECT * FROM usuario INNER JOIN vinculo
+		ON vinculo.usua_id = usuario.usua_id
+		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
+		LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id
+		WHERE (cartao.cart_id = $idCartao)
+		AND ('$dataTimeAtual' > vinc_fim)";
+		$result = $this->getConexao ()->query ($sql );
+	
+		foreach($result as $linha){
+			$vinculo = new Vinculo();
+			$vinculo->setId($linha['vinc_id']);
+			$vinculo->getResponsavel()->setNome($linha['usua_nome']);
+			$vinculo->getResponsavel()->setIdBaseExterna($linha['id_base_externa']);
+			$vinculo->getCartao()->setId($linha['cart_id']);
+			$vinculo->getCartao()->getTipo()->setNome($linha ['tipo_nome']);
+			$vinculo->getCartao()->setNumero($linha ['cart_numero']);
+			$vinculo->setInicioValidade($linha ['vinc_inicio']);
+			$vinculo->setFinalValidade($linha['vinc_fim']);
+			$vinculo->setAvulso($linha['vinc_avulso']);
+			$lista[] = $vinculo;
+	
+	
+		}
+		return $lista;
+	}
+	public function retornaVinculosFuturosDeCartao(Cartao $cartao){
+		$lista = array();
+		$idCartao = $cartao->getId();
+		$dataTimeAtual = date ( "Y-m-d G:i:s" );
+		$sql =  "SELECT * FROM usuario INNER JOIN vinculo
+		ON vinculo.usua_id = usuario.usua_id
+		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
+		LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id
+		WHERE (cartao.cart_id = $idCartao)
+		AND ('$dataTimeAtual' < vinc_inicio AND '$dataTimeAtual' < vinc_fim)";
 		$result = $this->getConexao ()->query ($sql );
 	
 		foreach($result as $linha){
@@ -259,15 +376,15 @@ class VinculoDAO extends DAO {
 		$this->getConexao()->beginTransaction();
 		
 		if($vinculo->isAvulso())
-			$sqlInsertVinculo = "INSERT into vinculo (usua_id, cart_id, vinc_refeicoes, vinc_avulso, vinc_inicio, vinc_fim, vinc_descricao) VALUES($idBaseLocal, $idCartao, $refeicoes,TRUE,'$inicio', '$dataDeValidade', '$descricao')";
+			$sqlInsertVinculo = "INSERT INTO vinculo(usua_id, cart_id, vinc_refeicoes, vinc_avulso, vinc_inicio, vinc_fim, vinc_descricao) VALUES($idBaseLocal, $idCartao, $refeicoes,TRUE,'$inicio', '$dataDeValidade', '$descricao')";
 		else
-			$sqlInsertVinculo = "INSERT into vinculo (usua_id, cart_id, vinc_refeicoes, vinc_avulso, vinc_inicio, vinc_fim) VALUES($idBaseLocal, $idCartao, 1,FALSE,'$inicio', '$dataDeValidade')";
+			$sqlInsertVinculo = "INSERT INTO vinculo(usua_id, cart_id, vinc_refeicoes, vinc_avulso, vinc_inicio, vinc_fim, vinc_descricao) VALUES($idBaseLocal, $idCartao, 1,FALSE,'$inicio', '$dataDeValidade', 'Padrão')";
 		if(!$this->getConexao()->exec($sqlInsertVinculo)){
 			$this->getConexao()->rollBack();
 			return 0;
 		}
 		$idVinculo = $this->getConexao()->lastInsertId('vinculo_vinc_id_seq');
-		if(!$this->getConexao()->exec("INSERT into vinculo_tipo (vinc_id, tipo_id) VALUES($idVinculo, $tipoCartao)")){
+		if(!$this->getConexao()->exec("INSERT INTO vinculo_tipo(vinc_id, tipo_id) VALUES($idVinculo, $tipoCartao)")){
 			$this->getConexao()->rollBack();
 			return 0;
 		}
@@ -285,10 +402,11 @@ class VinculoDAO extends DAO {
 	 */
 	public function cartaoTemVinculo(Cartao $cartao){
 		$numero = $cartao->getNumero();
+		
 		$dataTimeAtual = date ( "Y-m-d G:i:s" );
 		$sql =  "SELECT * FROM vinculo
 		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
-		WHERE (cartao.cart_numero = $numero)
+		WHERE (cartao.cart_numero = '$numero')
 		AND ('$dataTimeAtual' BETWEEN vinc_inicio AND vinc_fim) LIMIT 1";
 		$resultSet = $this->getConexao()->query($sql);
 		foreach($resultSet as $linha){
@@ -313,18 +431,20 @@ class VinculoDAO extends DAO {
 		$numeroCartao = $cartao->getNumero();
 		$idTipo = $cartao->getTipo()->getId();
 		
-		$result = $this->getConexao()->query("SELECT * FROM cartao WHERE cart_numero = $numeroCartao");
+		$result = $this->getConexao()->query("SELECT * FROM cartao WHERE cart_numero = '$numeroCartao'");
 		foreach($result as $linha){
+// 			if($linha['cart_creditos'] > 0)
+// 				return false;
 			if($linha['tipo_id'] != $idTipo){
-				if(!$this->getConexao()->exec("UPDATE cartao set tipo_id = $idTipo WHERE cart_numero = $numeroCartao"))
+				if(!$this->getConexao()->exec("UPDATE cartao set tipo_id = $idTipo WHERE cart_numero = '$numeroCartao'"))
 					return false;
 			}
 			$cartao->getTipo()->setId($linha['tipo_id']);
 			$cartao->setId($linha['cart_id']);
 			return $linha['cart_id'];
 		}
-		if($this->getConexao()->query("INSERT INTO cartao(cart_numero, cart_creditos, tipo_id) VALUES($numeroCartao, 0, $idTipo)")){
-			foreach($this->getConexao()->query("SELECT * FROM cartao WHERE cart_numero = $numeroCartao") as $otraLinha){
+		if($this->getConexao()->query("INSERT INTO cartao(cart_numero, cart_creditos, tipo_id) VALUES('$numeroCartao', 0, $idTipo)")){
+			foreach($this->getConexao()->query("SELECT * FROM cartao WHERE cart_numero = '$numeroCartao'") as $otraLinha){
 				$cartao->setId($otraLinha['cart_id']);
 				return $otraLinha['cart_id'];
 			}
@@ -400,6 +520,8 @@ class VinculoDAO extends DAO {
 			$vinculo->getResponsavel()->setId($linha['usua_id']);
 			$vinculo->getResponsavel()->setNome($linha['usua_nome']);
 		
+
+			$vinculo->getResponsavel()->setIdBaseExterna($linha['id_base_externa']);
 			$vinculo->getCartao()->setId($linha['cart_id']);
 			$vinculo->getCartao()->getTipo()->setNome($linha ['tipo_nome']);
 			$vinculo->getCartao()->setNumero($linha ['cart_numero']);
@@ -430,6 +552,7 @@ class VinculoDAO extends DAO {
 		ON vinculo.usua_id = usuario.usua_id
 		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
 		LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id
+		
 		WHERE '$dataReferencia' BETWEEN vinc_inicio AND vinc_fim  $outroFiltro LIMIT 100";
 		$result = $this->getConexao ()->query ($sql );
 		foreach($result as $linha){
@@ -439,7 +562,7 @@ class VinculoDAO extends DAO {
 			$vinculo->getCartao()->setTipo(new Tipo());
 			$vinculo->getResponsavel()->setId($linha['usua_id']);
 			$vinculo->getResponsavel()->setNome($linha['usua_nome']);
-				
+			$vinculo->getResponsavel()->setIdBaseExterna($linha['id_base_externa']);
 			$vinculo->getCartao()->setId($linha['cart_id']);
 			$vinculo->getCartao()->getTipo()->setNome($linha ['tipo_nome']);
 			$vinculo->getCartao()->setNumero($linha ['cart_numero']);

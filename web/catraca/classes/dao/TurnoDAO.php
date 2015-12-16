@@ -1,8 +1,8 @@
 <?php
 /**
- * UnidadeDAO alterações do banco de dados referentes à entidade unidade. 
+ * UnidadeDAO alteraï¿½ï¿½es do banco de dados referentes ï¿½ entidade unidade. 
  * Gera pesistencia da classe unidade. 
- * É a unidade academica. 
+ * ï¿½ a unidade academica. 
  * @author jefponte
  *
  */
@@ -10,7 +10,7 @@ class TurnoDAO extends DAO{
 
 	/**
 	 * Retorna Um vetor de unidades. 
-	 * @return multitype:Unidade
+	 * @return multitype:Turno
 	 */
 	public function retornaLista(){
 		$lista = array();

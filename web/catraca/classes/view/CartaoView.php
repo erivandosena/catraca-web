@@ -198,6 +198,11 @@ class CartaoView {
 	
 	
 	public function mostraVinculos($lista){
+		if(!count($lista))
+		{
+			echo '<div class="borda"><p>Nenhum ítem na lista</p></div>';
+			return;
+		}
 		echo '<div class="borda">
 						<table class="tabela borda-vertical zebrada texto-preto">';
 		echo '<tr>
@@ -224,7 +229,7 @@ class CartaoView {
 			echo 	'<td>Não</td>';
 		
 		echo '
-				<td>' . $vinculo->getResponsavel()->getNome(). '</td>
+				<td><a href="?pagina=cartao&selecionado='.$vinculo->getResponsavel()->getIdBaseExterna().'">' . $vinculo->getResponsavel()->getNome(). '</a></td>
 				<td>' .$vinculo->getCartao()->getTipo()->getNome() . '</td>
 				<td><a href="?pagina=cartao&cartaoselecionado='.$vinculo->getCartao()->getId().'">' . $vinculo->getCartao()->getNumero() . '</a></td>
 				<td>' . date("d/m/Y G:i:s", strtotime($vinculo->getFinalValidade())) . '</td>';
@@ -239,7 +244,10 @@ class CartaoView {
 	public function mostraFormAdicionarVinculo($listaDeTipos, $idSelecionado){
 		$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'H:00:01' );
 		$dataHoje = date ('Y-m-d') . 'T' . date ( 'H:00:01' );
-			
+		if(isset($_SESSION['ultima_hora_inserida'])){
+			$daqui3Meses = $_SESSION['ultima_hora_inserida'];
+		}
+		
 		echo '<div class="borda">
 				<script type="text/javascript">
 				function modificaForm(campoCheck){
@@ -300,6 +308,7 @@ class CartaoView {
 		echo '<p>Cartão: '.$vinculo->getCartao()->getNumero().'</p>';
 		echo '<p>Créditos no Cartão: R$' . number_format($vinculo->getCartao()->getCreditos(), 2, ',', '.').'</p>';
 		echo '<p>Tipo de Vínculo: '.$vinculo->getCartao()->getTipo()->getNome().'</p>';
+		echo '<p>Refeições Por Turno: '.$vinculo->getQuantidadeDeAlimentosPorTurno().'</p>';
 		
 		if($vinculo->isActive()){
 			echo '<p>Vinculo ativo</p>';
@@ -312,9 +321,10 @@ class CartaoView {
 			echo '<p>Vinculo inativo</p>';
 			echo '<p>Início do Vínculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getInicioValidade())).'</p>';
 			echo '<p>Fim do Vínculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getFinalValidade())).'</p>';
+			echo '<a class="botao b-erro" href="?pagina=cartao&vinculoselecionado='.$vinculo->getId().'&reativar=1">Reativar Vinculo</a>';
+			
+			
 		}
-		
-		
 		
 		
 		

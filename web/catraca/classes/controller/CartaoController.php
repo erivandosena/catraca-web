@@ -19,58 +19,44 @@ class CartaoController{
 	
 	public function telaCartao(){
 		
+
 		$this->view = new CartaoView();
 		
-		echo '<section id="navegacao">
-				<ul class="nav nav-tabs">';
-		$selecaoUsuarios = "active";
-		$selecaoCartoes = "";
-		$selecaoVinculos = "";
-		$selecaoIsencoes = "";
-		if(isset($_GET['selecionado']) || isset ( $_GET ['nome'] ) || isset($_GET['vinculoselecionado'])){
-			$selecaoUsuarios = "active";
-			$selecaoCartoes = "";
-			$selecaoVinculos = "";
-			$selecaoIsencoes = "";
-		}else if(isset($_GET['cartaoselecionado']) || isset ( $_GET ['numero'])){
-			$selecaoUsuarios = "";
-			$selecaoCartoes = "active";
-			$selecaoVinculos = "";
-			$selecaoIsencoes = "";
-		}else if(isset($_GET['filtro_data']) || isset ( $_GET ['busca_vinculos']) || isset($_GET['vinculos_validos'])){
-			$selecaoUsuarios = "";
-			$selecaoCartoes = "";
-			$selecaoVinculos = "active";
-			$selecaoIsencoes = "";
-		}else if(isset($_GET['filtro_data_isen']) || isset ( $_GET ['busca_vinculos_isen']) || isset($_GET['vinculos_validos_isen'])){
-			$selecaoUsuarios = "";
-			$selecaoCartoes = "";
-			$selecaoVinculos = "";
-			$selecaoIsencoes = "active";
-		}
-		echo '
-					<li role="presentation" class="'.$selecaoUsuarios.'"><a href="#tab1" data-toggle="tab">Usu&aacute;rios</a></li>
-					<li role="presentation" class="'.$selecaoCartoes.'"><a href="#tab2" data-toggle="tab">Cart&otilde;es</a></li>
-					<li role="presentation" class="'.$selecaoVinculos.'"><a href="#tab3" data-toggle="tab">Vínculos</a></li>
-					<li role="presentation" class="'.$selecaoIsencoes.'"><a href="#tab4" data-toggle="tab">Isenções</a></li>
-							
-							';
 		
-		echo '
-				</ul><div class="tab-content">';
-		echo '<div class="tab-pane '.$selecaoUsuarios.'" id="tab1">';
-		$this->pesquisaUsuarioAdicionarVinculo();
-		echo '</div>';
-		echo '<div class="tab-pane '.$selecaoCartoes.'" id="tab2">';
-		$this->pesquisaCartaoCancelarVinculo();
-		echo '</div>';
-		echo '<div class="tab-pane '.$selecaoVinculos.'" id="tab3">';
-		$this->pesquisaVinculosAtivos();
-		echo '</div>';
-		echo '<div class="tab-pane '.$selecaoIsencoes.'" id="tab4">';
-		$this->pesquisaIsencoes();
-		echo '</div>';
-		echo '</section>';
+		
+		echo '<div class="navegacao"> <div class = "simpleTabs">
+		        <ul class = "simpleTabsNavigation">
+				
+					<li><a href="#">Usu&aacute;rios</a></li>
+					<li><a href="#">Cart&otilde;es</a></li>
+					<li><a href="#">Vínculos</a></li>
+					<li><a href="#">Isenções</a></li>
+		        </ul>
+		        <div class = "simpleTabsContent">';
+				
+					$this->pesquisaUsuarioAdicionarVinculo();
+				
+				echo '</div>
+		        <div class = "simpleTabsContent">';
+					$this->pesquisaCartaoCancelarVinculo();
+				
+				echo '
+						
+						</div>
+		        <div class = "simpleTabsContent">'; 
+					$this->pesquisaVinculosAtivos();
+				
+				echo '</div>
+						
+						
+						
+				 <div class = "simpleTabsContent">'; 
+					$this->pesquisaIsencoes();
+					
+				echo '</div>
+		    </div></div>';
+		
+		
 		
 	}
 	public function pesquisaIsencoes(){
@@ -95,6 +81,8 @@ class CartaoController{
 		
 		
 		
+		
+		
 	}
 	
 	public function pesquisaVinculosAtivos(){
@@ -116,8 +104,8 @@ class CartaoController{
 			$this->view->mostraVinculos($vinculos);
 		}else{
 			echo '<a href="?pagina=cartao&vinculos_validos=1">Buscar</a>';
+			
 		}
-		
 		
 		
 		
@@ -132,10 +120,11 @@ class CartaoController{
 			$this->view->mostraResultadoBuscaDeCartoes($listaDeCartoes);
 			$cartaoDAO->fechaConexao();
 			
+			
 		}
 		if(isset($_GET['cartaoselecionado'])){
 			
-			$numeroDoSelecionado = intval($_GET['cartaoselecionado']);
+			$numeroDoSelecionado = $_GET['cartaoselecionado'];
 			$cartaoDAO = new CartaoDAO(null, DAO::TIPO_PG_LOCAL);
 			$cartao = new Cartao();
 			$cartao->setId($numeroDoSelecionado);
@@ -148,9 +137,21 @@ class CartaoController{
  			
  			foreach($vinculos as $vinculoComIsencao)
  				$vinculoDao->isencaoValidaDoVinculo($vinculoComIsencao);
- 			
+ 			echo '<h1>Vínculos Válidos</h1>';
  			$this->view->mostraVinculos($vinculos);
-			
+ 			
+ 			if (!isset ( $_GET ['vinculos_inativos'] )){
+ 				echo '<a class="botao" href="?pagina=cartao&cartaoselecionado=' . $numeroDoSelecionado . '&vinculos_inativos=ver">Ver Vínculos Inativos</a>';
+ 			}else
+ 			{
+ 				echo '<h1>Vínculos aguardando liberação</h1>';
+ 				$vinculosVencidosAguardando  = $vinculoDao->retornaVinculosFuturosDeCartao($cartao);
+ 				$this->view->mostraVinculos($vinculosVencidosAguardando);
+ 				echo '<h1>Vínculos vencidos</h1>';
+ 				$vinculosVencidos  = $vinculoDao->retornaVinculosVencidosDeCartao($cartao);
+ 				$this->view->mostraVinculos($vinculosVencidos);
+ 				echo '<a class="botao" href="?pagina=cartao&cartaoselecionado=' . $numeroDoSelecionado. '">Ocultar Vínculos Inativos</a>';
+ 			}
 			
 		}
 	}
@@ -164,6 +165,7 @@ class CartaoController{
 			$vinculoDao->vinculoPorId($vinculoDetalhe);
 			$vinculoDao->isencaoValidaDoVinculo($vinculoDetalhe);
 			$this->view->mostrarVinculoDetalhe($vinculoDetalhe);
+			
 			if($vinculoDetalhe->getIsencao()->getId()){
 				$this->view->mostraIsencaoDoVinculo($vinculoDetalhe);
 				
@@ -194,7 +196,7 @@ class CartaoController{
 						$vinculoDetalhe->getCartao()->adicionaCreditos($valorVendido);
 						$sessao = new Sessao();
 						if($vinculoDao->adicionarCreditos($vinculoDetalhe, $valorVendido, $sessao->getIdUsuario()))
-							$this->view->mostraSucesso("Isenção Inserida Com sucesso!");
+							$this->view->mostraSucesso("Creditos atualizados!");
 						else{
 							$this->view->mostraSucesso("Erro na tentativa de Inserir Isenção!");
 						}
@@ -270,6 +272,14 @@ class CartaoController{
 			
 				echo '</div>';
 			}
+			if(isset($_GET['cartaoselecionado']) || isset ( $_GET ['numero'])){
+				$this->pesquisaCartaoCancelarVinculo();
+			}else if(isset($_GET['filtro_data']) || isset ( $_GET ['busca_vinculos']) || isset($_GET['vinculos_validos'])){
+				$this->pesquisaVinculosAtivos();
+			}else if(isset($_GET['filtro_data_isen']) || isset ( $_GET ['busca_vinculos_isen']) || isset($_GET['vinculos_validos_isen'])){
+				$this->pesquisaIsencoes();
+			}
+			
 			
 			$vinculoDao->fechaConexao();
 			return;
@@ -284,7 +294,7 @@ class CartaoController{
 		}
 		if (isset ( $_GET ['selecionado'] )) {
 			
-			$idDoSelecionado = intval($_GET['selecionado']);
+			$idDoSelecionado = $_GET['selecionado'];
 			$usuarioDao = new UsuarioDAO(null, DAO::TIPO_PG_SIGAAA);
 			$usuario = new Usuario();
 			$usuario->setIdBaseExterna($idDoSelecionado);
@@ -296,15 +306,18 @@ class CartaoController{
 			foreach($vinculos as $vinculoComIsencao)
 				$vinculoDao->isencaoValidaDoVinculo($vinculoComIsencao);
 			
-			$this->view->mostraVinculos($vinculos);
-				
+			
+			
+
+			
 			if (isset ( $_POST ['salvar'] )) {
 			
 				// Todos os cadastros inicialmente ser�o n�o avulsos.
 				$vinculo = new Vinculo();
 				$vinculo->setFinalValidade($_POST ['data_validade']);
+				$_SESSION['ultima_hora_inserida'] = $_POST ['data_validade'];
 				$vinculo->getCartao()->getTipo()->setId(intval($_POST ['tipo']));
-				$vinculo->getCartao()->setNumero(intval($_POST ['numero_cartao']));
+				$vinculo->getCartao()->setNumero($_POST ['numero_cartao']);
 				$vinculo->getResponsavel()->setIdBaseExterna(intval($_POST ['id_base_externa']));
 				$vinculo->setInicioValidade($_POST['inicio_vinculo']);
 				if(isset($_POST['avulso'])){
@@ -353,6 +366,23 @@ class CartaoController{
 				$this->view->mostraFormAdicionarVinculo($listaDeTipos, $idDoSelecionado);
 		
 			}
+			echo '<h1>Vínculos Ativos</h1>';
+			$this->view->mostraVinculos($vinculos);
+			
+			if (!isset ( $_GET ['vinculos_inativos'] )){
+				echo '<a class="botao" href="?pagina=cartao&selecionado=' . $idDoSelecionado . '&vinculos_inativos=ver">Ver Vínculos Inativos</a>';
+			}else
+			{
+				echo '<h1>Vínculos aguardando liberação</h1>';
+				$vinculosVencidosAguardando  = $vinculoDao->retornaVinculosFuturos($usuario);
+				$this->view->mostraVinculos($vinculosVencidosAguardando);
+				echo '<h1>Vínculos vencidos</h1>';
+				$vinculosVencidos  = $vinculoDao->retornaVinculosVencidos($usuario);
+				$this->view->mostraVinculos($vinculosVencidos);
+				echo '<a class="botao" href="?pagina=cartao&selecionado=' . $idDoSelecionado . '">Ocultar Vínculos Inativos</a>';
+			}
+			
+			
 			$usuarioDao->fechaConexao();
 			$vinculoDao->fechaConexao();
 		}
