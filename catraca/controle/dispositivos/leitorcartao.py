@@ -244,7 +244,7 @@ class LeitorCartao(Relogio):
             self.bloqueia_acesso()
             if giro_completo:
 
-                # atualiza registro remoto
+                # insere registro remoto
                 registro_json.objeto_json(registro)
                 giro_completo = False
                 

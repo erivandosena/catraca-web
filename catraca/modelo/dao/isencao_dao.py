@@ -67,7 +67,7 @@ class IsencaoDAO(ConexaoGenerica):
         if data is None:
             data = Util().obtem_datahora_postgresql()
         sql = "SELECT isencao.isen_inicio, isencao.isen_fim, cartao.cart_id FROM cartao "\
-        "INNER JOIN isencao ON isencao.cart_id = cartao.cart_id WHERE cartao.cart_numero = "+str(numero_cartao)+" AND ('"+str(data)+"' "\
+        "INNER JOIN isencao ON isencao.cart_id = cartao.cart_id WHERE cartao.cart_numero = '"+str(numero_cartao)+"' AND ('"+str(data)+"' "\
         "BETWEEN isencao.isen_inicio AND isencao.isen_fim)" 
         print "=" * 100
         print sql

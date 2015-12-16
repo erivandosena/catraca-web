@@ -59,8 +59,12 @@ class CatracaJson(ServidorRestful):
                             obj = self.dict_obj(item)
                             if obj:
                                 #lista.append(obj)
+                                print "IP " + str(IP) + " == " + str(obj.ip)
                                 if IP == obj.ip:
                                     catraca_local = obj
+                                else:
+                                    obj.ip = IP
+                                    self.objeto_json(obj, "PUT")
                                 if mantem_tabela:
                                     self.mantem_tabela_local(obj, limpa_tabela)
                         return catraca_local
@@ -138,7 +142,7 @@ class CatracaJson(ServidorRestful):
                 }
                 self.catraca_post(catraca)
 
-    def objeto_json(self, obj):
+    def objeto_json(self, obj, operacao="POST"):
         if obj:
             catraca = {
                 "catr_ip":str(obj.ip),
@@ -146,7 +150,10 @@ class CatracaJson(ServidorRestful):
                 "catr_operacao":obj.operacao,
                 "catr_nome":str(obj.nome)
             }
-            self.catraca_post(catraca)
+            if operacao == "POST":
+                self.catraca_post(catraca)
+            if operacao == "PUT":
+                self.catraca_put(catraca, obj.id)
             
     def catraca_post(self, formato_json):
         servidor = self.obter_servidor()
@@ -158,6 +165,25 @@ class CatracaJson(ServidorRestful):
                 r = requests.post(url, auth=(self.usuario, self.senha), headers=header, data=json.dumps(formato_json))
                 print r.text
                 print r.status_code
+        except Exception as excecao:
+            print excecao
+            self.log.logger.error('Erro enviando json catraca.', exc_info=True)
+        finally:
+            pass
+        
+    def catraca_put(self, formato_json, id):
+        servidor = self.obter_servidor()
+        try:
+            if servidor:
+                url = str(servidor) + "catraca/atualiza/"+ str(id)
+                print url
+                header = {'Content-type': 'application/json'}
+                r = requests.put(url, auth=(self.usuario, self.senha), headers=header, data=json.dumps(formato_json))
+                print r.text
+                print r.status_code
+                return True
+            else:
+                return False
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro enviando json catraca.', exc_info=True)

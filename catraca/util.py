@@ -172,23 +172,82 @@ class Util(object):
         return int2ip(long)
     
     def obtem_cpu_temp(self):
-        tempFile = open("/sys/class/thermal/thermal_zone0/temp")
-        cpu_temp = tempFile.read()
-        tempFile.close()
-        return str(float(cpu_temp)/1000.0) #(Fahrenheit) 1000.0 * 9/5 + 32
-
-#         tempFile = open("/sys/class/thermal/thermal_zone0/temp")
-#         cpuTemp0 = tempFile.read()
-#         cpuTemp1 = float(cpuTemp0)/1000.0
-#         cpuTemp2 = float(cpuTemp0)/100
-#         cpuTempM = (cpuTemp2 % cpuTemp1)
-#         return str(cpuTemp1)+"."+str(cpuTempM)
+        """Retorna a velocidade atual da CPU."""
+        try:
+            s = subprocess.check_output(["/opt/vc/bin/vcgencmd","measure_temp"])
+            return str(float(s.split('=')[1][:-3]))
+        except:
+            return "0"
     
     def obtem_cpu_speed(self):
         tempFile = open("/sys/devices/system/cpu/cpu0/cpufreq/scaling_cur_freq")
-        cpu_speed = tempFile.read()
-        tempFile.close()
-        return str(float(cpu_speed)/1000)
-
+        try:
+            cpu_speed = tempFile.read()
+            return str(float(cpu_speed)/1000)
+        except:
+            return "0"
+        finally:
+            tempFile.close()
+            
+    def obtem_ram(self):
+        """Retorna uma tupla (total de RAM, memória RAM disponível) em megabytes."""
+        try:
+            s = subprocess.check_output(["free","-m"])
+            lines = s.split('\n')
+            ram = (int(lines[1].split()[1]), int(lines[2].split()[3]))
+            return str(ram[1])+'Mb de ('+str(ram[0])+'Mb)'
+        except:
+            return "0" 
+        
+    def obtem_process_count(self):
+        """Retorna o número de processos."""
+        try:
+            s = subprocess.check_output(["ps","-e"])
+            return str(len(s.split('\n')))
+        except:
+            return "0"
+        
+    def obtem_up_time(self):
+        """Retorna uma tupla ( tempo de atividade, média de carga 5 min)."""
+        try:
+            s = subprocess.check_output(["uptime"])
+            load_split = s.split('load average:')
+            load_five = float(load_split[1].split(',')[1])
+            up = load_split[0]
+            up_pos = up.rfind(',',0,len(up)-4)
+            up = up[:up_pos].split('up ')[1]
+            up_stats = (up, load_five)
+            return str(up_stats[0])
+        except:
+            return str(('', 0))
+            
+    def obtem_connections(self):
+        """Retorna o número de conexões de rede."""
+        try:
+            s = subprocess.check_output(["netstat","-tun"])
+            return str(len([x for x in s.split() if x == 'ESTABELECIDA']) or len([x for x in s.split() if x == 'ESTABLISHED']))
+        except:
+            return "0"
     
+    def obtem_temperature(self):
+        """Retorna a temperatura em grau celsius °C."""
+        try:
+            s = subprocess.check_output(["/opt/vc/bin/vcgencmd","measure_temp"])
+            return str(float(s.split('=')[1][:-3]))
+        except:
+            return "0"
+    
+    def obtem_ipaddress(self):
+        """Retorna o endereço IP atual."""
+        try:
+            arg='ip route list'
+            p=subprocess.Popen(arg,shell=True,stdout=subprocess.PIPE)
+            data = p.communicate()
+            split_data = data[0].split()
+            print split_data
+            ipaddr = split_data[split_data.index('src')+1]
+            return str(ipaddr)
+        except:
+            return "127.0.0.1"
+        
         

@@ -29,6 +29,18 @@ class Painel(object):
     
     def main(self):
         print '\nIniciando API...\n'
+        
+        print "IP " + str(self.util.obtem_ip()) 
+        
+        print 'Free RAM: '+str(self.util.obtem_ram())
+        print 'Nr. of processes: '+str(self.util.obtem_process_count())
+        print 'Up time: '+str(self.util.obtem_up_time())
+        print 'Nr. of connections: '+str(self.util.obtem_connections())
+        print 'Temperature in C: ' +str(self.util.obtem_temperature())
+        print 'IP-address: '+str(self.util.obtem_ipaddress())
+        print 'CPU speed: '+str(self.util.obtem_cpu_speed())
+        
+        
         self.log.logger.info('Iniciando Api...')
         self.aviso.exibir_inicializacao()
 #         self.aviso.exibir_estatus_catraca(self.util.obtem_ip())

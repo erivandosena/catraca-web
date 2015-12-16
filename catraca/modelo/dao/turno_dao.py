@@ -19,6 +19,7 @@ __status__ = "Prototype" # Prototype | Development | Production
 class TurnoDAO(ConexaoGenerica):
     
     util = Util()
+    catraca_dao = CatracaDAO()
 
     def __init__(self):
         super(TurnoDAO, self).__init__()
@@ -110,14 +111,10 @@ class TurnoDAO(ConexaoGenerica):
         finally:
             pass
         
-    def obtem_catraca(self):
-        return CatracaDAO().obtem_catraca()
-        
-        
     def obtem_turno(self, catraca=None, hora=None):
         turno = None
         if (catraca is None) or (hora is None):
-            turno = self.busca_por_catraca(self.obtem_catraca(), self.util.obtem_hora())
+            turno = self.busca_por_catraca(self.catraca_dao.obtem_catraca(), self.util.obtem_hora())
         else:
             turno = self.busca_por_catraca(catraca, hora)
         return turno

@@ -31,7 +31,7 @@ class MensagemDAO(ConexaoGenerica):
             "mens_institucional3, mens_institucional4, catr_id FROM mensagem WHERE mens_id = " + str(id)
         elif id is None:
             sql = "SELECT mens_id, mens_institucional1, mens_institucional2, "\
-            "mens_institucional3, mens_institucional4, catr_id FROM mensagem WHERE catr_id = " + str(self.obtem_catraca().id)+ " ORDER BY mens_id"
+            "mens_institucional3, mens_institucional4, catr_id FROM mensagem ORDER BY mens_id"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -60,11 +60,25 @@ class MensagemDAO(ConexaoGenerica):
             pass
         
     def busca_por_catraca(self, obj):
-        return CatracaDAO().busca(obj.id)
+        return CatracaDAO().busca(obj.id)        
         
-    def obtem_catraca(self):
-        return CatracaDAO().obtem_catraca()
-    
+    def obtem_mensagens(self, obj):
+        sql = "SELECT mens_id, mens_institucional1, mens_institucional2, "\
+        "mens_institucional3, mens_institucional4, catr_id FROM mensagem WHERE catr_id = " + str(obj.id)+ " ORDER BY mens_id"
+        try:
+            with closing(self.abre_conexao().cursor()) as cursor:
+                cursor.execute(sql)
+                list = cursor.fetchall()
+                if list != []:
+                    return list
+                else:
+                    return None
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[mensagem] Erro ao realizar SELECT.', exc_info=True)
+        finally:
+            pass
+        
     def insere(self, obj):
         try:
             if obj:

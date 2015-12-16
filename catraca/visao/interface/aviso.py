@@ -58,23 +58,17 @@ class Aviso(object):
         
     def exibir_mensagem_institucional_scroll(self, texto, tempo=0, limpa=True):
         tempo_padrao = tempo
-        soma = 0
         for i in range (len(texto) - 16 + 1):
             texto_scroll = "{}{}".format(texto[i:i+16], texto[i:i+16])
             if i == 0:
                 tempo = 3
             else:
                 tempo = tempo_padrao
-            print texto_scroll
+            if i == len(texto)-16:
+                tempo = 3
             self.display.mensagem("\n"+texto_scroll, tempo, False, False, limpa)
-            
-            if i == 16:
-                soma += i
-                
-            if soma >= len(texto):
+            if i == len(texto)-16:
                 break
-#             if i == len(texto) - 16:
-#                 break
             
     def exibir_aguarda_cartao(self):
         self.display.mensagem("BEM-VINDO!".center(16) +"\n"+ "APROXIME CARTAO", 0, True, False)

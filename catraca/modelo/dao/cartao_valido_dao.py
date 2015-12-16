@@ -32,7 +32,7 @@ class CartaoValidoDAO(ConexaoGenerica):
             "INNER JOIN tipo ON cartao.tipo_id = tipo.tipo_id "\
             "INNER JOIN vinculo ON vinculo.cart_id = cartao.cart_id "\
             "WHERE ('"+str(data)+"' BETWEEN vinculo.vinc_inicio AND vinculo.vinc_fim) AND "\
-            "(cartao.cart_numero = "+str(numero)+")"
+            "(cartao.cart_numero = '"+str(numero)+"')"
         print "=" * 100
         print sql 
         print "=" * 100

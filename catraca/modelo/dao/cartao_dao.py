@@ -63,7 +63,7 @@ class CartaoDAO(ConexaoGenerica):
     def busca_por_numero(self, numero):
         obj = Cartao()
         sql = "SELECT cart_id, cart_numero, cart_creditos, tipo_id FROM cartao " +\
-              "WHERE cart_numero = " + str(numero)
+              "WHERE cart_numero = '" + str(numero) + "'"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -91,8 +91,8 @@ class CartaoDAO(ConexaoGenerica):
                         "cart_numero, "\
                         "cart_creditos, "\
                         "tipo_id) VALUES (" +\
-                        str(obj.id) + ", " +\
-                        str(obj.numero) + ", " +\
+                        str(obj.id) + ", '" +\
+                        str(obj.numero) + "', " +\
                         str(obj.creditos) + ", " +\
                         str(obj.tipo) + ")"
                 self.aviso = "[cartao] Inserido com sucesso!"
@@ -122,7 +122,7 @@ class CartaoDAO(ConexaoGenerica):
                 else:
                     obj.numero = obj.numero.zfill(10)
                     sql = "UPDATE cartao SET " +\
-                          "cart_numero = " + str(obj.numero) + ", " +\
+                          "cart_numero = '" + str(obj.numero) + "', " +\
                           "cart_creditos = " + str(obj.creditos) + ", " +\
                           "tipo_id = " + str(obj.tipo) +\
                           " WHERE "\

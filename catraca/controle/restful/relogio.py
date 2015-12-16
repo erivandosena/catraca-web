@@ -58,11 +58,12 @@ class Relogio(ControleGenerico, threading.Thread):
             
     def obtem_catraca(self):
         catraca = self.recursos_restful.catraca_json.catraca_get()
+        print catraca
         if catraca is None:
             #catraca
             self.aviso.exibir_catraca_nao_cadastrada()
             self.recursos_restful.obtem_catraca(True, True, False)
-            catraca = self.turno_dao.obtem_catraca()
+            catraca = self.catraca_dao.obtem_catraca()
         else:
             #unidade
             if self.recursos_restful.unidade_json.unidade_get() is None:
