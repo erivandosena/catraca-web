@@ -17,6 +17,7 @@ class CartaoValido(object):
         self.__cart_creditos = None
         self.__tipo_valor = None
         self.__vinc_refeicoes = None
+        self.__vinc_descricao = None
         self.__tipo = None
         self.__vinculo = None
         
@@ -60,6 +61,14 @@ class CartaoValido(object):
     def refeicoes(self, valor):
         self.__vinc_refeicoes = valor
         
+    @property
+    def descricao(self):
+        return self.__vinc_descricao
+    
+    @descricao.setter
+    def descricao(self, valor):
+        self.__vinc_descricao = valor
+
     @property
     def tipo(self):
         return self.__tipo

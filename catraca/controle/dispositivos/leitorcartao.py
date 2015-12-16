@@ -90,6 +90,7 @@ class LeitorCartao(Relogio):
                 if self.bits:
                     LeitorCartao.uso_do_cartao = True
                     
+                    #Mensagem().join()
                     #self.mensagens.pausa()
                     
                     print self.bits
@@ -177,6 +178,7 @@ class LeitorCartao(Relogio):
                 cartao_limite_utilizacao = self.CARTAO.refeicoes
                 cartao_tipo_id = self.CARTAO.tipo
                 cartao_vinculo_id = self.CARTAO.vinculo
+                cartao_vinculo_descricao = self.CARTAO.descricao
                 ##############################################################
                 ## VERIFICA SE O CARTAO POSSUI ISENCAO DE PAGAMENTO
                 ##############################################################

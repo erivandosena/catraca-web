@@ -2,7 +2,7 @@
 -- Autor_script : Erivando Sena
 -- Copyright    : Unilab
 -- Data_criacao : 16/10/2015
--- Data_revisao : 12/12/2015
+-- Data_revisao : 16/12/2015
 -- Status       : Desenvolvimento
 ---------------------------------
 
@@ -137,22 +137,10 @@ COMMENT ON CONSTRAINT fk_catr_id ON giro IS 'Chave estrangeira da tabela catraca
 CREATE TABLE mensagem
 (
   mens_id integer NOT NULL, -- Campo para chave primaria da tabela.
-  mens_inicializacao character varying(35), -- Texto de inicializacao da catraca.
-  mens_saldacao character varying(35), -- Texto de saldacao na catraca.
-  mens_aguardacartao character varying(35), -- Texto solicitando o uso do cartao na catraca.
-  mens_erroleitor character varying(35), -- Texto de erro na leitura do cartao na catraca.
-  mens_bloqueioacesso character varying(35), -- Texto de acesso bloqueado na catraca.
-  mens_liberaacesso character varying(35), -- Texto de acesso liberado na catraca.
-  mens_semcredito character varying(35), -- Texto de cartao sem creditos.
-  mens_semcadastro character varying(35), -- Texto de cartao nao cadastrado no sistema.
-  mens_cartaoinvalido character varying(35), -- Texto de cartao que nao atende a todos os criterios de uso na catraca.
-  mens_turnoinvalido character varying(35), -- Texto de uso do cartao fora da faixa de horarios do turno.
-  mens_datainvalida character varying(35), -- Texto de dias nao uteis para uso da catraca.
-  mens_cartaoutilizado character varying(35), -- Texto para cartao ja utilizado na catraca dentro do turno.
-  mens_institucional1 character varying(35), -- Texto 01 livre para avisos, informes, etc.
-  mens_institucional2 character varying(35), -- Texto 02 livre para avisos, informes, etc.
-  mens_institucional3 character varying(35), -- Texto 03 livre para avisos, informes, etc.
-  mens_institucional4 character varying(35), -- Texto 04 livre para avisos, informes, etc.
+  mens_institucional1 character varying(80), -- Texto 01 livre para avisos, informes, etc.
+  mens_institucional2 character varying(80), -- Texto 02 livre para avisos, informes, etc.
+  mens_institucional3 character varying(80), -- Texto 03 livre para avisos, informes, etc.
+  mens_institucional4 character varying(80), -- Texto 04 livre para avisos, informes, etc.
   catr_id integer NOT NULL, -- Campo para chave estrangeira da tabela catraca.
   CONSTRAINT pk_mens_id PRIMARY KEY (mens_id), -- Chave primaria da tabela mensagem.
   CONSTRAINT fk_catr_id FOREIGN KEY (catr_id) REFERENCES catraca (catr_id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE -- Chave estrangeira da tabela catraca.
@@ -160,18 +148,6 @@ CREATE TABLE mensagem
 ALTER TABLE mensagem OWNER TO postgres;
 COMMENT ON TABLE mensagem IS 'Tabela que armazena as mensagens para exibicao em display LCD de 2 linhas de 16 caracteres.';
 COMMENT ON COLUMN mensagem.mens_id IS 'Campo para chave primaria da tabela.';
-COMMENT ON COLUMN mensagem.mens_inicializacao IS 'Texto de inicializacao da catraca.';
-COMMENT ON COLUMN mensagem.mens_saldacao IS 'Texto de saldacao na catraca.';
-COMMENT ON COLUMN mensagem.mens_aguardacartao IS 'Texto solicitando o uso do cartao na catraca.';
-COMMENT ON COLUMN mensagem.mens_erroleitor IS 'Texto de erro na leitura do cartao na catraca.';
-COMMENT ON COLUMN mensagem.mens_bloqueioacesso IS 'Texto de acesso bloqueado na catraca.';
-COMMENT ON COLUMN mensagem.mens_liberaacesso IS 'Texto de acesso liberado na catraca.';
-COMMENT ON COLUMN mensagem.mens_semcredito IS 'Texto de cartao sem creditos.';
-COMMENT ON COLUMN mensagem.mens_semcadastro IS 'Texto de cartao nao cadastrado no sistema.';
-COMMENT ON COLUMN mensagem.mens_cartaoinvalido IS 'Texto de cartao que nao atende a todos os criterios de uso na catraca.';
-COMMENT ON COLUMN mensagem.mens_turnoinvalido IS 'Texto de uso do cartao fora da faixa de horarios do turno.';
-COMMENT ON COLUMN mensagem.mens_datainvalida IS 'Texto de dias nao uteis para uso da catraca.';
-COMMENT ON COLUMN mensagem.mens_cartaoutilizado IS 'Texto para cartao ja utilizado na catraca dentro do turno.';
 COMMENT ON COLUMN mensagem.mens_institucional1 IS 'Texto 01 livre para avisos, informes, etc.';
 COMMENT ON COLUMN mensagem.mens_institucional2 IS 'Texto 02 livre para avisos, informes, etc.';
 COMMENT ON COLUMN mensagem.mens_institucional3 IS 'Texto 03 livre para avisos, informes, etc.';
@@ -208,7 +184,7 @@ CREATE TABLE vinculo
   vinc_avulso boolean NOT NULL, -- Status que informa se o vinculo esta ativo.
   vinc_inicio timestamp without time zone, -- Data e hora de inicio da validade do vinculo.
   vinc_fim timestamp without time zone, -- Data e hora de fim da validade do vinculo.
-  vinc_descricao character varying(150) NOT NULL, -- Descricao sobre a finalidade do vinculo.
+  vinc_descricao character varying(16) NOT NULL, -- Descricao sobre a finalidade do vinculo.
   vinc_refeicoes integer NOT NULL, -- Quantidade de uso do cartao por refeicao.
   cart_id integer NOT NULL, -- Campo para chave estrangeira da tabela cartao.
   usua_id integer NOT NULL, -- Campo para chave estrangeira da tabela usuario.(Usuario responsavel por realizar a operacao de vinculo).

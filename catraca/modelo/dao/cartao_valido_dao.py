@@ -28,7 +28,7 @@ class CartaoValidoDAO(ConexaoGenerica):
         if data is None:
             data = Util().obtem_datahora_postgresql()
         sql = "SELECT cartao.cart_id, cartao.cart_numero, cartao.cart_creditos, "\
-            "tipo.tipo_valor, vinculo.vinc_refeicoes, tipo.tipo_id, vinculo.vinc_id FROM cartao "\
+            "tipo.tipo_valor, vinculo.vinc_refeicoes, tipo.tipo_id, vinculo.vinc_id, vinculo.vinc_descricao FROM cartao "\
             "INNER JOIN tipo ON cartao.tipo_id = tipo.tipo_id "\
             "INNER JOIN vinculo ON vinculo.cart_id = cartao.cart_id "\
             "WHERE ('"+str(data)+"' BETWEEN vinculo.vinc_inicio AND vinculo.vinc_fim) AND "\

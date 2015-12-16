@@ -94,7 +94,7 @@ class VinculoJson(ServidorRestful):
             if item == "vinc_fim":
                 vinculo.fim = self.dict_obj(formato_json[item])
             if item == "vinc_descricao":
-                    vinculo.fim = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
+                    vinculo.descricao = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
             if item == "vinc_refeicoes":
                 vinculo.refeicoes = self.dict_obj(formato_json[item])
             if item == "cart_id":

@@ -59,7 +59,7 @@ class CatracaJson(ServidorRestful):
                             obj = self.dict_obj(item)
                             if obj:
                                 #lista.append(obj)
-                                print "IP " + str(IP) + " == " + str(obj.ip)
+                                #print "IP " + str(IP) + " == " + str(obj.ip)
                                 if IP == obj.ip:
                                     catraca_local = obj
                                 else:

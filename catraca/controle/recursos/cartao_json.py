@@ -147,6 +147,8 @@ class CartaoJson(ServidorRestful):
                 cartao.tipo = self.dict_obj_cartao_valido(formato_json[item])
             if item == "vinc_id":
                 cartao.vinculo = self.dict_obj_cartao_valido(formato_json[item])
+            if item == "vinc_descricao":
+                cartao.descricao = self.dict_obj_cartao_valido(formato_json[item])
         return cartao
     
     def lista_json(self, lista):

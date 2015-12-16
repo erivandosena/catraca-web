@@ -10,7 +10,8 @@ from catraca.util import Util
 from catraca.visao.interface.aviso import Aviso
 from catraca.controle.dispositivos.solenoide import Solenoide
 from catraca.controle.dispositivos.sensoroptico import SensorOptico
-
+from catraca.controle.dispositivos.leitorcartao import LeitorCartao
+from catraca.visao.interface.mensagem import Mensagem
 
 __author__ = "Erivando Sena" 
 __copyright__ = "Copyright 2015, Unilab" 
@@ -26,7 +27,7 @@ class Alerta(threading.Thread):
     solenoide = Solenoide()
     sensor_optico = SensorOptico()
     status_alerta = False
- 
+
     def __init__(self, intervalo=1):
         super(Alerta, self).__init__()
         threading.Thread.__init__(self)
@@ -35,11 +36,22 @@ class Alerta(threading.Thread):
         
     def run(self):
         print "%s Rodando... " % self.name
+        mensagens = Mensagem()
+        mensagens.start()
         while True:
             if self.status_alerta:
                 self.status_alerta = False
                 self.aviso.exibir_aguarda_cartao()
             self.verifica_giro_irregular()
+            
+            if LeitorCartao.uso_do_cartao:
+                if mensagens.isAlive():
+                    mensagens.join()
+            else:
+                if not mensagens.isAlive():
+                    mensagens = Mensagem()
+                    mensagens.start()
+
             sleep(self.intervalo)
 
     def verifica_giro_irregular(self):

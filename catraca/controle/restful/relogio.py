@@ -58,7 +58,6 @@ class Relogio(ControleGenerico, threading.Thread):
             
     def obtem_catraca(self):
         catraca = self.recursos_restful.catraca_json.catraca_get()
-        print catraca
         if catraca is None:
             #catraca
             self.aviso.exibir_catraca_nao_cadastrada()

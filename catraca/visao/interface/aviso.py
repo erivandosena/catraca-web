@@ -158,6 +158,9 @@ class Aviso(object):
         self.display.mensagem('ERRO DE REDE LAN'.center(16) +'\n'+ 'VERIFICAR SWITCH'.center(16), 1, False, False)
         self.display.limpa_lcd()
         
+    def limpa_display(self):
+        self.display.limpa_lcd()
+        
 #     def exibir_dia_invalido(self):
 #         self.display.mensagem("DIA NAO UTIL".center(16) +"\n"+ "PARA ATENDIMENTO".center(16), 1, False, False)
         
