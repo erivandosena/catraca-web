@@ -28,9 +28,12 @@ class CartaoValidoDAO(ConexaoGenerica):
         if data is None:
             data = Util().obtem_datahora_postgresql()
         sql = "SELECT cartao.cart_id, cartao.cart_numero, cartao.cart_creditos, "\
-            "tipo.tipo_valor, vinculo.vinc_refeicoes, tipo.tipo_id, vinculo.vinc_id, vinculo.vinc_descricao FROM cartao "\
+            "tipo.tipo_valor, vinculo.vinc_refeicoes, tipo.tipo_id, vinculo.vinc_id, "\
+            "vinculo.vinc_descricao, SUBSTR(TRIM(usuario.usua_nome), 0, 16) || '.' as usua_nome "\
+            "FROM cartao "\
             "INNER JOIN tipo ON cartao.tipo_id = tipo.tipo_id "\
             "INNER JOIN vinculo ON vinculo.cart_id = cartao.cart_id "\
+            "INNER JOIN usuario ON usuario.usua_id = vinculo.usua_id "\
             "WHERE ('"+str(data)+"' BETWEEN vinculo.vinc_inicio AND vinculo.vinc_fim) AND "\
             "(cartao.cart_numero = '"+str(numero)+"')"
         print "=" * 100
@@ -43,11 +46,13 @@ class CartaoValidoDAO(ConexaoGenerica):
                 if dados:
                     obj.id = dados[0]
                     obj.numero = dados[1]
-                    obj.creditos = dados[3]
-                    obj.valor = dados[4]
-                    obj.refeicoes = dados[5]
+                    obj.creditos = dados[2]
+                    obj.valor = dados[3]
+                    obj.refeicoes = dados[4]
                     obj.tipo = self.busca_por_tipo(obj)
                     obj.vinculo = self.busca_por_vinculo(obj)
+                    obj.descricao = dados[7]
+                    obj.nome = dados[8]
                     return obj
                 else:
                     return None

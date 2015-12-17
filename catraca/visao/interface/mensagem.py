@@ -39,7 +39,7 @@ class Mensagem(threading.Thread):
         self.aviso.exibir_estatus_catraca(self.util.obtem_ip())
         self.aviso.exibir_mensagem_institucional_fixa(self.aviso.saldacao(), self.util.obtem_datahora_display(), 2)
         #self.aviso.exibir_datahora(self.util.obtem_datahora_display())
-        #self.aviso.exibir_aguarda_cartao()
+        self.aviso.exibir_aguarda_cartao()
 
         count = 0
         while not self._stopevent.isSet():

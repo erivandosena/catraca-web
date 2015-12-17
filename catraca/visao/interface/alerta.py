@@ -12,6 +12,7 @@ from catraca.controle.dispositivos.solenoide import Solenoide
 from catraca.controle.dispositivos.sensoroptico import SensorOptico
 from catraca.controle.dispositivos.leitorcartao import LeitorCartao
 from catraca.visao.interface.mensagem import Mensagem
+from catraca.controle.restful.relogio import Relogio
 
 __author__ = "Erivando Sena" 
 __copyright__ = "Copyright 2015, Unilab" 
@@ -44,13 +45,14 @@ class Alerta(threading.Thread):
                 self.aviso.exibir_aguarda_cartao()
             self.verifica_giro_irregular()
             
-            if LeitorCartao.uso_do_cartao:
-                if mensagens.isAlive():
-                    mensagens.join()
-            else:
-                if not mensagens.isAlive():
-                    mensagens = Mensagem()
-                    mensagens.start()
+            if not Relogio.periodo:
+                if LeitorCartao.uso_do_cartao:
+                    if mensagens.isAlive():
+                        mensagens.join()
+                else:
+                    if not mensagens.isAlive():
+                        mensagens = Mensagem()
+                        mensagens.start()
 
             sleep(self.intervalo)
 
@@ -68,6 +70,4 @@ class Alerta(threading.Thread):
                     self.util.cronometro = 0
             else:
                 break
- 
-
-                  
+            

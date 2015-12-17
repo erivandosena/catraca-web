@@ -5,6 +5,7 @@
 import csv
 import locale
 import threading
+import datetime
 from time import sleep
 from contextlib import closing
 from catraca.controle.raspberrypi.pinos import PinoControle
@@ -51,6 +52,7 @@ class LeitorCartao(Relogio):
     numero_cartao = None
     CATRACA = None
     CARTAO = None
+    TURNO = None
     contador_local = 0
     uso_do_cartao = False
     
@@ -72,6 +74,7 @@ class LeitorCartao(Relogio):
             print "|-------------<LEITOR "+str(Relogio.periodo)+">---------o"
             self.CATRACA = Relogio.catraca
             if self.CATRACA:
+                self.TURNO = Relogio.turno
                 self.ler()
             sleep(self.intervalo)
 
@@ -179,13 +182,15 @@ class LeitorCartao(Relogio):
                 cartao_tipo_id = self.CARTAO.tipo
                 cartao_vinculo_id = self.CARTAO.vinculo
                 cartao_vinculo_descricao = self.CARTAO.descricao
+                cartao_usuario_nome = self.CARTAO.nome
                 ##############################################################
                 ## VERIFICA SE O CARTAO POSSUI ISENCAO DE PAGAMENTO
                 ##############################################################
-                self.aviso.exibir_saldo_cartao(locale.currency(float(cartao_total_creditos)).format())
+                self.aviso.exibir_saldo_cartao(cartao_usuario_nome, locale.currency(float(cartao_total_creditos)).format())
                 saldo_creditos = 0.00
                 cartao_isento = False
-                if self.obtem_isencao(self.numero_cartao) is None:
+                ISENCAO = self.obtem_isencao(self.numero_cartao)
+                if ISENCAO is None:
                     ##############################################################
                     ## VERIFICA SE O CARTAO POSSUI CREDITO(S) PARA UTILIZACAO
                     ##############################################################
@@ -200,14 +205,14 @@ class LeitorCartao(Relogio):
                 else:
                     self.log.logger.info('Isento. [cartao n.] ' + str(self.numero_cartao))
                     cartao_isento = True
-                    self.aviso.exibir_cartao_isento()
+                    self.aviso.exibir_cartao_isento( datetime.datetime.strptime(str(ISENCAO.fim),'%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y %H:%M') )
                 ##############################################################
                 ## VERIFICA O LIMITE PERMITIDO DE USO DO CARTAO DURANTE TURNO
                 ##############################################################
                 if self.obtem_limite_utilizacao(cartao_id) >= cartao_limite_utilizacao:
                     self.log.logger.info('Limite de uso atingido. [cartao n.] ' + str(self.numero_cartao))
                     self.util.beep_buzzer(250, .1, 3)
-                    self.aviso.exibir_cartao_utilizado()
+                    self.aviso.exibir_cartao_utilizado(self.TURNO.descricao)
                     return None
                 else:
                     #cartao

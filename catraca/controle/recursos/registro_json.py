@@ -38,11 +38,13 @@ class RegistroJson(ServidorRestful):
         servidor = self.obter_servidor()
         turno = self.obtem_turno_valido()
         if turno:
-            self.hora_inicio = datetime.datetime.strptime(str(turno.inicio),'%H:%M:%S').time()
-            self.hora_fim = datetime.datetime.strptime(str(turno.fim),'%H:%M:%S').time()
+            data_atual = str(self.util.obtem_datahora().strftime("%Y%m%d"))
+            print data_atual
+            self.hora_inicio = datetime.datetime.strptime(str(turno.inicio),'%H:%M:%S').time().strftime('%H%M%S')
+            self.hora_fim = datetime.datetime.strptime(str(turno.fim),'%H:%M:%S').time().strftime('%H%M%S')
         try:
             if servidor:
-                url = str(servidor) + "registro/jregistro/" + str(self.hora_inicio) + "/" +str(self.hora_fim)
+                url = str(servidor) + "registro/jregistro/" + str(data_atual+self.hora_inicio) + "/" +str(data_atual+self.hora_fim)
                 header = {'Content-type': 'application/json'}
                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
                 #print "Status HTTP: " + str(r.status_code)
@@ -71,10 +73,13 @@ class RegistroJson(ServidorRestful):
             pass
         
     def registro_utilizacao_get(self, hora_ini, hora_fim, cartao_id):
+        data_atual = str(self.util.obtem_datahora().strftime("%Y%m%d"))
+        self.hora_inicio = datetime.datetime.strptime(str(hora_ini),'%H:%M:%S').time().strftime('%H%M%S')
+        self.hora_fim = datetime.datetime.strptime(str(hora_fim),'%H:%M:%S').time().strftime('%H%M%S')
         servidor = self.obter_servidor()
         try:
             if servidor:
-                url = str(servidor) + "registro/jregistro/" +str(hora_ini) + "/" +str(hora_fim)+ "/" +str(cartao_id)
+                url = str(servidor) + "registro/jregistro/" +str(data_atual+self.hora_inicio) + "/" +str(data_atual+self.hora_fim)+ "/" +str(cartao_id)
                 header = {'Content-type': 'application/json'}
                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
                 print "Status HTTP: " + str(r.status_code)

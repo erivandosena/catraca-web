@@ -88,11 +88,14 @@ class UsuarioJson(ServidorRestful):
             if item == "usua_id":
                 usuario.id = self.dict_obj(formato_json[item])
             if item == "usua_nome":
-                usuario.nome = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
+                usuario.nome = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is \
+                None else self.dict_obj(formato_json[item]).encode('utf-8')
             if item == "usua_email":
-                usuario.email = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
+                usuario.email = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is \
+                None else self.dict_obj(formato_json[item]).encode('utf-8')
             if item == "usua_login":
-                usuario.login = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
+                usuario.login = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is \
+                None else self.dict_obj(formato_json[item]).encode('utf-8')
             if item == "usua_senha":
                 usuario.senha = self.dict_obj(formato_json[item])
             if item == "usua_nivel":

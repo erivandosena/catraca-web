@@ -163,6 +163,10 @@ class Util(object):
         print hora_prevista.time()
         return hora_prevista.time()
     
+    def converte_data_string(self, data_hora):
+        dh = datetime.strptime(data_hora, '%Y-%m-%d %H:%M:%S')
+        return str(dh.strftime('%d/%m/%Y %H:%M'))
+    
     def converte_ip_para_long(self, ip):
         ip2int = lambda ip: reduce(lambda a, b: (a << 8) + b, map(int, ip.split('.')), 0)
         return ip2int(ip)

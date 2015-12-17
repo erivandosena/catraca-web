@@ -42,7 +42,7 @@ class Aviso(object):
         return opcoes.get(periodo, "Ola!")
 
     def exibir_inicializacao(self):
-        self.display.mensagem('Iniciando...\n'+self.util.obtem_nome_sistema(), 5, False, False)
+        self.display.mensagem('Iniciando...\n'+self.util.obtem_nome_sistema().center(16), 5, False, False)
 
     def exibir_estatus_catraca(self, status_rede):
         if status_rede:
@@ -50,7 +50,7 @@ class Aviso(object):
         else:
             self.display.mensagem(self.util.obtem_nome_rpi().center(16) +"\n"+ 'OFF-LINE!'.center(16), 5, False, False)
 
-    def exibir_saldacao(self, saldacao, mensagem):
+    def exibir_saldacao(self, saldacao, mensagem=''):
         self.display.mensagem(saldacao.center(16) + "\n"+ mensagem.center(16), 5, False, False)
 
     def exibir_mensagem_institucional_fixa(self, texto1, text2, tempo=0, cursor=False, scroll=False, limpa=True):
@@ -88,17 +88,17 @@ class Aviso(object):
     def exibir_cartao_nao_cadastrado(self):
         self.display.mensagem("CARTAO".center(16) +"\n"+ "NAO CADASTRADO!".center(16), 1, False, False)
         
-    def exibir_cartao_isento(self):
-        self.display.mensagem("CARTAO ISENTO".center(16) +"\n"+ "DE PAGAMENTO!".center(16), 1, False, False)
+    def exibir_cartao_isento(self, dada_hora_fim):
+        self.display.mensagem("ISENTO ATE".center(16) +"\n"+ dada_hora_fim.center(16), 2, False, False)
         
-    def exibir_saldo_cartao(self, saldo):
-        self.display.mensagem("SALDO DO CARTAO:".center(16) +"\n"+ saldo.center(16), 1, False, False)
+    def exibir_saldo_cartao(self, usuario, saldo):
+        self.display.mensagem(usuario.center(16) + "\n"+ str("SALDO " + saldo).center(16), 1, False, False)
         
     def exibir_horario_invalido(self):
         self.display.mensagem("FORA DO HORARIO".center(16) +"\n"+ "DE ATENDIMENTO".center(16), 1, False, False)  
 
-    def exibir_cartao_utilizado(self):
-        self.display.mensagem("CARTAO JA USADO" +"\n"+ "PARA ESTE TURNO".center(16), 2, False, False)
+    def exibir_cartao_utilizado(self, turno):
+        self.display.mensagem("JA USADO PARA" +"\n"+ turno.center(16), 2, False, False)
         
     def exibir_acesso_livre(self):
         self.display.mensagem("BEM-VINDO!".center(16) +"\n"+ "ACESSO LIVRE".center(16), 1, False, False)

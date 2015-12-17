@@ -5,6 +5,7 @@
 import json
 import requests
 from catraca.logs import Logs
+from catraca.util import Util
 from catraca.modelo.dados.servidor_restful import ServidorRestful
 from catraca.modelo.dao.isencao_dao import IsencaoDAO
 from catraca.modelo.entidades.isencao import Isencao
@@ -20,6 +21,7 @@ class IsencaoJson(ServidorRestful):
     
     log = Logs()
     isencao_dao = IsencaoDAO()
+    util = Util()
     
     def __init__(self):
         super(IsencaoJson, self).__init__()
@@ -61,7 +63,7 @@ class IsencaoJson(ServidorRestful):
         servidor = self.obter_servidor()
         try:
             if servidor:
-                url = str(servidor) + "isencao/jisencao/" + str(numero_cartao)
+                url = str(servidor) + "isencao/jisencao/" + str(numero_cartao)+ "/"+str(self.util.obtem_datahora().strftime("%Y%m%d%H%M%S"))
                 header = {'Content-type': 'application/json'}
                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
                 print "Status HTTP: " + str(r.status_code)

@@ -32,9 +32,6 @@ class Relogio(ControleGenerico, threading.Thread):
         
     def run(self):
         print "%s. Rodando... " % self.name
-#         self.aviso.exibir_datahora(self.util.obtem_datahora_display())
-#         self.aviso.exibir_aguarda_cartao()
-        
         while True:
             self.hora_atul = self.util.obtem_hora()
             Relogio.hora = self.hora_atul
@@ -43,7 +40,7 @@ class Relogio(ControleGenerico, threading.Thread):
             print "|-------------<"+str(self.datahora)+">---------o"
             
             if (str(self.hora) == "06:00:00") or (str(self.hora) == "12:00:00") or (str(self.hora) == "18:00:00"):
-                self.aviso.exibir_saldacao(self.aviso.saldacao())
+                self.aviso.exibir_saldacao(self.aviso.saldacao(), self.util.obtem_datahora_display())
                 self.aviso.exibir_aguarda_cartao()
                 
             self.contador += 1

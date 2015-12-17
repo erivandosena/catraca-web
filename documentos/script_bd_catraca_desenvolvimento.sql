@@ -2,7 +2,7 @@
 -- Autor_script : Erivando Sena
 -- Copyright    : Unilab
 -- Data_criacao : 16/10/2015
--- Data_revisao : 16/12/2015
+-- Data_revisao : 17/12/2015
 -- Status       : Desenvolvimento
 ---------------------------------
 
@@ -31,7 +31,7 @@ CREATE TABLE turno
   turn_id integer NOT NULL, -- Campo para chave primaria da tabela.
   turn_hora_inicio time without time zone, -- Hora inicio do periodo para liberacao da catraca.
   turn_hora_fim time without time zone, -- Hora final do periodo para liberacao da catraca.
-  turn_descricao character varying(25), -- Descricao da refeicao disponibilizada durante o turno. Ex.: Cafe, Almoco, Janta.
+  turn_descricao character varying(16), -- Descricao da refeicao disponibilizada durante o turno. Ex.: Cafe, Almoco, Janta.
   CONSTRAINT pk_turn_id PRIMARY KEY (turn_id) -- Chave primaria da tabela turno.
 );
 ALTER TABLE turno OWNER TO postgres;

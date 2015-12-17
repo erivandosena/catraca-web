@@ -5,6 +5,7 @@
 import json
 import requests
 from catraca.logs import Logs
+from catraca.util import Util
 from catraca.modelo.dados.servidor_restful import ServidorRestful
 from catraca.modelo.dao.cartao_dao import CartaoDAO
 from catraca.modelo.entidades.cartao import Cartao
@@ -20,6 +21,7 @@ class CartaoJson(ServidorRestful):
     
     log = Logs()
     cartao_dao = CartaoDAO()
+    util = Util()
     
     def __init__(self):
         super(CartaoJson, self).__init__()
@@ -61,7 +63,7 @@ class CartaoJson(ServidorRestful):
         servidor = self.obter_servidor()
         try:
             if servidor:
-                url = str(servidor) + "cartao/jcartao/" + str(numero_cartao)
+                url = str(servidor) + "cartao/jcartao/" + str(numero_cartao)+ "/"+str(self.util.obtem_datahora().strftime("%Y%m%d%H%M%S"))
                 print url
                 header = {'Content-type': 'application/json'}
                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
@@ -70,6 +72,7 @@ class CartaoJson(ServidorRestful):
                 print r.text
 
                 if r.text != '':
+                    print json.loads(r.text)
                     dados  = json.loads(r.text)
                     LISTA_JSON = dados["cartao"]
                     if LISTA_JSON != []:
@@ -127,29 +130,35 @@ class CartaoJson(ServidorRestful):
         return cartao
 
     def dict_obj_cartao_valido(self, formato_json):
-        cartao = CartaoValido()
+        cartao_valido = CartaoValido()
         if isinstance(formato_json, list):
             formato_json = [self.dict_obj_cartao_valido(x) for x in formato_json]
         if not isinstance(formato_json, dict):
             return formato_json
         for item in formato_json:
             if item == "cart_id":
-                cartao.id = self.dict_obj_cartao_valido(formato_json[item])
+                cartao_valido.id = self.dict_obj_cartao_valido(formato_json[item])
             if item == "cart_numero":
-                cartao.numero = self.dict_obj_cartao_valido(formato_json[item])
+                cartao_valido.numero = self.dict_obj_cartao_valido(formato_json[item])
             if item == "cart_creditos":
-                cartao.creditos = self.dict_obj_cartao_valido(formato_json[item])
+                cartao_valido.creditos = self.dict_obj_cartao_valido(formato_json[item])
             if item == "tipo_valor":
-                cartao.valor = self.dict_obj_cartao_valido(formato_json[item])
+                cartao_valido.valor = self.dict_obj_cartao_valido(formato_json[item])
             if item == "vinc_refeicoes":
-                cartao.refeicoes = self.dict_obj_cartao_valido(formato_json[item])
+                cartao_valido.refeicoes = self.dict_obj_cartao_valido(formato_json[item])
             if item == "tipo_id":
-                cartao.tipo = self.dict_obj_cartao_valido(formato_json[item])
+                cartao_valido.tipo = self.dict_obj_cartao_valido(formato_json[item])
             if item == "vinc_id":
-                cartao.vinculo = self.dict_obj_cartao_valido(formato_json[item])
+                cartao_valido.vinculo = self.dict_obj_cartao_valido(formato_json[item])
             if item == "vinc_descricao":
-                cartao.descricao = self.dict_obj_cartao_valido(formato_json[item])
-        return cartao
+                cartao_valido.descricao = self.dict_obj_cartao_valido(formato_json[item]) if \
+                self.dict_obj_cartao_valido(formato_json[item]) is None else \
+                self.dict_obj_cartao_valido(formato_json[item]).encode('utf-8')
+            if item == "usua_nome":
+                cartao_valido.nome = self.dict_obj_cartao_valido(formato_json[item]) \
+                if self.dict_obj_cartao_valido(formato_json[item]) is None else \
+                self.dict_obj_cartao_valido(formato_json[item]).encode('utf-8')
+        return cartao_valido
     
     def lista_json(self, lista):
         if lista:

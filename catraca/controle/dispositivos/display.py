@@ -71,20 +71,6 @@ class Display(object):
 
     def mensagem(self, texto, duracao, cursor, scroll, limpa=True):
         texto = self.remove_acentos(texto).upper()
-        
-#         if texto1:
-#             texto1 = self.remove_acentos(texto1).upper()
-#         else:
-#             texto1 = "\n"
-#         if texto2:    
-#             texto1 = self.remove_acentos(texto2).upper()
-#         
-#         texto = texto1 +" "+ texto2
-#             
-#         for char in texto:
-#             # Advance to next line if character is a new line.
-#             if char == '\n':
-
         try:
             # limpa
             if limpa:
