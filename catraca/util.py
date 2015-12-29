@@ -12,7 +12,8 @@ import datetime
 import subprocess
 from time import sleep
 from catraca.logs import Logs
-from catraca.controle.raspberrypi.pinos import PinoControle
+#from catraca.controle.raspberrypi.pinos import PinoControle
+from catraca.controle.dispositivos.buzzer import Buzzer
 
 
 __author__ = "Erivando Sena" 
@@ -26,9 +27,10 @@ class Util(object):
     locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
     
     log = Logs()
-    rpi = PinoControle()
+    #rpi = PinoControle()
     
-    pino_buzzer = rpi.ler(21)['gpio']
+    #pino_buzzer = rpi.ler(21)['gpio']
+    buzzer = Buzzer()
     cronometro = 0
     hora_stop = None
     
@@ -68,27 +70,28 @@ class Util(object):
     def obtem_path(self, arquivo):
         return "%s" % (os.path.join(os.path.dirname(os.path.abspath(__file__)), arquivo))
         
-    def buzzer(self, frequencia, intensidade):
-        period = 1.0 / frequencia
-        delay = period / 2.0
-        cycles = int(intensidade * frequencia)
-        retorno = False
-        for i in range(cycles):
-            self.rpi.atualiza(self.pino_buzzer, True)
-            sleep(delay)
-            self.rpi.atualiza(self.pino_buzzer, False)
-            sleep(delay)
-            retorno = True
-        return retorno
+#     def buzzer(self, frequencia, intensidade):
+#         period = 1.0 / frequencia
+#         delay = period / 2.0
+#         cycles = int(intensidade * frequencia)
+#         retorno = False
+#         for i in range(cycles):
+#             self.rpi.atualiza(self.pino_buzzer, True)
+#             sleep(delay)
+#             self.rpi.atualiza(self.pino_buzzer, False)
+#             sleep(delay)
+#             retorno = True
+#         return retorno
     
     def beep_buzzer(self, frequencia, intensidade, quantidade_beep):
-        while quantidade_beep > 0:
-            self.rpi.atualiza(self.pino_buzzer, True)
-            self.buzzer(frequencia, intensidade)
-            print 'beeep!'
-            sleep(intensidade)
-            self.rpi.atualiza(self.pino_buzzer, False)
-            quantidade_beep -= 1
+        self.buzzer.reproduzir(frequencia, intensidade, quantidade_beep)
+#         while quantidade_beep > 0:
+#             self.rpi.atualiza(self.pino_buzzer, True)
+#             self.buzzer(frequencia, intensidade)
+#             print 'beeep!'
+#             sleep(intensidade)
+#             self.rpi.atualiza(self.pino_buzzer, False)
+#             quantidade_beep -= 1
             
     def beep_buzzer_delay(self, frequencia, intensidade, quantidade_beep, delay_beep):
         self.cronometro += 1

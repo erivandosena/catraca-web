@@ -12,7 +12,8 @@
 # from testes import finalidade_teste
 # from testes import controlegiro_teste
 # from testes import buzzer_teste
-from testes import TesteRFID
+# from testes import TesteRFID
+from testes import buzzer
 
 
 
@@ -21,8 +22,8 @@ __author__ = "Erivando Sena"
 
 if __name__ == '__main__':
     
-    
-    TesteRFID.main()
+    buzzer.main()
+    #TesteRFID.main()
     
     #usuario_teste.main()
     #tipo_teste.main()
