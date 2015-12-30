@@ -39,7 +39,7 @@ class CatracaJson(ServidorRestful):
                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
                 print "Status HTTP: " + str(r.status_code)
                 
-                print r.text
+                #print r.text
 
                 if r.text == '':
                     self.contador_acesso_servidor += 1
@@ -49,7 +49,9 @@ class CatracaJson(ServidorRestful):
                     else:
                         self.contador_acesso_servidor = 0
                 else:
+
                     dados  = json.loads(r.text)
+                    
                     LISTA_JSON = dados["catracas"]
                     
                     if LISTA_JSON != []:
@@ -85,7 +87,7 @@ class CatracaJson(ServidorRestful):
                             self.aviso.exibir_aguarda_cartao()
                             self.contador_acesso_servidor = 0
         except Exception as excecao:
-            print excecao
+            #print excecao
             self.log.logger.error('Erro obtendo json catraca', exc_info=True)
         finally:
             pass

@@ -22,7 +22,7 @@ from catraca.controle.recursos.registro_json import RegistroJson
 from catraca.controle.restful.relogio import Relogio
 from catraca.modelo.dao.cartao_valido_dao import CartaoValidoDAO
 from catraca.modelo.dao.isencao_dao import IsencaoDAO
-#from catraca.visao.interface.mensagem import Mensagem
+from catraca.visao.interface.mensagem import Mensagem
 
 
 __author__ = "Erivando Sena" 

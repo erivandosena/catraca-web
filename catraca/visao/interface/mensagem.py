@@ -2,8 +2,8 @@
 # -*- coding: latin-1 -*-
 
 
-import time
 import threading
+#from time import sleep
 from catraca.logs import Logs
 from catraca.util import Util
 from catraca.visao.interface.aviso import Aviso
@@ -36,11 +36,6 @@ class Mensagem(threading.Thread):
 
     def run(self):
         print "%s Rodando... " % self.name
-        self.aviso.exibir_estatus_catraca(self.util.obtem_ip())
-        self.aviso.exibir_mensagem_institucional_fixa(self.aviso.saldacao(), self.util.obtem_datahora_display(), 2)
-        #self.aviso.exibir_datahora(self.util.obtem_datahora_display())
-        self.aviso.exibir_aguarda_cartao()
-
         count = 0
         while not self._stopevent.isSet():
             count += 1
@@ -61,13 +56,12 @@ class Mensagem(threading.Thread):
         if catraca:
             mensagens = self.mensagem_dao.obtem_mensagens(catraca)
             try:
+                self.aviso.exibir_mensagem_institucional_fixa("Temperatura CPU", self.util.obtem_cpu_temp() +" C", 5)
                 self.aviso.exibir_mensagem_institucional_fixa(self.aviso.saldacao(), self.util.obtem_datahora_display(), 3)
                 if mensagens:
                     for msg in mensagens:
                         for i in range (len(msg)-2):
-                            self.aviso.exibir_mensagem_institucional_scroll(str(msg[i+1]), 0.4, False)
-                self.aviso.exibir_mensagem_institucional_fixa("Temperatura CPU", self.util.obtem_cpu_temp() +" C", 5)
-                #self.aviso.exibir_mensagem_institucional_fixa("Desempenho CPU", self.util.obtem_cpu_speed() +" RPM", 5)
+                            self.aviso.exibir_mensagem_institucional_scroll(str(msg[i+1]), 0.4, False, Relogio.periodo)
             except Exception as excecao:
                 print excecao
                 self.log.logger.error('Erro exibindo mensagem no display', exc_info=True)

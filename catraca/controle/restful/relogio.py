@@ -108,7 +108,7 @@ class Relogio(ControleGenerico, threading.Thread):
                     self.aviso.exibir_horario_invalido()
                     self.util.beep_buzzer(855, .5, 1)
                     print "|-------------< Turno FINALIZADO! >---------o"
-                    self.aviso.exibir_aguarda_cartao()
+                    #self.aviso.exibir_aguarda_cartao()
                 return None
         else:
             return None

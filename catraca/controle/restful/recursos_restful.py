@@ -48,26 +48,26 @@ class RecursosRestful(object):
         super(RecursosRestful, self).__init__()
         
     def obtem_recursos(self, display=False, mantem_tabela=False, limpa_tabela=False):
-        try:
-            
-            self.obtem_catraca(display, mantem_tabela, limpa_tabela)
-            self.obtem_mensagem(display, mantem_tabela, limpa_tabela)
-            self.obtem_unidade(display, mantem_tabela, limpa_tabela)
-            self.obtem_catraca_unidade(display, mantem_tabela, limpa_tabela)
-            self.obtem_turno(display, mantem_tabela, limpa_tabela)
-            self.obtem_unidade_turno(display, mantem_tabela, limpa_tabela)
-            self.obtem_tipo(display, mantem_tabela, limpa_tabela)
-            self.obtem_usuario(display, mantem_tabela, limpa_tabela)
-            self.obtem_custo_refeicao(display, mantem_tabela, limpa_tabela)
-            self.obtem_cartao(display, mantem_tabela, limpa_tabela)
-            self.obtem_isencao(display, mantem_tabela, limpa_tabela)
-            self.obtem_vinculo(display, mantem_tabela, limpa_tabela)
-            self.obtem_registro(display, mantem_tabela, limpa_tabela)
-            
-        except IntegrityError as excecao:
-            print excecao
-            self.obtem_recursos()
-            self.log.logger.error('Erro ao atualizar tabelas.', exc_info=True)
+#         try:
+#             
+        self.obtem_catraca(display, mantem_tabela, limpa_tabela)
+        self.obtem_mensagem(display, mantem_tabela, limpa_tabela)
+        self.obtem_unidade(display, mantem_tabela, limpa_tabela)
+        self.obtem_catraca_unidade(display, mantem_tabela, limpa_tabela)
+        self.obtem_turno(display, mantem_tabela, limpa_tabela)
+        self.obtem_unidade_turno(display, mantem_tabela, limpa_tabela)
+        self.obtem_tipo(display, mantem_tabela, limpa_tabela)
+        self.obtem_usuario(display, mantem_tabela, limpa_tabela)
+        self.obtem_custo_refeicao(display, mantem_tabela, limpa_tabela)
+        self.obtem_cartao(display, mantem_tabela, limpa_tabela)
+        self.obtem_isencao(display, mantem_tabela, limpa_tabela)
+        self.obtem_vinculo(display, mantem_tabela, limpa_tabela)
+        self.obtem_registro(display, mantem_tabela, limpa_tabela)
+#             
+#         except IntegrityError as excecao:
+#             print excecao
+#             self.obtem_recursos()
+#             self.log.logger.error('Erro ao atualizar tabelas.', exc_info=True)
         
     def obtem_catraca(self, display=False, mantem_tabela=False, limpa_tabela=False):
         print "|---------------------------------------------------------------<CATRACA>---------o"

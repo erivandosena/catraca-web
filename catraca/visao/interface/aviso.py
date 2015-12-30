@@ -7,7 +7,6 @@ from catraca.logs import Logs
 from catraca.util import Util
 from catraca.controle.dispositivos.display import Display
 
-
 __author__ = "Erivando Sena" 
 __copyright__ = "Copyright 2015, Unilab" 
 __email__ = "erivandoramos@unilab.edu.br" 
@@ -56,7 +55,9 @@ class Aviso(object):
     def exibir_mensagem_institucional_fixa(self, texto1, text2, tempo=0, cursor=False, scroll=False, limpa=True):
         self.display.mensagem(texto1.center(16) +"\n"+ text2.center(16), tempo, cursor, scroll, limpa)
         
-    def exibir_mensagem_institucional_scroll(self, texto, tempo=0, limpa=True):
+    def exibir_mensagem_institucional_scroll(self, texto, tempo=0, limpa=True, turno_ativo=False):
+        if turno_ativo:
+            return None
         tempo_padrao = tempo
         for i in range (len(texto) - 16 + 1):
             texto_scroll = "{}{}".format(texto[i:i+16], texto[i:i+16])
@@ -98,7 +99,7 @@ class Aviso(object):
         self.display.mensagem("FORA DO HORARIO".center(16) +"\n"+ "DE ATENDIMENTO".center(16), 1, False, False)  
 
     def exibir_cartao_utilizado(self, turno):
-        self.display.mensagem("JA USADO PARA" +"\n"+ turno.center(16), 2, False, False)
+        self.display.mensagem("JA USADO PARA".center(16) +"\n"+ turno.center(16), 2, False, False)
         
     def exibir_acesso_livre(self):
         self.display.mensagem("BEM-VINDO!".center(16) +"\n"+ "ACESSO LIVRE".center(16), 1, False, False)
