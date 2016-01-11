@@ -7,12 +7,8 @@ body{
 	font-family: sans-serif;
 }
 
-hr{
+footer{
 	
-}
-
-input{
-	color: #000;
 }
 
 h1{
@@ -144,7 +140,6 @@ th{
 	padding-bottom: 10px;
 	border-radius: 10px;
 	margin-top: 10px;
-	margin-right: 10px;
 	position: relative;
 	box-shadow: 0 1px 3px #000;
 	background-color: #fff;
@@ -210,10 +205,6 @@ th{
 
 }
 
-.relatorio hr{
-	margin: 10px;
-}
-
 .relatorio h2, h3{
 	font-weight: bold;
 	text-align: center;
@@ -222,13 +213,57 @@ th{
 
 .relatorio span{
 	display: block;
-	font-weight: bold;
+	font-weight: bold;	
+	padding: 5px;	
+}
+
+.tabela-relatorio{
+	width: 100%;
+	font-size: 20px;
+	text-align: left !important;
+}
+
+.tabela-relatorio th{
+	background: #CCC;
 	padding: 5px;
+	font-size: 16px !important;
+}
+
+.tabela-relatorio td{
+	padding: 10px;
+	border-top:;
+	font-size: 16px !important;
+}
+
+#soma{
+	border-top: 2px solid #ccc;
+	border-bottom: 3px solid #ccc;
+	font-weight: bold;
+}
+
+.dados-relatorio span{
+	font-weight: normal;
+	display: inline;
+	background-color: none;
+}
+
+.cab-relatorio2 {
+	background-color: #CCC;
+	margin-top: 5px;
+	margin-bottom: 10px;
+	text-align:;	
+}
+
+.cab-relatorio2 span, .dados-relatorio span{
+	position: relative; 
+	display: inline !important;
+	font-size: 16px;
+	margin-right: 20px;
+	margin-top: 10px;
 }
 
 .cab-relatorio{
 	background-color: #CCC;
-	margin-top: 5px;
 	margin-bottom: 10px;
 	text-align: center;
 }
@@ -257,12 +292,12 @@ th{
 
 hr.um{
 	border: 1px solid #CCC;
-	margin: 0;
+	margin-bottom: 3px;
 	padding: 0;
 }
 
 hr.dois{
-	margin: 0;
+	margin-bottom: 3px;
 	padding: 0;
 	border: 2px solid #CCC;
 }
@@ -457,39 +492,41 @@ a:focus {
  
 /* Menu das abas */
 .tabs-abas {
-	border-bottom: ; 
 	float: none;
 	background: transparent;
 	opacity: 3;
-	border-bottom: 1px solid #ddd;
 }
 
 .tabs-abas ul {
-   list-style: none;
+    margin:0px;
+    margin-bottom:-1px;
+    padding:0px;
+    text-align:left;
 
 }
 .tabs-abas ul li {
-  float: left;  
-  padding-right: 3px;
+ list-style:none;
+    display:inline;
+    margin:0;
+    padding:0;
 
 }
 .tabs-abas ul li a {
-  display: block;
-  padding: 10px 20px;
-  text-decoration: none;
-  font-weight: 700;  
-  letter-spacing: 0.08em;
-  color: #000;   
-  border-bottom: none;
-  border-top-left-radius: 5px;
-  border-top-right-radius: 5px;
+  display: inline-block;
+    text-decoration: none;
+    color: #A4A4A4;
+    padding: 7px 14px 4px 14px; 
+    cursor: default;
+    background-color: transparent;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
 }
 
 .tabs-abas ul li a:hover{	
-	background-color: #FFFAFA;	
+	background-color: #CCCCCC;
 }
 
-.tabs-abas ul li a.activo-tab-abas{
+.tabs-abas ul li a.tab-ativa{
   background-color: #fff;  
   border: 1px solid #ddd;
   border-top-color: rgb(221, 221, 221);
@@ -503,15 +540,19 @@ a:focus {
 /* Conteúdo das abas */
 .tabs {	
   	display: none;
- 	padding: 10px;  
-  	border-bottom-color: #666;
-  	background: #fff;  
+ 	padding: 10px;   	
+  	background: #fff;
+  	border:1px solid #D5D9DE;  
+}
+
+.tabs:after{
+	 clear: both;
 }
 
 .tabs:before,
 .tabs:after{
 	content: " ";
-  	display: ;
+  	display: table;
 }
 
 .first-tab {
@@ -520,10 +561,6 @@ a:focus {
 
 
 /*paginação*/
-.paginacao{
-
-	
-}
 
 .paginacao ul {
 	list-style: none;	

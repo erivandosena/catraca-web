@@ -17,7 +17,7 @@ class RelatorioController {
 		$this->dao = new UnidadeDAO ();
 		$listaDeUnidades = $this->dao->retornaLista ();
 		
-		echo '<div class="borda">
+		echo '<div class="doze colunas borda relatorio">
 									<form action="" class="formulario sequencial">									
 											<div id="data">
 												<label for="opcoes-1">
@@ -416,19 +416,27 @@ class RelatorioController {
 		}
 		$subTotal ['total'] = 0;
 		
-		echo '
+		echo '<div class=" doze colunas borda relatorio">
+				<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>	
+				<hr class="um">
+				<h3>RESTAURANTE UNIVERSITÁRIO</h3>
+				<span>Data:</span>
+				<span>Unidade Acadêmica:</span>
+				<span>Turno:</span>									
+				<hr class="dois">';
 		
-		<div class=" doze colunas borda">';
-		
-		echo '<table class="tabela quadro no-centro fundo-branco">';
-		echo '<tr class="centralizado"><td colspan="' . (count ( $tipos ) + 2) . '">' . $titulo . '</td></tr>';
-		echo '<tr>';
-		echo '<td>Data</td>';
+		echo '<table class="tabela-relatorio">
+				<thead>
+					<tr>
+						<th>Data</th>';
 		foreach ( $tipos as $tipo ) {
-			echo '<td>' . $tipo->getNome () . '</td>';
-		}
-		echo '<td>Total</td>';
-		echo '</tr>';
+			echo '<th>' . $tipo->getNome () . '</th>';
+		}		
+		echo'			<th>Total</th>
+				</thead>';
+		
+		echo '<tbody>';
+		
 		foreach ( $listaDeDatas as $data ) {
 			echo '<tr>';
 			echo '<td>' . date ( 'd/m/Y', strtotime ( $data ) ) . '</td>';
@@ -441,15 +449,20 @@ class RelatorioController {
 			echo '</tr>';
 			$subTotal ['total'] += $listaDeDados [$data] ['total'];
 		}
-		echo '<tr><th>Somatório</th>';
+		echo '<tr id="soma">
+				<th>Somatório</th>';
 		foreach ( $tipos as $tipo ) {
 			echo '<td>R$ '.number_format ( $subTotal [$tipo->getId ()] , 2, ',', '.' )  . '</td>';
 		}
 		echo '<td>R$ ' . number_format ( $subTotal ['total']  , 2, ',', '.' )  . '</td>';
 		echo '</tr>';
-		echo '</table>';
-		
-		echo '</div>';
+		echo '</table>
+				<div class="doze colunas relatorio-rodape">
+					<span>CATRACA | Copyright © 2015 - DTI</span>
+					<span>Relatório Emitido em: '.$date = date('d-m-Y H:i:s').'</span>
+					<a class="botao icone-printer"> Imprimir</a>
+				</div>		
+			</div>';
 	}
 	
 	
@@ -460,47 +473,63 @@ class RelatorioController {
 		}
 		$subTotal ['total'] = 0;
 	
-		echo '
-	
-		<div class=" doze colunas borda">';
-	
-		echo '<table class="tabela quadro no-centro fundo-branco">';
-		echo '<tr class="centralizado"><td colspan="' . (count ( $tipos ) + 2) . '">' . $titulo . '</td></tr>';
-		echo '<tr>';
-		echo '<td>Data</td>';
+		echo '<div class=" doze colunas borda relatorio">
+				<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>	
+				<hr class="um">
+				<h3>RESTAURANTE UNIVERSITÁRIO</h3>
+				<span>Data:</span>
+				<span>Unidade Acadêmica:</span>
+				<span>Turno:</span>									
+				<hr class="dois">';
+		
+		echo '<table class="tabela-relatorio">
+				<thead>
+					<tr>
+						<th>Data</th>';
 		foreach ( $tipos as $tipo ) {
-			echo '<td>' . $tipo->getNome () . '</td>';
-		}
-		echo '<td>Total</td>';
-		echo '</tr>';
+			echo '<th>' . $tipo->getNome () . '</th>';
+		}		
+		echo'			<th>Total</th>
+				</thead>';
+		
+		echo '<tbody>';
+		
 		foreach ( $listaDeDatas as $data ) {
 			echo '<tr>';
 			echo '<td>' . date ( 'd/m/Y', strtotime ( $data ) ) . '</td>';
 			foreach ( $tipos as $tipo ) {
-	
-				echo '<td>' . $listaDeDados [$data] [$tipo->getId ()] . '</td>';
+				
+				echo '<td>R$ '.$listaDeDados [$data] [$tipo->getId ()] . '</td>';
 				$subTotal [$tipo->getId ()] += $listaDeDados [$data] [$tipo->getId ()];
 			}
-			echo '<td>' . $listaDeDados [$data] ['total'] . '</td>';
+			echo '<td>R$ '.$listaDeDados [$data] ['total'] . '</td>';
 			echo '</tr>';
 			$subTotal ['total'] += $listaDeDados [$data] ['total'];
 		}
-		echo '<tr><th>Somatório</th>';
+		echo '<tr id="soma">
+				<th>Somatório</th>';
 		foreach ( $tipos as $tipo ) {
-			echo '<td>' . $subTotal [$tipo->getId ()] . '</td>';
+			echo '<td>'.$subTotal [$tipo->getId ()] . '</td>';
 		}
 		echo '<td>' . $subTotal ['total'] . '</td>';
 		echo '</tr>';
+		
 		$ultimoCusto = $this->pegaUltimoCusto();
-		echo '<tr><th>Custo</th>';
+		echo '<tr id="soma">
+				<th>Custo</th>';
 		foreach ( $tipos as $tipo ) {
 			echo '<td>R$ ' . number_format (($ultimoCusto*$subTotal [$tipo->getId ()]), 2, ',', '.' ) . '</td>';
 		}
 		echo '<td>R$ ' . number_format ( ($ultimoCusto*$subTotal ['total']) , 2, ',', '.' )  . '</td>';
 		echo '</tr>';
-		echo '</table>';
-	
-		echo '</div>';
+		
+		echo '</table>
+				<div class="doze colunas relatorio-rodape">
+					<span>CATRACA | Copyright © 2015 - DTI</span>
+					<span>Relatório Emitido em: '.$date = date('d-m-Y H:i:s').'</span>
+					<a class="botao icone-printer"> Imprimir</a>
+				</div>		
+			</div>';
 	}
 }
 

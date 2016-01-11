@@ -22,68 +22,61 @@ class CartaoController{
 
 		$this->view = new CartaoView();
 		
-		$selecaoUsuarios = "active";
+		$selecaoUsuarios = "";
 		$selecaoCartoes = "";
 		$selecaoVinculos = "";
 		$selecaoIsencoes = "";
 		if(isset($_GET['selecionado']) || isset ( $_GET ['nome'] ) || isset($_GET['vinculoselecionado'])){
-			$selecaoUsuarios = "active";
+			$selecaoUsuarios = "";
 			$selecaoCartoes = "";
 			$selecaoVinculos = "";
 			$selecaoIsencoes = "";
 		}else if(isset($_GET['cartaoselecionado']) || isset ( $_GET ['numero'])){
 			$selecaoUsuarios = "";
-			$selecaoCartoes = "active";
+			$selecaoCartoes = "";
 			$selecaoVinculos = "";
 			$selecaoIsencoes = "";
 		}else if(isset($_GET['filtro_data']) || isset ( $_GET ['busca_vinculos']) || isset($_GET['vinculos_validos'])){
 			$selecaoUsuarios = "";
 			$selecaoCartoes = "";
-			$selecaoVinculos = "active";
+			$selecaoVinculos = "";
 			$selecaoIsencoes = "";
 		}else if(isset($_GET['filtro_data_isen']) || isset ( $_GET ['busca_vinculos_isen']) || isset($_GET['vinculos_validos_isen'])){
 			$selecaoUsuarios = "";
 			$selecaoCartoes = "";
 			$selecaoVinculos = "";
-			$selecaoIsencoes = "active";
+			$selecaoIsencoes = "";
 		}
 		
-		echo '<div class="navegacao"> <div class = "simpleTabs">
-		        <ul class = "simpleTabsNavigation">
-				
-					<li><a href="#">Usu&aacute;rios</a></li>
-					<li><a href="#">Cart&otilde;es</a></li>
-					<li><a href="#">Vínculos</a></li>
-					<li><a href="#">Isenções</a></li>
-				
-		        </ul>
-		        <div class = "simpleTabsContent">';
-				
+		echo '<div class="conteiner"> 
+				<div class = "tabs-conteiner">
+			        <div class="tabs-abas">
+						<ul>				
+							<li><a href="#tab1" class="tab-ativa">Usu&aacute;rios</a></li>
+							<li><a href="#tab2">Cart&otilde;es</a></li>
+							<li><a href="#tab3">VÃ­nculos</a></li>
+							<li><a href="#tab4">IsenÃ§Ãµes</a></li>					
+				        </ul>
+					</div>
+		        	<div class = "tabs first-tab" id="tab1">';				
 					$this->pesquisaUsuarioAdicionarVinculo();
 				
 				echo '</div>
-		        <div class = "simpleTabsContent">';
+		        	<div class = "tabs" id="tab2">';
 					$this->pesquisaCartaoCancelarVinculo();
 				
-				echo '
-						
-						</div>
-		        <div class = "simpleTabsContent">'; 
+				echo '</div>
+		       		<div class = "tabs" id="tab3">'; 
 					$this->pesquisaVinculosAtivos();
 				
-				echo '</div>
-						
-						
-						
-				 <div class = "simpleTabsContent">'; 
+				echo '</div>						
+					 <div class = "tabs " id="tab4">'; 
 					$this->pesquisaIsencoes();
 					
 				echo '</div>
-		    </div></div>';
-		
-		
-		
+		    	</div>';		
 	}
+	
 	public function pesquisaIsencoes(){
 		$this->view->formBuscaVinculoIsencao();
 		$this->view->filtroDataIsencao();
