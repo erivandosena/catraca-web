@@ -21,3 +21,4 @@
 *.exe
 *.log
 /projeto/unicafeWin/.recommenders/index/http___download_eclipse_org_recommenders_models_luna_
+*.buildpath
