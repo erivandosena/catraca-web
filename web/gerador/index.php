@@ -37,14 +37,12 @@ if (isset ( $_GET ["sair"] )) {
 
 <title>Projeto Catraca</title>
 
-<script type="text/javascript" src="js/simpletabs_1.3.js"></script>
 <link rel="stylesheet" href="css/simpletabs.css" />
-<link rel="stylesheet"
-	href="http://spa.dsi.unilab.edu.br/spa/css/spa.css" />
-<link rel="stylesheet" href="css/estilo.css" type="text/css"
-	media="screen">
-
+<link rel="stylesheet" href="http://spa.dsi.unilab.edu.br/spa/css/spa.css" />
+<link rel="stylesheet" href="css/estilo.css" type="text/css"/>
+<link rel="stylesheet" href="css/estilo_responsivo.css" type="text/css"/>
 <script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/simpletabs_1.3.js"></script>
 </head>
 
 <body>
@@ -95,10 +93,11 @@ if (isset ( $_GET ["sair"] )) {
 
 		<div id="barra" class="doze colunas fundo-azul3 alinhado-a-direita">
 			<div class="config">
-				<a href="#"><span>Perguntas frequentes |</span></a> <a href="#"><span>Contato
-						|</span></a> <a href="#"><span>Servi&ccedil;os |</span></a> <a
-					href="#"><span>Dados Abertos |</span></a> <a href="#"><span>&Aacute;rea
-						de Imprensa |</span></a>
+				<a href="#"><span>Perguntas frequentes |</span></a> 
+				<a href="#"><span>Contato |</span></a> 
+				<a href="#"><span>Servi&ccedil;os |</span></a> 
+				<a href="#"><span>Dados Abertos |</span></a> 
+				<a href="#"><span>&Aacute;rea de Imprensa |</span></a>
 			</div>
 		</div>
 
@@ -110,21 +109,39 @@ if (isset ( $_GET ["sair"] )) {
 						
 						
 						// exibir menu de usuario Super.
+						
 						echo '
-							<div class="duas colunas">					
-								<div class="padding">
+		
+							<div id="menu2" class="doze colunas barra-menu">
+							    <div class="menu-horizontal">
+							        <ol class="a-esquerda">
+							             <li><a href="?pagina=inicio" class="item-vertical-ativo"><span class="icone-home3"></span> <span class="item-vertical-texto">Início</span></a></li>					
+								      	 <li><a href="?pagina=gerador" class="item-vertical"><span class="icone-credit-card"></span> <span class="item-vertical-texto">Registro Manual</span></a></li>
+							            
+							        </ol>
+							        <ol class="a-direita" start="4">
+							            <li><a href="?sair=sair" class="item"><span class="icone-arrow-right"></span> <span class="item-texto">Sair</span></a></li>
+							        </ol>
+							    </div>
+							</div>
+		
+							';
+						
+						
+						
+						echo '
+							<div id="menu1" class="duas colunas">					
+								<div id="menu" class="padding">
 								    <a href="#expandir_menu" title="Clique para expandir o menu" class="menu-resp icone-menu2"> Menu Catraca</a>
 								    <div id="expandir_menu" class="menu-vertical">
 								        <a href="#ocultar_menu" class="fechar-menu icone-cross"></a>
 								        <ol>
 		
-										 <li><a href="?pagina=inicio" class="item-vertical-ativo"><span class="icone-home3"></span> <span class="item-vertical-texto">Início</span></a></li>';
+										 <li><a href="?pagina=inicio" class="item-vertical-ativo"><span class="icone-home3"></span> <span class="item-vertical-texto">Início</span></a></li>					
+								      	 <li><a href="?pagina=gerador" class="item-vertical"><span class="icone-credit-card"></span> <span class="item-vertical-texto">Registro Manual</span></a></li>
+						         		 <li><a href="?sair=sair" class="item-vertical"><span class="icone-exit"></span> <span class="item-vertical-texto">Sair</span></a></li>
 						
 						
-						echo '          <li><a href="?pagina=gerador" class="item-vertical"><span class="icone-credit-card"></span> <span class="item-vertical-texto">Registro Manual</span></a></li>';
-						echo '         	<li><a href="?sair=sair" class="item-vertical"><span class="icone-exit"></span> <span class="item-vertical-texto">Sair</span></a></li>';
-						
-						echo '
 										</ol>
 								    </div>
 								</div>
@@ -133,7 +150,7 @@ if (isset ( $_GET ["sair"] )) {
 					}
 					?>
 					
-					<div class="dez colunas">
+					<div id="conteudo" class="dez colunas">
 					
 						
 					<?php

@@ -2,7 +2,7 @@
 class UsuarioView {
 	public function mostraFormularioLogin($erro = false, $msg_erro = "") {
 		echo '<div class="tela fundo-cinza1">
-     <div class="duas colunas no-meio">
+     <div id="login" class="duas colunas no-meio">
             <div class="no-centro">
                 <h1>Catraca</h1>
             </div>
