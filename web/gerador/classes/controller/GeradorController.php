@@ -204,16 +204,16 @@ class GeradorController{
 				$selectTurno = "Select * FROM turno WHERE '$data' BETWEEN turno.turn_hora_inicio AND turno.turn_hora_fim";
 				$result = $this->dao->getConexao()->query($selectTurno);
 				$i = 0;
+
 				foreach($result as $linha){
 					$i++;
 					break;
 				}
-				if(!$i){
+				if($i == 0){
 					$this->mensagemErro("Fora do hor&aacute;rio de refei&ccedil;&atilde;o");
 					echo '<meta http-equiv="refresh" content="1; url=\?pagina=inicio">';
 					return;
 				}
-					
 				if($this->dao->getConexao()->exec($sql))
 					$this->mensagemSucesso();
 				else

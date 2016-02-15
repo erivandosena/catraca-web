@@ -126,21 +126,24 @@ class UnidadeDAO extends DAO {
 			$horaInicial = date("Y-m-d ").$turno->getHoraInicial();
 			$horaFinal = date("Y-m-d ").$turno->getHoraFinal();
 			if($tipo == null){
-				$idTipo = $tipo->getId();
+				
 				$sql = "SELECT sum(1) as resultado FROM registro INNER JOIN catraca ON registro.catr_id = catraca.catr_id
 			WHERE catraca.catr_id = $idCatraca AND registro.regi_data BETWEEN '$horaInicial' AND '$horaFinal' ";
 				
 			
 			}
 			else{
+				$idTipo = $tipo->getId();
 				$sql = "SELECT sum(1) as resultado FROM registro INNER JOIN catraca ON registro.catr_id = catraca.catr_id
-			WHERE catraca.catr_id = $idCatraca AND registro.regi_data BETWEEN '$horaInicial' AND '$horaFinal' AND catraca.tipo_id = $idTipo";
+				INNER JOIN cartao ON cartao.cart_id = registro.cart_id
+				WHERE catraca.catr_id = $idCatraca AND registro.regi_data BETWEEN '$horaInicial' AND '$horaFinal' AND cartao.tipo_id = $idTipo";
 				
 			}
-			echo $sql;
+
 			foreach ($this->getConexao()->query($sql) as $linha){
 				$resultado = $linha['resultado'];
 			}
+			
 		}
 		
 		
