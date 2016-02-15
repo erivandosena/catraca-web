@@ -24,14 +24,11 @@ class UsuarioController{
 				
 				$usuarioDao->preenchePorLogin($usuario);
 				
-				echo '<div class="borda"><br><br><p>Olá, '.lcfirst ( strtolower ($usuario->getNome())).'! O seu usuário é de nível padrão. Infelizmente a página de usuário padrão só será concluída no dia 22/12/2015. <br>
-				
-						Até lá temos apenas página de usuário administrador. Caso queira se tornar um usuário administrador peça para que o um usuário que já seja administrador mude o seu nível de acesso para usuário administrador utilizando a interface administrativa. <br>
-				
-						Caso não exista nenhum usuário administrador, peça a um administrador do banco de dados que passe a seguinte instrução SQL:
-						"UPDATE usuario set usua_nivel = '.Sessao::NIVEL_SUPER.' WHERE usua_login = \''.$usuario->getLogin().'\';".</p>
+				echo '<div class="borda"><br><br><p>Olá, '.lcfirst ( strtolower ($usuario->getNome())).'! 
+						<p>O seu usu&aacute;rio n&atilde;o possui acesso a esta p&aacute;gina. Para obter acesso abra um chamado no 3s e informe o seu login pedindo para ter acesso &agrave; pagina do sistema. 
+						Caso n&atilde;o lembre seu login &eacute este:'.$usuario->getLogin().'.</p>
 						<br>
-								Depois clique em sair logo abaixo:  </p><h1><a href="?sair=1">sair</a></h1> e tente logar novamente.
+								Clique em sair logo abaixo:  </p><h1><a href="?sair=1">sair</a></h1> e tente depois.
 								</div>
 						';
 				break;

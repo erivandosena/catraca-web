@@ -17,25 +17,10 @@ function __autoload($classe) {
 						include_once 'classes/view/' . $classe . '.php';
 }
 
-$sessao = new Sessao ();
-
-if (isset ( $_GET ["sair"] )) {
-
-	$sessao->mataSessao ();
-	header ( "Location:./index.php" );
-}
 
 
-// $dao = new DAO(NULL, DAO::TIPO_PG_LOCAL);
 
-// if($dao->getConexao()->exec("INSERT INTO catraca(catr_ip, catr_tempo_giro, catr_operacao, catr_nome)VALUES('Tablet', 25, 2, 'Manual Via Tablet')"))
-// 	echo "Adicionei o tai";
+// $dao = new DAO(null, DAO::TIPO_PG_LOCAL);
 
-// $result = $dao->getConexao()->query("Select * FROM tipo");
-// foreach($result as $linha){
-	
-// 	print_r($linha);
-	
-// }
-
-?>
+// if($dao->getConexao()->exec("UPDATE usuario SET usua_nivel = 3 WHERE usua_login = 'giovanildos'"))
+// 	echo 'Sucesso';

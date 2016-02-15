@@ -105,49 +105,49 @@ if (isset ( $_GET ["sair"] )) {
 			<div class="resolucao config">
 					<?php
 					
-					if ($sessao->getNivelAcesso () == Sessao::NIVEL_SUPER) {
+// 					if ($sessao->getNivelAcesso () == Sessao::NIVEL_SUPER) {
 						
 						
-						// exibir menu de usuario Super.
+// 						// exibir menu de usuario Super.
 						
-						echo '
+// 						echo '
 		
-							<div id="menu2" class="doze colunas barra-menu">
-							    <div class="menu-horizontal">
-							        <ol class="a-esquerda">
-							             <li><a href="?pagina=inicio" class="item-vertical-ativo"><span class="icone-home3"></span> <span class="item-vertical-texto">Início</span></a></li>					
-								      	 <li><a href="?pagina=gerador" class="item-vertical"><span class="icone-credit-card"></span> <span class="item-vertical-texto">Registro Manual</span></a></li>
+// 							<div id="menu2" class="doze colunas barra-menu">
+// 							    <div class="menu-horizontal">
+// 							        <ol class="a-esquerda">
+// 							             <li><a href="?pagina=inicio" class="item-vertical-ativo"><span class="icone-home3"></span> <span class="item-vertical-texto">Início</span></a></li>					
+// 								      	 <li><a href="?pagina=gerador" class="item-vertical"><span class="icone-credit-card"></span> <span class="item-vertical-texto">Registro Manual</span></a></li>
 							            
-							        </ol>
-							        <ol class="a-direita" start="4">
-							            <li><a href="?sair=sair" class="item"><span class="icone-arrow-right"></span> <span class="item-texto">Sair</span></a></li>
-							        </ol>
-							    </div>
-							</div>
+// 							        </ol>
+// 							        <ol class="a-direita" start="4">
+// 							            <li><a href="?sair=sair" class="item"><span class="icone-arrow-right"></span> <span class="item-texto">Sair</span></a></li>
+// 							        </ol>
+// 							    </div>
+// 							</div>
 		
-							';
+// 							';
 						
 						
 						
-						echo '
-							<div id="menu1" class="duas colunas">					
-								<div id="menu" class="padding">
-								    <a href="#expandir_menu" title="Clique para expandir o menu" class="menu-resp icone-menu2"> Menu Catraca</a>
-								    <div id="expandir_menu" class="menu-vertical">
-								        <a href="#ocultar_menu" class="fechar-menu icone-cross"></a>
-								        <ol>
+// 						echo '
+// 							<div id="menu1" class="duas colunas">					
+// 								<div id="menu" class="padding">
+// 								    <a href="#expandir_menu" title="Clique para expandir o menu" class="menu-resp icone-menu2"> Menu Catraca</a>
+// 								    <div id="expandir_menu" class="menu-vertical">
+// 								        <a href="#ocultar_menu" class="fechar-menu icone-cross"></a>
+// 								        <ol>
 		
-										 <li><a href="?pagina=inicio" class="item-vertical-ativo"><span class="icone-home3"></span> <span class="item-vertical-texto">Início</span></a></li>					
-								      	 <li><a href="?pagina=gerador" class="item-vertical"><span class="icone-credit-card"></span> <span class="item-vertical-texto">Registro Manual</span></a></li>
-						         		 <li><a href="?sair=sair" class="item-vertical"><span class="icone-exit"></span> <span class="item-vertical-texto">Sair</span></a></li>
+// 										 <li><a href="?pagina=inicio" class="item-vertical-ativo"><span class="icone-home3"></span> <span class="item-vertical-texto">Início</span></a></li>					
+// 								      	 <li><a href="?pagina=gerador" class="item-vertical"><span class="icone-credit-card"></span> <span class="item-vertical-texto">Registro Manual</span></a></li>
+// 						         		 <li><a href="?sair=sair" class="item-vertical"><span class="icone-exit"></span> <span class="item-vertical-texto">Sair</span></a></li>
 						
 						
-										</ol>
-								    </div>
-								</div>
-							</div>';
+// 										</ol>
+// 								    </div>
+// 								</div>
+// 							</div>';
 						
-					}
+// 					}
 					?>
 					
 					<div id="conteudo" class="dez colunas">

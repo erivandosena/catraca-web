@@ -21,4 +21,7 @@ class TipoDAO extends DAO{
 	}
 	
 	
+	
+	
+	
 }
