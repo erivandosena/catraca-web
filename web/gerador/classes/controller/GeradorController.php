@@ -198,11 +198,27 @@ class GeradorController{
 				
 				$sql = "INSERT into registro(regi_data, regi_valor_pago, regi_valor_custo, catr_id, cart_id, vinc_id) 
 						VALUES('$data', $valorPago, $custo, $idCatraca, $idCartao, $idVinculo)";
+				
+				
+				
+				$selectTurno = "Select * FROM turno WHERE '$data' BETWEEN turno.turn_hora_inicio AND turno.turn_hora_fim";
+				$result = $this->dao->getConexao()->query($selectTurno);
+				$i = 0;
+				foreach($result as $linha){
+					$i++;
+					break;
+				}
+				if(!$i){
+					$this->mensagemErro("Fora do hor&aacute;rio de refei&ccedil;&atilde;o");
+					echo '<meta http-equiv="refresh" content="1; url=\?pagina=inicio">';
+					return;
+				}
+					
 				if($this->dao->getConexao()->exec($sql))
 					$this->mensagemSucesso();
 				else
 					$this->mensagemErro();
-				echo '<meta http-equiv="refresh" content="1; url=.\?pagina=inicio">';
+					echo '<meta http-equiv="refresh" content="1; url=\?pagina=inicio">';
 			}
 			else
 			{
@@ -233,13 +249,15 @@ class GeradorController{
 		
 	}
 	
-	public function mensagemErro(){
+	public function mensagemErro($strMensagem = null){
+		if($strMensagem == null)
+			$strMensagem = "Erro na tentativa de inserir os dados!";
 		echo '<div class="doze colunas borda centralizado">
 	
 										<div class="alerta-erro">
 										    <div class="icone icone-fire ix24"></div>
-										    <div class="titulo-alerta">Erro na tentativa de inserir os dados!</div>
-										    <div class="subtitulo-alerta">Dados enviados com sucesso!</div>
+										    <div class="titulo-alerta">'.$strMensagem.'</div>
+										    <div class="subtitulo-alerta">Erro!</div>
 										</div>
 	
 									</div>';
