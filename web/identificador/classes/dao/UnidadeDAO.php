@@ -1,8 +1,8 @@
 <?php
 /**
- * UnidadeDAO altera��es do banco de dados referentes � entidade unidade. 
+ * UnidadeDAO alteraï¿½ï¿½es do banco de dados referentes ï¿½ entidade unidade. 
  * Gera pesistencia da classe unidade. 
- * � a unidade academica. 
+ * ï¿½ a unidade academica. 
  * @author jefponte
  *
  */
@@ -38,6 +38,32 @@ class UnidadeDAO extends DAO {
 			return true;
 		return false;
 	}
+// 	public function preencheCatracaPorId(Catraca $catraca){
+// 		$idCatraca = $catraca->getId();
+		
+// 		$sql = "SELECT *, catraca.catr_id as
+// 					catraca_id
+// 					 FROM catraca
+// 					LEFT JOIN catraca_unidade
+// 					ON catraca.catr_id = catraca_unidade.catr_id
+// 					LEFT JOIN unidade
+// 					ON unidade.unid_id = catraca_unidade.unid_id
+// 					WHERE catraca_catr_id = $idCatraca";
+		
+// 		foreach ( $this->getConexao ()->query ( $sql ) as $linha ) {
+
+// 			$catraca->setNome ( $linha ['catr_nome'] );
+// 			$catraca->setOperacao($linha['catr_operacao']);
+// 			$catraca->setTempoDeGiro($linha['catr_tempo_giro']);
+// 			$catraca->setIp($linha['catr_ip']);
+// 			$catraca->setId($linha['catraca_id']);
+// 			$catraca->setUnidade(new Unidade());
+// 			$catraca->getUnidade()->setNome($linha['unid_nome']);
+
+
+// 		}
+// 		return $catraca;
+// 	}
 	public function retornaCatracasPorUnidade(Unidade $unidade = null) {
 		$lista = array ();
 		if ($unidade != null) {
@@ -92,22 +118,33 @@ class UnidadeDAO extends DAO {
 		return $resultado;
 	}
 	
-	public function totalDeGirosDaCatracaTurnoAtual(Catraca $catraca){
+	public function totalDeGirosDaCatracaTurnoAtual(Catraca $catraca, Tipo $tipo = null){
 		$resultado = 0;
 		$idCatraca = $catraca->getId();
 		$turno = $this->pegaTurnoAtualSeExistir();
 		if($turno){
 			$horaInicial = date("Y-m-d ").$turno->getHoraInicial();
 			$horaFinal = date("Y-m-d ").$turno->getHoraFinal();
-			$sql = "SELECT sum(1) as resultado FROM registro INNER JOIN catraca ON registro.catr_id = catraca.catr_id
-			WHERE catraca.catr_id = $idCatraca AND registro.regi_data BETWEEN '$horaInicial' AND '$horaFinal'";
-			//echo $sql;
+			if($tipo == null){
+				
+				$sql = "SELECT sum(1) as resultado FROM registro INNER JOIN catraca ON registro.catr_id = catraca.catr_id
+			WHERE catraca.catr_id = $idCatraca AND registro.regi_data BETWEEN '$horaInicial' AND '$horaFinal' ";
+				
+			
+			}
+			else{
+				$idTipo = $tipo->getId();
+				$sql = "SELECT sum(1) as resultado FROM registro INNER JOIN catraca ON registro.catr_id = catraca.catr_id
+				INNER JOIN cartao ON cartao.cart_id = registro.cart_id
+				WHERE catraca.catr_id = $idCatraca AND registro.regi_data BETWEEN '$horaInicial' AND '$horaFinal' AND cartao.tipo_id = $idTipo";
+				
+			}
+
 			foreach ($this->getConexao()->query($sql) as $linha){
 				$resultado = $linha['resultado'];
 			}
+			
 		}
-		
-	
 		
 		
 		return $resultado;
@@ -206,7 +243,7 @@ class UnidadeDAO extends DAO {
 			return true;
 		return false;
 		
-		// Caso contrário a gente insere.
+		// Caso contrÃ¡rio a gente insere.
 	}
 	
 	public function excluirTurnoDaUnidade(Turno $turno, Unidade $unidade) {
@@ -219,7 +256,7 @@ class UnidadeDAO extends DAO {
 			return true;
 		return false;
 	
-		// Caso contrário a gente insere.
+		// Caso contrÃ¡rio a gente insere.
 	}
 	
 	public function turnosDaUnidade(Unidade $unidade) {
