@@ -44,7 +44,7 @@ ul.simpleTabsNavigation li a.current {
 
 div.simpleTabsContent {
     border:1px solid #D5D9DE;
-    padding:10px;
+    padding:10px 10px 10px 10px;;
     margin-top:1px;
     margin-bottom: 4%;
     display:none;

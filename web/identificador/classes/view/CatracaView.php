@@ -27,11 +27,12 @@ class CatracaView{
 	
 	public function mostrarUnidade(Unidade $unidade, $quantidadeDeCatracas = 0, $catracasFuncionando = 0){
 		
-		echo '<a href="?pagina=catraca&unidade='.$unidade->getId().'"><div class="tres colunas borda fundo-branco catraca-pequeno">
+		echo '<a href="?pagina=catraca&unidade='.$unidade->getId().'">
+				<div class="tres colunas borda catraca-pequeno">
 										<div class="doze colunas">
 											<h3 class="centralizado negrito">'.$unidade->getNome().'</h3>
 											<hr class="solida" />
-											<div class="duas colunas fill-verde">
+											<div class="catraca-icone fill-verde">
 												<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
 												 width="40pt" height="33pt" viewBox="0 0 900 753"
 												 preserveAspectRatio="xMidYMid meet">
@@ -78,7 +79,7 @@ class CatracaView{
 													</g>
 												</svg>
 											</div>
-											<div class="oito colunas direita f12">
+											<div class="catraca-info medio">
 												<span class="icone-loop2"> Qnt. Catracas: '.$quantidadeDeCatracas.'</span>
 												<span class="icone-loop2"> Registros: '.$catracasFuncionando.'</span>
 											</div>
@@ -103,11 +104,12 @@ class CatracaView{
 	}
 	public function mostraCatraca(Catraca $catraca, $girosTurno = 0, $totalDeGiros = 0){
 		
-		echo '<div class="tres colunas borda fundo-branco catraca-medio">
+		echo '<a href="?pagina=catraca&detalhe='.$catraca->getId().'">
+				<div class="tres colunas borda fundo-branco catraca-medio">
 									<div class="doze colunas">
 										<h3 class="centralizado negrito">'.$catraca->getNome().'</h2>
 										<hr class="solida" />
-										<div class="quatro colunas fill-cinza">
+										<div class="catraca-icone fill-cinza">
 											<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
 											 width="50pt" height="55pt" viewBox="0 0 903.000000 1000.000000"
 											 preserveAspectRatio="xMidYMid meet">									
@@ -166,23 +168,25 @@ class CatracaView{
 												</g>
 											</svg>
 										</div>									
-								    	<div class="oito colunas direita f14">
+								    	<div class="catraca-info medio">
 									    	<span>Giros Por Turno: '.$girosTurno.'</span>
 									    	<span>Total de Giros: '.$totalDeGiros.'</span>
 								    	</div>
 							    	</div>															
-								</div>';
+								</div></a>';
 		
 	}
 	
 	
 	
 	public function detalheCatraca(Catraca $catraca, $valor = 0, $outroValor= 0){
-		echo '<div class="doze colunas">
-							<div id="titulo" class="doze colunas fundo-azul2 centralizado ">
-								<h1 class="texto-branco">Visualização de Catracas</h1>
-							</div>						
-							<div class="oito coluna no-meio borda catraca">
+		echo '	<div id="titulo" class="doze colunas fundo-azul2 centralizado ">
+					<h1 class="texto-branco">Visualização de Catracas</h1>
+				</div>';
+				
+		echo'
+				<div class="doze colunas">													
+							<div class="seis coluna no-meio borda catraca">
 								<h3 class="centralizado negrito">'.$catraca->getNome().'</h3>
 								<hr class="solida" />
 								<div class="catraca-icone fill-verde">									
@@ -253,13 +257,13 @@ class CatracaView{
 									<hr class="solida" />
 									<span>Unidade Acadêmica: '.$catraca->getUnidade()->getNome().'</span><br>
 									<span>IP: '.$catraca->getIp().'</span>						
-								</div>
-
-											
-											
+								</div>																					
+							</div>
 						</div>
-						</div>													
-							';
+				';												
+									
+								
+																					
 	}
 	
 	

@@ -40,6 +40,10 @@ th{
 	font-size: 12px !important;
 }
 
+#menu{
+	border-bottom: 3px solid #003966;
+}
+
 .fundo {	
 	opacity: 0.3;
 	position: center;	
@@ -83,7 +87,6 @@ th{
 }
 
 .config{	
-	margin-top: 0 auto;
 	margin: 0 auto;
 	max-width: 1200px;		
 }
@@ -116,14 +119,11 @@ th{
 }
 
 .borda {
-	padding-top: 10px;
-	padding-left: 10px;
-	padding-right: 10px;
-	padding-bottom: 10px;	
-	margin-top: 10px;
-	position: relative;
+	padding: 10px 10px 10px 10px;
 	box-shadow: 0 1px 3px #000;
-	background-color: #fff;
+	background-color: #fff;	
+	position: relative;
+	border-radius: 3px;
 }
 
 .a-direita{
@@ -135,21 +135,19 @@ th{
 }
 
 .catraca-pequeno{	
-	width: 210px;
+	width: 250px;
     height: 130px;
+    margin: 5px;
 }
 
-.catraca-pequeno:hover{
+.catraca-pequeno:hover, .catraca-medio:hover{
 	box-shadow: 0 1px 5px #000;
 }
 
 .catraca-medio{
 	width: 230px;
     height: 160px;
-}
-
-.catraca-medio:hover{
-	box-shadow: 0 1px 5px #000;
+    margin: 5px;
 }
 
 .catraca-icone{	
@@ -158,15 +156,15 @@ th{
 	position: relative;
 }
 
-.catraca-info span{	
+.catraca-info span{
+	display:block;
 	float: right;
 }
 
-.catraca{	
-	max-height:250px;
-	max-width:600px;
+.catraca{    
 	padding-right: 10px;
-	padding-left: 10px;	
+	padding-left: 10px;
+	top: 100px;	
 }
 
 .catraca a{
@@ -185,12 +183,17 @@ th{
 .catraca span{
 	font-weight: bold;
 	color: #ccc;
+}
 
+.catraca hr{
+	border: 1px solid #CCC;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	padding: 0;
 }
 
 .relatorio{
-	margin-left: 20px !important;
-	margin-top:20px !important;
+	margin-top:20px !important;	
 }
 
 .relatorio h2, h3{
@@ -206,21 +209,28 @@ th{
 }
 
 .tabela-relatorio{
-	width: 100%;
+	width: 100%;	
 	font-size: 20px;
 	text-align: left !important;
 }
 
 .tabela-relatorio th{
+	text-align: center;
 	background: #CCC;
 	padding: 5px;
 	font-size: 16px !important;
 }
 
 .tabela-relatorio td{
+	text-align: center;
 	padding: 10px;
 	border-top:;
 	font-size: 16px !important;
+}
+
+#limpar{
+	background: transparent !important;
+	text-align: left !important;
 }
 
 #soma{
@@ -366,9 +376,8 @@ color: #fff;
 }
 
 #titulo{
-	margin-right: 10px;
 	margin-top: 20px;
-	margin-left: 10px;
+	margin-bottom: 30px;
 }
 
 #titulo-caixa{
@@ -409,12 +418,6 @@ color: #fff;
 
 #infovenda td{
 	font-size: 14px;
-}
-
-.navegacao{
-	height: 100%;
-	padding-left: 30px;
-	padding-top: 20px;
 }
 
 div#topo{
@@ -462,11 +465,6 @@ div ul li a:hover{
 
 a:focus {	
   outline: none;
-}
-
-.conteiner {
-  margin: 20px;
-  overflow: auto;
 }
 
 .limpar:after {

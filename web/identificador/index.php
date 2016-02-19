@@ -44,7 +44,6 @@ echo $html []='<!DOCTYPE html>
 <link rel="stylesheet" href="css/estilo.css" type="text/css" media="screen">
 <link rel="stylesheet" href="css/estilo_responsivo.css" type="text/css" media="screen">
 <script type="text/javascript" src="js/jquery.min.js"></script>
-
 </head>'
 ?>
 <body>
@@ -93,30 +92,29 @@ echo $html []='<!DOCTYPE html>
 			</div>
 		</div>
 
-		<div  id="menu" class="doze colunas fundo-azul3 ">
-			<div class="config">
+		
 				
 				<?php
 					
-					if ($sessao->getNivelAcesso () == Sessao::NIVEL_SUPER) {
-						
+					if ($sessao->getNivelAcesso () == Sessao::NIVEL_SUPER) {						
 						
 						// exibir menu de usuario Super.
+				
  						echo '
-							<div  class="doze colunas barra-menu fundo-azul3">
-								    <div class="menu-horizontal">
+							<div  class="doze colunas barra-menu">
+								    <div class="menu-horizontal config">
 								        <ol class="a-esquerda">';
 								             
- 						echo '<li><a href="?pagina=inicio" class="item-vertical-ativo"><span class="icone-home3"></span> <span class="item-vertical-texto">Início</span></a></li>';
- 						echo ' <li><a href="?pagina=catraca" class="item-vertical"><span class="icone-loop2"></span> <span class="item-vertical-texto">Catraca</span></a></li>';
- 						echo '<li><a href="?pagina=cartao" class="item-vertical"><span class="icone-credit-card"></span> <span class="item-vertical-texto">Cartão</span></a></li>';
- 						echo '<li><a href="?pagina=gerador" class="item-vertical"><span class="icone-credit-card"></span> <span class="item-vertical-texto">Catraca Virtual</span></a></li>';
- 						// 						echo ' <li><a href="?pagina=guiche" class="item-vertical"><span class="icone-user"></span> <span class="item-vertical-texto">Guichê</span></a></li>';
- 						echo ' <li><a href="?pagina=relatorio" class="item-vertical"><span class="icone-file-text2"></span> <span class="item-vertical-texto">Relatório</span></a></li>';
+ 						echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
+ 						echo ' <li><a href="?pagina=catraca" class="item"><span class="icone-loop2"></span> <span class="item-texto">Catraca</span></a></li>';
+ 						echo '<li><a href="?pagina=cartao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a></li>';
+ 						echo '<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a></li>';
+ 						//echo ' <li><a href="?pagina=guiche" class="item"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a></li>';
+ 						echo ' <li><a href="?pagina=relatorio" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a></li>';
  						
 						echo '</ol>
 								        <ol class="a-direita" start="4">
-								            <li><a href="?sair=sair" class="item"><span class="icone-arrow-right"></span> <span class="item-texto">Sair</span></a></li>
+								            <li><a href="?sair=sair" class="item"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
 								        </ol>
 								    </div>
 								</div>';
@@ -124,8 +122,7 @@ echo $html []='<!DOCTYPE html>
 					}
 					?>
 				
-			</div>
-		</div>
+			
 
 		<div class="doze colunas">
 			<div class="resolucao config">					
@@ -176,7 +173,7 @@ echo $html []='<!DOCTYPE html>
 								
 								break;
 							case 'gerador' :
-								CatracaVirtual::main( $sessao->getNivelAcesso () );
+								GeradorController::main( $sessao->getNivelAcesso () );
 								break;
 							case 'relatorio' :
 								RelatorioController::main($sessao->getNivelAcesso());
