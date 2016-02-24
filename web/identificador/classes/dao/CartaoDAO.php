@@ -32,8 +32,7 @@ class CartaoDAO extends DAO{
 		INNER JOIN tipo ON
 		cartao.tipo_id = tipo.tipo_id
 		WHERE cart_numero = '$numero' LIMIT 100";
-		echo $sql;
-		echo '<br><hr>';
+
 		foreach($this->getConexao()->query($sql) as $linha){
 			
 			$cartao->setId($linha['cart_id']);

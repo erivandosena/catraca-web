@@ -1,17 +1,24 @@
 <?php
 
 
-
 class CatracaVirtual{
+	
 	private $dao;
+	private $view;
 	
+	public function CatracaVirtual(){
+		$this->view = new CatracaVirtualView();
+	}
 	
-	public static function main(){
+	public static function main($nivel){
+		
+		if($nivel == Sessao::NIVEL_SUPER){
+
+			$gerador = new CatracaVirtual();
+			$gerador->verificarSelecaoRU();
+		}
 		
 		
-		
-		$gerador = new CatracaVirtual();
-		$gerador->verificarSelecaoRU();
 	}
 	
 	public function verificarSelecaoRU(){
@@ -23,7 +30,7 @@ class CatracaVirtual{
 		else{
 			if(isset($_POST['catraca_id'])){
 				$_SESSION['catraca_id'] = intval($_POST['catraca_id']);
-				echo '<meta http-equiv="refresh" content="0; url=.\?pagina=inicio">';
+				echo '<meta http-equiv="refresh" content="0; url=?pagina=gerador">';
 			}
 			$this->selecionarRU();
 		} 
@@ -89,7 +96,6 @@ class CatracaVirtual{
 				<div class = "simpleTabs">
 			        <ul class = "simpleTabsNavigation">					
 						<li><a href="#">Cadastro</a></li>	
-						<li><a href="?sair=1">Sair</a></li>	
 			        </ul>
 				
 			        <div class = "simpleTabsContent">
@@ -128,14 +134,7 @@ class CatracaVirtual{
 		echo '
 							        </tr>
 									<tr>';
-//echo '
-// 										<th>Palmares</th>										
-// 							            <td>1</td>
-// 							            <td>2</td>
-// 							            <td>3</td>
-// 							            <td>4</td>
-// 										<td>5</td>
-// 							        </tr>';
+
 		echo '
 									<tr>
 										<th>Selecionar</th>';
@@ -143,7 +142,7 @@ class CatracaVirtual{
 		$i = 0;
 		foreach($listaDeTipos as $tipo){
 			
-			echo '<td><a href="?tipo_id='.$tipo->getId().'" class="botao b-'.$listaDeCores[$i].' icone-checkmar">+1</a></td>';
+			echo '<td><a href="?pagina=gerador&tipo_id='.$tipo->getId().'" class="botao b-'.$listaDeCores[$i].' icone-checkmar">+1</a></td>';
 			$i++;
 		}
 		
@@ -151,11 +150,98 @@ class CatracaVirtual{
 							            
 							        </tr>
 							    </tbody>
-							</table>
+							</table>';
+		
+		$this->view->formBuscaCartao();
+		
+		echo '
 				
 						</div>';
-		
-		if(isset($_GET['tipo_id'])){
+		$data = date ( "Y-m-d G:i:s" );
+		if(isset($_GET['numero_cartao'])){
+			if($_GET['numero_cartao'] == NULL || $_GET['numero_cartao'] == "")
+				return;
+			$i = 0;
+			$selectTurno = "Select * FROM turno WHERE '$data' BETWEEN turno.turn_hora_inicio AND turno.turn_hora_fim";
+			$result = $this->dao->getConexao()->query($selectTurno);
+			foreach($result as $linha){
+				$i++;
+				break;
+			}
+			if($i == 0){
+				$this->mensagemErro("Fora do hor&aacute;rio de refei&ccedil;&atilde;o");
+				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
+				return;
+			}
+			
+			
+			$cartao = new Cartao();
+			$cartao->setNumero($_GET['numero_cartao']);
+			$cartaoDao = new CartaoDAO($tipoDao->getConexao());
+			$verifica = $cartaoDao->preenchePorNumero($cartao);
+			if($verifica == NULL){
+				$this->mensagemErro("Cartão não cadastrado!");
+				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
+				return;
+			}
+			
+			$vinculoDao = new VinculoDAO($cartaoDao->getConexao());
+			$vinculo = $vinculoDao->retornaVinculoValidoDeCartao($cartao);
+			if($vinculo == NULL)
+			{
+				$this->mensagemErro("Verifique o vínculo deste cartão!");
+				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
+				return;
+				
+			}
+			
+			
+			if(isset($_GET['confirmado'])){
+				
+				$custo = 0;
+				$sql = "SELECT cure_valor FROM custo_refeicao ORDER BY cure_id DESC LIMIT 1";
+				foreach($tipoDao->getConexao()->query($sql) as $linha){
+					$custo = $linha['cure_valor'];
+				}
+				$idCartao = $vinculo->getCartao()->getId();
+				$idVinculo= $vinculo->getId();
+				$valorPago = $vinculo->getCartao()->getTipo()->getValorCobrado();
+				$idCatraca = $_SESSION['catraca_id'];
+				$sql = "INSERT into registro(regi_data, regi_valor_pago, regi_valor_custo, catr_id, cart_id, vinc_id)
+				VALUES('$data', $valorPago, $custo, $idCatraca, $idCartao, $idVinculo)";
+				//echo $sql;
+				if($this->dao->getConexao()->exec($sql))
+						$this->mensagemSucesso();
+					else
+						$this->mensagemErro();
+				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
+				
+			}else{
+				
+				$strNome = $vinculo->getResponsavel()->getNome();
+				if($vinculo->isAvulso()){
+					$strNome = " Avulso ";
+				}
+				echo '<div class="doze colunas borda centralizado">';
+				echo '<p>Confirmar Cadastro de refeição para '.$strNome.' - '.$cartao->getTipo()->getNome().'?</p>';
+				echo '<a href="?pagina=gerador&numero_cartao='.$_GET['numero_cartao'].'&confirmado=1" class="botao b-sucesso">Confimar</a>';
+				echo '</div>';
+			}
+		}else if(isset($_GET['tipo_id'])){
+			
+			$i = 0;
+			$selectTurno = "Select * FROM turno WHERE '$data' BETWEEN turno.turn_hora_inicio AND turno.turn_hora_fim";
+			$result = $this->dao->getConexao()->query($selectTurno);
+			foreach($result as $linha){
+				$i++;
+				break;
+			}
+			if($i == 0){
+				$this->mensagemErro("Fora do hor&aacute;rio de refei&ccedil;&atilde;o");
+				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
+				return;
+			}
+			
 			if(isset($_GET['confirmado']))
 			{
 				
@@ -175,7 +261,7 @@ class CatracaVirtual{
 					$custo = $linha['cure_valor'];
 				}
 				
-				$data = date ( "Y-m-d G:i:s" );			
+					
 				
 				$idCartao = 0;
 				$idVinculo = 0;
@@ -200,29 +286,15 @@ class CatracaVirtual{
 						VALUES('$data', $valorPago, $custo, $idCatraca, $idCartao, $idVinculo)";
 				
 				
-				
-				$selectTurno = "Select * FROM turno WHERE '$data' BETWEEN turno.turn_hora_inicio AND turno.turn_hora_fim";
-				$result = $this->dao->getConexao()->query($selectTurno);
-				$i = 0;
-
-				foreach($result as $linha){
-					$i++;
-					break;
-				}
-				if($i == 0){
-					$this->mensagemErro("Fora do hor&aacute;rio de refei&ccedil;&atilde;o");
-					echo '<meta http-equiv="refresh" content="1; url=\?pagina=inicio">';
-					return;
-				}
 				if($this->dao->getConexao()->exec($sql))
 					$this->mensagemSucesso();
 				else
 					$this->mensagemErro();
-					echo '<meta http-equiv="refresh" content="1; url=\?pagina=inicio">';
+				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
 			}
 			else
 			{
-				echo '<div class="doze colunas borda centralizado"><p>Confirmar Envio de Dados?</p><a href="?tipo_id='.$_GET['tipo_id'].'&confirmado=1" class="botao b-sucesso">Confimar</a></div>';
+				echo '<div class="doze colunas borda centralizado"><p>Confirmar Envio de Dados?</p><a href="?pagina=gerador&tipo_id='.$_GET['tipo_id'].'&confirmado=1" class="botao b-sucesso">Confimar</a></div>';
 			}	
 			
 		}
@@ -236,6 +308,9 @@ class CatracaVirtual{
 		
 		
 	}
+	
+	
+	
 	public function mensagemSucesso(){
 		echo '<div class="doze colunas borda centralizado">
 		
@@ -265,6 +340,5 @@ class CatracaVirtual{
 	}
 
 }
-	
 
 ?>

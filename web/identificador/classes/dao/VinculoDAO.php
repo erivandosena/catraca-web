@@ -289,7 +289,6 @@ class VinculoDAO extends DAO {
 		LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id
 		WHERE (cartao.cart_id = $idCartao)
 		AND ('$dataTimeAtual' BETWEEN vinc_inicio AND vinc_fim)";
-		echo $sql;
 		$result = $this->getConexao ()->query ($sql );
 		$vinculo = NULL;
 		foreach($result as $linha){
@@ -299,6 +298,7 @@ class VinculoDAO extends DAO {
 			$vinculo->getResponsavel()->setIdBaseExterna($linha['id_base_externa']);
 			$vinculo->getCartao()->setId($linha['cart_id']);
 			$vinculo->getCartao()->getTipo()->setNome($linha ['tipo_nome']);
+			$vinculo->getCartao()->getTipo()->setValorCobrado($linha['tipo_valor']);
 			$vinculo->getCartao()->setNumero($linha ['cart_numero']);
 			$vinculo->setInicioValidade($linha ['vinc_inicio']);
 			$vinculo->setFinalValidade($linha['vinc_fim']);

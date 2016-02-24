@@ -166,14 +166,10 @@ echo $html []='<!DOCTYPE html>
 								CatracaController::main($sessao->getNivelAcesso());
 								break;
 							case 'cartao' :
-
-				
-								
 								CartaoController::main ( $sessao->getNivelAcesso () );
-								
 								break;
 							case 'gerador' :
-								GeradorController::main( $sessao->getNivelAcesso () );
+								CatracaVirtual::main( $sessao->getNivelAcesso () );
 								break;
 							case 'relatorio' :
 								RelatorioController::main($sessao->getNivelAcesso());
