@@ -162,9 +162,12 @@ class CatracaVirtual{
 			if($_GET['numero_cartao'] == NULL || $_GET['numero_cartao'] == "")
 				return;
 			$i = 0;
+			$turnoAtual = new Turno();
 			$selectTurno = "Select * FROM turno WHERE '$data' BETWEEN turno.turn_hora_inicio AND turno.turn_hora_fim";
 			$result = $this->dao->getConexao()->query($selectTurno);
 			foreach($result as $linha){
+				$turnoAtual->setHoraInicial($linha['turn_hora_inicio ']);
+				$turnoAtual->setHoraFinal($linha['turn_hora_fim ']);
 				$i++;
 				break;
 			}
@@ -179,11 +182,16 @@ class CatracaVirtual{
 			$cartao->setNumero($_GET['numero_cartao']);
 			$cartaoDao = new CartaoDAO($tipoDao->getConexao());
 			$verifica = $cartaoDao->preenchePorNumero($cartao);
+			$idCartao = $cartao->getId();
+			
 			if($verifica == NULL){
 				$this->mensagemErro("Cartão não cadastrado!");
 				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
 				return;
 			}
+			
+			
+			
 			
 			$vinculoDao = new VinculoDAO($cartaoDao->getConexao());
 			$vinculo = $vinculoDao->retornaVinculoValidoDeCartao($cartao);
@@ -194,6 +202,21 @@ class CatracaVirtual{
 				return;
 				
 			}
+			//Vamos ver se ele pode mesmo comer. Coloque o código aqui.
+			$data1 = date("Y-m-d").' '.$turnoAtual->getHoraInicial();
+			$data2 = date("Y-m-d").' '.$turnoAtual->getHoraFinal();
+			
+			$sqlVerRegistros = "SELECT * FROM registro WHERE (registro.regi_data  BETWEEN '$data1' AND '$data2')
+			AND (registro.cart_id = $idCartao) ORDER BY registro.regi_id DESC";
+			$i = 0;
+			foreach($this->dao->getConexao()->query($sqlVerRegistros) as $linha){
+				$i++;
+				if($i >= $vinculo->getQuantidadeDeAlimentosPorTurno()){
+					$this->mensagemErro("Usuário já passou neste turno!");
+					echo '<meta http-equiv="refresh" content="3; url=?pagina=gerador">';
+					return;
+				}
+			}
 			
 			
 			if(isset($_GET['confirmado'])){
@@ -203,7 +226,7 @@ class CatracaVirtual{
 				foreach($tipoDao->getConexao()->query($sql) as $linha){
 					$custo = $linha['cure_valor'];
 				}
-				$idCartao = $vinculo->getCartao()->getId();
+				
 				$idVinculo= $vinculo->getId();
 				$valorPago = $vinculo->getCartao()->getTipo()->getValorCobrado();
 				$idCatraca = $_SESSION['catraca_id'];

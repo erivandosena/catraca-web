@@ -294,6 +294,7 @@ class VinculoDAO extends DAO {
 		foreach($result as $linha){
 			$vinculo = new Vinculo();
 			$vinculo->setId($linha['vinc_id']);
+			$vinculo->setQuantidadeDeAlimentosPorTurno($linha['vinc_refeicoes']);
 			$vinculo->getResponsavel()->setNome($linha['usua_nome']);
 			$vinculo->getResponsavel()->setIdBaseExterna($linha['id_base_externa']);
 			$vinculo->getCartao()->setId($linha['cart_id']);
