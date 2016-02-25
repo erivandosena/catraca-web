@@ -67,12 +67,17 @@ class RelatorioController {
 			}
 		}
 	}
-	public function gerarPratosConsumidos($idUnidade, $dateStart = null, $dataEnd = null) {
+	public function gerarPratosConsumidos($idUnidade = NULL, $dateStart = null, $dataEnd = null) {
 		if ($dateStart == null)
 			$dateStart = date ( 'Y-m-d' );
 		if ($dataEnd == null)
 			$dataEnd = date ( 'Y-m-d' );
-		
+		$strFiltroUnidade = "";
+		if($idUnidade != NULL){
+			$idUnidade = intval($idUnidade);
+			$strFiltroUnidade  = " AND catraca_unidade.unid_id = $idUnidade";
+				
+		}
 		$idUnidade = intval ( $idUnidade );
 		$dao = new TipoDAO ( null, DAO::TIPO_PG_LOCAL );
 		$tipos = $dao->retornaLista ();
@@ -99,7 +104,10 @@ class RelatorioController {
 				$sql = "SELECT sum(1) valor FROM registro
 				INNER JOIN vinculo ON vinculo.vinc_id = registro.vinc_id
 				INNER JOIN vinculo_tipo ON vinculo.vinc_id = vinculo_tipo.vinc_id
-				WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') AND vinculo_tipo.tipo_id =  $tipoId;";
+				INNER JOIN catraca ON registro.catr_id = catraca.catr_id
+				INNER JOIN catraca_unidade ON catraca.catr_id = catraca_unidade.catr_id
+				WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') AND vinculo_tipo.tipo_id =  $tipoId
+				$strFiltroUnidade;";
 				foreach ( $dao->getConexao ()->query ( $sql ) as $linha ) {
 					$valor = $linha ['valor'];
 				}
@@ -113,8 +121,12 @@ class RelatorioController {
 			}
 			$listaDeDados [$data] ['total'] = $total;
 		}
-		
-		$this->mostraListaDeDadosPratos($listaDeDados, 'Liberdade - Todos os Turnos', $tipos, $listaDeDatas );
+		$strUnidade =  'Todos os restaurantes ';
+		if($idUnidade != NULL){
+			$strunidade=  'Restaurante id '.$idUnidade;
+		}
+			
+		$this->mostraListaDeDadosPratos($listaDeDados, $strUnidade.' - Todos os Turnos', $tipos, $listaDeDatas );
 		
 		$listaDeDados = array ();
 		$turnoDao = new TurnoDAO ( $this->dao->getConexao () );
@@ -145,7 +157,8 @@ class RelatorioController {
 				}
 				$listaDeDados [$data] ['total'] = $total;
 			}
-			$this->mostraListaDeDadosPratos($listaDeDados, 'Liberdade - turno: ' . $turno->getDescricao () . ' - entre: ' . $turno->getHoraInicial () . ' e ' . $turno->getHoraFinal (), $tipos, $listaDeDatas );
+			
+			$this->mostraListaDeDadosPratos($listaDeDados, $strUnidade.' - turno: ' . $turno->getDescricao () . ' - entre: ' . $turno->getHoraInicial () . ' e ' . $turno->getHoraFinal (), $tipos, $listaDeDatas );
 		}
 	}
 	public function geraValoresArrecadados($idUnidade, $dateStart = null, $dataEnd = null) {
@@ -491,7 +504,7 @@ class RelatorioController {
 		echo '<div class=" doze colunas borda relatorio">
 				<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>	
 				<hr class="um">
-				<h3>RESTAURANTE UNIVERSITÁRIO</h3>
+				<h3>'.$titulo.'</h3>
 				<span>Data:</span>
 				<span>Unidade Acadêmica:</span>
 				<span>Turno:</span>									
