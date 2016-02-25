@@ -117,7 +117,7 @@ class CatracaVirtual{
 				
 				
 		}
-		
+		echo '<th>Total</th>';
 		echo '
 							        </tr>
 							    </thead>
@@ -125,11 +125,14 @@ class CatracaVirtual{
 		
 		echo '					        <tr>
 										<th>'.$catraca->getNome().'</th>';
+		$somatorio = 0;
 		foreach ($listaDeTipos as $tipo){
 			$j = $unidadeDao->totalDeGirosDaCatracaTurnoAtual($catraca, $tipo);
+			$somatorio += $j;
 			echo '<td>'.$j.'</td>';	
 			
 		}
+		echo '<td>'.$somatorio.'</td>';
 		
 		echo '
 							        </tr>
@@ -146,7 +149,7 @@ class CatracaVirtual{
 			$i++;
 		}
 		
-		echo '		
+		echo '<td>-</td>		
 							            
 							        </tr>
 							    </tbody>
@@ -163,11 +166,12 @@ class CatracaVirtual{
 				return;
 			$i = 0;
 			$turnoAtual = new Turno();
-			$selectTurno = "Select * FROM turno WHERE '$data' BETWEEN turno.turn_hora_inicio AND turno.turn_hora_fim";
+			$selectTurno = "Select * FROM turno 
+				WHERE '$data' BETWEEN turno.turn_hora_inicio AND turno.turn_hora_fim";
 			$result = $this->dao->getConexao()->query($selectTurno);
 			foreach($result as $linha){
-				$turnoAtual->setHoraInicial($linha['turn_hora_inicio ']);
-				$turnoAtual->setHoraFinal($linha['turn_hora_fim ']);
+				$turnoAtual->setHoraInicial($linha['turn_hora_inicio']);
+				$turnoAtual->setHoraFinal($linha['turn_hora_fim']);
 				$i++;
 				break;
 			}
@@ -211,6 +215,8 @@ class CatracaVirtual{
 			$i = 0;
 			foreach($this->dao->getConexao()->query($sqlVerRegistros) as $linha){
 				$i++;
+				if($vinculo->isAvulso())
+					break;
 				if($i >= $vinculo->getQuantidadeDeAlimentosPorTurno()){
 					$this->mensagemErro("Usuário já passou neste turno!");
 					echo '<meta http-equiv="refresh" content="3; url=?pagina=gerador">';
@@ -239,7 +245,9 @@ class CatracaVirtual{
 						$this->mensagemErro();
 				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
 				
-			}else{
+			}
+			
+			else{
 				
 				$strNome = $vinculo->getResponsavel()->getNome();
 				if($vinculo->isAvulso()){

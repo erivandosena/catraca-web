@@ -26,6 +26,7 @@ class RelatorioController {
 		foreach ( $listaDeUnidades as $unidade ) {
 			echo '<option value="' . $unidade->getId () . '">' . $unidade->getNome () . '</option>';
 		}
+		echo '<option value="">Todos as Unidades</option>';
 		echo '								            										            
 												    </select>
 												</label><br>
@@ -234,11 +235,17 @@ class RelatorioController {
 		}
 		return $ultimoCusto;
 	}
-	public function geraRelacaoPratosValores($idUnidade, $data1 = null, $data2 = null) {
+	public function geraRelacaoPratosValores($idUnidade = NULL, $data1 = null, $data2 = null) {
 		if ($data1 == null)
 			$data1 = date ( 'Y-m-d' );
 		if ($data2 == null)
 			$dat = date ( 'Y-m-d' );
+		$strFiltroUnidade = "";
+		if($idUnidade != NULL){
+			$idUnidade = intval($idUnidade);
+			$strFiltroUnidade  = " AND catraca_unidade.unid_id = $idUnidade";
+			
+		}
 		$idUnidade = intval ( $idUnidade );
 		$dao = new TipoDAO ( null, DAO::TIPO_PG_LOCAL );
 		$tipos = $dao->retornaLista ();
@@ -271,7 +278,10 @@ class RelatorioController {
 				$sql = "SELECT sum(1) pratos,sum(regi_valor_pago) valor  FROM registro
 				INNER JOIN vinculo ON vinculo.vinc_id = registro.vinc_id
 				INNER JOIN vinculo_tipo ON vinculo.vinc_id = vinculo_tipo.vinc_id
-				WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') AND vinculo_tipo.tipo_id =  $tipoId;";
+				INNER JOIN catraca ON catraca.catr_id = registro.catr_id
+				INNER JOIN catraca_unidade ON catraca.catr_id = catraca_unidade.catr_id
+				WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') AND vinculo_tipo.tipo_id =  $tipoId
+				$strFiltroUnidade;";
 				foreach ( $dao->getConexao ()->query ( $sql ) as $linha ) {
 					$pratos = $linha ['pratos'];
 					$valor = $linha ['valor'];
@@ -293,8 +303,7 @@ class RelatorioController {
 				<hr class="um">
 				<h3>RESTAURANTE UNIVERSITÁRIO</h3>
 				<span>Data: '. date ( 'd/m/Y', strtotime ( $data1 ) ) . ' e ' . date ( 'd/m/Y', strtotime ( $data2 ) ) .'</span>
-				<span>Unidade Acadêmica:</span>
-				<span>Turno:</span>
+				<span>Todos os Turnos</span>
 				<hr class="dois">
 				
 					<table class="tabela-relatorio">
@@ -304,22 +313,26 @@ class RelatorioController {
 								<th>Pratos</th>
 								<th>Valores Arrecadados</th>
 								<th>Valores Custo</th>
+								<th>Despesa(Custo - Arrecadação)</th>
 							</tr>
 						<thead>
 						<tbody>
 							';
 		foreach ( $tipos as $tipo ) {
+			
 			echo'	<tr >	
 						<th id="limpar">' . $tipo->getNome () . '</th>
 						<td>' . $listaDeDados [$tipo->getId ()] ['pratos'] . '</td>
 						<td>R$ ' . number_format ( $listaDeDados [$tipo->getId ()] ['valor'], 2, ',', '.' ) . '</td>
 						<td>R$ ' . number_format ( $listaDeDados [$tipo->getId ()] ['custo'], 2, ',', '.' ) . '</td>
+						<td>R$ ' . number_format ( ($listaDeDados [$tipo->getId ()] ['custo'] - $listaDeDados [$tipo->getId ()] ['valor']), 2, ',', '.' ) . '</td>
 					</tr>';
 		}		
 		echo'		<tr id="soma">
 						<th id="limpar">Somatório</th><td>' . $listaDeDados ['total'] ['pratos'] . '</td>
 						<td>R$ ' . number_format ( $listaDeDados ['total'] ['valor'], 2, ',', '.' ) . '</td>
 						<td>R$ ' . number_format ( $listaDeDados ['total'] ['custo'], 2, ',', '.' ) . '</td>
+						<td>R$ ' . number_format ( ($listaDeDados ['total'] ['custo'] - $listaDeDados ['total']['valor']), 2, ',', '.' ) . '</td>
 					</tr>';
 		
 		echo'			</tbody>
@@ -354,7 +367,10 @@ class RelatorioController {
 					$sql = "SELECT sum(1) pratos,sum(regi_valor_pago) valor  FROM registro
 				INNER JOIN vinculo ON vinculo.vinc_id = registro.vinc_id
 				INNER JOIN vinculo_tipo ON vinculo.vinc_id = vinculo_tipo.vinc_id
-				WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') AND vinculo_tipo.tipo_id =  $tipoId;";
+				INNER JOIN catraca ON catraca.catr_id = registro.catr_id
+				INNER JOIN catraca_unidade ON catraca.catr_id = catraca_unidade.catr_id
+				WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') AND vinculo_tipo.tipo_id =  $tipoId
+				$strFiltroUnidade;";
 					foreach ( $dao->getConexao ()->query ( $sql ) as $linha ) {
 						$pratos = $linha ['pratos'];
 						$valor = $linha ['valor'];
@@ -376,7 +392,7 @@ class RelatorioController {
 				<h3>RESTAURANTE UNIVERSITÁRIO</h3>
 				<span>Data: '. date ( 'd/m/Y', strtotime ( $data1 ) ) . ' e ' . date ( 'd/m/Y', strtotime ( $data2 ) ) .'</span>
 				<span>Unidade Acadêmica:</span>
-				<span>Turno:</span>
+				<span>Turno: '.$turno->getDescricao().'</span>
 				<hr class="dois">
 						<table class="tabela-relatorio">
 							<thead>								
@@ -385,6 +401,8 @@ class RelatorioController {
 									<th>Pratos</th>
 									<th>Valores Arrecadados</th>
 									<th>Valores de Custo</th>
+									<th>Despesa(custo - arrecadação)</th>
+								
 								</tr>';
 		foreach ( $tipos as $tipo ) {
 			echo '<tr >
@@ -392,9 +410,15 @@ class RelatorioController {
 					<td>' . $listaDeDados [$tipo->getId ()] ['pratos'] . '</td>
 					<td>R$ ' . number_format ( $listaDeDados [$tipo->getId ()] ['valor'], 2, ',', '.' ) . '</td>
 					<td>R$ ' . number_format ( $listaDeDados [$tipo->getId ()] ['custo'], 2, ',', '.' ) . '</td>
+					<td>R$ ' . number_format ( ($listaDeDados [$tipo->getId ()] ['custo'] - $listaDeDados [$tipo->getId ()] ['valor']), 2, ',', '.' ) . '</td>
 				</tr>';
 		}
-		echo '<tr id="soma"><th id="limpar">Somatário</th><td>' . $listaDeDados ['total'] ['pratos'] . '</td><td>R$ ' . number_format ( $listaDeDados ['total'] ['valor'], 2, ',', '.' ) . '</td><td>R$ ' . number_format ( $listaDeDados ['total'] ['custo'], 2, ',', '.' ) . '</td></tr>';
+		echo '<tr id="soma">
+			<th id="limpar">Somatário</th><td>' . $listaDeDados ['total'] ['pratos'] . '</td>';
+		echo '<td>R$ ' . number_format ( $listaDeDados ['total'] ['valor'], 2, ',', '.' ) . '</td>';
+		echo '<td>R$ ' . number_format ( $listaDeDados ['total'] ['custo'], 2, ',', '.' ) . '</td>';
+		echo '<td>R$ ' . number_format ( ($listaDeDados ['total'] ['custo'] - $listaDeDados ['total'] ['valor']), 2, ',', '.' ) . '</td>';
+		echo '</tr>';
 		echo '</table>';
 		echo '</div>';
 		}
@@ -405,6 +429,7 @@ class RelatorioController {
 			$subTotal [$tipo->getId ()] = 0;
 		}
 		$subTotal ['total'] = 0;
+	
 		
 		echo '<div class=" doze colunas borda relatorio">
 				<h2>UNILAB<small class="fim">Universidade da Integraçao Internacional da Lusofonia Afro-Brasileira</small></h2>	
