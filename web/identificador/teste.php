@@ -1,8 +1,20 @@
 <?php
 
-echo date("H:i:s");
+ini_set ( 'display_errors', 1 );
+ini_set ( 'display_startup_erros', 1 );
+error_reporting ( E_ALL );
+
+class TesteThread extends Threaded{
+	
+	
+	
+	
+	
+}
+
+
+$teste =new TesteThread();
+
+
 
 ?>
-
-
-

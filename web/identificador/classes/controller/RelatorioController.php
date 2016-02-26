@@ -367,28 +367,43 @@ class RelatorioController {
 							<tr>
 								<th>Tipo Usuário</th>
 								<th>Pratos</th>
+								<th>%Pratos</th>
 								<th>Valores Arrecadados</th>
 								<th>Valores Custo</th>
 								<th>Despesa(Custo - Arrecadação)</th>
+								<th>%Despesa</th>
 							</tr>
 						<thead>
 						<tbody>
 							';
 		foreach ( $tipos as $tipo ) {
 			
+			$percentual = 0;
+			if($listaDeDados ['total']['custo'] - $listaDeDados ['total']['valor'])
+				$percentual = ($listaDeDados [$tipo->getId ()] ['custo'] - $listaDeDados [$tipo->getId ()] ['valor'])/($listaDeDados ['total'] ['custo'] - $listaDeDados ['total']['valor'])*100;
+			$percentualPratos = 0;
+			if($listaDeDados ['total']['pratos'])
+				$percentualPratos = ($listaDeDados [$tipo->getId ()] ['pratos'])/($listaDeDados ['total'] ['pratos'])*100;
+			
 			echo'	<tr >	
 						<th id="limpar">' . $tipo->getNome () . '</th>
 						<td>' . $listaDeDados [$tipo->getId ()] ['pratos'] . '</td>
+						<td>'.number_format ( $percentualPratos, 2, ',', '.' ).'</td>
 						<td>R$ ' . number_format ( $listaDeDados [$tipo->getId ()] ['valor'], 2, ',', '.' ) . '</td>
 						<td>R$ ' . number_format ( $listaDeDados [$tipo->getId ()] ['custo'], 2, ',', '.' ) . '</td>
 						<td>R$ ' . number_format ( ($listaDeDados [$tipo->getId ()] ['custo'] - $listaDeDados [$tipo->getId ()] ['valor']), 2, ',', '.' ) . '</td>
+						
+						<td> ' . number_format ( ($percentual), 2, ',', '.' ) . '</td>
+														
 					</tr>';
 		}		
+		
 		echo'		<tr id="soma">
-						<th id="limpar">Somatório</th><td>' . $listaDeDados ['total'] ['pratos'] . '</td>
+						<th id="limpar">Somatório</th><td>' . $listaDeDados ['total'] ['pratos'] . '</td><td>-</td>
 						<td>R$ ' . number_format ( $listaDeDados ['total'] ['valor'], 2, ',', '.' ) . '</td>
 						<td>R$ ' . number_format ( $listaDeDados ['total'] ['custo'], 2, ',', '.' ) . '</td>
 						<td>R$ ' . number_format ( ($listaDeDados ['total'] ['custo'] - $listaDeDados ['total']['valor']), 2, ',', '.' ) . '</td>
+						<td>-</td>
 					</tr>';
 		
 		echo'			</tbody>
@@ -457,25 +472,38 @@ class RelatorioController {
 									<tr>
 									<th>Tipo Usuário</th>
 									<th>Pratos</th>
+									<th>%Pratos</th>
 									<th>Valores Arrecadados</th>
-									<th>Valores de Custo</th>
-									<th>Despesa(custo - arrecadação)</th>
+									<th>Valores Custo</th>
+									<th>Despesa(Custo - Arrecadação)</th>
+									<th>%Despesa</th>
 								
 								</tr>';
 		foreach ( $tipos as $tipo ) {
+			$percentual = 0;
+			if($listaDeDados ['total']['custo'] - $listaDeDados ['total']['valor'])
+				$percentual = ($listaDeDados [$tipo->getId ()] ['custo'] - $listaDeDados [$tipo->getId ()] ['valor'])/($listaDeDados ['total'] ['custo'] - $listaDeDados ['total']['valor'])*100;
+			$percentualPratos = 0;
+			if($listaDeDados ['total']['pratos'])
+				$percentualPratos = ($listaDeDados [$tipo->getId ()] ['pratos'])/($listaDeDados ['total'] ['pratos'])*100;
+			
+			
 			echo '<tr >
 					<th id="limpar">' . $tipo->getNome () . '</th>
 					<td>' . $listaDeDados [$tipo->getId ()] ['pratos'] . '</td>
+					<td>'.number_format ( $percentualPratos, 2, ',', '.' ).'</td>
 					<td>R$ ' . number_format ( $listaDeDados [$tipo->getId ()] ['valor'], 2, ',', '.' ) . '</td>
 					<td>R$ ' . number_format ( $listaDeDados [$tipo->getId ()] ['custo'], 2, ',', '.' ) . '</td>
 					<td>R$ ' . number_format ( ($listaDeDados [$tipo->getId ()] ['custo'] - $listaDeDados [$tipo->getId ()] ['valor']), 2, ',', '.' ) . '</td>
+					<td> ' . number_format ( ($percentual), 2, ',', '.' ) . '</td>
 				</tr>';
 		}
 		echo '<tr id="soma">
 			<th id="limpar">Somatário</th><td>' . $listaDeDados ['total'] ['pratos'] . '</td>';
+		echo '<td>-</td>';
 		echo '<td>R$ ' . number_format ( $listaDeDados ['total'] ['valor'], 2, ',', '.' ) . '</td>';
 		echo '<td>R$ ' . number_format ( $listaDeDados ['total'] ['custo'], 2, ',', '.' ) . '</td>';
-		echo '<td>R$ ' . number_format ( ($listaDeDados ['total'] ['custo'] - $listaDeDados ['total'] ['valor']), 2, ',', '.' ) . '</td>';
+		echo '<td>R$ ' . number_format ( ($listaDeDados ['total'] ['custo'] - $listaDeDados ['total'] ['valor']), 2, ',', '.' ) . '</td><td>-</td>';
 		echo '</tr>';
 		echo '</table>';
 		echo '</div>';

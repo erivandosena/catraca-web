@@ -25,6 +25,12 @@ if (isset ( $_GET ["sair"] )) {
 	header ( "Location:./index.php" );
 }
 
+
+$dao = new DAO();
+$auditoria = new Auditoria($dao->getConexao());
+$auditoria->cadastrar($sessao->getIdUsuario());
+
+
 ?>
 
 <?php 
