@@ -325,7 +325,8 @@ class CatracaVirtual{
 			}
 			else
 			{
-				echo '<div class="doze colunas borda centralizado"><p>Confirmar Envio de Dados?</p><a href="?pagina=gerador&tipo_id='.$_GET['tipo_id'].'&confirmado=1" class="botao b-sucesso">Confimar</a></div>';
+				echo '<div class="doze colunas borda centralizado"><p>Confirmar Envio de Dados?</p>
+						<a href="?pagina=gerador&tipo_id='.$_GET['tipo_id'].'&confirmado=1" class="botao b-sucesso">Confimar</a></div>';
 			}	
 			
 		}

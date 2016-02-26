@@ -68,17 +68,24 @@ class RelatorioController {
 		}
 	}
 	public function gerarPratosConsumidos($idUnidade = NULL, $dateStart = null, $dataEnd = null) {
+
 		if ($dateStart == null)
 			$dateStart = date ( 'Y-m-d' );
 		if ($dataEnd == null)
 			$dataEnd = date ( 'Y-m-d' );
 		$strFiltroUnidade = "";
+		$strUnidade =  'Todos os restaurantes ';
 		if($idUnidade != NULL){
+			
 			$idUnidade = intval($idUnidade);
 			$strFiltroUnidade  = " AND catraca_unidade.unid_id = $idUnidade";
-				
+			$unidadeDao = new UnidadeDAO($this->dao->getConexao());
+			$unidade = new Unidade();
+			$unidade->setId($idUnidade);
+			$unidadeDao->preenchePorId($unidade);
+			$strUnidade =  $unidade->getNome();
 		}
-		$idUnidade = intval ( $idUnidade );
+		
 		$dao = new TipoDAO ( null, DAO::TIPO_PG_LOCAL );
 		$tipos = $dao->retornaLista ();
 		
@@ -121,10 +128,6 @@ class RelatorioController {
 			}
 			$listaDeDados [$data] ['total'] = $total;
 		}
-		$strUnidade =  'Todos os restaurantes ';
-		if($idUnidade != NULL){
-			$strunidade=  'Restaurante id '.$idUnidade;
-		}
 			
 		$this->mostraListaDeDadosPratos($listaDeDados, $strUnidade.' - Todos os Turnos', $tipos, $listaDeDatas );
 		
@@ -143,7 +146,10 @@ class RelatorioController {
 					$sql = "SELECT sum(1) valor FROM registro
 					INNER JOIN vinculo ON vinculo.vinc_id = registro.vinc_id
 					INNER JOIN vinculo_tipo ON vinculo.vinc_id = vinculo_tipo.vinc_id
-					WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') AND vinculo_tipo.tipo_id =  $tipoId;";
+					INNER JOIN catraca ON registro.catr_id = catraca.catr_id
+					INNER JOIN catraca_unidade ON catraca.catr_id = catraca_unidade.catr_id
+					WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') AND vinculo_tipo.tipo_id =  $tipoId
+					$strFiltroUnidade;";
 					foreach ( $dao->getConexao ()->query ( $sql ) as $linha ) {
 						$valor = $linha ['valor'];
 					}
@@ -161,7 +167,7 @@ class RelatorioController {
 			$this->mostraListaDeDadosPratos($listaDeDados, $strUnidade.' - turno: ' . $turno->getDescricao () . ' - entre: ' . $turno->getHoraInicial () . ' e ' . $turno->getHoraFinal (), $tipos, $listaDeDatas );
 		}
 	}
-	public function geraValoresArrecadados($idUnidade, $dateStart = null, $dataEnd = null) {
+	public function geraValoresArrecadados($idUnidade = NULL, $dateStart = null, $dataEnd = null) {
 		if ($dateStart == null)
 			$dateStart = date ( 'Y-m-d' );
 		if ($dataEnd == null)
@@ -169,6 +175,19 @@ class RelatorioController {
 		$idUnidade = intval ( $idUnidade );
 		$dao = new TipoDAO ( null, DAO::TIPO_PG_LOCAL );
 		$tipos = $dao->retornaLista ();
+		
+		$strFiltroUnidade = "";
+		$strUnidade =  'Todos os restaurantes ';
+		if($idUnidade != NULL){
+				
+			$idUnidade = intval($idUnidade);
+			$strFiltroUnidade  = " AND catraca_unidade.unid_id = $idUnidade";
+			$unidadeDao = new UnidadeDAO($this->dao->getConexao());
+			$unidade = new Unidade();
+			$unidade->setId($idUnidade);
+			$unidadeDao->preenchePorId($unidade);
+			$strUnidade =  $unidade->getNome();
+		}
 		
 		$dateStart = new DateTime ( $dateStart );
 		$dateEnd = new DateTime ( $dataEnd );
@@ -192,7 +211,10 @@ class RelatorioController {
 				$sql = "SELECT sum(regi_valor_pago) valor FROM registro
 				INNER JOIN vinculo ON vinculo.vinc_id = registro.vinc_id
 				INNER JOIN vinculo_tipo ON vinculo.vinc_id = vinculo_tipo.vinc_id
-				WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') AND vinculo_tipo.tipo_id =  $tipoId;";
+				INNER JOIN catraca ON registro.catr_id = catraca.catr_id
+				INNER JOIN catraca_unidade ON catraca.catr_id = catraca_unidade.catr_id
+				WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') AND vinculo_tipo.tipo_id =  $tipoId
+				$strFiltroUnidade;";
 				foreach ( $dao->getConexao ()->query ( $sql ) as $linha ) {
 					$valor = $linha ['valor'];
 				}
@@ -207,7 +229,7 @@ class RelatorioController {
 			$listaDeDados [$data] ['total'] = $total;
 		}
 		
-		$this->mostraListaDeDados ( $listaDeDados, 'Liberdade - Todos os Turnos', $tipos, $listaDeDatas );
+		$this->mostraListaDeDados ( $listaDeDados, $strUnidade.' - Todos os Turnos', $tipos, $listaDeDatas );
 		
 		$listaDeDados = array ();
 		$turnoDao = new TurnoDAO ( $this->dao->getConexao () );
@@ -224,7 +246,10 @@ class RelatorioController {
 					$sql = "SELECT sum(regi_valor_pago) valor FROM registro
 					INNER JOIN vinculo ON vinculo.vinc_id = registro.vinc_id
 					INNER JOIN vinculo_tipo ON vinculo.vinc_id = vinculo_tipo.vinc_id
-					WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') AND vinculo_tipo.tipo_id =  $tipoId;";
+					INNER JOIN catraca ON registro.catr_id = catraca.catr_id
+					INNER JOIN catraca_unidade ON catraca.catr_id = catraca_unidade.catr_id
+					WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') AND vinculo_tipo.tipo_id =  $tipoId
+					$strFiltroUnidade;";
 					foreach ( $dao->getConexao ()->query ( $sql ) as $linha ) {
 						$valor = $linha ['valor'];
 					}
@@ -238,7 +263,7 @@ class RelatorioController {
 				}
 				$listaDeDados [$data] ['total'] = $total;
 			}
-			$this->mostraListaDeDados ( $listaDeDados, 'Liberdade - turno: ' . $turno->getDescricao () . ' - entre: ' . $turno->getHoraInicial () . ' e ' . $turno->getHoraFinal (), $tipos, $listaDeDatas );
+			$this->mostraListaDeDados ( $listaDeDados, $strUnidade.' - turno: ' . $turno->getDescricao () . ' - entre: ' . $turno->getHoraInicial () . ' e ' . $turno->getHoraFinal (), $tipos, $listaDeDatas );
 		}
 	}
 	public function pegaUltimoCusto(){
@@ -252,11 +277,17 @@ class RelatorioController {
 		if ($data1 == null)
 			$data1 = date ( 'Y-m-d' );
 		if ($data2 == null)
-			$dat = date ( 'Y-m-d' );
+			$data2 = date ( 'Y-m-d' );
 		$strFiltroUnidade = "";
+		$strUnidade = "Todos os restaurantes";
 		if($idUnidade != NULL){
 			$idUnidade = intval($idUnidade);
 			$strFiltroUnidade  = " AND catraca_unidade.unid_id = $idUnidade";
+			$unidadeDao = new UnidadeDAO($this->dao->getConexao());
+			$unidade = new Unidade();
+			$unidade->setId($idUnidade);
+			$unidadeDao->preenchePorId($unidade);
+			$strUnidade =  $unidade->getNome();
 			
 		}
 		$idUnidade = intval ( $idUnidade );
@@ -283,6 +314,8 @@ class RelatorioController {
 			$listaDeDados [$tipo->getId ()] ['pratos'] = 0;
 			$listaDeDados [$tipo->getId ()] ['valor'] = 0;
 			$listaDeDados [$tipo->getId ()] ['custo'] = 0;
+		}
+		foreach ( $tipos as $tipo ) {
 			
 			foreach ( $listaDeDatas as $data ) {
 				$dataInicial = $data . ' 00:00:00';
@@ -296,26 +329,36 @@ class RelatorioController {
 				WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') AND vinculo_tipo.tipo_id =  $tipoId
 				$strFiltroUnidade;";
 				foreach ( $dao->getConexao ()->query ( $sql ) as $linha ) {
-					$pratos = $linha ['pratos'];
-					$valor = $linha ['valor'];
+					$pratos = floatval($linha ['pratos']);
+					$valor = floatval($linha ['valor']);
+
+					$listaDeDados [$tipo->getId ()] ['pratos'] += $pratos;
+					$listaDeDados [$tipo->getId ()] ['valor'] += floatval($valor);
+					$listaDeDados [$tipo->getId ()] ['custo'] += $ultimoCusto * $pratos;
+					
+
+					$totalValor += floatval ( $valor );
+					
+					$totalPratos += intval ( $pratos );
+					$listaDeDados ['total'] ['pratos'] = floatval($totalPratos);
+					$listaDeDados ['total'] ['valor'] = floatval($totalValor);
+					$listaDeDados ['total'] ['custo'] = floatval($totalPratos * $ultimoCusto);
 				}
-				$listaDeDados [$tipo->getId ()] ['pratos'] += $pratos;
-				$listaDeDados [$tipo->getId ()] ['valor'] += $valor;
-				$listaDeDados [$tipo->getId ()] ['custo'] += $ultimoCusto * $pratos;
+				
+				
 			}
-			$totalValor += floatval ( $valor );
-			$totalPratos += intval ( $pratos );
-			$listaDeDados ['total'] ['pratos'] = $totalPratos;
-			$listaDeDados ['total'] ['valor'] = $totalValor;
-			$listaDeDados ['total'] ['custo'] = $totalPratos * $ultimoCusto;
+			
+			
+// 			$this->mostraMatriz($listaDeDados);
+			
 		}
-		
+
 		
 		echo '<div class=" doze colunas borda relatorio">';		
 		echo '<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>
 				<hr class="um">
-				<h3>RESTAURANTE UNIVERSITÁRIO</h3>
-				<span>Data: '. date ( 'd/m/Y', strtotime ( $data1 ) ) . ' e ' . date ( 'd/m/Y', strtotime ( $data2 ) ) .'</span>
+				<h3>'.$strUnidade.'</h3>
+				<span>De '. date ( 'd/m/Y', strtotime ( $data1 ) ) . ' a ' . date ( 'd/m/Y', strtotime ( $data2 ) ) .'</span>
 				<span>Todos os Turnos</span>
 				<hr class="dois">
 				
@@ -387,22 +430,24 @@ class RelatorioController {
 					foreach ( $dao->getConexao ()->query ( $sql ) as $linha ) {
 						$pratos = $linha ['pratos'];
 						$valor = $linha ['valor'];
+						$listaDeDados [$tipo->getId ()] ['pratos'] += $pratos;
+						$listaDeDados [$tipo->getId ()] ['valor'] += $valor;
+						$listaDeDados [$tipo->getId ()] ['custo'] += $ultimoCusto * $pratos;
+
+						$totalValor += floatval ( $valor );
+						$totalPratos += intval ( $pratos );
+						$listaDeDados ['total'] ['pratos'] = $totalPratos;
+						$listaDeDados ['total'] ['valor'] = $totalValor;
+						$listaDeDados ['total'] ['custo'] = $totalPratos * $ultimoCusto;
 					}
-					$listaDeDados [$tipo->getId ()] ['pratos'] += $pratos;
-					$listaDeDados [$tipo->getId ()] ['valor'] += $valor;
-					$listaDeDados [$tipo->getId ()] ['custo'] += $ultimoCusto * $pratos;
+					
 				}
-				$totalValor += floatval ( $valor );
-				$totalPratos += intval ( $pratos );
-				$listaDeDados ['total'] ['pratos'] = $totalPratos;
-				$listaDeDados ['total'] ['valor'] = $totalValor;
-				$listaDeDados ['total'] ['custo'] = $totalPratos * $ultimoCusto;
 			}
 			
 		echo '<div class="doze colunas borda relatorio">
 				<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>
 				<hr class="um">
-				<h3>RESTAURANTE UNIVERSITÁRIO</h3>
+				<h3>'.$strUnidade.'</h3>
 				<span>Data: '. date ( 'd/m/Y', strtotime ( $data1 ) ) . ' e ' . date ( 'd/m/Y', strtotime ( $data2 ) ) .'</span>
 				<span>Unidade Acadêmica:</span>
 				<span>Turno: '.$turno->getDescricao().'</span>
@@ -447,10 +492,9 @@ class RelatorioController {
 		echo '<div class=" doze colunas borda relatorio">
 				<h2>UNILAB<small class="fim">Universidade da Integraçao Internacional da Lusofonia Afro-Brasileira</small></h2>	
 				<hr class="um">
-				<h3>RESTAURANTE UNIVERSITÁRIO</h3>
+				<h3>'.$titulo.'</h3>
 				<span>Data:</span>
-				<span>Unidade Acadêmica:</span>
-				<span>Turno:</span>									
+					
 				<hr class="dois">';
 		
 		echo '<table class="tabela-relatorio">
@@ -487,7 +531,7 @@ class RelatorioController {
 		echo '</table>
 				<div class="doze colunas relatorio-rodape">
 					<span>CATRACA | Copyright © 2015 - DTI</span>
-					<span>Relatório Emitido em: '.$date = date('d-m-Y H:i:s').'</span>
+					<span>Relatório Emitido em: '.$date = date('d/m/Y').'</span>
 					<a class="botao icone-printer"> Imprimir</a>
 				</div>		
 			</div>';
@@ -546,9 +590,9 @@ class RelatorioController {
 		echo '<tr id="soma">
 				<th id="limpar">Custo</th>';
 		foreach ( $tipos as $tipo ) {
-			echo '<td>' . number_format (($ultimoCusto*$subTotal [$tipo->getId ()]), 2, ',', '.' ) . '</td>';
+			echo '<td>R$' . number_format (($ultimoCusto*$subTotal [$tipo->getId ()]), 2, ',', '.' ) . '</td>';
 		}
-		echo '<td>' . number_format ( ($ultimoCusto*$subTotal ['total']) , 2, ',', '.' )  . '</td>';
+		echo '<td>R$' . number_format ( ($ultimoCusto*$subTotal ['total']) , 2, ',', '.' )  . '</td>';
 		echo '</tr>';
 		
 		echo '</table>
@@ -558,6 +602,20 @@ class RelatorioController {
 					<a class="botao icone-printer"> Imprimir</a>
 				</div>		
 			</div>';
+	}
+	
+	public function mostraMatriz($matriz){
+		echo '<br><br><br><table border="1">';
+		foreach($matriz as $chave => $valor){
+			echo '<tr><th>'.$chave.'</th>';
+			foreach($valor as $chave2 => $valor2){
+				echo '<td>'.$chave2.' - '.$valor2.'</td>';
+			}
+			echo '</tr>';
+				
+		}
+		echo '</table>';
+		
 	}
 }
 

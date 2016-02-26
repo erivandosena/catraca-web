@@ -137,9 +137,9 @@ echo $html []='<!DOCTYPE html>
 							case 'inicio' :
 								HomeController::main ( $sessao->getNivelAcesso () );
 								break;
-							case 'definicoes' :
-								DefinicoesController::main ( $sessao->getNivelAcesso () );
-								break;
+// 							case 'definicoes' :
+// 								DefinicoesController::main ( $sessao->getNivelAcesso () );
+// 								break;
 							case 'catraca' :
 								
 								$filtroIdCatraca = "";

@@ -68,11 +68,16 @@ class CartaoController{
 				$tipo->setNome($linha['tipo_nome']);
 				$usuario->setNome($linha['usua_nome']);
 				$idCartao = $linha['cart_id'];
+				$avulso = $linha['vinc_avulso'];
+				if($avulso){
+					$usuario->setNome("Avulso");
+				}
 				break;
 				
 			}
 			if($idCartao){
-				echo '<div class="borda"><h1>Cartão vinculado ao usuário '.$usuario->getNome().'. Tipo: '.$tipo->getNome().' .
+				
+				echo '<div class="borda"><h1>'.ucwords(strtolower(htmlentities($usuario->getNome()))).'. Tipo: '.$tipo->getNome().' .
 						
 						
 						</h1></div>';
