@@ -230,7 +230,7 @@ class CartaoView {
 	
 	
 	
-	public function mostraVinculos($lista){
+	public function mostraVinculos($lista, $podeRenovar = true){
 		if(!count($lista))
 		{
 			echo '<div class="borda"><p>Nenhum ítem na lista</p></div>';
@@ -245,15 +245,23 @@ class CartaoView {
 								<th>Cartão</th>
 								<th>Validade</th>
 								<th>Isento</th>
+				';
+		
+		if($podeRenovar)
+			echo '<th>-</th>';
+		echo '
 							</tr>';
 		foreach ( $lista as $vinculo) {
-			$this->mostraLinhaVinculo($vinculo);
+			$this->mostraLinhaVinculo($vinculo, $podeRenovar);
 			
 		}
 		echo '</table></div>';
 		
+	
 	}
-	public function mostraLinhaVinculo(Vinculo $vinculo){
+	
+	
+	public function mostraLinhaVinculo(Vinculo $vinculo, $podeRenovar = true){
 		echo '<tr>';
 		if($vinculo->isAvulso())
 			echo 	'<td>Sim</td>';
@@ -269,9 +277,17 @@ class CartaoView {
 			echo '<td>Sim</td>';
 		else
 			echo '<td>Não</td>';
-		echo '
-				
-			</tr>';
+		
+		if($vinculo->isActive())
+			echo '<td><a href="?pagina=cartao&selecionado='.$vinculo->getResponsavel()->getIdBaseExterna().'&vinculo_cancelar='.$vinculo->getId().'" class="botao">Cancelar</a></td>';
+		else{
+			if($podeRenovar)
+				echo '<td><a href="?pagina=cartao&selecionado='.$vinculo->getResponsavel()->getIdBaseExterna().'&vinculo_renovar='.$vinculo->getId().'" class="botao">Renovar</a></td>';
+			
+			
+		}
+			
+		echo '</tr>';
 	}
 	public function formConfirmacaoEnvioVinculo(Usuario $usuario, $numeroCartao, Tipo $tipo){
 		echo '<div class="borda">';
@@ -283,6 +299,28 @@ class CartaoView {
 		
 		echo '</div>';
 	}
+	public function formConfirmacaoEliminarVinculo(Vinculo $vinculo){
+		echo '<div class="borda">';
+		echo '<p>Tem certeza que deseja eliminar esse vínculo? </p>';
+		echo '<form action="" method="post">
+				<input type="submit" class="botao" value="certeza" name="certeza" />
+	
+				</form>';
+	
+		echo '</div>';
+	}
+	public function formConfirmacaoRenovarVinculo(){
+		echo '<div class="borda">';
+		echo '<p>Tem certeza que deseja renovar esse vínculo? </p>';
+		echo '<form action="" method="post">
+				<input type="submit" class="botao" value="certeza" name="certeza" />
+	
+				</form>';
+	
+		echo '</div>';
+	}
+	
+	
 	public function mostraFormAdicionarVinculo($listaDeTipos, $idSelecionado){
 		$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'H:00:01' );
 		$dataHoje = date ('Y-m-d') . 'T' . date ( 'H:00:01' );

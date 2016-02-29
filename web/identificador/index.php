@@ -26,9 +26,6 @@ if (isset ( $_GET ["sair"] )) {
 }
 
 
-$dao = new DAO();
-$auditoria = new Auditoria($dao->getConexao());
-$auditoria->cadastrar($sessao->getIdUsuario());
 
 
 ?>
@@ -103,8 +100,9 @@ echo $html []='<!DOCTYPE html>
 				<?php
 					
 					if ($sessao->getNivelAcesso () == Sessao::NIVEL_SUPER) {						
-						
-						// exibir menu de usuario Super.
+						$dao = new DAO();
+						$auditoria = new Auditoria($dao->getConexao());
+						$auditoria->cadastrar($sessao->getIdUsuario());
 				
  						echo '
 							<div  class="doze colunas barra-menu">
@@ -134,9 +132,7 @@ echo $html []='<!DOCTYPE html>
 			<div class="resolucao config">					
 						
 					<?php
-					
-					$nivelNovo = Sessao::NIVEL_SUPER;
-					
+
 					
 					if (isset ( $_GET ['pagina'] )) {
 						switch ($_GET ['pagina']) {

@@ -134,6 +134,7 @@ class VinculoDAO extends DAO {
 		}
 		
 		$sql = "UPDATE vinculo set vinc_fim = '$dataTimeAtual' WHERE vinc_id = $idVinculo";
+// 		echo $sql;
 		if($this->getConexao()->exec($sql))
 			return true;
 		return false;
@@ -214,7 +215,7 @@ class VinculoDAO extends DAO {
 		$result = $this->getConexao ()->query ($sql);
 		foreach($result as $linha){
 
-			$vinculo->setId($linha['vinc_id']);
+			
 			$vinculo->getResponsavel()->setNome($linha['usua_nome']);
 			$vinculo->getResponsavel()->setIdBaseExterna($linha['id_base_externa']);
 			$vinculo->getCartao()->setId($linha['cart_id']);
@@ -368,6 +369,20 @@ class VinculoDAO extends DAO {
 		}
 		return $lista;
 	}
+	public function atualizaValidade(Vinculo $vinculo){
+		$data= $vinculo->getFinalValidade();
+		$idVinculo = $vinculo->getId();
+	
+		if(!$idVinculo)
+			return false;
+		
+		$sqlUpdate = "UPDATE vinculo set vinc_fim = '$data' WHERE vinc_id = $idVinculo";
+		if($this->getConexao()->exec($sqlUpdate))
+			return true;
+		return false;
+		
+	}
+	
 	public function usuarioJaTemVinculo(Usuario $usuario){
 		$idBaseExterna = $usuario->getIdBaseExterna();
 		$dataTimeAtual = date ( "Y-m-d G:i:s" );
@@ -375,7 +390,8 @@ class VinculoDAO extends DAO {
 		ON vinculo.usua_id = usuario.usua_id
 		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
 		LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id WHERE (usuario.id_base_externa = $idBaseExterna)
-		AND ('$dataTimeAtual' BETWEEN vinc_inicio AND vinc_fim)";
+		AND ('$dataTimeAtual' BETWEEN vinc_inicio AND vinc_fim) ";
+// 		echo $sql;
 		$result = $this->getConexao ()->query ($sql );
 		foreach($result as $linha){
 			
@@ -437,8 +453,7 @@ class VinculoDAO extends DAO {
 		$dataTimeAtual = date ( "Y-m-d G:i:s" );
 		$sql =  "SELECT * FROM vinculo
 		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
-		WHERE (cartao.cart_numero = '$numero')
-		AND ('$dataTimeAtual' BETWEEN vinc_inicio AND vinc_fim) LIMIT 1";
+		WHERE (cartao.cart_numero = '$numero') LIMIT 1";
 		$resultSet = $this->getConexao()->query($sql);
 		foreach($resultSet as $linha){
 			$cartao->setId($linha['cart_id']);

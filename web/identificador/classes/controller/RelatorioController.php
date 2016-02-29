@@ -521,8 +521,6 @@ class RelatorioController {
 				<h2>UNILAB<small class="fim">Universidade da Integraçao Internacional da Lusofonia Afro-Brasileira</small></h2>	
 				<hr class="um">
 				<h3>'.$titulo.'</h3>
-				<span>Data:</span>
-					
 				<hr class="dois">';
 		
 		echo '<table class="tabela-relatorio">
@@ -576,10 +574,7 @@ class RelatorioController {
 		echo '<div class=" doze colunas borda relatorio">
 				<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>	
 				<hr class="um">
-				<h3>'.$titulo.'</h3>
-				<span>Data:</span>
-				<span>Unidade Acadêmica:</span>
-				<span>Turno:</span>									
+				<h3>'.$titulo.'</h3>							
 				<hr class="dois">';
 		
 		echo '<table class="tabela-relatorio">
