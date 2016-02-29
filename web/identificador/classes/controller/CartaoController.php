@@ -91,7 +91,7 @@ class CartaoController{
 				echo '</h1>';
 				if(!$vinculo->isActive()){
 					echo '<p>O vinculo não está ativo </p><br>
-							<a href="?pagina=cartao&numero_cartao=3994233022&cartao_renovar=1" class="botao">Renovar</a> ';
+							<a href="?pagina=cartao&numero_cartao='.$_GET['numero_cartao'].'&cartao_renovar=1" class="botao">Renovar</a> ';
 				
 					if(isset($_GET['cartao_renovar'])){
 						if(isset($_POST['certeza'])){
