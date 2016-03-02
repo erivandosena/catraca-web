@@ -188,44 +188,51 @@ class CartaoView {
 
 	public function mostraSelecionado(Usuario $usuario) {
 		echo '<div class="borda">
-				Nome: ' . $usuario->getNome () . '. Login: ' . $usuario->getLogin () . '. Identidade: ' . $usuario->getIdentidade () . '. CPF: ' . $usuario->getCpf () . '. Passaporte: ' . $usuario->getPassaporte() . '';
-		
-		echo '<br><br>';
-		
-		if(strtolower (trim($usuario->getTipodeUsuario())) == 'servidor'){
-			if(strtolower (trim($usuario->getStatusServidor())) == 'ativo' && strtolower (trim($usuario->getCategoria())) == 'docente'){
-				echo "<br>Servidor Docente<br>";
-			}
-			else if(strtolower (trim($usuario->getCategoria())) == 'docente'){
-				echo "<br>Servidor Docente Inativo<br>";
-			}
-			if(strtolower (trim($usuario->getStatusServidor())) == 'ativo' && strpos(strtolower (trim($usuario->getCategoria())), 'administrativo')){
-				echo "<br>Servidor TAE<br>";
-			}else if(strpos(strtolower (trim($usuario->getCategoria())), 'administrativo' )){
-				echo "<br>Servidor TAE Inativo<br>";
+				<table  class="tabela borda-vertical zebrada texto-preto">
+					<tr><th>Nome:</th><td> ' . $usuario->getNome () . '.</td></tr>
+					<tr><th>Login:</th><td>'. $usuario->getLogin () .'.</td></tr>
+					<tr><th>Identidade: </th><td>' . $usuario->getIdentidade () . '.</td></tr>
+					<tr><th>CPF:</th><td>' . $usuario->getCpf () . '.</tr>
+					<tr></td><th>Passaporte:</th><td>' . $usuario->getPassaporte() . '</td></tr>';
 				
-			}
-			echo 'SIAPE: ' . $usuario->getSiape();
+
+		if(strtolower (trim($usuario->getStatusServidor())) == 'ativo' && strtolower (trim($usuario->getCategoria())) == 'docente'){
+			echo '<tr><th>Servidor </th><td>Docente</td></tr>
+					<tr><th>SIAPE: </th><td>' . $usuario->getSiape().'</td></tr></table>';
 		}
+		else if(strtolower (trim($usuario->getCategoria())) == 'docente'){
+			echo "<tr><th>Servidor </th><td>Docente Inativo</td></tr>";
+			echo '<tr><th>SIAPE:</th> <td>' . $usuario->getSiape().'</td></tr>';
+		}
+		if(strtolower (trim($usuario->getStatusServidor())) == 'ativo' && strpos(strtolower (trim($usuario->getCategoria())), 'administrativo')){
+			echo "<tr><th>Servidor </th><td>TAE</td></tr>";
+			echo '<tr><th>SIAPE:</th><td>' . $usuario->getSiape().'</td></tr>';
+		}else if(strpos(strtolower (trim($usuario->getCategoria())), 'administrativo' )){
+			echo "<tr><th>Servidor </th><td>TAE Inativo</td></tr>";
+			echo '<tr><th>SIAPE:</th><td>' . $usuario->getSiape().'</td></tr>';
+			
+		}
+			
+		
 		
 		if(strtolower (trim($usuario->getTipodeUsuario())) == 'aluno'){
 			if(strtolower (trim($usuario->getStatusDiscente())) == 'ativo'){
-				echo 'Aluno Ativo ';
+				echo '<tr><th>Aluno </th><td>Ativo</td></tr>';
 			}else{
-				echo 'Aluno Inativo. ';
+				echo '<tr><th>Aluno </th><td>Inativo. </td></tr>';
 				
 			}
-			echo 'Nivel Discente: ' . $usuario->getNivelDiscente();
-			echo 'Matricula: '.$usuario->getMatricula();
+			echo '<tr><th>Nivel Discente:</th><td> ' . $usuario->getNivelDiscente().'</td></tr>';
+			echo '<tr><th>Matricula:</th><td>'.$usuario->getMatricula().'</td></tr>';
 			
 		}
 		
 		if(strtolower (trim($usuario->getTipodeUsuario())) == 'terceirizado'){
-			echo 'Terceirizado Sem Informação de Status<br>';
+			echo '<tr><th colspan=2>Terceirizado Sem Informação de Status</th></tr>';
 		}
 		
 		
-		echo '</div>';
+		echo '</table></div>';
 	}
 	
 	

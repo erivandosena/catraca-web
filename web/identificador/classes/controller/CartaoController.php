@@ -377,16 +377,18 @@ class CartaoController{
 		
 	}
 	public function verificaSeAtivo(Usuario $usuario){
-		if(strtolower (trim($usuario->getTipodeUsuario())) == 'servidor' && strtolower (trim($usuario->getStatusServidor())) == 'ativo'){
+		if(strtolower (trim($usuario->getStatusServidor())) == 'ativo'){
+			
 			return true;
 		}
-		if(strtolower (trim($usuario->getTipodeUsuario())) == 'aluno' && strtolower (trim($usuario->getStatusDiscente())) == 'ativo'){
+		if(strtolower (trim($usuario->getStatusDiscente())) == 'ativo'){
 			return true;	
 		}
 		
 		if(strtolower (trim($usuario->getTipodeUsuario())) == 'terceirizado'){
 			return true;
 		}
+
 		return false;
 	}
 	
