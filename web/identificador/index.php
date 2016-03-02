@@ -77,7 +77,7 @@ echo $html []='<!DOCTYPE html>
 				<div class="tres colunas">
 					<a href="http://www.dti.unilab.edu.br"><img
 						class="imagem-responsiva"
-						src="http://dti.unilab.edu.br/wp-content/themes/dti/img/logo_h-site.png"
+						src="img/logo_h-site.png"
 						alt=""></a>
 				</div>
 				<div class="seis colunas centralizado">
@@ -89,7 +89,7 @@ echo $html []='<!DOCTYPE html>
 				<div class="tres colunas alinhado-a-direita">
 					<a href="http://www.unilab.edu.br"><img
 						class="imagem-responsiva centralizada"
-						src="http://200.129.19.10/pub/templates_dti/img/logo-unilab-branco.png"
+						src="img/logo-unilab-branco.png"
 						alt=""></a>
 				</div>
 			</div>

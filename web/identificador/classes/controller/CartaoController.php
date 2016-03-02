@@ -103,6 +103,8 @@ class CartaoController{
 							if($vinculoDao->usuarioJaTemVinculo($usuario))
 							{
 								$this->view->mostraSucesso("Esse usuário já possui vínculo válido.");
+								echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+								return;
 							}
 							if($vinculo->isAvulso()){
 						
@@ -201,6 +203,8 @@ class CartaoController{
 					if($vinculoDao->usuarioJaTemVinculo($usuario))
 					{
 						$this->view->mostraSucesso("Esse usuário já possui vínculo válido.");
+						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+						return;
 					}
 					if($vinculo->isAvulso()){
 						
@@ -302,6 +306,7 @@ class CartaoController{
 							echo '<div class="borda">';
 							echo '<p>O numero do cartão digitado já possui vinculo, utilize outro cartão.</p><br>';
 							echo '</div>';
+							echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $vinculo->getResponsavel()->getIdBaseExterna() . '&cartao=add">';
 							return;
 						}
 						
