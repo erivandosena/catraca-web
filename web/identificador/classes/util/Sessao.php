@@ -73,24 +73,27 @@ class Sessao{
 				return self::NIVEL_DESLOGADO;
 			}
 	}
+	
 	const NIVEL_DESLOGADO = 0;
 	const NIVEL_COMUM = 1;
-	const NIVEL_ADMIN= 2;
-	
+	const NIVEL_ADMIN = 2;
+	const NIVEL_GUICHE = 4;
+	const NIVEL_CADASTRADOR = 4;
 	const NIVEL_SUPER = 3;
+	
 	/**
 	 * 
 	 * @var 
 	 * 
-	 * Aqui é complicado. 
+	 * Aqui ï¿½ complicado. 
 	 * Nenhum terceirizado tem login no sistema, mas 
-	 * a biblioteca é tocada por terceirizados. 
+	 * a biblioteca ï¿½ tocada por terceirizados. 
 	 * 
-	 * São tercerizados que irão trabalhar com o sistema, gerenciando.
-	 * E aí, como resolve isso?
-	 * Iremos criar um artifício emergencial para que o sistema
-	 * não fique sem gerenciamento. 
-	 * Um usuário com senha fixa que terá acesso às máquinas da biblioteca. 
+	 * Sï¿½o tercerizados que irï¿½o trabalhar com o sistema, gerenciando.
+	 * E aï¿½, como resolve isso?
+	 * Iremos criar um artifï¿½cio emergencial para que o sistema
+	 * nï¿½o fique sem gerenciamento. 
+	 * Um usuï¿½rio com senha fixa que terï¿½ acesso ï¿½s mï¿½quinas da biblioteca. 
 	 *  
 	 */
 	const NIVEL_USUARIO_ESPECIAL = 10;

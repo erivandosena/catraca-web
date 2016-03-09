@@ -390,6 +390,21 @@ color: #fff;
 	padding-left: 40px;
 }
 
+#caixa {
+	margin-top: 40px;
+}
+
+#caixa table {
+	width: 100%;
+}
+
+#caixa hr{
+	border: 1px solid #CCC;
+	margin-bottom: 10px;
+	margin-top: 10px;
+	padding: 0;
+}
+
 #caixa span{
 	font-size: 18px;
 	display: block;

@@ -178,7 +178,9 @@ class GeradorController{
 			
 				$sql = "SELECT * FROM cartao
 				INNER JOIN vinculo ON cartao.cart_id = vinculo.cart_id
-				WHERE tipo_id = $idTipo LIMIT 1";
+				WHERE tipo_id = $idTipo
+				AND vinc_avulso = 'TRUE'
+				LIMIT 1";
 				foreach($tipoDao->getConexao()->query($sql) as $linha){
 					$idCartao = $linha['cart_id'];
 					$idVinculo = $linha['vinc_id'];

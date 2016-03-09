@@ -83,7 +83,7 @@ echo $html []='<!DOCTYPE html>
 				<div class="seis colunas centralizado">
 					<h1>
 						CATRACA<br> <small class="texto-branco">Controle Administrativo de
-							Tr&aacute;fego Acad&eacute;mico Automatizado</small>
+							Tr&aacute;fego Acadêmico Automatizado</small>
 					</h1>
 				</div>
 				<div class="tres colunas alinhado-a-direita">
@@ -175,6 +175,9 @@ echo $html []='<!DOCTYPE html>
 								break;
 							case 'relatorio' :
 								RelatorioController::main($sessao->getNivelAcesso());
+								break;
+							case 'guiche' :
+								GuicheController::main($sessao->getNivelAcesso());
 								break;
 							default :
 								echo '404 NOT FOUND';

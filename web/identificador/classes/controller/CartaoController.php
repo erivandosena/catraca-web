@@ -18,8 +18,6 @@ class CartaoController{
 	
 	
 	public function telaCartao(){
-		
-
 		$this->view = new CartaoView();
 		echo '<div class="conteudo"> <div class = "simpleTabs">
 		        <ul class = "simpleTabsNavigation">
