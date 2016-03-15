@@ -103,7 +103,8 @@ echo $html []='<!DOCTYPE html>
 						$dao = new DAO();
 						$auditoria = new Auditoria($dao->getConexao());
 						$auditoria->cadastrar($sessao->getIdUsuario());
-				
+						$dao->fechaConexao();
+						
  						echo '
 							<div  class="doze colunas barra-menu">
 								    <div class="menu-horizontal config">
