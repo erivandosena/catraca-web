@@ -23,20 +23,17 @@ function __autoload($classe) {
 
 // $dao = new DAO();
 
-// $sql = "SELECT * FROM cartao INNER JOIN vinculo  ON cartao.cart_id = vinculo.cart_id";
-// $result = $dao->getConexao()->query($sql);
+//$sql = "DELETE FROM registro WHERE regi_data > '2016-02-15 23:59:59'";
+// $sql = "DELETE FROM vinculo_tipo";
+// $sql = "DELETE FROM vinculo WHERE vinc_avulso <> 'TRUE'";
+//$sql = "INSERT INTO vinculo_tipo (vinc_id, tipo_id) VALUES(8, 13)";
+// $sql = "DELETE FROM catraca WHERE catr_id > 5";
 
-// foreach($result as $linha){
-// 	$vinc_id = $linha['vinc_id'];
-// 	$idTipo = $linha['tipo_id'];
-// 	$sqlInsert = "INSERT INTO vinculo_tipo (vinc_id, tipo_id) VALUES($vinc_id, $idTipo)";
-// 	if($dao->getConexao()->exec($sqlInsert))
-// 		echo "Inseriu";
-// 	else
-// 		echo "nao inseriu";
-	
-	
-// }
+// $sql = "UPDATE turno set turn_hora_fim = '13:30:00'
+// 		WHERE turn_id = 1";
+
+// $i = $result = $dao->getConexao()->exec($sql);
+// echo $i;
 
 
 ?>

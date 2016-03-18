@@ -32,7 +32,7 @@ class Auditoria{
 		$url = $_SERVER['REQUEST_URI'];
 		$idDoUsuario = intval($idDoUsuario);
 		$data = date("Y-m-d H:i:s");
-		$sql = "INSERT INTO auditoria(audit_pagina, audit_data, usua_id, audit_observacao) VALUES('$url', '$data', $idDoUsuario, '$obs');";
+		$sql = "INSERT INTO auditoria(audi_pagina, audi_data, usua_id, audi_observacao) VALUES('$url', '$data', $idDoUsuario, '$obs');";
 		$this->conexao->exec($sql);
 	}
 	/**
@@ -40,9 +40,9 @@ class Auditoria{
 	 * @param PDO $conexao
 	 */
 	public static function criarTabela(PDO $conexao){
-		$conexao->exec("CREATE TABLE auditoria(audit_id serial NOT NULL,
-				audit_pagina character varying(200),audit_data timestamp without time zone,  
-				usua_id integer,  audit_observacao character varying(200),  CONSTRAINT auditoria_pkey PRIMARY KEY (audit_id));");		
+		$conexao->exec("CREATE TABLE auditoria(audi_id serial NOT NULL,
+				audi_pagina character varying(200),audi_data timestamp without time zone,  
+				usua_id integer,  audi_observacao character varying(200),  CONSTRAINT auditoria_pkey PRIMARY KEY (audi_id));");		
 	}
 }
 

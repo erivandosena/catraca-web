@@ -473,9 +473,10 @@ class RelatorioControllerNovo {
 		
 		echo'<div class="doze colunas relatorio-rodape">
 			<span>CATRACA | Copyright © 2015 - DTI</span>
-			<span>Relatório Emitido em:'.$date = date('d-m-Y H:i:s').'</span>
-			<a class="botao icone-printer"> Imprimir</a>
-			</div>	
+			<span>Relatório Emitido em:'.$date = date('d-m-Y H:i:s').'</span>';
+		
+		//	<a class="botao icone-printer"> Imprimir</a>
+		echo 	'</div>	
 				</div>';		
 		
 		$turnoDao = new TurnoDAO ( $this->dao->getConexao () );
@@ -618,8 +619,9 @@ class RelatorioControllerNovo {
 		echo '</table>
 				<div class="doze colunas relatorio-rodape">
 					<span>CATRACA | Copyright © 2015 - DTI</span>
-					<span>Relatório Emitido em: '.$date = date('d/m/Y').'</span>
-					<a class="botao icone-printer"> Imprimir</a>
+					<span>Relatório Emitido em: '.$date = date('d/m/Y').'</span>';
+// 		echo '<a class="botao icone-printer"> Imprimir</a>';
+		echo '
 				</div>		
 			</div>';
 	}
@@ -682,8 +684,9 @@ class RelatorioControllerNovo {
 		echo '</table>
 				<div class="doze colunas relatorio-rodape">
 					<span>CATRACA | Copyright © 2015 - DTI</span>
-					<span>Relatório Emitido em: '.$date = date('d-m-Y H:i:s').'</span>
-					<a class="botao icone-printer"> Imprimir</a>
+					<span>Relatório Emitido em: '.$date = date('d-m-Y H:i:s').'</span>';
+	// echo '					<a class="botao icone-printer"> Imprimir</a>';
+		echo '
 				</div>		
 			</div>';
 	}

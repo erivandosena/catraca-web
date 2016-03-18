@@ -175,9 +175,9 @@ class CartaoController{
 				
 				if(isset($_POST['certeza'])){
 					if($vinculoDao->invalidarVinculo($vinculo)){
-						$this->view->mostraSucesso("Vínculo Eliminado.  ");
+						$this->view->mostraSucesso("Vínculo Invalidado.  ");
 					}else{
-						$this->view->mostraSucesso("Erro ao tentar eliminar vínculo.  ");
+						$this->view->mostraSucesso("Erro ao tentar invalidar vínculo.  ");
 					}
 					echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
 					return;
@@ -294,7 +294,7 @@ class CartaoController{
 						$vinculo->setInicioValidade(date ( "Y-m-d G:i:s" ));
 						if($vinculoDao->usuarioJaTemVinculo($vinculo->getResponsavel())){
 								echo '<div class="borda">';
-								echo '<p>Esse usuário já possui cartão. Cancele o cartão atual para adicionar um novo.</p><br>';
+								echo '<p>Esse usuário já possui cartão. Inative o cartão atual para adicionar um novo.</p><br>';
 								//echo '<a href="?pagina=cartao&cartaoselecionado=' .$vinculo->getCartao()->getId().'">Clique aqui para ver</a>';
 								echo '</div>';
 								return;
@@ -312,7 +312,7 @@ class CartaoController{
 							
 							if($vinculoDao->usuarioJaTemVinculo($vinculo->getResponsavel())){
 								echo '<div class="borda">';
-								echo '<p>Esse usuário já possui cartão. Cancele o cartão atual para adicionar um novo.</p><br>';
+								echo '<p>Esse usuário já possui cartão. Invalide o cartão atual para adicionar um novo.</p><br>';
 								//echo '<a href="?pagina=cartao&cartaoselecionado=' .$vinculo->getCartao()->getId().'">Clique aqui para ver</a>';
 								echo '</div>';
 								return;
