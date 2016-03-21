@@ -18,7 +18,7 @@ class CatracaController {
 	}
 	public function controlar() {
 		
-		$unidadeDao = new UnidadeDAO ( null, DAO::TIPO_PG_LOCAL );
+		$unidadeDao = new UnidadeDAO ();
 		if(!isset($_GET['unidade']) && !isset($_GET['completo']) && !isset($_GET['detalhe'])){
 			$this->view->abreContainer("Selecione uma Unidade Acadêmica");
 			$lista = $unidadeDao->retornaLista ();

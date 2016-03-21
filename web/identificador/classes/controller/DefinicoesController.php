@@ -260,7 +260,7 @@ class DefinicoesController {
 	
 	
 	public function telaDefinicoes() {
-		$this->dao = new DAO ( null, DAO::TIPO_PG_LOCAL );
+		$this->dao = new DAO ();
 		$this->view = new DefinicoesView ();
 		
 		$selecaoUnidade = "active";

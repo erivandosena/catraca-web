@@ -57,7 +57,7 @@ class CartaoController{
 				LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id
 				WHERE cartao.cart_numero = '$numeroCartao'
 					";
-			$dao = new DAO(NULL, DAO::TIPO_PG_LOCAL);
+			$dao = new DAO();
 			$result = $dao->getConexao()->query($sqlVerificaNumero);
 			$idCartao = 0;
 			$usuario = new Usuario();

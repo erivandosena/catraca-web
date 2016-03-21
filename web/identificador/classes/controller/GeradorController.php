@@ -18,7 +18,7 @@ class GeradorController{
 	}
 	
 	public function verificarSelecaoRU(){
-		$this->dao = new DAO(null, DAO::TIPO_PG_LOCAL);
+		$this->dao = new DAO();
 		
 		if(isset($_SESSION['catraca_id'])){
 			$this->paginaRegistroManual();
@@ -73,7 +73,6 @@ class GeradorController{
 
 	
 	public function paginaRegistroManual(){
-// 		$dao = new DAO(NULL, DAO::TIPO_PG_LOCAL);
 		
 		$tipoDao = new TipoDAO($this->dao->getConexao());
 		$listaDeTipos = $tipoDao->retornaLista();

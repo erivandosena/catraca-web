@@ -87,7 +87,7 @@ class RelatorioController {
 			$strUnidade =  $unidade->getNome();
 		}
 		
-		$dao = new TipoDAO ( null, DAO::TIPO_PG_LOCAL );
+		$dao = new TipoDAO ();
 		$tipos = $dao->retornaLista ();
 		
 		$dateStart = new DateTime ( $dateStart );
@@ -174,7 +174,7 @@ class RelatorioController {
 		if ($dataEnd == null)
 			$dataEnd = date ( 'Y-m-d' );
 		$idUnidade = intval ( $idUnidade );
-		$dao = new TipoDAO ( null, DAO::TIPO_PG_LOCAL );
+		$dao = new TipoDAO ();
 		$tipos = $dao->retornaLista ();
 		
 		$strFiltroUnidade = "";
@@ -292,7 +292,7 @@ class RelatorioController {
 			
 		}
 		$idUnidade = intval ( $idUnidade );
-		$dao = new TipoDAO ( null, DAO::TIPO_PG_LOCAL );
+		$dao = new TipoDAO ();
 		$tipos = $dao->retornaLista ();
 		
 		$dateStart = new DateTime ( $data1 );

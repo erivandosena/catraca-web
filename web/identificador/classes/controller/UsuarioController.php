@@ -57,7 +57,7 @@ class UsuarioController{
 		if(isset($_POST['formlogin']))
 		
 		{
-			$usuarioDAO = new UsuarioDAO(null, DAO::TIPO_PG_LOCAL);
+			$usuarioDAO = new UsuarioDAO();
 			$usuario = new Usuario();
 			$usuario->setLogin($_POST['login']);
 			$usuario->setSenha($_POST['senha']);
