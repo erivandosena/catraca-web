@@ -165,7 +165,7 @@ class CartaoController{
 			
 			
 			$this->view->mostraSelecionado($usuario);
-			$vinculoDao = new VinculoDAO(null, DAO::TIPO_PG_LOCAL);
+			$vinculoDao = new VinculoDAO();
 				
 			
 			

@@ -182,6 +182,9 @@ echo $html []='<!DOCTYPE html>
 							case 'guiche' :
 								GuicheController::main($sessao->getNivelAcesso());
 								break;
+							case 'definicoes' :
+								DefinicoesController::main($sessao->getNivelAcesso());
+								break;
 							default :
 								echo '404 NOT FOUND';
 								break;

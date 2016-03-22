@@ -30,7 +30,7 @@ if($sessao->getNivelAcesso() != Sessao::NIVEL_SUPER)
 	exit(0);
 
 
-$dao = new DAO(NULL, DAO::TIPO_PG_LOCAL);
+$dao = new DAO();
 
 $sql = "SELECT schemaname AS esquema, tablename AS tabela, tableowner AS dono
  FROM pg_catalog.pg_tables

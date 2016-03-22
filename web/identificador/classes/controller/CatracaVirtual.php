@@ -55,8 +55,8 @@ class CatracaVirtual{
 			        <select name="catraca_id" id="catraca_id">';
 		
 		foreach ($listaDeCatracas as $catraca){
-			if(strpos($catraca->getNome(), 'ablet'))
-				echo '<option value="'.$catraca->getId().'">'.$catraca->getNome().'</option>';
+			
+			echo '<option value="'.$catraca->getId().'">'.$catraca->getNome().'</option>';
 						
 		}
 		
