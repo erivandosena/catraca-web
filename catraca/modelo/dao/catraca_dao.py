@@ -33,7 +33,9 @@ class CatracaDAO(ConexaoGenerica):
                   "catr_ip, "\
                   "catr_tempo_giro, "\
                   "catr_operacao, "\
-                  "catr_nome "\
+                  "catr_nome, "\
+                  "catr_mac_lan, "\
+                  "catr_mac_wlan "\
                   "FROM catraca WHERE "\
                   "catr_id = " + str(id)
         elif id is None:
@@ -41,7 +43,9 @@ class CatracaDAO(ConexaoGenerica):
                   "catr_ip, "\
                   "catr_tempo_giro, "\
                   "catr_operacao, "\
-                  "catr_nome "\
+                  "catr_nome, "\
+                  "catr_mac_lan, "\
+                  "catr_mac_wlan "\
                   "FROM catraca ORDER BY catr_id"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
@@ -54,6 +58,8 @@ class CatracaDAO(ConexaoGenerica):
                         obj.tempo = dados[2]
                         obj.operacao = dados[3]
                         obj.nome = dados[4]
+                        obj.maclan = dados[5]
+                        obj.macwlan = dados[6]
                         return obj
                     else:
                         return None
@@ -75,7 +81,9 @@ class CatracaDAO(ConexaoGenerica):
               "catr_ip, "\
               "catr_tempo_giro, "\
               "catr_operacao, "\
-              "catr_nome "\
+              "catr_nome, "\
+              "catr_mac_lan, "\
+              "catr_mac_wlan "\
               "FROM catraca WHERE "\
               "catr_ip = '" + str(ip) + "'"
         try:
@@ -88,6 +96,8 @@ class CatracaDAO(ConexaoGenerica):
                     obj.tempo = dados[2]
                     obj.operacao = dados[3]
                     obj.nome = dados[4]
+                    obj.maclan = dados[5]
+                    obj.macwlan = dados[6]
                     return obj
                 else:
                     return None
@@ -98,7 +108,7 @@ class CatracaDAO(ConexaoGenerica):
             pass
         
     def obtem_catraca(self):
-        return self.busca_por_ip(self.util.obtem_ip())
+        return self.busca_por_ip(self.util.obtem_ip_por_interface())
         
     def insere(self, obj):
         try:
@@ -108,12 +118,16 @@ class CatracaDAO(ConexaoGenerica):
                     "catr_ip, "\
                     "catr_tempo_giro, "\
                     "catr_operacao, "\
-                    "catr_nome) VALUES (" +\
+                    "catr_nome, "\
+                    "catr_mac_lan, "\
+                    "catr_mac_wlan) VALUES (" +\
                     str(obj.id) + ", '" +\
                     str(obj.ip) + "', " +\
                     str(obj.tempo) + ", " +\
                     str(obj.operacao) + ", '" +\
-                    str(obj.nome) + "')"
+                    str(obj.nome) + "', '" +\
+                    str(obj.maclan) + "', '" +\
+                    str(obj.macwlan) + "')"
                 self.aviso = "[catraca] Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)
@@ -122,10 +136,10 @@ class CatracaDAO(ConexaoGenerica):
             else:
                 self.aviso = "[catraca] inexistente!"
                 return False
-#         except Exception as excecao:
-#             self.aviso = str(excecao)
-#             self.log.logger.error('[catraca] Erro realizando INSERT.', exc_info=True)
-#             return False
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[catraca] Erro realizando INSERT.', exc_info=True)
+            return False
         finally:
             pass   
         
@@ -143,7 +157,9 @@ class CatracaDAO(ConexaoGenerica):
                         "catr_ip = '" + str(obj.ip) + "', " +\
                         "catr_tempo_giro = " + str(obj.tempo) + ", " +\
                         "catr_operacao = " + str(obj.operacao) + ", " +\
-                        "catr_nome = '" + str(obj.nome) +\
+                        "catr_nome = '" + str(obj.nome) + "', " +\
+                        "catr_mac_lan = '" + str(obj.maclan) + "', " +\
+                        "catr_mac_wlan = '" + str(obj.macwlan) +\
                         "' WHERE "\
                         "catr_id = " + str(obj.id)
                     self.aviso = "[catraca] Alterado com sucesso!"
@@ -154,10 +170,10 @@ class CatracaDAO(ConexaoGenerica):
             else:
                 self.aviso = "[catraca] inexistente!"
                 return False
-#         except Exception as excecao:
-#             self.aviso = str(excecao)
-#             self.log.logger.error('[catraca] Erro realizando UPDATE/DELETE.', exc_info=True)
-#             return False
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[catraca] Erro realizando UPDATE/DELETE.', exc_info=True)
+            return False
         finally:
             pass
         

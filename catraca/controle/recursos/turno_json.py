@@ -60,7 +60,7 @@ class TurnoJson(ServidorRestful):
             pass
         
     def turno_funcionamento_get(self):
-        IP = Util().obtem_ip()
+        IP = Util().obtem_ip_por_interface()
         servidor = self.obter_servidor()
         try:
             if servidor:

@@ -114,10 +114,10 @@ class Aviso(object):
         self.display.mensagem('SINCRONIZANDO...'.center(16) +'\n'+ 'AGUARDE!'.center(16), 1, False, False)
 
     def exibir_reinicia_catraca(self):
-        self.display.mensagem("REINICIANDO...".center(16) +"\n"+ "CATRACA".center(16), 4, False, False)
+        self.display.mensagem("REINICIANDO...".center(16) +"\n"+ "CATRACA".center(16), 5, False, False)
         
     def exibir_desliga_catraca(self):
-        self.display.mensagem("DESLIGANDO...".center(16) +"\n"+ "CATRACA".center(16), 4, False, False)
+        self.display.mensagem("DESLIGANDO...".center(16) +"\n"+ "CATRACA".center(16), 5, False, False)
         
     def exibir_turno_atual(self, nome_turno):
         self.display.mensagem('TURNO INICIADO'.center(16) +'\n'+ nome_turno.center(16), 2, False, False)

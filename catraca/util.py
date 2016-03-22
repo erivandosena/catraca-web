@@ -5,10 +5,18 @@
 import os
 import pwd
 import time
+import fcntl
+import struct
 import socket
+import random
 import locale
 import calendar
 import datetime
+
+import codecs 
+from tempfile import mkstemp
+from shutil import move
+
 import subprocess
 from time import sleep
 from catraca.logs import Logs
@@ -37,27 +45,6 @@ class Util(object):
     def __init__(self):
         super(Util, self).__init__()
         
-    def obtem_ip(self):
-        exibe = False
-        ip = None
-        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        try:
-            s.settimeout(2)
-            s.connect(('unilab.edu.br',0))
-            ip = '%s' % ( s.getsockname()[0] )
-            #return ip
-        except Exception as excecao:
-            exibe = True
-            self.aviso.exibir_estatus_catraca(None)
-            print "Erro obtendo unilab.edu.br"
-            self.log.logger.error('Erro obtendo conexao!', exc_info=True)
-        finally:
-            if exibe:
-                from catraca.visao.interface.aviso import Aviso
-                Aviso().exibir_estatus_catraca(ip)
-            s.close()
-            return ip
-        
     def obtem_nome_sistema(self):
         return os.name
     
@@ -69,30 +56,10 @@ class Util(object):
     
     def obtem_path(self, arquivo):
         return "%s" % (os.path.join(os.path.dirname(os.path.abspath(__file__)), arquivo))
-        
-#     def buzzer(self, frequencia, intensidade):
-#         period = 1.0 / frequencia
-#         delay = period / 2.0
-#         cycles = int(intensidade * frequencia)
-#         retorno = False
-#         for i in range(cycles):
-#             self.rpi.atualiza(self.pino_buzzer, True)
-#             sleep(delay)
-#             self.rpi.atualiza(self.pino_buzzer, False)
-#             sleep(delay)
-#             retorno = True
-#         return retorno
     
     def beep_buzzer(self, frequencia, intensidade, quantidade_beep):
         self.buzzer.reproduzir(frequencia, intensidade, quantidade_beep)
-#         while quantidade_beep > 0:
-#             self.rpi.atualiza(self.pino_buzzer, True)
-#             self.buzzer(frequencia, intensidade)
-#             print 'beeep!'
-#             sleep(intensidade)
-#             self.rpi.atualiza(self.pino_buzzer, False)
-#             quantidade_beep -= 1
-            
+        
     def beep_buzzer_delay(self, frequencia, intensidade, quantidade_beep, delay_beep):
         self.cronometro += 1
         if self.cronometro/1000 == delay_beep:
@@ -243,18 +210,43 @@ class Util(object):
             return str(float(s.split('=')[1][:-3]))
         except:
             return "0"
-    
-    def obtem_ipaddress(self):
-        """Retorna o endereço IP atual."""
+        
+    def obtem_ip_por_interface(self, interface='eth0'):
+        exibe = False
         try:
-            arg='ip route list'
-            p=subprocess.Popen(arg,shell=True,stdout=subprocess.PIPE)
-            data = p.communicate()
-            split_data = data[0].split()
-            print split_data
-            ipaddr = split_data[split_data.index('src')+1]
-            return str(ipaddr)
-        except:
-            return "127.0.0.1"
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            ip = socket.inet_ntoa(fcntl.ioctl(s.fileno(), 0x8915, struct.pack('256s', interface[:15]))[20:24])
+            return ip
+        except Exception as excecao:
+            print excecao
+            ip = "127.0.0.1"
+            exibe = True
+            print "Erro na conexao!"
+            self.log.logger.error('Erro obtendo conexao!', exc_info=True)
+        finally:
+            if exibe:
+                from catraca.visao.interface.aviso import Aviso
+                Aviso().exibir_estatus_catraca(ip)
+                
+    def obtem_MAC_por_interface(self, interface='eth0'):
+        mac = None
+        try:
+            str = open('/sys/class/net/' + interface + '/address').read()
+            mac = str[0:17]
+        except Exception as excecao:
+            #print excecao
+            mac = "00:00:00:00:00:00"
+        return mac
         
+    def altera_hostname(self, novo_nome):
+        self.substitui_string_arquivo("/etc/hosts", self.obtem_nome_rpi(), novo_nome)
+        self.substitui_string_arquivo("/etc/hostname", self.obtem_nome_rpi(), novo_nome)
+        subprocess.call('/etc/init.d/hostname.sh')
         
+    def substitui_string_arquivo(self, local_arquivo, str_atual, str_novo):
+        with codecs.open(local_arquivo, 'r+', 'utf-8') as arq:
+            content = arq.read()
+            arq.seek(0)
+            arq.truncate()
+            arq.write(content.replace(str_atual, str_novo))
+            

@@ -36,21 +36,16 @@ class Relogio(ControleGenerico, threading.Thread):
             self.hora_atul = self.util.obtem_hora()
             Relogio.hora = self.hora_atul
             self.datahora = self.util.obtem_datahora().strftime("%d/%m/%Y %H:%M:%S")
-            
-            print "|-------------<"+str(self.datahora)+">---------o"
-            
             if (str(self.hora) == "06:00:00") or (str(self.hora) == "12:00:00") or (str(self.hora) == "18:00:00"):
+                print "|-------------<RELOGIO "+str(self.hora)+">---------o"
                 self.aviso.exibir_saldacao(self.aviso.saldacao(), self.util.obtem_datahora_display())
                 self.aviso.exibir_aguarda_cartao()
                 
             self.contador += 1
-            print "|-------------<"+str(self.contador)+">---------o"
             if self.contador == 5:
                 self.contador = 0
                 Relogio.catraca = self.obtem_catraca()
                 Relogio.turno = self.obtem_turno()
-                
-            print "|-------------<RELOGIO "+str(Relogio.periodo)+">---------o"
             sleep(self.intervalo)
             
     def obtem_catraca(self):

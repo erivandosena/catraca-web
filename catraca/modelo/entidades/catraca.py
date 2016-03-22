@@ -16,6 +16,8 @@ class Catraca(object):
         self.__catr_tempo_giro = None
         self.__catr_operacao = None
         self.__catr_nome = None
+        self.__catr_mac_lan = None
+        self.__catr_mac_wlan = None
     
     @property
     def id(self):
@@ -56,5 +58,20 @@ class Catraca(object):
     @nome.setter
     def nome(self, valor):
         self.__catr_nome = valor
-
+        
+    @property
+    def maclan(self):
+        return self.__catr_mac_lan
+    
+    @maclan.setter
+    def maclan(self, valor):
+        self.__catr_mac_lan = valor
+    
+    @property
+    def macwlan(self):
+        return self.__catr_mac_wlan
+        
+    @macwlan.setter
+    def macwlan(self, valor):
+        self.__catr_mac_wlan = valor
         

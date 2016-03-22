@@ -43,7 +43,7 @@ class Painel(object):
         
         self.log.logger.info('Iniciando Api...')
         self.aviso.exibir_inicializacao()
-        self.aviso.exibir_estatus_catraca(self.util.obtem_ip())
+        self.aviso.exibir_estatus_catraca(self.util.obtem_ip_por_interface())
         #self.aviso.exibir_mensagem_institucional_fixa(self.aviso.saldacao(), self.util.obtem_datahora_display(), 2)
         
 #         self.aviso.exibir_estatus_catraca(self.util.obtem_ip())

@@ -39,8 +39,6 @@ class Mensagem(threading.Thread):
         count = 0
         while not self._stopevent.isSet():
             count += 1
-            #print "|-----------------------------------------------<Mensagem DISPLAY "+str(LeitorCartao.uso_do_cartao)+">---------o"
-            print "LOOP %d" % (count)
             if not Relogio.periodo:
                 self.exibe_mensagem()
             self._stopevent.wait(self._sleepperiod)
