@@ -110,6 +110,7 @@ CREATE TABLE catraca
   catr_nome character varying(25), -- Nome da catraca formado pelo nome do host, nome da unidade e numero da catraca.
   catr_mac_lan character varying(23), -- Registro do endereco fisico do hardware fixo LAN.
   catr_mac_wlan character varying(23), -- Registro do endereco fisico do hardware fixo ou plugue de rede WLAN.
+  catr_interface_rede character varying(10), -- Informa se a interface de rede utilizada sera eth0 ou wlan0
   CONSTRAINT pk_catr_id PRIMARY KEY (catr_id ) -- Chave primaria da tabela catraca.
 );
 ALTER TABLE catraca OWNER TO postgres;
@@ -121,6 +122,7 @@ COMMENT ON COLUMN catraca.catr_operacao IS '1=Giro Horario(Entrada controlada co
 COMMENT ON COLUMN catraca.catr_nome IS 'Nome da catraca formado pelo nome do host, nome da unidade e numero da catraca. ';
 COMMENT ON COLUMN catraca.catr_mac_lan IS 'Registro do endereco fisico do hardware fixo LAN.';
 COMMENT ON COLUMN catraca.catr_mac_wlan IS 'Registro do endereco fisico do hardware fixo ou plugue de rede WLAN.';
+COMMENT ON COLUMN catraca.catr_interface_rede IS 'Informa se a interface de rede utilizada sera eth0 ou wlan0';
 COMMENT ON CONSTRAINT pk_catr_id ON catraca IS 'Chave primaria da tabela catraca.';
 
 -- Table: mensagem

@@ -26,6 +26,7 @@ class CatracaJson(ServidorRestful):
     catraca_dao = CatracaDAO()
     contador_acesso_servidor = 0
     util = Util()
+    interface = catraca_dao.obtem_interface_rede(util.obtem_nome_rpi())
     IP = util.obtem_ip_por_interface()
     
     def __init__(self):
@@ -56,13 +57,14 @@ class CatracaJson(ServidorRestful):
                         for item in LISTA_JSON:
                             obj = self.dict_obj(item)
                             if obj:
-                                #print "MAC " + str(self.util.obtem_MAC_por_interface('eth0')) + " == " + str(obj.maclan)
-                                if self.util.obtem_MAC_por_interface('eth0') == obj.maclan:
+                                print "MAC " + str(self.util.obtem_MAC_por_interface(self.interface)) + " == " + str(obj.maclan)
+                                if self.util.obtem_MAC_por_interface(self.interface) == obj.maclan:
                                     # Atualiza catraca local
                                     obj.ip = self.IP
                                     obj.nome = obj.nome.upper()
-                                    obj.maclan = self.util.obtem_MAC_por_interface('eth0')
-                                    obj.macwlan = self.util.obtem_MAC_por_interface('wlan0')
+                                    obj.interface = "eth0" if obj.interface == None else obj.interface
+#                                     obj.maclan = self.util.obtem_MAC_por_interface('eth0')            
+#                                     obj.macwlan = self.util.obtem_MAC_por_interface('wlan0')
                                     catraca_local = obj
                                     # Atualiza remoto
                                     self.objeto_json(obj, 'PUT')
@@ -72,7 +74,8 @@ class CatracaJson(ServidorRestful):
                                         self.util.reinicia_raspberrypi()
                                         return self.aviso.exibir_reinicia_catraca()
                                     print "NÃO VAI DAR REBOOT!!!"
-                        self.mantem_tabela_local(catraca_local, True)
+                                if mantem_tabela:
+                                    self.mantem_tabela_local(obj, limpa_tabela)
                         if catraca_local is None:
                             self.cadastra_catraca_remoto()
                             return self.catraca_get(True, True)
@@ -96,12 +99,15 @@ class CatracaJson(ServidorRestful):
     def mantem_tabela_local(self, obj, limpa_tabela=False):
         if limpa_tabela:
             self.atualiza_exclui(None, limpa_tabela)
+            print "excluiu tudo!"
         if obj:
             resultado = self.catraca_dao.busca(obj.id)
             if resultado:
                 self.atualiza_exclui(obj, False)
+                print "atualizou!"
             else:
                 self.insere(obj)
+                print "inseriu!"
         else:
             return None
         
@@ -135,6 +141,8 @@ class CatracaJson(ServidorRestful):
                 catraca.maclan = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
             if item == "catr_mac_wlan":
                 catraca.macwlan = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
+            if item == "catr_interface_rede":
+                catraca.interface = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
                 
         return catraca
     
@@ -147,7 +155,8 @@ class CatracaJson(ServidorRestful):
                     "catr_operacao":item[3],
                     "catr_nome":str(item[4]),
                     "catr_mac_lan":str(item[5]),
-                    "catr_mac_wlan":str(item[6])
+                    "catr_mac_wlan":str(item[6]),
+                    "catr_interface_rede":str(item[7])
                 }
                 self.catraca_post(catraca)
 
@@ -159,7 +168,8 @@ class CatracaJson(ServidorRestful):
                 "catr_operacao":obj.operacao,
                 "catr_nome":str(obj.nome),
                 "catr_mac_lan":str(obj.maclan),
-                "catr_mac_wlan":str(obj.macwlan)
+                "catr_mac_wlan":str(obj.macwlan),
+                "catr_interface_rede":str(obj.interface)
             }
             if operacao == "POST":
                 self.catraca_post(catraca)
@@ -171,11 +181,10 @@ class CatracaJson(ServidorRestful):
         try:
             if servidor:
                 url = str(servidor) + "catraca/insere"
-                print url
                 header = {'Content-type': 'application/json'}
                 r = requests.post(url, auth=(self.usuario, self.senha), headers=header, data=json.dumps(formato_json))
-                print r.text
-                print r.status_code
+                #print r.text
+                #print r.status_code
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro enviando json catraca.', exc_info=True)
@@ -187,11 +196,11 @@ class CatracaJson(ServidorRestful):
         try:
             if servidor:
                 url = str(servidor) + "catraca/atualiza/"+ str(id)
-                print url
+                #print url
                 header = {'Content-type': 'application/json'}
                 r = requests.put(url, auth=(self.usuario, self.senha), headers=header, data=json.dumps(formato_json))
-                print r.text
-                print r.status_code
+                #print r.text
+                #print r.status_code
                 return True
             else:
                 return False
@@ -209,6 +218,7 @@ class CatracaJson(ServidorRestful):
         catraca.nome = self.util.obtem_nome_rpi().upper()
         catraca.maclan = self.util.obtem_MAC_por_interface('eth0')
         catraca.macwlan = self.util.obtem_MAC_por_interface('wlan0')
+        catraca.interface = "eth0"
         self.objeto_json(catraca)
             
     

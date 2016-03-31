@@ -19,9 +19,8 @@ from shutil import move
 
 import subprocess
 from time import sleep
-from catraca.logs import Logs
-#from catraca.controle.raspberrypi.pinos import PinoControle
 from catraca.controle.dispositivos.buzzer import Buzzer
+from catraca.modelo.dao.catraca_dao import CatracaDAO
 
 
 __author__ = "Erivando Sena" 
@@ -34,11 +33,9 @@ class Util(object):
     
     locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')
     
-    log = Logs()
-    #rpi = PinoControle()
-    
-    #pino_buzzer = rpi.ler(21)['gpio']
     buzzer = Buzzer()
+    catraca_dao = CatracaDAO()
+    
     cronometro = 0
     hora_stop = None
     
@@ -211,25 +208,28 @@ class Util(object):
         except:
             return "0"
         
-    def obtem_ip_por_interface(self, interface='eth0'):
+    def obtem_ip_por_interface(self, interface=None):
         exibe = False
+        if interface is None:
+            interface = self.catraca_dao.obtem_interface_rede(self.obtem_nome_rpi())
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
             ip = socket.inet_ntoa(fcntl.ioctl(s.fileno(), 0x8915, struct.pack('256s', interface[:15]))[20:24])
             return ip
         except Exception as excecao:
-            print excecao
+            #print excecao
             ip = "127.0.0.1"
             exibe = True
-            print "Erro na conexao!"
-            self.log.logger.error('Erro obtendo conexao!', exc_info=True)
+            print "Erro ao obter ip!"
         finally:
             if exibe:
                 from catraca.visao.interface.aviso import Aviso
                 Aviso().exibir_estatus_catraca(ip)
                 
-    def obtem_MAC_por_interface(self, interface='eth0'):
+    def obtem_MAC_por_interface(self, interface=None):
         mac = None
+        if interface is None:
+            interface = self.catraca_dao.obtem_interface_rede(self.obtem_nome_rpi())
         try:
             str = open('/sys/class/net/' + interface + '/address').read()
             mac = str[0:17]

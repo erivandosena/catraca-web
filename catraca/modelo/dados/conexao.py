@@ -8,7 +8,6 @@ import psycopg2
 #import mysql.connector
 from contextlib import closing
 from catraca.logs import Logs
-from catraca.util import Util
 
 
 __author__ = "Erivando Sena"
@@ -20,7 +19,6 @@ __status__ = "Prototype" # Prototype | Development | Production
 class ConexaoFactory(object):
     
     log = Logs()
-    util = Util()
     
     def __init__(self):
         super(ConexaoFactory, self).__init__()
@@ -42,7 +40,8 @@ class ConexaoFactory(object):
         con = None
         self.__factory = tipo_banco
         try:
-            str_conexao = self.obtem_dns("desenvolvimento","postgres","localhost","postgres", tipo_banco)
+            #str_conexao = self.obtem_dns("desenvolvimento","postgres","localhost","postgres", tipo_banco)
+            str_conexao = "dbname='%s' user='%s' host='%s' password='%s'" % ("desenvolvimento", "postgres", "localhost", "postgres")
             # PostgreSQL
             if (tipo_banco == self.__POSTGRESQL):
                 try:
@@ -54,7 +53,7 @@ class ConexaoFactory(object):
                     pass
             # MySQL
             if (tipo_banco == self.__MYSQL):
-                #str_conexao = "user='%s', password='%s', host='%s', database='%s'" % (usuario, senha, localhost, banco)
+                str_conexao = "user='%s' password='%s' host='%s' database='%s'" % (usuario, senha, host, bd)
                 try:
                     #con = mysql.connector.connect(str_conexao)
                     pass
@@ -65,7 +64,7 @@ class ConexaoFactory(object):
                     pass
             # SQLite
             if (tipo_banco == self.__SQLITE):
-                #str_conexao = "'%s'" % (os.path.join(os.path.dirname(os.path.abspath(__file__)),"banco.db"))
+                str_conexao = "'%s'" % (os.path.join(os.path.dirname(os.path.abspath(__file__)),"banco.db"))
                 try:
                     con = sqlite3.connect(str_conexao)
                 except Exception, e:
@@ -80,25 +79,25 @@ class ConexaoFactory(object):
         finally:
             pass
         
-    def obtem_dns(self, bd = None, usuario = None, host = None, senha = None, tipo_banco = 1):
-        try:
-            if bd == None:
-                bd = self.util.obtem_nome_rpi()
-            if usuario == None:
-                usuario = self.util.obtem_nome_root_rpi()
-            if host == None:
-                host = self.util.obtem_ip()
-            if senha == None:
-                senha = 'postgres'
-            if tipo_banco == 1:
-                dns = "dbname='%s' user='%s' host='%s' password='%s'" % (bd, usuario, host, senha)
-            elif tipo_banco == 2:
-                dns = "user='%s' password='%s' host='%s' database='%s'" % (usuario, senha, host, bd)
-            elif tipo_banco == 3:
-                dns = self.util.obtem_path(str(bd)+".db")
-        except Exception as excecao:
-            self.aviso = str(excecao)
-            self.log.logger.error('Erro ao obter string de conexao.', exc_info=True)
-        finally:
-            return dns
+#     def obtem_dns(self, bd = None, usuario = None, host = None, senha = None, tipo_banco = 1):
+#         try:
+#             if bd == None:
+#                 bd = self.util.obtem_nome_rpi()
+#             if usuario == None:
+#                 usuario = self.util.obtem_nome_root_rpi()
+#             if host == None:
+#                 host = self.util.obtem_ip()
+#             if senha == None:
+#                 senha = 'postgres'
+#             if tipo_banco == 1:
+#                 dns = "dbname='%s' user='%s' host='%s' password='%s'" % (bd, usuario, host, senha)
+#             elif tipo_banco == 2:
+#                 dns = "user='%s' password='%s' host='%s' database='%s'" % (usuario, senha, host, bd)
+#             elif tipo_banco == 3:
+#                 dns = self.util.obtem_path(str(bd)+".db")
+#         except Exception as excecao:
+#             self.aviso = str(excecao)
+#             self.log.logger.error('Erro ao obter string de conexao.', exc_info=True)
+#         finally:
+#             return dns
         

@@ -10,7 +10,7 @@ from catraca.visao.interface.aviso import Aviso
 from catraca.modelo.dao.mensagem_dao import MensagemDAO
 from catraca.modelo.dao.catraca_dao import CatracaDAO
 from catraca.controle.restful.relogio import Relogio
-#from catraca.controle.dispositivos.leitorcartao import LeitorCartao
+from time import sleep
 
 
 __author__ = "Erivando Sena" 
@@ -33,7 +33,7 @@ class Mensagem(threading.Thread):
         self._stopevent = threading.Event()
         self._sleepperiod = 1
         self.name = 'Thread Mensagem.'
-
+        
     def run(self):
         print "%s Rodando... " % self.name
         count = 0
@@ -43,14 +43,14 @@ class Mensagem(threading.Thread):
                 self.exibe_mensagem()
             self._stopevent.wait(self._sleepperiod)
         print "%s Finalizando..." % self.getName()
-  
+        
     def join(self, timeout=None):
         self._stopevent.set()
         super(Mensagem, self).join(timeout)
         threading.Thread.join(self, timeout)
-
+        
     def exibe_mensagem(self):
-        catraca = self.catraca_dao.obtem_catraca()
+        catraca = self.catraca_dao.busca_por_ip(self.util.obtem_ip_por_interface())
         if catraca:
             mensagens = self.mensagem_dao.obtem_mensagens(catraca)
             try:
@@ -65,3 +65,4 @@ class Mensagem(threading.Thread):
                 self.log.logger.error('Erro exibindo mensagem no display', exc_info=True)
             finally:
                 pass
+            

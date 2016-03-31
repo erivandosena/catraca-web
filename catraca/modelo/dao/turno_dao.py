@@ -3,6 +3,7 @@
 
 
 from contextlib import closing
+from catraca.logs import Logs
 from catraca.util import Util
 from catraca.modelo.dados.conexao import ConexaoFactory
 from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
@@ -18,8 +19,9 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 class TurnoDAO(ConexaoGenerica):
     
+    log = Logs()
     util = Util()
-    catraca_dao = CatracaDAO()
+    #catraca_dao = CatracaDAO()
 
     def __init__(self):
         super(TurnoDAO, self).__init__()
@@ -77,9 +79,6 @@ class TurnoDAO(ConexaoGenerica):
                     "WHERE catraca.catr_ip = '"+str(obj.ip)+"' "\
                     "AND turno.turn_hora_inicio <= '" + str(hora_atual) +"' "\
                     "AND turno.turn_hora_fim >= '" + str(hora_atual) + "'"
-            print "=" * 100
-            print sql
-            print "=" * 100
         else:
             ip = self.util.obtem_ip()
             sql = "SELECT turno.turn_id, turno.turn_hora_inicio, turno.turn_hora_fim, turno.turn_descricao FROM turno "\
@@ -89,9 +88,6 @@ class TurnoDAO(ConexaoGenerica):
                     "WHERE catraca.catr_ip = '"+str(ip)+"' "\
                     "AND turno.turn_hora_inicio <= '" + str(hora_atual) +"' "\
                     "AND turno.turn_hora_fim >= '" + str(hora_atual) + "'"
-            print "=" * 100
-            print sql
-            print "=" * 100
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -114,7 +110,7 @@ class TurnoDAO(ConexaoGenerica):
     def obtem_turno(self, catraca=None, hora=None):
         turno = None
         if (catraca is None) or (hora is None):
-            turno = self.busca_por_catraca(self.catraca_dao.obtem_catraca(), self.util.obtem_hora())
+            turno = self.busca_por_catraca( CatracaDAO().busca_por_ip(self.util.obtem_ip_por_interface()), self.util.obtem_hora() )
         else:
             turno = self.busca_por_catraca(catraca, hora)
         return turno

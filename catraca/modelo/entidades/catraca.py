@@ -18,7 +18,8 @@ class Catraca(object):
         self.__catr_nome = None
         self.__catr_mac_lan = None
         self.__catr_mac_wlan = None
-    
+        self.__catr_interface_rede = None
+        
     @property
     def id(self):
         return self.__catr_id
@@ -74,4 +75,12 @@ class Catraca(object):
     @macwlan.setter
     def macwlan(self, valor):
         self.__catr_mac_wlan = valor
+        
+    @property
+    def interface(self):
+        return self.__catr_interface_rede
+        
+    @interface.setter
+    def interface(self, valor):
+        self.__catr_interface_rede = valor
         

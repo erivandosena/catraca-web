@@ -9,7 +9,6 @@ from catraca.visao.interface.alerta import Alerta
 from catraca.controle.dispositivos.leitorcartao import LeitorCartao
 from catraca.controle.restful.relogio import Relogio
 from catraca.controle.restful.sincronia import Sincronia
-#from catraca.visao.interface.mensagem import Mensagem
 
 
 __author__ = "Erivando Sena"

@@ -5,6 +5,7 @@
 import json
 import requests
 from catraca.logs import Logs
+from catraca.util import Util
 from catraca.modelo.dados.servidor_restful import ServidorRestful
 from catraca.modelo.dao.mensagem_dao import MensagemDAO
 from catraca.modelo.entidades.mensagem import Mensagem
@@ -19,6 +20,7 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 class MensagemJson(ServidorRestful):
     
+    util = Util()
     log = Logs()
     mensagem_dao = MensagemDAO()
     
@@ -30,7 +32,7 @@ class MensagemJson(ServidorRestful):
         servidor = self.obter_servidor()
         try:
             if servidor:
-                url = str(servidor) + "mensagem/jmensagem/" + str(CatracaDAO().obtem_catraca().id)
+                url = str(servidor) + "mensagem/jmensagem/" + str(CatracaDAO().busca_por_ip(self.util.obtem_ip_por_interface()).id)
                 print url 
                 header = {'Content-type': 'application/json'}
                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)

@@ -3,6 +3,8 @@
 
 
 from contextlib import closing
+from catraca.logs import Logs
+from catraca.logs import Logs
 from catraca.util import Util
 from catraca.modelo.dados.conexao import ConexaoFactory
 from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
@@ -18,6 +20,8 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 
 class CartaoValidoDAO(ConexaoGenerica):
+    
+    log = Logs()
 
     def __init__(self):
         super(CartaoValidoDAO, self).__init__()

@@ -12,6 +12,7 @@ from catraca.modelo.dao.registro_dao import RegistroDAO
 from catraca.modelo.entidades.registro import Registro
 from catraca.modelo.dao.turno_dao import TurnoDAO
 from catraca.controle.recursos.turno_json import TurnoJson
+from catraca.modelo.dao.catraca_dao import CatracaDAO
 
 
 __author__ = "Erivando Sena" 
@@ -36,36 +37,41 @@ class RegistroJson(ServidorRestful):
         
     def registro_get(self, mantem_tabela=False, limpa_tabela=False):
         servidor = self.obter_servidor()
-        turno = self.obtem_turno_valido()
-        if turno:
-            data_atual = str(self.util.obtem_datahora().strftime("%Y%m%d"))
-            print data_atual
-            self.hora_inicio = datetime.datetime.strptime(str(turno.inicio),'%H:%M:%S').time().strftime('%H%M%S')
-            self.hora_fim = datetime.datetime.strptime(str(turno.fim),'%H:%M:%S').time().strftime('%H%M%S')
         try:
-            if servidor:
-                url = str(servidor) + "registro/jregistro/" + str(data_atual+self.hora_inicio) + "/" +str(data_atual+self.hora_fim)
-                header = {'Content-type': 'application/json'}
-                r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
-                #print "Status HTTP: " + str(r.status_code)
+            turno = self.obtem_turno_valido()
+            if turno:
+                data_atual = str(self.util.obtem_datahora().strftime("%Y%m%d"))
+                self.hora_inicio = datetime.datetime.strptime(str(turno.inicio),'%H:%M:%S').time().strftime('%H%M%S')
+                self.hora_fim = datetime.datetime.strptime(str(turno.fim),'%H:%M:%S').time().strftime('%H%M%S')
                 
-                if r.text != '':
-                    dados  = json.loads(r.text)
-                    LISTA_JSON = dados["registros"]
-                    if LISTA_JSON != []:
-                        lista = []
-                        for item in LISTA_JSON:
-                            obj = self.dict_obj(item)
-                            if obj:
-                                lista.append(obj)
-                                if mantem_tabela:
-                                    self.mantem_tabela_local(obj, limpa_tabela)
-                        return lista
+                if servidor:
+                    url = str(servidor) + "registro/jregistro/" + str(data_atual+str(self.hora_inicio)) + "/" +str(data_atual+str(self.hora_fim))
+                    print url
+                    header = {'Content-type': 'application/json'}
+                    r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
+                    #print "Status HTTP: " + str(r.status_code)
+                    
+                    if r.text != '':
+                        dados  = json.loads(r.text)
+                        LISTA_JSON = dados["registros"]
+                        if LISTA_JSON != []:
+                            lista = []
+                            for item in LISTA_JSON:
+                                obj = self.dict_obj(item)
+                                if obj:
+                                    lista.append(obj)
+                                    if mantem_tabela:
+                                        self.mantem_tabela_local(obj, limpa_tabela)
+                            return lista
+                        else:
+                            self.atualiza_exclui(None, True)
+                            return None
                     else:
-                        self.atualiza_exclui(None, True)
                         return None
                 else:
                     return None
+            else:
+                return None
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json registro', exc_info=True)
@@ -170,7 +176,6 @@ class RegistroJson(ServidorRestful):
                     "vinc_id":item[6]
                 }
                 self.registro_post(registro)
-                #self.registro_dao.mantem(self.registro_dao.busca(item[0]),True)
 
     def objeto_json(self, obj):
         if obj:
@@ -208,7 +213,7 @@ class RegistroJson(ServidorRestful):
         turno_ativo = TurnoJson().turno_funcionamento_get()
         if turno_ativo is None:
             #local
-            turno_ativo = self.turno_dao.obtem_turno(self.turno_dao.obtem_catraca(), self.util.obtem_hora())
+            turno_ativo = self.turno_dao.obtem_turno( CatracaDAO().busca_por_ip(self.util.obtem_ip_por_interface()), self.util.obtem_hora())
         if turno_ativo:
             return turno_ativo
         else:

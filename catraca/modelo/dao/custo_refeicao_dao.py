@@ -3,6 +3,7 @@
 
 
 from contextlib import closing
+from catraca.logs import Logs
 from catraca.modelo.dados.conexao import ConexaoFactory
 from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
 from catraca.modelo.entidades.custo_refeicao import CustoRefeicao
@@ -15,6 +16,8 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 
 class CustoRefeicaoDAO(ConexaoGenerica):
+    
+    log = Logs()
     
     def __init__(self):
         super(CustoRefeicaoDAO, self).__init__()

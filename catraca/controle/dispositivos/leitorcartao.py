@@ -22,7 +22,6 @@ from catraca.controle.recursos.registro_json import RegistroJson
 from catraca.controle.restful.relogio import Relogio
 from catraca.modelo.dao.cartao_valido_dao import CartaoValidoDAO
 from catraca.modelo.dao.isencao_dao import IsencaoDAO
-from catraca.visao.interface.mensagem import Mensagem
 
 
 __author__ = "Erivando Sena" 
@@ -39,7 +38,6 @@ class LeitorCartao(Relogio):
     pictograma = Pictograma()
     sensor_optico = SensorOptico()
     pino_controle = PinoControle()
-    #mensagens = Mensagem()
 
     cartao_dao = CartaoDAO()
     cartao_valido_dao = CartaoValidoDAO()
@@ -69,9 +67,7 @@ class LeitorCartao(Relogio):
         self.pino_controle.evento_both(self.D0, self.zero)
         self.pino_controle.evento_both(self.D1, self.um)
         
-        #self.mensagens.start()
         while True:
-            print "|-------------<LEITOR "+str(Relogio.periodo)+">---------o"
             self.CATRACA = Relogio.catraca
             if self.CATRACA:
                 self.TURNO = Relogio.turno
@@ -92,23 +88,19 @@ class LeitorCartao(Relogio):
             while True:
                 if self.bits:
                     LeitorCartao.uso_do_cartao = True
-                    
-                    #Mensagem().join()
-                    #self.mensagens.pausa()
-                    
-                    print self.bits
                     self.aviso.exibir_aguarda_consulta()
                     self.log.logger.info('Binario obtido corretamente. [Cartao n.] '+str(self.bits))
                     id = str(int(self.bits, 2))
                     id = id.zfill(10)
-                    print id
                     if (len(self.bits) == 32) and (len(id) == 10):
                         self.numero_cartao = id
                         self.util.beep_buzzer(860, .1, 1)
+                        print "Leu CARTAO N. " +str(self.numero_cartao) +"  BINARIO: "+ str(self.bits)
                         return self.numero_cartao
                     else:
+                        print "Erro ao ler cartao N. " +str(self.numero_cartao)
                         self.log.logger.warn('Binario ou inteiro obtido incorretamente. [cartao n.] ' + str(self.bits), exc_info=True)
-                        self.util.beep_buzzer(250, .1, 3) #0 seg.
+                        self.util.beep_buzzer(250, .1, 3)
                         self.aviso.exibir_erro_leitura_cartao()
                         self.bloqueia_acesso()
                         id = None
@@ -150,7 +142,6 @@ class LeitorCartao(Relogio):
             self.log.logger.error('Erro ao ler. [cartao n.] ' + str(self.numero_cartao), exc_info=True)
         finally:
             LeitorCartao.uso_do_cartao = False
-            #self.mensagens.unpausa()
         
     def valida_cartao(self, numero):
         cartao = Cartao()
@@ -188,6 +179,8 @@ class LeitorCartao(Relogio):
                 ##############################################################
                 self.aviso.exibir_saldo_cartao(cartao_usuario_nome, locale.currency(float(cartao_total_creditos)).format())
                 saldo_creditos = 0.00
+                cartao_isento = True
+                """ DESABILITADO TEMPORARIAMENTE
                 cartao_isento = False
                 ISENCAO = self.obtem_isencao(self.numero_cartao)
                 if ISENCAO is None:
@@ -206,6 +199,7 @@ class LeitorCartao(Relogio):
                     self.log.logger.info('Isento. [cartao n.] ' + str(self.numero_cartao))
                     cartao_isento = True
                     self.aviso.exibir_cartao_isento( datetime.datetime.strptime(str(ISENCAO.fim),'%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y %H:%M') )
+                """
                 ##############################################################
                 ## VERIFICA O LIMITE PERMITIDO DE USO DO CARTAO DURANTE TURNO
                 ##############################################################
@@ -233,12 +227,12 @@ class LeitorCartao(Relogio):
                     self.desbloqueia_acesso()
                     while True:
                         if self.sensor_optico.registra_giro(self.CATRACA.tempo, self.CATRACA):
-                            print "|------------------------------------------------------------------< GIROU >---------o"
+                            print "GIROU!"
                             self.log.logger.info('Girou catraca. [cartao n.] ' + str(self.numero_cartao))
                             giro_completo = True
                             return None
                         else:
-                            print "|------------------------------------------------------------------< NAO GIROU >---------o"
+                            print "NAO GIROU!"
                             self.log.logger.info('Nao girou catraca. [cartao n.] ' + str(self.numero_cartao))
                             return None
         except Exception as excecao:

@@ -13,6 +13,7 @@ from catraca.controle.dispositivos.sensoroptico import SensorOptico
 from catraca.controle.dispositivos.leitorcartao import LeitorCartao
 from catraca.visao.interface.mensagem import Mensagem
 from catraca.controle.restful.relogio import Relogio
+from catraca.controle.restful.recursos_restful import RecursosRestful
 
 __author__ = "Erivando Sena" 
 __copyright__ = "Copyright 2015, Unilab" 
@@ -38,15 +39,25 @@ class Alerta(threading.Thread):
     def run(self):
         print "%s Rodando... " % self.name
         mensagens = Mensagem()
-        mensagens.start()
+        #mensagens.start()
         while True:
             if self.status_alerta:
                 self.status_alerta = False
                 self.aviso.exibir_aguarda_cartao()
             self.verifica_giro_irregular()
             
+            # trata exibicao de mensagens padroes quando nao houver turno ativo
             if not Relogio.periodo:
+                # durante a leitura de um cartao
                 if LeitorCartao.uso_do_cartao:
+                    if mensagens.isAlive():
+                        mensagens.join()
+                else:
+                    if not mensagens.isAlive():
+                        mensagens = Mensagem()
+                        mensagens.start()
+                # durante a sincronizacao da catraca com o servidor RESTful
+                if RecursosRestful.obtendo_recurso:
                     if mensagens.isAlive():
                         mensagens.join()
                 else:

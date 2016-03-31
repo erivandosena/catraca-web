@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
 from contextlib import closing
+from catraca.logs import Logs
 from catraca.modelo.dados.conexao import ConexaoFactory
 from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
 from catraca.modelo.entidades.unidade import Unidade
@@ -14,6 +16,8 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 
 class UnidadeDAO(ConexaoGenerica):
+    
+    log = Logs()
     
     def __init__(self):
         super(UnidadeDAO, self).__init__()

@@ -162,6 +162,4 @@ class Aviso(object):
     def limpa_display(self):
         self.display.limpa_lcd()
         
-#     def exibir_dia_invalido(self):
-#         self.display.mensagem("DIA NAO UTIL".center(16) +"\n"+ "PARA ATENDIMENTO".center(16), 1, False, False)
         
