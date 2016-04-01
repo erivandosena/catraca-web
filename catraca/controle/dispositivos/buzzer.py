@@ -85,15 +85,16 @@ class Buzzer(object):
                 
     def reproduzir(self, frequencia=523, duracao=0.1, repeticao=1):
         
+        print "\n----------- BUZZER -----------"
         print "Reproduzindo..."
         print "Frequencia: ", frequencia
         print "Duracao: ", duracao
         print "Repeticao: ", repeticao
+        print "-" * 30
         
         pitches=[frequencia]
         duration=duracao
         while repeticao > 0:
-            print repeticao
             for p in pitches:
                 self.beeper(p, duration)
                 sleep(duration * 0.5)

@@ -66,9 +66,9 @@ class IsencaoJson(ServidorRestful):
                 url = str(servidor) + "isencao/jisencao/" + str(numero_cartao)+ "/"+str(self.util.obtem_datahora().strftime("%Y%m%d%H%M%S"))
                 header = {'Content-type': 'application/json'}
                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
-                print "Status HTTP: " + str(r.status_code)
+                #print "Status HTTP: " + str(r.status_code)
                 
-                print r.text
+                #print r.text
 
                 if r.text != '':
                     dados  = json.loads(r.text)

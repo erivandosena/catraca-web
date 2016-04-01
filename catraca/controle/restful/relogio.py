@@ -38,7 +38,7 @@ class Relogio(ControleGenerico, threading.Thread):
             Relogio.hora = self.hora_atul
             self.datahora = self.util.obtem_datahora().strftime("%d/%m/%Y %H:%M:%S")
             if (str(self.hora) == "06:00:00") or (str(self.hora) == "12:00:00") or (str(self.hora) == "18:00:00"):
-                print "Hora: "+str(self.hora)
+                print "HORA: "+str(self.hora)
                 self.aviso.exibir_saldacao(self.aviso.saldacao(), self.util.obtem_datahora_display())
                 self.aviso.exibir_aguarda_cartao()
             self.contador += 1
@@ -56,6 +56,7 @@ class Relogio(ControleGenerico, threading.Thread):
             self.recursos_restful.obtem_catraca(True, True, False)
             catraca = self.catraca_dao.busca_por_ip(self.util.obtem_ip_por_interface())
         else:
+            # Solicita ao servidor RESTful o cadastro inicial na tabela
             #unidade
             if self.recursos_restful.unidade_json.unidade_get() is None:
                 self.aviso.exibir_unidade_nao_cadastrada()
@@ -93,7 +94,7 @@ class Relogio(ControleGenerico, threading.Thread):
                     self.aviso.exibir_turno_atual(turno_ativo.descricao)
                     self.util.beep_buzzer(855, .5, 1)
                     self.aviso.exibir_aguarda_cartao()
-                    print "INICIO DE TURNO!"
+                    print "\nINICIO DE TURNO!\n"
                 return turno_ativo
             else:
                 # Finaliza turno
@@ -102,7 +103,7 @@ class Relogio(ControleGenerico, threading.Thread):
                     Relogio.periodo = False
                     self.aviso.exibir_horario_invalido()
                     self.util.beep_buzzer(855, .5, 1)
-                    print "ENCERRAMENTO DE TURNO!"
+                    print "\nENCERRAMENTO DE TURNO!\n"
                 return None
         else:
             return None

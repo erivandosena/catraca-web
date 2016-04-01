@@ -46,7 +46,7 @@ class RegistroJson(ServidorRestful):
                 
                 if servidor:
                     url = str(servidor) + "registro/jregistro/" + str(data_atual+str(self.hora_inicio)) + "/" +str(data_atual+str(self.hora_fim))
-                    print url
+                    #print url
                     header = {'Content-type': 'application/json'}
                     r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
                     #print "Status HTTP: " + str(r.status_code)
@@ -88,9 +88,9 @@ class RegistroJson(ServidorRestful):
                 url = str(servidor) + "registro/jregistro/" +str(data_atual+self.hora_inicio) + "/" +str(data_atual+self.hora_fim)+ "/" +str(cartao_id)
                 header = {'Content-type': 'application/json'}
                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
-                print "Status HTTP: " + str(r.status_code)
+                #print "Status HTTP: " + str(r.status_code)
                 
-                print r.text
+                #print r.text
                 
                 if r.text != '':
                     dados  = json.loads(r.text)
@@ -194,12 +194,12 @@ class RegistroJson(ServidorRestful):
         try:
             if servidor:
                 url = str(servidor) + "registro/insere"
-                print url
+                #print url
                 header = {'Content-type': 'application/json'}
                 r = requests.post(url, auth=(self.usuario, self.senha), headers=header, data=json.dumps(formato_json))
                 #print r.headers['content-type']
                 #print r.headers
-                print r.text
+                #print r.text
                 print r.status_code
                 #print 'requests.post: '+ str(formato_json)
         except Exception as excecao:

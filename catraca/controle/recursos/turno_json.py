@@ -65,12 +65,12 @@ class TurnoJson(ServidorRestful):
         try:
             if servidor:
                 url = str(servidor) + "turno/jturno/" + str(self.util.converte_ip_para_long(IP)) + "/" + str(self.util.obtem_hora())
-                print url
+                #print url
                 header = {'Content-type': 'application/json'}
                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
-                print "Status HTTP: " + str(r.status_code)
+                #print "Status HTTP: " + str(r.status_code)
                 
-                print r.text
+                #print r.text
 
                 if r.text != '':
                     dados  = json.loads(r.text)

@@ -67,9 +67,9 @@ class CartaoJson(ServidorRestful):
                 print url
                 header = {'Content-type': 'application/json'}
                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
-                print "Status HTTP: " + str(r.status_code)
+                #print "Status HTTP: " + str(r.status_code)
                 
-                print r.text
+                #print r.text
 
                 if r.text != '':
                     print json.loads(r.text)
@@ -185,11 +185,11 @@ class CartaoJson(ServidorRestful):
         try:
             if servidor:
                 url = str(servidor) + "cartao/atualiza/"+ str(id)
-                print url
+                #print url
                 header = {'Content-type': 'application/json'}
                 r = requests.put(url, auth=(self.usuario, self.senha), headers=header, data=json.dumps(formato_json))
-                print r.text
-                print r.status_code
+                #print r.text
+                #print r.status_code
                 return True
             else:
                 return False

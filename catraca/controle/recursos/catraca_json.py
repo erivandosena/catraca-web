@@ -40,7 +40,7 @@ class CatracaJson(ServidorRestful):
                 url = str(servidor) + "catraca/jcatraca"
                 header = {'Content-type': 'application/json'}
                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
-                print "Status HTTP: " + str(r.status_code)
+                #print "Status HTTP: " + str(r.status_code)
                 #print r.text
                 if r.text == '':
                     self.contador_acesso_servidor += 1
@@ -57,8 +57,8 @@ class CatracaJson(ServidorRestful):
                         for item in LISTA_JSON:
                             obj = self.dict_obj(item)
                             if obj:
-                                print "MAC " + str(self.util.obtem_MAC_por_interface(self.interface)) + " == " + str(obj.maclan)
                                 if self.util.obtem_MAC_por_interface(self.interface) == obj.maclan:
+                                    print "MAC Local -> " + str(self.util.obtem_MAC_por_interface(self.interface)) + " == " + str(obj.maclan) + " <- MAC Remoto"
                                     # Atualiza catraca local
                                     obj.ip = self.IP
                                     obj.nome = obj.nome.upper()
@@ -69,11 +69,10 @@ class CatracaJson(ServidorRestful):
                                     # Atualiza remoto
                                     self.objeto_json(obj, 'PUT')
                                     if self.util.obtem_nome_rpi().lower() != obj.nome.lower():
-                                        print "VAI REINICIAR...."
+                                        print "CATRACA VAI REINICIAR...."
                                         self.util.altera_hostname(obj.nome.lower())
                                         self.util.reinicia_raspberrypi()
                                         return self.aviso.exibir_reinicia_catraca()
-                                    print "NÃO VAI DAR REBOOT!!!"
                                 if mantem_tabela:
                                     self.mantem_tabela_local(obj, limpa_tabela)
                         if catraca_local is None:
@@ -99,15 +98,12 @@ class CatracaJson(ServidorRestful):
     def mantem_tabela_local(self, obj, limpa_tabela=False):
         if limpa_tabela:
             self.atualiza_exclui(None, limpa_tabela)
-            print "excluiu tudo!"
         if obj:
             resultado = self.catraca_dao.busca(obj.id)
             if resultado:
                 self.atualiza_exclui(obj, False)
-                print "atualizou!"
             else:
                 self.insere(obj)
-                print "inseriu!"
         else:
             return None
         

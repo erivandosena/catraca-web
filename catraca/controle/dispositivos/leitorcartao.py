@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+ #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
 
@@ -248,9 +248,14 @@ class LeitorCartao(Relogio):
                 # insere registro remoto
                 registro_json.objeto_json(registro)
                 giro_completo = False
+                #sleep(0.5)
+                registro_json.registro_get(True, False)
+                
                 
                 # atualiza cartao remoto
                 cartao_json.objeto_json(cartao)
+                #sleep(0.5)
+                cartao_json.cartao_get(True, False)
             else:
                 cartao = None
                 registro = None
