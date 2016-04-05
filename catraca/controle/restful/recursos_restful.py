@@ -61,11 +61,11 @@ class RecursosRestful(object):
             self.obtem_registro(display, mantem_tabela, limpa_tabela)           # 1ºGRAU DE PRIORIDADE DE SINCRONIA
             self.obtem_turno(display, mantem_tabela, limpa_tabela)              # 4ºGRAU DE PRIORIDADE DE SINCRONIA
             self.obtem_isencao(display, mantem_tabela, limpa_tabela)            # 5ºGRAU DE PRIORIDADE DE SINCRONIA
-            #self.obtem_unidade(display, mantem_tabela, limpa_tabela)
-            #self.obtem_unidade_turno(display, mantem_tabela, limpa_tabela)
-            #self.obtem_catraca_unidade(display, mantem_tabela, limpa_tabela)
-            #self.obtem_custo_refeicao(display, mantem_tabela, limpa_tabela)
-            #self.obtem_mensagem(display, mantem_tabela, limpa_tabela)
+            self.obtem_unidade(display, mantem_tabela, limpa_tabela)
+            self.obtem_unidade_turno(display, mantem_tabela, limpa_tabela)
+            self.obtem_catraca_unidade(display, mantem_tabela, limpa_tabela)
+            self.obtem_custo_refeicao(display, mantem_tabela, limpa_tabela)
+            self.obtem_mensagem(display, mantem_tabela, limpa_tabela)
 
 #             self.obtem_catraca(display, mantem_tabela, limpa_tabela)
 #             self.obtem_mensagem(display, mantem_tabela, limpa_tabela)

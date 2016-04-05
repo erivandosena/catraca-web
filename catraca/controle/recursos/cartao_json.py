@@ -11,6 +11,7 @@ from catraca.modelo.dao.cartao_dao import CartaoDAO
 from catraca.modelo.entidades.cartao import Cartao
 from catraca.modelo.entidades.cartao_valido import CartaoValido
 
+
 __author__ = "Erivando Sena" 
 __copyright__ = "(C) Copyright 2015, Unilab" 
 __email__ = "erivandoramos@unilab.edu.br" 

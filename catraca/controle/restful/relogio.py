@@ -37,7 +37,7 @@ class Relogio(ControleGenerico, threading.Thread):
             self.hora_atul = self.util.obtem_hora()
             Relogio.hora = self.hora_atul
             self.datahora = self.util.obtem_datahora().strftime("%d/%m/%Y %H:%M:%S")
-            if (str(self.hora) == "06:00:00") or (str(self.hora) == "12:00:00") or (str(self.hora) == "18:00:00"):
+            if (self.hora == datetime.datetime.strptime('06:00:00','%H:%M:%S').time()) or (self.hora == datetime.datetime.strptime('12:00:00','%H:%M:%S').time()) or (self.hora == datetime.datetime.strptime('18:00:00','%H:%M:%S').time()):
                 print "HORA: "+str(self.hora)
                 self.aviso.exibir_saldacao(self.aviso.saldacao(), self.util.obtem_datahora_display())
                 self.aviso.exibir_aguarda_cartao()

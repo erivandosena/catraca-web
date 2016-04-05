@@ -33,10 +33,10 @@ class Sincronia(Relogio):
             
     def executa_controle_recursos(self):
         self.contador_status_recursos += 1
-        if (Relogio.periodo == True) and (self.contador_status_recursos >= 10):
+        if ((Relogio.periodo == True) and (self.contador_status_recursos >= 10)):
             self.contador_status_recursos = 0
             self.recursos_restful.obtem_recursos(False, True, False)
-        elif (Relogio.periodo == False and Relogio.hora >= datetime.datetime.strptime('00:00:00','%H:%M:%S').time() and Relogio.hora <= datetime.datetime.strptime('00:00:20','%H:%M:%S').time()):
+        elif ((Relogio.periodo == False) and (Relogio.hora >= datetime.datetime.strptime('00:00:00','%H:%M:%S').time()) and (Relogio.hora <= datetime.datetime.strptime('00:00:20','%H:%M:%S').time())):
             self.util.beep_buzzer(855, .5, 1)
             self.aviso.exibir_aguarda_sincronizacao()
             print "\nLimpando... tabela local CATRACA"

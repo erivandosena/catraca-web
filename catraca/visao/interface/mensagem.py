@@ -47,7 +47,7 @@ class Mensagem(threading.Thread):
     def join(self, timeout=None):
         self._stopevent.set()
         super(Mensagem, self).join(timeout)
-        threading.Thread.join(self, timeout)
+        #threading.Thread.join(self, timeout)
         
     def exibe_mensagem(self):
         catraca = self.catraca_dao.busca_por_ip(self.util.obtem_ip_por_interface())

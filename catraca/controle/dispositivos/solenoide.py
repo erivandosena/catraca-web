@@ -21,6 +21,8 @@ class Solenoide(object):
     
     def __init__(self):
         super(Solenoide, self).__init__()
+        self.gpio_solenoide1 = self.solenoide_1
+        self.gpio_solenoide2 = self.solenoide_2
         
     def ativa_solenoide(self,solenoide,estado):
         if solenoide == 1:
@@ -39,6 +41,34 @@ class Solenoide(object):
             else:
                 self.rpi.atualiza(self.solenoide_2, self.baixo)
                 return False
+            
+#     def ativa_solenoide(self,solenoide,estado,catraca_operacao=None):
+#         if solenoide == 1:
+#             if estado:
+#                 if catraca_operacao is None:
+#                     self.rpi.atualiza(self.solenoide_1, self.alto)
+#                     self.rpi.atualiza(self.solenoide_2, self.baixo)
+#                     return True
+#                 elif catraca_operacao == 3:
+#                     self.rpi.atualiza(self.solenoide_1, self.baixo)
+#                     #self.rpi.atualiza(self.solenoide_2, self.baixo)
+#                     return False
+#             else:
+#                 self.rpi.atualiza(self.solenoide_1, self.baixo)
+#                 return False
+#         elif solenoide == 2:
+#             if estado:
+#                 if catraca_operacao is None:
+#                     self.rpi.atualiza(self.solenoide_2, self.alto)
+#                     self.rpi.atualiza(self.solenoide_1, self.baixo)
+#                     return True
+#                 elif catraca_operacao == 3:
+#                     self.rpi.atualiza(self.solenoide_1, self.baixo)
+#                     #self.rpi.atualiza(self.solenoide_2, self.baixo)
+#                     return False
+#             else:
+#                 self.rpi.atualiza(self.solenoide_2, self.baixo)
+#                 return False
             
     def obtem_estado_solenoide(self,solenoide):
         if solenoide == 1:

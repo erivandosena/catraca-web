@@ -39,3 +39,11 @@ class Pictograma(object):
         else:
             return self.rpi.atualiza(self.x, comando)
         
+    def obtem_estado_pictograma(self, nome):
+        if nome == "direita":
+            return self.rpi.estado(self.sd)
+        elif nome == "esquerda":
+            return self.rpi.estado(self.se)
+        elif nome == "x":
+            return self.rpi.estado(self.x)
+        

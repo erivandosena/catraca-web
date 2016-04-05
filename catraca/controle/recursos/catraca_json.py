@@ -58,7 +58,7 @@ class CatracaJson(ServidorRestful):
                             obj = self.dict_obj(item)
                             if obj:
                                 if self.util.obtem_MAC_por_interface(self.interface) == obj.maclan:
-                                    print "MAC Local -> " + str(self.util.obtem_MAC_por_interface(self.interface)) + " == " + str(obj.maclan) + " <- MAC Remoto"
+                                    #print "MAC Local -> " + str(self.util.obtem_MAC_por_interface(self.interface)) + " == " + str(obj.maclan) + " <- MAC Remoto"
                                     # Atualiza catraca local
                                     obj.ip = self.IP
                                     obj.nome = obj.nome.upper()
