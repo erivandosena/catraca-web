@@ -32,7 +32,7 @@ class GuicheController{
 												    <th>Valor</th>
 												    <th>Descri&ccedil&atildeo</th>
 												    <th>Data</th>
-													<th>Cliente</th>
+													<th>Operador</th>
 												</tr>
 											</thead>
 											<tbody>';		
@@ -43,8 +43,7 @@ class GuicheController{
 				WHERE usuario.usua_id = $idDoUsuario";
 		$result = $dao->getConexao()->query($sqlTransacao);
 		$i = 1;
-		foreach ($result as $linha){
-			
+		foreach ($result as $linha){			
 				echo'	
 												<tr>
 											        <td>'.$i.'</td>
@@ -60,7 +59,7 @@ class GuicheController{
 											</tbody>											
 										</table>
 									</div>
-								</div>';	
+								</div>';		
 		
 		$valorTotal = 0;
 		$result = $dao->getConexao()->query($sqlTransacao);
@@ -134,7 +133,7 @@ class GuicheController{
  				$cartao->setId($idCartao);
  				$vinculoDao->vinculoPorId($vinculo);
 			
-				echo '	<span>Usuario 12: '.ucwords(strtolower(htmlentities($usuario->getNome()))).'</span>						
+				echo '	<span>Usuario: '.ucwords(strtolower(htmlentities($usuario->getNome()))).'</span>						
 						<span>Tipo Usuario: '.$tipo->getNome().'</span>						
 						<span>Saldo: '.$cartao->getCreditos().'</span>
 						<span>Valor Credito: '.$tipo->getValorCobrado().'</span>
@@ -164,34 +163,42 @@ class GuicheController{
 						$idUsuario = $usuario->getId();						
 						$dataTimeAtual = date ( "Y-m-d G:i:s" );
 						$novoValor = $valorAnt + $valorVendido;					
+						$tipoTransacao = 'Venda de Créditos';
 						
-						if($valorVendido <= 0){
-							$controller->mensagem('-erro','Valor inv&aacutelido.');
-							echo '<meta http-equiv="refresh" content="2; url=.\?pagina=guiche">';
-						}else{
+						if($valorVendido < 0){							
+							echo '	<form class="formulario">
+										<input type="submit" value="Confirmar" name="confirmar">
+									<form>';
+							if(isset($_POST['confirmar'])){
+								$tipoTransacao = 'Estorno de valores';
+							}
 							
-						$dao->getConexao()->beginTransaction();
-					
-						$sql = "UPDATE cartao set cart_creditos = $novoValor WHERE cart_id = $idCartao";
 							
-						$sql2 = "INSERT into transacao(tran_valor, tran_descricao, tran_data, usua_id)
-						VALUES($valorVendido, 'Venda de Créditos','$dataTimeAtual', $idDoUsuario)";					
-					
-						//echo $sql;
-						if(!$dao->getConexao()->exec($sql)){
-							$dao->getConexao()->rollBack();
-							$controller->mensagem('-erro','Erro ao inserir os creditos.');
-							return false;
 						}
-						if(!$dao->getConexao()->exec($sql2)){
-							$dao->getConexao()->rollBack();
-							$controller->mensagem('-erro','Erro ao inserir os creditos.');
-							return false;
-						}
+						
+						
+// 						$dao->getConexao()->beginTransaction();
+					
+// 						$sql = "UPDATE cartao set cart_creditos = $novoValor WHERE cart_id = $idCartao";
 							
-						$dao->getConexao()->commit();
-						$controller->mensagem('-sucesso','Valor inserido com sucesso.');
-						echo '<meta http-equiv="refresh" content="2; url=.\?pagina=guiche">';
+// 						$sql2 = "INSERT into transacao(tran_valor, tran_descricao, tran_data, usua_id)
+// 						VALUES($valorVendido, '$tipoTransacao' ,'$dataTimeAtual', $idDoUsuario)";					
+					
+// 						//echo $sql;
+// 						if(!$dao->getConexao()->exec($sql)){
+// 							$dao->getConexao()->rollBack();
+// 							$controller->mensagem('-erro','Erro ao inserir os creditos.');
+// 							return false;
+// 						}
+// 						if(!$dao->getConexao()->exec($sql2)){
+// 							$dao->getConexao()->rollBack();
+// 							$controller->mensagem('-erro','Erro ao inserir os creditos.');
+// 							return false;
+// 						}
+							
+// 						$dao->getConexao()->commit();
+// 						$controller->mensagem('-sucesso','Valor inserido com sucesso.');
+// 						echo '<meta http-equiv="refresh" content="2; url=.\?pagina=guiche">';
 					
 						}				
 					
@@ -200,7 +207,7 @@ class GuicheController{
 						$controller->mensagem('-erro','O vinculo n&atildeo est&aacute ativo.');
 						
 					}
-				}
+				
 			}
 				
  			}else{
@@ -210,9 +217,8 @@ class GuicheController{
  				}			
 		}
 		echo'
-								<hr class="solida">
-				
-								<a href="" class="botao b-erro">Sangria 123</a>
+								<hr class="solida">				
+								<a href="" class="botao b-erro">Sangria</a>
 								<a href="" class="botao ">Encerrar Caixa</a>
 							</div>
 						</div>
