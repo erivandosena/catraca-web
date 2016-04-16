@@ -94,13 +94,13 @@ class LeitorCartao(Relogio):
                     id = id.zfill(10)
                     if (len(self.bits) == 32) and (len(id) == 10):
                         self.numero_cartao = id
-                        self.util.beep_buzzer(860, .1, 1)
+#                         self.util.beep_buzzer(860, .1, 1)
                         print "Leu CARTAO N. " +str(self.numero_cartao) +"  BINARIO: "+ str(self.bits)
                         return self.numero_cartao
                     else:
-                        print "Erro ao ler cartao N. " +str(self.numero_cartao)
+                        print "Erro ao ler cartao N. " +str(id)
                         self.log.logger.warn('Binario ou inteiro obtido incorretamente. [cartao n.] ' + str(self.bits), exc_info=True)
-                        self.util.beep_buzzer(250, .1, 3)
+#                         self.util.beep_buzzer(250, .1, 3)
                         self.aviso.exibir_erro_leitura_cartao()
                         self.bloqueia_acesso()
                         id = None
@@ -244,13 +244,13 @@ class LeitorCartao(Relogio):
             ##############################################################
             self.bloqueia_acesso()
             if giro_completo:
-                # insere registro remoto
-                registro_json.objeto_json(registro)
+#                 # insere registro remoto
+#                 registro_json.objeto_json(registro)
                 giro_completo = False
-                #registro_json.registro_get(True, False)
-                # atualiza cartao remoto
-                cartao_json.objeto_json(cartao)
-                #cartao_json.cartao_get(True, False)
+#                 #registro_json.registro_get(True, False)
+#                 # atualiza cartao remoto
+#                 cartao_json.objeto_json(cartao)
+#                 #cartao_json.cartao_get(True, False)
             else:
                 cartao = None
                 registro = None
@@ -324,7 +324,7 @@ class LeitorCartao(Relogio):
     
     def desbloqueia_acesso(self):
         self.aviso.exibir_acesso_liberado()
-        self.util.beep_buzzer(860, .2, 1)
+#         self.util.beep_buzzer(860, .2, 1)
         if self.CATRACA.operacao == 1:
             self.solenoide.ativa_solenoide(1,1)
             self.pictograma.seta_esquerda(1)

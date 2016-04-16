@@ -49,7 +49,20 @@ class Relogio(ControleGenerico, threading.Thread):
             sleep(self.intervalo)
             
     def obtem_catraca(self):
+        
+        #remoto
         catraca = self.recursos_restful.catraca_json.catraca_get()
+        if catraca is None:
+            #local
+            catraca = self.catraca_dao.busca_por_ip(self.util.obtem_ip_por_interface())
+#         if catraca:
+#             return catraca
+#         else:
+#             return None
+#         
+#         
+#         
+#         catraca = self.recursos_restful.catraca_json.catraca_get()
         if catraca is None:
             #catraca
             self.aviso.exibir_catraca_nao_cadastrada()
@@ -92,7 +105,7 @@ class Relogio(ControleGenerico, threading.Thread):
                     self.status = False
                     Relogio.periodo = True
                     self.aviso.exibir_turno_atual(turno_ativo.descricao)
-                    self.util.beep_buzzer(855, .5, 1)
+#                     self.util.beep_buzzer(855, .5, 1)
                     self.aviso.exibir_aguarda_cartao()
                     print "\nINICIO DE TURNO!\n"
                 return turno_ativo
@@ -102,7 +115,7 @@ class Relogio(ControleGenerico, threading.Thread):
                     self.status = True
                     Relogio.periodo = False
                     self.aviso.exibir_horario_invalido()
-                    self.util.beep_buzzer(855, .5, 1)
+#                     self.util.beep_buzzer(855, .5, 1)
                     print "\nENCERRAMENTO DE TURNO!\n"
                 return None
         else:
