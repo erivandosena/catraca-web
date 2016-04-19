@@ -123,14 +123,13 @@ echo $html []='<!DOCTYPE html>
 									<li><a href="?pagina=relatorio">Relatorio RU</a></li>
 									<li><a href="?pagina=relatorio_guiche">Relatorio Guichê</a></li>
 								</ul>	 					
-							</li>';
- 						
-						echo '</ol>
-								        <ol class="a-direita" start="4">
-								            <li><a href="?sair=sair" class="item"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
-								        </ol>
-								    </div>
-								</div>';
+							</li>
+								</ol>
+									<ol class="a-direita" start="4">
+								    	<li><a href="?sair=sair" class="item"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
+									</ol>
+								</div>
+							</div>';
 						
 					}
 					?>
@@ -193,6 +192,9 @@ echo $html []='<!DOCTYPE html>
 								break;
 							case 'relatorio_guiche' :
 								RelatorioControllerGuiche::main($sessao->getNivelAcesso());
+								break;
+							case 'nivel' :
+								NivelController::main($sessao->getNivelAcesso());
 								break;
 							default :
 								echo '404 NOT FOUND';

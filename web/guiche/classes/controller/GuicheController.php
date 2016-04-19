@@ -24,7 +24,7 @@ class GuicheController{
 							<div id="infovenda" class="fundo-cinza1">
 
 								<div class="doze colunas">													
-									<h3 class="centralizado">Desci&ccedil&atildeo da Opera&ccedil&atildeo</h1><br>
+									<h3 class="centralizado">Descri&ccedil&atildeo da Opera&ccedil&atildeo</h1><br>
 										<table class="tabela quadro no-centro">													    
 										    <thead>
 												<tr>
@@ -35,15 +35,28 @@ class GuicheController{
 													<th>Operador</th>
 												</tr>
 											</thead>
-											<tbody>';		
+											<tbody>';
+		
+		/*
+		 * Preenche a tabela 'Descrição da Operação'
+		 * apenas com dados das operações realizadas no dia 
+		 * corrente do operador logado.		 * 
+		 */
+		
+		$dataInicio = date('Y-m-d');
+		$dataFim = date('Y-m-d');
+		
+		$data1 = $dataInicio.' 00:00:00';
+		$data2 = $dataFim.' 23:59:59';
 		
 		$sqlTransacao = "SELECT * FROM transacao as trans 
 				LEFT JOIN usuario as usuario
-				on trans.usua_id = usuario.usua_id 
-				WHERE usuario.usua_id = $idDoUsuario";
+				on trans.usua_id = usuario.usua_id				
+				WHERE (tran_data BETWEEN '$data1' AND '$data2') AND usuario.usua_id = $idDoUsuario";
 		$result = $dao->getConexao()->query($sqlTransacao);
 		$i = 1;
-		foreach ($result as $linha){			
+		foreach ($result as $linha){	
+			
 				echo'	
 												<tr>
 											        <td>'.$i.'</td>
@@ -55,11 +68,14 @@ class GuicheController{
 				$i++;
 		}
 		
-		echo'
-											</tbody>											
+		echo'								</tbody>											
 										</table>
 									</div>
 								</div>';		
+		
+		/*
+		 * Soma os campos de valores.
+		 */
 		
 		$valorTotal = 0;
 		$result = $dao->getConexao()->query($sqlTransacao);
@@ -72,7 +88,7 @@ class GuicheController{
 		}
 		
 		echo'					<h2>Saldo em Caixa: R$ '.number_format($valorTotal, 2).' </h1>
-								<div class="sete borda">';
+								<div class="sete borda">';		
 		
 		$sqlUsuario = "SELECT * FROM usuario WHERE usua_login = '$user'";
 		$result = $dao->getConexao()->query($sqlUsuario);
@@ -93,16 +109,19 @@ class GuicheController{
 							<hr>
 						</form>';
 		
+		/*
+		 * Realiza a pesquisa pelo numero do cartão identificando se existe vinculo ativo.
+		 */
+		
 		if(isset($_POST['cartao'])){
 			$cartao = new Cartao();
 			$cartao->setNumero($_POST['cartao']);
 			$numeroCartao = $cartao->getNumero();			
 			$sqlVerificaNumero = "SELECT * FROM usuario 
-				INNER JOIN vinculo
-				ON vinculo.usua_id = usuario.usua_id
-				LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
-				LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id
-				WHERE cartao.cart_numero = '$numeroCartao'";			
+								INNER JOIN vinculo ON vinculo.usua_id = usuario.usua_id
+								LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
+								LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id
+								WHERE cartao.cart_numero = '$numeroCartao'";			
 			$result = $dao->getConexao()->query($sqlVerificaNumero);			
 			$usuario = new Usuario();
 			$idCartao = 0;
@@ -137,8 +156,7 @@ class GuicheController{
 						<span>Tipo Usuario: '.$tipo->getNome().'</span>						
 						<span>Saldo: '.$cartao->getCreditos().'</span>
 						<span>Valor Credito: '.$tipo->getValorCobrado().'</span>
-						<hr>
-					
+						<hr>					
 						
 						<form method="post" class="formulario-organizado" >
 						<label for="valor">								
@@ -152,6 +170,10 @@ class GuicheController{
 						<input type="hidden" name="cartao" value="'.$_POST['cartao'].'" />
 						<input type="submit" value="finalizar" class="botao b-sucesso" name="finalizar">
 					</form>';				
+				
+				/*
+				 * Insere os créditos ou estorna os creditos no usuario pesquisado com vinculo ativo.
+				 */
 				
 				if(isset($_POST['valor'])){
 					if(isset($_POST['finalizar'])){					
@@ -171,34 +193,32 @@ class GuicheController{
 									<form>';
 							if(isset($_POST['confirmar'])){
 								$tipoTransacao = 'Estorno de valores';
-							}
+							}							
 							
+						}						
+						
+						$dao->getConexao()->beginTransaction();
+					
+						$sql = "UPDATE cartao set cart_creditos = $novoValor WHERE cart_id = $idCartao";
 							
+						$sql2 = "INSERT into transacao(tran_valor, tran_descricao, tran_data, usua_id)
+						VALUES($valorVendido, '$tipoTransacao' ,'$dataTimeAtual', $idDoUsuario)";					
+					
+						//echo $sql;
+						if(!$dao->getConexao()->exec($sql)){
+							$dao->getConexao()->rollBack();
+							$controller->mensagem('-erro','Erro ao inserir os creditos.');
+							return false;
 						}
-						
-						
-// 						$dao->getConexao()->beginTransaction();
-					
-// 						$sql = "UPDATE cartao set cart_creditos = $novoValor WHERE cart_id = $idCartao";
+						if(!$dao->getConexao()->exec($sql2)){
+							$dao->getConexao()->rollBack();
+							$controller->mensagem('-erro','Erro ao inserir os creditos.');
+							return false;
+						}
 							
-// 						$sql2 = "INSERT into transacao(tran_valor, tran_descricao, tran_data, usua_id)
-// 						VALUES($valorVendido, '$tipoTransacao' ,'$dataTimeAtual', $idDoUsuario)";					
-					
-// 						//echo $sql;
-// 						if(!$dao->getConexao()->exec($sql)){
-// 							$dao->getConexao()->rollBack();
-// 							$controller->mensagem('-erro','Erro ao inserir os creditos.');
-// 							return false;
-// 						}
-// 						if(!$dao->getConexao()->exec($sql2)){
-// 							$dao->getConexao()->rollBack();
-// 							$controller->mensagem('-erro','Erro ao inserir os creditos.');
-// 							return false;
-// 						}
-							
-// 						$dao->getConexao()->commit();
-// 						$controller->mensagem('-sucesso','Valor inserido com sucesso.');
-// 						echo '<meta http-equiv="refresh" content="2; url=.\?pagina=guiche">';
+						$dao->getConexao()->commit();
+						$controller->mensagem('-sucesso','Valor inserido com sucesso.');
+						echo '<meta http-equiv="refresh" content="2; url=.\?pagina=guiche">';
 					
 						}				
 					
@@ -229,7 +249,7 @@ class GuicheController{
  	public function mensagem($tipo, $texto){
  		//Tipo = -sucesso, -erro, -ajuda
  		echo '	<div class="alerta'.$tipo.'">
-				    	<div class="icone icone-warning ix16"></div>
+				    	<div class="icone icone-notification ix16"></div>
 				    	<div class="titulo-alerta">Aten&ccedil&atildeo</div>
 				    	<div class="subtitulo-alerta">'.$texto.'</div>
 				</div>';

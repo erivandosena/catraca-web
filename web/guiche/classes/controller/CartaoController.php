@@ -1,6 +1,5 @@
 <?php
 
-
 class CartaoController{
 	private $view;
 	public static function main($nivelDeAcesso){
@@ -165,7 +164,6 @@ class CartaoController{
 			
 			
 			$this->view->mostraSelecionado($usuario);
-			$vinculoDao = new VinculoDAO();
 				
 			
 			
