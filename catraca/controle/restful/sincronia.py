@@ -36,7 +36,7 @@ class Sincronia(Relogio):
         if ((Relogio.periodo == True) and (self.contador_status_recursos >= 10)):
             self.contador_status_recursos = 0
             self.recursos_restful.obtem_recursos(False, True, False)
-        elif Relogio.periodo == False:
+        elif not Relogio.periodo:
             if Relogio.hora >= datetime.datetime.strptime('00:00:00','%H:%M:%S').time() and Relogio.hora <= datetime.datetime.strptime('00:00:10','%H:%M:%S').time():
                 self.util.beep_buzzer(855, .5, 1)
                 self.aviso.exibir_aguarda_sincronizacao()

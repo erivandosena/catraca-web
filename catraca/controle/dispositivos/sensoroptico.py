@@ -12,8 +12,10 @@ from catraca.util import Util
 from catraca.visao.interface.aviso import Aviso
 from catraca.controle.raspberrypi.pinos import PinoControle
 from catraca.controle.dispositivos.solenoide import Solenoide
-from _ast import While
-from __builtin__ import True
+from catraca.controle.dispositivos.pictograma import Pictograma
+from numbers import Number
+# from _ast import While
+# from __builtin__ import True
 
 
 __author__ = "Erivando Sena" 
@@ -31,6 +33,7 @@ class SensorOptico(object):
     sensor_1 = rpi.ler(6)['gpio']
     sensor_2 = rpi.ler(13)['gpio']
     solenoide = Solenoide()
+    pictograma = Pictograma()
     tempo_decorrido = 0
     tempo_decorrente = 0
     finaliza_giro = False
@@ -47,42 +50,57 @@ class SensorOptico(object):
             return self.rpi.estado(self.sensor_2)
         
     def registra_giro(self, tempo, catraca):
-        #tempo = tempo*1000
-#         confirma_giro_completo = ''
-#         codigo_giro_completo = ''
-#         giro = None
         giro = self.obtem_codigo_sensores()
         contragiro = self.obtem_codigo_sensores()
         try:
-            while self.tempo < tempo*tempo:
+            while self.tempo < tempo*tempo-500:
                 self.tempo +=1
-                #print str(self.tempo) + " de "+ str(tempo*tempo)
-                
+                #OPCAO 1 ou 2
                 if catraca.operacao == 1 or catraca.operacao == 2:
-                    
                     giro = self.obtem_codigo_sensores()
                     giro += self.obtem_codigo_sensores()
-                    print giro[0:8]
                     
                     if self.obtem_codigo_sensores() != "00":
-                        
-                        giro = giro[0:2]    
+                        giro = giro[0:2]
                         giro += self.obtem_codigo_sensores()
                         while self.obtem_codigo_sensores() == "01" or self.obtem_codigo_sensores() == "10" or self.obtem_codigo_sensores() == "11":
-                            
                             giro = giro[0:4]
                             giro += self.obtem_codigo_sensores()
-                            print giro[0:6]
-                            
-#                         giro = giro[0:6]
-#                         giro += self.obtem_codigo_sensores()
-#                         print giro[0:8]
+                        giro = giro[0:6]
+                        giro += self.obtem_codigo_sensores()
                         
+                    # FINALIZANDO O GIRO
                     if catraca.operacao == 1 and giro[0:8] == "10100100":
+                        self.solenoide.ativa_solenoide(1,0)
+                        print self.bloqueia_acesso(catraca)
                         return True
-                    if catraca.operacao == 2 and giro[0:8] == "10100100":
+                    if catraca.operacao == 2 and giro[0:8] == "01011000" or catraca.operacao == 2 and giro[0:8] == "11110000" or catraca.operacao == 2 and giro[0:8] == "11111000":
+                        self.solenoide.ativa_solenoide(2,0)
+                        print self.bloqueia_acesso(catraca)
                         return True
-                    
+                
+                if catraca.operacao == 3 or catraca.operacao == 4:
+                    giro = self.obtem_codigo_sensores()
+                    giro += self.obtem_codigo_sensores()
+                    if self.obtem_codigo_sensores() != "00":
+                        giro = giro[0:2]
+                        giro += self.obtem_codigo_sensores()
+                        while self.obtem_codigo_sensores() == "01" or self.obtem_codigo_sensores() == "10" or self.obtem_codigo_sensores() == "11":
+                            giro = giro[0:4]
+                            giro += self.obtem_codigo_sensores()
+                        giro = giro[0:6]
+                        giro += self.obtem_codigo_sensores()
+                        
+                    # FINALIZANDO O GIRO
+                    print giro[0:8]
+                    if catraca.operacao == 3 and giro[0:8] == "101001" or catraca.operacao == 3 and giro[0:8] == "10100100" or catraca.operacao == 3 and giro[0:8] == "11110100":
+                        self.solenoide.ativa_solenoide(1,0)
+                        self.bloqueia_acesso(catraca)
+                        return True
+                    if catraca.operacao == 4 and giro[0:8] == "01011000" or catraca.operacao == 2 and giro[0:8] == "11110000" or catraca.operacao == 2 and giro[0:8] == "11111000":
+                        self.solenoide.ativa_solenoide(2,0)
+                        self.bloqueia_acesso(catraca)
+                        return True
                 sleep(0.1)
             return False
         except SystemExit, KeyboardInterrupt:
@@ -91,13 +109,7 @@ class SensorOptico(object):
             self.log.logger.error('Erro lendo sensores opticos.', exc_info=True)
         finally:
             self.tempo = 0
-            #giro = self.obtem_codigo_sensores()
-#             self.tempo_decorrente = 0
-#             confirma_giro_completo = ''
-#             codigo_giro_completo = ''
-#             giro = None
-#             return self.finaliza_giro
-
+            
     def obtem_codigo_sensores(self):
         return str(self.ler_sensor(1)) + '' + str(self.ler_sensor(2))
     
@@ -132,4 +144,16 @@ class SensorOptico(object):
             return self.finaliza_giro
         else:
             return True
+        
+    def bloqueia_acesso(self, catraca):
+        if catraca.operacao == 1:
+            #self.solenoide.ativa_solenoide(1,0)
+            self.pictograma.seta_esquerda(0)
+            self.pictograma.xis(0)
+        elif catraca.operacao == 2:
+            #self.solenoide.ativa_solenoide(2,0)
+            self.pictograma.seta_direita(0)
+            self.pictograma.xis(0)
+        self.aviso.exibir_acesso_bloqueado()
+        self.aviso.exibir_aguarda_cartao()
         

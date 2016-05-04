@@ -102,7 +102,10 @@ class Aviso(object):
         self.display.mensagem("JA USADO PARA".center(16) +"\n"+ turno.center(16), 2, False, False)
         
     def exibir_acesso_livre(self):
-        self.display.mensagem("BEM-VINDO!".center(16) +"\n"+ "ACESSO LIVRE".center(16), 1, False, False)
+        self.display.mensagem("BEM-VINDO!".center(16) +"\n"+ "ACESSO LIVRE".center(16), 0, False, False)
+        
+    def exibir_bloqueio_total(self):
+        self.display.mensagem("BLOQUEIO TOTAL".center(16) +"\n"+ "DEFINIR OPERACAO".center(16), 2, False, False)
 
     def exibir_aguarda_consulta(self):
         self.display.mensagem('CONSULTANDO...'.center(16) +'\n'+ 'AGUARDE!'.center(16), 0, False, False)

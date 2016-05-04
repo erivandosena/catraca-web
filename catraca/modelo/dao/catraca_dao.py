@@ -103,8 +103,10 @@ class CatracaDAO(ConexaoGenerica):
                     obj.maclan = dados[5]
                     obj.macwlan = dados[6]
                     obj.interface = dados[7]
+                    print "LENDO TABELA CATRACA"
                     return obj
                 else:
+                    print "LENDO TABELA CATRACA VAZIA"
                     return None
         except Exception as excecao:
             self.aviso = str(excecao)

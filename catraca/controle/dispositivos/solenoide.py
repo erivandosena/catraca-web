@@ -22,7 +22,7 @@ class Solenoide(object):
     def __init__(self):
         super(Solenoide, self).__init__()
         
-    def ativa_solenoide(self,solenoide,estado):
+    def ativa_solenoide(self, solenoide, estado):
         if solenoide == 1:
             if estado:
                 self.rpi.atualiza(self.solenoide_1, self.alto)
@@ -40,10 +40,26 @@ class Solenoide(object):
                 self.rpi.atualiza(self.solenoide_2, self.baixo)
                 return False
             
-    def obtem_estado_solenoide(self,solenoide):
+    def ativa_solenoide_individual(self, solenoide, estado):
+        if solenoide == 1:
+            if estado:
+                self.rpi.atualiza(self.solenoide_1, self.alto)
+                return True
+            else:
+                self.rpi.atualiza(self.solenoide_1, self.baixo)
+                return False
+        elif solenoide == 2:
+            if estado:
+                self.rpi.atualiza(self.solenoide_2, self.alto)
+                return True
+            else:
+                self.rpi.atualiza(self.solenoide_2, self.baixo)
+                return False
+            
+    def obtem_estado_solenoide(self, solenoide):
         if solenoide == 1:
             return self.rpi.estado(self.solenoide_1)
-        elif solenoide == 2:
+        if solenoide == 2:
             return self.rpi.estado(self.solenoide_2)
         
                 

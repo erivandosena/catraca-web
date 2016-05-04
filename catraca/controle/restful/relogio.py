@@ -30,7 +30,11 @@ class Relogio(ControleGenerico, threading.Thread):
         self.intervalo = intervalo
         self.name = 'Thread Relogio'
         self.status = True
-        
+        Relogio.catraca = self.obtem_catraca()
+        while Relogio.catraca is None:
+            print "(RELOGIO) tentando obter paramentros da catraca..."
+            Relogio.catraca = self.obtem_catraca()
+            
     def run(self):
         print "%s. Rodando... " % self.name
         while True:
@@ -38,7 +42,6 @@ class Relogio(ControleGenerico, threading.Thread):
             Relogio.hora = self.hora_atul
             self.datahora = self.util.obtem_datahora().strftime("%d/%m/%Y %H:%M:%S")
             if (self.hora == datetime.datetime.strptime('06:00:00','%H:%M:%S').time()) or (self.hora == datetime.datetime.strptime('12:00:00','%H:%M:%S').time()) or (self.hora == datetime.datetime.strptime('18:00:00','%H:%M:%S').time()):
-                print "HORA: "+str(self.hora)
                 self.aviso.exibir_saldacao(self.aviso.saldacao(), self.util.obtem_datahora_display())
                 self.aviso.exibir_aguarda_cartao()
             self.contador += 1
@@ -55,14 +58,6 @@ class Relogio(ControleGenerico, threading.Thread):
         if catraca is None:
             #local
             catraca = self.catraca_dao.busca_por_ip(self.util.obtem_ip_por_interface())
-#         if catraca:
-#             return catraca
-#         else:
-#             return None
-#         
-#         
-#         
-#         catraca = self.recursos_restful.catraca_json.catraca_get()
         if catraca is None:
             #catraca
             self.aviso.exibir_catraca_nao_cadastrada()
@@ -105,7 +100,7 @@ class Relogio(ControleGenerico, threading.Thread):
                     self.status = False
                     Relogio.periodo = True
                     self.aviso.exibir_turno_atual(turno_ativo.descricao)
-#                     self.util.beep_buzzer(855, .5, 1)
+                    self.util.beep_buzzer(855, .5, 1)
                     self.aviso.exibir_aguarda_cartao()
                     print "\nINICIO DE TURNO!\n"
                 return turno_ativo
@@ -115,7 +110,7 @@ class Relogio(ControleGenerico, threading.Thread):
                     self.status = True
                     Relogio.periodo = False
                     self.aviso.exibir_horario_invalido()
-#                     self.util.beep_buzzer(855, .5, 1)
+                    self.util.beep_buzzer(855, .5, 1)
                     print "\nENCERRAMENTO DE TURNO!\n"
                 return None
         else:

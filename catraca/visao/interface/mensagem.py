@@ -39,8 +39,8 @@ class Mensagem(threading.Thread):
         count = 0
         while not self._stopevent.isSet():
             count += 1
-            if not Relogio.periodo:
-                self.exibe_mensagem()
+            #if not Relogio.periodo:
+            self.exibe_mensagem()
             self._stopevent.wait(self._sleepperiod)
         print "%s Finalizando..." % self.getName()
         

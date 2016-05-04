@@ -54,7 +54,7 @@ class LeitorCartao(Relogio):
     contador_local = 0
     uso_do_cartao = False
     
-    def __init__(self, intervalo=1):
+    def __init__(self, intervalo=0.2):
         super(LeitorCartao, self).__init__()
         Relogio.__init__(self)
         threading.Thread.__init__(self)
@@ -63,15 +63,17 @@ class LeitorCartao(Relogio):
         
     def run(self):
         print "%s. Rodando... " % self.name
+        
+        self.obtem_catraca_turno()
 
         self.pino_controle.evento_both(self.D0, self.zero)
         self.pino_controle.evento_both(self.D1, self.um)
         
         while True:
-            self.CATRACA = Relogio.catraca
-            if self.CATRACA:
-                self.TURNO = Relogio.turno
-                self.ler()
+#             self.CATRACA = Relogio.catraca
+#             if self.CATRACA:
+#                 self.TURNO = Relogio.turno
+            self.ler()
             sleep(self.intervalo)
 
     def zero(self, obj):
@@ -87,6 +89,7 @@ class LeitorCartao(Relogio):
         try:
             while True:
                 if self.bits:
+                    print self.bits
                     LeitorCartao.uso_do_cartao = True
                     self.aviso.exibir_aguarda_consulta()
                     self.log.logger.info('Binario obtido corretamente. [Cartao n.] '+str(self.bits))
@@ -94,7 +97,7 @@ class LeitorCartao(Relogio):
                     id = id.zfill(10)
                     if (len(self.bits) == 32) and (len(id) == 10):
                         self.numero_cartao = id
-#                         self.util.beep_buzzer(860, .1, 1)
+                        self.util.beep_buzzer(860, .1, 1)
                         print "Leu CARTAO N. " +str(self.numero_cartao) +"  BINARIO: "+ str(self.bits)
                         return self.numero_cartao
                     else:
@@ -130,8 +133,16 @@ class LeitorCartao(Relogio):
                     self.bloqueia_acesso()
                     return None
                 if Relogio.periodo:
+                    self.obtem_catraca_turno()
+                    if self.CATRACA.operacao == 5:
+                        self.aviso.exibir_acesso_livre()
+                        return None
+                    if self.CATRACA.operacao <= 0 or self.CATRACA.operacao >= 6:
+                        self.aviso.exibir_bloqueio_total()
+                        return None
                     self.valida_cartao(self.numero_cartao)
                 else:
+                    self.obtem_catraca_turno()
                     self.aviso.exibir_horario_invalido()
                     self.bloqueia_acesso()
                     return None
@@ -148,7 +159,7 @@ class LeitorCartao(Relogio):
         registro = Registro()
         cartao_json = CartaoJson()
         registro_json = RegistroJson()
-
+        
         giro_completo = False
         try:
             ##############################################################
@@ -311,11 +322,11 @@ class LeitorCartao(Relogio):
         
     def bloqueia_acesso(self):
         self.aviso.exibir_acesso_bloqueado()
-        if self.CATRACA.operacao == 1:
+        if self.CATRACA.operacao == 1 or self.CATRACA.operacao == 3:
             self.solenoide.ativa_solenoide(1,0)
             self.pictograma.seta_esquerda(0)
             self.pictograma.xis(0)
-        if self.CATRACA.operacao == 2:
+        if self.CATRACA.operacao == 2 or self.CATRACA.operacao == 4:
             self.solenoide.ativa_solenoide(2,0)
             self.pictograma.seta_direita(0)
             self.pictograma.xis(0)
@@ -325,14 +336,24 @@ class LeitorCartao(Relogio):
     def desbloqueia_acesso(self):
         self.aviso.exibir_acesso_liberado()
 #         self.util.beep_buzzer(860, .2, 1)
-        if self.CATRACA.operacao == 1:
+        if self.CATRACA.operacao == 1 or self.CATRACA.operacao == 3:
             self.solenoide.ativa_solenoide(1,1)
             self.pictograma.seta_esquerda(1)
             self.pictograma.xis(1)
-        if self.CATRACA.operacao == 2:
+        if self.CATRACA.operacao == 2 or self.CATRACA.operacao == 4:
             self.solenoide.ativa_solenoide(2,1)
             self.pictograma.seta_direita(1)
             self.pictograma.xis(1)
         self.log.logger.info('Libera. [cartao n.] ' + str(self.numero_cartao))
         
         
+    def obtem_catraca_turno(self):
+        #while self.CATRACA is None:
+        self.CATRACA = Relogio.catraca
+        while self.CATRACA is None:
+            self.CATRACA = Relogio.catraca
+            print "tentando obter catraca no alerta"
+        #self.TURNO = Relogio.turno
+            #print "tentando obter catraca no leitor"
+        if self.CATRACA:
+            self.TURNO = Relogio.turno
