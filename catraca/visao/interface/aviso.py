@@ -159,7 +159,7 @@ class Aviso(object):
         self.display.mensagem('ERRO NO SERVIDOR'.center(16) +'\n'+ 'WEB SERVICE'.center(16), 6, False, False)
         
     def exibir_falha_rede(self):
-        self.display.mensagem('ERRO DE REDE LAN'.center(16) +'\n'+ 'VERIFICAR SWITCH'.center(16), 1, False, False)
+        self.display.mensagem('FALHA NA REDE'.center(16) +'\n'+ 'AGUARDANDO REDE!'.center(16), 2, False, False)
         self.display.limpa_lcd()
         
     def limpa_display(self):

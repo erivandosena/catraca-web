@@ -51,7 +51,6 @@ class Painel(object):
     def threads(self):
         #os.system("echo 'Sistema da Catraca iniciado!' | mail -s 'Raspberry Pi B' erivandoramos@bol.com.br")
         try:
-            #Mensagem().start()
             Relogio().start()
             Alerta().start()
             Sincronia().start()

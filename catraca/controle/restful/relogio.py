@@ -7,6 +7,11 @@ import threading
 from time import sleep
 from catraca.util import Util
 from catraca.controle.restful.controle_generico import ControleGenerico
+from catraca.modelo.dao.unidade_dao import UnidadeDAO
+from catraca.modelo.dao.catraca_unidade_dao import CatracaUnidadeDAO
+from catraca.modelo.dao.turno_dao import TurnoDAO
+from catraca.modelo.dao.unidade_turno_dao import UnidadeTurnoDAO
+from catraca.modelo.dao.custo_refeicao_dao import CustoRefeicaoDAO
 
 
 __author__ = "Erivando Sena" 
@@ -22,6 +27,12 @@ class Relogio(ControleGenerico, threading.Thread):
     turno = None
     periodo = False
     contador = 4
+    
+#     unidade_dao = UnidadeDAO()
+#     catraca_unidade_dao = CatracaUnidadeDAO()
+#     turno_dao = TurnoDAO
+#     unidade_turno_dao = UnidadeTurnoDAO()
+#     custo_refeicao_dao = CustoRefeicaoDAO()
 
     def __init__(self, intervalo=1):
         super(Relogio, self).__init__()
@@ -30,13 +41,12 @@ class Relogio(ControleGenerico, threading.Thread):
         self.intervalo = intervalo
         self.name = 'Thread Relogio'
         self.status = True
-        Relogio.catraca = self.obtem_catraca()
-        while Relogio.catraca is None:
-            print "(RELOGIO) tentando obter paramentros da catraca..."
-            Relogio.catraca = self.obtem_catraca()
-            
+        self.rede = False
+        self.catraca = self.recursos_restful.catraca_json.catraca_get()
+        
     def run(self):
         print "%s. Rodando... " % self.name
+        Relogio.catraca = self.catraca
         while True:
             self.hora_atul = self.util.obtem_hora()
             Relogio.hora = self.hora_atul
@@ -45,45 +55,75 @@ class Relogio(ControleGenerico, threading.Thread):
                 self.aviso.exibir_saldacao(self.aviso.saldacao(), self.util.obtem_datahora_display())
                 self.aviso.exibir_aguarda_cartao()
             self.contador += 1
-            if self.contador == 5:
+            if self.contador == 10:
                 self.contador = 0
                 Relogio.catraca = self.obtem_catraca()
-                Relogio.turno = self.obtem_turno()
+                if Relogio.catraca:
+                    if not Relogio.catraca.operacao == 5 or not Relogio.catraca.operacao <= 0 or not Relogio.catraca.operacao >= 6:
+                        Relogio.turno = self.obtem_turno()
             sleep(self.intervalo)
             
     def obtem_catraca(self):
-        
         #remoto
         catraca = self.recursos_restful.catraca_json.catraca_get()
         if catraca is None:
+            Relogio.rede = False
+            if not self.turno:
+                self.aviso.exibir_falha_rede()
             #local
             catraca = self.catraca_dao.busca_por_ip(self.util.obtem_ip_por_interface())
-        if catraca is None:
-            #catraca
-            self.aviso.exibir_catraca_nao_cadastrada()
-            self.recursos_restful.obtem_catraca(True, True, False)
-            catraca = self.catraca_dao.busca_por_ip(self.util.obtem_ip_por_interface())
-        else:
-            # Solicita ao servidor RESTful o cadastro inicial na tabela
-            #unidade
-            if self.recursos_restful.unidade_json.unidade_get() is None:
-                self.aviso.exibir_unidade_nao_cadastrada()
-            #catraca-unidade
-            elif self.recursos_restful.catraca_unidade_json.catraca_unidade_get() is None:
-                self.aviso.exibir_catraca_unidade_nao_cadastrada()
-            #turno
-            elif self.recursos_restful.turno_json.turno_get() is None:
-                self.aviso.exibir_turno_nao_cadastrado()
-            #unidade-turno
-            elif self.recursos_restful.unidade_turno_json.unidade_turno_get() is None:
-                self.aviso.exibir_unidade_turno_nao_cadastrada()
-            #custo-refeicao
-            elif self.recursos_restful.custo_refeicao_json.custo_refeicao_get() is None:
-                self.aviso.exibir_custo_refeicao_nao_cadastrado()
-            else:
-                if catraca is None:
+            if catraca is None:
+                #catraca
+                self.aviso.exibir_catraca_nao_cadastrada()
+                self.recursos_restful.obtem_catraca(True, True, False)
+                catraca = self.catraca_dao.busca_por_ip(self.util.obtem_ip_por_interface())
+                if catraca:
+                    return catraca
+                else:
                     self.obtem_catraca()
-                return catraca
+            else:
+                return self.obtem_dependencias_locais(catraca)
+        else:
+            Relogio.rede = True
+            return self.obtem_dependencias_remotas(catraca)
+
+    def obtem_dependencias_locais(self, catraca):
+        #unidade
+        if UnidadeDAO().busca() is None:
+            self.aviso.exibir_unidade_nao_cadastrada()
+        #catraca-unidade
+        elif CatracaUnidadeDAO().busca() is None:
+            self.aviso.exibir_catraca_unidade_nao_cadastrada()
+        #turno
+        elif TurnoDAO().busca() is None:
+            self.aviso.exibir_turno_nao_cadastrado()
+        #unidade-turno
+        elif UnidadeTurnoDAO().busca() is None:
+            self.aviso.exibir_unidade_turno_nao_cadastrada()
+        #custo-refeicao
+        elif CustoRefeicaoDAO().busca() is None:
+            self.aviso.exibir_custo_refeicao_nao_cadastrado()
+        else:
+            return catraca
+            
+    def obtem_dependencias_remotas(self, catraca):
+        #unidade
+        if self.recursos_restful.unidade_json.unidade_get() is None:
+            self.aviso.exibir_unidade_nao_cadastrada()
+        #catraca-unidade
+        elif self.recursos_restful.catraca_unidade_json.catraca_unidade_get() is None:
+            self.aviso.exibir_catraca_unidade_nao_cadastrada()
+        #turno
+        elif self.recursos_restful.turno_json.turno_get() is None:
+            self.aviso.exibir_turno_nao_cadastrado()
+        #unidade-turno
+        elif self.recursos_restful.unidade_turno_json.unidade_turno_get() is None:
+            self.aviso.exibir_unidade_turno_nao_cadastrada()
+        #custo-refeicao
+        elif self.recursos_restful.custo_refeicao_json.custo_refeicao_get() is None:
+            self.aviso.exibir_custo_refeicao_nao_cadastrado()
+        else:
+            return catraca
             
     def obtem_turno(self):
         if self.catraca:
@@ -101,7 +141,7 @@ class Relogio(ControleGenerico, threading.Thread):
                     Relogio.periodo = True
                     self.aviso.exibir_turno_atual(turno_ativo.descricao)
                     self.util.beep_buzzer(855, .5, 1)
-                    self.aviso.exibir_aguarda_cartao()
+                   # self.aviso.exibir_aguarda_cartao()
                     print "\nINICIO DE TURNO!\n"
                 return turno_ativo
             else:
@@ -109,7 +149,7 @@ class Relogio(ControleGenerico, threading.Thread):
                 if not self.status:
                     self.status = True
                     Relogio.periodo = False
-                    self.aviso.exibir_horario_invalido()
+                    #self.aviso.exibir_horario_invalido()
                     self.util.beep_buzzer(855, .5, 1)
                     print "\nENCERRAMENTO DE TURNO!\n"
                 return None

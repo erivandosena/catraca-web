@@ -31,7 +31,9 @@ class Alerta(threading.Thread):
     solenoide = Solenoide()
     sensor_optico = SensorOptico()
     pictograma = Pictograma()
-    status_alerta = False
+    mensagem_final = 0
+    exibicao = False
+    mensagens = Mensagem()
 
     def __init__(self, intervalo=0.1):
         super(Alerta, self).__init__()
@@ -41,56 +43,62 @@ class Alerta(threading.Thread):
         
     def run(self):
         print "%s Rodando... " % self.name
-        mensagens = Mensagem()
+        #mensagens = Mensagem()
         while True:
             catraca = Relogio.catraca
-            while catraca is None:
-                catraca = Relogio.catraca
-                print "tentando obter catraca no alerta"
-            # libera giro antihorario-livre quando nao houver leitura de cartao em andamento
-            if not LeitorCartao.uso_do_cartao:
-                
-#                 if catraca.operacao == 1 or catraca.operacao == 2:
-# #                     if self.sensor_optico.obtem_codigo_sensores() != "00" or self.sensor_optico.obtem_codigo_sensores() == "00":
-# #                         if not self.solenoide.obtem_estado_solenoide(2):
-# #                             self.solenoide.ativa_solenoide(2,1)
-# #                             print "SOLENOIDE 02 ATIVADO"
-# #                     if self.sensor_optico.obtem_codigo_sensores() == "01":
-# #                         if not self.solenoide.obtem_estado_solenoide(1):
-# #                             self.solenoide.ativa_solenoide(1,1)
-# #                             print "SOLENOIDE 01 ATIVADO"
+            if catraca:
+                # quando nao houver leitura de cartao em andamento
+                if not LeitorCartao.uso_do_cartao:
+                    if catraca.operacao == 1 or catraca.operacao == 2:
+                        if self.sensor_optico.obtem_codigo_sensores() != "00":
+                            if self.solenoide.obtem_estado_solenoide(2):
+                                self.solenoide.ativa_solenoide(2,0)
+                            if self.solenoide.obtem_estado_solenoide(1):
+                                self.solenoide.ativa_solenoide(1,0)
+                                
+                    if catraca.operacao == 3:
+                        if self.sensor_optico.obtem_codigo_sensores() != "00":
+                            if not self.solenoide.obtem_estado_solenoide(2):
+                                self.solenoide.ativa_solenoide(2,1)
+                            if self.solenoide.obtem_estado_solenoide(1):
+                                self.solenoide.ativa_solenoide(1,0)
 
-                if catraca.operacao == 1 or catraca.operacao == 2:
-                    if self.sensor_optico.obtem_codigo_sensores() != "00":
-                        if self.solenoide.obtem_estado_solenoide(2):
-                            self.solenoide.ativa_solenoide(2,0)
-                        if self.solenoide.obtem_estado_solenoide(1):
-                            self.solenoide.ativa_solenoide(1,0)
+                            self.pictograma.xis(1)
+                            if self.sensor_optico.obtem_codigo_sensores() == "01":
+                                
+                                self.pictograma.seta_direita(1)
+                                self.aviso.exibir_acesso_liberado()
+                                self.verifica_giro_inverso(catraca)
                             
-                if catraca.operacao == 3:
-                    if not self.solenoide.obtem_estado_solenoide(2):
-                        self.solenoide.ativa_solenoide(2,1)
-                    if self.sensor_optico.obtem_codigo_sensores() == "01":
-                        self.pictograma.xis(1)
-                        self.pictograma.seta_direita(1)
-                        self.verifica_giro_inverso(catraca)
-                        
-                if catraca.operacao == 4:
-                    if not self.solenoide.obtem_estado_solenoide(1):
-                        self.solenoide.ativa_solenoide(1,1)
-                    if self.sensor_optico.obtem_codigo_sensores() == "10":
-                        self.pictograma.xis(1)
-                        self.pictograma.seta_esquerda(1)
-                        self.verifica_giro_inverso(catraca)
-                        
+                            self.pictograma.xis(0)
+                            
+                    if catraca.operacao == 4:
+                        if self.sensor_optico.obtem_codigo_sensores() != "00":
+                            if not self.solenoide.obtem_estado_solenoide(1):
+                                self.solenoide.ativa_solenoide(1,1)
+                            if self.solenoide.obtem_estado_solenoide(2):
+                                self.solenoide.ativa_solenoide(2,0)
+                                
+                            self.pictograma.xis(1)
+                            if self.sensor_optico.obtem_codigo_sensores() == "10":
+                                
+                                self.pictograma.seta_esquerda(1)
+                                self.aviso.exibir_acesso_liberado()
+                                self.verifica_giro_inverso(catraca)
+
+                            self.pictograma.xis(0)
+                            
                 if catraca.operacao == 5:
+                    self.mensagem_final = 5
                     if self.sensor_optico.obtem_codigo_sensores() != "00":
-                        if not self.solenoide.obtem_estado_solenoide(2):
-                            self.solenoide.ativa_solenoide_individual(2,1)
-                        if not self.solenoide.obtem_estado_solenoide(1):
-                            self.solenoide.ativa_solenoide_individual(1,1)
+                        
+                        self.exibicao = False
+                        
+                        self.define_acesso_livre()
                             
-                        self.aviso.exibir_acesso_livre()    
+                        if not self.exibicao:
+                            self.aviso.exibir_acesso_livre()
+                            self.exibicao = True
                             
                         if self.sensor_optico.obtem_codigo_sensores() == "01":
                             self.pictograma.seta_direita(1)
@@ -102,133 +110,167 @@ class Alerta(threading.Thread):
                             while self.sensor_optico.detecta_giro_completo(self.sensor_optico.obtem_codigo_sensores()):
                                 self.verifica_meio_giro()
                             self.pictograma.seta_esquerda(0)
-                            
-            if catraca.operacao <= 0 or catraca.operacao >= 6:
-                if self.sensor_optico.obtem_codigo_sensores() != "00":
-                    if self.solenoide.obtem_estado_solenoide(2):
-                        self.solenoide.ativa_solenoide(2,0)
-                    if self.solenoide.obtem_estado_solenoide(1):
-                        self.solenoide.ativa_solenoide(1,0)
-                    self.aviso.exibir_bloqueio_total()
+                                
+                if catraca.operacao <= 0 or catraca.operacao >= 6:
+                    self.mensagem_final = 6
+                    if self.sensor_optico.obtem_codigo_sensores() != "00":
+                        self.exibicao = False
                         
-            self.verifica_giro_irregular(catraca)
-
-            if self.status_alerta:
-                self.status_alerta = False
-                self.aviso.exibir_aguarda_cartao()
-                
-            # trata exibicao de mensagens padroes quando nao houver turno ativo
-            if not Relogio.periodo:
-                # durante a leitura de um cartao
-                if LeitorCartao.uso_do_cartao:
-                    if mensagens.isAlive():
-                        mensagens.join()
+                        self.define_bloqueio_total()
+                            
+                        if not self.exibicao:
+                            self.aviso.exibir_bloqueio_total()
+                            self.exibicao = True
+                            
+                self.verifica_giro_irregular(catraca)
+                    
+                # trata exibicao de mensagens padroes quando nao houver turno ativo
+                # trata exibicao de mensagens padroes quando o tipo de giro definido for igual a 5
+                # trata exibicao de mensagens padroes quando o tipo de giro definido nao for igual a 1,2,3,4,5
+                # trata exibicao de mensagens durante a sincronizacao da catraca com o servidor RESTful
+                # trata exibicao de mensagens se a catraca retornar vazio(None)
+                if not Relogio.periodo or catraca.operacao == 5 or catraca.operacao <= 0 or catraca.operacao >= 6 or RecursosRestful.obtendo_recurso:
+                    # durante a leitura de um cartao
+                    if LeitorCartao.uso_do_cartao:
+                        if self.mensagens.isAlive():
+                            self.exibicao = False
+                            self.mensagens.join()
+                    else:
+                        if not self.mensagens.isAlive():
+                            self.mensagens = Mensagem()
+                            self.mensagens.start()
                 else:
-                    if not mensagens.isAlive():
-                        mensagens = Mensagem()
-                        mensagens.start()
-                # durante a sincronizacao da catraca com o servidor RESTful
-                if RecursosRestful.obtendo_recurso:
-                    if mensagens.isAlive():
-                        mensagens.join()
-                else:
-                    if not mensagens.isAlive():
-                        mensagens = Mensagem()
-                        mensagens.start()
-            
-            # trata exibicao de mensagens padroes quando nao houver tipo de giro definido ou giros livres opcao = 5
-            if catraca.operacao == 5 or catraca.operacao <= 0 or catraca.operacao >= 6:
-                # durante a leitura de um cartao
-                if LeitorCartao.uso_do_cartao:
-                    if mensagens.isAlive():
-                        mensagens.join()
-                else:
-                    if not mensagens.isAlive():
-                        mensagens = Mensagem()
-                        mensagens.start()
+                    self.mensagem_final = 1
+                    if self.mensagens.isAlive():
+                        self.exibicao = False
+                        self.mensagens.join()
+                        
+                if self.mensagem_final == 1:
+                    if not self.exibicao:
+                        self.exibicao = True
+                        self.aviso.exibir_aguarda_cartao()
+                if self.mensagem_final == 5:
+                    if not self.exibicao:
+                        self.aviso.exibir_acesso_livre()
+                        self.exibicao = True
+                if self.mensagem_final == 6:
+                    if not self.exibicao:
+                        self.exibicao = True
+                        self.aviso.exibir_bloqueio_total()
+                        
             else:
-                if mensagens.isAlive():
-                    mensagens.join()
-            
+                self.mensagem_final = 6
+                
+                if not self.exibicao:
+                    self.aviso.exibir_bloqueio_total()
+                    self.exibicao = True
+                    
+                if catraca is None:
+                    if not self.mensagens.isAlive():
+                        self.mensagens = Mensagem()
+                        self.mensagens.start()
+                else:
+                    if self.mensagens.isAlive():
+                        self.exibicao = False
+                        self.mensagens.join()
+                
+                if self.sensor_optico.obtem_codigo_sensores() != "00":
+                    self.exibicao = False
+                    
+                    self.define_bloqueio_total()
+                    
+                    if not self.exibicao:
+                        self.aviso.exibir_bloqueio_total()
+                        self.exibicao = True
+                        
             sleep(self.intervalo)
             
+    def define_acesso_livre(self):
+        if not self.solenoide.obtem_estado_solenoide(2):
+            self.solenoide.ativa_solenoide_individual(2,1)
+        if not self.solenoide.obtem_estado_solenoide(1):
+            self.solenoide.ativa_solenoide_individual(1,1)
+            
+    def define_bloqueio_total(self):
+        if self.solenoide.obtem_estado_solenoide(2):
+            self.solenoide.ativa_solenoide(2,0)
+        if self.solenoide.obtem_estado_solenoide(1):
+            self.solenoide.ativa_solenoide(1,0)
+  
     def verifica_giro_inverso(self, catraca):
-        try:
-            if catraca.operacao == 3 and self.pictograma.obtem_estado_pictograma('esquerda') == 0:
-                self.aviso.exibir_acesso_liberado()
-                if self.solenoide.obtem_estado_solenoide(2):
-                    while self.sensor_optico.detecta_giro_completo(self.sensor_optico.obtem_codigo_sensores()):
-                        self.verifica_meio_giro()
-                    
-            if catraca.operacao == 4 and self.pictograma.obtem_estado_pictograma('direita') == 0:
-                self.aviso.exibir_acesso_liberado()
-                if self.solenoide.obtem_estado_solenoide(1):
-                    while self.sensor_optico.detecta_giro_completo(self.sensor_optico.obtem_codigo_sensores()):
-                        self.verifica_meio_giro()
-        finally:
+        if catraca.operacao == 3 and self.pictograma.obtem_estado_pictograma('esquerda') == 0:
             if self.solenoide.obtem_estado_solenoide(2):
+                while self.sensor_optico.detecta_giro_completo(self.sensor_optico.obtem_codigo_sensores()):
+                    self.verifica_meio_giro()
                 self.pictograma.seta_direita(0)
+                
+        if catraca.operacao == 4 and self.pictograma.obtem_estado_pictograma('direita') == 0:
             if self.solenoide.obtem_estado_solenoide(1):
+                while self.sensor_optico.detecta_giro_completo(self.sensor_optico.obtem_codigo_sensores()):
+                    self.verifica_meio_giro()
                 self.pictograma.seta_esquerda(0)
                 
-            self.aviso.exibir_acesso_bloqueado()
-            self.pictograma.xis(0)
-                    
+        self.pictograma.xis(0)
+        self.aviso.exibir_acesso_bloqueado()
+        self.exibicao = False
+            
+    def verifica_meio_giro(self):
+        ##############################################################
+        ## VERIFICA SE A CATRACA SE ENCONTRA EM MEIO GIRO
+        ##############################################################
+        while self.sensor_optico.obtem_codigo_sensores() == "11":
+            
+#             if self.mensagens.isAlive():
+#                 self.exibicao = False
+#                 self.mensagens.join()
+                
+            self.util.beep_buzzer_delay(860, 1, 1, 40)
+            if self.util.cronometro/1000 == 40:
+                self.aviso.exibir_uso_incorreto()
+                self.util.cronometro = 0
+        self.util.cronometro = 0
+        
     def verifica_giro_irregular(self, catraca):
-        try:
-            if catraca.operacao == 1 or catraca.operacao == 2 or catraca.operacao <= 0 or catraca.operacao >= 6:
-                while (self.sensor_optico.obtem_direcao_giro() == 'horario' and self.solenoide.obtem_estado_solenoide(1) == 0) or \
-                       (self.sensor_optico.obtem_direcao_giro() == 'antihorario' and  self.solenoide.obtem_estado_solenoide(2) == 0):
-                    if (self.sensor_optico.obtem_codigo_sensores() == "01") or (self.sensor_optico.obtem_codigo_sensores() == "10"):
-                        if self.util.cronometro == 0:
-                            self.status_alerta = True
+        if catraca.operacao == 1 or catraca.operacao == 2 or catraca.operacao <= 0 or catraca.operacao >= 6:
+            while (self.sensor_optico.obtem_direcao_giro() == 'horario' and self.solenoide.obtem_estado_solenoide(1) == 0) or \
+                   (self.sensor_optico.obtem_direcao_giro() == 'antihorario' and  self.solenoide.obtem_estado_solenoide(2) == 0):
+                if (self.sensor_optico.obtem_codigo_sensores() == "01") or (self.sensor_optico.obtem_codigo_sensores() == "10"):
+#                     if self.util.cronometro == 0:
+#                         self.status_alerta = True
+                    self.util.beep_buzzer_delay(860, 1, 1, 10)
+                    if self.util.cronometro/1000 == 10:
+                        self.aviso.exibir_uso_incorreto()
+                        self.util.cronometro = 0
+                else:
+                    break
+                 
+        if catraca.operacao == 3:
+            if self.sensor_optico.obtem_codigo_sensores() == "10":
+                while (self.sensor_optico.obtem_direcao_giro() == 'horario' and self.solenoide.obtem_estado_solenoide(1) == 0):
+                    if (self.sensor_optico.obtem_codigo_sensores() == "10"):
+#                         if self.util.cronometro == 0:
+#                             self.status_alerta = True
                         self.util.beep_buzzer_delay(860, 1, 1, 10)
                         if self.util.cronometro/1000 == 10:
                             self.aviso.exibir_uso_incorreto()
                             self.util.cronometro = 0
                     else:
                         break
-                     
-            if catraca.operacao == 3:
-                if self.sensor_optico.obtem_codigo_sensores() == "10":
-                    while (self.sensor_optico.obtem_direcao_giro() == 'horario' and self.solenoide.obtem_estado_solenoide(1) == 0):
-                        if (self.sensor_optico.obtem_codigo_sensores() == "10"):
-                            if self.util.cronometro == 0:
-                                self.status_alerta = True
-                            self.util.beep_buzzer_delay(860, 1, 1, 10)
-                            if self.util.cronometro/1000 == 10:
-                                self.aviso.exibir_uso_incorreto()
-                                self.util.cronometro = 0
-                        else:
-                            break
-                        
-            if catraca.operacao == 4:
-                if self.sensor_optico.obtem_codigo_sensores() == "01":
-                    while (self.sensor_optico.obtem_direcao_giro() == 'antihorario' and self.solenoide.obtem_estado_solenoide(2) == 0):
-                        if (self.sensor_optico.obtem_codigo_sensores() == "01"):
-                            if self.util.cronometro == 0:
-                                self.status_alerta = True
-                            self.util.beep_buzzer_delay(860, 1, 1, 10)
-                            if self.util.cronometro/1000 == 10:
-                                self.aviso.exibir_uso_incorreto()
-                                self.util.cronometro = 0
-                        else:
-                            break
-                                   
-            self.verifica_meio_giro()       
-        finally:
-            pass
+                    
+        if catraca.operacao == 4:
+            if self.sensor_optico.obtem_codigo_sensores() == "01":
+                while (self.sensor_optico.obtem_direcao_giro() == 'antihorario' and self.solenoide.obtem_estado_solenoide(2) == 0):
+                    if (self.sensor_optico.obtem_codigo_sensores() == "01"):
+#                         if self.util.cronometro == 0:
+#                             self.status_alerta = True
+                        self.util.beep_buzzer_delay(860, 1, 1, 10)
+                        if self.util.cronometro/1000 == 10:
+                            self.aviso.exibir_uso_incorreto()
+                            self.util.cronometro = 0
+                    else:
+                        break
+                               
+        self.verifica_meio_giro()
         
-    def verifica_meio_giro(self):
-        ##############################################################
-        ## VERIFICA SE A CATRACA SE ENCONTRA EM MEIO GIRO
-        ##############################################################
-        while self.sensor_optico.obtem_codigo_sensores() == "11":
-            if self.util.cronometro == 0:
-                self.status_alerta = True
-            self.util.beep_buzzer_delay(860, 1, 1, 40)
-            if self.util.cronometro/1000 == 40:
-                self.aviso.exibir_uso_incorreto()
-                self.util.cronometro = 0
-        self.util.cronometro = 0
+        
         

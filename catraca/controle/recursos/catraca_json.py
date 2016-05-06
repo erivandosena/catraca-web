@@ -85,10 +85,10 @@ class CatracaJson(ServidorRestful):
                         if self.contador_acesso_servidor < 4:
                             self.cadastra_catraca_remoto()
                             return self.catraca_get(True,True)
-                        else:
-                            self.aviso.exibir_falha_servidor()
-                            self.aviso.exibir_aguarda_cartao()
-                            self.contador_acesso_servidor = 0
+#                         else:
+#                             self.aviso.exibir_falha_servidor()
+#                             self.aviso.exibir_aguarda_cartao()
+#                             self.contador_acesso_servidor = 0
         except Exception:
             print traceback.format_exc()
             self.log.logger.error('Erro obtendo json catraca', exc_info=True)

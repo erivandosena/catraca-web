@@ -70,9 +70,6 @@ class LeitorCartao(Relogio):
         self.pino_controle.evento_both(self.D1, self.um)
         
         while True:
-#             self.CATRACA = Relogio.catraca
-#             if self.CATRACA:
-#                 self.TURNO = Relogio.turno
             self.ler()
             sleep(self.intervalo)
 
@@ -89,7 +86,6 @@ class LeitorCartao(Relogio):
         try:
             while True:
                 if self.bits:
-                    print self.bits
                     LeitorCartao.uso_do_cartao = True
                     self.aviso.exibir_aguarda_consulta()
                     self.log.logger.info('Binario obtido corretamente. [Cartao n.] '+str(self.bits))
@@ -133,6 +129,8 @@ class LeitorCartao(Relogio):
                     self.bloqueia_acesso()
                     return None
                 if Relogio.periodo:
+                    if not Relogio.rede:
+                        return None
                     self.obtem_catraca_turno()
                     if self.CATRACA.operacao == 5:
                         self.aviso.exibir_acesso_livre()
@@ -348,12 +346,6 @@ class LeitorCartao(Relogio):
         
         
     def obtem_catraca_turno(self):
-        #while self.CATRACA is None:
         self.CATRACA = Relogio.catraca
-        while self.CATRACA is None:
-            self.CATRACA = Relogio.catraca
-            print "tentando obter catraca no alerta"
-        #self.TURNO = Relogio.turno
-            #print "tentando obter catraca no leitor"
         if self.CATRACA:
             self.TURNO = Relogio.turno
