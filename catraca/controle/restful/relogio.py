@@ -53,7 +53,7 @@ class Relogio(ControleGenerico, threading.Thread):
             self.datahora = self.util.obtem_datahora().strftime("%d/%m/%Y %H:%M:%S")
             if (self.hora == datetime.datetime.strptime('06:00:00','%H:%M:%S').time()) or (self.hora == datetime.datetime.strptime('12:00:00','%H:%M:%S').time()) or (self.hora == datetime.datetime.strptime('18:00:00','%H:%M:%S').time()):
                 self.aviso.exibir_saldacao(self.aviso.saldacao(), self.util.obtem_datahora_display())
-                self.aviso.exibir_aguarda_cartao()
+                #self.aviso.exibir_aguarda_cartao()
             self.contador += 1
             if self.contador == 10:
                 self.contador = 0
@@ -141,7 +141,7 @@ class Relogio(ControleGenerico, threading.Thread):
                     Relogio.periodo = True
                     self.aviso.exibir_turno_atual(turno_ativo.descricao)
                     self.util.beep_buzzer(855, .5, 1)
-                   # self.aviso.exibir_aguarda_cartao()
+                    self.aviso.exibir_aguarda_cartao()
                     print "\nINICIO DE TURNO!\n"
                 return turno_ativo
             else:
@@ -149,7 +149,7 @@ class Relogio(ControleGenerico, threading.Thread):
                 if not self.status:
                     self.status = True
                     Relogio.periodo = False
-                    #self.aviso.exibir_horario_invalido()
+                    self.aviso.exibir_horario_invalido()
                     self.util.beep_buzzer(855, .5, 1)
                     print "\nENCERRAMENTO DE TURNO!\n"
                 return None

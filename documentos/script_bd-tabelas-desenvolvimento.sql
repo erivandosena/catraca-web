@@ -2,7 +2,7 @@
 -- Autor_script : Erivando Sena											  --
 -- Copyright    : Unilab											      --
 -- Data_criacao : 16/10/2015											  --
--- Data_revisao : 15/03/2016											  --
+-- Data_revisao : 09/05/2016											  --
 -- Status       : DESENVOLVIMENTO										  --
 ----------------------------------------------------------------------------
 
@@ -15,10 +15,14 @@
 
 -- Database: desenvolvimento
 -- psql -h localhost -U catraca
-/*
+
 CREATE DATABASE desenvolvimento WITH OWNER = catraca ENCODING = 'UTF8';
 COMMENT ON DATABASE desenvolvimento IS 'Bando de dados de desenvolvimento.';
-*/
+
+-- Conectar a base desenvolvimento
+\connect desenvolvimento;
+
+-- Criacao das tabelas
 ----------------------------------------------------------------------------
 --                                 TABELAS                                --
 ----------------------------------------------------------------------------
@@ -378,6 +382,25 @@ COMMENT ON COLUMN custo_refeicao.cure_id IS 'Campo autoincremento para chave pri
 COMMENT ON COLUMN custo_refeicao.cure_valor IS 'Valor em R$ do custo da refeicao.';
 COMMENT ON COLUMN custo_refeicao.cure_data IS 'Data e hora de cadastro do custo.';
 COMMENT ON CONSTRAINT pk_cure_id ON custo_refeicao IS 'Chave primaria da tabela custo_refeicao.';
+
+-- Table: custo_unidade
+CREATE TABLE custo_unidade
+(
+  cuun_id serial NOT NULL, -- Campo para chave primaria da tabela.
+  unid_id integer NOT NULL, -- Chave estrangeira da tabela unidade.
+  cure_id integer NOT NULL, -- Chave estrangeira da tabela custo_refeicao.
+  CONSTRAINT pk_cuun_id PRIMARY KEY (cuun_id ), -- Chave primaria da tabela custo_unidade.
+  CONSTRAINT fk_cure_id FOREIGN KEY (cure_id) REFERENCES custo_refeicao (cure_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, -- Chave estrangeira da tabela custo_refeicao.
+  CONSTRAINT fk_unid_id FOREIGN KEY (unid_id) REFERENCES unidade (unid_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION -- Chave estrangeira da tabela unidade.
+);
+ALTER TABLE custo_unidade OWNER TO catraca;
+COMMENT ON TABLE custo_unidade IS 'Tabela que armazena os custo de refeicoes por unidade.';
+COMMENT ON COLUMN custo_unidade.cuun_id IS 'Campo para chave primaria da tabela.';
+COMMENT ON COLUMN custo_unidade.unid_id IS 'Chave estrangeira da tabela unidade.';
+COMMENT ON COLUMN custo_unidade.cure_id IS 'Chave estrangeira da tabela custo_refeicao.';
+COMMENT ON CONSTRAINT pk_cuun_id ON custo_unidade IS 'Chave primaria da tabela custo_unidade.';
+COMMENT ON CONSTRAINT fk_cure_id ON custo_unidade IS 'Chave estrangeira da tabela custo_refeicao.';
+COMMENT ON CONSTRAINT fk_unid_id ON custo_unidade IS 'Chave estrangeira da tabela unidade.';
 
 -- Table: atividade_tipo
 CREATE TABLE atividade_tipo

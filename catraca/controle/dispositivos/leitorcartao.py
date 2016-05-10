@@ -135,7 +135,7 @@ class LeitorCartao(Relogio):
                     if self.CATRACA.operacao == 5:
                         self.aviso.exibir_acesso_livre()
                         return None
-                    if self.CATRACA.operacao <= 0 or self.CATRACA.operacao >= 6:
+                    if self.CATRACA.operacao < 1 or self.CATRACA.operacao > 5:
                         self.aviso.exibir_bloqueio_total()
                         return None
                     self.valida_cartao(self.numero_cartao)

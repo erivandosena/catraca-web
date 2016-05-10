@@ -11,10 +11,14 @@
 ----------------------------------------------------------------------------
 
 -- Database: raspberrypi
-/*
+
 CREATE DATABASE raspberrypi WITH OWNER = catraca ENCODING = 'UTF8';
 COMMENT ON DATABASE raspberrypi IS 'Bando de dados de desenvolvimento.';
-*/
+
+-- Conectar a base raspberrypi
+\connect raspberrypi;
+
+-- Criacao das tabelas
 ----------------------------------------------------------------------------
 --                                 TABELAS                                --
 ----------------------------------------------------------------------------
@@ -78,6 +82,25 @@ COMMENT ON COLUMN custo_refeicao.cure_id IS 'Campo para chave primaria da tabela
 COMMENT ON COLUMN custo_refeicao.cure_valor IS 'Valor em R$ do custo da refeicao.';
 COMMENT ON COLUMN custo_refeicao.cure_data IS 'Data e hora de cadastro do custo.';
 COMMENT ON CONSTRAINT pk_cure_id ON custo_refeicao IS 'Chave primaria da tabela custo_refeicao.';
+
+-- Table: custo_unidade
+CREATE TABLE custo_unidade
+(
+  cuun_id integer NOT NULL, -- Campo para chave primaria da tabela.
+  unid_id integer NOT NULL, -- Chave estrangeira da tabela unidade.
+  cure_id integer NOT NULL, -- Chave estrangeira da tabela custo_refeicao.
+  CONSTRAINT pk_cuun_id PRIMARY KEY (cuun_id ), -- Chave primaria da tabela custo_unidade.
+  CONSTRAINT fk_cure_id FOREIGN KEY (cure_id) REFERENCES custo_refeicao (cure_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, -- Chave estrangeira da tabela custo_refeicao.
+  CONSTRAINT fk_unid_id FOREIGN KEY (unid_id) REFERENCES unidade (unid_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION -- Chave estrangeira da tabela unidade.
+);
+ALTER TABLE custo_unidade OWNER TO postgres;
+COMMENT ON TABLE custo_unidade IS 'Tabela que armazena os custo de refeicoes por unidade.';
+COMMENT ON COLUMN custo_unidade.cuun_id IS 'Campo para chave primaria da tabela.';
+COMMENT ON COLUMN custo_unidade.unid_id IS 'Chave estrangeira da tabela unidade.';
+COMMENT ON COLUMN custo_unidade.cure_id IS 'Chave estrangeira da tabela custo_refeicao.';
+COMMENT ON CONSTRAINT pk_cuun_id ON custo_unidade IS 'Chave primaria da tabela custo_unidade.';
+COMMENT ON CONSTRAINT fk_cure_id ON custo_unidade IS 'Chave estrangeira da tabela custo_refeicao.';
+COMMENT ON CONSTRAINT fk_unid_id ON custo_unidade IS 'Chave estrangeira da tabela unidade.';
 
 -- Table: usuario
 CREATE TABLE usuario

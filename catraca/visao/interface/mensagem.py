@@ -47,6 +47,7 @@ class Mensagem(threading.Thread):
     def join(self, timeout=None):
         self._stopevent.set()
         super(Mensagem, self).join(timeout)
+        self.aviso.exibir_aguarda_cartao()
         #threading.Thread.join(self, timeout)
         
     def exibe_mensagem(self):

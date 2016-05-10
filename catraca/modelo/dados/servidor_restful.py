@@ -14,7 +14,8 @@ __status__ = "Prototype" # Prototype | Development | Production
 class ServidorRestful(object):
     
     
-    URL = 'http://200.129.19.65:27289/api/'
+    URL = 'http://10.5.0.123:27289/api/'
+    #URL = 'catraca.unilab.edu.br:27289/api/'
     #URL = 'http://10.5.0.15:27289/api/'
     timeout_conexao = 0.2 #0.0009
 
