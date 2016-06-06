@@ -225,7 +225,14 @@ class CartaoView {
 			echo '<tr><th>Nivel Discente:</th><td> ' . $usuario->getNivelDiscente().'</td></tr>';
 			echo '<tr><th>Matricula:</th><td>'.$usuario->getMatricula().'</td></tr>';
 			
+		}else if(strtolower (trim($usuario->getStatusDiscente())) == 'ativo'){
+				echo '<tr><th>Aluno </th><td>Ativo</td></tr>';
+				echo '<tr><th>Nivel Discente:</th><td> ' . $usuario->getNivelDiscente().'</td></tr>';
+				echo '<tr><th>Matricula:</th><td>'.$usuario->getMatricula().'</td></tr>';
+
 		}
+
+
 		
 		if(strtolower (trim($usuario->getTipodeUsuario())) == 'terceirizado'){
 			echo '<tr><th colspan=2>Terceirizado Sem Informação de Status</th></tr>';

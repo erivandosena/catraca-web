@@ -140,7 +140,7 @@ class CatracaVirtual{
 		echo '
 									<tr>
 										<th>Selecionar</th>';
-		$listaDeCores = array('aviso', 'primario', 'sucesso', 'secundario', 'erro', 'erro','primario', 'sucesso', 'secundario', 'aviso', 'erro');
+		$listaDeCores = array('erro', 'primario', 'primario', 'sucesso','aviso', 'aviso', 'secundario', 'primario', 'erro', 'sucesso');
 		$i = 0;
 		foreach($listaDeTipos as $tipo){
 			

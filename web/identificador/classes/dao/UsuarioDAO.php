@@ -102,7 +102,7 @@ class UsuarioDAO extends DAO {
 	}
 	public function retornaPorIdBaseExterna(Usuario $usuario){
 		$id = $usuario->getIdBaseExterna();
-		$sql = "SELECT * FROM vw_usuarios_catraca WHERE id_usuario = $id LIMIT 1";
+		$sql = "SELECT * FROM vw_usuarios_catraca WHERE id_usuario = $id ORDER BY status_discente ASC LIMIT 1";
 		foreach ($this->getConexao ()->query ( $sql ) as $linha){
 			$usuario->setNome($linha['nome']);
 			$usuario->setEmail($linha['email']);

@@ -1,11 +1,14 @@
+
 <?php
 
-
+/*
+ini_set('display_errors',1);
+ini_set('display_startup_erros',1);
+error_reporting(E_ALL);
+*/
 date_default_timezone_set ( 'America/Araguaina' );
 
-ini_set ( 'display_errors', 1 );
-ini_set ( 'display_startup_erros', 1 );
-error_reporting ( E_ALL );
+
 function __autoload($classe) {
 	if (file_exists ( 'classes/dao/' . $classe . '.php' ))
 		include_once 'classes/dao/' . $classe . '.php';
@@ -45,7 +48,7 @@ echo $html []='<!DOCTYPE html>
 
 <script type="text/javascript" src="js/simpletabs_1.3.js"></script>
 <link rel="stylesheet" href="css/simpletabs.css" />
-<link rel="stylesheet" href="http://spa.dsi.unilab.edu.br/spa/css/spa.css" />
+<link rel="stylesheet" href="css_spa/spa.css" />
 <link rel="stylesheet" href="css/estilo.css" type="text/css" media="screen">
 <link rel="stylesheet" href="css/estilo_responsivo.css" type="text/css" media="screen">
 <script type="text/javascript" src="js/jquery.min.js"></script>
