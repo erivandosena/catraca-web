@@ -1,6 +1,6 @@
 <?php
 
-teste teste  notepad
+
 date_default_timezone_set ( 'America/Araguaina' );
 
 ini_set ( 'display_errors', 1 );

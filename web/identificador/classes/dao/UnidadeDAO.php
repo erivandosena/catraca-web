@@ -60,7 +60,10 @@ class UnidadeDAO extends DAO {
 					LEFT JOIN catraca_unidade
 					ON catraca.catr_id = catraca_unidade.catr_id
 					LEFT JOIN unidade
-					ON unidade.unid_id = catraca_unidade.unid_id";
+					ON unidade.unid_id = catraca_unidade.unid_id
+					ORDER BY catraca.catr_id ASC
+					
+					";
 		}
 		
 		foreach ( $this->getConexao ()->query ( $sql ) as $linha ) {
