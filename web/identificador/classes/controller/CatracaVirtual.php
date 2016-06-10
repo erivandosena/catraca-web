@@ -90,7 +90,6 @@ class CatracaVirtual{
 		
 		
 		
-		
 		echo '<div class="navegacao"> 
 				<div class = "simpleTabs">
 			        <ul class = "simpleTabsNavigation">					
@@ -155,6 +154,23 @@ class CatracaVirtual{
 							</table>';
 		
 		$this->view->formBuscaCartao();
+		$idCatraca = $_SESSION['catraca_id'];
+		$custo = 0;
+		$sql = "SELECT cure_valor FROM custo_refeicao
+		INNER JOIN custo_unidade
+		ON custo_unidade.cure_id = custo_refeicao.cure_id
+		INNER JOIN unidade
+		ON unidade.unid_id = custo_unidade.unid_id
+		INNER JOIN catraca_unidade
+		ON catraca_unidade.unid_id = unidade.unid_id
+		WHERE catraca_unidade.catr_id = $idCatraca
+		ORDER BY custo_unidade.cure_id DESC LIMIT 1
+		";
+		
+		foreach($tipoDao->getConexao()->query($sql) as $linha){
+			$custo = $linha['cure_valor'];
+		}
+		//echo $custo;
 		
 		echo '
 				
@@ -226,28 +242,10 @@ class CatracaVirtual{
 			
 			if(isset($_GET['confirmado'])){
 				
-				$custo = 0;
 				
-				$sql = "SELECT cure_valor FROM custo_refeicao ORDER BY cure_id DESC LIMIT 1";
-				foreach($tipoDao->getConexao()->query($sql) as $linha){
-					$custo = $linha['cure_valor'];
-				}
 				$idCatraca = $_SESSION['catraca_id'];
 				
-				$sql = "SELECT cure_valor FROM custo_refeicao
-					INNER JOIN custo_unidade 
-					ON custo_unidade.cure_id = custo_refeicao.cure_id
-					INNER JOIN unidade
-					ON unidade.unid_id = custo_unidade.unid_id
-					INNER JOIN catraca_unidade
-					ON catraca_unidade.unid_id = unidade.unid_id
-					WHERE catraca_unidade.catr_id = $idCatraca
-					ORDER BY custo_unidade.cure_id DESC LIMIT 1
-				";
-				
-				foreach($tipoDao->getConexao()->query($sql) as $linha){
-					$custo = $linha['cure_valor'];
-				}
+			
 				
 				$idVinculo= $vinculo->getId();
 				$valorPago = $vinculo->getCartao()->getTipo()->getValorCobrado();
@@ -260,7 +258,7 @@ class CatracaVirtual{
 					else
 						$this->mensagemErro();
 				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
-				
+				echo 'Teste';
 			}
 			
 			else{
@@ -302,11 +300,7 @@ class CatracaVirtual{
 					$tipo->setValorCobrado($linha['tipo_valor']);
 					
 				}
-				$custo = 0;
-				$sql = "SELECT cure_valor FROM custo_refeicao ORDER BY cure_id DESC LIMIT 1";
-				foreach($tipoDao->getConexao()->query($sql) as $linha){
-					$custo = $linha['cure_valor'];
-				}
+				
 				
 					
 				

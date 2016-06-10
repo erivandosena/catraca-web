@@ -71,16 +71,16 @@ $result = $dao->getConexao()->query($sql);
 foreach($result as $linha){
 	$i++;
 	echo ' - '.$linha['cart_numero'].' - '.$linha['vinc_inicio'].' - '.$i.'<br>';
-
+	
 }
 
 echo $i.' cadastros';
 
 
-$sql = "UPDATE usuario set 
-	usua_nivel = 3 
-	WHERE usua_login = 'marcosv'";
-echo $dao->getConexao()->exec($sql);
+// $sql = "UPDATE usuario set 
+// 	usua_nivel = 3 
+// 	WHERE usua_login = 'marcosv'";
+// echo $dao->getConexao()->exec($sql);
 
 
 

@@ -260,7 +260,12 @@ class CartaoController{
 							continue;
 						}
 						if(strtolower (trim( $tipo->getNome())) == 'servidor tae'){
+							
 							if(strtolower (trim($usuario->getStatusServidor())) == 'ativo' && strpos(strtolower (trim($usuario->getCategoria())), 'administrativo')){
+								continue;
+							}
+							if($usuario->getIDCategoria() == 3){
+								
 								continue;
 							}
 							unset($listaDeTipos[$chave]);
