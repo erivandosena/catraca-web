@@ -63,7 +63,7 @@ class CatracaVirtual{
 		                
 			            
 		echo '       </select><br>
-					<input type="submit" class="botao" VALUE="Selecionar" />
+					<input name="catraca_virtual" type="submit" class="botao" VALUE="Selecionar" />
 				</form>	';
 		
 

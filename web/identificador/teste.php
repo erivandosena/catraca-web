@@ -70,17 +70,38 @@ INNER JOIN usuario ON vinculo.usua_id = usuario.usua_id
 $result = $dao->getConexao()->query($sql);
 foreach($result as $linha){
 	$i++;
-	echo ' - '.$linha['cart_numero'].' - '.$linha['vinc_inicio'].' - '.$i.'<br>';
+	//echo ' - '.$linha['cart_numero'].' - '.$linha['vinc_inicio'].' - '.$i.'<br>';
 	
 }
 
 echo $i.' cadastros';
+echo '<br>';
+
+$sql = "SELECT * FROM auditoria
+	INNER JOIN usuario ON auditoria.usua_id = usuario.usua_id
+	 ORDER BY audi_id DESC LIMIT 10";
+$result = $dao->getConexao()->query($sql);
+foreach($result as $linha){
+	echo $linha['audi_id'].' - '.$linha['usua_nome'].' - '.$linha['audi_pagina'].' - '.$linha['audi_data'].'<br>';
+	
+}
 
 
-// $sql = "UPDATE usuario set 
-// 	usua_nivel = 3 
-// 	WHERE usua_login = 'marcosv'";
-// echo $dao->getConexao()->exec($sql);
+echo '<br><br>';
+
+
+$sql = "SELECT * FROM registro 
+	INNER JOIN vinculo
+	ON vinculo.vinc_id = registro.vinc_id
+	INNER JOIN usuario
+	ON usuario.usua_id = vinculo.vinc_id
+	ORDER BY regi_id DESC LIMIT 30";
+$result = $dao->getConexao()->query($sql);
+foreach($result as $linha){
+
+	echo $linha['regi_id'].' - '.$linha['regi_valor_custo'].' '.$linha['regi_data'].' Cliente: '.$linha['usua_nome'].'<br>';
+	
+}
 
 
 

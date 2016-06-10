@@ -107,7 +107,14 @@ echo $html []='<!DOCTYPE html>
 					if ($sessao->getNivelAcesso () == Sessao::NIVEL_SUPER) {						
 						$dao = new DAO();
 						$auditoria = new Auditoria($dao->getConexao());
-						$auditoria->cadastrar($sessao->getIdUsuario());
+						
+						$obs = " - ";
+						if(isset($_POST['catraca_virtual']) && isset($_POST['catraca_id'])){
+							$obs = "Selecionou Catraca virtual: ".$_POST['catraca_id'];
+							
+						}
+						
+						$auditoria->cadastrar($sessao->getIdUsuario(), $obs);
 						$dao->fechaConexao();
 						
  						echo '
