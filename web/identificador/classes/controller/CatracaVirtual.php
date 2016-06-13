@@ -275,6 +275,7 @@ class CatracaVirtual{
 		}else if(isset($_GET['tipo_id'])){
 			
 			$i = 0;
+			
 			$selectTurno = "Select * FROM turno WHERE '$data' BETWEEN turno.turn_hora_inicio AND turno.turn_hora_fim";
 			$result = $this->dao->getConexao()->query($selectTurno);
 			foreach($result as $linha){
@@ -309,8 +310,10 @@ class CatracaVirtual{
 				$numero = "";
 			
 				$sql = "SELECT * FROM cartao
-				INNER JOIN vinculo ON cartao.cart_id = vinculo.cart_id
-				WHERE tipo_id = $idTipo LIMIT 1";
+					INNER JOIN vinculo ON cartao.cart_id = vinculo.cart_id
+					WHERE tipo_id = $idTipo 
+					AND vinculo.vinc_avulso = 'TRUE'
+					LIMIT 1";
 				foreach($tipoDao->getConexao()->query($sql) as $linha){
 					$idCartao = $linha['cart_id'];
 					$idVinculo = $linha['vinc_id'];
