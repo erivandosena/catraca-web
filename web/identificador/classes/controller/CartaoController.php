@@ -253,7 +253,7 @@ class CartaoController{
 					$listaDeTipos = $tipoDao->retornaLista();
 					foreach ($listaDeTipos as $chave => $tipo){
 						if(strtolower (trim( $tipo->getNome())) == 'aluno'){
-							if(strtolower (trim($usuario->getStatusDiscente())) == 'ativo'){
+							if(strtolower (trim($usuario->getStatusDiscente())) == 'ativo' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - graduando'){
 								continue;
 							}
 							unset($listaDeTipos[$chave]);
@@ -393,7 +393,7 @@ class CartaoController{
 			
 			return true;
 		}
-		if(strtolower (trim($usuario->getStatusDiscente())) == 'ativo'){
+		if(strtolower (trim($usuario->getStatusDiscente())) == 'ativo' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - graduando'){
 			return true;	
 		}
 		
