@@ -23,8 +23,13 @@ function __autoload($classe) {
 
 $dao = new DAO();
 
-$sql = "UPDATE usuario set usua_nivel = 3 WHERE usua_login = 'jefponte';";
-echo $dao->getConexao()->exec($sql);
+// $dataAtual = date("Y-m-d G:i:s");
+//$sql = "UPDATE guiche SET guic_encerramento = '2016-05-03 17:37:55', guic_ativo = '0' WHERE guic_id = 64";
+//$sql = "UPDATE usuario set usua_nivel = 3 WHERE usua_login = 'jefponte';";
+// $sql = "INSERT INTO guiche (guic_abertura, guic_ativo, unid_id, usua_id)
+// 		VALUES('2016-05-03 10:32:47', '1', 1, 3)";
+// $sql = "DELETE FROM catraca WHERE catr_id > 60";
+// echo $dao->getConexao()->exec($sql);
 
 // $sql = "DELETE FROM vinculo_tipo";
 // $sql = "DELETE FROM vinculo WHERE vinc_avulso <> 'TRUE'";
@@ -37,5 +42,7 @@ echo $dao->getConexao()->exec($sql);
 // $i = $result = $dao->getConexao()->exec($sql);
 // echo $i;
 
+$sql = "DELETE FROM catraca WHERE catr_id > 5";
+echo $dao->getConexao()->exec($sql);
 
 ?>

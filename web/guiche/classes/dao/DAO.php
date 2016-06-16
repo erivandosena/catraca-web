@@ -21,10 +21,10 @@ class DAO {
 					$this->conexao = new PDO ( "pgsql:host=localhost dbname=producao user=catraca password=CaTraCa@unilab2015" );
 					break;
 			case self::TIPO_PG_SIGAAA ://Produ��o do SIG. 
-				$this->conexao = new PDO ( "pgsql:host=200.129.19.80 dbname=sigaa user=catraca password=c4Tr@3a" );
+				$this->conexao = new PDO ( "pgsql:host=200.129.19.74 dbname=sigaa user=catraca password=c4Tr@3a" );
 				break;
 			case self::TIPO_PG_SISTEMAS_COMUM ://Produ��o do SIG. 
-				$this->conexao = new PDO ( "pgsql:host=200.129.19.80 dbname=sistemas_comum user=catraca password=c4Tr@3a" );
+				$this->conexao = new PDO ( "pgsql:host=200.129.19.74 dbname=sistemas_comum user=catraca password=c4Tr@3a" );
 				break;
 			default :
 				$this->conexao = new PDO ( "pgsql:host=localhost dbname=desenvolvimento user=catraca password=CaTraCa@unilab2015" );

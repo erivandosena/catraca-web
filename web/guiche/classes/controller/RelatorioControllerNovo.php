@@ -139,7 +139,7 @@ class RelatorioControllerNovo {
 						WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') AND vinculo_tipo.tipo_id =  $tipoId
 						$strFiltroUnidade;";
 				echo $sql.'<br><hr>';
-				foreach ( $this->dao->getConexao ()->query ( $sql ) as $linha ) {
+				foreach ( $this->dao->getConexao()->query ( $sql ) as $linha ) {
 					$valor = $linha ['valor'];
 				}
 		

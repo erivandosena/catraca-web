@@ -41,9 +41,33 @@ class TurnoDAO extends DAO{
 		
 	}
 	
+	public function retornaTurnoPorId(Turno $turno){
+		
+		$idTurno = $turno->getId();
+		$sql = "SELECT * FROM turno WHERE turn_id = $idTurno";
+		$result = $this->getConexao()->query($sql);
+		foreach ($result as $linha){
+			$turno->setId($linha['turn_id']);
+			$turno->setHoraInicial($linha['turn_hora_inicio']);
+			$turno->setHoraFinal($linha['turn_hora_fim']);
+			$turno->setDescricao($linha['turn_descricao']);			
+		}
+	}
 	
-	
-	
+	public function atualizaTurno(Turno $turno){
+		
+		$idTurno = $turno->getId();
+		$novaHoraIni = $turno->getHoraInicial();
+		$novaHoraFim = $turno->getHoraFinal();
+		
+		$sql = "UPDATE turno SET 
+				turn_hora_inicio = '$novaHoraIni', turn_hora_fim = '$novaHoraFim'
+				WHERE turn_id = $idTurno";		
+		if($this->getConexao()->exec($sql))
+			return true;
+		return false;
+		
+	}
 	
 }
 
