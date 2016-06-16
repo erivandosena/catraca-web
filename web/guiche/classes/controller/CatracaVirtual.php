@@ -41,12 +41,12 @@ class CatracaVirtual{
 		$unidadeDao = new UnidadeDAO($this->dao->getConexao());
 		$listaDeCatracas = $unidadeDao->retornaCatracasPorUnidade();		
 		
-		echo '<div class="navegacao">
+		echo '
 				<div class = "simpleTabs">
 			        <ul class = "simpleTabsNavigation">
-						<li><a href="#">Cadastro</a></li>
+						<li><a href="#" class="current">Cadastro</a></li>
 			        </ul>
-			        <div class = "simpleTabsContent">		
+			        <div class = "simpleTabsContent currentTab">		
 						<div class="doze colunas borda">';
 		
 		echo '<form action="" method="post">
@@ -69,7 +69,7 @@ class CatracaVirtual{
 		echo '</div>
 				</div>
 				</div>
-				</div>';
+				';
 		
 		
 	}
@@ -83,27 +83,17 @@ class CatracaVirtual{
 		$unidadeDao = new UnidadeDAO($this->dao->getConexao());
 		$catraca = new Catraca();
 		$catraca->setId($_SESSION['catraca_id']);
-		$unidadeDao->preencheCatracaPorId($catraca);
-		
-		
-		
-		
-		
+		$unidadeDao->preencheCatracaPorId($catraca);		
 		
 		echo '<div class="navegacao"> 
 				<div class = "simpleTabs">
 			        <ul class = "simpleTabsNavigation">					
-						<li><a href="#">Cadastro</a></li>	
+						<li><a href="#">Cadastro</a></li>						
 			        </ul>
 				
-			        <div class = "simpleTabsContent">
+			        <div class = "simpleTabsContent">					
 				
-						
-				
-						<div class="doze colunas borda">';
-		
-		
-		
+						<div class="doze colunas borda">';		
 		echo '
 							
 							<table class="tabela borda-vertical zebrada no-centro centralizado">							    
@@ -190,10 +180,7 @@ class CatracaVirtual{
 				$this->mensagemErro("Cartão não cadastrado!");
 				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
 				return;
-			}
-			
-			
-			
+			}			
 			
 			$vinculoDao = new VinculoDAO($cartaoDao->getConexao());
 			$vinculo = $vinculoDao->retornaVinculoValidoDeCartao($cartao);
@@ -231,17 +218,50 @@ class CatracaVirtual{
 					$custo = $linha['cure_valor'];
 				}
 				
+				$numeroCartao = $_GET['numero_cartao'];
 				$idVinculo= $vinculo->getId();
-				$valorPago = $vinculo->getCartao()->getTipo()->getValorCobrado();
+				$valorPago = $vinculo->getCartao()->getTipo()->getValorCobrado();				
 				$idCatraca = $_SESSION['catraca_id'];
-				$sql = "INSERT into registro(regi_data, regi_valor_pago, regi_valor_custo, catr_id, cart_id, vinc_id)
-				VALUES('$data', $valorPago, $custo, $idCatraca, $idCartao, $idVinculo)";
-				//echo $sql;
-				if($this->dao->getConexao()->exec($sql))
-						$this->mensagemSucesso();
-					else
-						$this->mensagemErro();
-				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
+				
+				$sqlVerificaNumero = "SELECT * FROM cartao WHERE cart_numero = '$numeroCartao'";
+				
+				$result = $this->dao->getConexao()->query($sqlVerificaNumero);
+				foreach($result as $linha){
+					$saldoCartao = ($linha['cart_creditos']);				
+				}
+				
+				$novoSaldo = $saldoCartao - $valorPago;
+				
+				if($novoSaldo < 0){
+					$novoSaldo = null;
+				}				
+				
+ 				$this->dao->getConexao()->beginTransaction(); 				
+ 				
+ 				$sql1 = "UPDATE cartao SET cart_creditos = '$novoSaldo' WHERE cart_numero = '$numeroCartao'";
+ 				
+ 				$sql2 = "INSERT into registro(regi_data, regi_valor_pago, regi_valor_custo, catr_id, cart_id, vinc_id)
+ 				VALUES('$data', $valorPago, $custo, $idCatraca, $idCartao, $idVinculo)";
+ 								
+				if(!$this->dao->getConexao()->exec($sql1)){
+					$this->dao->getConexao()->rollBack();
+					$this->view->formMensagem("-erro", "Saldo insuficiente, recarregue seu cartão!");
+					return false;
+				}
+				
+				if(!$this->dao->getConexao()->exec($sql2)){
+					$this->dao->getConexao()->rollBack();
+					$this->view->formMensagem("-erro", "Erro ao inserir o registro!");
+					return false;
+				}
+				
+				$this->dao->getConexao()->commit();
+				
+// 				if($this->dao->getConexao()->exec($sql))
+// 						$this->mensagemSucesso();
+// 					else
+// 						$this->mensagemErro();
+//				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
 				
 			}
 			
@@ -256,6 +276,7 @@ class CatracaVirtual{
 				echo '<a href="?pagina=gerador&numero_cartao='.$_GET['numero_cartao'].'&confirmado=1" class="botao b-sucesso">Confimar</a>';
 				echo '</div>';
 			}
+			
 		}else if(isset($_GET['tipo_id'])){
 			
 			$i = 0;
@@ -303,10 +324,14 @@ class CatracaVirtual{
 					$idCartao = $linha['cart_id'];
 					$idVinculo = $linha['vinc_id'];
 					$numero = $linha['cart_numero'];
-					
+
 					break;
 					
 				}
+				
+				$saldoCartao = $vinculo->getCartao()->getCreditos();
+				
+				echo $saldoCartao;
 				
 				$idCatraca = $_SESSION['catraca_id'];
 				$valorPago = $tipo->getValorCobrado();

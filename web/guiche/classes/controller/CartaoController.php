@@ -1,5 +1,6 @@
 <?php
 
+
 class CartaoController{
 	private $view;
 	public static function main($nivelDeAcesso){
@@ -18,7 +19,7 @@ class CartaoController{
 	
 	public function telaCartao(){
 		$this->view = new CartaoView();
-		echo '<div class="conteudo"> <div class = "simpleTabs">
+		echo '<div class = "simpleTabs">
 		        <ul class = "simpleTabsNavigation">
 				
 					<li><a href="#">Identifica&ccedil;&atilde;o</a></li>
@@ -35,7 +36,7 @@ class CartaoController{
 		$this->telaCadastro();
 		echo '	</div>		
 						
-		    </div></div>';
+		    </div>';
 		
 		
 		
@@ -164,6 +165,7 @@ class CartaoController{
 			
 			
 			$this->view->mostraSelecionado($usuario);
+			$vinculoDao = new VinculoDAO();
 				
 			
 			

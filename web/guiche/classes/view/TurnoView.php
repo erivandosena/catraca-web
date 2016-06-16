@@ -26,6 +26,7 @@ class TurnoView{
 		}
 		
 	}
+	
 	public function cadastroSucesso(){
 		echo "Inserido com sucesso";
 	}

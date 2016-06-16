@@ -70,9 +70,10 @@ class RelatorioControllerGuiche{
 						<thead>
 							<tr>
 								<th>Data</th>
-								<th>Valor</th>
+								<th>Hora</th>								
 								<th>Descrição</th>
 								<th>Operador</th>
+								<th>Valor</th>
 							</tr>
 						</thead>
 						<tbody>';		
@@ -88,10 +89,11 @@ class RelatorioControllerGuiche{
 		$result =  $dao->getConexao()->query($sqlTran);			
 		foreach ($result as $dado){			
 			echo'	<tr>
-						<td>'.date("d/m/y",strtotime($dado['tran_data'])).'</td>
-						<td>R$ '.$dado['tran_valor'].'</td>
+						<td>'.date("d/m/Y",strtotime($dado['tran_data'])).'</td>
+						<td>'.date('H:i:s',strtotime($dado['tran_data'])).'</td>						
 						<td>'.$dado['tran_descricao'].'</td>
 						<td>'.$dado['usua_nome'].'</td>	
+						<td>R$ '.$dado['tran_valor'].'</td>
 					</tr>';				
 		}
 			
@@ -105,10 +107,11 @@ class RelatorioControllerGuiche{
 		}
 			
 				echo'	<tr id="soma">
-							<th>Somatório</th>
+							<th>Somatório</th>							
+							<td> - </td>
+							<td> - </td>
+							<td> - </td>
 							<td>R$ '.number_format($valorTotal, 2).'</td>
-							<td> - </td>
-							<td> - </td>
 						</tr>					
 					</tbody>
 				</table>

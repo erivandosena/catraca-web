@@ -1,41 +1,31 @@
 <?php
 
 class GuicheController{
-		
+	
+	private $view;
+	private $dao;
 	public static function main($nivel){
 		
-		$controller = new GuicheController();
-		$controller->telaGuiche();
-		
+		switch ($nivel) {
+			case Sessao::NIVEL_SUPER :
+				$controller = new GuicheController();
+				$controller->telaGuiche();
+				break;
+			default :
+				UsuarioController::main ( $nivelDeAcesso );
+				break;
+		}		
 	}
-		
+	
 	public function telaGuiche(){
 		
 		$controller = new GuicheController();
-		
-		$dao = new DAO();
-		$dataTimeAtual = date ( "Y-m-d G:i:s" );
-		$sessao = new Sessao();
-		$user = $sessao->getLoginUsuario();
-		$idDoUsuario= $sessao->getIdUsuario();
-		echo '	<div id="caixa"class="doze colunas borda">										
-					<h2 id="titulo-caixa" class="texto-branco fundo-azul2 centralizado">Venda de Cr&eacuteditos</h2>																											
-						<div class="sete colunas">											
-							<div id="infovenda" class="fundo-cinza1">
-
-								<div class="doze colunas">													
-									<h3 class="centralizado">Descri&ccedil&atildeo da Opera&ccedil&atildeo</h1><br>
-										<table class="tabela quadro no-centro">													    
-										    <thead>
-												<tr>
-												    <th>Cod</th>
-												    <th>Valor</th>
-												    <th>Descri&ccedil&atildeo</th>
-												    <th>Data</th>
-													<th>Operador</th>
-												</tr>
-											</thead>
-											<tbody>';
+		$this->view = new GuicheView();
+		$this->dao = new GuicheDAO();
+		$unidade = new Unidade();
+		$dao = new DAO();		
+		$sessao = new Sessao();		
+		$idDoUsuario = $sessao->getIdUsuario();		
 		
 		/*
 		 * Preenche a tabela 'Descrição da Operação'
@@ -53,25 +43,9 @@ class GuicheController{
 				LEFT JOIN usuario as usuario
 				on trans.usua_id = usuario.usua_id				
 				WHERE (tran_data BETWEEN '$data1' AND '$data2') AND usuario.usua_id = $idDoUsuario";
-		$result = $dao->getConexao()->query($sqlTransacao);
-		$i = 1;
-		foreach ($result as $linha){	
-			
-				echo'	
-												<tr>
-											        <td>'.$i.'</td>
-											        <td>R$ '.$linha['tran_valor'].'</td>
-											        <td>'.$linha['tran_descricao'].'</td>
-											        <td>'.date("d/m/Y H:i:s", strtotime($linha['tran_data'])).'</td>
-											        <td>'.ucwords(strtolower(htmlentities($linha['usua_nome']))).'</td>
-											    </tr>';
-				$i++;
-		}
 		
-		echo'								</tbody>											
-										</table>
-									</div>
-								</div>';		
+		$listaDescricao = $dao->getConexao()->query($sqlTransacao);		
+		$this->view->formDescricao($listaDescricao);		
 		
 		/*
 		 * Soma os campos de valores.
@@ -85,29 +59,19 @@ class GuicheController{
 			if($linha){				
 				$valorTotal = $valorTotal + $valor;				
 			}			
-		}
-		
+		}		
 		echo'					<h2>Saldo em Caixa: R$ '.number_format($valorTotal, 2).' </h1>
 								<div class="sete borda">';		
 		
-		$sqlUsuario = "SELECT * FROM usuario WHERE usua_login = '$user'";
+		$sqlUsuario = "SELECT * FROM usuario WHERE usua_id = '$idDoUsuario'";
 		$result = $dao->getConexao()->query($sqlUsuario);
 		foreach ($result as $linha){
-			echo'	<span class="icone-user">Operador: '.ucwords(strtolower(htmlentities(substr($linha['usua_nome'], 0, 15)))).'</span>';			
-		}
-		
-		echo'		<span id="ultAcesso" class="icone-clock"> Ultimo Acesso: '.$date = date('d/m/Y H:i:s').'</span>
-				</div>																					
+			echo'	<span class="icone-user"> Operador: '.ucwords(strtolower(htmlentities($linha['usua_nome']))).'</span>';			
+		}		
+		echo'	</div>																					
 			</div>';
 		
-		echo'		<div class="cinco colunas">								
-						<form method="post" class="formulario-organizado" >								
-							<label for="cartao">
-								N&uacutemero Cart&atildeo: <input type="number" name="cartao" id="cartao" autofocus>													
-							</label>
-								<input type="submit" value="Pesquisar">								
-							<hr>
-						</form>';
+		$this->view->formBuscarCartao();
 		
 		/*
 		 * Realiza a pesquisa pelo numero do cartão identificando se existe vinculo ativo.
@@ -151,32 +115,22 @@ class GuicheController{
  				$vinculo->setId($idDoVinculo);
  				$cartao->setId($idCartao);
  				$vinculoDao->vinculoPorId($vinculo);
-			
-				echo '	<span>Usuario: '.ucwords(strtolower(htmlentities($usuario->getNome()))).'</span>						
-						<span>Tipo Usuario: '.$tipo->getNome().'</span>						
-						<span>Saldo: '.$cartao->getCreditos().'</span>
-						<span>Valor Credito: '.$tipo->getValorCobrado().'</span>
-						<hr>					
-						
-						<form method="post" class="formulario-organizado" >
-						<label for="valor">								
-							Valor: <input type="number" name="valor" id="valor" step="0.01">
-						</label>
-						<label for="valorrec">
-							Valor Recebido: <input type="number" name="valorrec" id="valorrec" step="0.01">
-						</label>
-						<hr>
-						<h2>Troco: <output id="troco"></output></h2>						
-						<input type="hidden" name="cartao" value="'.$_POST['cartao'].'" />
-						<input type="submit" value="finalizar" class="botao b-sucesso" name="finalizar">
-					</form>';				
+ 				
+ 				if(!$vinculo->isActive()){
+ 					
+ 					$this->view->mensagem('-erro','O vinculo n&atildeo est&aacute ativo.');
+ 					
+ 				}else{			
+									
+				$this->view->formConsulta($usuario, $tipo, $cartao);		
+				$this->view->formInserirValor();						
 				
 				/*
-				 * Insere os créditos ou estorna os creditos no usuario pesquisado com vinculo ativo.
+				 * Insere os estorna os creditos no usuario pesquisado com vinculo ativo.
 				 */
 				
 				if(isset($_POST['valor'])){
-					if(isset($_POST['finalizar'])){					
+					if(isset($_POST['finalizar'])){	
 					
 						$valorAnt = $vinculo->getCartao()->getCreditos();
 						$idCartao = $vinculo->getCartao()->getId();					
@@ -185,77 +139,59 @@ class GuicheController{
 						$idUsuario = $usuario->getId();						
 						$dataTimeAtual = date ( "Y-m-d G:i:s" );
 						$novoValor = $valorAnt + $valorVendido;					
-						$tipoTransacao = 'Venda de Créditos';
+						$tipoTransacao = 'Venda de Créditos';										
+						$tipo = "-sucesso";
+						$mensagem = "Valor inserido com sucesso.";
 						
-						if($valorVendido < 0){							
-							echo '	<form class="formulario">
-										<input type="submit" value="Confirmar" name="confirmar">
-									<form>';
-							if(isset($_POST['confirmar'])){
-								$tipoTransacao = 'Estorno de valores';
-							}							
-							
-						}						
+						if ($valorVendido == 0){
+							$this->view->mensagem("-erro", "Valor Inválido!");
+							echo '<meta http-equiv="refresh" content="2; url=.\?pagina=guiche">';
+							return ;
+						}
+						
+						if($valorVendido < 0){
+							$tipo = "-ajuda";
+							$mensagem = "Valor estornado com sucesso!";
+							$tipoTransacao = 'Estorno de valores';							
+						}
 						
 						$dao->getConexao()->beginTransaction();
-					
+							
 						$sql = "UPDATE cartao set cart_creditos = $novoValor WHERE cart_id = $idCartao";
 							
 						$sql2 = "INSERT into transacao(tran_valor, tran_descricao, tran_data, usua_id)
-						VALUES($valorVendido, '$tipoTransacao' ,'$dataTimeAtual', $idDoUsuario)";					
-					
+						VALUES($valorVendido, '$tipoTransacao' ,'$dataTimeAtual', $idDoUsuario)";
+							
 						//echo $sql;
 						if(!$dao->getConexao()->exec($sql)){
 							$dao->getConexao()->rollBack();
-							$controller->mensagem('-erro','Erro ao inserir os creditos.');
+							$this->view->mensagem('-erro','Erro ao inserir os creditos.');
 							return false;
 						}
 						if(!$dao->getConexao()->exec($sql2)){
 							$dao->getConexao()->rollBack();
-							$controller->mensagem('-erro','Erro ao inserir os creditos.');
+							$this->view->mensagem('-erro','Erro ao inserir os creditos.');
 							return false;
 						}
 							
 						$dao->getConexao()->commit();
-						$controller->mensagem('-sucesso','Valor inserido com sucesso.');
+						$this->view->mensagem($tipo,$mensagem);
 						echo '<meta http-equiv="refresh" content="2; url=.\?pagina=guiche">';
-					
-						}				
-					
-					if(!$vinculo->isActive()){
-						
-						$controller->mensagem('-erro','O vinculo n&atildeo est&aacute ativo.');
+						}
 						
 					}
-				
-			}
+ 				
+				}
 				
  			}else{
  				
- 				$controller->mensagem('-erro','Cart&atildeo sem vinculo v&aacutelido.');				
+ 				$this->view->mensagem('-erro','Cart&atildeo sem vinculo v&aacutelido.');				
 				
- 				}			
+ 			}			
 		}
-		echo'
-								<hr class="solida">				
-								<a href="" class="botao b-erro">Sangria</a>
-								<a href="" class="botao ">Encerrar Caixa</a>
-							</div>
-						</div>
-					</div>';
-		
- 	}
- 	
- 	public function mensagem($tipo, $texto){
- 		//Tipo = -sucesso, -erro, -ajuda
- 		echo '	<div class="alerta'.$tipo.'">
-				    	<div class="icone icone-notification ix16"></div>
-				    	<div class="titulo-alerta">Aten&ccedil&atildeo</div>
-				    	<div class="subtitulo-alerta">'.$texto.'</div>
-				</div>';
- 		
- 	}
- 	
+				
+ 	}	
+
 }
 
 

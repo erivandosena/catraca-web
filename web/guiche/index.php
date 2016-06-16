@@ -29,15 +29,13 @@ if (isset ( $_GET ["sair"] )) {
 
 
 
-
 ?>
 
-<?php 
-echo $html []='<!DOCTYPE html>
-<html lang="pt-br">
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
 
-<meta charset="utf-8">
+<meta charset="UTF-8">
 <meta name="viewport"
 	content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no" />
 
@@ -48,10 +46,10 @@ echo $html []='<!DOCTYPE html>
 <link rel="stylesheet" href="http://spa.dsi.unilab.edu.br/spa/css/spa.css" />
 <link rel="stylesheet" href="css/estilo.css" type="text/css" media="screen">
 <link rel="stylesheet" href="css/estilo_responsivo.css" type="text/css" media="screen">
-<script type = "text/javascript" src="js/jquery-1.12.0.min.js"></script>
+<script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/javascript.js"></script>
-</head>'
-?>
+</head>
+
 <body>
 	<div class="pagina fundo-cinza1">
 		<div id="barra-governo">
@@ -113,22 +111,24 @@ echo $html []='<!DOCTYPE html>
 								    <div class="menu-horizontal config">
 								        <ol class="a-esquerda">';
 								             
- 						echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
- 						echo '<li><a href="?pagina=catraca" class="item"><span class="icone-loop2"></span> <span class="item-texto">Catraca</span></a></li>';
- 						echo '<li><a href="?pagina=cartao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a></li>';
- 						echo '<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a></li>';
- 						echo '<li><a href="?pagina=guiche" class="item"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a></li>';
- 						echo '<li><a href="" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a>
-								<ul>
-									<li><a href="?pagina=relatorio">Relatorio RU</a></li>
-									<li><a href="?pagina=relatorio_guiche">Relatorio Guichê</a></li>
-								</ul>	 					
-							</li>
-								</ol>
-									<ol class="a-direita" start="4">
-								    	<li><a href="?sair=sair" class="item"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
-									</ol>
-								</div>
+ 						echo '	<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
+ 						echo ' 	<li><a href="?pagina=catraca" class="item"><span class="icone-loop2"></span> <span class="item-texto">Catraca</span></a></li>';
+ 						echo '	<li><a href="?pagina=cartao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a></li>';
+ 						echo '	<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a></li>';
+ 						echo ' 	<li><a href="?pagina=guiche" class="item"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a></li>';
+						echo ' 	<li><a href="?pagina=definicoes" class="item"><span class="icone-cogs"></span> <span class="item-texto">Definições</span></a></li>';
+ 						echo ' 	<li><a href="" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a>
+									<ul>
+										<li><a href="?pagina=relatorio">Relatório RU</a></li>
+										<li><a href="?pagina=relatorio_guiche">Relatório Guichê</a></li>
+									</ul>
+								</li>';
+ 						
+						echo '		</ol>
+										<ol class="a-direita" start="4">
+								    		<li><a href="?sair=sair" class="item"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
+										</ol>
+									</div>
 							</div>';
 						
 					}
@@ -145,11 +145,12 @@ echo $html []='<!DOCTYPE html>
 					if (isset ( $_GET ['pagina'] )) {
 						switch ($_GET ['pagina']) {
 							case 'inicio' :
+								
 								HomeController::main ( $sessao->getNivelAcesso () );
 								break;
-// 							case 'definicoes' :
-// 								DefinicoesController::main ( $sessao->getNivelAcesso () );
-// 								break;
+							case 'definicoes' :
+								DefinicoesController::main ( $sessao->getNivelAcesso () );
+								break;
 							case 'catraca' :
 								
 								$filtroIdCatraca = "";
@@ -184,14 +185,11 @@ echo $html []='<!DOCTYPE html>
 							case 'relatorio' :
 								RelatorioController::main($sessao->getNivelAcesso());
 								break;
-							case 'guiche' :
-								GuicheController::main($sessao->getNivelAcesso());
-								break;
-							case 'definicoes' :
-								DefinicoesController::main($sessao->getNivelAcesso());
-								break;
 							case 'relatorio_guiche' :
 								RelatorioControllerGuiche::main($sessao->getNivelAcesso());
+								break;
+							case 'guiche' :
+								GuicheController::main($sessao->getNivelAcesso());
 								break;
 							case 'nivel' :
 								NivelController::main($sessao->getNivelAcesso());
