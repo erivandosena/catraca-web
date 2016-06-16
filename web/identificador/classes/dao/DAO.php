@@ -15,7 +15,7 @@ class DAO {
 	public function fazerConexao(){
 		switch ($this->tipoDeConexao) {
 			case self::TIPO_PG_DESENVOLVIMENTO:
-				$this->conexao = new PDO ( "pgsql:host=localhost dbname=desenvolvimento user=catraca password=CaTraCa@unilab2015" );
+				$this->conexao = new PDO ( "pgsql:host=localhost dbname=treinamento user=catraca password=CaTraCa@unilab2015" );
 				break;
 			case self::TIPO_PG_PRODUCAO:
 					$this->conexao = new PDO ( "pgsql:host=localhost dbname=producao user=catraca password=CaTraCa@unilab2015" );
@@ -52,7 +52,7 @@ class DAO {
 	const TIPO_PG_SISTEMAS_COMUM = 6;
 	const TIPO_PG_PRODUCAO = 7;
 	const TIPO_PG_DESENVOLVIMENTO = 8;
-	const TIPO_DEFAULT = self::TIPO_PG_DESENVOLVIMENTO;
+	const TIPO_DEFAULT = self::TIPO_PG_PRODUCAO;
 	
 }
 

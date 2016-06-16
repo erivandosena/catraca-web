@@ -63,7 +63,7 @@ class CatracaVirtual{
 		                
 			            
 		echo '       </select><br>
-					<input type="submit" class="botao" VALUE="Selecionar" />
+					<input name="catraca_virtual" type="submit" class="botao" VALUE="Selecionar" />
 				</form>	';
 		
 
@@ -85,7 +85,6 @@ class CatracaVirtual{
 		$catraca = new Catraca();
 		$catraca->setId($_SESSION['catraca_id']);
 		$unidadeDao->preencheCatracaPorId($catraca);
-		
 		
 		
 		
@@ -140,7 +139,7 @@ class CatracaVirtual{
 		echo '
 									<tr>
 										<th>Selecionar</th>';
-		$listaDeCores = array('aviso', 'primario', 'sucesso', 'secundario', 'erro', 'erro','primario', 'sucesso', 'secundario', 'aviso', 'erro');
+		$listaDeCores = array('erro', 'primario', 'primario', 'sucesso','aviso', 'aviso', 'secundario', 'primario', 'erro', 'sucesso');
 		$i = 0;
 		foreach($listaDeTipos as $tipo){
 			
@@ -155,6 +154,23 @@ class CatracaVirtual{
 							</table>';
 		
 		$this->view->formBuscaCartao();
+		$idCatraca = $_SESSION['catraca_id'];
+		$custo = 0;
+		$sql = "SELECT cure_valor FROM custo_refeicao
+		INNER JOIN custo_unidade
+		ON custo_unidade.cure_id = custo_refeicao.cure_id
+		INNER JOIN unidade
+		ON unidade.unid_id = custo_unidade.unid_id
+		INNER JOIN catraca_unidade
+		ON catraca_unidade.unid_id = unidade.unid_id
+		WHERE catraca_unidade.catr_id = $idCatraca
+		ORDER BY custo_unidade.cure_id DESC LIMIT 1
+		";
+		
+		foreach($tipoDao->getConexao()->query($sql) as $linha){
+			$custo = $linha['cure_valor'];
+		}
+		//echo $custo;
 		
 		echo '
 				
@@ -226,15 +242,14 @@ class CatracaVirtual{
 			
 			if(isset($_GET['confirmado'])){
 				
-				$custo = 0;
-				$sql = "SELECT cure_valor FROM custo_refeicao ORDER BY cure_id DESC LIMIT 1";
-				foreach($tipoDao->getConexao()->query($sql) as $linha){
-					$custo = $linha['cure_valor'];
-				}
+				
+				$idCatraca = $_SESSION['catraca_id'];
+				
+			
 				
 				$idVinculo= $vinculo->getId();
 				$valorPago = $vinculo->getCartao()->getTipo()->getValorCobrado();
-				$idCatraca = $_SESSION['catraca_id'];
+				
 				$sql = "INSERT into registro(regi_data, regi_valor_pago, regi_valor_custo, catr_id, cart_id, vinc_id)
 				VALUES('$data', $valorPago, $custo, $idCatraca, $idCartao, $idVinculo)";
 				//echo $sql;
@@ -243,7 +258,7 @@ class CatracaVirtual{
 					else
 						$this->mensagemErro();
 				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
-				
+				echo 'Teste';
 			}
 			
 			else{
@@ -260,6 +275,7 @@ class CatracaVirtual{
 		}else if(isset($_GET['tipo_id'])){
 			
 			$i = 0;
+			
 			$selectTurno = "Select * FROM turno WHERE '$data' BETWEEN turno.turn_hora_inicio AND turno.turn_hora_fim";
 			$result = $this->dao->getConexao()->query($selectTurno);
 			foreach($result as $linha){
@@ -285,11 +301,7 @@ class CatracaVirtual{
 					$tipo->setValorCobrado($linha['tipo_valor']);
 					
 				}
-				$custo = 0;
-				$sql = "SELECT cure_valor FROM custo_refeicao ORDER BY cure_id DESC LIMIT 1";
-				foreach($tipoDao->getConexao()->query($sql) as $linha){
-					$custo = $linha['cure_valor'];
-				}
+				
 				
 					
 				
@@ -298,8 +310,10 @@ class CatracaVirtual{
 				$numero = "";
 			
 				$sql = "SELECT * FROM cartao
-				INNER JOIN vinculo ON cartao.cart_id = vinculo.cart_id
-				WHERE tipo_id = $idTipo LIMIT 1";
+					INNER JOIN vinculo ON cartao.cart_id = vinculo.cart_id
+					WHERE tipo_id = $idTipo 
+					AND vinculo.vinc_avulso = 'TRUE'
+					LIMIT 1";
 				foreach($tipoDao->getConexao()->query($sql) as $linha){
 					$idCartao = $linha['cart_id'];
 					$idVinculo = $linha['vinc_id'];

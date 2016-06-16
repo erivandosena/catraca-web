@@ -406,12 +406,17 @@ class VinculoDAO extends DAO {
 		$numeroCartao = $vinculo->getCartao()->getNumero();
 		$dataDeValidade = $vinculo->getFinalValidade();
 		$tipoCartao = $vinculo->getCartao()->getTipo()->getId();
-		$this->verificarUsuario($vinculo->getResponsavel());
-		if($vinculo->invalidoParaAdicionar())
-			return false;
 		
-		if(!$vinculo->getResponsavel()->getId())
+		$this->verificarUsuario($vinculo->getResponsavel());
+		if($vinculo->invalidoParaAdicionar()){	
 			return false;
+		}
+
+		echo $vinculo->getResponsavel()->getId();
+		if(!$vinculo->getResponsavel()->getId()){
+			//echo 'Veio daqui oh';
+			return false;
+		}
 		
 		$idBaseLocal = $vinculo->getResponsavel()->getId();
 		$this->verificaCartao($vinculo->getCartao());
@@ -515,22 +520,31 @@ class VinculoDAO extends DAO {
 		$result = $this->getConexao()->query("SELECT id_base_externa, usua_id FROM usuario WHERE id_base_externa = $idBaseExterna");
 		foreach ($result as $linha){
 			$usuario->setId($linha['usua_id']);
+			
 			return $linha['usua_id'];
 		}
 		$daoSistemasComum = new DAO(null, DAO::TIPO_PG_SISTEMAS_COMUM);
 		$result2 = 	$daoSistemasComum->getConexao()->query("SELECT * FROM vw_usuarios_autenticacao_catraca WHERE id_usuario = $idBaseExterna");
 		foreach($result2 as $linha){
+			
 			$nivel = Sessao::NIVEL_COMUM;
 			$nome = $linha['nome'];
+			$nome = preg_replace ('/[^a-zA-Z0-9\s]/', '', $nome);
+			$nome = strtoupper ( $nome );
 			$email = $linha['email'];
 			$login = $linha['login'];
 			$senha = $linha['senha'];
 			$idBaseExterna = $linha['id_usuario'];
-			if($this->getConexao()->exec("INSERT into usuario(usua_login,usua_senha, usua_nome,usua_email, usua_nivel, id_base_externa)
-					VALUES	('$login', '$senha', '$nome','$email', $nivel, $idBaseExterna)"))
+			$sqlInserir = "INSERT into usuario(usua_login,usua_senha, usua_nome,usua_email, usua_nivel, id_base_externa)
+					VALUES	('$login', '$senha', '$nome','$email', $nivel, $idBaseExterna)";
+				
+			//echo $sqlInserir;
+			if($this->getConexao()->exec($sqlInserir))
 			{
+				
 				foreach($this->getConexao()->query("SELECT * FROM usuario WHERE id_base_externa = $idBaseExterna") as $linha3){
 					$usuario->setId($linha3['usua_id']);
+					
 					return $linha3['usua_id'];
 				}
 			}

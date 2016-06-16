@@ -10,14 +10,23 @@ class Usuario{
 	private $login;
 	private $senha;
 	private $nivelAcesso;
+	private $idCategoria;
 	
 	public function Usuario(){
 		$this->id = 0;
 	}
 	
 	
+	public function setIDCategoria($idCategoria){	
+		$idBaseExterna = intval ( $idCategoria ) ;
+		if(is_int($idCategoria))
+			$this->idCategoria = $idCategoria;
+	}
 	
-	
+	public function getIDCategoria(){
+		
+		return $this->idCategoria;
+	}
 	public function setId($id){
 		$idBaseExterna = intval ( $id) ;
 		if(is_int($id))

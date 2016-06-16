@@ -26,7 +26,7 @@ class RelatorioController {
 		foreach ( $listaDeUnidades as $unidade ) {
 			echo '<option value="' . $unidade->getId () . '">' . $unidade->getNome () . '</option>';
 		}
-		echo '<option value="">Todos as Unidades</option>';
+		//echo '<option value="">Todos as Unidades</option>';
 		echo '								            										            
 												    </select>
 												</label><br>
@@ -39,10 +39,11 @@ class RelatorioController {
 												<label for="tipo_de_relatorio">
 													Tipo De Relatório
 												</label>
-												<select id="tipo_de_relatorio" name="tipo_de_relatorio">
-													<option value="1">Pratos Consumidos</option>
-													<option value="2">Valores Arrecadados</option>
-													<option value="3">Relação Pratos e Valores</option>
+												<select id="tipo_de_relatorio" name="tipo_de_relatorio">';
+		
+// 													<option value="1">Pratos Consumidos</option>
+// 													<option value="2">Valores Arrecadados</option>
+		echo '										<option value="3">Relação Pratos e Valores</option>
 												</select>
 												<input type="hidden" name="pagina" value="relatorio" />
 												<input  type="submit"  name="gerar" value="Gerar"/>
@@ -267,7 +268,29 @@ class RelatorioController {
 			$this->mostraListaDeDados ( $listaDeDados, $strUnidade.' - turno: ' . $turno->getDescricao () . ' - entre: ' . $turno->getHoraInicial () . ' e ' . $turno->getHoraFinal (), $tipos, $listaDeDatas );
 		}
 	}
-	public function pegaUltimoCusto(){
+	public function pegaUltimoCusto($idUnidade = null){
+		
+		if($idUnidade != null){
+			
+
+			$sql = "SELECT cure_valor FROM custo_refeicao
+			INNER JOIN custo_unidade
+			ON custo_unidade.cure_id = custo_refeicao.cure_id
+			INNER JOIN unidade
+			ON unidade.unid_id = custo_unidade.unid_id
+			INNER JOIN catraca_unidade
+			ON catraca_unidade.unid_id = unidade.unid_id
+			WHERE catraca_unidade.unid_id = $idUnidade
+			ORDER BY custo_unidade.cure_id DESC LIMIT 1
+			";
+			
+			foreach($this->dao->getConexao()->query($sql) as $linha){
+				return $linha['cure_valor'];
+			}
+			
+			
+		}
+		
 		$ultimoCusto = 0;
 		foreach ( $this->dao->getConexao ()->query ( "SELECT * FROM custo_refeicao ORDER BY cure_id DESC LIMIT 1" ) as $linha ) {
 			$ultimoCusto = $linha ['cure_valor'];
@@ -290,6 +313,9 @@ class RelatorioController {
 			$unidadeDao->preenchePorId($unidade);
 			$strUnidade =  $unidade->getNome();
 			
+		}else{
+			echo "Relatorio Para todas as Unidades desabilitado por enquanto!";
+			return;
 		}
 		$idUnidade = intval ( $idUnidade );
 		$dao = new TipoDAO ();
@@ -322,14 +348,16 @@ class RelatorioController {
 				$dataInicial = $data . ' 00:00:00';
 				$dataFinal = $data . ' 23:59:59';
 				$tipoId = $tipo->getId ();
-				$sql = "SELECT sum(1) pratos,sum(regi_valor_pago) valor  FROM registro
-				INNER JOIN vinculo ON vinculo.vinc_id = registro.vinc_id
-				INNER JOIN vinculo_tipo ON vinculo.vinc_id = vinculo_tipo.vinc_id
-				INNER JOIN catraca ON catraca.catr_id = registro.catr_id
-				INNER JOIN catraca_unidade ON catraca.catr_id = catraca_unidade.catr_id
-				WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') AND vinculo_tipo.tipo_id =  $tipoId
+				$sql = "SELECT  sum(1) pratos,sum(regi_valor_pago) valor FROM registro
+					INNER JOIN vinculo ON vinculo.vinc_id = registro.vinc_id
+					INNER JOIN vinculo_tipo ON vinculo.vinc_id = vinculo_tipo.vinc_id
+					INNER JOIN catraca ON catraca.catr_id = registro.catr_id
+					INNER JOIN catraca_unidade ON catraca.catr_id = catraca_unidade.catr_id
+					WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') AND vinculo_tipo.tipo_id =  $tipoId
 				$strFiltroUnidade;";
 				foreach ( $dao->getConexao ()->query ( $sql ) as $linha ) {
+					//print_r($linha);
+					$ultimoCusto = $this->pegaUltimoCusto($idUnidade);
 					$pratos = floatval($linha ['pratos']);
 					$valor = floatval($linha ['valor']);
 
@@ -444,6 +472,7 @@ class RelatorioController {
 				WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') AND vinculo_tipo.tipo_id =  $tipoId
 				$strFiltroUnidade;";
 					foreach ( $dao->getConexao ()->query ( $sql ) as $linha ) {
+						$ultimoCusto = $this->pegaUltimoCusto($idUnidade);
 						$pratos = $linha ['pratos'];
 						$valor = $linha ['valor'];
 						$listaDeDados [$tipo->getId ()] ['pratos'] += $pratos;

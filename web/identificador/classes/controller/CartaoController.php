@@ -127,6 +127,7 @@ class CartaoController{
 								$this->view->mostraSucesso("Vínculo Atualizado com Sucesso!  ");
 							}else{
 								$this->view->mostraSucesso("Erro ao tentar renovar vínculo.  ");
+								
 							}
 							echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
 							return;
@@ -178,6 +179,7 @@ class CartaoController{
 						$this->view->mostraSucesso("Vínculo Invalidado.  ");
 					}else{
 						$this->view->mostraSucesso("Erro ao tentar invalidar vínculo.  ");
+						
 					}
 					echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
 					return;
@@ -224,6 +226,7 @@ class CartaoController{
 						$this->view->mostraSucesso("Vínculo Atualizado com Sucesso!  ");
 					}else{
 						$this->view->mostraSucesso("Erro ao tentar renovar vínculo.  ");
+
 					}
 					echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
 					return;
@@ -250,14 +253,19 @@ class CartaoController{
 					$listaDeTipos = $tipoDao->retornaLista();
 					foreach ($listaDeTipos as $chave => $tipo){
 						if(strtolower (trim( $tipo->getNome())) == 'aluno'){
-							if(strtolower (trim($usuario->getTipodeUsuario())) == 'aluno' && strtolower (trim($usuario->getStatusDiscente())) == 'ativo'){
+							if(strtolower (trim($usuario->getStatusDiscente())) == 'ativo' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - graduando'){
 								continue;
 							}
 							unset($listaDeTipos[$chave]);
 							continue;
 						}
 						if(strtolower (trim( $tipo->getNome())) == 'servidor tae'){
+							
 							if(strtolower (trim($usuario->getStatusServidor())) == 'ativo' && strpos(strtolower (trim($usuario->getCategoria())), 'administrativo')){
+								continue;
+							}
+							if($usuario->getIDCategoria() == 3){
+								
 								continue;
 							}
 							unset($listaDeTipos[$chave]);
@@ -328,8 +336,9 @@ class CartaoController{
 								$this->view->mostraSucesso("Vinculo Adicionado Com Sucesso. ");
 							}else{
 								$this->view->mostraSucesso("Erro na tentativa de Adicionar Vínculo. ");
+								
 							}
-							echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $vinculo->getResponsavel()->getIdBaseExterna() . '">';
+							echo '<meta http-equiv="refresh" content="10; url=.\?pagina=cartao&selecionado=' . $vinculo->getResponsavel()->getIdBaseExterna() . '">';
 							return;
 						}
 						
@@ -384,7 +393,7 @@ class CartaoController{
 			
 			return true;
 		}
-		if(strtolower (trim($usuario->getStatusDiscente())) == 'ativo'){
+		if(strtolower (trim($usuario->getStatusDiscente())) == 'ativo' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - graduando'){
 			return true;	
 		}
 		
