@@ -34,7 +34,6 @@ if (isset ( $_GET ["sair"] )) {
 
 
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -47,13 +46,12 @@ if (isset ( $_GET ["sair"] )) {
 
 <script type="text/javascript" src="js/simpletabs_1.3.js"></script>
 <link rel="stylesheet" href="css/simpletabs.css" />
-<link rel="stylesheet" href="css_spa/spa.css" />
+<link rel="stylesheet" href="http://spa.dsi.unilab.edu.br/spa/css/spa.css" />
 <link rel="stylesheet" href="css/estilo.css" type="text/css" media="screen">
 <link rel="stylesheet" href="css/estilo_responsivo.css" type="text/css" media="screen">
 <script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/javascript.js"></script>
 </head>
-
-
 
 <body>
 	<div class="pagina fundo-cinza1">
@@ -61,17 +59,17 @@ if (isset ( $_GET ["sair"] )) {
 		<div class="acessibilidade">
 			<div class="config">
 				<div class="a-esquerda">
-					<a href="#conteudo" tabindex="1" accesskey="1">Ir para o conteÃºdo <b>1</b></a>
+					<a href="#conteudo" tabindex="1" accesskey="1">Ir para o conteúdo <b>1</b></a>
 					<a href="#menu" tabindex="2" accesskey="2"><span>Ir para o</span> menu <b>2</b></a>
 					<a href="#busca" tabindex="3" accesskey="3"><span>Ir para a</span> busca <b>3</b></a>
-					<a href="#rodape" tabindex="4" accesskey="4"><span>Ir para o</span> rodapÃ© <b>4</b></a>
+					<a href="#rodape" tabindex="4" accesskey="4"><span>Ir para o</span> rodapé <b>4</b></a>
 					</div>
 					<div class="a-direita">
+<!-- 					<a href="#" id="alto-contraste">ALTO <b>CONTRASTE</b></a> -->
+<!-- 					<a href="#" id="mapa-do-site"><b>MAPA DO SITE</b></a> -->
 				</div>
 			</div>
 		</div>
-
-	
 	
 		<div id="barra-governo">
 			<div class="resolucao config">
