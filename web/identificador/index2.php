@@ -1,11 +1,14 @@
+
 <?php
 
 
+ini_set('display_errors',1);
+ini_set('display_startup_erros',1);
+error_reporting(E_ALL);
+
 date_default_timezone_set ( 'America/Araguaina' );
 
-ini_set ( 'display_errors', 1 );
-ini_set ( 'display_startup_erros', 1 );
-error_reporting ( E_ALL );
+
 function __autoload($classe) {
 	if (file_exists ( 'classes/dao/' . $classe . '.php' ))
 		include_once 'classes/dao/' . $classe . '.php';
@@ -29,6 +32,7 @@ if (isset ( $_GET ["sair"] )) {
 
 
 
+
 ?>
 
 <!DOCTYPE html>
@@ -43,12 +47,13 @@ if (isset ( $_GET ["sair"] )) {
 
 <script type="text/javascript" src="js/simpletabs_1.3.js"></script>
 <link rel="stylesheet" href="css/simpletabs.css" />
-<link rel="stylesheet" href="http://spa.dsi.unilab.edu.br/spa/css/spa.css" />
+<link rel="stylesheet" href="css_spa/spa.css" />
 <link rel="stylesheet" href="css/estilo.css" type="text/css" media="screen">
 <link rel="stylesheet" href="css/estilo_responsivo.css" type="text/css" media="screen">
 <script type="text/javascript" src="js/jquery.min.js"></script>
-<script type="text/javascript" src="js/javascript.js"></script>
 </head>
+
+
 
 <body>
 	<div class="pagina fundo-cinza1">
@@ -56,17 +61,17 @@ if (isset ( $_GET ["sair"] )) {
 		<div class="acessibilidade">
 			<div class="config">
 				<div class="a-esquerda">
-					<a href="#conteudo" tabindex="1" accesskey="1">Ir para o conteúdo <b>1</b></a>
+					<a href="#conteudo" tabindex="1" accesskey="1">Ir para o conteÃºdo <b>1</b></a>
 					<a href="#menu" tabindex="2" accesskey="2"><span>Ir para o</span> menu <b>2</b></a>
 					<a href="#busca" tabindex="3" accesskey="3"><span>Ir para a</span> busca <b>3</b></a>
-					<a href="#rodape" tabindex="4" accesskey="4"><span>Ir para o</span> rodapé <b>4</b></a>
+					<a href="#rodape" tabindex="4" accesskey="4"><span>Ir para o</span> rodapÃ© <b>4</b></a>
 					</div>
 					<div class="a-direita">
-<!-- 					<a href="#" id="alto-contraste">ALTO <b>CONTRASTE</b></a> -->
-<!-- 					<a href="#" id="mapa-do-site"><b>MAPA DO SITE</b></a> -->
 				</div>
 			</div>
 		</div>
+
+	
 	
 		<div id="barra-governo">
 			<div class="resolucao config">
@@ -119,7 +124,14 @@ if (isset ( $_GET ["sair"] )) {
 					if ($sessao->getNivelAcesso () == Sessao::NIVEL_SUPER) {						
 						$dao = new DAO();
 						$auditoria = new Auditoria($dao->getConexao());
-						$auditoria->cadastrar($sessao->getIdUsuario());
+						
+						$obs = " - ";
+						if(isset($_POST['catraca_virtual']) && isset($_POST['catraca_id'])){
+							$obs = "Selecionou Catraca virtual: ".$_POST['catraca_id'];
+							
+						}
+						
+						$auditoria->cadastrar($sessao->getIdUsuario(), $obs);
 						$dao->fechaConexao();
 						
  						echo '
@@ -127,25 +139,19 @@ if (isset ( $_GET ["sair"] )) {
 								    <div class="menu-horizontal config">
 								        <ol class="a-esquerda">';
 								             
- 						echo '	<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
- 						echo ' 	<li><a href="?pagina=catraca" class="item"><span class="icone-loop2"></span> <span class="item-texto">Catraca</span></a></li>';
- 						echo '	<li><a href="?pagina=cartao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a></li>';
- 						echo '	<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a></li>';
- 						echo ' 	<li><a href="?pagina=guiche" class="item"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a></li>';
-						echo ' 	<li><a href="?pagina=definicoes" class="item"><span class="icone-cogs"></span> <span class="item-texto">Definições</span></a></li>';
- 						echo ' 	<li><a href="" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a>
-									<ul>
-										<li><a href="?pagina=relatorio">Relatório RU</a></li>
-										<li><a href="?pagina=relatorio_guiche">Relatório Guichê</a></li>
-									</ul>
-								</li>';
+ 						echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
+ 						echo ' <li><a href="?pagina=catraca" class="item"><span class="icone-loop2"></span> <span class="item-texto">Catraca</span></a></li>';
+ 						echo '<li><a href="?pagina=cartao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a></li>';
+ 						echo '<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a></li>';
+ 						//echo ' <li><a href="?pagina=guiche" class="item"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a></li>';
+ 						echo ' <li><a href="?pagina=relatorio" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a></li>';
  						
-						echo '		</ol>
-										<ol class="a-direita" start="4">
-								    		<li><a href="?sair=sair" class="item"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
-										</ol>
-									</div>
-							</div>';
+						echo '</ol>
+								        <ol class="a-direita" start="4">
+								            <li><a href="?sair=sair" class="item"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
+								        </ol>
+								    </div>
+								</div>';
 						
 					}
 					?>
@@ -161,12 +167,11 @@ if (isset ( $_GET ["sair"] )) {
 					if (isset ( $_GET ['pagina'] )) {
 						switch ($_GET ['pagina']) {
 							case 'inicio' :
-								
 								HomeController::main ( $sessao->getNivelAcesso () );
 								break;
-							case 'definicoes' :
-								DefinicoesController::main ( $sessao->getNivelAcesso () );
-								break;
+// 							case 'definicoes' :
+// 								DefinicoesController::main ( $sessao->getNivelAcesso () );
+// 								break;
 							case 'catraca' :
 								
 								$filtroIdCatraca = "";
@@ -201,17 +206,11 @@ if (isset ( $_GET ["sair"] )) {
 							case 'relatorio' :
 								RelatorioController::main($sessao->getNivelAcesso());
 								break;
-							case 'relatorio_guiche' :
-								RelatorioControllerGuiche::main($sessao->getNivelAcesso());
-								break;
 							case 'guiche' :
 								GuicheController::main($sessao->getNivelAcesso());
 								break;
-							case 'nivel' :
-								NivelController::main($sessao->getNivelAcesso());
-								break;
-							case 'abertura' :
-								AberturaGuicheController::main($sessao->getNivelAcesso());
+							case 'definicoes' :
+								DefinicoesController::main($sessao->getNivelAcesso());
 								break;
 							default :
 								echo '404 NOT FOUND';

@@ -41,9 +41,11 @@ class RelatorioController {
 												</label>
 												<select id="tipo_de_relatorio" name="tipo_de_relatorio">';
 		
-// 													<option value="1">Pratos Consumidos</option>
-// 													<option value="2">Valores Arrecadados</option>
-		echo '										<option value="3">Relação Pratos e Valores</option>
+		echo '										
+													<option value="3">Relação Pratos e Valores</option>
+													<option value="1">Pratos Consumidos</option>
+ 													<option value="2">Valores Arrecadados</option>';
+		echo '										
 												</select>
 												<input type="hidden" name="pagina" value="relatorio" />
 												<input  type="submit"  name="gerar" value="Gerar"/>
@@ -63,12 +65,16 @@ class RelatorioController {
 					$this->geraRelacaoPratosValores ( $_GET ['unidade'], $_GET ['data_inicial'], $_GET ['data_final'] );
 					break;
 				default :
-					$this->gerarPratosConsumidos ( $_GET ['unidade'], $_GET ['data_inicial'], $_GET ['data_final'] );
+					$this->geraRelacaoPratosValores ( $_GET ['unidade'], $_GET ['data_inicial'], $_GET ['data_final'] );
 					break;
 			}
+		}else{
+			$this->geraRelacaoPratosValores ();
+				
 		}
 	}
 	public function gerarPratosConsumidos($idUnidade = NULL, $dateStart = null, $dataEnd = null) {
+
 		if ($dateStart == null)
 			$dateStart = date ( 'Y-m-d' );
 		if ($dataEnd == null)
@@ -313,9 +319,6 @@ class RelatorioController {
 			$unidadeDao->preenchePorId($unidade);
 			$strUnidade =  $unidade->getNome();
 			
-		}else{
-			echo "Relatorio Para todas as Unidades desabilitado por enquanto!";
-			return;
 		}
 		$idUnidade = intval ( $idUnidade );
 		$dao = new TipoDAO ();
@@ -640,14 +643,7 @@ class RelatorioController {
 		echo '<td>' . $subTotal ['total'] . '</td>';
 		echo '</tr>';
 		
-		$ultimoCusto = $this->pegaUltimoCusto();
-		echo '<tr id="soma">
-				<th id="limpar">Custo</th>';
-		foreach ( $tipos as $tipo ) {
-			echo '<td>R$' . number_format (($ultimoCusto*$subTotal [$tipo->getId ()]), 2, ',', '.' ) . '</td>';
-		}
-		echo '<td>R$' . number_format ( ($ultimoCusto*$subTotal ['total']) , 2, ',', '.' )  . '</td>';
-		echo '</tr>';
+		
 		
 		echo '</table>
 				<div class="doze colunas relatorio-rodape">
