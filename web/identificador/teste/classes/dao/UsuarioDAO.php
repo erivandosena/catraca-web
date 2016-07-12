@@ -77,7 +77,7 @@ class UsuarioDAO extends DAO {
 		$lista = array();
 		$pesquisa = preg_replace ('/[^a-zA-Z0-9\s]/', '', $pesquisa );
 		$pesquisa = strtoupper ( $pesquisa );
-		$sql = "SELECT * FROM vw_usuarios_catraca WHERE nome LIKE '%$pesquisa%' LIMIT 150";
+		$sql = "SELECT * FROM vw_usuarios_catraca WHERE nome LIKE '%$pesquisa%' LIMIT 30";
 		foreach($this->getConexao()->query($sql) as $linha){
 			$usuario = new Usuario();
 			$usuario->setNome($linha['nome']);
@@ -102,7 +102,7 @@ class UsuarioDAO extends DAO {
 	}
 	public function retornaPorIdBaseExterna(Usuario $usuario){
 		$id = $usuario->getIdBaseExterna();
-		$sql = "SELECT * FROM vw_usuarios_catraca WHERE id_usuario = $id ORDER BY status_discente, status_servidor ASC LIMIT 1";
+		$sql = "SELECT * FROM vw_usuarios_catraca WHERE id_usuario = $id LIMIT 1";
 		foreach ($this->getConexao ()->query ( $sql ) as $linha){
 			$usuario->setNome($linha['nome']);
 			$usuario->setEmail($linha['email']);
@@ -116,7 +116,6 @@ class UsuarioDAO extends DAO {
 			$usuario->setStatusDiscente($linha['status_discente']);
 			$usuario->setNivelDiscente($linha['nivel_discente']);
 			$usuario->setCategoria($linha['categoria']);
-			$usuario->setIDCategoria($linha['id_categoria']);
 			$usuario->setSiape($linha['siape']);
 			$usuario->setStatusServidor($linha['status_servidor']);
 			return $usuario;
