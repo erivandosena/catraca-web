@@ -189,7 +189,27 @@ class CartaoView {
 	public function mostraSelecionado(Usuario $usuario) {
 		echo '<div class="borda">
 				<table  class="tabela borda-vertical zebrada texto-preto">
-					<tr><th>Nome:</th><td> ' . $usuario->getNome () . '.</td></tr>
+					<tr><th>Nome:</th><td> ' . $usuario->getNome () . '.</td><td rowspan="7">';
+		
+							
+		echo '
+							<img src="img/camera.png" />';
+		echo '
+        
+							</td>
+             		
+				<td rowspan="7">teste
+						 <video  id="video" width="320" height="200" autoplay></video>
+		            <section>
+		                <button id="btnStart">Start video</button>
+		                <button id="btnStop">Stop video</button>            
+		                <button id="btnPhoto">Take a photo</button>
+		            </section>
+		            
+		            <canvas id="canvas" width="320" height="240"></canvas>
+				</td>
+             		
+             		</tr>
 					<tr><th>Login:</th><td>'. $usuario->getLogin () .'.</td></tr>
 					<tr><th>Identidade: </th><td>' . $usuario->getIdentidade () . '.</td></tr>
 					<tr><th>CPF:</th><td>' . $usuario->getCpf () . '.</tr>

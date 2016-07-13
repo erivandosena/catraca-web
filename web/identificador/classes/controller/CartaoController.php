@@ -157,6 +157,7 @@ class CartaoController{
 		$this->view->formBuscaUsuarios();
 		
 		if (isset ( $_GET ['selecionado'] )) {
+			
 			$idDoSelecionado = $_GET['selecionado'];
 			$usuarioDao = new UsuarioDAO(null, DAO::TIPO_PG_SIGAAA);
 			$usuario = new Usuario();

@@ -50,7 +50,8 @@ if (isset ( $_GET ["sair"] )) {
 <link rel="stylesheet" href="css/estilo.css" type="text/css" media="screen">
 <link rel="stylesheet" href="css/estilo_responsivo.css" type="text/css" media="screen">
 <script type="text/javascript" src="js/jquery.min.js"></script>
-<script type="text/javascript" src="js/javascript.js"></script>
+
+
 </head>
 
 <body>
@@ -224,5 +225,58 @@ if (isset ( $_GET ["sair"] )) {
 			</div>
 		</div>		
 	</div>
+	
+ <script type="text/javascript">
+        	var img;
+	        window.onload = function() {
+	
+	            //Compatibility
+	            navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+	
+	            var canvas = document.getElementById("canvas"),
+	                context = canvas.getContext("2d"),
+	                video = document.getElementById("video"),
+	                btnStart = document.getElementById("btnStart"),
+	                btnStop = document.getElementById("btnStop"),
+	                btnPhoto = document.getElementById("btnPhoto"),
+	                videoObj = {
+	                    video: true,
+	                    audio: false
+	                };
+	
+	            btnStart.addEventListener("click", function() {
+	                var localMediaStream;
+	
+	                if (navigator.getUserMedia) {
+	                    navigator.getUserMedia(videoObj, function(stream) {              
+	                        video.src = (navigator.webkitGetUserMedia) ? window.webkitURL.createObjectURL(stream) : stream;
+	                        localMediaStream = stream;
+	                        
+	                    }, function(error) {
+	                        console.error("Video capture error: ", error.code);
+
+	                    });
+	                	
+	                    btnStop.addEventListener("click", function() {
+	                        localMediaStream.stop();
+	                        
+	                    });
+	
+	                    btnPhoto.addEventListener("click", function() {
+	                        context.drawImage(video, 0, 0, 320, 240);
+
+	                        img = canvas.toDataURL("image/png");
+	                        formulario.img64.value = img;
+
+							
+	                    });
+
+	                    
+	                }
+	            });
+	        };
+	       
+
+        </script>
 </body>
 </html>
