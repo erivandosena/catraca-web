@@ -30,6 +30,11 @@ $dao = new DAO();
 
 //echo $dao->getConexao()->exec("UPDATE usuario set usua_nivel = 3 WHERE usua_login like 'claudinei.holanda'");
 
+foreach($dao->getConexao()->query("SELECT * FROM turno") as $linha){
+	print_r($linha);
+
+
+}
 
 
 ?>
