@@ -30,7 +30,7 @@ class TipoDAO(ConexaoGenerica):
             id = i
         if id:
             sql = "SELECT tipo_id, tipo_nome, tipo_valor FROM tipo WHERE tipo_id = " + str(id)
-        elif id is None:
+        else:
             sql = "SELECT tipo_id, tipo_nome, tipo_valor FROM tipo ORDER BY tipo_id"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
@@ -44,7 +44,7 @@ class TipoDAO(ConexaoGenerica):
                         return obj
                     else:
                         return None
-                elif id is None:
+                else:
                     list = cursor.fetchall()
                     if list != []:
                         return list

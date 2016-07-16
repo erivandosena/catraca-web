@@ -29,9 +29,11 @@ class CustoRefeicaoJson(ServidorRestful):
         servidor = self.obter_servidor()
         try:
             if servidor:
-                url = str(servidor) + "custo_refeicao/jcusto_refeicao"
-                header = {'Content-type': 'application/json'}
-                r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
+#                 url = str(servidor) + "custo_refeicao/jcusto_refeicao"
+#                 header = {'Content-type': 'application/json'}
+#                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
+                url = str(self.URL) + "custo_refeicao/jcusto_refeicao"
+                r = servidor.get(url)
                 #print "Status HTTP: " + str(r.status_code)
 
                 if r.text != '':
@@ -61,10 +63,12 @@ class CustoRefeicaoJson(ServidorRestful):
         servidor = self.obter_servidor()
         try:
             if servidor:
-                url = str(servidor) + "custo_refeicao/jcusto_refeicao"
-                #print url
-                header = {'Content-type': 'application/json'}
-                r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
+#                 url = str(servidor) + "custo_refeicao/jcusto_refeicao"
+#                 #print url
+#                 header = {'Content-type': 'application/json'}
+#                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
+                url = str(self.URL) + "custo_refeicao/jcusto_refeicao"
+                r = servidor.get(url)
                 #print "Status HTTP: " + str(r.status_code)
                 
                 #print r.text

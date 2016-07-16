@@ -32,9 +32,11 @@ class CartaoJson(ServidorRestful):
         servidor = self.obter_servidor()
         try:
             if servidor:
-                url = str(servidor) + "cartao/jcartao"
-                header = {'Content-type': 'application/json'}
-                r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
+#                 url = str(servidor) + "cartao/jcartao"
+#                 header = {'Content-type': 'application/json'}
+#                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
+                url = str(self.URL) + "cartao/jcartao"
+                r = servidor.get(url)
                 #print "Status HTTP: " + str(r.status_code)
                 
                 if r.text != '':
@@ -64,10 +66,12 @@ class CartaoJson(ServidorRestful):
         servidor = self.obter_servidor()
         try:
             if servidor:
-                url = str(servidor) + "cartao/jcartao/" + str(numero_cartao)+ "/"+str(self.util.obtem_datahora().strftime("%Y%m%d%H%M%S"))
-                print url
-                header = {'Content-type': 'application/json'}
-                r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
+#                 url = str(servidor) + "cartao/jcartao/" + str(numero_cartao)+ "/"+str(self.util.obtem_datahora().strftime("%Y%m%d%H%M%S"))
+#                 print url
+#                 header = {'Content-type': 'application/json'}
+#                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
+                url = str(self.URL) + "cartao/jcartao/" + str(numero_cartao)+ "/"+str(self.util.obtem_datahora().strftime("%Y%m%d%H%M%S"))
+                r = servidor.get(url)
                 #print "Status HTTP: " + str(r.status_code)
                 
                 #print r.text
@@ -185,15 +189,15 @@ class CartaoJson(ServidorRestful):
         servidor = self.obter_servidor()
         try:
             if servidor:
-                url = str(servidor) + "cartao/atualiza/"+ str(id)
-                #print url
-                header = {'Content-type': 'application/json'}
-                r = requests.put(url, auth=(self.usuario, self.senha), headers=header, data=json.dumps(formato_json))
+#                 url = str(servidor) + "cartao/atualiza/"+ str(id)
+#                 #print url
+#                 header = {'Content-type': 'application/json'}
+#                 r = requests.put(url, auth=(self.usuario, self.senha), headers=header, data=json.dumps(formato_json))
+                url = str(self.URL) + "cartao/atualiza/"+ str(id)
+                r = servidor.put(url, data=json.dumps(formato_json))
                 #print r.text
-                #print r.status_code
-                return True
-            else:
-                return False
+                print r.status_code
+                return r.status_code
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro enviando json cartao.', exc_info=True)

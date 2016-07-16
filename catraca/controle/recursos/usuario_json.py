@@ -29,9 +29,11 @@ class UsuarioJson(ServidorRestful):
         servidor = self.obter_servidor()
         try:
             if servidor:
-                url = str(servidor) + "usuario/jusuario"
-                header = {'Content-type': 'application/json'}
-                r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
+#                 url = str(servidor) + "usuario/jusuario"
+#                 header = {'Content-type': 'application/json'}
+#                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
+                url = str(self.URL) + "usuario/jusuario"
+                r = servidor.get(url)
                 #print "Status HTTP: " + str(r.status_code)
 
                 if r.text != '':

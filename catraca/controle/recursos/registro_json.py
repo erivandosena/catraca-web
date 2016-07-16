@@ -45,10 +45,12 @@ class RegistroJson(ServidorRestful):
                 self.hora_fim = datetime.datetime.strptime(str(turno.fim),'%H:%M:%S').time().strftime('%H%M%S')
                 
                 if servidor:
-                    url = str(servidor) + "registro/jregistro/" + str(data_atual+str(self.hora_inicio)) + "/" +str(data_atual+str(self.hora_fim))
-                    #print url
-                    header = {'Content-type': 'application/json'}
-                    r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
+#                     url = str(servidor) + "registro/jregistro/" + str(data_atual+str(self.hora_inicio)) + "/" +str(data_atual+str(self.hora_fim))
+#                     #print url
+#                     header = {'Content-type': 'application/json'}
+#                     r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
+                    url = str(self.URL) + "registro/jregistro/" + str(data_atual+str(self.hora_inicio)) + "/" +str(data_atual+str(self.hora_fim))
+                    r = servidor.get(url)
                     #print "Status HTTP: " + str(r.status_code)
                     
                     if r.text != '':
@@ -85,9 +87,11 @@ class RegistroJson(ServidorRestful):
         servidor = self.obter_servidor()
         try:
             if servidor:
-                url = str(servidor) + "registro/jregistro/" +str(data_atual+self.hora_inicio) + "/" +str(data_atual+self.hora_fim)+ "/" +str(cartao_id)
-                header = {'Content-type': 'application/json'}
-                r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
+#                 url = str(servidor) + "registro/jregistro/" +str(data_atual+self.hora_inicio) + "/" +str(data_atual+self.hora_fim)+ "/" +str(cartao_id)
+#                 header = {'Content-type': 'application/json'}
+#                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
+                url = str(self.URL) + "registro/jregistro/" +str(data_atual+self.hora_inicio) + "/" +str(data_atual+self.hora_fim)+ "/" +str(cartao_id)
+                r = servidor.get(url)
                 #print "Status HTTP: " + str(r.status_code)
                 
                 #print r.text
@@ -187,21 +191,24 @@ class RegistroJson(ServidorRestful):
                 "catr_id":obj.catraca,
                 "vinc_id":obj.vinculo
             }
-            self.registro_post(registro)
+            return self.registro_post(registro)
             
     def registro_post(self, formato_json):
         servidor = self.obter_servidor()
         try:
             if servidor:
-                url = str(servidor) + "registro/insere"
-                #print url
-                header = {'Content-type': 'application/json'}
-                r = requests.post(url, auth=(self.usuario, self.senha), headers=header, data=json.dumps(formato_json))
+#                 url = str(servidor) + "registro/insere"
+#                 #print url
+#                 header = {'Content-type': 'application/json'}
+#                 r = requests.post(url, auth=(self.usuario, self.senha), headers=header, data=json.dumps(formato_json))
+                url = str(self.URL) + "registro/insere"
+                r = servidor.post(url, data=json.dumps(formato_json))
                 #print r.headers['content-type']
                 #print r.headers
                 #print r.text
                 print r.status_code
                 #print 'requests.post: '+ str(formato_json)
+                return r.status_code
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro enviando json registro.', exc_info=True)

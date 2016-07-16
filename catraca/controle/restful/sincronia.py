@@ -6,6 +6,7 @@ import threading
 import datetime
 from time import sleep
 from catraca.controle.restful.relogio import Relogio
+from catraca.visao.interface.rede import Rede
 
 
 __author__ = "Erivando Sena" 
@@ -35,7 +36,7 @@ class Sincronia(Relogio):
         if Relogio.catraca:
             if (Relogio.catraca.operacao == 1) or (Relogio.catraca.operacao == 2) or (Relogio.catraca.operacao == 3) or (Relogio.catraca.operacao == 4):
                 self.contador_status_recursos += 1
-                if ((Relogio.periodo == True) and (self.contador_status_recursos >= 15)):
+                if ( (Rede.status == True) and (Relogio.periodo == True) and (self.contador_status_recursos >= 15) ):
                     self.contador_status_recursos = 0
                     self.recursos_restful.obtem_recursos(False, True, False)
                 elif not Relogio.periodo:

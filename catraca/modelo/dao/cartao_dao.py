@@ -44,7 +44,7 @@ class CartaoDAO(ConexaoGenerica):
                         obj.id = dados[0]
                         obj.numero = dados[1]
                         obj.creditos = dados[2]
-                        obj.tipo = self.busca_por_tipo(obj)
+                        obj.tipo = self.busca_por_tipo(dados[3])
                         return obj
                     else:
                         return None
@@ -60,8 +60,8 @@ class CartaoDAO(ConexaoGenerica):
         finally:
             pass
 
-    def busca_por_tipo(self, obj):
-        return TipoDAO().busca(obj.id)
+    def busca_por_tipo(self, id):
+        return TipoDAO().busca(id)
         
     def busca_por_numero(self, numero):
         obj = Cartao()

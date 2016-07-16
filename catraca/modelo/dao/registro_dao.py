@@ -83,7 +83,7 @@ class RegistroDAO(ConexaoGenerica):
         data = Util().obtem_datahora()
         data_ini = str(data.strftime("%Y-%m-%d")) + " " + str(hora_ini)
         data_fim = str(data.strftime("%Y-%m-%d")) + " " + str(hora_fim)
-        sql = "SELECT COUNT(regi_id) FROM registro " +\
+        sql = "SELECT COUNT(regi_data) FROM registro " +\
             "WHERE (regi_data BETWEEN '"+ str(data_ini) +"' "\
             "AND '"+ str(data_fim) +"') "\
             "AND (cart_id = "+str(cartao_id)+")"
@@ -113,7 +113,7 @@ class RegistroDAO(ConexaoGenerica):
               "catr_id, "\
               "vinc_id "\
               "FROM registro WHERE "\
-              "regi_data BETWEEN " + str(data_ini) + " AND " + str(data_fim)
+              "regi_data::timestamp::time BETWEEN '" + str(data_ini) + "' AND '" + str(data_fim) +"'"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
@@ -149,21 +149,36 @@ class RegistroDAO(ConexaoGenerica):
     def insere(self, obj):
         try:
             if obj:
-                sql = "INSERT INTO registro("\
-                      "regi_id, "\
-                      "regi_data, "\
-                      "regi_valor_pago, "\
-                      "regi_valor_custo, "\
-                      "cart_id, "\
-                      "catr_id, "\
-                      "vinc_id) VALUES (" +\
-                      str(obj.id) + ", '" +\
-                      str(obj.data) + "', " +\
-                      str(obj.pago) + ", " +\
-                      str(obj.custo) + ", " +\
-                      str(obj.cartao) + ", " +\
-                      str(obj.catraca) + ", " +\
-                      str(obj.vinculo) + ")"
+                if obj.id is None:
+                    sql = "INSERT INTO registro("\
+                          "regi_data, "\
+                          "regi_valor_pago, "\
+                          "regi_valor_custo, "\
+                          "cart_id, "\
+                          "catr_id, "\
+                          "vinc_id) VALUES ('" +\
+                          str(obj.data) + "', " +\
+                          str(obj.pago) + ", " +\
+                          str(obj.custo) + ", " +\
+                          str(obj.cartao) + ", " +\
+                          str(obj.catraca) + ", " +\
+                          str(obj.vinculo) + ")"
+                else:
+                    sql = "INSERT INTO registro("\
+                          "regi_id, "\
+                          "regi_data, "\
+                          "regi_valor_pago, "\
+                          "regi_valor_custo, "\
+                          "cart_id, "\
+                          "catr_id, "\
+                          "vinc_id) VALUES (" +\
+                          str(obj.id) + ", '" +\
+                          str(obj.data) + "', " +\
+                          str(obj.pago) + ", " +\
+                          str(obj.custo) + ", " +\
+                          str(obj.cartao) + ", " +\
+                          str(obj.catraca) + ", " +\
+                          str(obj.vinculo) + ")"
                 self.aviso = "[registro] Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
                     cursor.execute(sql)

@@ -29,9 +29,11 @@ class UnidadeTurnoJson(ServidorRestful):
         servidor = self.obter_servidor()
         try:
             if servidor:
-                url = str(servidor) + "unidade_turno/junidade_turno"
-                header = {'Content-type': 'application/json'}
-                r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
+#                 url = str(servidor) + "unidade_turno/junidade_turno"
+#                 header = {'Content-type': 'application/json'}
+#                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
+                url = str(self.URL) + "unidade_turno/junidade_turno"
+                r = servidor.get(url)
                 #print "Status HTTP: " + str(r.status_code)
 
                 if r.text != '':

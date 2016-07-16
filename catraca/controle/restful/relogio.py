@@ -5,6 +5,7 @@
 import datetime
 import threading
 from time import sleep
+from decimal import Decimal
 from catraca.util import Util
 from catraca.controle.restful.controle_generico import ControleGenerico
 from catraca.modelo.dao.unidade_dao import UnidadeDAO
@@ -12,6 +13,15 @@ from catraca.modelo.dao.catraca_unidade_dao import CatracaUnidadeDAO
 from catraca.modelo.dao.turno_dao import TurnoDAO
 from catraca.modelo.dao.unidade_turno_dao import UnidadeTurnoDAO
 from catraca.modelo.dao.custo_refeicao_dao import CustoRefeicaoDAO
+from catraca.visao.interface.rede import Rede
+
+
+from catraca.controle.recursos.cartao_json import CartaoJson
+from catraca.controle.recursos.registro_json import RegistroJson
+
+from catraca.modelo.dao.registro_dao import RegistroDAO
+from catraca.modelo.dao.cartao_dao import CartaoDAO
+from catraca.modelo.dao.tipo_dao import TipoDAO
 
 
 __author__ = "Erivando Sena" 
@@ -27,6 +37,7 @@ class Relogio(ControleGenerico, threading.Thread):
     turno = None
     periodo = False
     contador = 4
+    lote_off = False
     
 #     unidade_dao = UnidadeDAO()
 #     catraca_unidade_dao = CatracaUnidadeDAO()
@@ -41,12 +52,12 @@ class Relogio(ControleGenerico, threading.Thread):
         self.intervalo = intervalo
         self.name = 'Thread Relogio'
         self.status = True
-        self.rede = False
-        self.catraca = self.recursos_restful.catraca_json.catraca_get()
+        #self.rede = False
+        #self.catraca = self.recursos_restful.catraca_json.catraca_get()
         
     def run(self):
         print "%s. Rodando... " % self.name
-        Relogio.catraca = self.catraca
+        #Relogio.catraca = self.catraca
         while True:
             self.hora_atul = self.util.obtem_hora()
             Relogio.hora = self.hora_atul
@@ -64,28 +75,32 @@ class Relogio(ControleGenerico, threading.Thread):
             sleep(self.intervalo)
             
     def obtem_catraca(self):
-        #remoto
-        catraca = self.recursos_restful.catraca_json.catraca_get()
-        if catraca is None:
-            Relogio.rede = False
-            if not self.turno:
-                self.aviso.exibir_falha_rede()
+        if Rede.status:
+            
+            #self.atualiza_remoto()
+            
+            #remoto
+            #catraca = self.recursos_restful.catraca_json.catraca_get()
+            catraca = Rede.interface[3]
+            print "[ACESSO REMOTO] "+ str(catraca)
+            return self.obtem_dependencias_remotas(catraca)
+        else:
             #local
+            self.lote_off = True
             catraca = self.catraca_dao.busca_por_ip(self.util.obtem_ip_por_interface())
+            print "[ACESSO LOCAL] "+ str(catraca)
             if catraca is None:
                 #catraca
                 self.aviso.exibir_catraca_nao_cadastrada()
                 self.recursos_restful.obtem_catraca(True, True, False)
                 catraca = self.catraca_dao.busca_por_ip(self.util.obtem_ip_por_interface())
+                print catraca
                 if catraca:
                     return catraca
                 else:
-                    self.obtem_catraca()
+                    return self.obtem_catraca()
             else:
                 return self.obtem_dependencias_locais(catraca)
-        else:
-            Relogio.rede = True
-            return self.obtem_dependencias_remotas(catraca)
 
     def obtem_dependencias_locais(self, catraca):
         #unidade
@@ -155,4 +170,63 @@ class Relogio(ControleGenerico, threading.Thread):
                 return None
         else:
             return None
+        
+    def atualiza_remoto(self):
+        if self.lote_off:
+            turnos = TurnoDAO().busca()
+            if turnos:
+                for turno in turnos:
+                    registros =  RegistroDAO().busca_por_periodo( str(self.util.obtem_data()) +" " + str(turno[1]) , str(self.util.obtem_data()) +" " + str(turno[2]))
+                    if registros:
+                        for registro in registros:
+                            #registro aqui
+                            print "#registro aqui"
+                            # insere registro remoto
+                            RegistroJson().objeto_json(registro)
+                            cartao = CartaoDAO().busca(registro[4])
+                            if cartao:
+                                #cartao aqui
+                                print "#cartao aqui"
+                                saldo_creditos = cartao.creditos - cartao.tipo.valor
+                                cartao.creditos = saldo_creditos
+                                print CartaoDAO().atualiza_exclui(cartao, False).aviso
+                                # atualiza cartao remoto
+                                CartaoJson().objeto_json(cartao)
+                                
+
+                
+#         conta_turno = 0
+#         conta_cartao = 0
+#         conta_registro = 0
+#         total_r = 0
+#         total_c = 0
+#         
+#         print self.lote_off
+#         if self.lote_off:
+#             turnos = TurnoDAO().busca()
+#             if turnos:
+#                 for turno in turnos:
+#                     conta_turno += 1
+#                     print "-" * 50
+#                     print "TURNO " + str(conta_turno)
+#                     print "-" * 50
+#                     registros =  RegistroDAO().busca_por_periodo( str(self.util.obtem_data()) +" " + str(turno[1]) , str(self.util.obtem_data()) +" " + str(turno[2]))
+#                     if registros:
+#                         for registro in registros:
+#                             conta_registro += 1
+#                             #aqui
+#                             cartao = CartaoDAO().busca(registro[4])
+#                             if cartao:
+#                                 conta_cartao += 1
+#                                 #aqui
+#                         print str(conta_registro)+ " REGISTROS"
+#                         print str(conta_cartao)+ " CARTOES" 
+#                         total_r += conta_registro
+#                         total_c += conta_cartao
+#                         conta_registro = 0
+#                         conta_cartao = 0
+#                 conta_turno = 0
+#                 print "=" * 50
+#                 print "TOTAL REGISTROS " + str(total_r)
+#                 print "TOTAL CARTOES " + str(total_c)
         

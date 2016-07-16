@@ -9,6 +9,8 @@ from catraca.visao.interface.alerta import Alerta
 from catraca.controle.dispositivos.leitorcartao import LeitorCartao
 from catraca.controle.restful.relogio import Relogio
 from catraca.controle.restful.sincronia import Sincronia
+from catraca.visao.interface.rede import Rede
+from time import sleep
 
 
 __author__ = "Erivando Sena"
@@ -27,38 +29,28 @@ class Painel(object):
         super(Painel, self).__init__()
     
     def main(self):
-        print '\nIniciando API...\n'
-        
-#         print "IP " + str(self.util.obtem_ip()) 
-#         
-#         print 'Free RAM: '+str(self.util.obtem_ram())
-#         print 'Nr. of processes: '+str(self.util.obtem_process_count())
-#         print 'Up time: '+str(self.util.obtem_up_time())
-#         print 'Nr. of connections: '+str(self.util.obtem_connections())
-#         print 'Temperature in C: ' +str(self.util.obtem_temperature())
-#         print 'IP-address: '+str(self.util.obtem_ipaddress())
-#         print 'CPU speed: '+str(self.util.obtem_cpu_speed())
-        
-        
-        self.log.logger.info('Iniciando Api...')
+        print '\nIniciando API CATRACA...\n'
+        print "=" * 50
+        print 'Memoria Livre: '+str(self.util.obtem_ram()).upper()
+        print 'Numero de Processos: '+str(self.util.obtem_process_count())
+        print 'Numero de Conexoes: '+str(self.util.obtem_connections())
+        print 'Temperatura do Processador: ' +str(self.util.obtem_temperature()) +' C'
+        print "=" * 50
+        print ''
         self.aviso.exibir_inicializacao()
-        self.aviso.exibir_estatus_catraca(self.util.obtem_ip_por_interface())
-        #self.aviso.exibir_mensagem_institucional_fixa(self.aviso.saldacao(), self.util.obtem_datahora_display(), 2)
-        
-#         self.aviso.exibir_estatus_catraca(self.util.obtem_ip())
+        self.aviso.exibir_mensagem_institucional_fixa(self.aviso.saldacao(), self.util.obtem_datahora_display(), 2)
         self.threads()
             
     def threads(self):
         #os.system("echo 'Sistema da Catraca iniciado!' | mail -s 'Raspberry Pi B' erivandoramos@bol.com.br")
         try:
+            Rede().start()
             Relogio().start()
-            Alerta().start()
-            Sincronia().start()
+            #Alerta().start()
+            #Sincronia().start()
             LeitorCartao().start()
-            
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro executando Painel.', exc_info=True)
-        finally:
-            pass
+            
         

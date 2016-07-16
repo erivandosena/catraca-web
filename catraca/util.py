@@ -17,6 +17,8 @@ import codecs
 from tempfile import mkstemp
 from shutil import move
 
+from unicodedata import normalize
+
 import subprocess
 from time import sleep
 from catraca.controle.dispositivos.buzzer import Buzzer
@@ -135,7 +137,11 @@ class Util(object):
         return str(dh.strftime('%d/%m/%Y %H:%M'))
     
     def converte_ip_para_long(self, ip):
-        ip2int = lambda ip: reduce(lambda a, b: (a << 8) + b, map(int, ip.split('.')), 0)
+        try:
+            ip2int = lambda ip: reduce(lambda a, b: (a << 8) + b, map(int, ip.split('.')), 0)
+        except Exception as excecao:
+            print excecao
+            return ip2int("127.0.0.1")
         return ip2int(ip)
     
     def converte_long_para_ip(self, long):
@@ -221,20 +227,26 @@ class Util(object):
             ip = "127.0.0.1"
             exibe = True
             print "Erro ao obter ip!"
+            return ip
         finally:
-            if exibe:
-                from catraca.visao.interface.aviso import Aviso
-                Aviso().exibir_estatus_catraca(ip)
+            pass
+#             if exibe:
+#                 from catraca.visao.interface.aviso import Aviso
+#                 Aviso().exibir_estatus_catraca(ip)
                 
     def obtem_MAC_por_interface(self, interface=None):
         mac = None
         if interface is None:
             interface = self.catraca_dao.obtem_interface_rede(self.obtem_nome_rpi())
         try:
-            str = open('/sys/class/net/' + interface + '/address').read()
-            mac = str[0:17]
+            arquivo = "/sys/class/net/" + interface + "/address"
+            if self.verifica_arquivo(arquivo):
+                str = open(arquivo).read()
+                mac = str[0:17]
+            else:
+                mac = "00:00:00:00:00:00"
         except Exception as excecao:
-            #print excecao
+            print excecao
             mac = "00:00:00:00:00:00"
         return mac
         
@@ -250,3 +262,32 @@ class Util(object):
             arq.truncate()
             arq.write(content.replace(str_atual, str_novo))
             
+#     def remove_chr(self, old, to_remove):
+#         new_string = old
+#         for x in to_remove:
+#             new_string = new_string.replace(x, '')
+#         return new_string
+    
+    def substitui_espaco(self, texto):
+        vogais = " "
+        for espaco in vogais:
+            texto = texto.replace(espaco, "_")
+        return texto
+    
+    def remove_acentos_caracteres(self, texto, codif='utf-8'):
+        return normalize('NFKD', texto.decode(codif)).encode('ASCII','ignore')
+    
+    def obtem_string_normalizada(self, str):
+        return self.remove_acentos_caracteres( self.substitui_espaco(str) )
+    
+    def verifica_pasta(self, dir):
+        if os.path.exists(dir):
+            return True
+        else:
+            return False
+    
+    def verifica_arquivo(self, arq):
+        if os.path.isfile(arq):
+            return True
+        else:
+            return False

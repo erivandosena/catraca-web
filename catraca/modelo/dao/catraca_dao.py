@@ -7,6 +7,7 @@ from catraca.logs import Logs
 from catraca.modelo.dados.conexao import ConexaoFactory
 from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
 from catraca.modelo.entidades.catraca import Catraca
+from curses.ascii import NUL
 
 
 __author__ = "Erivando Sena"
@@ -122,11 +123,11 @@ class CatracaDAO(ConexaoGenerica):
             with closing(self.abre_conexao().cursor()) as cursor:
                 cursor.execute(sql)
                 dados = cursor.fetchone()
-                if dados is not None:
+                if dados:
                     obj.interface = dados[0]
                     return str(obj.interface).lower()
-                else:
-                    return 'eth0'
+#                 else:
+#                     return 'eth0'
         except Exception as excecao:
             self.aviso = str(excecao)
             self.log.logger.error('[catraca] Erro ao realizar SELECT.', exc_info=True)
@@ -136,28 +137,28 @@ class CatracaDAO(ConexaoGenerica):
     def insere(self, obj):
         try:
             if obj:
-                sql = "INSERT INTO catraca("\
-                    "catr_id, "\
-                    "catr_ip, "\
-                    "catr_tempo_giro, "\
-                    "catr_operacao, "\
-                    "catr_nome, "\
-                    "catr_mac_lan, "\
-                    "catr_mac_wlan, "\
-                    "catr_interface_rede) VALUES (" +\
-                    str(obj.id) + ", '" +\
-                    str(obj.ip) + "', " +\
-                    str(obj.tempo) + ", " +\
-                    str(obj.operacao) + ", '" +\
-                    str(obj.nome) + "', '" +\
-                    str(obj.maclan) + "', '" +\
-                    str(obj.macwlan) + "', '" +\
-                    str(obj.interface) + "')"
-                self.aviso = "[catraca] Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
-                    cursor.execute(sql)
+                    sql_insert = 'INSERT INTO catraca(' +\
+                       'catr_id, ' +\
+                       'catr_ip, ' +\
+                       'catr_tempo_giro, ' +\
+                       'catr_operacao, ' +\
+                       'catr_nome, ' +\
+                       'catr_mac_lan, ' +\
+                       'catr_mac_wlan, ' +\
+                       'catr_interface_rede) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'
+                    cursor.execute(sql_insert, (obj.id, 
+                                                obj.ip,
+                                                obj.tempo,
+                                                obj.operacao,
+                                                obj.nome,
+                                                obj.maclan,
+                                                obj.macwlan,
+                                                obj.interface)
+                                   )
+                    self.aviso = "[catraca] Inserido com sucesso!"
                     self.commit()
-                    return False
+                    return True
             else:
                 self.aviso = "[catraca] inexistente!"
                 return False
@@ -171,26 +172,34 @@ class CatracaDAO(ConexaoGenerica):
     def atualiza_exclui(self, obj, delete):
         try:
             if obj or delete:
-                if delete:
-                    if obj:
-                        sql = "DELETE FROM catraca WHERE catr_id = " + str(obj.id)
-                    else:
-                        sql = "DELETE FROM catraca"
-                    self.aviso = "[catraca] Excluido com sucesso!"
-                else:
-                    sql = "UPDATE catraca SET " +\
-                        "catr_ip = '" + str(obj.ip) + "', " +\
-                        "catr_tempo_giro = " + str(obj.tempo) + ", " +\
-                        "catr_operacao = " + str(obj.operacao) + ", " +\
-                        "catr_nome = '" + str(obj.nome) + "', " +\
-                        "catr_mac_lan = '" + str(obj.maclan) + "', " +\
-                        "catr_mac_wlan = '" + str(obj.macwlan) + "', " +\
-                        "catr_interface_rede = '" + str(obj.interface) +\
-                        "' WHERE "\
-                        "catr_id = " + str(obj.id)
-                    self.aviso = "[catraca] Alterado com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
-                    cursor.execute(sql)
+                    if delete:
+                        if obj is None:
+                            sql_delete = 'DELETE FROM catraca'
+                            cursor.execute(sql_delete)
+                        else:
+                            sql_delete = sql_delete +' WHERE catr_id = %s'
+                            cursor.execute(sql_delete, (obj.id))
+                        self.aviso = "[catraca] Excluido com sucesso!"
+                    else:
+                        sql_update = 'UPDATE catraca SET catr_ip = %s, ' +\
+                              'catr_tempo_giro = %s, ' +\
+                              'catr_operacao = %s, ' +\
+                              'catr_nome = %s, ' +\
+                              'catr_mac_lan = %s, ' +\
+                              'catr_mac_wlan = %s, ' +\
+                              'catr_interface_rede = %s ' +\
+                              'WHERE catr_id = %s'
+                        cursor.execute(sql_update, (obj.ip, 
+                                                    obj.tempo,
+                                                    obj.operacao,
+                                                    obj.nome,
+                                                    obj.maclan,
+                                                    obj.macwlan,
+                                                    obj.interface,
+                                                    obj.id)
+                                       )
+                        self.aviso = "[catraca] Alterado com sucesso!"
                     self.commit()
                     return True
             else:

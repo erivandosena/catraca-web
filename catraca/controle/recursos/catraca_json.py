@@ -26,86 +26,113 @@ class CatracaJson(ServidorRestful):
     catraca_dao = CatracaDAO()
     contador_acesso_servidor = 0
     util = Util()
-    interface = catraca_dao.obtem_interface_rede(util.obtem_nome_rpi())
-    IP = util.obtem_ip_por_interface()
     
     def __init__(self):
         super(CatracaJson, self).__init__()
         ServidorRestful.__init__(self)
         
-    def catraca_get(self, mantem_tabela=False, limpa_tabela=False):
+    def __cmp__(self, valor):
+        return cmp(self.name, valor.name)
+        
+    def catraca_get(self, limpa_tabela=False):
         servidor = self.obter_servidor()
         try:
             if servidor:
-                url = str(servidor) + "catraca/jcatraca"
-                header = {'Content-type': 'application/json'}
-                r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
-                #print "Status HTTP: " + str(r.status_code)
-                #print r.text
-                if r.text == '':
-                    self.contador_acesso_servidor += 1
-                    if self.contador_acesso_servidor < 4:
-                        self.aviso.exibir_falha_servidor()
-                        self.aviso.exibir_aguarda_cartao()
-                    else:
-                        self.contador_acesso_servidor = 0
-                else:
+                url = str(self.URL) + "catraca/jcatraca"
+                r = servidor.get(url)
+                if r.text != '':
                     dados  = json.loads(r.text)
                     LISTA_JSON = dados["catracas"]
                     if LISTA_JSON != []:
                         catraca_local = None
+                        if limpa_tabela:
+                            self.mantem_tabela_local(None, 0)
                         for item in LISTA_JSON:
                             obj = self.dict_obj(item)
                             if obj:
-                                if self.util.obtem_MAC_por_interface(self.interface) == obj.maclan:
-                                    #print "MAC Local -> " + str(self.util.obtem_MAC_por_interface(self.interface)) + " == " + str(obj.maclan) + " <- MAC Remoto"
-                                    # Atualiza catraca local
-                                    obj.ip = self.IP
-                                    obj.nome = obj.nome.upper()
-                                    obj.interface = "eth0" if obj.interface == None else obj.interface
-#                                     obj.maclan = self.util.obtem_MAC_por_interface('eth0')            
-#                                     obj.macwlan = self.util.obtem_MAC_por_interface('wlan0')
-                                    catraca_local = obj
-                                    # Atualiza remoto
-                                    self.objeto_json(obj, 'PUT')
-                                    if self.util.obtem_nome_rpi().lower() != obj.nome.lower():
-                                        print "CATRACA VAI REINICIAR...."
-                                        self.util.altera_hostname(obj.nome.lower())
-                                        self.util.reinicia_raspberrypi()
-                                        return self.aviso.exibir_reinicia_catraca()
-                                if mantem_tabela:
-                                    self.mantem_tabela_local(obj, limpa_tabela)
+                                catraca = self.catraca_dao.busca(obj.id)
+                                if catraca is None:
+                                    print 'catraca remoto ausente no local'
+                                    self.mantem_tabela_local(obj, 1)
+                                    return self.catraca_get()
+                                if obj.interface == 'eth0' or obj.interface == 'wlan0':
+                                    if (self.util.obtem_nome_rpi().upper() == obj.nome.upper()):
+                                        print "catraca fisica local"
+                                        
+                                        catraca_local = catraca
+                                        ip_local = self.util.obtem_ip_por_interface(obj.interface.lower())
+                                        mac_local = self.util.obtem_MAC_por_interface(obj.interface.lower())
+                                         
+                                        if obj.ip != ip_local:
+                                             catraca_local.ip = ip_local
+                                               
+                                        if obj.interface.lower() == "eth0":
+                                            if mac_local != obj.maclan:
+                                                catraca_local.maclan = mac_local
+                                                  
+                                        if obj.interface.lower() == "wlan0":
+                                            if mac_local != obj.macwlan:
+                                                catraca_local.macwlan = mac_local
+                                                
+                                        if not catraca_local.__eq__(obj):
+                                            self.mantem_tabela_local(obj, 2)
+
+                                        if obj.nome.lower() != self.util.obtem_nome_rpi().lower():
+                                            print "REINICIAR SISTEMA...."
+                                            self.util.altera_hostname( self.util.obtem_string_normalizada( obj.nome.lower() ) )
+                                            self.util.reinicia_raspberrypi()
+                                            return self.aviso.exibir_reinicia_catraca()
+                                    else:
+                                        print "catraca fisica remota"
+                                        if not catraca.__eq__(obj):
+                                            self.mantem_tabela_local(obj, 2)
+                                            print "catraca fisica remota atualizada localmente"
+                                else:
+                                    print "catraca virtual remota"
+                                    if not catraca.__eq__(obj):
+                                        self.mantem_tabela_local(obj, 2)
+                                        print "catraca virtual remota atualizada localmente"
                         if catraca_local is None:
+                            print "catraca local ausente no remoto"
                             self.cadastra_catraca_remoto()
-                            return self.catraca_get(True, True)
-                        return catraca_local
-                    else:
-                        self.mantem_tabela_local(None, True)
-                        self.contador_acesso_servidor += 1
-                        if self.contador_acesso_servidor < 4:
-                            self.cadastra_catraca_remoto()
-                            return self.catraca_get(True,True)
-#                         else:
-#                             self.aviso.exibir_falha_servidor()
-#                             self.aviso.exibir_aguarda_cartao()
-#                             self.contador_acesso_servidor = 0
+                            return self.catraca_get()
+                        else:  
+                            return catraca_local
         except Exception:
             print traceback.format_exc()
-            self.log.logger.error('Erro obtendo json catraca', exc_info=True)
+            return None
         finally:
             pass
         
-    def mantem_tabela_local(self, obj, limpa_tabela=False):
-        if limpa_tabela:
-            self.atualiza_exclui(None, limpa_tabela)
-        if obj:
-            resultado = self.catraca_dao.busca(obj.id)
-            if resultado:
-                self.atualiza_exclui(obj, False)
-            else:
-                self.insere(obj)
-        else:
+    def obtem_catraca_rest(self):
+        servidor = self.obter_servidor()
+        try:
+            if servidor:
+                url = str(self.URL) + "catraca/jcatraca"
+                r = servidor.get(url)
+                if r.text != '':
+                    dados  = json.loads(r.text)
+                    LISTA_JSON = dados["catracas"]
+                    if LISTA_JSON != []:
+                        catraca_local = None
+                        obj = None
+                        for item in LISTA_JSON:
+                            obj = self.dict_obj(item)
+                            if obj:
+                                if obj.nome.upper() == self.util.obtem_nome_rpi().upper():
+                                    return obj
+        except Exception as excecao:
+            print excecao
             return None
+        
+    def mantem_tabela_local(self, obj, acao):
+        # 0=exclui    1=insere    2=atualiza
+        if acao == 0:
+            return self.atualiza_exclui(obj, True)
+        if acao == 1:
+            return self.insere(obj)
+        if acao == 2:
+            return self.atualiza_exclui(obj, False)
         
     def atualiza_exclui(self, obj, boleano):
         self.catraca_dao.atualiza_exclui(obj, boleano)
@@ -176,11 +203,8 @@ class CatracaJson(ServidorRestful):
         servidor = self.obter_servidor()
         try:
             if servidor:
-                url = str(servidor) + "catraca/insere"
-                header = {'Content-type': 'application/json'}
-                r = requests.post(url, auth=(self.usuario, self.senha), headers=header, data=json.dumps(formato_json))
-                #print r.text
-                #print r.status_code
+                url = str(self.URL) + "catraca/insere"
+                r = servidor.post(url, data=json.dumps(formato_json))
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro enviando json catraca.', exc_info=True)
@@ -191,12 +215,8 @@ class CatracaJson(ServidorRestful):
         servidor = self.obter_servidor()
         try:
             if servidor:
-                url = str(servidor) + "catraca/atualiza/"+ str(id)
-                #print url
-                header = {'Content-type': 'application/json'}
-                r = requests.put(url, auth=(self.usuario, self.senha), headers=header, data=json.dumps(formato_json))
-                #print r.text
-                #print r.status_code
+                url = str(self.URL) + "catraca/atualiza/"+ str(id)
+                r = servidor.put(url, data=json.dumps(formato_json))
                 return True
             else:
                 return False
@@ -207,14 +227,15 @@ class CatracaJson(ServidorRestful):
             pass
     
     def cadastra_catraca_remoto(self):
+        interface_padrao = "eth0"
         catraca = Catraca()
-        catraca.ip = self.IP
+        catraca.ip = self.util.obtem_ip_por_interface(interface_padrao)
         catraca.tempo = 20
         catraca.operacao = 1
         catraca.nome = self.util.obtem_nome_rpi().upper()
         catraca.maclan = self.util.obtem_MAC_por_interface('eth0')
         catraca.macwlan = self.util.obtem_MAC_por_interface('wlan0')
-        catraca.interface = "eth0"
+        catraca.interface = interface_padrao
         self.objeto_json(catraca)
-            
-    
+        
+        

@@ -32,10 +32,12 @@ class MensagemJson(ServidorRestful):
         servidor = self.obter_servidor()
         try:
             if servidor:
-                url = str(servidor) + "mensagem/jmensagem/" + str(CatracaDAO().busca_por_ip(self.util.obtem_ip_por_interface()).id)
-                print url 
-                header = {'Content-type': 'application/json'}
-                r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
+#                 url = str(servidor) + "mensagem/jmensagem/" + str(CatracaDAO().busca_por_ip(self.util.obtem_ip_por_interface()).id)
+#                 print url 
+#                 header = {'Content-type': 'application/json'}
+#                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
+                url = str(self.URL) + "mensagem/jmensagem/" + str(CatracaDAO().busca_por_ip(self.util.obtem_ip_por_interface()).id)
+                r = servidor.get(url)
                 #print "Status HTTP: " + str(r.status_code)
                 
                 if r.text != '':

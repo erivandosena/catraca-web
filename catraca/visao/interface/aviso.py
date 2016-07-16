@@ -43,12 +43,18 @@ class Aviso(object):
     def exibir_inicializacao(self):
         self.display.mensagem('Iniciando...\n'+self.util.obtem_nome_sistema().center(16), 5, False, False)
 
-    def exibir_estatus_catraca(self, status_rede):
+#     def exibir_estatus_catraca(self, status_catraca):
+#         if status_catraca:
+#             self.display.mensagem(self.util.obtem_nome_rpi().center(16) +"\n"+ 'ON-LINE!'.center(16), 3, False, False)
+#         else:
+#             self.display.mensagem(self.util.obtem_nome_rpi().center(16) +"\n"+ 'OFF-LINE!'.center(16), 3, False, False)
+            
+    def exibir_estatus_rede(self, interface, status_rede):
         if status_rede:
-            self.display.mensagem(self.util.obtem_nome_rpi().center(16) +"\n"+ 'ON-LINE!'.center(16), 5, False, False)
+            self.display.mensagem(str("LAN" if interface == "eth0" else "WLAN").center(16) +"\n"+ 'HABILITADA!'.center(16), 3, False, False)
         else:
-            self.display.mensagem(self.util.obtem_nome_rpi().center(16) +"\n"+ 'OFF-LINE!'.center(16), 5, False, False)
-
+            self.display.mensagem(str("LAN" if interface == "eth0" else "WLAN").center(16) +"\n"+ 'DESABILITADA!'.center(16), 3, False, False)
+            
     def exibir_saldacao(self, saldacao, mensagem=''):
         self.display.mensagem(saldacao.center(16) + "\n"+ mensagem.center(16), 5, False, False)
 

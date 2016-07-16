@@ -20,6 +20,26 @@ class Catraca(object):
         self.__catr_mac_wlan = None
         self.__catr_interface_rede = None
         
+    def __eq__(self, obj):
+        return ((self.id, 
+                 self.ip, 
+                 self.tempo, 
+                 self.operacao, 
+                 self.nome, 
+                 self.maclan, 
+                 self.macwlan, 
+                 self.interface) == (obj.id, 
+                                     obj.ip, 
+                                     obj.tempo, 
+                                     obj.operacao, 
+                                     obj.nome, 
+                                     obj.maclan, 
+                                     obj.macwlan, 
+                                     obj.interface))
+        
+    def __ne__(self, obj):
+        return not self == obj
+        
     @property
     def id(self):
         return self.__catr_id

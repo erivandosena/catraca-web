@@ -53,56 +53,67 @@ class SensorOptico(object):
         giro = self.obtem_codigo_sensores()
         contragiro = self.obtem_codigo_sensores()
         try:
-            while self.tempo < tempo*tempo-500:
+            while self.tempo < tempo:
                 self.tempo +=1
+                print str(self.tempo) + " de " + str(tempo)
                 #OPCAO 1 ou 2
                 if catraca.operacao == 1 or catraca.operacao == 2:
-                    giro = self.obtem_codigo_sensores()
-                    giro += self.obtem_codigo_sensores()
                     
                     if self.obtem_codigo_sensores() != "00":
-                        giro = giro[0:2]
-                        giro += self.obtem_codigo_sensores()
-                        while self.obtem_codigo_sensores() == "01" or self.obtem_codigo_sensores() == "10" or self.obtem_codigo_sensores() == "11":
-                            giro = giro[0:4]
-                            giro += self.obtem_codigo_sensores()
-                        giro = giro[0:6]
-                        giro += self.obtem_codigo_sensores()
-                        
-                    # FINALIZANDO O GIRO
-                    if catraca.operacao == 1 and giro[0:8] == "10100100":
-                        self.solenoide.ativa_solenoide(1,0)
-                        print self.bloqueia_acesso(catraca)
-                        return True
-                    if catraca.operacao == 2 and giro[0:8] == "01011000" or catraca.operacao == 2 and giro[0:8] == "11110000" or catraca.operacao == 2 and giro[0:8] == "11111000":
-                        self.solenoide.ativa_solenoide(2,0)
-                        print self.bloqueia_acesso(catraca)
-                        return True
-                
+                        print "===================> " + str(self.obtem_codigo_sensores())
+                        giro = self.obtem_codigo_sensores()
+                        while self.obtem_codigo_sensores() == "01":
+                            print "===================> " + str(self.obtem_codigo_sensores())
+                            giro = self.obtem_codigo_sensores()
+                        else:
+                            while self.obtem_codigo_sensores() == "11":
+                                print "===================> " + str(self.obtem_codigo_sensores())
+                                if giro == "01":
+                                    giro += self.obtem_codigo_sensores()
+                            else:
+                                while self.obtem_codigo_sensores() == "10":
+                                    print "===================> " + str(self.obtem_codigo_sensores())
+                                    if giro == "0111":
+                                        giro += self.obtem_codigo_sensores()
+                                    elif giro == "11":
+                                        giro = "011110"
+                                else:
+                                    print "===================> " + str(self.obtem_codigo_sensores())
+                                    if giro == "011110" or giro == "011100" and giro != "00":
+                                        print giro
+                                        return True
+                                    else:
+                                        print "saindo sem giro confirmado"
+                #OPCAO 3 ou 4
                 if catraca.operacao == 3 or catraca.operacao == 4:
-                    giro = self.obtem_codigo_sensores()
-                    giro += self.obtem_codigo_sensores()
                     if self.obtem_codigo_sensores() != "00":
-                        giro = giro[0:2]
-                        giro += self.obtem_codigo_sensores()
-                        while self.obtem_codigo_sensores() == "01" or self.obtem_codigo_sensores() == "10" or self.obtem_codigo_sensores() == "11":
-                            giro = giro[0:4]
-                            giro += self.obtem_codigo_sensores()
-                        giro = giro[0:6]
-                        giro += self.obtem_codigo_sensores()
-                        
-                    # FINALIZANDO O GIRO
-                    print giro[0:8]
-                    if catraca.operacao == 3 and giro[0:8] == "101001" or catraca.operacao == 3 and giro[0:8] == "10100100" or catraca.operacao == 3 and giro[0:8] == "11110100":
-                        self.solenoide.ativa_solenoide(1,0)
-                        self.bloqueia_acesso(catraca)
-                        return True
-                    if catraca.operacao == 4 and giro[0:8] == "01011000" or catraca.operacao == 2 and giro[0:8] == "11110000" or catraca.operacao == 2 and giro[0:8] == "11111000":
-                        self.solenoide.ativa_solenoide(2,0)
-                        self.bloqueia_acesso(catraca)
-                        return True
-                sleep(0.1)
-            return False
+                        print "===================> " + str(self.obtem_codigo_sensores())
+                        giro = self.obtem_codigo_sensores()
+                        while self.obtem_codigo_sensores() == "10":
+                            print "===================> " + str(self.obtem_codigo_sensores())
+                            giro = self.obtem_codigo_sensores()
+                        else:
+                            while self.obtem_codigo_sensores() == "11":
+                                print "===================> " + str(self.obtem_codigo_sensores())
+                                if giro == "10":
+                                    giro += self.obtem_codigo_sensores()
+                            else:
+                                while self.obtem_codigo_sensores() == "01":
+                                    print "===================> " + str(self.obtem_codigo_sensores())
+                                    if giro == "1011":
+                                        giro += self.obtem_codigo_sensores()
+                                    elif giro == "11":
+                                        giro = "101101"
+                                else:
+                                    print "===================> " + str(self.obtem_codigo_sensores())
+                                    if giro == "101101" or giro == "101100" and giro != "00":
+                                        print giro
+                                        return True
+                                    else:
+                                        print "saindo sem giro confirmado"
+                sleep(1)
+            else:
+                return False
         except SystemExit, KeyboardInterrupt:
             raise
         except Exception:
