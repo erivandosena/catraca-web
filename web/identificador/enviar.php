@@ -7,7 +7,8 @@
     </head>
     <body>
         <?php
-            echo "<img src=\"".$_POST['img64']."\"/>";
+
+        
             
             define('UPLOAD_DIR', 'fotos/');
             $img = $_POST['img64'];
@@ -16,7 +17,8 @@
             $data = base64_decode($img);
             $file = UPLOAD_DIR .$_POST['id_usuario']. '.png';
             $success = file_put_contents($file, $data);
-            print $success ? $file : 'Erro ao tentar salvar arquivo.';
+            print $success ? "Foto salva com sucesso!" : 'Erro ao tentar salvar arquivo.';
+            echo '<meta http-equiv="refresh" content="2; url=.\?pagina=cartao&selecionado=' . $_POST['id_usuario'] . '">';
         
             
          ?>

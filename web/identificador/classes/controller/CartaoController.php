@@ -87,6 +87,13 @@ class CartaoController{
 				echo '<div class="borda"><h1>'.ucwords(strtolower(htmlentities($usuario->getNome()))).'. Tipo: '.$tipo->getNome();
 				
 				echo '</h1>';
+				
+				if(file_exists('fotos/'.$usuario->getIdBaseExterna().'.png')){
+						
+					echo '<img width="300" src="fotos/'.$usuario->getIdBaseExterna().'.png" />';
+						
+				}
+				
 				if(!$vinculo->isActive()){
 					echo '<p>O vinculo não está ativo </p><br>
 							<a href="?pagina=cartao&numero_cartao='.$_GET['numero_cartao'].'&cartao_renovar=1" class="botao">Renovar</a> ';

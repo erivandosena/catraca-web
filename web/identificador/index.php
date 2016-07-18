@@ -51,10 +51,13 @@ if (isset ( $_GET ["sair"] )) {
 <link rel="stylesheet" href="css/estilo_responsivo.css" type="text/css" media="screen">
 <script type="text/javascript" src="js/jquery.min.js"></script>
 
-
 </head>
 
 <body>
+
+
+
+
 	<div class="pagina fundo-cinza1">
 	
 		<div class="acessibilidade">
@@ -223,26 +226,25 @@ if (isset ( $_GET ["sair"] )) {
 					?>
 										
 			</div>
-		</div>		
-	</div>
-	
- <script type="text/javascript">
+ 			<script type="text/javascript">
         	var img;
-	        window.onload = function() {
-	
-	            //Compatibility
-	            navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
-	
-	            var canvas = document.getElementById("canvas"),
-	                context = canvas.getContext("2d"),
-	                video = document.getElementById("video"),
-	                btnStart = document.getElementById("btnStart"),
-	                btnStop = document.getElementById("btnStop"),
-	                btnPhoto = document.getElementById("btnPhoto"),
-	                videoObj = {
-	                    video: true,
-	                    audio: false
-	                };
+
+        	navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+        	
+            var canvas = document.getElementById("canvas"),
+                context = canvas.getContext("2d"),
+                video = document.getElementById("video"),
+                btnStart = document.getElementById("btnStart"),
+                btnStop = document.getElementById("btnStop"),
+                btnPhoto = document.getElementById("btnPhoto"),
+                videoObj = {
+                    video: true,
+                    audio: false
+                };
+            
+	        
+				 //Compatibility
+	            
 	
 	            btnStart.addEventListener("click", function() {
 	                var localMediaStream;
@@ -274,9 +276,11 @@ if (isset ( $_GET ["sair"] )) {
 	                    
 	                }
 	            });
-	        };
+			
 	       
 
         </script>
+		</div>		
+	</div>
 </body>
 </html>

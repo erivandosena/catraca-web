@@ -188,26 +188,56 @@ class CartaoView {
 
 	public function mostraSelecionado(Usuario $usuario) {
 		echo '<div class="borda">
-				<table  class="tabela borda-vertical zebrada texto-preto">
-					<tr><th>Nome:</th><td> ' . $usuario->getNome () . '.</td><td rowspan="7">';
+				
+				
+								<table  class="tabela borda-vertical zebrada texto-preto">
+					<tr>
+						<td>';
+		if(file_exists('fotos/'.$_GET['selecionado'].'.png')){
+				
+			echo '<img width="300"  src="fotos/'.$_GET['selecionado'].'.png" />';
+				
+		}else{
+				
+			echo '<img width="300" src="img/camera.png" />';
 		
-							
-		echo '
-							<img src="img/camera.png" />';
+		}
+				
+		echo '				</td>
+				
+				
+						<td>
+				<video  id="video" width="320" height="200" autoplay></video>
+		            <section>
+		                <button id="btnStart">Iniciar Video</button>
+		                <button id="btnStop">Parar</button>            
+		                <button id="btnPhoto">Bater Foto</button>
+		            </section>
+						</td>
+						<td>
+				 <canvas id="canvas" width="320" height="240"></canvas>
+				 <form id="formulario" enctype="multipart/form-data" action="enviar.php" method="POST" id="youform" name="youform">
+	            <input type="hidden" name="MAX_FILE_SIZE" value="30000" />
+	            <input name="img64" id="img64" type="hidden" />
+	            <input name="id_usuario" id="id_usuario" value="'.$_GET['selecionado'].'" type="hidden" />
+	            
+	            <input type="submit" value="Enviar arquivo" onsubmit="document.getElementById(\'img64\').value = img" />
+	        </form>
+						</td>
+						
+					</tr>
+				</table>
+				
+				<table  class="tabela borda-vertical zebrada texto-preto">
+					<tr><th>Nome:</th><td> ' . $usuario->getNome () . '.</td>';
+		
+		
+		
+		
 		echo '
         
-							</td>
+							
              		
-				<td rowspan="7">teste
-						 <video  id="video" width="320" height="200" autoplay></video>
-		            <section>
-		                <button id="btnStart">Start video</button>
-		                <button id="btnStop">Stop video</button>            
-		                <button id="btnPhoto">Take a photo</button>
-		            </section>
-		            
-		            <canvas id="canvas" width="320" height="240"></canvas>
-				</td>
              		
              		</tr>
 					<tr><th>Login:</th><td>'. $usuario->getLogin () .'.</td></tr>
@@ -259,7 +289,13 @@ class CartaoView {
 		}
 		
 		
-		echo '</table></div>';
+		echo '</table>
+				
+				
+
+				
+				
+				</div>';
 	}
 	
 	
