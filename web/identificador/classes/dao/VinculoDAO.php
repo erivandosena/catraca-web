@@ -224,6 +224,7 @@ class VinculoDAO extends DAO {
 			$vinculo->getCartao()->setCreditos($linha['cart_creditos']);
 			$vinculo->setInicioValidade($linha ['vinc_inicio']);
 			$vinculo->setFinalValidade($linha['vinc_fim']);
+			$vinculo->getResponsavel()->setNivelAcesso($linha['usua_nivel']);
 			$vinculo->setQuantidadeDeAlimentosPorTurno($linha['vinc_refeicoes']);
 			$vinculo->setAvulso($linha['vinc_avulso']);
 			return $vinculo;
@@ -412,7 +413,6 @@ class VinculoDAO extends DAO {
 			return false;
 		}
 
-		echo $vinculo->getResponsavel()->getId();
 		if(!$vinculo->getResponsavel()->getId()){
 			//echo 'Veio daqui oh';
 			return false;

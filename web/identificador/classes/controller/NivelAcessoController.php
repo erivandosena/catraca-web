@@ -5,13 +5,13 @@
  *
  */
 
-class CartaoController{
+class NivelAcessoController{
 	private $view;
 	public static function main($nivelDeAcesso){
 		
 		switch ($nivelDeAcesso){
 			case Sessao::NIVEL_SUPER:
-				$controller = new CartaoController();
+				$controller = new NivelAcessoController();
 				$controller->telaCartao();
 				break;
 			default:
@@ -22,7 +22,7 @@ class CartaoController{
 	
 	
 	public function telaCartao(){
-		$this->view = new CartaoView();
+		$this->view = new NivelAcessoView();
 		echo '<div class="conteudo"> <div class = "simpleTabs">
 		        <ul class = "simpleTabsNavigation">
 				
@@ -46,7 +46,6 @@ class CartaoController{
 		
 	}
 	public function telaIdentificacao(){
-		
 		$this->view->formBuscaCartao();
 		
 		if(isset($_GET['numero_cartao'])){
@@ -65,9 +64,11 @@ class CartaoController{
 			$result = $dao->getConexao()->query($sqlVerificaNumero);
 			$idCartao = 0;
 			$usuario = new Usuario();
+			
 			$tipo = new Tipo();
 			$vinculoDao = new VinculoDAO($dao->getConexao());
 			$vinculo = new Vinculo();
+			
 			foreach($result as $linha){
 				$idDoVinculo = $linha['vinc_id'];
 				$tipo->setNome($linha['tipo_nome']);
@@ -89,8 +90,28 @@ class CartaoController{
 				$vinculoDao->vinculoPorId($vinculo);
 				
 				echo '<div class="borda"><h1>'.ucwords(strtolower(htmlentities($usuario->getNome()))).'. Tipo: '.$tipo->getNome();
+				$strNivelAcesso = "Padr&atilde;o";
+				switch ($vinculo->getResponsavel()->getNivelAcesso()){
+					case Sessao::NIVEL_ADMIN: 
+						$strNivelAcesso =  " Administrador";
+						break;
+					case Sessao::NIVEL_SUPER:
+						$strNivelAcesso = "Super Usu&aacute;rio";
+						break;
+					default:
+						$strNivelAcesso = "Padr&atilde;o";
+						break;
+						
+				}
+				echo ' - Nivel de Acesso:  '. $strNivelAcesso;
 				
 				echo '</h1>';
+				echo '<a class="botao b-primario" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getId().'novo_nivel='.Sessao::NIVEL_ADMIN.'">Tornar Administrador</a>';
+				echo '<a class="botao b-secundario" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getId().'novo_nivel='.Sessao::NIVEL_COMUM.'">Tornar Padr&atilde;o</a>';
+				echo '<a class="botao b-sucesso" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getId().'novo_nivel='.Sessao::NIVEL_COMUM.'">Tornar Guich&ecirc;</a>';
+				
+				
+				
 				
 				if(file_exists('fotos/'.$usuario->getIdBaseExterna().'.png')){
 						
@@ -351,7 +372,7 @@ class CartaoController{
 								$this->view->mostraSucesso("Erro na tentativa de Adicionar Vínculo. ");
 								
 							}
-							echo '<meta http-equiv="refresh" content="10; url=.\?pagina=cartao&selecionado=' . $vinculo->getResponsavel()->getIdBaseExterna() . '">';
+							echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $vinculo->getResponsavel()->getIdBaseExterna() . '">';
 							return;
 						}
 						

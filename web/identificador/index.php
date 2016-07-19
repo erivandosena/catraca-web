@@ -214,6 +214,9 @@ if (isset ( $_GET ["sair"] )) {
 							case 'definicoes' :
 								DefinicoesController::main($sessao->getNivelAcesso());
 								break;
+							case 'nivel_acesso' :
+								NivelAcessoController::main($sessao->getNivelAcesso());
+								break;
 							default :
 								echo '404 NOT FOUND';
 								break;
