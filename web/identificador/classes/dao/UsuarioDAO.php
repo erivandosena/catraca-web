@@ -157,6 +157,22 @@ class UsuarioDAO extends DAO {
 		
 		
 	}
+	/**
+	 * Diferente do outro este está preparado para olhar na base própria
+	 * @param Usuario $usuario
+	 */
+	public function preenchePorIdBaseExterna(Usuario $usuario){	
+		$id = $usuario->getIdBaseExterna();
+		$sql = "SELECT * FROM usuario WHERE id_base_externa  = $id";
+		foreach($this->getConexao()->query($sql) as $linha){
+			$usuario->setId($linha['usua_id']);
+			$usuario->setNome($linha['usua_nome']);
+			return true;
+		}
+		return false;
+	
+	
+	}
 	public function preenchePorNome(Laboratorio $laboratorio){
 		$nome = $laboratorio->getNome();
 		$sql = "SELECT * FROM laboratorio WHERE nome_laboratorio = '$nome'";
@@ -176,22 +192,17 @@ class UsuarioDAO extends DAO {
 		}
 		return false;
 	}
-	public function adicionaAdministrador(Usuario $usuario, Laboratorio $laboratorio){
-		$novoNivel = Sessao::NIVEL_ADMIN;
-		$idUsuario = $usuario->getId();
-		$idLaboratorio = $laboratorio->getId();
+	/**
+	 * Passe o usuario com id da base externa. 
+	 * @param Usuario $usuario
+	 */
+	public function alteraNivelDeAcesso(Usuario $usuario){
 		
-		$sqlUpdate = "UPDATE usuario set nivel_acesso = $novoNivel WHERE id_usuario = $idUsuario";
-		$sqlInsert = "INSERT into administrador (id_usuario, id_laboratorio) VALUES($idUsuario, $idLaboratorio)";
-		$this->getConexao()->beginTransaction();
-		if($this->getConexao()->query($sqlUpdate)){
-			if($this->getConexao()->query($sqlInsert)){
-				$this->getConexao()->commit();
-				return true;
-			}
-		}
-		$this->getConexao()->rollBack();
-		return false;
+		$idBaseExterna = $usuario->getIdBaseExterna();
+		$novoNivel = $usuario->getNivelAcesso();
+		$update = "UPDATE usuario set usua_nivel = $novoNivel WHERE id_base_externa = $idBaseExterna";
+		return $this->getConexao()->exec($update);
+		
 		
 	}
 	

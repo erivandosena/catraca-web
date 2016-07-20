@@ -217,6 +217,9 @@ class VinculoDAO extends DAO {
 
 			
 			$vinculo->getResponsavel()->setNome($linha['usua_nome']);
+			$vinculo->getResponsavel()->setId($linha['usua_id']);
+			
+				
 			$vinculo->getResponsavel()->setIdBaseExterna($linha['id_base_externa']);
 			$vinculo->getCartao()->setId($linha['cart_id']);
 			$vinculo->getCartao()->getTipo()->setNome($linha ['tipo_nome']);

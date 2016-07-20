@@ -32,6 +32,33 @@ class NivelAcessoView {
 				
 									</div>';
 	}
+	
+	public function formAlteraNivel(Usuario $usuario){
+		echo '
+								<script>
+				  $(document).bind(\'autofocus_ready\', function() {
+				    if (!("autofocus" in document.createElement("input"))) {
+				      $("#numero_cartao").focus();
+				    }
+				  });
+				</script>
+	
+				<div class="borda">
+									<form method="post" action="" class="formulario em-linha" >
+										<input type="hidden" name="pagina" value="nivel_acesso" />
+										<label for="numero_cartao">
+											
+											<object class="rotulo texto-preto">Tem certeza que deseja alterar o nível do : '.$usuario->getNome().'? </object><br><br>
+											<input type="hidden" name="certeza" value="sim" />
+											<input type="submit" name="confirmado" id="numero_cartao" autofocus /><br>
+											 <script>$(document).trigger(\'autofocus_ready\');</script>
+										</label>
+	
+									</form>
+	
+									</div>';
+	}
+	
 	public function mostraResultadoBuscaDeCartoes($cartoes) {
 		echo '<div class="doze linhas">';
 		echo '<br><h2 class="texto-preto">Busca de CartÃµes:</h2>';

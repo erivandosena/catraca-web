@@ -46,6 +46,35 @@ class NivelAcessoController{
 		
 	}
 	public function telaIdentificacao(){
+		$dao = new DAO();
+		if(isset($_GET['usua_id']) && isset($_GET['novo_nivel'])){
+			$usuarioDao = new UsuarioDAO($dao->getConexao());
+			$usuario = new Usuario();
+			$usuario->setIdBaseExterna($_GET['usua_id']);
+			$usuarioDao->preenchePorIdBaseExterna($usuario);
+			
+			
+			
+			if(!isset($_POST['certeza'])){
+				
+				$this->view->formAlteraNivel($usuario);
+				
+			}else{
+				$usuario->setNivelAcesso($_GET['novo_nivel']);
+				if($usuarioDao->alteraNivelDeAcesso($usuario)){
+					$this->view->mostraSucesso("Nível Alterado com Sucesso!");
+					
+				}else{
+					$this->view->mostraSucesso("Erro na tentativa de alterar nível.");
+						
+					
+				}
+				echo '<meta http-equiv="refresh" content="4; url=.\?pagina=nivel_acesso">';
+				
+			}
+			return;
+		}
+		
 		$this->view->formBuscaCartao();
 		
 		if(isset($_GET['numero_cartao'])){
@@ -60,7 +89,7 @@ class NivelAcessoController{
 				LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id
 				WHERE cartao.cart_numero = '$numeroCartao'
 					";
-			$dao = new DAO();
+			
 			$result = $dao->getConexao()->query($sqlVerificaNumero);
 			$idCartao = 0;
 			$usuario = new Usuario();
@@ -98,6 +127,10 @@ class NivelAcessoController{
 					case Sessao::NIVEL_SUPER:
 						$strNivelAcesso = "Super Usu&aacute;rio";
 						break;
+					case Sessao::NIVEL_GUICHE:
+						$strNivelAcesso = "Guich&ecirc;";
+						break;
+					
 					default:
 						$strNivelAcesso = "Padr&atilde;o";
 						break;
@@ -105,10 +138,15 @@ class NivelAcessoController{
 				}
 				echo ' - Nivel de Acesso:  '. $strNivelAcesso;
 				
+				
 				echo '</h1>';
-				echo '<a class="botao b-primario" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getId().'novo_nivel='.Sessao::NIVEL_ADMIN.'">Tornar Administrador</a>';
-				echo '<a class="botao b-secundario" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getId().'novo_nivel='.Sessao::NIVEL_COMUM.'">Tornar Padr&atilde;o</a>';
-				echo '<a class="botao b-sucesso" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getId().'novo_nivel='.Sessao::NIVEL_COMUM.'">Tornar Guich&ecirc;</a>';
+				echo '<a class="botao b-primario" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_COMUM.'">Tornar Padr&atilde;o</a>';
+				echo '<a class="botao b-secundario" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_GUICHE.'">Tornar Guich&ecirc;</a>';
+				echo '<a class="botao b-sucesso" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_ADMIN.'">Tornar Administrador</a>';
+				$sessao = new Sessao();
+				if($sessao->getNivelAcesso() == Sessao::NIVEL_SUPER)
+					echo '<a class="botao b-erro" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_SUPER.'">Tornar Super Usu&aacute;rio</a>';
+				
 				
 				
 				
