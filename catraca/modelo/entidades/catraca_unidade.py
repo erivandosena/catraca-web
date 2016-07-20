@@ -14,7 +14,14 @@ class CatracaUnidade(object):
         self.__caun_id = None
         self.__catraca = None
         self.__unidade = None
-
+        
+    def __eq__(self, obj):
+        return ((self.id, 
+                 self.catraca, 
+                 self.unidade) == (obj.id, 
+                                     obj.catraca, 
+                                     obj.unidade))
+        
     @property
     def id(self):
         return self.__caun_id

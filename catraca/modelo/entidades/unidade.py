@@ -13,7 +13,12 @@ class Unidade(object):
     def __init__(self):
         self.__unid_id = None
         self.__unid_nome = None
-    
+        
+    def __eq__(self, obj):
+        return ((self.id, 
+                 self.nome) == (obj.id, 
+                                     obj.nome))
+        
     @property
     def id(self):
         return self.__unid_id

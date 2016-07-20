@@ -22,6 +22,25 @@ class CartaoValido(object):
         self.__tipo = None
         self.__vinculo = None
         
+    def __eq__(self, obj):
+        return ((self.id, 
+                 self.numero, 
+                 self.creditos, 
+                 self.valor, 
+                 self.refeicoes, 
+                 self.descricao, 
+                 self.nome, 
+                 self.tipo,
+                 self.vinculo) == (obj.id, 
+                                     obj.numero, 
+                                     obj.creditos, 
+                                     obj.valor, 
+                                     obj.refeicoes, 
+                                     obj.descricao, 
+                                     obj.nome, 
+                                     obj.tipo,
+                                     obj.vinculo))
+        
     @property
     def id(self):
         return self.__cart_id

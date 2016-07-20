@@ -76,16 +76,16 @@ class TurnoDAO(ConexaoGenerica):
                     "INNER JOIN unidade_turno ON turno.turn_id = unidade_turno.turn_id "\
                     "INNER JOIN catraca_unidade ON unidade_turno.unid_id = catraca_unidade.unid_id "\
                     "INNER JOIN catraca ON catraca_unidade.catr_id = catraca.catr_id "\
-                    "WHERE catraca.catr_ip = '"+str(obj.ip)+"' "\
+                    "WHERE catraca.catr_nome = '"+str(obj.nome)+"' "\
                     "AND turno.turn_hora_inicio <= '" + str(hora_atual) +"' "\
                     "AND turno.turn_hora_fim >= '" + str(hora_atual) + "'"
         else:
-            ip = self.util.obtem_ip_por_interface()
+            nome = self.util.obtem_nome_rpi().upper()
             sql = "SELECT turno.turn_id, turno.turn_hora_inicio, turno.turn_hora_fim, turno.turn_descricao FROM turno "\
                     "INNER JOIN unidade_turno ON turno.turn_id = unidade_turno.turn_id "\
                     "INNER JOIN catraca_unidade ON unidade_turno.unid_id = catraca_unidade.unid_id "\
                     "INNER JOIN catraca ON catraca_unidade.catr_id = catraca.catr_id "\
-                    "WHERE catraca.catr_ip = '"+str(ip)+"' "\
+                    "WHERE catraca.catr_nome = '"+str(nome)+"' "\
                     "AND turno.turn_hora_inicio <= '" + str(hora_atual) +"' "\
                     "AND turno.turn_hora_fim >= '" + str(hora_atual) + "'"
         try:

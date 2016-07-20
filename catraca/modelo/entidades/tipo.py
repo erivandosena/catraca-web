@@ -14,7 +14,14 @@ class Tipo(object):
         self.__tipo_id = None
         self.__tipo_nome = None
         self.__tipo_valor = None
-    
+        
+    def __eq__(self, obj):
+        return ((self.id, 
+                 self.nome, 
+                 self.valor) == (obj.id, 
+                                     obj.nome, 
+                                     obj.valor))
+        
     @property
     def id(self):
         return self.__tipo_id

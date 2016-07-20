@@ -15,7 +15,16 @@ class Turno(object):
         self.__turn_hora_inicio = None
         self.__turn_hora_fim = None
         self.__turn_descricao = None
-    
+        
+    def __eq__(self, obj):
+        return ((self.id, 
+                 self.inicio, 
+                 self.fim, 
+                 self.descricao) == (obj.id, 
+                                     obj.inicio, 
+                                     obj.fim, 
+                                     obj.descricao))
+        
     @property
     def id(self):
         return self.__turn_id

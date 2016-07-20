@@ -114,6 +114,34 @@ class CatracaDAO(ConexaoGenerica):
             self.log.logger.error('[catraca] Erro ao realizar SELECT.', exc_info=True)
         finally:
             pass
+        
+    def busca_por_nome(self, nome):
+        obj = Catraca()
+        try:
+            with closing(self.abre_conexao().cursor()) as cursor:
+                sql_select = 'SELECT catr_id, catr_ip, catr_tempo_giro, catr_operacao, catr_nome, ' +\
+                'catr_mac_lan, catr_mac_wlan, catr_interface_rede FROM catraca WHERE catr_nome = %s'
+                cursor.execute(sql_select % str("'" + nome.upper() + "'"))
+                dados = cursor.fetchone()
+                if dados is not None:
+                    obj.id = dados[0]
+                    obj.ip = dados[1]
+                    obj.tempo = dados[2]
+                    obj.operacao = dados[3]
+                    obj.nome = dados[4]
+                    obj.maclan = dados[5]
+                    obj.macwlan = dados[6]
+                    obj.interface = dados[7]
+                    print "LENDO TABELA CATRACA"
+                    return obj
+                else:
+                    print "LENDO TABELA CATRACA VAZIA"
+                    return None
+        except Exception as excecao:
+            self.aviso = str(excecao)
+            self.log.logger.error('[catraca] Erro ao realizar SELECT.', exc_info=True)
+        finally:
+            pass
 
     
     def obtem_interface_rede(self, hostname):

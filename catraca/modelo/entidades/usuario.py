@@ -17,7 +17,20 @@ class Usuario(object):
         self.__usua_login = None
         self.__usua_senha = None
         self.__usua_nivel = None
-    
+        
+    def __eq__(self, obj):
+        return ((self.id, 
+                 self.nome, 
+                 self.email, 
+                 self.login, 
+                 self.senha, 
+                 self.nivel) == (obj.id, 
+                                     obj.nome, 
+                                     obj.email, 
+                                     obj.login, 
+                                     obj.senha, 
+                                     obj.nivel))
+        
     @property
     def id(self):
         return self.__usua_id

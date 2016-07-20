@@ -65,17 +65,9 @@ class TurnoJson(ServidorRestful):
         IP = Util().obtem_ip_por_interface()
         servidor = self.obter_servidor()
         try:
-            if servidor:
-#                 url = str(servidor) + "turno/jturno/" + str(self.util.converte_ip_para_long(IP)) + "/" + str(self.util.obtem_hora())
-#                 #print url
-#                 header = {'Content-type': 'application/json'}
-#                 r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
+            if servidor and IP:
                 url = str(self.URL) + "turno/jturno/" + str(self.util.converte_ip_para_long(IP)) + "/" + str(self.util.obtem_hora())
                 r = servidor.get(url)
-                #print "Status HTTP: " + str(r.status_code)
-                
-                #print r.text
-
                 if r.text != '':
                     dados  = json.loads(r.text)
                     LISTA_JSON = dados["turno"]

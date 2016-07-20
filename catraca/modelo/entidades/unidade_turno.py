@@ -13,7 +13,14 @@ class UnidadeTurno(object):
         self.__untu_id = None
         self.__turno = None
         self.__unidade = None
-    
+        
+    def __eq__(self, obj):
+        return ((self.id, 
+                 self.turno, 
+                 self.unidade) == (obj.id, 
+                                     obj.turno, 
+                                     obj.unidade))
+        
     @property
     def id(self):
         return self.__untu_id

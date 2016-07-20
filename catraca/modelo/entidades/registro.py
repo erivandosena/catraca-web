@@ -19,7 +19,22 @@ class Registro(object):
         self.__cartao = None
         self.__catraca = None
         self.__vinculo = None
- 
+        
+    def __eq__(self, obj):
+        return ((self.id, 
+                 self.data, 
+                 self.pago, 
+                 self.custo, 
+                 self.cartao, 
+                 self.catraca, 
+                 self.vinculo) == (obj.id, 
+                                     obj.data, 
+                                     obj.pago, 
+                                     obj.custo, 
+                                     obj.cartao, 
+                                     obj.catraca, 
+                                     obj.vinculo))
+        
     @property
     def id(self):
         return self.__regi_id

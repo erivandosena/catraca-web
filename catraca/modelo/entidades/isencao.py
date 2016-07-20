@@ -15,7 +15,16 @@ class Isencao(object):
         self.__isen_inicio = None
         self.__isen_fim = None
         self.__cartao = None
-    
+        
+    def __eq__(self, obj):
+        return ((self.id, 
+                 self.inicio, 
+                 self.fim, 
+                 self.cartao) == (obj.id, 
+                                     obj.inicio, 
+                                     obj.fim, 
+                                     obj.cartao))
+        
     @property
     def id(self):
         return self.__isen_id

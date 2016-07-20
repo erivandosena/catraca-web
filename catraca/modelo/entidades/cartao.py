@@ -15,7 +15,16 @@ class Cartao(object):
         self.__cart_numero = None
         self.__cart_creditos = None
         self.__tipo = None
-    
+        
+    def __eq__(self, obj):
+        return ((self.id, 
+                 self.numero, 
+                 self.creditos, 
+                 self.tipo) == (obj.id, 
+                                     obj.numero, 
+                                     obj.creditos, 
+                                     obj.tipo))
+        
     @property
     def id(self):
         return self.__cart_id

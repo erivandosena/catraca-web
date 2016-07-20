@@ -116,10 +116,8 @@ class Util(object):
             self.hora_stop = self.util.obtem_datahora()
             hora_start = self.hora_stop
             self.hora_stop += datetime.timedelta(minutes=minutos)
-            
-            print "====start=====> " + str( hora_start.strftime('%H:%M:%S'))
-            print "====stop======> " + str( self.hora_stop.strftime('%H:%M:%S'))
-        
+            #print "====start=====> " + str( hora_start.strftime('%H:%M:%S'))
+            #print "====stop======> " + str( self.hora_stop.strftime('%H:%M:%S'))
         if  self.util.obtem_datahora() >= self.hora_stop:
             self.hora_stop = None
             return False
@@ -138,10 +136,12 @@ class Util(object):
     
     def converte_ip_para_long(self, ip):
         try:
-            ip2int = lambda ip: reduce(lambda a, b: (a << 8) + b, map(int, ip.split('.')), 0)
+            if ip:
+                ip2int = lambda ip: reduce(lambda a, b: (a << 8) + b, map(int, ip.split('.')), 0)
+            else:
+                return None
         except Exception as excecao:
             print excecao
-            return ip2int("127.0.0.1")
         return ip2int(ip)
     
     def converte_long_para_ip(self, long):
@@ -215,27 +215,26 @@ class Util(object):
             return "0"
         
     def obtem_ip_por_interface(self, interface=None):
-        exibe = False
-        if interface is None:
-            interface = self.catraca_dao.obtem_interface_rede(self.obtem_nome_rpi())
+        ip = '127.0.0.1'
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         try:
-            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-            ip = socket.inet_ntoa(fcntl.ioctl(s.fileno(), 0x8915, struct.pack('256s', interface[:15]))[20:24])
-            return ip
+            if interface is None:
+                interface = self.catraca_dao.obtem_interface_rede(self.obtem_nome_rpi())
+                if interface is None:
+                    interface = 'lo'
+            numero_ip = socket.inet_ntoa(fcntl.ioctl(s.fileno(), 0x8915, struct.pack('256s', interface[0:15]))[20:24])
+            if len(numero_ip) == 0:
+                return ip
+            else:
+                return numero_ip
         except Exception as excecao:
-            #print excecao
-            ip = "127.0.0.1"
-            exibe = True
-            print "Erro ao obter ip!"
+            print excecao
             return ip
         finally:
-            pass
-#             if exibe:
-#                 from catraca.visao.interface.aviso import Aviso
-#                 Aviso().exibir_estatus_catraca(ip)
+            s.close()
                 
     def obtem_MAC_por_interface(self, interface=None):
-        mac = None
+        mac = "00:00:00:00:00:00"
         if interface is None:
             interface = self.catraca_dao.obtem_interface_rede(self.obtem_nome_rpi())
         try:
@@ -243,11 +242,8 @@ class Util(object):
             if self.verifica_arquivo(arquivo):
                 str = open(arquivo).read()
                 mac = str[0:17]
-            else:
-                mac = "00:00:00:00:00:00"
         except Exception as excecao:
             print excecao
-            mac = "00:00:00:00:00:00"
         return mac
         
     def altera_hostname(self, novo_nome):
@@ -262,12 +258,6 @@ class Util(object):
             arq.truncate()
             arq.write(content.replace(str_atual, str_novo))
             
-#     def remove_chr(self, old, to_remove):
-#         new_string = old
-#         for x in to_remove:
-#             new_string = new_string.replace(x, '')
-#         return new_string
-    
     def substitui_espaco(self, texto):
         vogais = " "
         for espaco in vogais:

@@ -21,7 +21,7 @@ from catraca.controle.recursos.registro_json import RegistroJson
 
 from catraca.modelo.dao.registro_dao import RegistroDAO
 from catraca.modelo.dao.cartao_dao import CartaoDAO
-from catraca.modelo.dao.tipo_dao import TipoDAO
+
 
 
 __author__ = "Erivando Sena" 
@@ -38,12 +38,6 @@ class Relogio(ControleGenerico, threading.Thread):
     periodo = False
     contador = 4
     lote_off = False
-    
-#     unidade_dao = UnidadeDAO()
-#     catraca_unidade_dao = CatracaUnidadeDAO()
-#     turno_dao = TurnoDAO
-#     unidade_turno_dao = UnidadeTurnoDAO()
-#     custo_refeicao_dao = CustoRefeicaoDAO()
 
     def __init__(self, intervalo=1):
         super(Relogio, self).__init__()
@@ -58,13 +52,14 @@ class Relogio(ControleGenerico, threading.Thread):
     def run(self):
         print "%s. Rodando... " % self.name
         #Relogio.catraca = self.catraca
+        self.catraca = self.catraca_dao.busca_por_nome(self.util.obtem_nome_rpi())
         while True:
             self.hora_atul = self.util.obtem_hora()
             Relogio.hora = self.hora_atul
             self.datahora = self.util.obtem_datahora().strftime("%d/%m/%Y %H:%M:%S")
-            if (self.hora == datetime.datetime.strptime('06:00:00','%H:%M:%S').time()) or (self.hora == datetime.datetime.strptime('12:00:00','%H:%M:%S').time()) or (self.hora == datetime.datetime.strptime('18:00:00','%H:%M:%S').time()):
+            #if (self.hora == datetime.datetime.strptime('06:00:00','%H:%M:%S').time()) or (self.hora == datetime.datetime.strptime('12:00:00','%H:%M:%S').time()) or (self.hora == datetime.datetime.strptime('18:00:00','%H:%M:%S').time()):
+            if (datetime.datetime.strptime(str(self.hora),'%H:%M:%S').time() == datetime.datetime.strptime('06:00:00','%H:%M:%S').time()) or (datetime.datetime.strptime(str(self.hora),'%H:%M:%S').time() == datetime.datetime.strptime('12:00:00','%H:%M:%S').time()) or (datetime.datetime.strptime(str(self.hora),'%H:%M:%S').time() == datetime.datetime.strptime('18:00:00','%H:%M:%S').time()):
                 self.aviso.exibir_saldacao(self.aviso.saldacao(), self.util.obtem_datahora_display())
-                #self.aviso.exibir_aguarda_cartao()
             self.contador += 1
             if self.contador == 10:
                 self.contador = 0
@@ -78,29 +73,16 @@ class Relogio(ControleGenerico, threading.Thread):
         if Rede.status:
             
             #self.atualiza_remoto()
-            
-            #remoto
-            #catraca = self.recursos_restful.catraca_json.catraca_get()
-            catraca = Rede.interface[3]
+
+            catraca = Rede.interface_ativa[3]
             print "[ACESSO REMOTO] "+ str(catraca)
             return self.obtem_dependencias_remotas(catraca)
         else:
             #local
             self.lote_off = True
-            catraca = self.catraca_dao.busca_por_ip(self.util.obtem_ip_por_interface())
+            catraca = self.catraca_dao.busca_por_nome(self.util.obtem_nome_rpi())
             print "[ACESSO LOCAL] "+ str(catraca)
-            if catraca is None:
-                #catraca
-                self.aviso.exibir_catraca_nao_cadastrada()
-                self.recursos_restful.obtem_catraca(True, True, False)
-                catraca = self.catraca_dao.busca_por_ip(self.util.obtem_ip_por_interface())
-                print catraca
-                if catraca:
-                    return catraca
-                else:
-                    return self.obtem_catraca()
-            else:
-                return self.obtem_dependencias_locais(catraca)
+            return self.obtem_dependencias_locais(catraca)
 
     def obtem_dependencias_locais(self, catraca):
         #unidade
@@ -142,9 +124,10 @@ class Relogio(ControleGenerico, threading.Thread):
             
     def obtem_turno(self):
         if self.catraca:
-            #remoto
-            turno_ativo = self.recursos_restful.turno_json.turno_funcionamento_get()
-            if turno_ativo is None:
+            if Rede.status:
+                #remoto
+                turno_ativo = self.recursos_restful.turno_json.turno_funcionamento_get()
+            else:
                 #local
                 turno_ativo = self.turno_dao.obtem_turno(self.catraca, self.hora)
             if turno_ativo:

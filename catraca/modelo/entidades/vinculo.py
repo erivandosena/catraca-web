@@ -18,7 +18,24 @@ class Vinculo(object):
         self.__vinc_refeicoes = None
         self.__cartao = None
         self.__usuario = None
-    
+        
+    def __eq__(self, obj):
+        return ((self.id, 
+                 self.avulso, 
+                 self.inicio, 
+                 self.fim, 
+                 self.descricao, 
+                 self.refeicoes, 
+                 self.cartao, 
+                 self.usuario) == (obj.id, 
+                                     obj.avulso, 
+                                     obj.inicio, 
+                                     obj.fim, 
+                                     obj.descricao, 
+                                     obj.refeicoes, 
+                                     obj.cartao, 
+                                     obj.usuario))
+        
     @property
     def id(self):
         return self.__vinc_id

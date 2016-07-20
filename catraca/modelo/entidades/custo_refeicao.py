@@ -14,7 +14,14 @@ class CustoRefeicao(object):
         self.__cure_id = None
         self.__cure_valor = None
         self.__cure_data = None
-    
+        
+    def __eq__(self, obj):
+        return ((self.id, 
+                 self.valor, 
+                 self.data) == (obj.id, 
+                                     obj.valor, 
+                                     obj.data))
+        
     @property
     def id(self):
         return self.__cure_id

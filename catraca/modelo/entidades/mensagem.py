@@ -17,7 +17,20 @@ class Mensagem(object):
         self.__mens_institucional3 = None
         self.__mens_institucional4 = None
         self.__catraca = None
-    
+        
+    def __eq__(self, obj):
+        return ((self.id, 
+                 self.institucional1, 
+                 self.institucional2, 
+                 self.institucional3, 
+                 self.institucional4, 
+                 self.catraca) == (obj.id, 
+                                     obj.institucional1, 
+                                     obj.institucional2, 
+                                     obj.institucional3, 
+                                     obj.institucional4, 
+                                     obj.catraca))
+        
     @property
     def id(self):
         return self.__mens_id

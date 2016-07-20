@@ -36,11 +36,12 @@ class Sincronia(Relogio):
         if Relogio.catraca:
             if (Relogio.catraca.operacao == 1) or (Relogio.catraca.operacao == 2) or (Relogio.catraca.operacao == 3) or (Relogio.catraca.operacao == 4):
                 self.contador_status_recursos += 1
-                if ( (Rede.status == True) and (Relogio.periodo == True) and (self.contador_status_recursos >= 15) ):
+                if (Rede.status == True and Relogio.periodo == True and self.contador_status_recursos >= 15):
                     self.contador_status_recursos = 0
                     self.recursos_restful.obtem_recursos(False, True, False)
                 elif not Relogio.periodo:
-                    if Relogio.hora >= datetime.datetime.strptime('00:00:00','%H:%M:%S').time() and Relogio.hora <= datetime.datetime.strptime('00:00:10','%H:%M:%S').time():
+                    #if Relogio.hora >= datetime.datetime.strptime('00:00:00','%H:%M:%S').time() and Relogio.hora <= datetime.datetime.strptime('00:00:10','%H:%M:%S').time():
+                    if datetime.datetime.strptime(str(Relogio.hora),'%H:%M:%S').time() >= datetime.datetime.strptime('00:00:00','%H:%M:%S').time() and datetime.datetime.strptime(str(Relogio.hora),'%H:%M:%S').time() <= datetime.datetime.strptime('00:00:10','%H:%M:%S').time():
                         if Relogio.rede:
                             self.util.beep_buzzer(855, .5, 1)
                             self.aviso.exibir_aguarda_sincronizacao()
@@ -65,5 +66,6 @@ class Sincronia(Relogio):
                             print "Concluido!\n"
                             print "Iniciando a sincronia com o servidor RESTful em 5 segundos..."
                             sleep(5)
+                            self.recursos_restful.obtem_catraca(True, False)
                             self.recursos_restful.obtem_recursos(True, True, False)
                 
