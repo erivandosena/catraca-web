@@ -167,6 +167,7 @@ class UsuarioDAO extends DAO {
 		foreach($this->getConexao()->query($sql) as $linha){
 			$usuario->setId($linha['usua_id']);
 			$usuario->setNome($linha['usua_nome']);
+			$usuario->setNivelAcesso($linha['usua_nivel']);
 			return true;
 		}
 		return false;

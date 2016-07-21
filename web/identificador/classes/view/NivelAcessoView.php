@@ -104,6 +104,7 @@ class NivelAcessoView {
 												<option value="1">Nome</option>
 		
 											</select>
+											<input type="hidden" name="pagina" value="nivel_acesso" />
 											<input class="texto-preto" type="text" name="nome" id="campo-texto-2" /><br>
 											<input type="submit" />
 										</label>
@@ -214,7 +215,7 @@ class NivelAcessoView {
 		echo '<td>' . $usuario->getStatusDiscente () . '</td>';
 		echo '<td>' . $usuario->getStatusServidor () . '</td>';
 		echo '<td>' . $usuario->getTipodeUsuario () . '</td>';
-		echo '<td class="centralizado"><a href="?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna () . '"><span class="icone-checkmark texto-verde2 botao" title="Selecionar"></span></a></td>';
+		echo '<td class="centralizado"><a href="?pagina=nivel_acesso&selecionado=' . $usuario->getIdBaseExterna () . '"><span class="icone-checkmark texto-verde2 botao" title="Selecionar"></span></a></td>';
 		echo '</tr>';
 	}
 	
@@ -333,7 +334,7 @@ class NivelAcessoView {
 		if(strtolower (trim($usuario->getTipodeUsuario())) == 'terceirizado'){
 			echo '<tr><th colspan=2>Terceirizado Sem Informação de Status</th></tr>';
 		}
-		
+		echo '<tr><th>Nivel de Acesso</th><td>'.$usuario->toStrNivel().'</td></tr>';
 		
 		echo '</table>
 				

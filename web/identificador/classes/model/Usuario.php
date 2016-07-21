@@ -211,5 +211,31 @@ class Usuario{
 		return $tipo;
 		
 	}
+	public function toStrNivel(){
+		
+		switch ($this->getNivelAcesso()){
+			case Sessao::NIVEL_ADMIN:
+				$strNivelAcesso =  " Administrador";
+				break;
+			case Sessao::NIVEL_SUPER:
+				$strNivelAcesso = "Super Usu&aacute;rio";
+				break;
+			case Sessao::NIVEL_GUICHE:
+				$strNivelAcesso = "Guich&ecirc;";
+				break;
+			case Sessao::NIVEL_COMUM:
+				$strNivelAcesso = "Padr&atilde;o";
+				break;
+		
+			default:
+				$strNivelAcesso = "Sem Cadastro";
+					
+				break;
+					
+		}
+		return $strNivelAcesso;
+		
+		
+	}
 	
 }
