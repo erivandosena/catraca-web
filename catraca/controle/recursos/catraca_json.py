@@ -44,55 +44,41 @@ class CatracaJson(ServidorRestful):
                     dados  = json.loads(r.text)
                     LISTA_JSON = dados["catracas"]
                     if LISTA_JSON != []:
-                        catraca_local = None
                         if limpa_tabela:
-                            self.mantem_tabela_local(None, 0)
+                            self.mantem_tabela_local(None, True)
+                        catraca_local = None
                         for item in LISTA_JSON:
                             obj = self.dict_obj(item)
                             if obj:
-                                catraca = self.catraca_dao.busca(obj.id)
-                                if catraca is None:
-                                    print 'catraca remoto ausente no local'
-                                    self.mantem_tabela_local(obj, 1)
-                                    return self.catraca_get()
+                                self.mantem_tabela_local(obj)
                                 if obj.interface == 'eth0' or obj.interface == 'wlan0':
                                     if (self.util.obtem_nome_rpi().upper() == obj.nome.upper()):
+                                        
                                         #print "catraca fisica local"
-                                        catraca_local = catraca
+                                        catraca_local = obj
                                         ip_local = self.util.obtem_ip_por_interface(obj.interface.lower())
                                         mac_local = self.util.obtem_MAC_por_interface(obj.interface.lower())
-                                        
+                                         
                                         if ip_local != "127.0.0.1":
                                             if obj.ip != ip_local:
                                                  catraca_local.ip = ip_local
-                                                   
+
                                             if obj.interface.lower() == "eth0":
                                                 if mac_local != obj.maclan:
                                                     catraca_local.maclan = mac_local
-                                                      
+                                                       
                                             if obj.interface.lower() == "wlan0":
                                                 if mac_local != obj.macwlan:
                                                     catraca_local.macwlan = mac_local
-                                                    
-                                        if not catraca_local.__eq__(obj):
-                                            self.mantem_tabela_local(obj, 2)
-                                            print "catraca fisica local atualizada"
-
+                                                     
+                                            if self.mantem_tabela_local(obj):
+                                                print "catraca fisica local atualizada"
+ 
                                         if obj.nome.lower() != self.util.obtem_nome_rpi().lower():
                                             print "REINICIAR SISTEMA...."
                                             self.util.altera_hostname( self.util.obtem_string_normalizada( obj.nome.lower() ) )
                                             self.util.reinicia_raspberrypi()
                                             return self.aviso.exibir_reinicia_catraca()
-                                    else:
-                                        #print "catraca fisica remota"
-                                        if not catraca.__eq__(obj):
-                                            self.mantem_tabela_local(obj, 2)
-                                            print "catraca fisica remota atualizada localmente"
-                                else:
-                                    #print "catraca virtual remota"
-                                    if not catraca.__eq__(obj):
-                                        self.mantem_tabela_local(obj, 2)
-                                        print "catraca virtual remota atualizada localmente"
                         if catraca_local is None:
                             print "catraca local ausente no remoto"
                             self.aviso.exibir_catraca_nao_cadastrada()
@@ -109,22 +95,58 @@ class CatracaJson(ServidorRestful):
         finally:
             pass
         
-    def mantem_tabela_local(self, obj, acao):
-        # 0=exclui    1=insere    2=atualiza
-        if acao == 0:
-            return self.atualiza_exclui(obj, True)
-        if acao == 1:
-            return self.insere(obj)
-        if acao == 2:
-            return self.atualiza_exclui(obj, False)
-        
+    def mantem_tabela_local(self, obj, mantem_tabela=False):
+        #se o obj existir
+        if obj:
+            # busca o objeto no banco local
+            objeto = self.catraca_dao.busca(obj.id)
+            #se mantem_tabela for false
+            if not mantem_tabela:
+                #se o objeto existir
+                if objeto:
+                    # se o objeto for diferente de obj
+                    if not objeto.__eq__(obj):
+                        #atualiza o objeto
+                        return self.atualiza_exclui(obj, mantem_tabela)
+                    # se o objeto for igual ao obj
+                    else:
+                        #nao faz nada
+                        print "Acao de atualizacao nao necessaria!"
+                        return None
+                #se o objeto nao existir
+                else:
+                     #insere novo obj
+                    return self.insere(obj)
+            #se mantem_tabela for True
+            else:
+                #se o objeto existir
+                if objeto:
+                    #exclui o objeto
+                    return self.atualiza_exclui(obj, mantem_tabela)
+        #se o obj nao existir
+        else:
+            #se mantem_tabela for true
+            if mantem_tabela:
+                #limpa todos os registros da tabela
+                return self.atualiza_exclui(obj, mantem_tabela)
+            #se mantem_tabela for false
+            else:
+                #nao faz nada
+                print "Nemhuma acao realizada!"
+                return None
+            
     def atualiza_exclui(self, obj, boleano):
-        self.catraca_dao.atualiza_exclui(obj, boleano)
-        print self.catraca_dao.aviso
+        if self.catraca_dao.atualiza_exclui(obj, boleano):
+            print self.catraca_dao.aviso
+            if not boleano:
+                return obj
+            else:
+                return None
         
     def insere(self, obj):
-        self.catraca_dao.insere(obj)
-        print self.catraca_dao.aviso
+        if self.catraca_dao.insere(obj):
+            print self.catraca_dao.aviso
+            return obj
         
     def dict_obj(self, formato_json):
         catraca = Catraca()

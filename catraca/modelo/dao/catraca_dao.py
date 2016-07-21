@@ -184,8 +184,8 @@ class CatracaDAO(ConexaoGenerica):
                                                 obj.macwlan,
                                                 obj.interface)
                                    )
-                    self.aviso = "[catraca] Inserido com sucesso!"
                     self.commit()
+                    self.aviso = "[catraca] Inserido com sucesso!"
                     return True
             else:
                 self.aviso = "[catraca] inexistente!"
@@ -227,8 +227,8 @@ class CatracaDAO(ConexaoGenerica):
                                                     obj.interface,
                                                     obj.id)
                                        )
-                        self.aviso = "[catraca] Alterado com sucesso!"
                     self.commit()
+                    self.aviso = "[catraca] Alterado com sucesso!"
                     return True
             else:
                 self.aviso = "[catraca] inexistente!"
