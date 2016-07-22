@@ -412,7 +412,7 @@ class RelatorioController {
 					
 		
 		echo'<div class="doze colunas relatorio-rodape">
-			<span>CATRACA | Copyright © 2015 - DTI</span>
+			<span>CATRACA | Copyright © '.date('Y').'- DTI</span>
 			<span>Relatório Emitido em:'.$date = date('d-m-Y H:i:s').'</span>
 			<a class="botao icone-printer"> Imprimir</a>
 			</div>	
