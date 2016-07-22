@@ -75,13 +75,54 @@ class Sessao{
 	}
 	
 	const NIVEL_DESLOGADO = 0;
+	
+	/**
+	 * 
+	 * @var int 
+	 * Esse cara pode acessar qualquer página. Inclusive págianas ainda em situação de homologação. 
+	 * 
+	 */
+	const NIVEL_SUPER = 2;
+	/**
+	 * 
+	 * @var int
+	 * Esse acessa tudo, exceto as páginas em homologação. 
+	 * o que já temos pra ele?
+	 * Cadastro
+	 * Cadastro Avulso
+	 * Catraca Virtual
+	 * Catraca
+	 * Guiche
+	 * 
+	 */
+	const NIVEL_ADMIN = 3;
+	/**
+	 * Acessa o Guiche e o Cartão. 
+	 * @var int
+	 * 
+	 */
+	const NIVEL_GUICHE = 4;
+	/**
+	 * Acessa o catraca virtual e o cartão. 
+	 * @var unknown
+	 */
+	const NIVEL_CATRACA_VIRTUAL = 6;
+	/**
+	 * So acessa o cartao
+	 * @var unknown
+	 */
+	const NIVEL_CADASTRO = 7;
+	/**
+	 * Só acessa os relatórios. 
+	 * @var unknown
+	 */
+	const NIVEL_RELATORIO = 8;
+	
+	
+	const NIVEL_SUPORTE = 5;
 	const NIVEL_COMUM = 1;
 	
-	const NIVEL_ADMIN = 2;
-	const NIVEL_SUPER = 3;
-	const NIVEL_SUPORTE = 5;
-	const NIVEL_GUICHE = 4;
-
+	
 
 	
 	/**

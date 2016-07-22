@@ -67,6 +67,7 @@ class CartaoView {
 		
 										<label for="opcoes-1">
 											<object class="rotulo texto-preto">Buscar por: </object>
+											<input type="hidden" name="pagina" value="cartao" />
 											<select name="opcoes-1" id="opcoes-1" class="texto-preto">
 												<option value="1">Nome</option>
 		

@@ -10,6 +10,10 @@ class NivelAcessoController{
 	public static function main($nivelDeAcesso){
 		
 		switch ($nivelDeAcesso){
+			case Sessao::NIVEL_ADMIN:
+				$controller = new NivelAcessoController();
+				$controller->telaCartao();
+				break;
 			case Sessao::NIVEL_SUPER:
 				$controller = new NivelAcessoController();
 				$controller->telaCartao();
@@ -141,8 +145,11 @@ class NivelAcessoController{
 				
 				echo '</h1>';
 				echo '<a class="botao b-primario" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_COMUM.'">Tornar Padr&atilde;o</a>';
-				echo '<a class="botao b-secundario" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_GUICHE.'">Tornar Guich&ecirc;</a>';
+				echo '<a class="botao b-secundario" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_CADASTRO.'">Tornar Cadastro</a>';
 				echo '<a class="botao b-sucesso" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_ADMIN.'">Tornar Administrador</a>';
+				echo '<a class="botao b-erro" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_RELATORIO.'">Somente Relatorios</a>';
+				echo '<a class="botao b-secundario" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_CATRACA_VIRTUAL.'">Tornar Catraca Virtual</a>';
+												
 				$sessao = new Sessao();
 				if($sessao->getNivelAcesso() == Sessao::NIVEL_SUPER)
 					echo '<a class="botao b-erro" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_SUPER.'">Tornar Super Usu&aacute;rio</a>';
@@ -271,10 +278,11 @@ class NivelAcessoController{
 
 			if($usuario->getNivelAcesso() == null)
 				return;
-			
 			echo '<a class="botao b-primario" href="?pagina=nivel_acesso&id_usuario='.$usuario->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_COMUM.'">Tornar Padr&atilde;o</a>';
-			echo '<a class="botao b-secundario" href="?pagina=nivel_acesso&id_usuario='.$usuario->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_GUICHE.'">Tornar Guich&ecirc;</a>';
+			echo '<a class="botao b-secundario" href="?pagina=nivel_acesso&id_usuario='.$usuario->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_CADASTRO.'">Somente Cadastro</a>';
 			echo '<a class="botao b-sucesso" href="?pagina=nivel_acesso&id_usuario='.$usuario->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_ADMIN.'">Tornar Administrador</a>';
+			echo '<a class="botao b-erro" href="?pagina=nivel_acesso&id_usuario='.$usuario->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_RELATORIO.'">Somente Relatorios</a>';
+			echo '<a class="botao b-secundario" href="?pagina=nivel_acesso&id_usuario='.$usuario->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_CATRACA_VIRTUAL.'">Catraca Virtual</a>';
 			$sessao = new Sessao();
 			if($sessao->getNivelAcesso() == Sessao::NIVEL_SUPER)
 				echo '<a class="botao b-erro" href="?pagina=nivel_acesso&id_usuario='.$usuario->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_SUPER.'">Tornar Super Usu&aacute;rio</a>';

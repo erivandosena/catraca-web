@@ -8,6 +8,18 @@ class RelatorioController {
 				$controller = new RelatorioController ();
 				$controller->relatorio ();
 				break;
+			case Sessao::NIVEL_ADMIN :
+				$controller = new RelatorioController ();
+				$controller->relatorio ();
+				break;
+			case Sessao::NIVEL_CATRACA_VIRTUAL:
+				$controller = new RelatorioController ();
+				$controller->relatorio ();
+				break;
+			case Sessao::NIVEL_RELATORIO:
+				$controller = new RelatorioController ();
+				$controller->relatorio ();
+				break;
 			default :
 				UsuarioController::main ( $nivelDeAcesso );
 				break;

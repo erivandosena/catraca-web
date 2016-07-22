@@ -11,12 +11,26 @@ class CatracaVirtual{
 	}
 	
 	public static function main($nivel){
-		
-		if($nivel == Sessao::NIVEL_SUPER){
 
-			$gerador = new CatracaVirtual();
-			$gerador->verificarSelecaoRU();
+		switch ($nivel){
+			case Sessao::NIVEL_SUPER:
+				$gerador = new CatracaVirtual();
+				$gerador->verificarSelecaoRU();
+				break;
+			case Sessao::NIVEL_ADMIN:
+				$gerador = new CatracaVirtual();
+				$gerador->verificarSelecaoRU();
+				break;
+			case Sessao::NIVEL_CATRACA_VIRTUAL:
+				$gerador = new CatracaVirtual();
+				$gerador->verificarSelecaoRU();
+				break;
+			default:
+				UsuarioController::main ( $nivelDeAcesso );
+				break;
 		}
+		
+		
 		
 		
 	}

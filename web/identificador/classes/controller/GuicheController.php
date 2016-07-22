@@ -7,10 +7,32 @@ class GuicheController{
 	
 	
 	public static function main($nivel){
+		switch ($nivel){
+			case Sessao::NIVEL_SUPER:
+				//Acessa tudo.
+				
+				$controller = new GuicheController();
+				$controller->telaGuiche();
+						
+				break;
+			case Sessao::NIVEL_ADMIN:
+				//Acessa tudo que já foi homologado.
 		
-		$controller = new GuicheController();
-		$controller->telaGuiche();
-		
+
+				$controller = new GuicheController();
+				$controller->telaGuiche();
+				
+				break;
+			case Sessao::NIVEL_GUICHE:
+
+				$controller = new GuicheController();
+				$controller->telaGuiche();
+				
+				break;
+			default:
+				UsuarioController::main ( $nivelDeAcesso );
+				break;
+		}		
 	}
 	
 	

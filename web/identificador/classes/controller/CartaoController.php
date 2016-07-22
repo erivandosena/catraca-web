@@ -14,6 +14,18 @@ class CartaoController{
 				$controller = new CartaoController();
 				$controller->telaCartao();
 				break;
+			case Sessao::NIVEL_ADMIN:
+				$controller = new CartaoController();
+				$controller->telaCartao();
+				break;
+			case Sessao::NIVEL_GUICHE:
+				$controller = new CartaoController();
+				$controller->telaCartao();
+				break;
+			case Sessao::NIVEL_CADASTRO:
+				$controller = new CartaoController();
+				$controller->telaCartao();
+				break;
 			default:
 				UsuarioController::main ( $nivelDeAcesso );
 				break;

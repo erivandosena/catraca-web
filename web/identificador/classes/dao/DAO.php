@@ -1,8 +1,8 @@
  <?php
  
- /*
-  * Descomente esta e comente a de baixo para colocar em produção.
-  */ 
+//  /*
+//   * Descomente esta e comente a de baixo para colocar em produção.
+//   */ 
  
  
 // class DAO {
@@ -62,9 +62,9 @@
 	
 // }
 
-// 
 
-?>
+
+// ?>
 
 
 
