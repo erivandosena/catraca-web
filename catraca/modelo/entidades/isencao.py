@@ -25,6 +25,9 @@ class Isencao(object):
                                      obj.fim, 
                                      obj.cartao))
         
+    def __ne__(self, obj):
+        return not self == obj
+     
     @property
     def id(self):
         return self.__isen_id

@@ -19,6 +19,9 @@ class Unidade(object):
                  self.nome) == (obj.id, 
                                      obj.nome))
         
+    def __ne__(self, obj):
+        return not self == obj
+     
     @property
     def id(self):
         return self.__unid_id

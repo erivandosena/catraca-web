@@ -28,7 +28,7 @@ class CartaoJson(ServidorRestful):
         super(CartaoJson, self).__init__()
         ServidorRestful.__init__(self)
         
-    def cartao_get(self, mantem_tabela=False, limpa_tabela=False):
+    def cartao_get(self, limpa_tabela=False):
         servidor = self.obter_servidor()
         try:
             if servidor:
@@ -38,23 +38,15 @@ class CartaoJson(ServidorRestful):
                     dados  = json.loads(r.text)
                     LISTA_JSON = dados["cartoes"]
                     if LISTA_JSON != []:
+                        if limpa_tabela:
+                            self.mantem_tabela_local(None, True)
                         lista = []
                         for item in LISTA_JSON:
                             obj = self.dict_obj(item)
                             if obj:
                                 lista.append(obj)
-                                if mantem_tabela:
-                                    self.mantem_tabela_local(obj, limpa_tabela)
-                                    
-#                                 if not catraca_local.__eq__(obj):
-#                                     self.mantem_tabela_local(obj, 2)
-#                                     print "catraca fisica local atualizada"
-                                    
-                                    
+                                self.mantem_tabela_local(obj)  
                         return lista
-                    else:
-                        self.atualiza_exclui(None, True)
-                        return None
                 else:
                     return None
         except Exception as excecao:
@@ -77,37 +69,72 @@ class CartaoJson(ServidorRestful):
                             obj = self.dict_obj_cartao_valido(item)
                             if obj:
                                 return obj
-                            else:
-                                return None
-                else:
-                    return None
+                    else:
+                        return None
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json cartao', exc_info=True)
         finally:
             pass
         
-    def mantem_tabela_local(self, obj, limpa_tabela=False):
-        if limpa_tabela:
-            self.atualiza_exclui(None, limpa_tabela)
+    def mantem_tabela_local(self, obj, mantem_tabela=False):
         if obj:
-            resultado = self.cartao_dao.busca(obj.id)
-            if resultado:
-                self.atualiza_exclui(obj, False)
+            objeto = self.cartao_dao.busca(obj.id)
+            if not mantem_tabela:
+                if objeto:
+                    if not objeto.__eq__(obj):
+                        return self.atualiza_exclui(obj, mantem_tabela)
+                    else:
+                        print "Acao de atualizacao nao necessaria!"
+                        return None
+                else:
+                    return self.insere(obj)
             else:
-                self.insere(obj)
+                if objeto:
+                    return self.atualiza_exclui(obj, mantem_tabela)
         else:
-            return None
-        
+            if mantem_tabela:
+                return self.atualiza_exclui(obj, mantem_tabela)
+            else:
+                print "Nemhuma acao realizada!"
+                return None
+            
     def atualiza_exclui(self, obj, boleano):
-        self.cartao_dao.atualiza_exclui(obj, boleano)
-        self.cartao_dao.commit()
-        print self.cartao_dao.aviso
-        
+        if self.cartao_dao.atualiza_exclui(obj, boleano):
+            self.cartao_dao.commit()
+            print self.cartao_dao.aviso
+            if not boleano:
+                return obj
+            else:
+                return None
+            
     def insere(self, obj):
-        self.cartao_dao.insere(obj)
-        self.cartao_dao.commit()
-        print self.cartao_dao.aviso
+        if self.cartao_dao.insere(obj):
+            self.cartao_dao.commit()
+            print self.cartao_dao.aviso
+            return obj
+        
+#     def mantem_tabela_local(self, obj, limpa_tabela=False):
+#         if limpa_tabela:
+#             self.atualiza_exclui(None, limpa_tabela)
+#         if obj:
+#             resultado = self.cartao_dao.busca(obj.id)
+#             if resultado:
+#                 self.atualiza_exclui(obj, False)
+#             else:
+#                 self.insere(obj)
+#         else:
+#             return None
+#         
+#     def atualiza_exclui(self, obj, boleano):
+#         self.cartao_dao.atualiza_exclui(obj, boleano)
+#         self.cartao_dao.commit()
+#         print self.cartao_dao.aviso
+#         
+#     def insere(self, obj):
+#         self.cartao_dao.insere(obj)
+#         self.cartao_dao.commit()
+#         print self.cartao_dao.aviso
         
     def dict_obj(self, formato_json):
         cartao = Cartao()

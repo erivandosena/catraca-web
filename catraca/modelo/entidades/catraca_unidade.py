@@ -22,6 +22,9 @@ class CatracaUnidade(object):
                                      obj.catraca, 
                                      obj.unidade))
         
+    def __ne__(self, obj):
+        return not self == obj
+     
     @property
     def id(self):
         return self.__caun_id

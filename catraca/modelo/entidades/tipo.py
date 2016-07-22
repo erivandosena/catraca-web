@@ -15,13 +15,25 @@ class Tipo(object):
         self.__tipo_nome = None
         self.__tipo_valor = None
         
-    def __eq__(self, obj):
-        return ((self.id, 
-                 self.nome, 
-                 self.valor) == (obj.id, 
-                                     obj.nome, 
-                                     obj.valor))
+    def __eq__(self, outro):
+        if outro is None:
+            return False
+        return (self.id, self.nome, self.valor) == (outro.id, outro.nome, outro.valor)
+    
+    def __ne__(self, outro):
+        return not self.__eq__(outro)
+        #return not self == outro
         
+#     def __eq__(self, obj):
+#         return ((self.id, 
+#                  self.nome, 
+#                  self.valor) == (obj.id, 
+#                                      obj.nome, 
+#                                      obj.valor))
+#         
+#     def __ne__(self, obj):
+#         return not self.__eq__(obj)
+    
     @property
     def id(self):
         return self.__tipo_id

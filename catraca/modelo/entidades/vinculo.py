@@ -36,6 +36,9 @@ class Vinculo(object):
                                      obj.cartao, 
                                      obj.usuario))
         
+    def __ne__(self, obj):
+        return not self == obj
+     
     @property
     def id(self):
         return self.__vinc_id

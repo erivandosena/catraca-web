@@ -31,6 +31,9 @@ class Mensagem(object):
                                      obj.institucional4, 
                                      obj.catraca))
         
+    def __ne__(self, obj):
+        return not self == obj
+     
     @property
     def id(self):
         return self.__mens_id

@@ -28,13 +28,14 @@ class TipoDAO(ConexaoGenerica):
         id = None
         for i in arg:
             id = i
-        if id:
-            sql = "SELECT tipo_id, tipo_nome, tipo_valor FROM tipo WHERE tipo_id = " + str(id)
-        else:
-            sql = "SELECT tipo_id, tipo_nome, tipo_valor FROM tipo ORDER BY tipo_id"
         try:
             with closing(self.abre_conexao().cursor()) as cursor:
-                cursor.execute(sql)
+                if id:
+                    sql_select = 'SELECT tipo_id, tipo_nome, tipo_valor FROM tipo WHERE tipo_id = %s'
+                    cursor.execute(sql_select % str(id))
+                else:
+                    sql_select = 'SELECT tipo_id, tipo_nome, tipo_valor FROM tipo ORDER BY tipo_id'
+                    cursor.execute(sql_select)
                 if id:
                     dados = cursor.fetchone()
                     if dados:
@@ -59,17 +60,11 @@ class TipoDAO(ConexaoGenerica):
     def insere(self, obj):
         try:
             if obj:
-                sql = "INSERT INTO tipo("\
-                        "tipo_id, "\
-                        "tipo_nome, "\
-                        "tipo_valor) VALUES (" +\
-                        str(obj.id) + ", '" +\
-                        str(obj.nome) + "', '" +\
-                        str(obj.valor) + "')"
-                self.aviso = "[tipo] Inserido com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
-                    cursor.execute(sql)
+                    sql_insert = 'INSERT INTO tipo(tipo_id, tipo_nome, tipo_valor) VALUES (%s, %s, %s)'
+                    cursor.execute(sql_insert, (obj.id, obj.nome, obj.valor))
                     self.commit()
+                    self.aviso = "[tipo] Inserido com sucesso!"
                     return True
             else:
                 self.aviso = "[tipo] inexistente!"
@@ -84,23 +79,23 @@ class TipoDAO(ConexaoGenerica):
     def atualiza_exclui(self, obj, delete):
         try:
             if obj or delete:
-                if delete:
-                    if obj:
-                        sql = "DELETE FROM tipo WHERE tipo_id = " + str(obj.id)
-                    else:
-                        sql = "DELETE FROM tipo"
-                    self.aviso = "[tipo] Excluido com sucesso!"
-                else:
-                    sql = "UPDATE tipo SET " +\
-                          "tipo_nome = '" + str(obj.nome) + "', " +\
-                          "tipo_valor = '" + str(obj.valor) +\
-                          "' WHERE "\
-                          "tipo_id = " + str(obj.id)
-                    self.aviso = "[tipo] Alterado com sucesso!"
                 with closing(self.abre_conexao().cursor()) as cursor:
-                    cursor.execute(sql)
-                    self.commit()
-                    return True
+                    if delete:
+                        if obj is None:
+                            sql_delete = 'DELETE FROM tipo'
+                            cursor.execute(sql_delete)
+                        else:
+                            sql_delete = sql_delete +' WHERE tipo_id = %s'
+                            cursor.execute(sql_delete, (obj.id))
+                        self.aviso = "[tipo] Excluido com sucesso!"
+                        self.commit()
+                        return True
+                    else:
+                        sql_update = 'UPDATE tipo SET tipo_nome = %s, tipo_valor = %s WHERE tipo_id = %s'
+                        cursor.execute(sql_update, (obj.nome, obj.valor, obj.id))
+                        self.commit()
+                        self.aviso = "[tipo] Alterado com sucesso!"
+                        return True
             else:
                 self.aviso = "[tipo] inexistente!"
                 return False
@@ -110,6 +105,4 @@ class TipoDAO(ConexaoGenerica):
             return False
         finally:
             pass
-        
-        
         

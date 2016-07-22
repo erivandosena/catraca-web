@@ -154,8 +154,6 @@ class CatracaDAO(ConexaoGenerica):
                 if dados:
                     obj.interface = dados[0]
                     return str(obj.interface).lower()
-#                 else:
-#                     return 'eth0'
         except Exception as excecao:
             self.aviso = str(excecao)
             self.log.logger.error('[catraca] Erro ao realizar SELECT.', exc_info=True)
@@ -208,7 +206,9 @@ class CatracaDAO(ConexaoGenerica):
                         else:
                             sql_delete = sql_delete +' WHERE catr_id = %s'
                             cursor.execute(sql_delete, (obj.id))
+                        self.commit()
                         self.aviso = "[catraca] Excluido com sucesso!"
+                        return True
                     else:
                         sql_update = 'UPDATE catraca SET catr_ip = %s, ' +\
                               'catr_tempo_giro = %s, ' +\
@@ -227,9 +227,9 @@ class CatracaDAO(ConexaoGenerica):
                                                     obj.interface,
                                                     obj.id)
                                        )
-                    self.commit()
-                    self.aviso = "[catraca] Alterado com sucesso!"
-                    return True
+                        self.commit()
+                        self.aviso = "[catraca] Alterado com sucesso!"
+                        return True
             else:
                 self.aviso = "[catraca] inexistente!"
                 return False

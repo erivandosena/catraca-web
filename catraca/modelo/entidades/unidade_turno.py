@@ -21,6 +21,9 @@ class UnidadeTurno(object):
                                      obj.turno, 
                                      obj.unidade))
         
+    def __ne__(self, obj):
+        return not self == obj
+     
     @property
     def id(self):
         return self.__untu_id

@@ -35,6 +35,9 @@ class Registro(object):
                                      obj.catraca, 
                                      obj.vinculo))
         
+    def __ne__(self, obj):
+        return not self == obj
+     
     @property
     def id(self):
         return self.__regi_id

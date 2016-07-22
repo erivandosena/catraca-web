@@ -41,6 +41,9 @@ class CartaoValido(object):
                                      obj.tipo,
                                      obj.vinculo))
         
+    def __ne__(self, obj):
+        return not self == obj
+     
     @property
     def id(self):
         return self.__cart_id

@@ -55,17 +55,17 @@ class RecursosRestful(object):
         print "\nObtendo recursos do servidor RESTful..."
         #self.obtem_catraca(display, mantem_tabela, limpa_tabela)            # 3ºGRAU DE PRIORIDADE DE SINCRONIA
         self.obtem_tipo(display, mantem_tabela, limpa_tabela)
-        self.obtem_cartao(display, mantem_tabela, limpa_tabela)             # 2ºGRAU DE PRIORIDADE DE SINCRONIA
-        self.obtem_usuario(display, mantem_tabela, limpa_tabela)
-        self.obtem_vinculo(display, mantem_tabela, limpa_tabela)
-        self.obtem_registro(display, mantem_tabela, limpa_tabela)           # 1ºGRAU DE PRIORIDADE DE SINCRONIA
-        self.obtem_turno(display, mantem_tabela, limpa_tabela)              # 4ºGRAU DE PRIORIDADE DE SINCRONIA
-        self.obtem_isencao(display, mantem_tabela, limpa_tabela)            # 5ºGRAU DE PRIORIDADE DE SINCRONIA
-        self.obtem_unidade(display, mantem_tabela, limpa_tabela)
-        self.obtem_unidade_turno(display, mantem_tabela, limpa_tabela)
-        self.obtem_catraca_unidade(display, mantem_tabela, limpa_tabela)
-        self.obtem_custo_refeicao(display, mantem_tabela, limpa_tabela)
-        self.obtem_mensagem(display, mantem_tabela, limpa_tabela)
+#         self.obtem_cartao(display, mantem_tabela, limpa_tabela)             # 2ºGRAU DE PRIORIDADE DE SINCRONIA
+#         self.obtem_usuario(display, mantem_tabela, limpa_tabela)
+#         self.obtem_vinculo(display, mantem_tabela, limpa_tabela)
+#         self.obtem_registro(display, mantem_tabela, limpa_tabela)           # 1ºGRAU DE PRIORIDADE DE SINCRONIA
+#         self.obtem_turno(display, mantem_tabela, limpa_tabela)              # 4ºGRAU DE PRIORIDADE DE SINCRONIA
+#         self.obtem_isencao(display, mantem_tabela, limpa_tabela)            # 5ºGRAU DE PRIORIDADE DE SINCRONIA
+#         self.obtem_unidade(display, mantem_tabela, limpa_tabela)
+#         self.obtem_unidade_turno(display, mantem_tabela, limpa_tabela)
+#         self.obtem_catraca_unidade(display, mantem_tabela, limpa_tabela)
+#         self.obtem_custo_refeicao(display, mantem_tabela, limpa_tabela)
+#         self.obtem_mensagem(display, mantem_tabela, limpa_tabela)
         RecursosRestful.obtendo_recurso = False
         return RecursosRestful.obtendo_recurso
         
@@ -176,7 +176,7 @@ class RecursosRestful(object):
             if display:
                 self.aviso.exibir_obtendo_recursos("Tipo")
             print "\n-------------------------------"
-            tipo = self.tipo_json.tipo_get(mantem_tabela, limpa_tabela)
+            tipo = self.tipo_json.tipo_get(limpa_tabela)
             if display:
                 self.aviso.exibir_aguarda_cartao()
             if tipo:
@@ -227,7 +227,7 @@ class RecursosRestful(object):
             if display:
                 self.aviso.exibir_obtendo_recursos("Cartao")
             print "\n-------------------------------"
-            cartao = self.cartao_json.cartao_get(mantem_tabela, limpa_tabela)
+            cartao = self.cartao_json.cartao_get(limpa_tabela)
             if display:
                 self.aviso.exibir_aguarda_cartao()
             if cartao:

@@ -22,6 +22,9 @@ class CustoRefeicao(object):
                                      obj.valor, 
                                      obj.data))
         
+    def __ne__(self, obj):
+        return not self == obj
+     
     @property
     def id(self):
         return self.__cure_id

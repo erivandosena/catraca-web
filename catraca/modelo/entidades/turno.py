@@ -25,6 +25,9 @@ class Turno(object):
                                      obj.fim, 
                                      obj.descricao))
         
+    def __ne__(self, obj):
+        return not self == obj
+     
     @property
     def id(self):
         return self.__turn_id

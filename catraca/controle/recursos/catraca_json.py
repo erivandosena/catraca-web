@@ -30,10 +30,7 @@ class CatracaJson(ServidorRestful):
     def __init__(self):
         super(CatracaJson, self).__init__()
         ServidorRestful.__init__(self)
-        
-    def __cmp__(self, valor):
-        return cmp(self.name, valor.name)
-        
+         
     def catraca_get(self, limpa_tabela=False):
         servidor = self.obter_servidor()
         try:
