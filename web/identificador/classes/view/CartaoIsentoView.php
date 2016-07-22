@@ -1,8 +1,7 @@
 <?php
-class CartaoAvulsoView {
+class CartaoIsentoView {
 	
 	public function formBuscaCartao(){
-
 		echo '				
 				<script>
   $(document).bind(\'autofocus_ready\', function() {
@@ -14,7 +13,7 @@ class CartaoAvulsoView {
 				
 				<div class="borda">
 									<form method="get" action="" class="formulario em-linha" >
-										<input type="hidden" name="pagina" value="avulso" />
+										<input type="hidden" name="pagina" value="cartao" />
 										<label for="numero_cartao">
 											<object class="rotulo texto-preto">Buscar por Número: </object><br><br>
 											
@@ -52,7 +51,7 @@ class CartaoAvulsoView {
 		echo '<td>' .  $cartao->getNumero() . '</a></td>';
 		echo '<td>' .$cartao->getCreditos(). '</td>';
 		echo '<td>' . $cartao->getTipo()->getNome() . '</td>';
-		echo '<td class="centralizado"><a href="?pagina=avulso&cartaoselecionado=' . $cartao->getId() . '"><span class="icone-checkmark texto-verde2 botao" title="Selecionar"></span></a></td>';
+		echo '<td class="centralizado"><a href="?pagina=cartao&cartaoselecionado=' . $cartao->getId() . '"><span class="icone-checkmark texto-verde2 botao" title="Selecionar"></span></a></td>';
 		echo '</tr>';
 	}
 	public function mostraCartaoSelecionado(Cartao $cartao){
@@ -68,7 +67,7 @@ class CartaoAvulsoView {
 		
 										<label for="opcoes-1">
 											<object class="rotulo texto-preto">Buscar por: </object>
-											<input type="hidden" name="pagina" value="avulso" />
+											<input type="hidden" name="pagina" value="cartao" />
 											<select name="opcoes-1" id="opcoes-1" class="texto-preto">
 												<option value="1">Nome</option>
 		
@@ -183,7 +182,7 @@ class CartaoAvulsoView {
 		echo '<td>' . $usuario->getStatusDiscente () . '</td>';
 		echo '<td>' . $usuario->getStatusServidor () . '</td>';
 		echo '<td>' . $usuario->getTipodeUsuario () . '</td>';
-		echo '<td class="centralizado"><a href="?pagina=avulso&selecionado=' . $usuario->getIdBaseExterna () . '"><span class="icone-checkmark texto-verde2 botao" title="Selecionar"></span></a></td>';
+		echo '<td class="centralizado"><a href="?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna () . '"><span class="icone-checkmark texto-verde2 botao" title="Selecionar"></span></a></td>';
 		echo '</tr>';
 	}
 	
@@ -424,16 +423,7 @@ class CartaoAvulsoView {
 				
 				<form method="get" action="" class="formulario texto-preto" >
 						    <label for="numero_cartao2">Número do Cartão</label>
-								<input type="text" name="numero_cartao2" id="numero_cartao2" autofocus/><br>
-								<label for="vinc_inicio">Inicio da Validade</label>
-								<input type="datetime-local" id="vinc_inicio" name="vinc_inicio" /><br>
-				
-								<label for="vinc_fim">Final da Validade</label>
-								<input type="datetime-local" id="vinc_fim"  name="vinc_fim"/><br>
-								<label for="obs">Observação</label>
-								<input type="text" id="obs"  name="obs"/><br>
-								<label for="vinc_refeicoes">Refeições Por Turno</label>
-								<input type="number" id="vinc_refeicoes"  name="vinc_refeicoes"/><br>
+								<input type="text" name="numero_cartao2" id="numero_cartao2" autofocus/>
 								 <script>$(document).trigger(\'autofocus_ready\');</script>
 						     <label for="id_tipo">Tipo</label>
 						       <select id="id_tipo" name="id_tipo">';

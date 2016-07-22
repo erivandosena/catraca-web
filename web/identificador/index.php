@@ -157,7 +157,8 @@ if (isset ( $_GET ["sair"] )) {
 						echo ' <li><a href="?pagina=guiche" class="item"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a></li>';
 						echo ' <li><a href="?pagina=relatorio" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a></li>';
 						echo ' <li><a href="?pagina=nivel_acesso" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Nivel de Acesso</span></a></li>';
-					
+						echo ' <li><a href="?pagina=avulso" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Avulso</span></a></li>';
+							
 						echo '</ol>
 								        <ol class="a-direita" start="4">
 											<li><a href="" class="item"><span class="item-texto">Status: Super</span></a></li>

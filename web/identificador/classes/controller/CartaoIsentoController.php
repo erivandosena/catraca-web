@@ -5,17 +5,17 @@
  *
  */
 
-class CartaoAvulsoController{
+class CartaoIsentoController{
 	private $view;
 	public static function main($nivelDeAcesso){
 		
 		switch ($nivelDeAcesso){
 			case Sessao::NIVEL_SUPER:
-				$controller = new CartaoAvulsoController();
+				$controller = new CartaoController();
 				$controller->telaCartao();
 				break;
 			case Sessao::NIVEL_ADMIN:
-				$controller = new CartaoAvulsoController();
+				$controller = new CartaoController();
 				$controller->telaCartao();
 				break;
 			default:
@@ -26,7 +26,7 @@ class CartaoAvulsoController{
 	
 	
 	public function telaCartao(){
-		$this->view = new CartaoAvulsoView();
+		$this->view = new CartaoIsentoView();
 		echo '<div class="conteudo"> <div class = "simpleTabs">
 		        <ul class = "simpleTabsNavigation">
 				
@@ -261,13 +261,50 @@ class CartaoAvulsoController{
 			
 			$podeComer = $this->verificaSeAtivo($usuario);
 			
-			if($podeComer){
+			if(!sizeof($vinculos) && $podeComer){
 				if (!isset ( $_GET ['cartao'] )){
-					echo '<a class="botao" href="?pagina=avulso&selecionado=' . $idDoSelecionado . '&cartao=add">Adicionar</a>';
+					echo '<a class="botao" href="?pagina=cartao&selecionado=' . $idDoSelecionado . '&cartao=add">Adicionar</a>';
 				}else{
 					$tipoDao = new TipoDAO($vinculoDao->getConexao());
 					$listaDeTipos = $tipoDao->retornaLista();
-					
+					foreach ($listaDeTipos as $chave => $tipo){
+						if(strtolower (trim( $tipo->getNome())) == 'aluno'){
+							if(strtolower (trim($usuario->getStatusDiscente())) == 'ativo' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - graduando'){
+								continue;
+							}
+							unset($listaDeTipos[$chave]);
+							continue;
+						}
+						if(strtolower (trim( $tipo->getNome())) == 'servidor tae'){
+							
+							if(strtolower (trim($usuario->getStatusServidor())) == 'ativo' && strpos(strtolower (trim($usuario->getCategoria())), 'administrativo')){
+								continue;
+							}
+							if($usuario->getIDCategoria() == 3){
+								
+								continue;
+							}
+							unset($listaDeTipos[$chave]);
+							continue;
+						}
+						if(strtolower (trim( $tipo->getNome())) == 'servidor docente'){
+							if(strtolower (trim($usuario->getStatusServidor())) == 'ativo' && strtolower (trim($usuario->getCategoria())) == 'docente'){
+								continue;
+								
+							}
+							unset($listaDeTipos[$chave]);
+							continue;
+						}
+						if(strtolower (trim( $tipo->getNome())) == 'terceirizado'){
+							if(strtolower (trim($usuario->getTipodeUsuario())) == 'terceirizado' || strtolower (trim($usuario->getTipodeUsuario())) == 'outros'){
+								continue;
+							}
+							unset($listaDeTipos[$chave]);
+							continue;
+						}
+						unset($listaDeTipos[$chave]);
+							
+					}
 					if(isset($_GET['salvar'])){
 						foreach($listaDeTipos as $tipo){
 							if($tipo->getId() == $_GET['id_tipo'])
