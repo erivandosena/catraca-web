@@ -12,13 +12,10 @@ import random
 import locale
 import calendar
 import datetime
-
 import codecs 
 from tempfile import mkstemp
 from shutil import move
-
 from unicodedata import normalize
-
 import subprocess
 from time import sleep
 from catraca.controle.dispositivos.buzzer import Buzzer
@@ -281,3 +278,4 @@ class Util(object):
             return True
         else:
             return False
+        

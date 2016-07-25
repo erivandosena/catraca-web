@@ -57,10 +57,6 @@ class TipoJson(ServidorRestful):
             objeto = self.tipo_dao.busca(obj.id)
             if not mantem_tabela:
                 if objeto:
-
-                    print objeto.__eq__(obj)
-                    print str(objeto.nome) + " = " + str(obj.nome)
-                    
                     if not objeto.__eq__(obj):
                         return self.atualiza_exclui(obj, mantem_tabela)
                     else:
@@ -77,6 +73,7 @@ class TipoJson(ServidorRestful):
             else:
                 print "Nemhuma acao realizada!"
                 return None
+
             
     def atualiza_exclui(self, obj, boleano):
         if self.tipo_dao.atualiza_exclui(obj, boleano):
