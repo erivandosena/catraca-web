@@ -77,6 +77,7 @@ class CartaoJson(ServidorRestful):
         finally:
             pass
         
+        
     def mantem_tabela_local(self, obj, mantem_tabela=False):
         if obj:
             objeto = self.cartao_dao.busca(obj.id)
@@ -98,6 +99,7 @@ class CartaoJson(ServidorRestful):
             else:
                 print "Nemhuma acao realizada!"
                 return None
+
             
     def atualiza_exclui(self, obj, boleano):
         if self.cartao_dao.atualiza_exclui(obj, boleano):
@@ -113,28 +115,6 @@ class CartaoJson(ServidorRestful):
             self.cartao_dao.commit()
             print self.cartao_dao.aviso
             return obj
-        
-#     def mantem_tabela_local(self, obj, limpa_tabela=False):
-#         if limpa_tabela:
-#             self.atualiza_exclui(None, limpa_tabela)
-#         if obj:
-#             resultado = self.cartao_dao.busca(obj.id)
-#             if resultado:
-#                 self.atualiza_exclui(obj, False)
-#             else:
-#                 self.insere(obj)
-#         else:
-#             return None
-#         
-#     def atualiza_exclui(self, obj, boleano):
-#         self.cartao_dao.atualiza_exclui(obj, boleano)
-#         self.cartao_dao.commit()
-#         print self.cartao_dao.aviso
-#         
-#     def insere(self, obj):
-#         self.cartao_dao.insere(obj)
-#         self.cartao_dao.commit()
-#         print self.cartao_dao.aviso
         
     def dict_obj(self, formato_json):
         cartao = Cartao()

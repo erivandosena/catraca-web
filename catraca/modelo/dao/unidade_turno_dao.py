@@ -41,8 +41,8 @@ class UnidadeTurnoDAO(ConexaoGenerica):
                     dados = cursor.fetchone()
                     if dados is not None:
                         obj.id = dados[0]
-                        obj.turno = self.busca_por_turno(obj)
-                        obj.unidade = self.busca_por_unidade(obj)
+                        obj.turno = dados[1]
+                        obj.unidade = dados[2]
                         return obj
                     else:
                         return None
@@ -58,11 +58,11 @@ class UnidadeTurnoDAO(ConexaoGenerica):
         finally:
             pass
         
-    def busca_por_turno(self, obj):
-        return TurnoDAO().busca(obj.id)
-        
-    def busca_por_unidade(self, obj):
-        return UnidadeDAO().busca(obj.id)
+#     def busca_por_turno(self, obj):
+#         return TurnoDAO().busca(obj.id)
+#         
+#     def busca_por_unidade(self, obj):
+#         return UnidadeDAO().busca(obj.id)
         
     def insere(self, obj):
         try:

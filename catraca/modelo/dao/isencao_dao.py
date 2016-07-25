@@ -8,7 +8,7 @@ from catraca.util import Util
 from catraca.modelo.dados.conexao import ConexaoFactory
 from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
 from catraca.modelo.entidades.isencao import Isencao
-from catraca.modelo.dao.cartao_dao import CartaoDAO
+# from catraca.modelo.dao.cartao_dao import CartaoDAO
 
 
 __author__ = "Erivando Sena"
@@ -43,7 +43,7 @@ class IsencaoDAO(ConexaoGenerica):
                         obj.id = dados[0]
                         obj.inicio = dados[1]
                         obj.fim = dados[2]
-                        obj.cartao = self.busca_por_cartao(obj)
+                        obj.cartao = dados[3]
                         return obj
                     else:
                         return None
@@ -59,8 +59,8 @@ class IsencaoDAO(ConexaoGenerica):
         finally:
             pass
         
-    def busca_por_cartao(self, obj):
-        return CartaoDAO().busca(obj.id)
+#     def busca_por_cartao(self, obj):
+#         return CartaoDAO().busca(obj.id)
         
     def busca_por_isencao(self, obj):
         return CartaoDAO().busca_por_numero(obj.numero)

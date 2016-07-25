@@ -46,7 +46,7 @@ class MensagemDAO(ConexaoGenerica):
                         obj.institucional2 = dados[2]
                         obj.institucional3 = dados[3]
                         obj.institucional4 = dados[4]
-                        obj.catraca = self.busca_por_catraca(obj)
+                        obj.catraca = dados[5]
                         return obj
                     else:
                         return None
@@ -62,8 +62,8 @@ class MensagemDAO(ConexaoGenerica):
         finally:
             pass
         
-    def busca_por_catraca(self, obj):
-        return CatracaDAO().busca(obj.id)        
+#     def busca_por_catraca(self, obj):
+#         return CatracaDAO().busca(obj.id)        
         
     def obtem_mensagens(self, obj):
         sql = "SELECT mens_id, mens_institucional1, mens_institucional2, "\

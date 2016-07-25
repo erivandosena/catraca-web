@@ -42,10 +42,10 @@ class TipoJson(ServidorRestful):
                             obj = self.dict_obj(item)
                             if obj:
                                 lista.append(obj)
-                                self.mantem_tabela_local(obj)
+                                self.mantem_tabela_local(obj)  
                         return lista
-                    else:
-                        return None
+                else:
+                    return None
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json tipo', exc_info=True)

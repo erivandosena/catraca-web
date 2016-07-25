@@ -8,10 +8,10 @@ from catraca.util import Util
 from catraca.modelo.dados.conexao import ConexaoFactory
 from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
 from catraca.modelo.entidades.registro import Registro
-from catraca.modelo.dao.cartao_dao import CartaoDAO
+# from catraca.modelo.dao.cartao_dao import CartaoDAO
 from catraca.modelo.dao.turno_dao import TurnoDAO
-from catraca.modelo.dao.catraca_dao import CatracaDAO
-from catraca.modelo.dao.vinculo_dao import VinculoDAO
+# from catraca.modelo.dao.catraca_dao import CatracaDAO
+# from catraca.modelo.dao.vinculo_dao import VinculoDAO
 
 
 __author__ = "Erivando Sena"
@@ -49,9 +49,9 @@ class RegistroDAO(ConexaoGenerica):
                         obj.data = dados[1]
                         obj.pago = dados[2]
                         obj.custo = dados[3]
-                        obj.cartao = self.busca_por_cartao(obj)
-                        obj.catraca = self.busca_por_catraca(obj)
-                        obj.vinculo = self.busca_por_vinculo(obj)
+                        obj.cartao = dados[4]
+                        obj.catraca = dados[5]
+                        obj.vinculo = dados[6]
                         return obj
                     else:
                         return None
@@ -67,17 +67,17 @@ class RegistroDAO(ConexaoGenerica):
         finally:
             pass
   
-    def busca_por_cartao(self, obj):
-        return CartaoDAO().busca(obj.id)
+#     def busca_por_cartao(self, obj):
+#         return CartaoDAO().busca(obj.id)
         
     def busca_por_turno(self, obj):
         return TurnoDAO().busca(obj.id)
         
-    def busca_por_catraca(self, obj):
-        return CatracaDAO().busca(obj.id)
+#     def busca_por_catraca(self, obj):
+#         return CatracaDAO().busca(obj.id)
     
-    def busca_por_vinculo(self, obj):
-        return VinculoDAO().busca(obj.id)
+#     def busca_por_vinculo(self, obj):
+#         return VinculoDAO().busca(obj.id)
     
     def busca_utilizacao(self, hora_ini, hora_fim, cartao_id):
         data = Util().obtem_datahora()

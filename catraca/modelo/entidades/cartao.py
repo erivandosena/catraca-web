@@ -28,9 +28,9 @@ class Cartao(object):
         return not self.__eq__(outro)
     
     def hash_dict(self, obj):
-        return hashlib.sha1(json.dumps(obj.__dict__, default=self.json_encode_decimal, use_decimal=False, ensure_ascii=False, sort_keys=False, encoding='utf-8')).hexdigest()
+        return hashlib.sha1(json.dumps(obj.__dict__, default=self.json_encode, use_decimal=False, ensure_ascii=True, sort_keys=False, encoding='utf-8')).hexdigest()
     
-    def json_encode_decimal(self, obj):
+    def json_encode(self, obj):
         if isinstance(obj, decimal.Decimal):
             return str(obj)
         raise TypeError(repr(obj) + " nao JSON serializado")

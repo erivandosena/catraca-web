@@ -4,7 +4,6 @@
 
 import simplejson as json
 import hashlib
-import decimal
 
 
 __author__ = "Erivando Sena"
@@ -26,12 +25,7 @@ class UnidadeTurno(object):
         return not self.__eq__(outro)
     
     def hash_dict(self, obj):
-        return hashlib.sha1(json.dumps(obj.__dict__, default=self.json_encode_decimal, use_decimal=False, ensure_ascii=False, sort_keys=False, encoding='utf-8')).hexdigest()
-    
-    def json_encode_decimal(self, obj):
-        if isinstance(obj, decimal.Decimal):
-            return str(obj)
-        raise TypeError(repr(obj) + " nao JSON serializado")
+        return hashlib.sha1(json.dumps(obj.__dict__, use_decimal=False, ensure_ascii=True, sort_keys=False, encoding='utf-8')).hexdigest()
     
     @property
     def id(self):

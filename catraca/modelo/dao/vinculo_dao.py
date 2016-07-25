@@ -48,8 +48,8 @@ class VinculoDAO(ConexaoGenerica):
                         obj.fim = dados[3]
                         obj.descricao = dados[4]
                         obj.refeicoes = dados[5]
-                        obj.cartao = self.busca_por_cartao(obj)
-                        obj.usuario = self.busca_por_usuario(obj)
+                        obj.cartao = dados[6]
+                        obj.usuario = dados[7]
                         return obj
                     else:
                         return None
@@ -65,11 +65,11 @@ class VinculoDAO(ConexaoGenerica):
         finally:
             pass
   
-    def busca_por_cartao(self, obj):
-        return CartaoDAO().busca(obj.id)
-        
-    def busca_por_usuario(self, obj):
-        return UsuarioDAO().busca(obj.id)
+#     def busca_por_cartao(self, obj):
+#         return CartaoDAO().busca(obj.id)
+#         
+#     def busca_por_usuario(self, obj):
+#         return UsuarioDAO().busca(obj.id)
     
     def busca_por_periodo(self, data_ini, data_fim, cartao):
         sql = "SELECT vinc_id, vinc_avulso, vinc_inicio, vinc_fim, vinc_descricao, "\

@@ -7,8 +7,8 @@ from catraca.logs import Logs
 from catraca.modelo.dados.conexao import ConexaoFactory
 from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
 from catraca.modelo.entidades.catraca_unidade import CatracaUnidade
-from catraca.modelo.dao.catraca_dao import CatracaDAO
-from catraca.modelo.dao.unidade_dao import UnidadeDAO
+# from catraca.modelo.dao.catraca_dao import CatracaDAO
+# from catraca.modelo.dao.unidade_dao import UnidadeDAO
 
 
 __author__ = "Erivando Sena"
@@ -41,8 +41,8 @@ class CatracaUnidadeDAO(ConexaoGenerica):
                     dados = cursor.fetchone()
                     if dados is not None:
                         obj.id = dados[0]
-                        obj.catraca = self.busca_por_catraca(obj)
-                        obj.unidade = self.busca_por_unidade(obj)
+                        obj.catraca = dados[1]
+                        obj.unidade = dados[2]
                         return obj
                     else:
                         return None
@@ -58,11 +58,11 @@ class CatracaUnidadeDAO(ConexaoGenerica):
         finally:
             pass
         
-    def busca_por_catraca(self, obj):
-        return CatracaDAO().busca(obj.id)
-        
-    def busca_por_unidade(self, obj):
-        return UnidadeDAO().busca(obj.id)
+#     def busca_por_catraca(self, obj):
+#         return CatracaDAO().busca(obj.id)
+#         
+#     def busca_por_unidade(self, obj):
+#         return UnidadeDAO().busca(obj.id)
         
     def insere(self, obj):
         try:
