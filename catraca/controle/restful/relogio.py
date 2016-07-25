@@ -43,14 +43,18 @@ class Relogio(ControleGenerico, threading.Thread):
         super(Relogio, self).__init__()
         ControleGenerico.__init__(self)
         threading.Thread.__init__(self)
-        self.intervalo = intervalo
+        self._stopevent = threading.Event()
+        self._sleepperiod = intervalo
         self.name = 'Thread Relogio'
         self.status = True
         
     def run(self):
-        print "%s. Rodando... " % self.name
+        print "%s Rodando... " % self.name
         self.catraca = self.catraca_dao.busca_por_nome(self.util.obtem_nome_rpi())
-        while True:
+        while not self._stopevent.isSet():
+            
+            print self.catraca_dao.busca(1)
+
             self.hora_atul = self.util.obtem_hora()
             Relogio.hora = self.hora_atul
             self.datahora = self.util.obtem_datahora().strftime("%d/%m/%Y %H:%M:%S")
@@ -63,7 +67,13 @@ class Relogio(ControleGenerico, threading.Thread):
                 if Relogio.catraca:
                     if not Relogio.catraca.operacao == 5 or not Relogio.catraca.operacao <= 0 or not Relogio.catraca.operacao >= 6:
                         Relogio.turno = self.obtem_turno()
-            sleep(self.intervalo)
+
+            self._stopevent.wait(self._sleepperiod)
+        print "%s Finalizando..." % (self.getName(),)
+            
+    def join(self, timeout=None):
+        self._stopevent.set()
+        threading.Thread.join(self, timeout)
             
     def obtem_catraca(self):
         if Rede.status:

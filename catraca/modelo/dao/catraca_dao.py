@@ -5,9 +5,9 @@
 from contextlib import closing
 from catraca.logs import Logs
 from catraca.modelo.dados.conexao import ConexaoFactory
-from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
+from catraca.modelo.dados.conexao_generica import ConexaoGenerica
 from catraca.modelo.entidades.catraca import Catraca
-from curses.ascii import NUL
+from catraca.modelo.dao.dao_generico import DAOGenerico
 
 
 __author__ = "Erivando Sena"
@@ -16,17 +16,15 @@ __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production
 
 
-class CatracaDAO(ConexaoGenerica):
+class CatracaDAO(DAOGenerico):
     
     log = Logs()
     
     def __init__(self):
         super(CatracaDAO, self).__init__()
-        ConexaoGenerica.__init__(self)
- 
+        DAOGenerico.__init__(self)
+        
     def busca(self, *arg):
-        obj = Catraca()
-        id = None
         for i in arg:
             id = i
         if id:
@@ -50,34 +48,64 @@ class CatracaDAO(ConexaoGenerica):
                   "catr_mac_wlan, "\
                   "catr_interface_rede "\
                   "FROM catraca ORDER BY catr_id"
-        try:
-            with closing(self.abre_conexao().cursor()) as cursor:
-                cursor.execute(sql)
-                if id:
-                    dados = cursor.fetchone()
-                    if dados is not None:
-                        obj.id = dados[0]
-                        obj.ip = dados[1]
-                        obj.tempo = dados[2]
-                        obj.operacao = dados[3]
-                        obj.nome = dados[4]
-                        obj.maclan = dados[5]
-                        obj.macwlan = dados[6]
-                        obj.interface = dados[7]
-                        return obj
-                    else:
-                        return None
-                elif id is None:
-                    list = cursor.fetchall()
-                    if list != []:
-                        return list
-                    else:
-                        return None
-        except Exception as excecao:
-            self.aviso = str(excecao)
-            self.log.logger.error('[catraca] Erro ao realizar SELECT.', exc_info=True)
-        finally:
-            pass
+
+        colunas = ['id', 'ip','tempo', 'operacao', 'nome', 'maclan', 'macwlan', 'interface']
+        return self.buscar(Catraca, sql, colunas, id)
+ 
+#     def busca(self, *arg):
+#         obj = Catraca()
+#         id = None
+#         for i in arg:
+#             id = i
+#         if id:
+#             sql = "SELECT catr_id, "\
+#                   "catr_ip, "\
+#                   "catr_tempo_giro, "\
+#                   "catr_operacao, "\
+#                   "catr_nome, "\
+#                   "catr_mac_lan, "\
+#                   "catr_mac_wlan, "\
+#                   "catr_interface_rede "\
+#                   "FROM catraca WHERE "\
+#                   "catr_id = " + str(id)
+#         elif id is None:
+#             sql = "SELECT catr_id, "\
+#                   "catr_ip, "\
+#                   "catr_tempo_giro, "\
+#                   "catr_operacao, "\
+#                   "catr_nome, "\
+#                   "catr_mac_lan, "\
+#                   "catr_mac_wlan, "\
+#                   "catr_interface_rede "\
+#                   "FROM catraca ORDER BY catr_id"
+#         try:
+#             with closing(self.abre_conexao().cursor()) as cursor:
+#                 cursor.execute(sql)
+#                 if id:
+#                     dados = cursor.fetchone()
+#                     if dados is not None:
+#                         obj.id = dados[0]
+#                         obj.ip = dados[1]
+#                         obj.tempo = dados[2]
+#                         obj.operacao = dados[3]
+#                         obj.nome = dados[4]
+#                         obj.maclan = dados[5]
+#                         obj.macwlan = dados[6]
+#                         obj.interface = dados[7]
+#                         return obj
+#                     else:
+#                         return None
+#                 elif id is None:
+#                     list = cursor.fetchall()
+#                     if list != []:
+#                         return list
+#                     else:
+#                         return None
+#         except Exception as excecao:
+#             self.aviso = str(excecao)
+#             self.log.logger.error('[catraca] Erro ao realizar SELECT.', exc_info=True)
+#         finally:
+#             pass
         
     def busca_por_ip(self, ip):
         obj = Catraca()

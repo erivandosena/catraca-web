@@ -27,18 +27,25 @@ class Rede(threading.Thread):
     def __init__(self, intervalo=10):
         super(Rede, self).__init__()
         threading.Thread.__init__(self)
-        self.intervalo = intervalo
+        self._stopevent = threading.Event()
+        self._sleepperiod = intervalo
         self.name = 'Thread Rede.'
         
     def run(self):
         print "%s Rodando... " % self.name
-        while True:
+        while not self._stopevent.isSet():
             if self.obtem_interface() != []:
                 if not self.status:
                     Rede.status = True
             else:
                  Rede.status = False
-            sleep(self.intervalo)
+
+            self._stopevent.wait(self._sleepperiod)
+        print "%s Finalizando..." % (self.getName(),)
+            
+    def join(self, timeout=None):
+        self._stopevent.set()
+        threading.Thread.join(self, timeout)
             
     def obtem_interface(self):
         try:

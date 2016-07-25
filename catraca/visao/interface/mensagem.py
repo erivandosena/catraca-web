@@ -27,28 +27,23 @@ class Mensagem(threading.Thread):
     catraca_dao = CatracaDAO()
     mensagem_dao = MensagemDAO()
     
-    def __init__(self):
+    def __init__(self, intervalo=1):
         super(Mensagem, self).__init__()
         threading.Thread.__init__(self)
         self._stopevent = threading.Event()
-        self._sleepperiod = 1
+        self._sleepperiod = intervalo
         self.name = 'Thread Mensagem.'
         
     def run(self):
         print "%s Rodando... " % self.name
-        count = 0
         while not self._stopevent.isSet():
-            count += 1
-            #if not Relogio.periodo:
             self.exibe_mensagem()
             self._stopevent.wait(self._sleepperiod)
         print "%s Finalizando..." % self.getName()
         
     def join(self, timeout=None):
         self._stopevent.set()
-        super(Mensagem, self).join(timeout)
-        self.aviso.exibir_aguarda_cartao()
-        #threading.Thread.join(self, timeout)
+        threading.Thread.join(self, timeout)
         
     def exibe_mensagem(self):
         catraca = self.catraca_dao.busca_por_ip(self.util.obtem_ip_por_interface())

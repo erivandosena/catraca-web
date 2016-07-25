@@ -7,6 +7,7 @@ import datetime
 from time import sleep
 from catraca.controle.restful.relogio import Relogio
 from catraca.visao.interface.rede import Rede
+from catraca.modelo.dados.conexao_generica import ConexaoGenerica
 
 
 __author__ = "Erivando Sena" 
@@ -18,6 +19,8 @@ __status__ = "Prototype" # Prototype | Development | Production
 class Sincronia(Relogio):
     
     contador_status_recursos = 0
+    rede = Rede()
+    relogio = Relogio()
 
     def __init__(self, intervalo=1):
         super(Sincronia, self).__init__()
@@ -28,42 +31,67 @@ class Sincronia(Relogio):
         
     def run(self):
         print "%s. Rodando... " % self.name
+        
+        self.rede.start()
+        self.relogio.start()
+        
         while True:
             self.executa_controle_recursos()
             sleep(self.intervalo)
-            
+               
     def executa_controle_recursos(self):
         if Relogio.catraca:
             if (Relogio.catraca.operacao == 1) or (Relogio.catraca.operacao == 2) or (Relogio.catraca.operacao == 3) or (Relogio.catraca.operacao == 4):
                 self.contador_status_recursos += 1
-                if (Rede.status == True and Relogio.periodo == True and self.contador_status_recursos >= 15):
-                    self.contador_status_recursos = 0
-                    self.recursos_restful.obtem_recursos()
-                elif not Relogio.periodo:
-                    if datetime.datetime.strptime(str(Relogio.hora),'%H:%M:%S').time() >= datetime.datetime.strptime('00:00:00','%H:%M:%S').time() and datetime.datetime.strptime(str(Relogio.hora),'%H:%M:%S').time() <= datetime.datetime.strptime('00:00:10','%H:%M:%S').time():
-                        if Relogio.rede:
-                            self.util.beep_buzzer(855, .5, 1)
-                            self.aviso.exibir_aguarda_sincronizacao()
-                            # realiza limpeza das tabelas locais
-                            print "\nLimpando... tabela local CATRACA"
-                            self.recursos_restful.catraca_json(True)
-                            print "Concluido!\n"
-                            print "\nLimpando... tabela local UNIDADE"
-                            self.recursos_restful.unidade_json(True)
-                            print "Concluido!\n"
-                            print "\nLimpando... tabela local TURNO"
-                            self.recursos_restful.turno_json(True)
-                            print "Concluido!\n"
-                            print "\nLimpando... tabela local TIPO"
-                            self.recursos_restful.tipo_json(True)
-                            print "Concluido!\n"
-                            print "\nLimpando... tabela local USUARIO"
-                            self.recursos_restful.usuario_json(True)
-                            print "Concluido!\n"
-                            print "\nLimpando... tabela local CUSTO-REFEICAO"
-                            self.recursos_restful.custo_refeicao_json(True)
-                            print "Concluido!\n"
-                            print "Iniciando a sincronia com o servidor RESTful em 5 segundos..."
-                            sleep(5)
-                            self.recursos_restful.obtem_recursos()
+                if Rede.status == True and Relogio.periodo == True:
+                    if self.contador_status_recursos >= 15:
+                        self.contador_status_recursos = 0
+                        self.recursos_restful.obtem_recursos()
+                else:
+                    if datetime.datetime.strptime(str(Relogio.hora),'%H:%M:%S').time() >= datetime.datetime.strptime('00:00:00','%H:%M:%S').time() and datetime.datetime.strptime(str(Relogio.hora),'%H:%M:%S').time() <= datetime.datetime.strptime('00:00:15','%H:%M:%S').time():
+                        print Relogio.hora
+                        self.util.beep_buzzer(855, .5, 1)
+                        
+                        if self.rede.isAlive():
+                            self.rede.join()
+                            
+                        if self.relogio.isAlive():
+                            self.relogio.join()
+                            
+                        #fecha conexoes com o bd
+                        ConexaoGenerica().fecha_todas_conexoes()
+                        
+                        self.aviso.exibir_aguarda_sincronizacao()
+                        
+
+                        # realiza limpeza das tabelas locais
+#                         print "\nLimpando... tabela local CATRACA"
+#                         self.recursos_restful.catraca_json(True)
+#                         print "Concluido!\n"
+#                         print "\nLimpando... tabela local UNIDADE"
+#                         self.recursos_restful.unidade_json(True)
+#                         print "Concluido!\n"
+#                         print "\nLimpando... tabela local TURNO"
+#                         self.recursos_restful.turno_json(True)
+#                         print "Concluido!\n"
+#                         print "\nLimpando... tabela local TIPO"
+#                         self.recursos_restful.tipo_json(True)
+#                         print "Concluido!\n"
+#                         print "\nLimpando... tabela local USUARIO"
+#                         self.recursos_restful.usuario_json(True)
+#                         print "Concluido!\n"
+#                         print "\nLimpando... tabela local CUSTO-REFEICAO"
+#                         self.recursos_restful.custo_refeicao_json(True)
+#                         print "Concluido!\n"
+#                         print "Iniciando a sincronia com o servidor RESTful..."
+                        print "esperando 100..."
+                        sleep(100)
+                        
+#                         self.recursos_restful.obtem_recursos()
+                        if not self.rede.isAlive():
+                            self.rede = Rede()
+                            self.rede.start()
+                        if not self.relogio.isAlive():
+                            self.relogio = Relogio()
+                            self.relogio.start()
                 

@@ -7,10 +7,9 @@ from catraca.util import Util
 from catraca.visao.interface.aviso import Aviso
 from catraca.visao.interface.alerta import Alerta
 from catraca.controle.dispositivos.leitorcartao import LeitorCartao
-from catraca.controle.restful.relogio import Relogio
 from catraca.controle.restful.sincronia import Sincronia
 from catraca.visao.interface.rede import Rede
-from time import sleep
+from catraca.controle.restful.relogio import Relogio
 
 
 __author__ = "Erivando Sena"
@@ -44,8 +43,8 @@ class Painel(object):
     def threads(self):
         #os.system("echo 'Sistema da Catraca iniciado!' | mail -s 'Raspberry Pi B' erivandoramos@bol.com.br")
         try:
-            Rede().start()
-            Relogio().start()
+#             Rede().start()
+#             Relogio().start()
             #Alerta().start()
             Sincronia().start()
             LeitorCartao().start()

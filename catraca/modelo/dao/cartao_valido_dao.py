@@ -7,7 +7,7 @@ from catraca.logs import Logs
 from catraca.logs import Logs
 from catraca.util import Util
 from catraca.modelo.dados.conexao import ConexaoFactory
-from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
+from catraca.modelo.dados.conexao_generica import ConexaoGenerica
 from catraca.modelo.entidades.cartao_valido import CartaoValido
 # from catraca.modelo.dao.tipo_dao import TipoDAO
 # from catraca.modelo.dao.vinculo_dao import VinculoDAO

@@ -5,7 +5,7 @@
 from contextlib import closing
 from catraca.logs import Logs
 from catraca.modelo.dados.conexao import ConexaoFactory
-from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
+from catraca.modelo.dados.conexao_generica import ConexaoGenerica
 from catraca.modelo.entidades.catraca_unidade import CatracaUnidade
 # from catraca.modelo.dao.catraca_dao import CatracaDAO
 # from catraca.modelo.dao.unidade_dao import UnidadeDAO

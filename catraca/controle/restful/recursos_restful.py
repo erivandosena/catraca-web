@@ -58,7 +58,7 @@ class RecursosRestful(object):
         self.obtem_cartao(display, limpa_tabela)             # 2ºGRAU DE PRIORIDADE DE SINCRONIA
         self.obtem_usuario(display, limpa_tabela)
         self.obtem_vinculo(display, limpa_tabela)
-        self.obtem_registro(display, mlimpa_tabela)           # 1ºGRAU DE PRIORIDADE DE SINCRONIA
+        self.obtem_registro(display, limpa_tabela)           # 1ºGRAU DE PRIORIDADE DE SINCRONIA
         #self.obtem_turno(display, limpa_tabela)              # 4ºGRAU DE PRIORIDADE DE SINCRONIA
         self.obtem_isencao(display, limpa_tabela)            # 5ºGRAU DE PRIORIDADE DE SINCRONIA
         #self.obtem_unidade(display, limpa_tabela)

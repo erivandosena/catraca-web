@@ -6,7 +6,7 @@ from contextlib import closing
 from catraca.logs import Logs
 from catraca.util import Util
 from catraca.modelo.dados.conexao import ConexaoFactory
-from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
+from catraca.modelo.dados.conexao_generica import ConexaoGenerica
 from catraca.modelo.entidades.turno import Turno
 from catraca.modelo.dao.catraca_dao import CatracaDAO
 
