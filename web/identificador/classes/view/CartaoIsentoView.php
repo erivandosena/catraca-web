@@ -523,7 +523,7 @@ class CartaoIsentoView {
 		echo '<div class="borda">
 				<form method="post" action="" class="formulario sequencial texto-preto" >
 					
-						    <label for="isen_inicio">InÃ­cio:</label>
+						    <label for="isen_inicio">Início:</label>
 						         <input id="isen_inicio" type="datetime-local" name="isen_inicio" value="' . $hoje . '" />
 				    	    <label for="isen_fim">Fim:</label>
 						         <input id="isen_fim" type="datetime-local" name="isen_fim" value="' . $daqui3Meses . '" />

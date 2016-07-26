@@ -247,6 +247,7 @@ class VinculoDAO extends DAO {
 		foreach($result as $linha){
 			if(isset($linha['isen_id'])){
 				$vinculo->setIsencao(new Isencao());
+				$vinculo->setIsento(true);
 				$vinculo->getIsencao()->setId($linha['isen_id']);
 				$vinculo->getIsencao()->setDataDeInicio($linha['isen_inicio']);
 				$vinculo->getIsencao()->setDataFinal($linha['isen_fim']);

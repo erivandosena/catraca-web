@@ -108,8 +108,37 @@ class CartaoIsentoController{
 				
 					
 				}else{
+					
 					//Aqui a gente da a opção de adicionar a isenção. 
-					echo '<a href="" class="botao">Adicionar Isenção</a>';
+					$vinculoDao->isencaoValidaDoVinculo($vinculo);
+					if($vinculo->ehIsento()){
+						echo 'Usuário Isento';
+					}
+					else{
+						if(!isset($_GET['add_isencao'])){
+							echo '<a href="?pagina=isento&numero_cartao='.$_GET['numero_cartao'].'&add_isencao=1" class="botao">Adicionar Isenção</a>';
+						}else{
+							if(isset($_POST['isen_inicio']) && isset($_POST['isen_fim']) && isset($_POST['id_card'])){
+								$vinculo->setIsencao(new Isencao());
+								$vinculo->getIsencao()->setDataDeInicio($_POST['isen_inicio']);
+								$vinculo->getIsencao()->setDataFinal($_POST['isen_fim']);
+								if($vinculoDao->adicionarIsencaoNoVinculo($vinculo)){
+									$this->view->mostraSucesso("Isenção adicionada Com Sucesso");
+									
+								}else{
+									$this->view->mostraSucesso("Erro ao tentar adicionar isenção. ");
+									
+								}
+								
+								
+							}
+							$this->view->formAdicionarIsencao($_GET['numero_cartao']);
+							
+							
+						}
+						
+					}
+						
 					
 				}
 				echo '
