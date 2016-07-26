@@ -40,7 +40,7 @@ class MensagemJson(ServidorRestful):
                     LISTA_JSON = dados["mensagens"]
                     if LISTA_JSON != []:
                         if limpa_tabela:
-                            self.mantem_tabela_local(None, True)
+                            return self.mantem_tabela_local(None, True)
                         lista = []
                         for item in LISTA_JSON:
                             obj = self.dict_obj(item)
@@ -64,7 +64,7 @@ class MensagemJson(ServidorRestful):
                     if not objeto.__eq__(obj):
                         return self.atualiza_exclui(obj, mantem_tabela)
                     else:
-                        print "Acao de atualizacao nao necessaria!"
+                        print "[MENSAGEM]Acao de atualizacao nao necessaria!"
                         return None
                 else:
                     return self.insere(obj)

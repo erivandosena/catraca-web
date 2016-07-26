@@ -38,34 +38,32 @@ class Sincronia(Relogio):
                 self.contador_status_recursos += 1
                 if (Rede.status == True and Relogio.periodo == True and self.contador_status_recursos >= 15):
                     self.contador_status_recursos = 0
-                    self.recursos_restful.obtem_recursos(False, True, False)
+                    self.recursos_restful.obtem_recursos()
                 elif not Relogio.periodo:
-                    #if Relogio.hora >= datetime.datetime.strptime('00:00:00','%H:%M:%S').time() and Relogio.hora <= datetime.datetime.strptime('00:00:10','%H:%M:%S').time():
                     if datetime.datetime.strptime(str(Relogio.hora),'%H:%M:%S').time() >= datetime.datetime.strptime('00:00:00','%H:%M:%S').time() and datetime.datetime.strptime(str(Relogio.hora),'%H:%M:%S').time() <= datetime.datetime.strptime('00:00:10','%H:%M:%S').time():
                         if Relogio.rede:
                             self.util.beep_buzzer(855, .5, 1)
                             self.aviso.exibir_aguarda_sincronizacao()
                             # realiza limpeza das tabelas locais
                             print "\nLimpando... tabela local CATRACA"
-                            self.recursos_restful.catraca_json.mantem_tabela_local(None, True)
+                            self.recursos_restful.catraca_json(True)
                             print "Concluido!\n"
                             print "\nLimpando... tabela local UNIDADE"
-                            self.recursos_restful.unidade_json.mantem_tabela_local(None, True)
+                            self.recursos_restful.unidade_json(True)
                             print "Concluido!\n"
                             print "\nLimpando... tabela local TURNO"
-                            self.recursos_restful.turno_json.mantem_tabela_local(None, True)
+                            self.recursos_restful.turno_json(True)
                             print "Concluido!\n"
                             print "\nLimpando... tabela local TIPO"
-                            self.recursos_restful.tipo_json.mantem_tabela_local(None, True)
+                            self.recursos_restful.tipo_json(True)
                             print "Concluido!\n"
                             print "\nLimpando... tabela local USUARIO"
-                            self.recursos_restful.usuario_json.mantem_tabela_local(None, True)
+                            self.recursos_restful.usuario_json(True)
                             print "Concluido!\n"
                             print "\nLimpando... tabela local CUSTO-REFEICAO"
-                            self.recursos_restful.custo_refeicao_json.mantem_tabela_local(None, True)
+                            self.recursos_restful.custo_refeicao_json(True)
                             print "Concluido!\n"
                             print "Iniciando a sincronia com o servidor RESTful em 5 segundos..."
                             sleep(5)
-                            self.recursos_restful.obtem_catraca(True, False)
-                            self.recursos_restful.obtem_recursos(True, True, False)
+                            self.recursos_restful.obtem_recursos()
                 

@@ -42,7 +42,7 @@ class CatracaJson(ServidorRestful):
                     LISTA_JSON = dados["catracas"]
                     if LISTA_JSON != []:
                         if limpa_tabela:
-                            self.mantem_tabela_local(None, True)
+                            return self.mantem_tabela_local(None, True)
                         catraca_local = None
                         for item in LISTA_JSON:
                             obj = self.dict_obj(item)
@@ -82,7 +82,7 @@ class CatracaJson(ServidorRestful):
                             self.cadastra_catraca_remoto()
                             return self.catraca_get()
                         else:
-                            print "Catraca em modo >>>> " + str("[CABO]" if catraca_local.interface == 'eth0' else "[SEM FIO]")
+                            #print "Catraca em modo >>>> " + str("[CABO]" if catraca_local.interface == 'eth0' else "[SEM FIO]")
                             return catraca_local
                     else:
                         return None
@@ -108,7 +108,7 @@ class CatracaJson(ServidorRestful):
                     # se o objeto for igual ao obj
                     else:
                         #nao faz nada
-                        print "Acao de atualizacao nao necessaria!"
+                        print "[CATRACA]Acao de atualizacao nao necessaria!"
                         return None
                 #se o objeto nao existir
                 else:

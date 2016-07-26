@@ -50,22 +50,22 @@ class RecursosRestful(object):
     def __init__(self, ):
         super(RecursosRestful, self).__init__()
         
-    def obtem_recursos(self, display=False, mantem_tabela=False, limpa_tabela=False):
+    def obtem_recursos(self, display=False, limpa_tabela=False):
         RecursosRestful.obtendo_recurso = True
         print "\nObtendo recursos do servidor RESTful..."
         #self.obtem_catraca(display, mantem_tabela, limpa_tabela)            # 3ºGRAU DE PRIORIDADE DE SINCRONIA
-        self.obtem_tipo(display, mantem_tabela, limpa_tabela)
-        self.obtem_cartao(display, mantem_tabela, limpa_tabela)             # 2ºGRAU DE PRIORIDADE DE SINCRONIA
-        self.obtem_usuario(display, mantem_tabela, limpa_tabela)
-        self.obtem_vinculo(display, mantem_tabela, limpa_tabela)
-        self.obtem_registro(display, mantem_tabela, limpa_tabela)           # 1ºGRAU DE PRIORIDADE DE SINCRONIA
-        self.obtem_turno(display, mantem_tabela, limpa_tabela)              # 4ºGRAU DE PRIORIDADE DE SINCRONIA
-        self.obtem_isencao(display, mantem_tabela, limpa_tabela)            # 5ºGRAU DE PRIORIDADE DE SINCRONIA
-        self.obtem_unidade(display, mantem_tabela, limpa_tabela)
-        self.obtem_unidade_turno(display, mantem_tabela, limpa_tabela)
-        self.obtem_catraca_unidade(display, mantem_tabela, limpa_tabela)
-        self.obtem_custo_refeicao(display, mantem_tabela, limpa_tabela)
-        self.obtem_mensagem(display, mantem_tabela, limpa_tabela)
+        self.obtem_tipo(display, limpa_tabela)
+        self.obtem_cartao(display, limpa_tabela)             # 2ºGRAU DE PRIORIDADE DE SINCRONIA
+        self.obtem_usuario(display, limpa_tabela)
+        self.obtem_vinculo(display, limpa_tabela)
+        self.obtem_registro(display, mlimpa_tabela)           # 1ºGRAU DE PRIORIDADE DE SINCRONIA
+        #self.obtem_turno(display, limpa_tabela)              # 4ºGRAU DE PRIORIDADE DE SINCRONIA
+        self.obtem_isencao(display, limpa_tabela)            # 5ºGRAU DE PRIORIDADE DE SINCRONIA
+        #self.obtem_unidade(display, limpa_tabela)
+        #self.obtem_unidade_turno(display, limpa_tabela)
+        #self.obtem_catraca_unidade(display, limpa_tabela)
+        #self.obtem_custo_refeicao(display, limpa_tabela)
+        self.obtem_mensagem(display, limpa_tabela)
         RecursosRestful.obtendo_recurso = False
         return RecursosRestful.obtendo_recurso
         
@@ -73,220 +73,220 @@ class RecursosRestful(object):
         if Rede.status:
             if display:
                 self.aviso.exibir_obtendo_recursos("Catraca")
-            print "\n-------------------------------"
             catraca = self.catraca_json.catraca_get(limpa_tabela)
             if display:
                 self.aviso.exibir_aguarda_cartao()
             if catraca:
+                print "-------------------------------"
                 print "Recurso CATRACA obtido!"
-                print "\n-------------------------------"
+                print "-------------------------------"
             else:
-                print "\n-------------------------------"
+                print "-------------------------------"
                 print "Recurso CATRACA nulo!"
-                print "\n-------------------------------"
+                print "-------------------------------"
             return catraca
                 
-    def obtem_mensagem(self, display=False, mantem_tabela=False, limpa_tabela=False):
+    def obtem_mensagem(self, display=False, limpa_tabela=False):
         if Rede.status:
             if display:
                 self.aviso.exibir_obtendo_recursos("Mensagem")
-            print "\n-------------------------------"
             mensagem = self.mensagem_json.mensagem_get(limpa_tabela)
             if display:
                 self.aviso.exibir_aguarda_cartao()
             if mensagem:
+                print "-------------------------------"
                 print "Recurso MENSAGEM obtido!"
-                print "\n-------------------------------"
+                print "-------------------------------"
             else:
-                print "\n-------------------------------"
+                print "-------------------------------"
                 print "Recurso MENSAGEM nulo!"
-                print "\n-------------------------------"
+                print "-------------------------------"
             return mensagem
                 
-    def obtem_unidade(self, display=False, mantem_tabela=False, limpa_tabela=False):
+    def obtem_unidade(self, display=False, limpa_tabela=False):
         if Rede.status:
             if display:
                 self.aviso.exibir_obtendo_recursos("Unidade")
-            print "\n-------------------------------"
             unidade = self.unidade_json.unidade_get(limpa_tabela)
             if display:
                 self.aviso.exibir_aguarda_cartao()
             if unidade:
+                print "-------------------------------"
                 print "Recurso UNIDADE obtido!"
-                print "\n-------------------------------"
+                print "-------------------------------"
             else:
-                print "\n-------------------------------"
+                print "-------------------------------"
                 print "Recurso UNIDADE nulo!"
-                print "\n-------------------------------"
+                print "-------------------------------"
             return unidade
                 
-    def obtem_catraca_unidade(self, display=False, mantem_tabela=False, limpa_tabela=False):
+    def obtem_catraca_unidade(self, display=False, limpa_tabela=False):
         if Rede.status:
             if display:
                 self.aviso.exibir_obtendo_recursos("Catraca Unidade")
-            print "\n-------------------------------"
             catraca_unidade = self.catraca_unidade_json.catraca_unidade_get(limpa_tabela)
             if display:
                 self.aviso.exibir_aguarda_cartao()
             if catraca_unidade:
+                print "-------------------------------"
                 print "Recurso CATRACA-UNIDADE obtido!"
-                print "\n-------------------------------"
+                print "-------------------------------"
             else:
-                print "\n-------------------------------"
+                print "-------------------------------"
                 print "Recurso CATRACA-UNIDADE nulo!"
-                print "\n-------------------------------"
+                print "-------------------------------"
             return catraca_unidade
                 
-    def obtem_turno(self, display=False, mantem_tabela=False, limpa_tabela=False):
+    def obtem_turno(self, display=False, limpa_tabela=False):
         if Rede.status:
             if display:
                 self.aviso.exibir_obtendo_recursos("Turno")
-            print "\n-------------------------------"
             turno = self.turno_json.turno_get(limpa_tabela)
             if display:
                 self.aviso.exibir_aguarda_cartao()
             if turno:
+                print "-------------------------------"
                 print "Recurso TURNO obtido!"
-                print "\n-------------------------------"
+                print "-------------------------------"
             else:
-                print "\n-------------------------------"
+                print "-------------------------------"
                 print "Recurso TURNO nulo!"
-                print "\n-------------------------------"
+                print "-------------------------------"
             return turno
                 
-    def obtem_unidade_turno(self, display=False, mantem_tabela=False, limpa_tabela=False):
+    def obtem_unidade_turno(self, display=False, limpa_tabela=False):
         if Rede.status:
             if display:
                 self.aviso.exibir_obtendo_recursos("Unidade Turno")
-            print "\n-------------------------------"
             unidade_turno = self.unidade_turno_json.unidade_turno_get(limpa_tabela)
             if display:
                 self.aviso.exibir_aguarda_cartao()
             if unidade_turno:
+                print "-------------------------------"
                 print "Recurso UNIDADE-TURNO obtido!"
-                print "\n-------------------------------"
+                print "-------------------------------"
             else:
-                print "\n-------------------------------"
+                print "-------------------------------"
                 print "Recurso UNIDADE-TURNO nulo!"
-                print "\n-------------------------------"
+                print "-------------------------------"
             return unidade_turno
                 
-    def obtem_tipo(self, display=False, mantem_tabela=False, limpa_tabela=False):
+    def obtem_tipo(self, display=False, limpa_tabela=False):
         if Rede.status:
             if display:
                 self.aviso.exibir_obtendo_recursos("Tipo")
-            print "\n-------------------------------"
             tipo = self.tipo_json.tipo_get(limpa_tabela)
             if display:
                 self.aviso.exibir_aguarda_cartao()
             if tipo:
+                print "-------------------------------"
                 print "Recurso TIPO obtido!"
-                print "\n-------------------------------"
+                print "-------------------------------"
             else:
-                print "\n-------------------------------"
+                print "-------------------------------"
                 print "Recurso TIPO nulo!"
-                print "\n-------------------------------"
+                print "-------------------------------"
             return tipo
                 
-    def obtem_usuario(self, display=False, mantem_tabela=False, limpa_tabela=False):
+    def obtem_usuario(self, display=False, limpa_tabela=False):
         if Rede.status:
             if display:
                 self.aviso.exibir_obtendo_recursos("Usuario")
-            print "\n-------------------------------"
             usuario = self.usuario_json.usuario_get(limpa_tabela)
             if display:
                 self.aviso.exibir_aguarda_cartao()
             if usuario:
+                print "-------------------------------"
                 print "Recurso USUARIO obtido!"
-                print "\n-------------------------------"
+                print "-------------------------------"
             else:
-                print "\n-------------------------------"
+                print "-------------------------------"
                 print "Recurso USUARIO nulo!"
-                print "\n-------------------------------"
+                print "-------------------------------"
             return usuario
                 
-    def obtem_custo_refeicao(self, display=False, mantem_tabela=False, limpa_tabela=False):
+    def obtem_custo_refeicao(self, display=False, limpa_tabela=False):
         if Rede.status:
             if display:
                 self.aviso.exibir_obtendo_recursos("Custo Refeicao")
-            print "\n-------------------------------"
             custo_refeicao = self.custo_refeicao_json.custo_refeicao_get(limpa_tabela)
             if display:
                 self.aviso.exibir_aguarda_cartao()
             if custo_refeicao:
+                print "-------------------------------"
                 print "Recurso CUSTO-REFEICAO obtido!"
-                print "\n-------------------------------"
+                print "-------------------------------"
             else:
-                print "\n-------------------------------"
+                print "-------------------------------"
                 print "Recurso CUSTO-REFEICAO nulo!"
-                print "\n-------------------------------"
+                print "-------------------------------"
             return custo_refeicao
                 
-    def obtem_cartao(self, display=False, mantem_tabela=False, limpa_tabela=False):
+    def obtem_cartao(self, display=False, limpa_tabela=False):
         if Rede.status:
             if display:
                 self.aviso.exibir_obtendo_recursos("Cartao")
-            print "\n-------------------------------"
             cartao = self.cartao_json.cartao_get(limpa_tabela)
             if display:
                 self.aviso.exibir_aguarda_cartao()
             if cartao:
+                print "-------------------------------"
                 print "Recurso CARTAO obtido!"
-                print "\n-------------------------------"
+                print "-------------------------------"
             else:
-                print "\n-------------------------------"
+                print "-------------------------------"
                 print "Recurso CARTAO nulo!"
-                print "\n-------------------------------"
+                print "-------------------------------"
             return cartao
                 
-    def obtem_vinculo(self, display=False, mantem_tabela=False, limpa_tabela=False):
+    def obtem_vinculo(self, display=False, limpa_tabela=False):
         if Rede.status:
             if display:
                 self.aviso.exibir_obtendo_recursos("Vinculo")
-            print "\n-------------------------------"
             vinculo = self.vinculo_json.vinculo_get(limpa_tabela)
             if display:
                 self.aviso.exibir_aguarda_cartao()
             if vinculo:
+                print "-------------------------------"
                 print "Recurso VINCULO obtido!"
-                print "\n-------------------------------"
+                print "-------------------------------"
             else:
-                print "\n-------------------------------"
+                print "-------------------------------"
                 print "Recurso VINCULO nulo!"
-                print "\n-------------------------------"
+                print "-------------------------------"
             return vinculo
                 
-    def obtem_isencao(self, display=False, mantem_tabela=False, limpa_tabela=False):
+    def obtem_isencao(self, display=False, limpa_tabela=False):
         if Rede.status:
             if display:
                 self.aviso.exibir_obtendo_recursos("Isencao")
-            print "\n-------------------------------"
             isencao = self.isencao_json.isencao_get(limpa_tabela)
             if display:
                 self.aviso.exibir_aguarda_cartao()
             if isencao:
+                print "-------------------------------"
                 print "Recurso ISENCAO obtido!"
-                print "\n-------------------------------"
+                print "-------------------------------"
             else:
-                print "\n-------------------------------"
+                print "-------------------------------"
                 print "Recurso ISENCAO nulo!"
-                print "\n-------------------------------"
+                print "-------------------------------"
             return isencao
                 
-    def obtem_registro(self, display=False, mantem_tabela=False, limpa_tabela=False):
+    def obtem_registro(self, display=False, limpa_tabela=False):
         if Rede.status:
             if display:
                 self.aviso.exibir_obtendo_recursos("Registro")
-            print "\n-------------------------------"
             registro = self.registro_json.registro_get(limpa_tabela)
             if display:
                 self.aviso.exibir_aguarda_cartao()
             if registro:
+                print "-------------------------------"
                 print "Recurso REGISTRO obtido!"
-                print "\n-------------------------------"
+                print "-------------------------------"
             else:
-                print "\n-------------------------------"
+                print "-------------------------------"
                 print "Recurso REGISTRO nulo!"
-                print "\n-------------------------------"
+                print "-------------------------------"
             return registro
         

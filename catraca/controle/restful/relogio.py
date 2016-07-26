@@ -46,18 +46,14 @@ class Relogio(ControleGenerico, threading.Thread):
         self.intervalo = intervalo
         self.name = 'Thread Relogio'
         self.status = True
-        #self.rede = False
-        #self.catraca = self.recursos_restful.catraca_json.catraca_get()
         
     def run(self):
         print "%s. Rodando... " % self.name
-        #Relogio.catraca = self.catraca
         self.catraca = self.catraca_dao.busca_por_nome(self.util.obtem_nome_rpi())
         while True:
             self.hora_atul = self.util.obtem_hora()
             Relogio.hora = self.hora_atul
             self.datahora = self.util.obtem_datahora().strftime("%d/%m/%Y %H:%M:%S")
-            #if (self.hora == datetime.datetime.strptime('06:00:00','%H:%M:%S').time()) or (self.hora == datetime.datetime.strptime('12:00:00','%H:%M:%S').time()) or (self.hora == datetime.datetime.strptime('18:00:00','%H:%M:%S').time()):
             if (datetime.datetime.strptime(str(self.hora),'%H:%M:%S').time() == datetime.datetime.strptime('06:00:00','%H:%M:%S').time()) or (datetime.datetime.strptime(str(self.hora),'%H:%M:%S').time() == datetime.datetime.strptime('12:00:00','%H:%M:%S').time()) or (datetime.datetime.strptime(str(self.hora),'%H:%M:%S').time() == datetime.datetime.strptime('18:00:00','%H:%M:%S').time()):
                 self.aviso.exibir_saldacao(self.aviso.saldacao(), self.util.obtem_datahora_display())
             self.contador += 1

@@ -47,9 +47,9 @@ class Rede(threading.Thread):
                 interface = catraca_remota.interface
                 interfaces = netifaces.interfaces()
                 for iface in interfaces:
-                    print iface
+                    #print iface
                     if iface == interface:
-                        print str(iface) + " == " + str(interface)
+                        #print str(iface) + " == " + str(interface)
                         addrs = netifaces.ifaddresses(iface)
                         addresses = [i['addr'] for i in addrs.setdefault(netifaces.AF_INET, [{'addr':None}] )]
                         if addresses[0]:

@@ -48,9 +48,10 @@ class RegistroJson(ServidorRestful):
                     r = servidor.get(url)
                     if r.text != '':
                         dados  = json.loads(r.text)
+                        LISTA_JSON = dados["registros"]
                         if LISTA_JSON != []:
                             if limpa_tabela:
-                                self.mantem_tabela_local(None, True)
+                                return self.mantem_tabela_local(None, True)
                             lista = []
                             for item in LISTA_JSON:
                                 obj = self.dict_obj(item)
@@ -103,7 +104,7 @@ class RegistroJson(ServidorRestful):
                     if not objeto.__eq__(obj):
                         return self.atualiza_exclui(obj, mantem_tabela)
                     else:
-                        print "Acao de atualizacao nao necessaria!"
+                        print "[REGISTRO]Acao de atualizacao nao necessaria!"
                         return None
                 else:
                     return self.insere(obj)
