@@ -330,6 +330,7 @@ class CartaoAvulsoView {
 								<th>Cartão</th>
 								<th>Validade</th>
 								<th>Isento</th>
+								<th>Obs</th>
 				';
 		
 		if($podeRenovar)
@@ -362,6 +363,7 @@ class CartaoAvulsoView {
 			echo '<td>Sim</td>';
 		else
 			echo '<td>Não</td>';
+		echo '<td>'.$vinculo->getDescricao().'</td>';
 		
 		if($vinculo->isActive())
 			echo '<td><a href="?pagina=cartao&selecionado='.$vinculo->getResponsavel()->getIdBaseExterna().'&vinculo_cancelar='.$vinculo->getId().'" class="botao">Cancelar</a></td>';
@@ -375,9 +377,24 @@ class CartaoAvulsoView {
 		echo '</tr>';
 	}
 	public function formConfirmacaoEnvioVinculo(Usuario $usuario, $numeroCartao, Tipo $tipo){
+		
+		$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'H:00:01' );
+		$dataHoje = date ('Y-m-d') . 'T' . date ( 'H:00:01' );
+		if(isset($_SESSION['ultima_hora_inserida'])){
+			$daqui3Meses = $_SESSION['ultima_hora_inserida'];
+		}
 		echo '<div class="borda">';
 		echo '<p>Tem certeza que deseja adicionar o cartão '.$numeroCartao.' para o usuario '.$usuario->getNome().' com o tipo '.$tipo->getNome().'? </p>';
-		echo '<form action="" method="post">
+		echo '<form action="" class="formulario" method="post">
+				<label for="vinc_inicio">Inicio da Validade:</label><br>
+				<input type="datetime-local"  id="vinc_inicio" value="'.$dataHoje.'" name="vinc_inicio" /><br>
+				<label for="vinc_fim">Final da Validade</label><br>
+				<input type="datetime-local" id="vinc_fim" value="'.$daqui3Meses.'"  name="vinc_fim"/><br>
+				<label for="obs">Observação</label><br>
+				<input type="text" id="obs"  name="obs"/><br>
+				<label for="vinc_refeicoes">Refeições Por Turno</label><br>
+				<input type="number" id="vinc_refeicoes" value="1" name="vinc_refeicoes"/><br>
+						
 				<input type="submit" class="botao" value="certeza" name="enviar_vinculo"/>
 				
 				</form>';
@@ -412,6 +429,7 @@ class CartaoAvulsoView {
 		if(isset($_SESSION['ultima_hora_inserida'])){
 			$daqui3Meses = $_SESSION['ultima_hora_inserida'];
 		}
+		
 		echo '
 				<script>
 				  $(document).bind(\'autofocus_ready\', function() {
@@ -423,27 +441,20 @@ class CartaoAvulsoView {
 		echo '<div class="borda">
 				
 				<form method="get" action="" class="formulario texto-preto" >
-						    <label for="numero_cartao2">Número do Cartão</label>
+						    	<label for="numero_cartao2">Número do Cartão</label><br>
 								<input type="text" name="numero_cartao2" id="numero_cartao2" autofocus/><br>
-								<label for="vinc_inicio">Inicio da Validade</label>
-								<input type="datetime-local" id="vinc_inicio" name="vinc_inicio" /><br>
-				
-								<label for="vinc_fim">Final da Validade</label>
-								<input type="datetime-local" id="vinc_fim"  name="vinc_fim"/><br>
-								<label for="obs">Observação</label>
-								<input type="text" id="obs"  name="obs"/><br>
-								<label for="vinc_refeicoes">Refeições Por Turno</label>
-								<input type="number" id="vinc_refeicoes"  name="vinc_refeicoes"/><br>
-								 <script>$(document).trigger(\'autofocus_ready\');</script>
-						     <label for="id_tipo">Tipo</label>
+								<script>$(document).trigger(\'autofocus_ready\');</script>
+						     	<label for="id_tipo">Tipo</label><br>
+										
 						       <select id="id_tipo" name="id_tipo">';
 		foreach ( $listaDeTipos as $tipo) {
 			echo '<option value="' . $tipo->getId() . '">' . $tipo->getNome() . '</option>';
 		}
 		echo '
 
-			        </select>
-				<input type="hidden" name="pagina"  value="cartao"/>
+			        </select><br>
+
+				<input type="hidden" name="pagina"  value="avulso"/>
 				<input type="hidden" name="cartao"  value="add"/>
 				<input type="hidden" name="selecionado"  value="' . $idSelecionado . '"/>
 			   <br> 	<input  type="submit"  name="salvar" value="Salvar"/>

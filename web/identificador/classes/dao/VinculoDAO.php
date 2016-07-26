@@ -56,6 +56,8 @@ class VinculoDAO extends DAO {
 			$vinculo->setInicioValidade($linha ['vinc_inicio']);
 			$vinculo->setFinalValidade($linha['vinc_fim']);
 			$vinculo->setAvulso($linha['vinc_avulso']);
+			$vinculo->setDescricao($linha['vinc_descricao']);
+			
 			$lista[] = $vinculo;
 						
 
@@ -394,7 +396,7 @@ class VinculoDAO extends DAO {
 		ON vinculo.usua_id = usuario.usua_id
 		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
 		LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id WHERE (usuario.id_base_externa = $idBaseExterna)
-		AND ('$dataTimeAtual' BETWEEN vinc_inicio AND vinc_fim) ";
+		AND ('$dataTimeAtual' BETWEEN vinc_inicio AND vinc_fim) AND vinc_avulso = FALSE";
 // 		echo $sql;
 		$result = $this->getConexao ()->query ($sql );
 		foreach($result as $linha){
@@ -405,17 +407,16 @@ class VinculoDAO extends DAO {
 		
 	}
 	public function adicionaVinculo(Vinculo $vinculo) {
+
 		$inicio = $vinculo->getInicioValidade();
 		$usuarioBaseExterna = $vinculo->getResponsavel()->getIdBaseExterna();
 		$numeroCartao = $vinculo->getCartao()->getNumero();
 		$dataDeValidade = $vinculo->getFinalValidade();
 		$tipoCartao = $vinculo->getCartao()->getTipo()->getId();
-		
 		$this->verificarUsuario($vinculo->getResponsavel());
 		if($vinculo->invalidoParaAdicionar()){	
 			return false;
 		}
-
 		if(!$vinculo->getResponsavel()->getId()){
 			//echo 'Veio daqui oh';
 			return false;
@@ -509,7 +510,7 @@ class VinculoDAO extends DAO {
 	}
 	/**
 	 * Vamos pegar da base exter a ecopiar para a base local.
-	 * Se Nem existir na base externa, � o usuario frescando. Preciso dar nem resposta pra ele. Aborto tudo logo.
+	 * Se Nem existir na base externa, É o usuario frescando. Preciso dar nem resposta pra ele. Aborto tudo logo.
 	 * Fa�amos um insert aqui.
 	 * Apos esse insert iremos pegar o id inserido na base e retornalo. 
 	 * Retorna 0, deu nada certo. Essa parada acaba aqui. 

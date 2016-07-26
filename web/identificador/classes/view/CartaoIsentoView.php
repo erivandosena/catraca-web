@@ -13,7 +13,7 @@ class CartaoIsentoView {
 				
 				<div class="borda">
 									<form method="get" action="" class="formulario em-linha" >
-										<input type="hidden" name="pagina" value="cartao" />
+										<input type="hidden" name="pagina" value="isento" />
 										<label for="numero_cartao">
 											<object class="rotulo texto-preto">Buscar por Número: </object><br><br>
 											
@@ -51,7 +51,7 @@ class CartaoIsentoView {
 		echo '<td>' .  $cartao->getNumero() . '</a></td>';
 		echo '<td>' .$cartao->getCreditos(). '</td>';
 		echo '<td>' . $cartao->getTipo()->getNome() . '</td>';
-		echo '<td class="centralizado"><a href="?pagina=cartao&cartaoselecionado=' . $cartao->getId() . '"><span class="icone-checkmark texto-verde2 botao" title="Selecionar"></span></a></td>';
+		echo '<td class="centralizado"><a href="?pagina=isento&cartaoselecionado=' . $cartao->getId() . '"><span class="icone-checkmark texto-verde2 botao" title="Selecionar"></span></a></td>';
 		echo '</tr>';
 	}
 	public function mostraCartaoSelecionado(Cartao $cartao){
@@ -182,7 +182,7 @@ class CartaoIsentoView {
 		echo '<td>' . $usuario->getStatusDiscente () . '</td>';
 		echo '<td>' . $usuario->getStatusServidor () . '</td>';
 		echo '<td>' . $usuario->getTipodeUsuario () . '</td>';
-		echo '<td class="centralizado"><a href="?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna () . '"><span class="icone-checkmark texto-verde2 botao" title="Selecionar"></span></a></td>';
+		echo '<td class="centralizado"><a href="?pagina=isento&selecionado=' . $usuario->getIdBaseExterna () . '"><span class="icone-checkmark texto-verde2 botao" title="Selecionar"></span></a></td>';
 		echo '</tr>';
 	}
 	
@@ -193,7 +193,7 @@ class CartaoIsentoView {
 		
 				
 		//Descomente esta linha para ativar o botão para cadastrar foto.	
-		//echo '		<a href="?pagina=cartao&selecionado='.$_GET['selecionado'].'&foto=1" class="botao">Adicionar Foto</a>';
+		//echo '		<a href="?pagina=isento&selecionado='.$_GET['selecionado'].'&foto=1" class="botao">Adicionar Foto</a>';
 		
 		
 		if(isset($_GET['foto'])){
@@ -363,10 +363,10 @@ class CartaoIsentoView {
 			echo '<td>Não</td>';
 		
 		if($vinculo->isActive())
-			echo '<td><a href="?pagina=cartao&selecionado='.$vinculo->getResponsavel()->getIdBaseExterna().'&vinculo_cancelar='.$vinculo->getId().'" class="botao">Cancelar</a></td>';
+			echo '<td><a href="?pagina=isento&selecionado='.$vinculo->getResponsavel()->getIdBaseExterna().'&vinculo_cancelar='.$vinculo->getId().'" class="botao">Cancelar</a></td>';
 		else{
 			if($podeRenovar)
-				echo '<td><a href="?pagina=cartao&selecionado='.$vinculo->getResponsavel()->getIdBaseExterna().'&vinculo_renovar='.$vinculo->getId().'" class="botao">Renovar</a></td>';
+				echo '<td><a href="?pagina=isento&selecionado='.$vinculo->getResponsavel()->getIdBaseExterna().'&vinculo_renovar='.$vinculo->getId().'" class="botao">Renovar</a></td>';
 			
 			
 		}
@@ -462,13 +462,13 @@ class CartaoIsentoView {
 			echo '<p>InÃ­cio do VÃ­nculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getInicioValidade())).'</p>';
 			echo '<p>Fim do VÃ­nculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getFinalValidade())).'</p>';
 			
-			echo '<a class="botao b-erro" href="?pagina=cartao&vinculoselecionado='.$vinculo->getId().'&deletar=1">Eliminar Vinculo</a>';
+			echo '<a class="botao b-erro" href="?pagina=isento&vinculoselecionado='.$vinculo->getId().'&deletar=1">Eliminar Vinculo</a>';
 		}
 		else{
 			echo '<p>Vinculo inativo</p>';
 			echo '<p>InÃ­cio do VÃ­nculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getInicioValidade())).'</p>';
 			echo '<p>Fim do VÃ­nculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getFinalValidade())).'</p>';
-			echo '<a class="botao b-erro" href="?pagina=cartao&vinculoselecionado='.$vinculo->getId().'&reativar=1">Reativar Vinculo</a>';
+			echo '<a class="botao b-erro" href="?pagina=isento&vinculoselecionado='.$vinculo->getId().'&reativar=1">Reativar Vinculo</a>';
 			
 			
 		}
@@ -494,14 +494,14 @@ class CartaoIsentoView {
 				echo '<p>IsenÃ§Ã£o ativa</p>';
 				echo '<p>InÃ­cio da IsenÃ§Ã£o: '.date('d/m/Y H:i:s', strtotime($vinculo->getIsencao()->getDataDeInicio())).'</p>';
 				echo '<p>Fim da IsenÃ§Ã£o: '.date('d/m/Y H:i:s', strtotime($vinculo->getIsencao()->getDataFinal())).'</p>';
-				echo '<a href="?pagina=cartao&vinculoselecionado='.$vinculo->getId().'&delisencao=1">Eliminar IsenÃ§Ã£o</a>';
+				echo '<a href="?pagina=isento&vinculoselecionado='.$vinculo->getId().'&delisencao=1">Eliminar IsenÃ§Ã£o</a>';
 				
 			}
 			else if($tempoAgora < $tempoB){
 				echo '<p>IsenÃ§Ã£o no Futuro</p>';
 				echo '<p>InÃ­cio da IsenÃ§Ã£o: '.date('d/m/Y H:i:s', strtotime($vinculo->getIsencao()->getDataDeInicio())).'</p>';
 				echo '<p>Fim da IsenÃ§Ã£o: '.date('d/m/Y H:i:s', strtotime($vinculo->getIsencao()->getDataFinal())).'</p>';
-				echo '<p><a href="?pagina=cartao&vinculoselecionado='.$vinculo->getId().'&delisencao=1">Eliminar IsenÃ§Ã£o</a></p>';
+				echo '<p><a href="?pagina=isento&vinculoselecionado='.$vinculo->getId().'&delisencao=1">Eliminar IsenÃ§Ã£o</a></p>';
 			}else
 			{
 				echo '<p>IsenÃ§Ã£o inativa</p>';

@@ -11,11 +11,11 @@ class CartaoIsentoController{
 		
 		switch ($nivelDeAcesso){
 			case Sessao::NIVEL_SUPER:
-				$controller = new CartaoController();
+				$controller = new CartaoIsentoController();
 				$controller->telaCartao();
 				break;
 			case Sessao::NIVEL_ADMIN:
-				$controller = new CartaoController();
+				$controller = new CartaoIsentoController();
 				$controller->telaCartao();
 				break;
 			default:
@@ -31,7 +31,7 @@ class CartaoIsentoController{
 		        <ul class = "simpleTabsNavigation">
 				
 					<li><a href="#">Identifica&ccedil;&atilde;o</a></li>
-					<li><a href="#">Cadastro</a></li>
+					<li><a href="#">Cadastro de Isenção</a></li>
 					
 		        </ul>
 		        <div class = "simpleTabsContent">';
@@ -106,50 +106,11 @@ class CartaoIsentoController{
 					echo '<p>O vinculo não está ativo </p><br>
 							<a href="?pagina=cartao&numero_cartao='.$_GET['numero_cartao'].'&cartao_renovar=1" class="botao">Renovar</a> ';
 				
-					if(isset($_GET['cartao_renovar'])){
-						if(isset($_POST['certeza'])){
-							$usuarioDao = new UsuarioDAO(null, DAO::TIPO_PG_SIGAAA);
-							
-							
-							$usuarioDao->retornaPorIdBaseExterna($usuario);
-							
-							if($vinculoDao->usuarioJaTemVinculo($usuario))
-							{
-								$this->view->mostraSucesso("Esse usuário já possui vínculo válido.");
-								echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
-								return;
-							}
-							if($vinculo->isAvulso()){
-						
-								$this->view->mostraSucesso("Não existe renovação de vínculos avulsos!");
-								echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
-								return;
-							}
-							
-							
-							
-							if(!$this->verificaSeAtivo($usuario)){
-								$this->view->mostraSucesso("Esse usuário possui um problema quanto ao status!");
-								echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
-								return;
-						
-							}
-								
-							$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'G:00:01' );
-							$vinculo->setFinalValidade($daqui3Meses);
-								
-							if($vinculoDao->atualizaValidade($vinculo)){
-								$this->view->mostraSucesso("Vínculo Atualizado com Sucesso!  ");
-							}else{
-								$this->view->mostraSucesso("Erro ao tentar renovar vínculo.  ");
-								
-							}
-							echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
-							return;
-						}
-						
-						$this->view->formConfirmacaoRenovarVinculo();
-					}
+					
+				}else{
+					//Aqui a gente da a opção de adicionar a isenção. 
+					echo '<a href="" class="botao">Adicionar Isenção</a>';
+					
 				}
 				echo '
 						

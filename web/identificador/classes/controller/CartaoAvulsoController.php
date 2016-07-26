@@ -28,19 +28,24 @@ class CartaoAvulsoController{
 	public function telaCartao(){
 		$this->view = new CartaoAvulsoView();
 		echo '<div class="conteudo"> <div class = "simpleTabs">
-		        <ul class = "simpleTabsNavigation">
+		        <ul class = "simpleTabsNavigation">';
 				
-					<li><a href="#">Identifica&ccedil;&atilde;o</a></li>
-					<li><a href="#">Cadastro</a></li>
-					
-		        </ul>
-		        <div class = "simpleTabsContent">';
+// 		echo '		<li><a href="#">Listar Avulsos</a></li>';
 		
-		$this->telaIdentificacao();
-		echo '	</div>
+		echo '		<li><a href="#">Cadastro de Avulso</a></li>';
+		
+		echo '			
+		        </ul>';
+		
+// 		echo '    <div class = "simpleTabsContent">';
+		
+// 		$this->telaIdentificacao();
+// 		echo '	</div>';
+		
+		
 						
 						
-				<div class = "simpleTabsContent">';
+		echo '	<div class = "simpleTabsContent">';
 		$this->telaCadastro();
 		echo '	</div>		
 						
@@ -104,7 +109,7 @@ class CartaoAvulsoController{
 				
 				if(!$vinculo->isActive()){
 					echo '<p>O vinculo não está ativo </p><br>
-							<a href="?pagina=cartao&numero_cartao='.$_GET['numero_cartao'].'&cartao_renovar=1" class="botao">Renovar</a> ';
+							<a href="?pagina=avulso&numero_cartao='.$_GET['numero_cartao'].'&cartao_renovar=1" class="botao">Renovar</a> ';
 				
 					if(isset($_GET['cartao_renovar'])){
 						if(isset($_POST['certeza'])){
@@ -116,13 +121,13 @@ class CartaoAvulsoController{
 							if($vinculoDao->usuarioJaTemVinculo($usuario))
 							{
 								$this->view->mostraSucesso("Esse usuário já possui vínculo válido.");
-								echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+								echo '<meta http-equiv="refresh" content="4; url=.\?pagina=avulso&selecionado=' . $usuario->getIdBaseExterna() . '">';
 								return;
 							}
 							if($vinculo->isAvulso()){
 						
 								$this->view->mostraSucesso("Não existe renovação de vínculos avulsos!");
-								echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+								echo '<meta http-equiv="refresh" content="4; url=.\?pagina=avulso&selecionado=' . $usuario->getIdBaseExterna() . '">';
 								return;
 							}
 							
@@ -130,7 +135,7 @@ class CartaoAvulsoController{
 							
 							if(!$this->verificaSeAtivo($usuario)){
 								$this->view->mostraSucesso("Esse usuário possui um problema quanto ao status!");
-								echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+								echo '<meta http-equiv="refresh" content="4; url=.\?pagina=avulso&selecionado=' . $usuario->getIdBaseExterna() . '">';
 								return;
 						
 							}
@@ -144,7 +149,7 @@ class CartaoAvulsoController{
 								$this->view->mostraSucesso("Erro ao tentar renovar vínculo.  ");
 								
 							}
-							echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+							echo '<meta http-equiv="refresh" content="4; url=.\?pagina=avulso&selecionado=' . $usuario->getIdBaseExterna() . '">';
 							return;
 						}
 						
@@ -197,7 +202,7 @@ class CartaoAvulsoController{
 						$this->view->mostraSucesso("Erro ao tentar invalidar vínculo.  ");
 						
 					}
-					echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+					echo '<meta http-equiv="refresh" content="4; url=.\?pagina=avulso&selecionado=' . $usuario->getIdBaseExterna() . '">';
 					return;
 				}
 				
@@ -219,19 +224,19 @@ class CartaoAvulsoController{
 					if($vinculoDao->usuarioJaTemVinculo($usuario))
 					{
 						$this->view->mostraSucesso("Esse usuário já possui vínculo válido.");
-						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=avulso&selecionado=' . $usuario->getIdBaseExterna() . '">';
 						return;
 					}
 					if($vinculo->isAvulso()){
 						
 						$this->view->mostraSucesso("Não existe renovação de vínculos avulsos!");
-						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=avulso&selecionado=' . $usuario->getIdBaseExterna() . '">';
 						return;
 					}
 					
 					if(!$this->verificaSeAtivo($usuario)){
 						$this->view->mostraSucesso("Esse usuário possui um problema quanto ao status!");
-						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=avulso&selecionado=' . $usuario->getIdBaseExterna() . '">';
 						return;
 						
 					}
@@ -244,7 +249,7 @@ class CartaoAvulsoController{
 						$this->view->mostraSucesso("Erro ao tentar renovar vínculo.  ");
 
 					}
-					echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+					echo '<meta http-equiv="refresh" content="4; url=.\?pagina=avulso&selecionado=' . $usuario->getIdBaseExterna() . '">';
 					return;
 				}
 			
@@ -270,42 +275,35 @@ class CartaoAvulsoController{
 					
 					if(isset($_GET['salvar'])){
 						foreach($listaDeTipos as $tipo){
-							if($tipo->getId() == $_GET['id_tipo'])
+							
+							if($tipo->getId() == $_GET['id_tipo']){
 								$esseTipo = $tipo;	
+							
+							}
 						}
 						$vinculo = new Vinculo();
 						$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'G:00:01' );
-						$vinculo->setFinalValidade($daqui3Meses);
-						$vinculo->getCartao()->getTipo()->setId($tipo->getId());
+						
+						$vinculo->getCartao()->getTipo()->setId($esseTipo->getId());
 						$vinculo->getCartao()->setNumero($_GET['numero_cartao2']);
 						$vinculo->getResponsavel()->setIdBaseExterna(intval($usuario->getIdBaseExterna()));
-						$vinculo->setInicioValidade(date ( "Y-m-d G:i:s" ));
-						if($vinculoDao->usuarioJaTemVinculo($vinculo->getResponsavel())){
-								echo '<div class="borda">';
-								echo '<p>Esse usuário já possui cartão. Inative o cartão atual para adicionar um novo.</p><br>';
-								//echo '<a href="?pagina=cartao&cartaoselecionado=' .$vinculo->getCartao()->getId().'">Clique aqui para ver</a>';
-								echo '</div>';
-								return;
-	
-						}
+						
+						
 						if($vinculoDao->cartaoTemVinculo($vinculo->getCartao())){
 							echo '<div class="borda">';
 							echo '<p>O numero do cartão digitado já possui vinculo, utilize outro cartão.</p><br>';
 							echo '</div>';
-							echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $vinculo->getResponsavel()->getIdBaseExterna() . '&cartao=add">';
+							echo '<meta http-equiv="refresh" content="4; url=.\?pagina=avulso&selecionado=' . $vinculo->getResponsavel()->getIdBaseExterna() . '&cartao=add">';
 							return;
 						}
 						
 						if(isset($_POST['enviar_vinculo'])){
+							$vinculo->setAvulso(true);
+							$vinculo->setFinalValidade($_POST['vinc_fim']);
+							$vinculo->setInicioValidade($_POST['vinc_inicio']);
+							$vinculo->setDescricao($_POST['obs']);
+							$vinculo->setQuantidadeDeAlimentosPorTurno($_POST['vinc_refeicoes']);
 							
-							if($vinculoDao->usuarioJaTemVinculo($vinculo->getResponsavel())){
-								echo '<div class="borda">';
-								echo '<p>Esse usuário já possui cartão. Invalide o cartão atual para adicionar um novo.</p><br>';
-								//echo '<a href="?pagina=cartao&cartaoselecionado=' .$vinculo->getCartao()->getId().'">Clique aqui para ver</a>';
-								echo '</div>';
-								return;
-						
-							}
 							if($vinculoDao->cartaoTemVinculo($vinculo->getCartao())){
 								echo '<div class="borda">';
 								echo '<p>O numero do cartão digitado já possui vinculo, utilize outro cartão.</p><br>';
@@ -318,11 +316,11 @@ class CartaoAvulsoController{
 								$this->view->mostraSucesso("Erro na tentativa de Adicionar Vínculo. ");
 								
 							}
-							echo '<meta http-equiv="refresh" content="10; url=.\?pagina=cartao&selecionado=' . $vinculo->getResponsavel()->getIdBaseExterna() . '">';
+							echo '<meta http-equiv="refresh" content="10; url=.\?pagina=avulso&selecionado=' . $vinculo->getResponsavel()->getIdBaseExterna() . '">';
 							return;
 						}
 						
-						$this->view->formConfirmacaoEnvioVinculo($usuario, $_GET['numero_cartao2'], $tipo);
+						$this->view->formConfirmacaoEnvioVinculo($usuario, $_GET['numero_cartao2'], $esseTipo);
 					}else{
 						$this->view->mostraFormAdicionarVinculo($listaDeTipos, $idDoSelecionado);
 					}

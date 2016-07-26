@@ -49,6 +49,7 @@ class NivelAcessoController{
 		
 		
 	}
+
 	public function telaIdentificacao(){
 		$dao = new DAO();
 		if(isset($_GET['usua_id']) && isset($_GET['novo_nivel'])){
