@@ -2,7 +2,7 @@
 -- Autor_script : Erivando Sena											  --
 -- Copyright    : Unilab											      --
 -- Data_criacao : 16/10/2015											  --
--- Data_revisao : 09/05/2016											  --
+-- Data_revisao : 28/07/2016											  --
 -- Status       : DESENVOLVIMENTO										  --
 ----------------------------------------------------------------------------
 
@@ -114,7 +114,7 @@ CREATE TABLE vinculo
   vinc_avulso boolean NOT NULL, -- Status que informa se o vinculo esta ativo.
   vinc_inicio timestamp without time zone, -- Data e hora de inicio da validade do vinculo.
   vinc_fim timestamp without time zone, -- Data e hora de fim da validade do vinculo.
-  vinc_descricao character varying(16) NOT NULL, -- Descricao sobre a finalidade do vinculo.
+  vinc_descricao character varying(250) NOT NULL, -- Descricao sobre a finalidade do vinculo.
   vinc_refeicoes integer NOT NULL, -- Quantidade de uso do cartao por refeicao.
   cart_id integer NOT NULL, -- Campo para chave estrangeira da tabela cartao.
   usua_id integer NOT NULL, -- Campo para chave estrangeira da tabela usuario.(Usuario responsavel por realizar a operacao de vinculo).
@@ -179,6 +179,7 @@ CREATE TABLE catraca
   catr_mac_lan character varying(23), -- Registro do endereco fisico do hardware fixo LAN.
   catr_mac_wlan character varying(23), -- Registro do endereco fisico do hardware fixo ou plugue de rede WLAN.
   catr_interface_rede character varying(10), -- Informa se a interface de rede utilizada sera eth0 ou wlan0
+  catr_financeiro boolean NOT NULL DEFAULT false, -- Habilita ou desabilita a debitacao de creditos do cartao com relacao ao financeiro.
   CONSTRAINT pk_catr_id PRIMARY KEY (catr_id) -- Chave primaria da tabela catraca.
 );
 ALTER TABLE catraca OWNER TO catraca;
@@ -191,6 +192,7 @@ COMMENT ON COLUMN catraca.catr_nome IS 'Nome da catraca formado pelo nome do hos
 COMMENT ON COLUMN catraca.catr_mac_lan IS 'Registro do endereco fisico do hardware fixo LAN.';
 COMMENT ON COLUMN catraca.catr_mac_wlan IS 'Registro do endereco fisico do hardware fixo ou plugue de rede WLAN.';
 COMMENT ON COLUMN catraca.catr_interface_rede IS 'Informa se a interface de rede utilizada sera eth0 ou wlan0';
+COMMENT ON COLUMN catraca.catr_financeiro IS 'Habilita ou desabilita a debitacao de creditos do cartao com relacao ao financeiro.';
 COMMENT ON CONSTRAINT pk_catr_id ON catraca IS 'Chave primaria da tabela catraca.';
 
 -- Table: catraca_unidade

@@ -21,6 +21,8 @@ class ConexaoGenerica(object):
         self.__con = None
         self.__factory = None
         self.__fecha = None
+        self.__extras = None
+        self.__extensoes = None
         
     def aviso(self):
         return self.__aviso
@@ -43,9 +45,27 @@ class ConexaoGenerica(object):
         else:
             return False
         
+    @property
+    def extras(self):
+        return self.__extras
+    
+    @extras.setter
+    def extras(self, extra):
+        self.__extras = extra
+        
+    @property
+    def extensoes(self):
+        return self.__extensoes
+    
+    @extensoes.setter
+    def extensoes(self, extensao):
+        self.__extensoes = extensao
+        
     def abre_conexao(self):
         try:
             conexao_factory = ConexaoFactory()
+            self.extras = conexao_factory.extras
+            self.extensoes = conexao_factory.extensoes
             self.__con = conexao_factory.conexao(1) #use 1=PostgreSQL 2=MySQL 3=SQLite
             #self.__con.autocommit = False
             self.__factory = conexao_factory.factory

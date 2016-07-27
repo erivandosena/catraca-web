@@ -26,31 +26,30 @@ class CatracaDAO(DAOGenerico):
         
     def busca(self, *arg):
         for i in arg:
-            id = i
-        if id:
-            sql = "SELECT catr_id, "\
-                  "catr_ip, "\
-                  "catr_tempo_giro, "\
-                  "catr_operacao, "\
-                  "catr_nome, "\
-                  "catr_mac_lan, "\
-                  "catr_mac_wlan, "\
-                  "catr_interface_rede "\
+            arg = i
+        if arg:
+            sql = "SELECT catr_id as id, "\
+                  "catr_ip as ip, "\
+                  "catr_tempo_giro as tempo, "\
+                  "catr_operacao as operacao, "\
+                  "catr_nome as nome, "\
+                  "catr_mac_lan as maclan, "\
+                  "catr_mac_wlan as macwlan, "\
+                  "catr_interface_rede as interface "\
                   "FROM catraca WHERE "\
-                  "catr_id = " + str(id)
-        elif id is None:
-            sql = "SELECT catr_id, "\
-                  "catr_ip, "\
-                  "catr_tempo_giro, "\
-                  "catr_operacao, "\
-                  "catr_nome, "\
-                  "catr_mac_lan, "\
-                  "catr_mac_wlan, "\
-                  "catr_interface_rede "\
-                  "FROM catraca ORDER BY catr_id"
-
-        colunas = ['id', 'ip','tempo', 'operacao', 'nome', 'maclan', 'macwlan', 'interface']
-        return self.buscar(Catraca, sql, colunas, id)
+                  "catr_id = %s"
+        else:
+            sql = "SELECT catr_id as id, "\
+                  "catr_ip as ip, "\
+                  "catr_tempo_giro as tempo, "\
+                  "catr_operacao as operacao, "\
+                  "catr_nome as nome, "\
+                  "catr_mac_lan as maclan, "\
+                  "catr_mac_wlan as macwlan, "\
+                  "catr_interface_rede as interface "\
+                  "FROM catraca ORDER BY 1"
+        #colunas = ['id', 'ip','tempo', 'operacao', 'nome', 'maclan', 'macwlan', 'interface']
+        return self.seleciona(Catraca, sql, arg)
  
 #     def busca(self, *arg):
 #         obj = Catraca()
@@ -106,122 +105,165 @@ class CatracaDAO(DAOGenerico):
 #             self.log.logger.error('[catraca] Erro ao realizar SELECT.', exc_info=True)
 #         finally:
 #             pass
-        
-    def busca_por_ip(self, ip):
-        obj = Catraca()
-        sql = "SELECT catr_id, "\
-              "catr_ip, "\
-              "catr_tempo_giro, "\
-              "catr_operacao, "\
-              "catr_nome, "\
-              "catr_mac_lan, "\
-              "catr_mac_wlan, "\
-              "catr_interface_rede "\
-              "FROM catraca WHERE "\
-              "catr_ip = '" + str(ip) + "'"
-        try:
-            with closing(self.abre_conexao().cursor()) as cursor:
-                cursor.execute(sql)
-                dados = cursor.fetchone()
-                if dados is not None:
-                    obj.id = dados[0]
-                    obj.ip = dados[1]
-                    obj.tempo = dados[2]
-                    obj.operacao = dados[3]
-                    obj.nome = dados[4]
-                    obj.maclan = dados[5]
-                    obj.macwlan = dados[6]
-                    obj.interface = dados[7]
-                    print "LENDO TABELA CATRACA"
-                    return obj
-                else:
-                    print "LENDO TABELA CATRACA VAZIA"
-                    return None
-        except Exception as excecao:
-            self.aviso = str(excecao)
-            self.log.logger.error('[catraca] Erro ao realizar SELECT.', exc_info=True)
-        finally:
-            pass
-        
-    def busca_por_nome(self, nome):
-        obj = Catraca()
-        try:
-            with closing(self.abre_conexao().cursor()) as cursor:
-                sql_select = 'SELECT catr_id, catr_ip, catr_tempo_giro, catr_operacao, catr_nome, ' +\
-                'catr_mac_lan, catr_mac_wlan, catr_interface_rede FROM catraca WHERE catr_nome = %s'
-                cursor.execute(sql_select % str("'" + nome.upper() + "'"))
-                dados = cursor.fetchone()
-                if dados is not None:
-                    obj.id = dados[0]
-                    obj.ip = dados[1]
-                    obj.tempo = dados[2]
-                    obj.operacao = dados[3]
-                    obj.nome = dados[4]
-                    obj.maclan = dados[5]
-                    obj.macwlan = dados[6]
-                    obj.interface = dados[7]
-                    print "LENDO TABELA CATRACA"
-                    return obj
-                else:
-                    print "LENDO TABELA CATRACA VAZIA"
-                    return None
-        except Exception as excecao:
-            self.aviso = str(excecao)
-            self.log.logger.error('[catraca] Erro ao realizar SELECT.', exc_info=True)
-        finally:
-            pass
 
-    
-    def obtem_interface_rede(self, hostname):
-        obj = Catraca()
-        sql = "SELECT catr_interface_rede FROM catraca WHERE catr_nome = '" + str(hostname).upper() + "' LIMIT 1"
-        try:
-            with closing(self.abre_conexao().cursor()) as cursor:
-                cursor.execute(sql)
-                dados = cursor.fetchone()
-                if dados:
-                    obj.interface = dados[0]
-                    return str(obj.interface).lower()
-        except Exception as excecao:
-            self.aviso = str(excecao)
-            self.log.logger.error('[catraca] Erro ao realizar SELECT.', exc_info=True)
-        finally:
-            pass
+    def busca_por_ip(self, ip):
+        sql = "SELECT catr_id as id, "\
+              "catr_ip as ip, "\
+              "catr_tempo_giro as tempo, "\
+              "catr_operacao as operacao, "\
+              "catr_nome as nome, "\
+              "catr_mac_lan as maclan, "\
+              "catr_mac_wlan as macwlan, "\
+              "catr_interface_rede as interface "\
+              "FROM catraca WHERE "\
+              "catr_ip = %s"
+        return self.seleciona(Catraca, sql, ip)
         
+#     def busca_por_ip(self, ip):
+#         obj = Catraca()
+#         sql = "SELECT catr_id, "\
+#               "catr_ip, "\
+#               "catr_tempo_giro, "\
+#               "catr_operacao, "\
+#               "catr_nome, "\
+#               "catr_mac_lan, "\
+#               "catr_mac_wlan, "\
+#               "catr_interface_rede "\
+#               "FROM catraca WHERE "\
+#               "catr_ip = '" + str(ip) + "'"
+#         try:
+#             with closing(self.abre_conexao().cursor()) as cursor:
+#                 cursor.execute(sql)
+#                 dados = cursor.fetchone()
+#                 if dados is not None:
+#                     obj.id = dados[0]
+#                     obj.ip = dados[1]
+#                     obj.tempo = dados[2]
+#                     obj.operacao = dados[3]
+#                     obj.nome = dados[4]
+#                     obj.maclan = dados[5]
+#                     obj.macwlan = dados[6]
+#                     obj.interface = dados[7]
+#                     print "LENDO TABELA CATRACA"
+#                     return obj
+#                 else:
+#                     print "LENDO TABELA CATRACA VAZIA"
+#                     return None
+#         except Exception as excecao:
+#             self.aviso = str(excecao)
+#             self.log.logger.error('[catraca] Erro ao realizar SELECT.', exc_info=True)
+#         finally:
+#             pass
+
+    def busca_por_nome(self, nome):
+        sql = "SELECT catr_id as id, "\
+              "catr_ip as ip, "\
+              "catr_tempo_giro as tempo, "\
+              "catr_operacao as operacao, "\
+              "catr_nome as nome, "\
+              "catr_mac_lan as maclan, "\
+              "catr_mac_wlan as macwlan, "\
+              "catr_interface_rede as interface "\
+              "FROM catraca WHERE "\
+              "catr_nome = %s"
+        print "LENDO TABELA CATRACA"
+        return self.seleciona(Catraca, sql, nome.upper())
+   
+#     def busca_por_nome(self, nome):
+#         obj = Catraca()
+#         try:
+#             with closing(self.abre_conexao().cursor()) as cursor:
+#                 sql_select = 'SELECT catr_id, catr_ip, catr_tempo_giro, catr_operacao, catr_nome, ' +\
+#                 'catr_mac_lan, catr_mac_wlan, catr_interface_rede FROM catraca WHERE catr_nome = %s'
+#                 cursor.execute(sql_select % str("'" + nome.upper() + "'"))
+#                 dados = cursor.fetchone()
+#                 if dados is not None:
+#                     obj.id = dados[0]
+#                     obj.ip = dados[1]
+#                     obj.tempo = dados[2]
+#                     obj.operacao = dados[3]
+#                     obj.nome = dados[4]
+#                     obj.maclan = dados[5]
+#                     obj.macwlan = dados[6]
+#                     obj.interface = dados[7]
+#                     print "LENDO TABELA CATRACA"
+#                     return obj
+#                 else:
+#                     print "LENDO TABELA CATRACA VAZIA"
+#                     return None
+#         except Exception as excecao:
+#             self.aviso = str(excecao)
+#             self.log.logger.error('[catraca] Erro ao realizar SELECT.', exc_info=True)
+#         finally:
+#             pass
+
+    def obtem_interface_rede(self, hostname):
+        sql = "SELECT catr_interface_rede as interface FROM catraca WHERE catr_nome = %s LIMIT 1"
+#         print self.seleciona(Catraca, sql, hostname.upper()).interface
+        return str(self.seleciona(Catraca, sql, hostname.upper())).lower()
+    
+#     def obtem_interface_rede(self, hostname):
+#         obj = Catraca()
+#         sql = "SELECT catr_interface_rede FROM catraca WHERE catr_nome = '" + str(hostname).upper() + "' LIMIT 1"
+#         try:
+#             with closing(self.abre_conexao().cursor()) as cursor:
+#                 cursor.execute(sql)
+#                 dados = cursor.fetchone()
+#                 if dados:
+#                     obj.interface = dados[0]
+#                     return str(obj.interface).lower()
+#         except Exception as excecao:
+#             self.aviso = str(excecao)
+#             self.log.logger.error('[catraca] Erro ao realizar SELECT.', exc_info=True)
+#         finally:
+#             pass
+
     def insere(self, obj):
-        try:
-            if obj:
-                with closing(self.abre_conexao().cursor()) as cursor:
-                    sql_insert = 'INSERT INTO catraca(' +\
-                       'catr_id, ' +\
-                       'catr_ip, ' +\
-                       'catr_tempo_giro, ' +\
-                       'catr_operacao, ' +\
-                       'catr_nome, ' +\
-                       'catr_mac_lan, ' +\
-                       'catr_mac_wlan, ' +\
-                       'catr_interface_rede) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'
-                    cursor.execute(sql_insert, (obj.id, 
-                                                obj.ip,
-                                                obj.tempo,
-                                                obj.operacao,
-                                                obj.nome,
-                                                obj.maclan,
-                                                obj.macwlan,
-                                                obj.interface)
-                                   )
-                    self.commit()
-                    self.aviso = "[catraca] Inserido com sucesso!"
-                    return True
-            else:
-                self.aviso = "[catraca] inexistente!"
-                return False
-        except Exception as excecao:
-            self.aviso = str(excecao)
-            self.log.logger.error('[catraca] Erro realizando INSERT.', exc_info=True)
-            return False
-        finally:
-            pass   
+        sql = 'INSERT INTO catraca(' +\
+           'catr_id, ' +\
+           'catr_ip, ' +\
+           'catr_tempo_giro, ' +\
+           'catr_operacao, ' +\
+           'catr_nome, ' +\
+           'catr_mac_lan, ' +\
+           'catr_mac_wlan, ' +\
+           'catr_interface_rede) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'
+        return self.inclui(Catraca, sql, obj)
+    
+#     def insere(self, obj):
+#         try:
+#             if obj:
+#                 with closing(self.abre_conexao().cursor()) as cursor:
+#                     sql_insert = 'INSERT INTO catraca(' +\
+#                        'catr_id, ' +\
+#                        'catr_ip, ' +\
+#                        'catr_tempo_giro, ' +\
+#                        'catr_operacao, ' +\
+#                        'catr_nome, ' +\
+#                        'catr_mac_lan, ' +\
+#                        'catr_mac_wlan, ' +\
+#                        'catr_interface_rede) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'
+#                     cursor.execute(sql_insert, (obj.id, 
+#                                                 obj.ip,
+#                                                 obj.tempo,
+#                                                 obj.operacao,
+#                                                 obj.nome,
+#                                                 obj.maclan,
+#                                                 obj.macwlan,
+#                                                 obj.interface)
+#                                    )
+#                     self.commit()
+#                     self.aviso = "[catraca] Inserido com sucesso!"
+#                     return True
+#             else:
+#                 self.aviso = "[catraca] inexistente!"
+#                 return False
+#         except Exception as excecao:
+#             self.aviso = str(excecao)
+#             self.log.logger.error('[catraca] Erro realizando INSERT.', exc_info=True)
+#             return False
+#         finally:
+#             pass   
         
     def atualiza_exclui(self, obj, delete):
         try:

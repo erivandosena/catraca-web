@@ -5,6 +5,8 @@
 import sqlite3
 import urlparse
 import psycopg2
+from psycopg2 import extras
+from psycopg2 import extensions
 #import mysql.connector
 from contextlib import closing
 from catraca.logs import Logs
@@ -27,7 +29,8 @@ class ConexaoFactory(object):
         self.__SQLITE = 3
         self.__erroCon = None
         self.__factory = None
-        
+        self.__extras = extras
+        self.__extensoes = extensions
     @property
     def erro_conexao(self):
         return self.__erroCon
@@ -35,6 +38,14 @@ class ConexaoFactory(object):
     @property
     def factory(self):
         return self.__factory
+    
+    @property
+    def extras(self):
+        return self.__extras
+    
+    @property
+    def extensoes(self):
+        return self.__extensoes
     
     def conexao(self, tipo_banco):
         con = None
