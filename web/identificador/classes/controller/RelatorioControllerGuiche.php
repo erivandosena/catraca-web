@@ -3,9 +3,21 @@
 class RelatorioControllerGuiche{
 	
 	public static function main($nivel){
+		switch ($nivel) {
+			case Sessao::NIVEL_SUPER :
+				$relatorio = new RelatorioControllerGuiche();
+				$relatorio->relatorioGuiche();
+				break;
+			case Sessao::NIVEL_ADMIN :
+				$relatorio = new RelatorioControllerGuiche();
+				$relatorio->relatorioGuiche();
+								
+				break;
+			default :
+				UsuarioController::main ( $nivel );
+				break;
+		}
 		
-		$relatorio = new RelatorioControllerGuiche();
-		$relatorio->relatorioGuiche();
 		
 	}
 	

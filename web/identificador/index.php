@@ -384,6 +384,9 @@ if (isset ( $_GET ["sair"] )) {
 							case 'isento' :
 								CartaoIsentoController::main($sessao->getNivelAcesso());
 								break;
+							case 'relatorio_guiche' :
+								RelatorioControllerGuiche::main($sessao->getNivelAcesso());
+								break;
 							default :
 								echo '404 NOT FOUND';
 								break;

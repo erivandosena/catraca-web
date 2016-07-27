@@ -11,10 +11,23 @@ class GuicheController{
 				$controller = new GuicheController();
 				$controller->telaGuiche();
 				break;
-			default :
-				UsuarioController::main ( $nivelDeAcesso );
+			case Sessao::NIVEL_ADMIN :
+				$controller = new GuicheController();
+				$controller->telaGuiche();
 				break;
-		}		
+			case Sessao::NIVEL_GUICHE:
+				$controller = new GuicheController();
+				$controller->telaGuiche();
+				break;
+			case Sessao::NIVEL_CATRACA_VIRTUAL:
+				$controller = new GuicheController();
+				$controller->telaGuiche();
+				break;
+			default :
+				UsuarioController::main ( $nivel );
+				break;
+		}
+			
 	}
 	
 	public function telaGuiche(){
