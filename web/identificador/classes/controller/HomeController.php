@@ -32,10 +32,11 @@ class HomeController{
 				//So faz cadastro
 				CartaoController::main($nivelDeAcesso);
 				break;
-			case Sessao::NIVEL_CADASTRO:
+			case Sessao::NIVEL_RELATORIO:
 				//So faz cadastro
 				RelatorioController::main($nivelDeAcesso);
 				break;
+				
 			default:
 				UsuarioController::main ( $nivelDeAcesso );
 				break;
