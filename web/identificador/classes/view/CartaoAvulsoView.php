@@ -391,7 +391,7 @@ class CartaoAvulsoView {
 				<label for="vinc_fim">Final da Validade</label><br>
 				<input type="datetime-local" id="vinc_fim" value="'.$daqui3Meses.'"  name="vinc_fim"/><br>
 				<label for="obs">Observação</label><br>
-				<input type="text" id="obs"  name="obs"/><br>
+				<input type="text" id="obs" maxlength="16" name="obs"/><br>
 				<label for="vinc_refeicoes">Refeições Por Turno</label><br>
 				<input type="number" id="vinc_refeicoes" value="1" name="vinc_refeicoes"/><br>
 						

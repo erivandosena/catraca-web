@@ -299,6 +299,12 @@ class CartaoAvulsoController{
 						}
 						
 						if(isset($_POST['enviar_vinculo'])){
+							if(strlen($_POST['obs']) > 16){
+								
+								$this->view->mostraSucesso("Erro muitos digitos na observa&ccedil;&atilde;o. Digite no máximo 16. ");
+								echo '<meta http-equiv="refresh" content="4; url=.\?pagina=avulso&selecionado=' . $vinculo->getResponsavel()->getIdBaseExterna() . '">';
+								return;
+							}
 							$vinculo->setAvulso(true);
 							$vinculo->setFinalValidade($_POST['vinc_fim']);
 							$vinculo->setInicioValidade($_POST['vinc_inicio']);
@@ -311,13 +317,14 @@ class CartaoAvulsoController{
 								echo '</div>';
 								return;
 							}
+
 							if($vinculoDao->adicionaVinculo ($vinculo)){
 								$this->view->mostraSucesso("Vinculo Adicionado Com Sucesso. ");
 							}else{
 								$this->view->mostraSucesso("Erro na tentativa de Adicionar Vínculo. ");
 								
 							}
-							echo '<meta http-equiv="refresh" content="10; url=.\?pagina=avulso&selecionado=' . $vinculo->getResponsavel()->getIdBaseExterna() . '">';
+							echo '<meta http-equiv="refresh" content="4; url=.\?pagina=avulso&selecionado=' . $vinculo->getResponsavel()->getIdBaseExterna() . '">';
 							return;
 						}
 						
