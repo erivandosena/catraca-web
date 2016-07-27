@@ -146,6 +146,7 @@ class CartaoAvulsoController{
 							if($vinculoDao->atualizaValidade($vinculo)){
 								$this->view->mostraSucesso("Vínculo Atualizado com Sucesso!  ");
 							}else{
+								
 								$this->view->mostraSucesso("Erro ao tentar renovar vínculo.  ");
 								
 							}

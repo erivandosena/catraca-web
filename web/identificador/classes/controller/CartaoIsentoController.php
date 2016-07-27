@@ -30,21 +30,22 @@ class CartaoIsentoController{
 		echo '<div class="conteudo"> <div class = "simpleTabs">
 		        <ul class = "simpleTabsNavigation">
 				
-					<li><a href="#">Identifica&ccedil;&atilde;o</a></li>
-					<li><a href="#">Cadastro de Isenção</a></li>
+					<li><a href="#">Identifica&ccedil;&atilde;o</a></li>';
+		
+// 		echo '		<li><a href="#">Cadastro de Isenção</a></li>
 					
-		        </ul>
+		echo '     </ul>
 		        <div class = "simpleTabsContent">';
 		
 		$this->telaIdentificacao();
-		echo '	</div>
+		echo '	</div>';
 						
 						
-				<div class = "simpleTabsContent">';
-		$this->telaCadastro();
-		echo '	</div>		
+// 		echo '	<div class = "simpleTabsContent">';
+// 		$this->telaCadastro();
+// 		echo '	</div>';		
 						
-		    </div></div>';
+		echo '</div></div>';
 		
 		
 		
@@ -112,7 +113,15 @@ class CartaoIsentoController{
 					//Aqui a gente da a opção de adicionar a isenção. 
 					$vinculoDao->isencaoValidaDoVinculo($vinculo);
 					if($vinculo->ehIsento()){
-						echo 'Usuário Isento';
+						echo '<p>Usuário Isento</p>';
+						//descomente esta linha para começar. 
+// 						echo '<br><a href="?pagina=isento&numero_cartao='.$_GET['numero_cartao'].'&cancelar_isencao=1" class="botao">Cancelar Isenção</a>';
+						if(isset($_GET['cancelar_isencao']) && isset($_GET['numero_cartao'])){
+							
+							echo 'A funcionalidade de cancelar está em construção. ';
+							
+						}
+					
 					}
 					else{
 						if(!isset($_GET['add_isencao'])){
@@ -129,7 +138,7 @@ class CartaoIsentoController{
 									$this->view->mostraSucesso("Erro ao tentar adicionar isenção. ");
 									
 								}
-								
+								echo '<meta http-equiv="refresh" content="4; url=.\?pagina=isento&numero_cartao='.$_GET[''].'">';
 								
 							}
 							$this->view->formAdicionarIsencao($_GET['numero_cartao']);
