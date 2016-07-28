@@ -11,26 +11,12 @@ class CatracaVirtual{
 	}
 	
 	public static function main($nivel){
+		
+		if($nivel == Sessao::NIVEL_SUPER){
 
-		switch ($nivel){
-			case Sessao::NIVEL_SUPER:
-				$gerador = new CatracaVirtual();
-				$gerador->verificarSelecaoRU();
-				break;
-			case Sessao::NIVEL_ADMIN:
-				$gerador = new CatracaVirtual();
-				$gerador->verificarSelecaoRU();
-				break;
-			case Sessao::NIVEL_CATRACA_VIRTUAL:
-				$gerador = new CatracaVirtual();
-				$gerador->verificarSelecaoRU();
-				break;
-			default:
-				UsuarioController::main ( $nivelDeAcesso );
-				break;
+			$gerador = new CatracaVirtual();
+			$gerador->verificarSelecaoRU();
 		}
-		
-		
 		
 		
 	}
@@ -47,21 +33,20 @@ class CatracaVirtual{
 				echo '<meta http-equiv="refresh" content="0; url=?pagina=gerador">';
 			}
 			$this->selecionarRU();
-		} 
-			
+		}	
 		
 	}
+	
 	public function selecionarRU(){
 		$unidadeDao = new UnidadeDAO($this->dao->getConexao());
-		$listaDeCatracas = $unidadeDao->retornaCatracasPorUnidade();
+		$listaDeCatracas = $unidadeDao->retornaCatracasPorUnidade();		
 		
-		
-		echo '<div class="navegacao">
+		echo '
 				<div class = "simpleTabs">
 			        <ul class = "simpleTabsNavigation">
-						<li><a href="#">Cadastro</a></li>
+						<li><a href="#" class="current">Cadastro</a></li>
 			        </ul>
-			        <div class = "simpleTabsContent">		
+			        <div class = "simpleTabsContent currentTab">		
 						<div class="doze colunas borda">';
 		
 		echo '<form action="" method="post">
@@ -77,14 +62,14 @@ class CatracaVirtual{
 		                
 			            
 		echo '       </select><br>
-					<input name="catraca_virtual" type="submit" class="botao" VALUE="Selecionar" />
+					<input type="submit" class="botao" VALUE="Selecionar" />
 				</form>	';
 		
 
 		echo '</div>
 				</div>
 				</div>
-				</div>';
+				';
 		
 		
 	}
@@ -98,26 +83,17 @@ class CatracaVirtual{
 		$unidadeDao = new UnidadeDAO($this->dao->getConexao());
 		$catraca = new Catraca();
 		$catraca->setId($_SESSION['catraca_id']);
-		$unidadeDao->preencheCatracaPorId($catraca);
-		
-		
-		
-		
+		$unidadeDao->preencheCatracaPorId($catraca);		
 		
 		echo '<div class="navegacao"> 
 				<div class = "simpleTabs">
 			        <ul class = "simpleTabsNavigation">					
-						<li><a href="#">Cadastro</a></li>	
+						<li><a href="#">Cadastro</a></li>						
 			        </ul>
 				
-			        <div class = "simpleTabsContent">
+			        <div class = "simpleTabsContent">					
 				
-						
-				
-						<div class="doze colunas borda">';
-		
-		
-		
+						<div class="doze colunas borda">';		
 		echo '
 							
 							<table class="tabela borda-vertical zebrada no-centro centralizado">							    
@@ -153,7 +129,7 @@ class CatracaVirtual{
 		echo '
 									<tr>
 										<th>Selecionar</th>';
-		$listaDeCores = array('erro', 'primario', 'primario', 'sucesso','aviso', 'aviso', 'secundario', 'primario', 'erro', 'sucesso');
+		$listaDeCores = array('aviso', 'primario', 'sucesso', 'secundario', 'erro', 'erro','primario', 'sucesso', 'secundario', 'aviso', 'erro');
 		$i = 0;
 		foreach($listaDeTipos as $tipo){
 			
@@ -168,23 +144,6 @@ class CatracaVirtual{
 							</table>';
 		
 		$this->view->formBuscaCartao();
-		$idCatraca = $_SESSION['catraca_id'];
-		$custo = 0;
-		$sql = "SELECT cure_valor FROM custo_refeicao
-		INNER JOIN custo_unidade
-		ON custo_unidade.cure_id = custo_refeicao.cure_id
-		INNER JOIN unidade
-		ON unidade.unid_id = custo_unidade.unid_id
-		INNER JOIN catraca_unidade
-		ON catraca_unidade.unid_id = unidade.unid_id
-		WHERE catraca_unidade.catr_id = $idCatraca
-		ORDER BY custo_unidade.cure_id DESC LIMIT 1
-		";
-		
-		foreach($tipoDao->getConexao()->query($sql) as $linha){
-			$custo = $linha['cure_valor'];
-		}
-		//echo $custo;
 		
 		echo '
 				
@@ -221,10 +180,7 @@ class CatracaVirtual{
 				$this->mensagemErro("Cartão não cadastrado!");
 				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
 				return;
-			}
-			
-			
-			
+			}			
 			
 			$vinculoDao = new VinculoDAO($cartaoDao->getConexao());
 			$vinculo = $vinculoDao->retornaVinculoValidoDeCartao($cartao);
@@ -256,23 +212,57 @@ class CatracaVirtual{
 			
 			if(isset($_GET['confirmado'])){
 				
+				$custo = 0;
+				$sql = "SELECT cure_valor FROM custo_refeicao ORDER BY cure_id DESC LIMIT 1";
+				foreach($tipoDao->getConexao()->query($sql) as $linha){
+					$custo = $linha['cure_valor'];
+				}
 				
+				$numeroCartao = $_GET['numero_cartao'];
+				$idVinculo= $vinculo->getId();
+				$valorPago = $vinculo->getCartao()->getTipo()->getValorCobrado();				
 				$idCatraca = $_SESSION['catraca_id'];
 				
-			
+				$sqlVerificaNumero = "SELECT * FROM cartao WHERE cart_numero = '$numeroCartao'";
 				
-				$idVinculo= $vinculo->getId();
-				$valorPago = $vinculo->getCartao()->getTipo()->getValorCobrado();
+				$result = $this->dao->getConexao()->query($sqlVerificaNumero);
+				foreach($result as $linha){
+					$saldoCartao = ($linha['cart_creditos']);				
+				}
 				
-				$sql = "INSERT into registro(regi_data, regi_valor_pago, regi_valor_custo, catr_id, cart_id, vinc_id)
-				VALUES('$data', $valorPago, $custo, $idCatraca, $idCartao, $idVinculo)";
-				//echo $sql;
-				if($this->dao->getConexao()->exec($sql))
-						$this->mensagemSucesso();
-					else
-						$this->mensagemErro();
-				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
-				echo 'Teste';
+				$novoSaldo = $saldoCartao - $valorPago;
+				
+				if($novoSaldo < 0){
+					$novoSaldo = null;
+				}				
+				
+ 				$this->dao->getConexao()->beginTransaction(); 				
+ 				
+ 				$sql1 = "UPDATE cartao SET cart_creditos = '$novoSaldo' WHERE cart_numero = '$numeroCartao'";
+ 				
+ 				$sql2 = "INSERT into registro(regi_data, regi_valor_pago, regi_valor_custo, catr_id, cart_id, vinc_id)
+ 				VALUES('$data', $valorPago, $custo, $idCatraca, $idCartao, $idVinculo)";
+ 								
+				if(!$this->dao->getConexao()->exec($sql1)){
+					$this->dao->getConexao()->rollBack();
+					$this->view->formMensagem("-erro", "Saldo insuficiente, recarregue seu cartão!");
+					return false;
+				}
+				
+				if(!$this->dao->getConexao()->exec($sql2)){
+					$this->dao->getConexao()->rollBack();
+					$this->view->formMensagem("-erro", "Erro ao inserir o registro!");
+					return false;
+				}
+				
+				$this->dao->getConexao()->commit();
+				
+// 				if($this->dao->getConexao()->exec($sql))
+// 						$this->mensagemSucesso();
+// 					else
+// 						$this->mensagemErro();
+//				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
+				
 			}
 			
 			else{
@@ -286,10 +276,10 @@ class CatracaVirtual{
 				echo '<a href="?pagina=gerador&numero_cartao='.$_GET['numero_cartao'].'&confirmado=1" class="botao b-sucesso">Confimar</a>';
 				echo '</div>';
 			}
+			
 		}else if(isset($_GET['tipo_id'])){
 			
 			$i = 0;
-			
 			$selectTurno = "Select * FROM turno WHERE '$data' BETWEEN turno.turn_hora_inicio AND turno.turn_hora_fim";
 			$result = $this->dao->getConexao()->query($selectTurno);
 			foreach($result as $linha){
@@ -315,7 +305,11 @@ class CatracaVirtual{
 					$tipo->setValorCobrado($linha['tipo_valor']);
 					
 				}
-				
+				$custo = 0;
+				$sql = "SELECT cure_valor FROM custo_refeicao ORDER BY cure_id DESC LIMIT 1";
+				foreach($tipoDao->getConexao()->query($sql) as $linha){
+					$custo = $linha['cure_valor'];
+				}
 				
 					
 				
@@ -324,18 +318,20 @@ class CatracaVirtual{
 				$numero = "";
 			
 				$sql = "SELECT * FROM cartao
-					INNER JOIN vinculo ON cartao.cart_id = vinculo.cart_id
-					WHERE tipo_id = $idTipo 
-					AND vinculo.vinc_avulso = 'TRUE'
-					LIMIT 1";
+				INNER JOIN vinculo ON cartao.cart_id = vinculo.cart_id
+				WHERE tipo_id = $idTipo LIMIT 1";
 				foreach($tipoDao->getConexao()->query($sql) as $linha){
 					$idCartao = $linha['cart_id'];
 					$idVinculo = $linha['vinc_id'];
 					$numero = $linha['cart_numero'];
-					
+
 					break;
 					
 				}
+				
+				$saldoCartao = $vinculo->getCartao()->getCreditos();
+				
+				echo $saldoCartao;
 				
 				$idCatraca = $_SESSION['catraca_id'];
 				$valorPago = $tipo->getValorCobrado();
