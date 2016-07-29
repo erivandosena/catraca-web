@@ -77,7 +77,7 @@ class DAO {
 	protected $conexao;
 	private $tipoDeConexao;
 	
-	public function DAO($conexao = null, $tipo = self::TIPO_DEFAULT) {
+	public function DAO(PDO $conexao = null, $tipo = self::TIPO_DEFAULT) {
 		$this->tipoDeConexao = $tipo;
 		if ($conexao != null) {
 			$this->conexao = $conexao;
