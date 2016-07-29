@@ -25,30 +25,32 @@ class CatracaDAO(DAOGenerico):
         DAOGenerico.__init__(self)
         
     def busca(self, *arg):
-        for i in arg:
-            arg = i
+        arg = [a for a in arg][0] if arg else None
+#         for i in arg:
+#             arg = i
         if arg:
-            sql = "SELECT catr_id as id, "\
-                  "catr_ip as ip, "\
-                  "catr_tempo_giro as tempo, "\
-                  "catr_operacao as operacao, "\
-                  "catr_nome as nome, "\
-                  "catr_mac_lan as maclan, "\
-                  "catr_mac_wlan as macwlan, "\
-                  "catr_interface_rede as interface "\
-                  "FROM catraca WHERE "\
-                  "catr_id = %s"
+            sql = "SELECT "\
+                "catr_id as id, "\
+                "catr_interface_rede as interface, "\
+                "catr_ip as ip, "\
+                "catr_mac_lan as maclan, "\
+                "catr_mac_wlan as macwlan, "\
+                "catr_nome as nome, "\
+                "catr_operacao as operacao, "\
+                "catr_tempo_giro as tempo "\
+                "FROM catraca WHERE "\
+                "catr_id = %s"
         else:
-            sql = "SELECT catr_id as id, "\
-                  "catr_ip as ip, "\
-                  "catr_tempo_giro as tempo, "\
-                  "catr_operacao as operacao, "\
-                  "catr_nome as nome, "\
-                  "catr_mac_lan as maclan, "\
-                  "catr_mac_wlan as macwlan, "\
-                  "catr_interface_rede as interface "\
-                  "FROM catraca ORDER BY 1"
-        #colunas = ['id', 'ip','tempo', 'operacao', 'nome', 'maclan', 'macwlan', 'interface']
+            sql = "SELECT "\
+                "catr_id as id, "\
+                "catr_interface_rede as interface, "\
+                "catr_ip as ip, "\
+                "catr_mac_lan as maclan, "\
+                "catr_mac_wlan as macwlan, "\
+                "catr_nome as nome, "\
+                "catr_operacao as operacao, "\
+                "catr_tempo_giro as tempo "\
+                "FROM catraca ORDER BY 1"
         return self.seleciona(Catraca, sql, arg)
  
 #     def busca(self, *arg):
@@ -107,16 +109,17 @@ class CatracaDAO(DAOGenerico):
 #             pass
 
     def busca_por_ip(self, ip):
-        sql = "SELECT catr_id as id, "\
-              "catr_ip as ip, "\
-              "catr_tempo_giro as tempo, "\
-              "catr_operacao as operacao, "\
-              "catr_nome as nome, "\
-              "catr_mac_lan as maclan, "\
-              "catr_mac_wlan as macwlan, "\
-              "catr_interface_rede as interface "\
-              "FROM catraca WHERE "\
-              "catr_ip = %s"
+        sql = "SELECT "\
+            "catr_id as id, "\
+            "catr_interface_rede as interface, "\
+            "catr_ip as ip, "\
+            "catr_mac_lan as maclan, "\
+            "catr_mac_wlan as macwlan, "\
+            "catr_nome as nome, "\
+            "catr_operacao as operacao, "\
+            "catr_tempo_giro as tempo "\
+            "FROM catraca WHERE "\
+            "catr_ip = %s"
         return self.seleciona(Catraca, sql, ip)
         
 #     def busca_por_ip(self, ip):
@@ -156,16 +159,17 @@ class CatracaDAO(DAOGenerico):
 #             pass
 
     def busca_por_nome(self, nome):
-        sql = "SELECT catr_id as id, "\
-              "catr_ip as ip, "\
-              "catr_tempo_giro as tempo, "\
-              "catr_operacao as operacao, "\
-              "catr_nome as nome, "\
-              "catr_mac_lan as maclan, "\
-              "catr_mac_wlan as macwlan, "\
-              "catr_interface_rede as interface "\
-              "FROM catraca WHERE "\
-              "catr_nome = %s"
+        sql = "SELECT "\
+            "catr_id as id, "\
+            "catr_interface_rede as interface, "\
+            "catr_ip as ip, "\
+            "catr_mac_lan as maclan, "\
+            "catr_mac_wlan as macwlan, "\
+            "catr_nome as nome, "\
+            "catr_operacao as operacao, "\
+            "catr_tempo_giro as tempo "\
+            "FROM catraca WHERE "\
+            "catr_nome = %s"
         print "LENDO TABELA CATRACA"
         return self.seleciona(Catraca, sql, nome.upper())
    
@@ -198,8 +202,10 @@ class CatracaDAO(DAOGenerico):
 #             pass
 
     def obtem_interface_rede(self, hostname):
-        sql = "SELECT catr_interface_rede as interface FROM catraca WHERE catr_nome = %s LIMIT 1"
-#         print self.seleciona(Catraca, sql, hostname.upper()).interface
+        sql = "SELECT "\
+            "catr_interface_rede as interface "\
+            "FROM catraca WHERE "\
+            "catr_nome = %s LIMIT 1"
         return str(self.seleciona(Catraca, sql, hostname.upper())).lower()
     
 #     def obtem_interface_rede(self, hostname):
@@ -219,16 +225,19 @@ class CatracaDAO(DAOGenerico):
 #             pass
 
     def insere(self, obj):
-        sql = 'INSERT INTO catraca(' +\
-           'catr_id, ' +\
-           'catr_ip, ' +\
-           'catr_tempo_giro, ' +\
-           'catr_operacao, ' +\
-           'catr_nome, ' +\
-           'catr_mac_lan, ' +\
-           'catr_mac_wlan, ' +\
-           'catr_interface_rede) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)'
-        return self.inclui(Catraca, sql, obj)
+        sql = "INSERT INTO catraca "\
+            "("\
+            "catr_id, "\
+            "catr_interface_rede, "\
+            "catr_ip, "\
+            "catr_mac_lan, "\
+            "catr_mac_wlan, "\
+            "catr_nome, "\
+            "catr_operacao, "\
+            "catr_tempo_giro "\
+            ") VALUES ("\
+            "%s, %s, %s, %s, %s, %s, %s, %s)"
+        return self.inclui(sql, obj)
     
 #     def insere(self, obj):
 #         try:
@@ -264,49 +273,81 @@ class CatracaDAO(DAOGenerico):
 #             return False
 #         finally:
 #             pass   
-        
-    def atualiza_exclui(self, obj, delete):
-        try:
-            if obj or delete:
-                with closing(self.abre_conexao().cursor()) as cursor:
-                    if delete:
-                        if obj is None:
-                            sql_delete = 'DELETE FROM catraca'
-                            cursor.execute(sql_delete)
-                        else:
-                            sql_delete = sql_delete +' WHERE catr_id = %s'
-                            cursor.execute(sql_delete, (obj.id))
-                        self.commit()
-                        self.aviso = "[catraca] Excluido com sucesso!"
-                        return True
-                    else:
-                        sql_update = 'UPDATE catraca SET catr_ip = %s, ' +\
-                              'catr_tempo_giro = %s, ' +\
-                              'catr_operacao = %s, ' +\
-                              'catr_nome = %s, ' +\
-                              'catr_mac_lan = %s, ' +\
-                              'catr_mac_wlan = %s, ' +\
-                              'catr_interface_rede = %s ' +\
-                              'WHERE catr_id = %s'
-                        cursor.execute(sql_update, (obj.ip, 
-                                                    obj.tempo,
-                                                    obj.operacao,
-                                                    obj.nome,
-                                                    obj.maclan,
-                                                    obj.macwlan,
-                                                    obj.interface,
-                                                    obj.id)
-                                       )
-                        self.commit()
-                        self.aviso = "[catraca] Alterado com sucesso!"
-                        return True
+
+
+    def atualiza(self, obj):
+        sql = "UPDATE catraca SET "\
+            "catr_id, "\
+            "catr_interface_rede, "\
+            "catr_ip "\
+            "catr_mac_lan, "\
+            "catr_mac_wlan, "\
+            "catr_nome, "\
+            "catr_operacao, "\
+            "catr_tempo_giro "\
+            "WHERE catr_id = %s"
+        return self.altera_deleta(sql, obj)
+    
+    def exclui(self, *arg):
+        obj = [a for a in arg][0] if arg else None
+        sql = "DELETE FROM catraca"
+        if obj:
+            sql = str(sql) + " WHERE catr_id = %s"
+        return self.deleta(sql, obj)
+    
+    def atualiza_exclui(self, obj, boleano):
+        if obj or boleano:
+            if boleano:
+                if obj is None:
+                    return self.exclui()
+                else:
+                    self.exclui(obj)
             else:
-                self.aviso = "[catraca] inexistente!"
-                return False
-        except Exception as excecao:
-            self.aviso = str(excecao)
-            self.log.logger.error('[catraca] Erro realizando UPDATE/DELETE.', exc_info=True)
-            return False
-        finally:
-            pass
+                return self.atualiza(obj)
+        #return self.altera_deleta(sql, boleano, obj)
+        
+#     def atualiza_exclui(self, obj, delete):
+#         try:
+#             if obj or delete:
+#                 with closing(self.abre_conexao().cursor()) as cursor:
+#                     if delete:
+#                         if obj is None:
+#                             sql_delete = 'DELETE FROM catraca'
+#                             cursor.execute(sql_delete)
+#                         else:
+#                             sql_delete = sql_delete +' WHERE catr_id = %s'
+#                             cursor.execute(sql_delete, (obj.id))
+#                         self.commit()
+#                         self.aviso = "[catraca] Excluido com sucesso!"
+#                         return True
+#                     else:
+#                         sql_update = 'UPDATE catraca SET catr_ip = %s, ' +\
+#                               'catr_tempo_giro = %s, ' +\
+#                               'catr_operacao = %s, ' +\
+#                               'catr_nome = %s, ' +\
+#                               'catr_mac_lan = %s, ' +\
+#                               'catr_mac_wlan = %s, ' +\
+#                               'catr_interface_rede = %s ' +\
+#                               'WHERE catr_id = %s'
+#                         cursor.execute(sql_update, (obj.ip, 
+#                                                     obj.tempo,
+#                                                     obj.operacao,
+#                                                     obj.nome,
+#                                                     obj.maclan,
+#                                                     obj.macwlan,
+#                                                     obj.interface,
+#                                                     obj.id)
+#                                        )
+#                         self.commit()
+#                         self.aviso = "[catraca] Alterado com sucesso!"
+#                         return True
+#             else:
+#                 self.aviso = "[catraca] inexistente!"
+#                 return False
+#         except Exception as excecao:
+#             self.aviso = str(excecao)
+#             self.log.logger.error('[catraca] Erro realizando UPDATE/DELETE.', exc_info=True)
+#             return False
+#         finally:
+#             pass
         

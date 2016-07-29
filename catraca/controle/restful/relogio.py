@@ -54,7 +54,10 @@ class Relogio(ControleGenerico, threading.Thread):
         while not self._stopevent.isSet():
             
             #print self.catraca_dao.busca(1)
-            print self.catraca_dao.obtem_interface_rede(self.util.obtem_nome_rpi())
+            #print self.catraca_dao.obtem_interface_rede(self.util.obtem_nome_rpi())
+#             obj = None
+#             if self.catraca_dao.atualiza_exclui(obj, True):
+#                 print self.catraca_dao.aviso
 
             self.hora_atul = self.util.obtem_hora()
             Relogio.hora = self.hora_atul
