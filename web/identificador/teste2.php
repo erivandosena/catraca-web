@@ -22,18 +22,114 @@ function __autoload($classe) {
 
 $dao = new DAO();
 
-// foreach($dao->getConexao()->query("SELECT * FROM usuario WHERE usua_login like 'jefponte'") as $linha){
-// 	print_r($linha);
-	
+/*
+
+$sql = "SELECT * FROM cartao WHERE cart_numero = '0401320170'";
+$result = $dao->getConexao()->query($sql);
+foreach($result as $linha){
+
+	print_r($linha);
+}
+echo '<hr>';
+$sql = "SELECT * FROM vinculo INNER JOIN cartao
+ON cartao.cart_id = vinculo.cart_id
+INNER JOIN 
+vinculo_tipo ON vinculo_tipo.vinc_id = vinculo.vinc_id
+WHERE cart_numero = '0401320170'";
+$result = $dao->getConexao()->query($sql);
+foreach($result as $linha){
+
+	print_r($linha);
+}
+echo '<hr>';
+
+
+$sql = "UPDATE vinculo set usua_id = 1
+WHERE vinc_id = 173";
+*/
+
+$strCatr = "AND catr_id = 3";
+$data1 = "2016-07-25 08:00:00";
+$data2 = "2016-07-25 22:00:00";
+
+$i = 0;
+$sql = "SELECT * FROM registro INNER JOIN 
+vinculo ON vinculo.vinc_id = registro.vinc_id
+INNER JOIN 
+usuario on vinculo.usua_id = usuario.usua_id";
+
+//WHERE (registro.regi_data BETWEEN '$data1'	AND '$data2')  $strCatr	";
+$result = $dao->getConexao()->query($sql);
+foreach($result as $linha){
+	$i++;
+	//echo $linha['usua_nome'].$linha['regi_data'].'-'.$i.'<br>';
+}
+
+echo $i.' refeicoes<br>';
+
+
+$i = 0;
+$sql = "SELECT * FROM registro INNER JOIN
+vinculo ON vinculo.vinc_id = registro.vinc_id
+INNER JOIN
+usuario on vinculo.usua_id = usuario.usua_id
+WHERE (vinculo.vinc_avulso = TRUE)";
+$result = $dao->getConexao()->query($sql);
+foreach($result as $linha){
+	$i++;
+	//echo $linha['usua_nome'].$linha['regi_data'].'-'.$i.'<br>';
+}
+
+echo $i.' Clicks Avulsos <br>';
+
+
+// $i = 0;
+// $sql = "SELECT * FROM vinculo INNER JOIN 
+// cartao ON cartao.cart_id = vinculo.cart_id
+// INNER JOIN usuario ON vinculo.usua_id = usuario.usua_id
+//  WHERE vinculo.vinc_avulso <> 'TRUE' ORDER BY vinc_inicio";
+// $result = $dao->getConexao()->query($sql);
+// foreach($result as $linha){
+// 	$i++;
+// 	//echo ' - '.$linha['cart_numero'].' - '.$linha['vinc_inicio'].' - '.$i.'<br>';
 	
 // }
 
-//echo $dao->getConexao()->exec("UPDATE usuario set usua_nivel = 3 WHERE usua_login like 'claudinei.holanda'");
+// echo $i.' cadastros';
+// echo '<br>';
 
-// foreach($dao->getConexao()->query("SELECT * FROM usuario Where usua_nivel <> 1") as $linha){
-// 	print_r($linha);
-// 	echo '<br><br><hr>';
-
+// $sql = "SELECT * FROM auditoria
+// 	INNER JOIN usuario ON auditoria.usua_id = usuario.usua_id
+// 	 ORDER BY audi_id DESC LIMIT 100";
+// $result = $dao->getConexao()->query($sql);
+// foreach($result as $linha){
+// 	echo $linha['audi_id'].' - '.$linha['usua_nome'].' - '.$linha['audi_pagina'].' - '.$linha['audi_data'].'<br>';
+	
 // }
+
+
+echo '<br><br>';
+
+
+$sql = "SELECT * FROM registro 
+	INNER JOIN vinculo
+	ON vinculo.vinc_id = registro.vinc_id
+	INNER JOIN usuario
+	ON usuario.usua_id = vinculo.vinc_id
+	WHERE (registro.regi_data BETWEEN '$data1' AND '$data2') $strCatr
+	ORDER BY regi_id DESC";
+$result = $dao->getConexao()->query($sql);
+foreach($result as $linha){
+	
+	if(!$linha['vinc_avulso'])
+		echo $linha['regi_id'].' - '.$linha['regi_valor_custo'].' '.$linha['regi_data'].' Cliente: '.$linha['usua_nome'].'<br>';
+	else{
+		echo $linha['regi_id'].' - '.$linha['regi_valor_custo'].' '.$linha['regi_data'].' Cliente: AVULSO<br>';
+	}
+}
+
+
+
+
 
 ?>
