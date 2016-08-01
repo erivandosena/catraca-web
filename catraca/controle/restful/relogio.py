@@ -53,9 +53,8 @@ class Relogio(ControleGenerico, threading.Thread):
         self.catraca = self.catraca_dao.busca_por_nome(self.util.obtem_nome_rpi())
         while not self._stopevent.isSet():
             
-            #print self.catraca_dao.busca(1)
-            #print self.catraca_dao.obtem_interface_rede(self.util.obtem_nome_rpi())
-#             obj = None
+            
+#             obj = self.catraca_dao.busca(1057)
 #             if self.catraca_dao.atualiza_exclui(obj, True):
 #                 print self.catraca_dao.aviso
 
