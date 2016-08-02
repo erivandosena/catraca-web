@@ -1,6 +1,7 @@
 <?php
 
-class CatracaVirtualDAO{
+class CatracaVirtualDAO extends DAO{
+	
 	
 	
 	

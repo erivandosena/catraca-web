@@ -93,6 +93,7 @@ class CatracaVirtual{
 	public function paginaRegistroManual(){
 		
 		$tipoDao = new TipoDAO($this->dao->getConexao());
+		
 		$listaDeTipos = $tipoDao->retornaLista();
 		
 		$unidadeDao = new UnidadeDAO($this->dao->getConexao());
@@ -230,6 +231,9 @@ class CatracaVirtual{
 			$vinculo = $vinculoDao->retornaVinculoValidoDeCartao($cartao);
 			if($vinculo == NULL)
 			{
+				//Antes de mostrar esta mensagem vamos tentar renovar o vínculo deste usuário. 
+				
+				
 				$this->mensagemErro("Verifique o vínculo deste cartão!");
 				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
 				return;
@@ -252,6 +256,12 @@ class CatracaVirtual{
 					return;
 				}
 			}
+			$vinculoDao->isencaoValidaDoVinculo($vinculo);
+			if($vinculo->getIsencao()->isActive())
+				$valorPago = 0;
+			else
+				$valorPago = $vinculo->getCartao()->getTipo()->getValorCobrado();
+				
 			
 			
 			if(isset($_GET['confirmado'])){
@@ -262,7 +272,9 @@ class CatracaVirtual{
 			
 				
 				$idVinculo= $vinculo->getId();
-				$valorPago = $vinculo->getCartao()->getTipo()->getValorCobrado();
+				
+				
+				
 				
 				$sql = "INSERT into registro(regi_data, regi_valor_pago, regi_valor_custo, catr_id, cart_id, vinc_id)
 				VALUES('$data', $valorPago, $custo, $idCatraca, $idCartao, $idVinculo)";
@@ -281,8 +293,14 @@ class CatracaVirtual{
 				if($vinculo->isAvulso()){
 					$strNome = " Avulso ";
 				}
+				
 				echo '<div class="doze colunas borda centralizado">';
+				
 				echo '<p>Confirmar Cadastro de refeição para '.$strNome.' - '.$cartao->getTipo()->getNome().'?</p>';
+				if($vinculo->getIsencao()->isActive())
+						echo '<p>Usuário Isento</p>';
+				else
+					echo '<p>Cobrar R$'.number_format($valorPago, 2, ',', '.').'.</p>';
 				echo '<a href="?pagina=gerador&numero_cartao='.$_GET['numero_cartao'].'&confirmado=1" class="botao b-sucesso">Confimar</a>';
 				echo '</div>';
 			}

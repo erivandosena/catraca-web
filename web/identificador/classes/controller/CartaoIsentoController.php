@@ -138,7 +138,7 @@ class CartaoIsentoController{
 									$this->view->mostraSucesso("Erro ao tentar adicionar isenção. ");
 									
 								}
-								echo '<meta http-equiv="refresh" content="4; url=.\?pagina=isento&numero_cartao='.$_GET[''].'">';
+								echo '<meta http-equiv="refresh" content="4; url=.\?pagina=isento&numero_cartao='.$_GET['numero_cartao'].'">';
 								
 							}
 							$this->view->formAdicionarIsencao($_GET['numero_cartao']);
