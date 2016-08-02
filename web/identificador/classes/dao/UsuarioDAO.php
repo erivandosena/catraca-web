@@ -75,11 +75,23 @@ class UsuarioDAO extends DAO {
 
 	public function pesquisaNoSigaa($pesquisa){
 		$lista = array();
-		$pesquisa = preg_replace ('/[^a-zA-Z0-9\s]/', '', $pesquisa );
 		$pesquisa = strtoupper ( $pesquisa );
-		$sql = "SELECT * FROM vw_usuarios_catraca WHERE UPPER(nome) 
-		LIKE '%$pesquisa%' LIMIT 150";
-		foreach($this->getConexao()->query($sql) as $linha){
+		$pesquisa = "%".$pesquisa."%";
+		
+		$sql = "SELECT * FROM vw_usuarios_catraca WHERE 
+				TRANSLATE(UPPER(nome), 'áéíóúàèìòùãõâêîôôäëïöüçÁÉÍÓÚÀÈÌÒÙÃÕÂÊÎÔÛÄËÏÖÜÇ','aeiouaeiouaoaeiooaeioucAEIOUAEIOUAOAEIOOAEIOUC')
+				LIKE TRANSLATE(:pesquisa, 'áéíóúàèìòùãõâêîôôäëïöüçÁÉÍÓÚÀÈÌÒÙÃÕÂÊÎÔÛÄËÏÖÜÇ','aeiouaeiouaoaeiooaeioucAEIOUAEIOUAOAEIOOAEIOUC') LIMIT 150";
+
+		try{
+			$stmt = $this->getConexao()->prepare($sql);
+			$stmt->bindParam(":pesquisa", $pesquisa, PDO::PARAM_STR);
+			$stmt->execute();
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			
+		}catch (PDOException $e){
+			echo '{"erro":{"text":'. $e->getMessage() .'}}';
+		}
+		foreach($result as $linha){
 			$usuario = new Usuario();
 			$usuario->setNome($linha['nome']);
 			$usuario->setEmail($linha['email']);
@@ -103,15 +115,13 @@ class UsuarioDAO extends DAO {
 	}
 	public function pesquisaTesteNoSigaa($pesquisa){
 		$lista = array();
-		
-		$pesquisa = preg_replace ('/[^a-zA-Z0-9\s]/', '', $pesquisa );
 		$pesquisa = strtoupper ( $pesquisa );
+		$pesquisa = "%".$pesquisa."%";
 		
-		echo "Pesquisei ".$pesquisa;
-		
-		$sql = "SELECT * FROM vw_usuarios_catraca WHERE UPPER(nome)
-		LIKE :pesquisa LIMIT 150";
-		
+		$sql = "SELECT * FROM vw_usuarios_catraca WHERE 
+				TRANSLATE(UPPER(nome), 'áéíóúàèìòùãõâêîôôäëïöüçÁÉÍÓÚÀÈÌÒÙÃÕÂÊÎÔÛÄËÏÖÜÇ','aeiouaeiouaoaeiooaeioucAEIOUAEIOUAOAEIOOAEIOUC')
+				LIKE TRANSLATE(:pesquisa, 'áéíóúàèìòùãõâêîôôäëïöüçÁÉÍÓÚÀÈÌÒÙÃÕÂÊÎÔÛÄËÏÖÜÇ','aeiouaeiouaoaeiooaeioucAEIOUAEIOUAOAEIOOAEIOUC') LIMIT 150";
+
 		try{
 			$stmt = $this->getConexao()->prepare($sql);
 			$stmt->bindParam(":pesquisa", $pesquisa, PDO::PARAM_STR);
@@ -141,6 +151,7 @@ class UsuarioDAO extends DAO {
 		}
 	
 		return $lista;
+		
 	
 	}
 	public function retornaPorIdBaseExterna(Usuario $usuario){

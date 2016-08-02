@@ -54,7 +54,7 @@ if ($sessao->getNivelAcesso () != Sessao::NIVEL_SUPER){
 
 
 $dao = new UsuarioDAO(null, DAO::TIPO_PG_SIGAAA);
-$lista = $dao->pesquisaTesteNoSigaa("jeffers");
+$lista = $dao->pesquisaTesteNoSigaa("JOão");
 
 foreach($lista as $usuario){
 	echo '<hr>';
