@@ -232,11 +232,21 @@ class CatracaVirtual{
 			if($vinculo == NULL)
 			{
 				//Antes de mostrar esta mensagem vamos tentar renovar o vínculo deste usuário. 
+				$usuarioDao = new UsuarioDAO(null, DAO::TIPO_PG_SIGAAA);
+				$usuarioDao->retornaPorIdBaseExterna($vinculo->getResponsavel());
+				if(!$vinculoDao->usuarioJaTemVinculo($usuario) && !$vinculo->isAvulso() && $vinculo->getResponsavel()->verificaSeAtivo()){
+					
+					$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'G:00:01' );
+					$vinculo->setFinalValidade($daqui3Meses);
+					$vinculoDao->atualizaValidade($vinculo);
+					
+				}else{
+					$this->mensagemErro("Verifique o vínculo deste cartão!");
+					echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
+					return;
+				}
 				
 				
-				$this->mensagemErro("Verifique o vínculo deste cartão!");
-				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
-				return;
 				
 			}
 			//Vamos ver se ele pode mesmo comer. Coloque o código aqui.
