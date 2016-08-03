@@ -29,12 +29,16 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
     def seleciona(self, T, sql, *arg):
         obj = T()
         try:
-            with closing(self.abre_conexao().cursor('cursor_unique_name', cursor_factory=self.extras.DictCursor)) as cursor:
-                cursor.execute(sql, arg)
+            with closing(self.abre_conexao().cursor()) as cursor:
                 dic = {}
-                if [argumento for argumento in arg if argumento]:
+                argumentos = []
+                for a in arg:
+                    argumentos.append(str(a))
+                print argumentos
+                cursor.execute(sql, argumentos)
+                if arg:
                     linhas = cursor.fetchone()
-                    #print cursor.query
+                    print cursor.query
                     colunas = [coluna[0] for coluna in cursor.description]
                     dic = dict(zip(colunas, linhas))
                     if linhas:
