@@ -232,6 +232,41 @@ class CatracaVirtual{
 			if($vinculo == NULL)
 			{
 				//Antes de mostrar esta mensagem vamos tentar renovar o vínculo deste usuário. 
+				$cartao = new Cartao();
+				$cartao->setNumero($_GET['numero_cartao']);
+				$numeroCartao = $cartao->getNumero();
+				$dataTimeAtual = date ( "Y-m-d G:i:s" );
+				$sqlVerificaNumero = "SELECT * FROM usuario
+				INNER JOIN vinculo
+				ON vinculo.usua_id = usuario.usua_id
+				LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
+				LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id
+				WHERE cartao.cart_numero = '$numeroCartao'
+				";
+				$dao = new DAO();
+				$result = $dao->getConexao()->query($sqlVerificaNumero);
+				$idCartao = 0;
+				$usuario = new Usuario();
+				$tipo = new Tipo();
+				$vinculoDao = new VinculoDAO($dao->getConexao());
+				$vinculo = new Vinculo();
+				echo $sqlVerificaNumero;
+				foreach($result as $linha){
+					$idDoVinculo = $linha['vinc_id'];
+					$tipo->setNome($linha['tipo_nome']);
+					$usuario->setNome($linha['usua_nome']);
+					$usuario->setIdBaseExterna($linha['id_base_externa']);
+					$idCartao = $linha['cart_id'];
+					$vinculo->setAvulso($linha['vinc_avulso']);
+					$avulso = $linha['vinc_avulso'];
+					if($avulso){
+						$usuario->setNome("Avulso");
+					}
+					$vinculo->setResponsavel($usuario);
+					break;
+				
+				}
+				
 				$usuarioDao = new UsuarioDAO(null, DAO::TIPO_PG_SIGAAA);
 				$usuarioDao->retornaPorIdBaseExterna($vinculo->getResponsavel());
 				if(!$vinculoDao->usuarioJaTemVinculo($usuario) && !$vinculo->isAvulso() && $vinculo->getResponsavel()->verificaSeAtivo()){
