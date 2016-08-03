@@ -2,10 +2,9 @@
 # -*- coding: latin-1 -*-
 
 
-import simplejson as json
+import inspect
 from typing import TypeVar
 from typing import Generic
-from collections import OrderedDict
 from contextlib import closing
 from catraca.logs import Logs
 from catraca.modelo.dados.conexao_generica import ConexaoGenerica
@@ -18,7 +17,6 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 
 T = TypeVar('T')
-
 
 class DAOGenerico(ConexaoGenerica, Generic[T]):
     
@@ -33,18 +31,29 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
         try:
             with closing(self.abre_conexao().cursor('cursor_unique_name', cursor_factory=self.extras.DictCursor)) as cursor:
                 cursor.execute(sql, arg)
+                dic = {}
                 if [argumento for argumento in arg if argumento]:
-                    dados = cursor.fetchone()
-                    cursor.query
-                    if dados:
-                        for (campo, valor) in zip((nom[0] for nom in cursor.description), [val for val in dados]):
-                            setattr(obj, campo, valor)
+                    linhas = cursor.fetchone()
+                    #print cursor.query
+                    colunas = [coluna[0] for coluna in cursor.description]
+                    dic = dict(zip(colunas, linhas))
+                    if linhas:
+                        for coluna in sorted(dic):
+                            setattr(obj, coluna, dic[coluna])
                         return obj
                 else:
-                    lista = cursor.fetchall()
-                    cursor.query
-                    if lista != []:
-                        return lista
+                    linhas = cursor.fetchall()
+                    #print cursor.query
+                    if linhas != []:
+                        listas = []
+                        for linha in linhas:
+                            colunas = [coluna[0] for coluna in cursor.description]
+                            dic.update(zip(colunas, linha))
+                            lista = []
+                            for linha in sorted(dic):
+                                lista.append(dic[linha])
+                            listas.append(lista)
+                        return listas
         except Exception as excecao:
             self.log.logger.error("ERRO: ", exc_info=True)
             
@@ -53,12 +62,18 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
         try:
             if obj:
                 with closing(self.abre_conexao().cursor()) as cursor:
-                    colunas = dict((name, getattr(obj, name)) for name in obj.__dict__).keys()
-                    print colunas
-                    valores = dict((name, getattr(obj, name)) for name in obj.__dict__)
-                    lista_ordenada = self.ordem_customizada(sorted(colunas))
-                    lista_valores = lista_ordenada(valores)
-                    cursor.execute(sql, lista_valores.values())
+
+                    atributos = inspect.getmembers(obj, lambda m:not(inspect.isroutine(m)))
+                    colunas = [m[0] for m in atributos if '_' not in m[0]]
+                    valores = [m[1] for m in atributos if '_' not in m[0]]
+                    dic = dict(zip(colunas[0::1], valores[0::1]))
+                    lista_ordenada = []
+                    for linha in sorted(dic):
+                        lista_ordenada.append(dic[linha])
+                    
+                    print lista_ordenada
+                    
+                    cursor.execute(sql, lista_ordenada)
                     print cursor.query
                     #self.commit()
                     self.aviso = "Inserido com sucesso!"
@@ -71,23 +86,29 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
             
     def altera(self, sql, *arg):
         obj = [a for a in arg][0] if arg else None
-        print obj.id
         try:
             if obj:
                 with closing(self.abre_conexao().cursor()) as cursor:
-                    colunas = dict((name, getattr(obj, name)) for name in obj.__dict__).keys()
-                    valores = dict((name, getattr(obj, name)) for name in obj.__dict__)
-                    lista_ordenada = self.ordem_customizada(sorted(colunas))
-                    lista_valores = lista_ordenada(valores)
-                    lista_valores = lista_valores.values()[1:len(lista_valores.values())]
-                    lista_valores.append(obj.id)
-                    cursor.execute(sql, lista_valores)
+
+                    atributos = inspect.getmembers(obj, lambda m:not(inspect.isroutine(m)))
+                    colunas = [m[0] for m in atributos if '_' not in m[0]]
+                    valores = [m[1] for m in atributos if '_' not in m[0]]
+                    dic = dict(zip(colunas[0::1], valores[0::1]))
+                    dic.pop('id')
+                    lista_ordenada = []
+                    for linha in sorted(dic):
+                        lista_ordenada.append(dic[linha])
+                    lista_ordenada.append(obj.id)
+                    
+                    print lista_ordenada
+
+                    cursor.execute(sql, lista_ordenada)
                     print cursor.query
                     if obj.__class__.__name__ != "Cartao":
                         print obj.__class__.__name__
                         #self.commit()
                     else:
-                        print "Favor realizar commit do " + str(obj.__class__.__name__)
+                        print "Favor realizar commit de " + str(obj.__class__.__name__)
                     self.aviso = "Alterado com sucesso!"
                     return True
             else:
@@ -111,31 +132,4 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
                 return True
         except Exception as excecao:
             self.log.logger.error("ERRO: ", exc_info=True)
-            
-    def ordem_customizada(self, ordens):
-        """
-        Classificar em uma ordem especificada qualquer dicionário aninhado em uma estrutura complexa.
-        Especialmente útil para classificar um arquivo JSON em uma ordem significativa.
-        args :
-            ordens: Uma lista de listas de chaves na ordem desejada.
-        retorna:
-            Um novo objeto com qualquer dict aninhada classificadas em conformidade.
-        """
-        ordens = [{k: -i for (i, k) in enumerate(reversed(order), 1)} for order in ordens]
-        try:
-            def process(stuff):
-                if isinstance(stuff, dict):
-                    l = [(k, process(v)) for (k, v) in stuff.iteritems()]
-                    keys = set(stuff)
-                    for order in ordens:
-                        if keys.issubset(order) or keys.issuperset(order):
-                            return OrderedDict(sorted(l, key=lambda x: order.get(x[0], 0)))
-                    return OrderedDict(sorted(l))
-                if isinstance(stuff, list):
-                    return [process(x) for x in stuff]
-                return stuff
-            return process
-        except Exception as excecao:
-            self.log.logger.error("ERRO: ", exc_info=True)
-            
             

@@ -54,7 +54,7 @@ class Relogio(ControleGenerico, threading.Thread):
         while not self._stopevent.isSet():
             
             
-#             obj = self.catraca_dao.busca(1057)
+            obj = self.catraca_dao.busca()
 #             if self.catraca_dao.atualiza_exclui(obj, True):
 #                 print self.catraca_dao.aviso
 
