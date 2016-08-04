@@ -227,9 +227,35 @@ if (isset ( $_GET ["sair"] )) {
 								    <div class="menu-horizontal config">
 								        <ol class="a-esquerda">';
 						 
+						
+						
+						/*
+						 * Como deveria ser. 
+						 */
+// 						echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
+// 						echo '<li><a href="?pagina=cartao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a></li>';
+// 						echo ' <li><a href="?pagina=guiche" class="item"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a></li>';
+
+						/*
+						 * Como realmente é. 
+						 */
+						echo '
+							<div  class="doze colunas barra-menu">
+								    <div class="menu-horizontal config">
+								        <ol class="a-esquerda">';
+							
 						echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
+						echo ' <li><a href="?pagina=catraca" class="item"><span class="icone-loop2"></span> <span class="item-texto">Catraca</span></a></li>';
 						echo '<li><a href="?pagina=cartao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a></li>';
-						echo ' <li><a href="?pagina=guiche" class="item"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a></li>';						
+						echo '<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a></li>';
+						echo ' <li><a href="?pagina=relatorio" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a>
+						
+						
+					
+						
+						
+						</li>';
+						
 						echo '</ol>
 								        <ol class="a-direita" start="4">
 											<li><a href="" class="item"><span class="item-texto">Status: Guiche</span></a></li>
@@ -247,7 +273,6 @@ if (isset ( $_GET ["sair"] )) {
 							        <ol class="a-esquerda">';
 							
 						echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
-						echo ' <li><a href="?pagina=catraca" class="item"><span class="icone-loop2"></span> <span class="item-texto">Catraca</span></a></li>';
 						echo '<li><a href="?pagina=cartao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a></li>';
 						
 						echo '<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a></li>';

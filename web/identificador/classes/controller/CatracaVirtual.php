@@ -26,7 +26,7 @@ class CatracaVirtual{
 				$gerador->verificarSelecaoRU();
 				break;
 			default:
-				UsuarioController::main ( $nivelDeAcesso );
+				UsuarioController::main ( $nivel );
 				break;
 		}
 		

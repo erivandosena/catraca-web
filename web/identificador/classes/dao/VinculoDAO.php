@@ -407,6 +407,7 @@ class VinculoDAO extends DAO {
 		return false;
 		
 	}
+	
 	public function adicionaVinculo(Vinculo $vinculo) {
 
 		$inicio = $vinculo->getInicioValidade();

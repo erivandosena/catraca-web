@@ -441,8 +441,7 @@ class CartaoAvulsoView {
 		echo '<div class="borda">
 				
 				<form method="get" action="" class="formulario texto-preto" >
-						    	<label for="numero_cartao2">Número do Cartão</label><br>
-								<input type="text" name="numero_cartao2" id="numero_cartao2" autofocus/><br>
+						    	
 								<script>$(document).trigger(\'autofocus_ready\');</script>
 						     	<label for="id_tipo">Tipo</label><br>
 										
@@ -453,7 +452,8 @@ class CartaoAvulsoView {
 		echo '
 
 			        </select><br>
-
+					<label for="numero_cartao2">Número do Cartão</label><br>
+								<input type="text" name="numero_cartao2" id="numero_cartao2" autofocus/><br>
 				<input type="hidden" name="pagina"  value="avulso"/>
 				<input type="hidden" name="cartao"  value="add"/>
 				<input type="hidden" name="selecionado"  value="' . $idSelecionado . '"/>

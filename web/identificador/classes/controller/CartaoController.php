@@ -26,6 +26,10 @@ class CartaoController{
 				$controller = new CartaoController();
 				$controller->telaCartao();
 				break;
+			case Sessao::NIVEL_CATRACA_VIRTUAL:
+				$controller = new CartaoController();
+				$controller->telaCartao();
+				break;
 			default:
 				UsuarioController::main ( $nivelDeAcesso );
 				break;

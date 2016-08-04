@@ -26,7 +26,7 @@ class HomeController{
 				break;
 			case Sessao::NIVEL_CATRACA_VIRTUAL:
 				//Acessa catraca virtual. 
-				CatracaVirtual::main($nivelDeAcesso);
+				CartaoController::main($nivelDeAcesso);
 				break;
 			case Sessao::NIVEL_CADASTRO:
 				//So faz cadastro
