@@ -24,42 +24,29 @@ if (isset ( $_GET ["sair"] )) {
 	header ( "Location:./index.php" );
 }
 
-if ($sessao->getNivelAcesso () != Sessao::NIVEL_SUPER){
-	exit ( 0 );
-}
 	
 
+$dao = new DAO();
 
+$sql = "SELECT * FROM usuario 
+		INNER JOIN vinculo ON vinculo.usua_id = usuario.usua_id 
+		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id 
+		LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id 
+		WHERE cartao.cart_numero = '3995578542' ";
 
-// $sql = "SELECT distinct turno.turn_id, turno.turn_hora_inicio, turno.turn_hora_fim, turno.turn_descricao FROM turno
-// 			INNER JOIN unidade_turno ON turno.turn_id = unidade_turno.turn_id
-// 			INNER JOIN catraca_unidade ON unidade_turno.unid_id = catraca_unidade.unid_id
-// 			INNER JOIN catraca ON catraca_unidade.catr_id = catraca.catr_id WHERE catraca.catr_ip = :ip
-// 			AND turno.turn_hora_inicio <= :hora_ini
-// 			AND turno.turn_hora_fim >= :hora_fim;";
-
-// try {
-// 	$db = getDB();
-// 	$stmt = $db->prepare($sql);
-// 	$stmt->bindParam(":ip", sprintf(long2ip($ip)), PDO::PARAM_STR);
-// 	$stmt->bindParam(":hora_ini", $hora, PDO::PARAM_STR);
-// 	$stmt->bindParam(":hora_fim", $hora, PDO::PARAM_STR);
-// 	$stmt->execute();
-// 	$dados = $stmt->fetchAll(PDO::FETCH_OBJ);
-// 	$db = null;
-// 	echo '{"turno": ' . json_encode($dados) . '}';
-// } catch(PDOException $e) {
-// 	echo '{"erro":{"text":'. $e->getMessage() .'}}';
-// }
-
-
-$dao = new UsuarioDAO(null, DAO::TIPO_PG_SIGAAA);
-$lista = $dao->pesquisaTesteNoSigaa("JOão");
-
-foreach($lista as $usuario){
-	echo '<hr>';
-	echo $usuario->getNome();
-	echo "<hr><br><hr>";
+try {
+	$db = $dao->getConexao();
+	$stmt = $db->prepare($sql);
 	
-	
+	$stmt->execute();
+	$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+	foreach($result as $linha){
+		print_r($linha);
+		echo "<br><hr>";
+		
+	}	
+	$db = null;
+	echo '{"turno": ' . json_encode($dados) . '}';
+} catch(PDOException $e) {
+	echo '{"erro":{"text":'. $e->getMessage() .'}}';
 }

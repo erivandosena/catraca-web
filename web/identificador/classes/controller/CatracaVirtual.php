@@ -241,8 +241,7 @@ class CatracaVirtual{
 				ON vinculo.usua_id = usuario.usua_id
 				LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
 				LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id
-				WHERE cartao.cart_numero = '$numeroCartao'
-				";
+				WHERE cartao.cart_numero = '$numeroCartao'";
 				$dao = new DAO();
 				$result = $dao->getConexao()->query($sqlVerificaNumero);
 				$idCartao = 0;
@@ -250,18 +249,25 @@ class CatracaVirtual{
 				$tipo = new Tipo();
 				$vinculoDao = new VinculoDAO($dao->getConexao());
 				$vinculo = new Vinculo();
-				echo $sqlVerificaNumero;
 				foreach($result as $linha){
 					$idDoVinculo = $linha['vinc_id'];
 					$tipo->setNome($linha['tipo_nome']);
+					$tipo->setValorCobrado($linha['tipo_valor']);
 					$usuario->setNome($linha['usua_nome']);
 					$usuario->setIdBaseExterna($linha['id_base_externa']);
 					$idCartao = $linha['cart_id'];
+					
+					$cartao->setId($idCartao);
+					$cartao->setTipo($tipo);
+					
+
 					$vinculo->setAvulso($linha['vinc_avulso']);
 					$avulso = $linha['vinc_avulso'];
 					if($avulso){
 						$usuario->setNome("Avulso");
 					}
+					$vinculo->setCartao($cartao);
+					$vinculo->setId($idDoVinculo);
 					$vinculo->setResponsavel($usuario);
 					break;
 				
@@ -277,7 +283,7 @@ class CatracaVirtual{
 					
 				}else{
 					$this->mensagemErro("Verifique o vínculo deste cartão!");
-					echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
+					echo '<meta http-equiv="refresh" content="3; url=?pagina=gerador">';
 					return;
 				}
 				
@@ -313,9 +319,6 @@ class CatracaVirtual{
 				
 				
 				$idCatraca = $_SESSION['catraca_id'];
-				
-			
-				
 				$idVinculo= $vinculo->getId();
 				
 				
@@ -329,7 +332,6 @@ class CatracaVirtual{
 					else
 						$this->mensagemErro();
 				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
-				echo 'Teste';
 			}
 			
 			else{
