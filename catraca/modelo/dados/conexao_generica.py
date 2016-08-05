@@ -23,6 +23,8 @@ class ConexaoGenerica(object):
         self.__fecha = None
         self.__extras = None
         self.__extensoes = None
+        self.DataError = None
+        self.ProgrammingError = None
         
     def aviso(self):
         return self.__aviso
@@ -67,8 +69,11 @@ class ConexaoGenerica(object):
             self.extras = conexao_factory.extras
             self.extensoes = conexao_factory.extensoes
             self.__con = conexao_factory.conexao(1) #use 1=PostgreSQL 2=MySQL 3=SQLite
-            #self.__con.autocommit = False
+            self.__con.autocommit=False
+            self.__con.set_client_encoding('UTF8')
             self.__factory = conexao_factory.factory
+            self.DataError = self.DataError
+            self.ProgrammingError = self.ProgrammingError
             return self.__con
         except Exception, e:
             self.log.logger.critical('Erro abrindo conexao com o banco de dados.', exc_info=True)

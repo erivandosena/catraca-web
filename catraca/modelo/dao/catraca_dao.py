@@ -3,8 +3,8 @@
 
 
 from catraca.logs import Logs
-from catraca.modelo.entidades.catraca import Catraca
 from catraca.modelo.dao.dao_generico import DAOGenerico
+from catraca.modelo.entidades.catraca import Catraca
 
 
 __author__ = "Erivando Sena"
@@ -45,7 +45,7 @@ class CatracaDAO(DAOGenerico):
                 "catr_nome as nome, "\
                 "catr_operacao as operacao, "\
                 "catr_tempo_giro as tempo "\
-                "FROM catraca ORDER BY 1"
+                "FROM catraca ORDER BY catr_id"
         return self.seleciona(Catraca, sql, arg)
     
     def busca_por_ip(self, ip):

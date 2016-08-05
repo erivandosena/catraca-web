@@ -7,6 +7,8 @@ import urlparse
 import psycopg2
 from psycopg2 import extras
 from psycopg2 import extensions
+from psycopg2 import DataError
+from psycopg2 import ProgrammingError
 #import mysql.connector
 from contextlib import closing
 from catraca.logs import Logs
@@ -31,6 +33,8 @@ class ConexaoFactory(object):
         self.__factory = None
         self.__extras = extras
         self.__extensoes = extensions
+        self.DataError = DataError
+        self.ProgrammingError = ProgrammingError
     @property
     def erro_conexao(self):
         return self.__erroCon
