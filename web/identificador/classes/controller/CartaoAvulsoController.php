@@ -273,10 +273,16 @@ class CartaoAvulsoController{
 				}else{
 					$tipoDao = new TipoDAO($vinculoDao->getConexao());
 					$listaDeTipos = $tipoDao->retornaLista();
+					foreach($listaDeTipos as $chave => $tipo ){
+						if(strtolower (trim($listaDeTipos[$chave]->getNome())) == 'isento'){
+							unset($listaDeTipos[$chave]);
+							
+						}
+					}
 					
 					if(isset($_GET['salvar'])){
-						foreach($listaDeTipos as $tipo){
-							
+						foreach($listaDeTipos as $tipo ){
+								
 							if($tipo->getId() == $_GET['id_tipo']){
 								$esseTipo = $tipo;	
 							
