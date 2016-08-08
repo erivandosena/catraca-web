@@ -55,8 +55,13 @@ class DefinicoesView{
 		echo '<td>'.$catraca->getStrIterfaceRede().'</td>';
 		echo '<td>
 				
-			<a href="?pagina=definicoes&editar_catraca='.$catraca->getId().'"><span class="icone-pencil2 botao texto-amarelo2" title="Editar"></span></a>
-			</td>';
+			<a href="?pagina=definicoes&editar_catraca='.$catraca->getId().'"><span class="icone-pencil2 botao texto-amarelo2" title="Editar"></span></a>';
+			if (!$catraca->getUnidade()->getNome()){
+				echo '<a href="?pagina=definicoes&editar_catraca='.$catraca->getId().'"><span class="icone-pencil2 botao texto-amarelo2" title="Editar"></span></a>';
+				
+			}
+			
+		echo '</td>';
 		echo '</tr>';
 	}
 	
@@ -173,13 +178,13 @@ class DefinicoesView{
 									<div class="borda">
 											<form method="get" action="" class="formulario" >										
 											<label for="turno_nome" class="">
-										        Turno: <input type="text" name="turno_nome" id="turno" required />
+										        Turno: <input type="text" name="turno_nome" id="turno" />
 										    </label><br>
 										    <label for="hora_inicio" class="">
-										        Hora Inicio: <input type="time" name="hora_inicio" id="hora_inicio" required />
+										        Hora Inicio: <input type="time" name="hora_inicio" id="hora_inicio"/>
 										    </label><br>
 										    <label for="hora_fim" class="">
-										        Hora Fim: <input type="time" name="hora_fim" id="hora_fim" required />
+										        Hora Fim: <input type="time" name="hora_fim" id="hora_fim"/>
 										    </label><br>
 										    <input type="hidden" name="pagina" value="definicoes" />
 										    <input type="submit" name="cadastrar_turno" value="Salvar" />
@@ -249,7 +254,7 @@ class DefinicoesView{
 					Editar Tipo : '.$tipo->getNome().'<br></h2>
 					<form method="post" class="formulario em-linha">
 						<label for="valor_tipo">
-							Novo valor: <input required type="number" max="100" step="0.01" name="valor_tipo" value="'.$tipo->getValorCobrado().'">
+							Novo valor: <input type="number" max="100" step="0.01" name="valor_tipo" value="'.$tipo->getValorCobrado().'">
 						</label>
 						<input type="submit" name="alterar" value="Alterar">				
 					</form>
@@ -298,7 +303,7 @@ class DefinicoesView{
 						<form action="" method="post" class="formulario em-linha">';	
 		
 		echo '	<label for="nome_catraca">
-					Nome da Catraca: <input required type="text" name="nome_catraca" id="nome_catraca" value="'.$catraca->getNome().'">
+					Nome da Catraca: <input  type="text" name="nome_catraca" id="nome_catraca" value="'.$catraca->getNome().'">
 				</label><br>				
 				<label for="unidade_academica">
 				<object class="rotulo">Unidade Acadêmica: </object>';		
@@ -364,7 +369,7 @@ class DefinicoesView{
 		echo '<option  '.$livre.' value="'.Catraca::GIRO_LIVRE.'" '.$livre.'>Livre</option>';
 		echo '</select></label><br>';
 		echo '<label for="tempo_giro">Tempo De Giro: ';
-		echo '<input required type="number" min="0" max="100" step="1" name="tempo_giro" id="tempo_giro" value="'.$catraca->getTempodeGiro().'"/></label><br>';
+		echo '<input type="number" min="0" max="100" step="1" name="tempo_giro" id="tempo_giro" value="'.$catraca->getTempodeGiro().'"/></label><br>';
 		
 		echo '	<label for="interface">
 				<object class="rotulo">Interface de Rede: </object>
@@ -438,6 +443,31 @@ class DefinicoesView{
 						</label>
 						<input type="submit" class="botao" value="Alterar" name="confirmar">
 					</form>
+				</div>';
+	}
+	
+	public function formNivel(Usuario $usuario){
+		echo'	<div class="borda relatorio">
+	
+						<span>Usuario: '.$usuario->getNome().'</span>
+						<span>Login: '.$usuario->getLogin().'</span>
+						<span>Nível Atual: '.$usuario->strNivelAcesso().'</span><br>
+						<hr class="um"><br>
+	
+					<form class="formulario-organizado" method="post">
+						<label>
+							<object data="" type="" class="rotulo">Novo Nível:</object>
+							<select name="novo_nivel" id="novo_nivel">
+								<option selected="selected" value="'.$usuario->getNivelAcesso().'">'.$usuario->strNivelAcesso().'</option>
+								<option value="1">Padrão</option>
+								<option value="2">Admin</option>
+								<option value="3">Super</option>
+								<option value="4">Guichê</option>
+								<option value="5">Suporte</option>
+							</select>
+							</label>
+						<input class="botao" type="submit" name="alterar" value="Alterar Nível">
+					</form><br>
 				</div>';
 	}
 	

@@ -52,10 +52,34 @@ class Usuario{
             return $this->senha;
         }
 	public function setNivelAcesso($nivelAcesso){
-		$this->nivelAcesso = $nivelAcesso;
+		$this->nivelAcesso = $nivelAcesso;	
 	}
 	public function getNivelAcesso(){
 		return $this->nivelAcesso;
+	}
+	
+	public function strNivelAcesso(){
+		
+		switch ($this->getNivelAcesso()){				
+			case 1 : $nivelAtual = "Padrão";
+			break;
+		
+			case 2 : $nivelAtual = "Admin";
+			break;
+		
+			case 3 : $nivelAtual = "Super";
+			break;
+				
+			case 4 : $nivelAtual = "Guichê";
+			break;
+				
+			case 5 : $nivelAtual = "Suporte";
+			break;
+				
+			default: $nivelAtual = "Padrão";
+			break;		
+		}
+		return $nivelAtual;
 	}
 	
 	public function __toString(){

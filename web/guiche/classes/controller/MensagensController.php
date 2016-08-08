@@ -19,19 +19,42 @@ class MensagensController{
 		$mensagem = new MensagensController();
 		
 		echo'	<div class="borda relatorio">						
-						<form action="" class="formulario em-linha" method="post">						
-							<label for="">
-								<object class="rotulo">Selecione a Unidade: </object>
-								<select name="unidade" id="unidade">';		
+					<form action="" class="formulario em-linha" method="">							
+						<label for="">
+							1ª Mensagem: <input type="text" name="msg_um">
+						</label>
+						<label for="">
+							2ª Mensagem: <input type="text" name="msg_dois">
+						</label>
+						<label for="">
+							3ª Mensagem: <input type="text" name="msg_tres">
+						</label>
+						<label for="">
+							4ª Mensagem: <input type="text" name="msg_quatro">
+						</label>					
+						<select name="unidade_id" id="unidade_id">';		
+		foreach ($unidades as $unidade){
+		echo'				<option value="'.$unidade->getId().'">'.$unidade->getNome().'</option>';
+		}
+		echo'			</select>
+						<input type="hidden" name="pagina" value="definicoes" />
+						<input type="submit" name="salvar" value="Salvar">
+					</form>
+				</div>';
 		
-		$unidades = $unidadeDao->retornaLista();
-		foreach ($unidades as $unidade){		
-		echo'						<option value="'.$unidade->getId().'">'.$unidade->getNome().'</option>';				
-				}
-		echo'					</select>
-							</label>
-							<input type="submit" name="buscar" value="Buscar">
-						</form>';
+		if (isset($_GET['unidade_id'])){
+			if (isset($_POST['confirmar'])){
+				echo'ok';
+			}
+			echo'	
+					<form class="formulario-organizado" method="post">
+						<input type="submit" name="confirmar" value="Confirmar">
+					</form>
+					';
+		}
+		
+		
+		
 		
 		if(isset($_POST['buscar'])){		
 			
@@ -40,6 +63,7 @@ class MensagensController{
 						<table class="tabela borda-vertical zebrada no-centro">
 							<thead>
 								<tr class="centralizado">
+									<th>Catraca</th>
 									<th>Mesnagem 1</th>
 									<th>Mesnagem 2</th>
 									<th>Mesnagem 3</th>
@@ -58,7 +82,8 @@ class MensagensController{
 			$result = $dao->getConexao()->query($sql);
 			foreach ($result as $linha){
 			
-				echo'					<tr>
+			echo'				<tr>
+									<td>'.$linha['mens_institucional1'].'</td>
 									<td>'.$linha['mens_institucional1'].'</td>
 									<td>'.$linha['mens_institucional2'].'</td>
 									<td>'.$linha['mens_institucional3'].'</td>
@@ -66,7 +91,7 @@ class MensagensController{
 									<td><a href="" class="botao">Editar</a></td>
 								</tr>';
 			}
-			echo'					</tbody>
+			echo'			</tbody>
 						</table>
 					</div>';
 			
@@ -77,8 +102,7 @@ class MensagensController{
 	
 	public function formEditar(){
 		
-		echo'			<form action="" class="formulario em-linha" method="post">
-							<input name="catraca" type="hidden" value="'.$_POST['catraca'].'">
+		echo'			<form action="" class="formulario em-linha" method="post">							
 							<label for="">
 								1ª Mensagem: <input type="text" name="msg_um">
 							</label>

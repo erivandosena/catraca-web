@@ -356,7 +356,21 @@ class RelatorioController {
 
 		
 		echo '<div class=" doze colunas borda relatorio">';		
-		echo '<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>
+		echo '<div class="doze colunas">
+					<div class="tres colunas">
+						<a href="http://www.dti.unilab.edu.br">
+							<img class="imagem-responsiva no-centro" src="img/logo-dti-preto.png" alt=""/>
+						</a>
+					</div>
+					<div class="seis colunas">
+						<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>
+					</div>
+					<div class="tres colunas">
+						<a href="http://www.unilab.edu.br"><br>
+						<img class="imagem-responsiva no-centro" src="img/logo-unilab.png" alt="">
+						</a>
+					</div>
+				</div>
 				<hr class="um">
 				<h3>'.$strUnidade.'</h3>
 				<span>De '. date ( 'd/m/Y', strtotime ( $data1 ) ) . ' a ' . date ( 'd/m/Y', strtotime ( $data2 ) ) .'</span>
@@ -461,7 +475,21 @@ class RelatorioController {
 			}
 			
 		echo '<div class="doze colunas borda relatorio">
-				<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>
+				<div class="doze colunas">
+					<div class="tres colunas">
+						<a href="http://www.dti.unilab.edu.br">
+							<img class="imagem-responsiva no-centro" src="img/logo-dti-preto.png" alt=""/>
+						</a>
+					</div>
+					<div class="seis colunas">
+						<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>
+					</div>
+					<div class="tres colunas">
+						<a href="http://www.unilab.edu.br"><br>
+						<img class="imagem-responsiva no-centro" src="img/logo-unilab.png" alt="">
+						</a>
+					</div>
+				</div>
 				<hr class="um">
 				<h3>'.$strUnidade.'</h3>
 				<span>Data: '. date ( 'd/m/Y', strtotime ( $data1 ) ) . ' e ' . date ( 'd/m/Y', strtotime ( $data2 ) ) .'</span>
@@ -519,7 +547,21 @@ class RelatorioController {
 	
 		
 		echo '<div class=" doze colunas borda relatorio">
-				<h2>UNILAB<small class="fim">Universidade da Integraçao Internacional da Lusofonia Afro-Brasileira</small></h2>	
+				<div class="doze colunas">
+					<div class="tres colunas">
+						<a href="http://www.dti.unilab.edu.br">
+							<img class="imagem-responsiva no-centro" src="img/logo-dti-preto.png" alt=""/>
+						</a>
+					</div>
+					<div class="seis colunas">
+						<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>
+					</div>
+					<div class="tres colunas">
+						<a href="http://www.unilab.edu.br"><br>
+						<img class="imagem-responsiva no-centro" src="img/logo-unilab.png" alt="">
+						</a>
+					</div>
+				</div>	
 				<hr class="um">
 				<h3>'.$titulo.'</h3>
 				<hr class="dois">';
@@ -574,7 +616,21 @@ class RelatorioController {
 		$subTotal ['total'] = 0;
 	
 		echo '<div class=" doze colunas borda relatorio">
-				<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>	
+				<div class="doze colunas">
+					<div class="tres colunas">
+						<a href="http://www.dti.unilab.edu.br">
+							<img class="imagem-responsiva no-centro" src="img/logo-dti-preto.png" alt=""/>
+						</a>
+					</div>
+					<div class="seis colunas">
+						<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>
+					</div>
+					<div class="tres colunas">
+						<a href="http://www.unilab.edu.br"><br>
+						<img class="imagem-responsiva no-centro" src="img/logo-unilab.png" alt="">
+						</a>
+					</div>
+				</div>	
 				<hr class="um">
 				<h3>'.$titulo.'</h3>							
 				<hr class="dois">';

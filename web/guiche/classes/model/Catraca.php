@@ -116,6 +116,7 @@ class Catraca{
 			break;
 			default:
 				$interface = "Não Identificado";
+			break;
 		}
 		return $interface;
 	}

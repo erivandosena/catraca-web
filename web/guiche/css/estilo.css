@@ -445,7 +445,7 @@ color: #fff;
 }
 
 div#topo{
-	padding-top: 10px;
+	padding-top: 20px;
 }
 
 div#topo h1{
@@ -605,4 +605,42 @@ a:focus {
 
 .paginacao ul li a:hover{
 	background: #DCDCDC;
+}
+
+.informacao{
+	background: #ccc;
+	box-shadow: inset 0 3px 7px rgba(0,0,0,.2), inset 0 -3px 7px rgba(0,0,0,.2);
+}
+
+.informacao p{
+	text-align: justify;
+	font-size: 20px;
+}
+
+.informacao li{
+	font-size: 20px;
+	list-style: disc;
+}
+
+.login{
+	
+	padding-left: 10px;
+}
+
+.acessibilidade{
+	padding-top: 0;
+	margin-top: 8px;
+	margin-bottom: 8px;
+}
+
+.dados-usuario img{
+	width:10cm;
+	height:12cm;
+	border:solid 1px #000;
+}
+
+#informacao{
+	border:solid 1px #ccc;
+	height:12cm;
+	font-size:22px;	
 }

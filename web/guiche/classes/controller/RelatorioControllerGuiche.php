@@ -64,7 +64,25 @@ class RelatorioControllerGuiche{
 		}
 			
 		echo'	<div class="borda relatorio">
-				<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>
+				
+				<div class="doze colunas">
+					<div class="tres colunas">
+						<a href="http://www.dti.unilab.edu.br">
+							<img class="imagem-responsiva no-centro" src="img/logo-dti-preto.png" alt=""/>
+						</a>
+					</div>
+					<div class="seis colunas">
+						<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>
+					</div>
+					<div class="tres colunas">
+						<a href="http://www.unilab.edu.br"><br>
+						<img class="imagem-responsiva no-centro" src="img/logo-unilab.png" alt="">
+						</a>
+					</div>
+				</div>
+				
+				<hr class="um">
+				<h3 class="centralizado">Relatório de Guichê</h3>				
 				<hr class="um">	
 				<table class="tabela-relatorio">
 						<thead>
@@ -115,6 +133,12 @@ class RelatorioControllerGuiche{
 						</tr>					
 					</tbody>
 				</table>
+				<div class="relatorio-rodape">
+					<span>CATRACA | Copyright © 2015 - DTI</span>
+					<span>Relatório Emitido em: '.$date = date('d/m/Y H:i:s').'</span>';
+// echo '			<a class="botao icone-printer"> Imprimir</a>';
+		echo '
+				</div>	
 			</div>';
 		}	
 	}

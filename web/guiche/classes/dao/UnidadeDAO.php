@@ -205,6 +205,32 @@ class UnidadeDAO extends DAO {
 		
 		
 	}
+	
+	function inserirRegistro() {
+		$request = \Slim\Slim::getInstance()->request();
+		$body = $request->getBody();
+		$dados = json_decode($body);
+	
+		$sql = "INSERT INTO registro(regi_data, regi_valor_pago, regi_valor_custo, cart_id, catr_id, vinc_id)
+	VALUES (:data, :pago, :custo, :cartao, :catraca, :vinculo);";
+	
+		try {
+			$db = getDB();
+			$stmt = $db->prepare($sql);
+			$stmt->bindParam("data", ($dados->regi_data == '') ? NULL : $dados->regi_data ); //NULL if $dados->regi_data == NULL else $dados->regi_data );
+			$stmt->bindParam("pago", $dados->regi_valor_pago);
+			$stmt->bindParam("custo", $dados->regi_valor_custo);
+			$stmt->bindParam("cartao", $dados->cart_id);
+			$stmt->bindParam("catraca", $dados->catr_id);
+			$stmt->bindParam("vinculo", $dados->vinc_id);
+			$stmt->execute();
+			$db = null;
+		} catch(PDOException $e) {
+			echo '{"erro":{"text":'. $e->getMessage() .'}}';
+		}
+	}
+	
+	
 	public function preenchePorId(Unidade $unidade) {
 		$idUnidade = $unidade->getId ();
 		if (! is_int ( $idUnidade ) && $idUnidade <= 0)

@@ -12,7 +12,7 @@ class GuicheController{
 				$controller->telaGuiche();
 				break;
 			default :
-				UsuarioController::main ( $nivelDeAcesso );
+				UsuarioController::main ($nivel);
 				break;
 		}		
 	}

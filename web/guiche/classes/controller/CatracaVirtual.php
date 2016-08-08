@@ -154,6 +154,8 @@ class CatracaVirtual{
 				return;
 			$i = 0;
 			$turnoAtual = new Turno();
+			$cartaoPagina2 = "";
+			$cartaoPagina2 = $_SESSION['numero_cartao'];
 			$selectTurno = "Select * FROM turno 
 				WHERE '$data' BETWEEN turno.turn_hora_inicio AND turno.turn_hora_fim";
 			$result = $this->dao->getConexao()->query($selectTurno);
@@ -213,15 +215,29 @@ class CatracaVirtual{
 			if(isset($_GET['confirmado'])){
 				
 				$custo = 0;
-				$sql = "SELECT cure_valor FROM custo_refeicao ORDER BY cure_id DESC LIMIT 1";
-				foreach($tipoDao->getConexao()->query($sql) as $linha){
+				$idCatraca = $_SESSION['catraca_id'];
+				
+				$verificaCusto = "SELECT * FROM custo_refeicao				
+								INNER JOIN custo_unidade ON custo_unidade.cure_id = custo_refeicao.cure_id					
+								INNER JOIN unidade ON unidade.unid_id = custo_unidade.unid_id					
+								INNER JOIN catraca_unidade ON catraca_unidade.unid_id = unidade.unid_id	
+								WHERE catraca_unidade.catr_id = $idCatraca";
+				
+				$result = $this->dao->getConexao()->query($verificaCusto);
+				foreach ($result as $linha){
 					$custo = $linha['cure_valor'];
+				}
+				
+				if (!$custo){					
+					$sql = "SELECT cure_valor FROM custo_refeicao ORDER BY cure_id DESC LIMIT 1";
+					foreach($tipoDao->getConexao()->query($sql) as $linha){
+						$custo = $linha['cure_valor'];
+					}					
 				}
 				
 				$numeroCartao = $_GET['numero_cartao'];
 				$idVinculo= $vinculo->getId();
-				$valorPago = $vinculo->getCartao()->getTipo()->getValorCobrado();				
-				$idCatraca = $_SESSION['catraca_id'];
+				$valorPago = $vinculo->getCartao()->getTipo()->getValorCobrado();			
 				
 				$sqlVerificaNumero = "SELECT * FROM cartao WHERE cart_numero = '$numeroCartao'";
 				
@@ -232,8 +248,8 @@ class CatracaVirtual{
 				
 				$novoSaldo = $saldoCartao - $valorPago;
 				
-				if($novoSaldo < 0){
-					$novoSaldo = null;
+				if($novoSaldo <= 0){					
+					$novoSaldo = null;								
 				}				
 				
  				$this->dao->getConexao()->beginTransaction(); 				
@@ -255,13 +271,15 @@ class CatracaVirtual{
 					return false;
 				}
 				
-				$this->dao->getConexao()->commit();
+ 				$this->dao->getConexao()->commit();
+				$this->view->formMensagem("-sucesso", "Dados inseridos com sucesso");
+ 				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
 				
 // 				if($this->dao->getConexao()->exec($sql))
 // 						$this->mensagemSucesso();
 // 					else
 // 						$this->mensagemErro();
-//				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
+				
 				
 			}
 			
@@ -353,14 +371,9 @@ class CatracaVirtual{
 			}	
 			
 		}
-		
-		
-		
 				
 		echo '</div>
-				</div>';
-		        
-		
+				</div>';		
 		
 	}
 	

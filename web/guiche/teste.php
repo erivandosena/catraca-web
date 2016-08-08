@@ -42,7 +42,7 @@ $dao = new DAO();
 // $i = $result = $dao->getConexao()->exec($sql);
 // echo $i;
 
-$sql = "DELETE FROM catraca WHERE catr_id > 5";
+$sql = "DELETE FROM custo_refeicao WHERE cure_id = 4";
 echo $dao->getConexao()->exec($sql);
 
 ?>
