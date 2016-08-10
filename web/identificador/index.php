@@ -196,6 +196,7 @@ if (isset ( $_GET ["sair"] )) {
 										<li><a href="?pagina=cartao">Próprio</a></li>
 										<li><a href="?pagina=avulso">Avulso</a></li>
 										<li><a href="?pagina=isento">Isento</a></li>
+										<li><a href="?pagina=info">Informações</a></li>
 									</ul>
 							
 							</li>';
@@ -425,6 +426,9 @@ if (isset ( $_GET ["sair"] )) {
 								break;
 							case 'relatorio_guiche' :
 								RelatorioControllerGuiche::main($sessao->getNivelAcesso());
+								break;
+							case 'info' :
+								InfoController::main($sessao->getNivelAcesso());
 								break;
 							default :
 								echo '404 NOT FOUND';
