@@ -75,7 +75,7 @@ class UnidadeDAO extends DAO {
 			$catraca->setId($linha['catraca_id']);
 			$catraca->setUnidade(new Unidade());
 			$catraca->getUnidade()->setNome($linha['unid_nome']);
-			
+			$catraca->setFinanceiro($linha['catr_financeiro']);
 			
 			$lista [] = $catraca;
 		}

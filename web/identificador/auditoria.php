@@ -46,8 +46,8 @@ foreach($result as $linha){
 
 echo '<h1>Cartoes avulsos</h1>';
 echo '<hr>';
-$sql = "SELECT * FROM cartao INNER JOIN vinculo ON vinculo
-";
+$sql = "SELECT * FROM cartao INNER JOIN vinculo 
+		ON vinculo";
 $result = $dao->getConexao()->query($sql);
 foreach($result as $linha){
 

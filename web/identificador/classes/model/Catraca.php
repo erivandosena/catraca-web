@@ -8,6 +8,21 @@ class Catraca{
 	private $tempoDeGiro;
 	private $operacao;
 	private $unidade;
+	private $financeiro;
+	public function setFinanceiro($financeiro){
+		
+		if($financeiro)
+			$this->financeiro = true;
+		else
+			$this->financeiro = false;
+		
+	}
+	public function financeiroAtivo(){
+		if($this->financeiro)
+			return true;
+		return false;
+		
+	}
 	public function Catraca(){
 		$this->unidade = new Unidade();
 	}
@@ -72,6 +87,15 @@ class Catraca{
 		return $strOperacao;
 	}
 	
+	public function __toString(){
+		$str = $this->getStrOperacao();
+		$str .= $this->getUnidade()->getNome();
+		if($this->financeiroAtivo())
+			$str .= "Financeiro Ativo";
+		else
+			$str .= "Sem financeiro";
+		return $str;
+	}
 	const GIRO_HORARIO = 1;
 	const GIRO_ANTI_HORARIO = 2;
 	const GIRO_LIVRE = 3;

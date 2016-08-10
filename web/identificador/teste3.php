@@ -25,28 +25,37 @@ if (isset ( $_GET ["sair"] )) {
 }
 
 	
+$unidadeDao = new UnidadeDAO();
 
-$dao = new DAO();
-
-$sql = "SELECT * FROM usuario 
-		INNER JOIN vinculo ON vinculo.usua_id = usuario.usua_id 
-		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id 
-		LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id 
-		WHERE cartao.cart_numero = '3995578542' ";
-
-try {
-	$db = $dao->getConexao();
-	$stmt = $db->prepare($sql);
+$lista  = $unidadeDao->retornaCatracasPorUnidade();
+foreach($lista as $catraca){
 	
-	$stmt->execute();
-	$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-	foreach($result as $linha){
-		print_r($linha);
-		echo "<br><hr>";
-		
-	}	
-	$db = null;
-	echo '{"turno": ' . json_encode($dados) . '}';
-} catch(PDOException $e) {
-	echo '{"erro":{"text":'. $e->getMessage() .'}}';
+	echo $catraca;
+	echo '<br><hr>';
+	
 }
+
+// echo $unidadeDao->getConexao()->exec("UPDATE catraca set catr_financeiro = 'TRUE';");
+
+// $sql = "SELECT * FROM usuario 
+// 		INNER JOIN vinculo ON vinculo.usua_id = usuario.usua_id 
+// 		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id 
+// 		LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id 
+// 		WHERE cartao.cart_numero = '3995578542' ";
+
+// try {
+// 	$db = $dao->getConexao();
+// 	$stmt = $db->prepare($sql);
+	
+// 	$stmt->execute();
+// 	$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+// 	foreach($result as $linha){
+// 		print_r($linha);
+// 		echo "<br><hr>";
+		
+// 	}	
+// 	$db = null;
+// 	echo '{"turno": ' . json_encode($dados) . '}';
+// } catch(PDOException $e) {
+// 	echo '{"erro":{"text":'. $e->getMessage() .'}}';
+// }

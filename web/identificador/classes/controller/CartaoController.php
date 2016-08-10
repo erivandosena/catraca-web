@@ -271,9 +271,11 @@ class CartaoController{
 			
 			$vinculos = $vinculoDao->retornaVinculosValidosDeUsuario($usuario);
 			
+			
+			
 			$podeComer = $this->verificaSeAtivo($usuario);
 			
-			if(!sizeof($vinculos) && $podeComer){
+			if(!$vinculoDao->usuarioJaTemVinculo($usuario) && $podeComer){
 				if (!isset ( $_GET ['cartao'] )){
 					echo '<a class="botao" href="?pagina=cartao&selecionado=' . $idDoSelecionado . '&cartao=add">Adicionar</a>';
 				}else{
