@@ -131,10 +131,6 @@ class InfoController{
 		echo '<p>Cartões próprios que nunca foram utilizados:'.($cadastradosProprios-$i).' </p>';
 		
 	}
-	public function pesquisarEMostrar($sql, $mensagem){
-		
-		
-	}
 		
 		
 	
