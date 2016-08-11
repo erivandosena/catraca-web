@@ -288,7 +288,7 @@ class VinculoDAO extends DAO {
 	}
 	
 	public function retornaVinculoValidoDeCartao(Cartao $cartao){
-		$lista = array();
+
 		$idCartao = $cartao->getId();
 		$dataTimeAtual = date ( "Y-m-d G:i:s" );
 		$sql =  "SELECT * FROM usuario INNER JOIN vinculo

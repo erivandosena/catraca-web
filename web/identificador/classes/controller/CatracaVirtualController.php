@@ -1,28 +1,30 @@
 <?php
 
 
-class CatracaVirtual{
+class CatracaVirtualController{
 	
 	private $dao;
 	private $view;
+	private $catracaSelecionada;
 	
 	public function CatracaVirtual(){
 		$this->view = new CatracaVirtualView();
+		
 	}
 	
 	public static function main($nivel){
 
 		switch ($nivel){
 			case Sessao::NIVEL_SUPER:
-				$gerador = new CatracaVirtual();
+				$gerador = new CatracaVirtualController();
 				$gerador->verificarSelecaoRU();
 				break;
 			case Sessao::NIVEL_ADMIN:
-				$gerador = new CatracaVirtual();
+				$gerador = new CatracaVirtualController();
 				$gerador->verificarSelecaoRU();
 				break;
 			case Sessao::NIVEL_CATRACA_VIRTUAL:
-				$gerador = new CatracaVirtual();
+				$gerador = new CatracaVirtualController();
 				$gerador->verificarSelecaoRU();
 				break;
 			default:
@@ -54,38 +56,7 @@ class CatracaVirtual{
 	public function selecionarRU(){
 		$unidadeDao = new UnidadeDAO($this->dao->getConexao());
 		$listaDeCatracas = $unidadeDao->retornaCatracasPorUnidade();
-		
-		
-		echo '<div class="navegacao">
-				<div class = "simpleTabs">
-			        <ul class = "simpleTabsNavigation">
-						<li><a href="#">Cadastro</a></li>
-			        </ul>
-			        <div class = "simpleTabsContent">		
-						<div class="doze colunas borda">';
-		
-		echo '<form action="" method="post">
-				<label for="catraca_id">Selecione o Restaurante:</label><br>
-			        <select name="catraca_id" id="catraca_id">';
-		
-		foreach ($listaDeCatracas as $catraca){
-			
-			echo '<option value="'.$catraca->getId().'">'.$catraca->getNome().'</option>';
-						
-		}
-		
-		                
-			            
-		echo '       </select><br>
-					<input name="catraca_virtual" type="submit" class="botao" VALUE="Selecionar" />
-				</form>	';
-		
-
-		echo '</div>
-				</div>
-				</div>
-				</div>';
-		
+		$this->view->formSelecionarRu($listaDeCatracas);		
 		
 	}
 
@@ -134,54 +105,14 @@ class CatracaVirtual{
 		}
 		echo 'turno '.$descricao.' iniciado</p>';
 		
-		echo '
-							
-							<table class="tabela borda-vertical zebrada no-centro centralizado">							    
-							    <thead>
-							        <tr>
-												<th>Unidade</th>';
-		foreach($listaDeTipos as $tipo){
-				echo '<th>'.$tipo->getNome().'</th>';
-				
-				
-		}
-		echo '<th>Total</th>';
-		echo '
-							        </tr>
-							    </thead>
-							    <tbody>';
 		
-		echo '					        <tr>
-										<th>'.$catraca->getNome().'</th>';
 		$somatorio = 0;
 		foreach ($listaDeTipos as $tipo){
-			$j = $unidadeDao->totalDeGirosDaCatracaTurnoAtual($catraca, $tipo);
-			$somatorio += $j;
-			echo '<td>'.$j.'</td>';	
-			
+			$quantidades[] = $unidadeDao->totalDeGirosDaCatracaTurnoAtual($catraca, $tipo);	
 		}
-		echo '<td>'.$somatorio.'</td>';
+		$this->view = new CatracaVirtualView();
+		$this->view->exibirQuantidadesDeCadaTipo($listaDeTipos, $quantidades, $catraca);
 		
-		echo '
-							        </tr>
-									<tr>';
-
-		echo '
-									<tr>
-										<th>Selecionar</th>';
-		$listaDeCores = array('erro', 'primario', 'primario', 'sucesso','aviso', 'aviso', 'secundario', 'primario', 'erro', 'sucesso');
-		$i = 0;
-		foreach($listaDeTipos as $tipo){
-			
-			echo '<td><a href="?pagina=gerador&tipo_id='.$tipo->getId().'" class="botao b-'.$listaDeCores[$i].' icone-checkmar">+1</a></td>';
-			$i++;
-		}
-		
-		echo '<td>-</td>		
-							            
-							        </tr>
-							    </tbody>
-							</table>';
 		
 		$this->view->formBuscaCartao();
 		$idCatraca = $_SESSION['catraca_id'];

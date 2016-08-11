@@ -404,7 +404,7 @@ if (isset ( $_GET ["sair"] )) {
 								CartaoController::main ( $sessao->getNivelAcesso () );
 								break;
 							case 'gerador' :
-								CatracaVirtual::main( $sessao->getNivelAcesso () );
+								CatracaVirtualController::main( $sessao->getNivelAcesso () );
 								break;
 							case 'relatorio' :
 								RelatorioController::main($sessao->getNivelAcesso());

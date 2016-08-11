@@ -155,7 +155,7 @@ class UnidadeDAO extends DAO {
 			$catraca->setOperacao($linha['catr_operacao']);
 			$catraca->setTempoDeGiro($linha['catr_tempo_giro']);
 			$catraca->setIp($linha['catr_ip']);
-			
+			$catraca->setFinanceiro($linha['catr_financeiro']);
 			$catraca->setUnidade(new Unidade());
 			$catraca->getUnidade()->setNome($linha['unid_nome']);
 				
