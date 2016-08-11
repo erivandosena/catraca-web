@@ -7,6 +7,7 @@ class Cartao{
 	private $tipo;
 	
 	
+	
 	public function Cartao(){
 		$this->tipo = new Tipo();
 		$this->creditos = 0;

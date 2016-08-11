@@ -64,16 +64,13 @@ class CatracaVirtualController{
 	public function paginaRegistroManual(){
 		
 		$tipoDao = new TipoDAO($this->dao->getConexao());
-		
+		$catracaVirtualDao = new CatracaVirtualDAO($this->dao->getConexao());
 		$listaDeTipos = $tipoDao->retornaLista();
 		
 		$unidadeDao = new UnidadeDAO($this->dao->getConexao());
 		$catraca = new Catraca();
 		$catraca->setId($_SESSION['catraca_id']);
 		$unidadeDao->preencheCatracaPorId($catraca);
-		
-		
-		
 		
 		
 		echo '<div class="navegacao"> 
@@ -117,147 +114,57 @@ class CatracaVirtualController{
 		$this->view->formBuscaCartao();
 		$idCatraca = $_SESSION['catraca_id'];
 		$custo = 0;
-		$sql = "SELECT cure_valor FROM custo_refeicao
-		INNER JOIN custo_unidade
-		ON custo_unidade.cure_id = custo_refeicao.cure_id
-		INNER JOIN unidade
-		ON unidade.unid_id = custo_unidade.unid_id
-		INNER JOIN catraca_unidade
-		ON catraca_unidade.unid_id = unidade.unid_id
-		WHERE catraca_unidade.catr_id = $idCatraca
-		ORDER BY custo_unidade.cure_id DESC LIMIT 1
-		";
-		
-		foreach($tipoDao->getConexao()->query($sql) as $linha){
-			$custo = $linha['cure_valor'];
-		}
-		//echo $custo;
+		$custo = $catracaVirtualDao->custoDaRefeicao($catraca);
 		
 		echo '
 				
 						</div>';
-		$data = date ( "Y-m-d G:i:s" );
+		
 		if(isset($_GET['numero_cartao'])){
 			if($_GET['numero_cartao'] == NULL || $_GET['numero_cartao'] == "")
 				return;
-			$i = 0;
-			$turnoAtual = new Turno();
-			$selectTurno = "Select * FROM turno 
-				WHERE '$data' BETWEEN turno.turn_hora_inicio AND turno.turn_hora_fim";
-			$result = $this->dao->getConexao()->query($selectTurno);
-			foreach($result as $linha){
-				$turnoAtual->setHoraInicial($linha['turn_hora_inicio']);
-				$turnoAtual->setHoraFinal($linha['turn_hora_fim']);
-				$i++;
-				break;
-			}
-			if($i == 0){
+			
+			if(!($turnoAtual = $catracaVirtualDao->retornaTurnoAtual())){
 				$this->mensagemErro("Fora do hor&aacute;rio de refei&ccedil;&atilde;o");
 				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
 				return;
 			}
 			
 			
+			
 			$cartao = new Cartao();
 			$cartao->setNumero($_GET['numero_cartao']);
-			$cartaoDao = new CartaoDAO($tipoDao->getConexao());
-			$verifica = $cartaoDao->preenchePorNumero($cartao);
-			$idCartao = $cartao->getId();
 			
-			if($verifica == NULL){
-				$this->mensagemErro("Cartão não cadastrado!");
+			$vinculo = new Vinculo();
+			$vinculo->setCartao($cartao);
+			
+			
+			if(!$catracaVirtualDao->verificaVinculo($vinculo)){
+				//Aqui a gente tenta renovar se tiver vinculo proprio nesse cartao. 
+				
+				$this->mensagemErro("Verifique o vinculo deste cartão!");
 				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
 				return;
 			}
 			
 			
 			
-			
-			$vinculoDao = new VinculoDAO($cartaoDao->getConexao());
-			$vinculo = $vinculoDao->retornaVinculoValidoDeCartao($cartao);
-			if($vinculo == NULL)
-			{
-				//Antes de mostrar esta mensagem vamos tentar renovar o vínculo deste usuário. 
-				$cartao = new Cartao();
-				$cartao->setNumero($_GET['numero_cartao']);
-				$numeroCartao = $cartao->getNumero();
-				$dataTimeAtual = date ( "Y-m-d G:i:s" );
-				$sqlVerificaNumero = "SELECT * FROM usuario
-				INNER JOIN vinculo
-				ON vinculo.usua_id = usuario.usua_id
-				LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
-				LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id
-				WHERE cartao.cart_numero = '$numeroCartao'";
-				$dao = new DAO();
-				$result = $dao->getConexao()->query($sqlVerificaNumero);
-				$idCartao = 0;
-				$usuario = new Usuario();
-				$tipo = new Tipo();
-				$vinculoDao = new VinculoDAO($dao->getConexao());
-				$vinculo = new Vinculo();
-				foreach($result as $linha){
-					$idDoVinculo = $linha['vinc_id'];
-					$tipo->setNome($linha['tipo_nome']);
-					$tipo->setValorCobrado($linha['tipo_valor']);
-					$usuario->setNome($linha['usua_nome']);
-					$usuario->setIdBaseExterna($linha['id_base_externa']);
-					$idCartao = $linha['cart_id'];
-					
-					$cartao->setId($idCartao);
-					$cartao->setTipo($tipo);
-					
-
-					$vinculo->setAvulso($linha['vinc_avulso']);
-					$avulso = $linha['vinc_avulso'];
-					if($avulso){
-						$usuario->setNome("Avulso");
-					}
-					$vinculo->setCartao($cartao);
-					$vinculo->setId($idDoVinculo);
-					$vinculo->setResponsavel($usuario);
-					break;
-				
-				}
-				
-				$usuarioDao = new UsuarioDAO(null, DAO::TIPO_PG_SIGAAA);
-				$usuarioDao->retornaPorIdBaseExterna($vinculo->getResponsavel());
-				if(!$vinculoDao->usuarioJaTemVinculo($usuario) && !$vinculo->isAvulso() && $vinculo->getResponsavel()->verificaSeAtivo()){
-					
-					$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'G:00:01' );
-					$vinculo->setFinalValidade($daqui3Meses);
-					$vinculoDao->atualizaValidade($vinculo);
-					
-				}else{
-					$this->mensagemErro("Verifique o vínculo deste cartão!");
-					echo '<meta http-equiv="refresh" content="3; url=?pagina=gerador">';
-					return;
-				}
-				
-				
-				
+			if(!$catracaVirtualDao->podeContinuarComendo($vinculo, $turnoAtual)){
+				$this->mensagemErro("Usuário já passou neste turno!");
+				echo '<meta http-equiv="refresh" content="3; url=?pagina=gerador">';
+				return;
 			}
-			//Vamos ver se ele pode mesmo comer. Coloque o código aqui.
-			$data1 = date("Y-m-d").' '.$turnoAtual->getHoraInicial();
-			$data2 = date("Y-m-d").' '.$turnoAtual->getHoraFinal();
+				
 			
-			$sqlVerRegistros = "SELECT * FROM registro WHERE (registro.regi_data  BETWEEN '$data1' AND '$data2')
-			AND (registro.cart_id = $idCartao) ORDER BY registro.regi_id DESC";
-			$i = 0;
-			foreach($this->dao->getConexao()->query($sqlVerRegistros) as $linha){
-				$i++;
-				if($vinculo->isAvulso())
-					break;
-				if($i >= $vinculo->getQuantidadeDeAlimentosPorTurno()){
-					$this->mensagemErro("Usuário já passou neste turno!");
-					echo '<meta http-equiv="refresh" content="3; url=?pagina=gerador">';
-					return;
-				}
-			}
-			$vinculoDao->isencaoValidaDoVinculo($vinculo);
-			if($vinculo->getIsencao()->isActive())
+			if($catracaVirtualDao->vinculoEhIsento($vinculo)){
 				$valorPago = 0;
-			else
+				
+			}else{
 				$valorPago = $vinculo->getCartao()->getTipo()->getValorCobrado();
+			}
+			
+			$idCartao = $cartao->getId();
+				
 				
 			
 			
@@ -297,70 +204,9 @@ class CatracaVirtualController{
 				echo '<a href="?pagina=gerador&numero_cartao='.$_GET['numero_cartao'].'&confirmado=1" class="botao b-sucesso">Confimar</a>';
 				echo '</div>';
 			}
-		}else if(isset($_GET['tipo_id'])){
-			
-			
-			if(!$turnoAtivo){
-				$this->mensagemErro("Fora do hor&aacute;rio de refei&ccedil;&atilde;o");
-				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
-				return;
-			}
-			
-			if(isset($_GET['confirmado']))
-			{
-				
-				$idTipo = intval($_GET['tipo_id']);
-				$tipo = new Tipo();
-				$tipo->setId($idTipo);
-				
-				$sql = "SELECT * FROM tipo WHERE tipo_id = $idTipo";
-				
-				foreach($tipoDao->getConexao()->query($sql) as $linha){
-					$tipo->setValorCobrado($linha['tipo_valor']);
-					
-				}
-				
-				
-					
-				
-				$idCartao = 0;
-				$idVinculo = 0;
-				$numero = "";
-			
-				$sql = "SELECT * FROM cartao
-					INNER JOIN vinculo ON cartao.cart_id = vinculo.cart_id
-					WHERE tipo_id = $idTipo 
-					AND vinculo.vinc_avulso = 'TRUE'
-					LIMIT 1";
-				foreach($tipoDao->getConexao()->query($sql) as $linha){
-					$idCartao = $linha['cart_id'];
-					$idVinculo = $linha['vinc_id'];
-					$numero = $linha['cart_numero'];
-					
-					break;
-					
-				}
-				
-				$idCatraca = $_SESSION['catraca_id'];
-				$valorPago = $tipo->getValorCobrado();
-				
-				$sql = "INSERT into registro(regi_data, regi_valor_pago, regi_valor_custo, catr_id, cart_id, vinc_id) 
-						VALUES('$data', $valorPago, $custo, $idCatraca, $idCartao, $idVinculo)";
-				
-				
-				if($this->dao->getConexao()->exec($sql))
-					$this->mensagemSucesso();
-				else
-					$this->mensagemErro();
-				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
-			}
-			else
-			{
-				echo '<div class="doze colunas borda centralizado"><p>Confirmar Envio de Dados?</p>
-						<a href="?pagina=gerador&tipo_id='.$_GET['tipo_id'].'&confirmado=1" class="botao b-sucesso">Confimar</a></div>';
-			}	
-			
 		}
+		
+		
 		
 		
 		

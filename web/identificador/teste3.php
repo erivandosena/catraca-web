@@ -25,37 +25,39 @@ if (isset ( $_GET ["sair"] )) {
 }
 
 	
-$unidadeDao = new UnidadeDAO();
 
-$lista  = $unidadeDao->retornaCatracasPorUnidade();
-foreach($lista as $catraca){
+$dao = new CatracaVirtualDAO();
+if($turnoAtual = $dao->retornaTurnoAtual()){
+	echo 'Turno Ativo';
 	
-	echo $catraca;
-	echo '<br><hr>';
+}else{
+	
+	echo "Turno Inativo";
+	exit(0);
 	
 }
-
-// echo $unidadeDao->getConexao()->exec("UPDATE catraca set catr_financeiro = 'TRUE';");
-
-// $sql = "SELECT * FROM usuario 
-// 		INNER JOIN vinculo ON vinculo.usua_id = usuario.usua_id 
-// 		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id 
-// 		LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id 
-// 		WHERE cartao.cart_numero = '3995578542' ";
-
-// try {
-// 	$db = $dao->getConexao();
-// 	$stmt = $db->prepare($sql);
+$cartao = new Cartao();
+$cartao->setNumero("3994113038");
+$vinculo = new Vinculo();
+$vinculo->setCartao($cartao);
+echo '<br>';
+if($dao->verificaVinculo($vinculo)){
+	echo 'Cartao Tem vinculo<br>';
+}
+else{
+	echo "Cartao Nao tem vinculo<br>";
+	//A gente renova se for proprio. 
 	
-// 	$stmt->execute();
-// 	$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-// 	foreach($result as $linha){
-// 		print_r($linha);
-// 		echo "<br><hr>";
-		
-// 	}	
-// 	$db = null;
-// 	echo '{"turno": ' . json_encode($dados) . '}';
-// } catch(PDOException $e) {
-// 	echo '{"erro":{"text":'. $e->getMessage() .'}}';
-// }
+}
+echo '<hr>';
+if($dao->podeContinuarComendo($vinculo, $turnoAtual)){
+	echo 'POde';
+}else{
+	echo 'Pode nao';
+}
+if($dao->vinculoEhIsento($vinculo))
+	echo "ISento<hr>";//Valor pago eh zero. //Valor de custo depende da unidade academica. 
+else
+	echo 'Nao isento<hr>';
+
+
