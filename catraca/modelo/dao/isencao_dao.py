@@ -43,7 +43,7 @@ class IsencaoDAO(DAOGenerico):
                 "isen_id as id, "\
                 "cart_id as cartao "\
                 "FROM isencao ORDER BY isen_id"
-        return self.seleciona(Turno, sql, arg)
+        return self.seleciona(Isencao, sql, arg)
     
     def busca_isencao(Isencao, numero_cartao=None, data=None):
         data_atual = Util().obtem_datahora_postgresql() if data is None else data

@@ -114,23 +114,25 @@ class Relogio(ControleGenerico, threading.Thread):
             return catraca
             
     def obtem_dependencias_remotas(self, catraca):
-        #unidade
-        if self.recursos_restful.unidade_json.unidade_get() is None:
-            self.aviso.exibir_unidade_nao_cadastrada()
-        #catraca-unidade
-        elif self.recursos_restful.catraca_unidade_json.catraca_unidade_get() is None:
-            self.aviso.exibir_catraca_unidade_nao_cadastrada()
-        #turno
-        elif self.recursos_restful.turno_json.turno_get() is None:
-            self.aviso.exibir_turno_nao_cadastrado()
-        #unidade-turno
-        elif self.recursos_restful.unidade_turno_json.unidade_turno_get() is None:
-            self.aviso.exibir_unidade_turno_nao_cadastrada()
-        #custo-refeicao
-        elif self.recursos_restful.custo_refeicao_json.custo_refeicao_get() is None:
-            self.aviso.exibir_custo_refeicao_nao_cadastrado()
-        else:
-            return catraca
+        if not self.obtendo_recurso:
+            #unidade
+            if self.recursos_restful.unidade_json.unidade_get() is None:
+                self.aviso.exibir_unidade_nao_cadastrada()
+            #catraca-unidade
+            elif self.recursos_restful.catraca_unidade_json.catraca_unidade_get() is None:
+                self.aviso.exibir_catraca_unidade_nao_cadastrada()
+            #turno
+            elif self.recursos_restful.turno_json.turno_get() is None:
+                self.aviso.exibir_turno_nao_cadastrado()
+            #unidade-turno
+            elif self.recursos_restful.unidade_turno_json.unidade_turno_get() is None:
+                self.aviso.exibir_unidade_turno_nao_cadastrada()
+            #custo-refeicao
+            elif self.recursos_restful.custo_refeicao_json.custo_refeicao_get() is None:
+                self.aviso.exibir_custo_refeicao_nao_cadastrado()
+            else:
+                return catraca
+        return catraca
             
     def obtem_turno(self):
         if self.catraca:

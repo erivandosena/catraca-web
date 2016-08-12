@@ -216,9 +216,11 @@ class Util(object):
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         try:
             if interface is None:
-                interface = self.catraca_dao.obtem_interface_rede(self.obtem_nome_rpi())
-                if interface is None:
+                catraca = self.catraca_dao.obtem_interface_rede(self.obtem_nome_rpi())
+                if catraca is None:
                     interface = 'lo'
+                else:
+                    interface = catraca.interface.lower()
             numero_ip = socket.inet_ntoa(fcntl.ioctl(s.fileno(), 0x8915, struct.pack('256s', interface[0:15]))[20:24])
             if len(numero_ip) == 0:
                 return ip

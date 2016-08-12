@@ -10,7 +10,7 @@ from psycopg2 import extensions
 from psycopg2 import DataError
 from psycopg2 import ProgrammingError
 #import mysql.connector
-from contextlib import closing
+#from contextlib import closing
 from catraca.logs import Logs
 
 
@@ -61,6 +61,7 @@ class ConexaoFactory(object):
             if (tipo_banco == self.__POSTGRESQL):
                 try:
                     con = psycopg2.connect(str_conexao)
+                    #print "BD-CONEXAO ABERTA!"
                 except Exception as excecao:
                     self.__erroCon = str(excecao)
                     self.log.logger.critical('Erro na conexao com PostgreSQL.', exc_info=True)
@@ -96,6 +97,6 @@ class ConexaoFactory(object):
         
     #metodo destrutor
 #     def __del__(self):
-#         print "Conexão BD finalizada!"
+#         print "ConexÃ£o BD finalizada!"
 #         del self
         

@@ -44,7 +44,7 @@ class Sincronia(Relogio):
             if (Relogio.catraca.operacao == 1) or (Relogio.catraca.operacao == 2) or (Relogio.catraca.operacao == 3) or (Relogio.catraca.operacao == 4):
                 self.contador_status_recursos += 1
                 if Rede.status == True and Relogio.periodo == True:
-                    if self.contador_status_recursos >= 15:
+                    if self.contador_status_recursos >= 20:
                         self.contador_status_recursos = 0
                         self.recursos_restful.obtem_recursos()
                 else:
@@ -65,29 +65,31 @@ class Sincronia(Relogio):
                         
 
                         # realiza limpeza das tabelas locais
-#                         print "\nLimpando... tabela local CATRACA"
-#                         self.recursos_restful.catraca_json(True)
-#                         print "Concluido!\n"
-#                         print "\nLimpando... tabela local UNIDADE"
-#                         self.recursos_restful.unidade_json(True)
-#                         print "Concluido!\n"
-#                         print "\nLimpando... tabela local TURNO"
-#                         self.recursos_restful.turno_json(True)
-#                         print "Concluido!\n"
-#                         print "\nLimpando... tabela local TIPO"
-#                         self.recursos_restful.tipo_json(True)
-#                         print "Concluido!\n"
-#                         print "\nLimpando... tabela local USUARIO"
-#                         self.recursos_restful.usuario_json(True)
-#                         print "Concluido!\n"
-#                         print "\nLimpando... tabela local CUSTO-REFEICAO"
-#                         self.recursos_restful.custo_refeicao_json(True)
-#                         print "Concluido!\n"
-#                         print "Iniciando a sincronia com o servidor RESTful..."
-                        print "esperando 100..."
-                        sleep(100)
+                        print "\nLimpando... tabela local CATRACA"
+                        self.recursos_restful.catraca_json(True)
+                        print "Concluido!\n"
+                        print "\nLimpando... tabela local UNIDADE"
+                        self.recursos_restful.unidade_json(True)
+                        print "Concluido!\n"
+                        print "\nLimpando... tabela local TURNO"
+                        self.recursos_restful.turno_json(True)
+                        print "Concluido!\n"
+                        print "\nLimpando... tabela local TIPO"
+                        self.recursos_restful.tipo_json(True)
+                        print "Concluido!\n"
+                        print "\nLimpando... tabela local USUARIO"
+                        self.recursos_restful.usuario_json(True)
+                        print "Concluido!\n"
+                        print "\nLimpando... tabela local CUSTO-REFEICAO"
+                        self.recursos_restful.custo_refeicao_json(True)
+                        print "Concluido!\n"
+                        print "Iniciando a sincronia com o servidor RESTful..."
                         
-#                         self.recursos_restful.obtem_recursos()
+                        print "esperando 10"
+                        sleep(10)
+                        
+                        self.recursos_restful.obtem_recursos()
+                        
                         if not self.rede.isAlive():
                             self.rede = Rede()
                             self.rede.start()

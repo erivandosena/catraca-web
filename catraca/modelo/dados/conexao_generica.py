@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+
 from contextlib import closing
 from catraca.modelo.dados.conexao import ConexaoFactory
 from catraca.logs import Logs
+
 
 __author__ = "Erivando Sena"
 __copyright__ = "(C) Copyright 2015, Unilab"
@@ -36,6 +38,7 @@ class ConexaoGenerica(object):
         return self.__con.rollback()
     
     def fecha_conexao(self):
+        #print "BD-CONEXAO FECHADA!"
         return self.__con.close()
     
     def conexao_status(self):
@@ -68,12 +71,13 @@ class ConexaoGenerica(object):
             conexao_factory = ConexaoFactory()
             self.extras = conexao_factory.extras
             self.extensoes = conexao_factory.extensoes
+            self.DataError = self.DataError
+            self.ProgrammingError = self.ProgrammingError
+            self.__factory = conexao_factory.factory
             self.__con = conexao_factory.conexao(1) #use 1=PostgreSQL 2=MySQL 3=SQLite
             self.__con.autocommit=False
             self.__con.set_client_encoding('UTF8')
-            self.__factory = conexao_factory.factory
-            self.DataError = self.DataError
-            self.ProgrammingError = self.ProgrammingError
+
             return self.__con
         except Exception, e:
             self.log.logger.critical('Erro abrindo conexao com o banco de dados.', exc_info=True)

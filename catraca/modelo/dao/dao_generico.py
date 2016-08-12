@@ -34,9 +34,10 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
                 argumentos = []
                 for a in arg:
                     argumentos.append(a)
-                print argumentos
-                cursor.execute(sql, argumentos)
+                #print argumentos
+                #cursor.execute(sql, argumentos)
                 if arg:
+                    cursor.execute(sql, argumentos)
                     linhas = cursor.fetchone()
 #                     print cursor.query
 #                     colunas = [coluna[0] for coluna in cursor.description]
@@ -44,12 +45,11 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
 #                     dic = dict(zip(colunas, linhas))
 #                     print dic
                     if linhas:
-                        print cursor.query
+                        #print cursor.query
                         colunas = [coluna[0] for coluna in cursor.description]
-                        print colunas, linhas
+                        #print colunas, linhas
                         dic = dict(zip(colunas, linhas))
-                        print dic
-                    
+                        #print dic
                         for coluna in sorted(dic):
                             setattr(obj, coluna, dic[coluna])
                         msg = cursor.statusmessage
@@ -62,6 +62,7 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
                     else:
                         return None
                 else:
+                    cursor.execute(sql, argumentos)
                     linhas = cursor.fetchall()
                     #print cursor.query
                     if linhas != []:
@@ -84,6 +85,8 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
             self.rollback()
         except Exception as excecao:
             self.log.logger.error("ERRO: ", exc_info=True)
+        finally:
+            self.fecha_conexao()
             
     def inclui(self, sql, *arg):
         obj = [a for a in arg][0] if arg else None
@@ -95,17 +98,19 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
                     colunas = [m[0] for m in atributos if '_' not in m[0]]
                     valores = [m[1] for m in atributos if '_' not in m[0]]
                     dic = dict(zip(colunas[0::1], valores[0::1]))
+#                     print colunas
+#                     print valores
                     lista_ordenada = []
                     for linha in sorted(dic):
-                        print dic[linha]
                         lista_ordenada.append(dic[linha])
-                    print "============================="
-                    print sorted(dic)
-                    print lista_ordenada
-                    print sql
-                    print "============================="
+#                     print "============================="
+#                     print sorted(dic)
+#                     print lista_ordenada
+#                     print sql
+#                     print "============================="
+#                     print lista_ordenada
                     cursor.execute(sql, lista_ordenada)
-                    print cursor.query
+                    #print cursor.query
                     self.commit()
                     msg = cursor.statusmessage
                     status = msg[len(msg)-1:len(msg)]
@@ -120,6 +125,8 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
             self.rollback()
         except Exception as excecao:
             self.log.logger.error("ERRO: ", exc_info=True)
+        finally:
+            self.fecha_conexao()
             
     def altera(self, sql, *arg):
         obj = [a for a in arg][0] if arg else None
@@ -132,30 +139,47 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
                     valores = [m[1] for m in atributos if '_' not in m[0]]
                     dic = dict(zip(colunas[0::1], valores[0::1]))
                     dic.pop('id')
+#                     print colunas
+#                     print valores
+#                     print dic
                     lista_ordenada = []
                     for linha in sorted(dic):
                         lista_ordenada.append(dic[linha])
                     lista_ordenada.append(obj.id)
+                    #print lista_ordenada
                     cursor.execute(sql, lista_ordenada)
-                    print cursor.query
-                    if obj.__class__.__name__ != "Cartao":
-                        self.commit()
-                        msg = cursor.statusmessage
-                        status = msg[len(msg)-1:len(msg)]
-                        if status:
-                            self.aviso = "Alterado {0} com sucesso!".format(status)
-                            return True
-                        else:
-                            return False
+                    #print cursor.query
+                    
+#                     if obj.__class__.__name__ != "Cartao":
+#                         self.commit()
+#                         msg = cursor.statusmessage
+#                         status = msg[len(msg)-1:len(msg)]
+#                         if status:
+#                             self.aviso = "Alterado {0} com sucesso!".format(status)
+#                             return True
+#                         else:
+#                             return False
+#                     else:
+#                         self.aviso = "Favor realizar commit de {0} manualmente!".format(obj.__class__.__name__)
+#                         print self.aviso
+
+                    self.commit()
+                    msg = cursor.statusmessage
+                    status = msg[len(msg)-1:len(msg)]
+                    if status:
+                        self.aviso = "Alterado {0} com sucesso!".format(status)
+                        return True
                     else:
-                        self.aviso = "Favor realizar commit de {0} manualmente!".format(obj.__class__.__name__)
-                        print self.aviso
+                        return False
             else:
                 return False
         except (self.DataError, self.ProgrammingError):
+            print "fez rollback"
             self.rollback()
         except Exception as excecao:
             self.log.logger.error("ERRO: ", exc_info=True)
+        finally:
+            self.fecha_conexao()
             
     def deleta(self, sql, *arg):
         obj = [a for a in arg][0] if arg else None
@@ -179,4 +203,6 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
             self.rollback()
         except Exception as excecao:
             self.log.logger.error("ERRO: ", exc_info=True)
+        finally:
+            self.fecha_conexao()
             

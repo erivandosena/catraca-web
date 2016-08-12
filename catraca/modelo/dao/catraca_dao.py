@@ -82,7 +82,7 @@ class CatracaDAO(DAOGenerico):
             "catr_interface_rede as interface "\
             "FROM catraca WHERE "\
             "catr_nome = %s LIMIT 1"
-        return str(self.seleciona(Catraca, sql, hostname.upper())).lower()
+        return self.seleciona(Catraca, sql, hostname.upper())
     
     def insere(self, obj):
         sql = "INSERT INTO catraca "\

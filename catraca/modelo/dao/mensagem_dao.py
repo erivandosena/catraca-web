@@ -29,6 +29,7 @@ class MensagemDAO(DAOGenerico):
         arg = [a for a in arg][0] if arg else None
         if arg:
             sql = "SELECT "\
+                "catr_id as catraca, "\
                 "mens_id as id, "\
                 "mens_institucional1 as institucional1, "\
                 "mens_institucional2 as institucional2, "\
@@ -38,6 +39,7 @@ class MensagemDAO(DAOGenerico):
                 "mens_id = %s"
         else:
             sql = "SELECT "\
+                "catr_id as catraca, "\
                 "mens_id as id, "\
                 "mens_institucional1 as institucional1, "\
                 "mens_institucional2 as institucional2, "\
@@ -49,17 +51,19 @@ class MensagemDAO(DAOGenerico):
     def insere(self, obj):
         sql = "INSERT INTO mensagem "\
             "("\
+            "catr_id, "\
             "mens_id, "\
             "mens_institucional1, "\
             "mens_institucional2, "\
             "mens_institucional3, "\
             "mens_institucional4 "\
             ") VALUES ("\
-            "%s, %s, %s, %s, %s)"
+            "%s, %s, %s, %s, %s, %s)"
         return self.inclui(sql, obj)
      
     def atualiza(self, obj):
         sql = "UPDATE mensagem SET "\
+            "catr_id = %s, "\
             "mens_institucional1 = %s, "\
             "mens_institucional2 = %s, "\
             "mens_institucional3 = %s, "\

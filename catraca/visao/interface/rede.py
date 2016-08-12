@@ -70,6 +70,7 @@ class Rede(threading.Thread):
                             if self.interface_atual != Rede.interface_ativa[1]:
                                 self.interface_atual = Rede.interface_ativa[1]
                                 self.aviso.exibir_estatus_rede(interface, Rede.interface_ativa)
+                            #print Rede.interface_ativa
                             return Rede.interface_ativa
                 else:
                     return []

@@ -28,15 +28,15 @@ class TipoDAO(DAOGenerico):
         arg = [a for a in arg][0] if arg else None
         if arg:
             sql = "SELECT "\
-                "tipo_nome as valor, "\
-                "tipo_valor as data, "\
+                "tipo_nome as nome, "\
+                "tipo_valor as valor, "\
                 "tipo_id as id "\
                 "FROM tipo WHERE "\
                 "tipo_id = %s"
         else:
             sql = "SELECT "\
-                "tipo_nome as valor, "\
-                "tipo_valor as data, "\
+                "tipo_nome as nome, "\
+                "tipo_valor as valor, "\
                 "tipo_id as id "\
                 "FROM tipo ORDER BY tipo_id"
         return self.seleciona(Tipo, sql, arg)
