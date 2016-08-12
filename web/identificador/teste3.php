@@ -30,22 +30,24 @@ $dao = new CatracaVirtualDAO();
 if($turnoAtual = $dao->retornaTurnoAtual()){
 	echo 'Turno Ativo';
 	
-}else{
+}
+else{
 	
 	echo "Turno Inativo";
 	exit(0);
 	
 }
+
 $cartao = new Cartao();
 $cartao->setNumero("3994113038");
 $vinculo = new Vinculo();
 $vinculo->setCartao($cartao);
 echo '<br>';
 if($dao->verificaVinculo($vinculo)){
-	echo 'Cartao Tem vinculo<br>';
+	echo '<br>Cartao Tem vinculo<br>';
 }
 else{
-	echo "Cartao Nao tem vinculo<br>";
+	echo "<br>Cartao Nao tem vinculo<br>";
 	//A gente renova se for proprio. 
 	
 }
@@ -56,8 +58,9 @@ if($dao->podeContinuarComendo($vinculo, $turnoAtual)){
 	echo 'Pode nao';
 }
 if($dao->vinculoEhIsento($vinculo))
-	echo "ISento<hr>";//Valor pago eh zero. //Valor de custo depende da unidade academica. 
+	echo "<hr>ISento<hr>";//Valor pago eh zero. //Valor de custo depende da unidade academica. 
 else
-	echo 'Nao isento<hr>';
+	echo '<hr>Nao isento<hr>';
 
 
+?>

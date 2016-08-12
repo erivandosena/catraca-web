@@ -42,12 +42,16 @@ class CatracaVirtualDAO extends DAO{
 			$vinculo->setResponsavel($usuario);
 			$vinculo->getResponsavel()->setNome($linha['usua_nome']);
 			$vinculo->getResponsavel()->setIdBaseExterna($linha['id_base_externa']);
+			$vinculo->getCartao()->setCreditos($linha['cart_creditos']);
 			$vinculo->getCartao()->setId($linha['cart_id']);
 			$vinculo->getCartao()->getTipo()->setNome($linha ['tipo_nome']);
+			$vinculo->getCartao()->getTipo()->setValorCobrado($linha['tipo_valor']);
 			$vinculo->getCartao()->setNumero($linha ['cart_numero']);
 			$vinculo->getCartao()->setId($linha['cart_id']);
 			$vinculo->setQuantidadeDeAlimentosPorTurno($linha['vinc_refeicoes']);
 			$vinculo->setId($linha['vinc_id']);
+			$vinculo->setAvulso($linha['vinc_avulso']);
+			$vinculo->setDescricao($linha['vinc_descricao']);
 			return true;
 		}
 		return false;
@@ -104,6 +108,7 @@ class CatracaVirtualDAO extends DAO{
 		foreach($result as $linha){
 			$i++;
 		}
+		$vinculo->setRefeicoesRestantes($quantidadePermitida - $i);
 		if($i < $quantidadePermitida){
 			return true;
 		}
@@ -154,6 +159,9 @@ class CatracaVirtualDAO extends DAO{
 		return $custo;
 		
 	}
+	
+	
+
 	
 	public function renovaVinculoDoCartao(){
 		

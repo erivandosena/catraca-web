@@ -13,8 +13,14 @@ class Vinculo{
 	private $quantidadeDeAlimentosPorTurno;
 	private $descricao;
 	private $cartao;
-
-	
+	private $refeicoesRestantes;
+	public function setRefeicoesRestantes($refeicoesRestantes){
+		$this->refeicoesRestantes = intval($refeicoesRestantes);
+	}
+	public function getRefeicoesRestantes(){
+		return $this->refeicoesRestantes;
+		
+	}
 	
 	private $isento;
 	public $isencao;

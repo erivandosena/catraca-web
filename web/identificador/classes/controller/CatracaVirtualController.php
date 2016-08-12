@@ -7,7 +7,8 @@ class CatracaVirtualController{
 	private $view;
 	private $catracaSelecionada;
 	
-	public function CatracaVirtual(){
+	public function CatracaVirtualController(){
+		
 		$this->view = new CatracaVirtualView();
 		
 	}
@@ -107,7 +108,7 @@ class CatracaVirtualController{
 		foreach ($listaDeTipos as $tipo){
 			$quantidades[] = $unidadeDao->totalDeGirosDaCatracaTurnoAtual($catraca, $tipo);	
 		}
-		$this->view = new CatracaVirtualView();
+		
 		$this->view->exibirQuantidadesDeCadaTipo($listaDeTipos, $quantidades, $catraca);
 		
 		
@@ -126,7 +127,7 @@ class CatracaVirtualController{
 			
 			if(!($turnoAtual = $catracaVirtualDao->retornaTurnoAtual())){
 				$this->mensagemErro("Fora do hor&aacute;rio de refei&ccedil;&atilde;o");
-				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
+				echo '<meta http-equiv="refresh" content="2; url=?pagina=gerador">';
 				return;
 			}
 			
@@ -143,7 +144,7 @@ class CatracaVirtualController{
 				//Aqui a gente tenta renovar se tiver vinculo proprio nesse cartao. 
 				
 				$this->mensagemErro("Verifique o vinculo deste cartão!");
-				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
+				echo '<meta http-equiv="refresh" content="3; url=?pagina=gerador">';
 				return;
 			}
 			
@@ -161,6 +162,13 @@ class CatracaVirtualController{
 				
 			}else{
 				$valorPago = $vinculo->getCartao()->getTipo()->getValorCobrado();
+				if(($vinculo->getCartao()->getCreditos() < $valorPago) && $catraca->financeiroAtivo()){
+					
+					$this->mensagemErro("Usuário créditos insuficiente. ");
+					echo '<meta http-equiv="refresh" content="4; url=?pagina=gerador">';
+					return;
+					
+				}
 			}
 			
 			$idCartao = $cartao->getId();
@@ -174,29 +182,69 @@ class CatracaVirtualController{
 				$idCatraca = $_SESSION['catraca_id'];
 				$idVinculo= $vinculo->getId();
 				
-				
-				
-				
-				$sql = "INSERT into registro(regi_data, regi_valor_pago, regi_valor_custo, catr_id, cart_id, vinc_id)
-				VALUES('$data', $valorPago, $custo, $idCatraca, $idCartao, $idVinculo)";
-				//echo $sql;
-				if($this->dao->getConexao()->exec($sql))
-						$this->mensagemSucesso();
-					else
+				if($catraca->financeiroAtivo()){
+
+					$this->dao->getConexao()->beginTransaction();
+					$novoValor = floatval($vinculo->getCartao()->getCreditos()) - floatval($valorPago);
+					$sql0 = "UPDATE cartao set cart_creditos = $novoValor WHERE cart_id = $idCartao";
+					
+					if(!$this->dao->getConexao()->exec($sql0)){
+						$this->dao->getConexao()->rollBack();
 						$this->mensagemErro();
-				echo '<meta http-equiv="refresh" content="1; url=?pagina=gerador">';
+						
+						echo '<meta http-equiv="refresh" content="2; url=?pagina=gerador">';
+						return;
+					}
+					
+					
+					$sql = "INSERT into registro(regi_data, regi_valor_pago, regi_valor_custo, catr_id, cart_id, vinc_id)
+					VALUES('$data', $valorPago, $custo, $idCatraca, $idCartao, $idVinculo)";
+					//echo $sql;
+					
+					if(!$this->dao->getConexao()->exec($sql)){
+						$this->dao->getConexao()->rollBack();
+						
+						$this->mensagemErro();
+						
+						echo '<meta http-equiv="refresh" content="2; url=?pagina=gerador">';
+						return;
+					}else{
+						$this->dao->getConexao()->commit();
+						$this->mensagemSucesso();
+						echo '<meta http-equiv="refresh" content="2; url=?pagina=gerador">';						
+					}
+					
+				}else{
+					
+
+					$sql = "INSERT into registro(regi_data, regi_valor_pago, regi_valor_custo, catr_id, cart_id, vinc_id)
+					VALUES('$data', $valorPago, $custo, $idCatraca, $idCartao, $idVinculo)";
+					//echo $sql;
+					if($this->dao->getConexao()->exec($sql))
+						$this->mensagemSucesso();
+						else
+							$this->mensagemErro();
+							echo '<meta http-equiv="refresh" content="2; url=?pagina=gerador">';
+				}
+				
+				
 			}
 			
 			else{
 				
 				$strNome = $vinculo->getResponsavel()->getNome();
-				if($vinculo->isAvulso()){
-					$strNome = " Avulso ";
-				}
-				
+
 				echo '<div class="doze colunas borda centralizado">';
 				
-				echo '<p>Confirmar Cadastro de refeição para '.$strNome.' - '.$cartao->getTipo()->getNome().'?</p>';
+
+				if($vinculo->isAvulso())
+					echo '<p>Confirmar Cadastro de refeição para: '.$vinculo->getDescricao().'</p>';
+				else
+					echo '<p>Confirmar Cadastro de refeição para: '.$strNome.' - '.$cartao->getTipo()->getNome().'?</p>';
+				
+				echo '<p>'.$vinculo->getRefeicoesRestantes().' refeições restantes para este cartão. </p>';
+				if($catraca->financeiroAtivo())
+					echo '<p>Quantidade de créditos restante: R$ '.number_format($vinculo->getCartao()->getCreditos(), 2, ',', '.').'</p>';
 				if($vinculo->getIsencao()->isActive())
 						echo '<p>Usuário Isento</p>';
 				else
@@ -205,12 +253,6 @@ class CatracaVirtualController{
 				echo '</div>';
 			}
 		}
-		
-		
-		
-		
-		
-				
 		echo '</div>
 				</div>';
 		        

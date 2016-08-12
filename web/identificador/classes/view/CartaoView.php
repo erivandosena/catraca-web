@@ -193,7 +193,7 @@ class CartaoView {
 		
 				
 		//Descomente esta linha para ativar o botão para cadastrar foto.	
-		//echo '		<a href="?pagina=cartao&selecionado='.$_GET['selecionado'].'&foto=1" class="botao">Adicionar Foto</a>';
+		//echo '<a href="?pagina=cartao&selecionado='.$_GET['selecionado'].'&foto=1" class="botao">Adicionar Foto</a>';
 		
 		
 		if(isset($_GET['foto'])){
