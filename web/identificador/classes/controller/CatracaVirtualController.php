@@ -142,10 +142,64 @@ class CatracaVirtualController{
 			
 			if(!$catracaVirtualDao->verificaVinculo($vinculo)){
 				//Aqui a gente tenta renovar se tiver vinculo proprio nesse cartao. 
+				$numeroCartao = $vinculo->getCartao()->getNumero();
+				$sqlVerificaNumero = "SELECT * FROM usuario
+				INNER JOIN vinculo
+				ON vinculo.usua_id = usuario.usua_id
+				LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
+				LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id
+				WHERE cartao.cart_numero = '$numeroCartao'";
+				$result = $this->dao->getConexao()->query($sqlVerificaNumero);
+				$idCartao = 0;
+				$usuario = new Usuario();
+				$tipo = new Tipo();
+			
+				$vinculo = new Vinculo();
+				$i = 0;
+				foreach($result as $linha){
+					$i++;
+					$idDoVinculo = $linha['vinc_id'];
+					$tipo->setNome($linha['tipo_nome']);
+					$tipo->setValorCobrado($linha['tipo_valor']);
+					$usuario->setNome($linha['usua_nome']);
+					$usuario->setIdBaseExterna($linha['id_base_externa']);
+					$idCartao = $linha['cart_id'];
+						
+					$cartao->setId($idCartao);
+					$cartao->setTipo($tipo);
+						
 				
-				$this->mensagemErro("Verifique o vinculo deste cartão!");
-				echo '<meta http-equiv="refresh" content="3; url=?pagina=gerador">';
-				return;
+					$vinculo->setAvulso($linha['vinc_avulso']);
+					$avulso = $linha['vinc_avulso'];
+					if($avulso){
+						$usuario->setNome("Avulso");
+					}
+					$vinculo->setCartao($cartao);
+					$vinculo->setId($idDoVinculo);
+					$vinculo->setResponsavel($usuario);
+					$usuarioDao = new UsuarioDAO(null, DAO::TIPO_PG_SIGAAA);
+					$usuarioDao->retornaPorIdBaseExterna($vinculo->getResponsavel());
+					break;
+				
+				}
+				
+				
+				$vinculoDao = new VinculoDAO($this->dao->getConexao());
+				if(($i != 0) && !$vinculoDao->usuarioJaTemVinculo($usuario) && !$vinculo->isAvulso() && $vinculo->getResponsavel()->verificaSeAtivo()){
+					
+					$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'G:00:01' );
+					$vinculo->setFinalValidade($daqui3Meses);
+					
+					$vinculoDao->atualizaValidade($vinculo);
+						
+					
+				}else{
+
+					$this->mensagemErro("Verifique o vinculo deste cartão!");
+					echo '<meta http-equiv="refresh" content="3; url=?pagina=gerador">';
+					return;
+				}
+				
 			}
 			
 			
