@@ -215,9 +215,7 @@ class VinculoDAO extends DAO {
 		LEFT JOIN tipo ON vinculo_tipo.tipo_id = tipo.tipo_id
 		WHERE vinculo.vinc_id = $idVinculo";
 		$result = $this->getConexao ()->query ($sql);
-		foreach($result as $linha){
-
-			
+		foreach($result as $linha){		
 			$vinculo->getResponsavel()->setNome($linha['usua_nome']);
 			$vinculo->getResponsavel()->setIdBaseExterna($linha['id_base_externa']);
 			$vinculo->getCartao()->setId($linha['cart_id']);

@@ -644,3 +644,14 @@ a:focus {
 	height:12cm;
 	font-size:22px;	
 }
+
+span#aproxime{
+	padding-top: 70px;
+	font-size:36px !important;
+	
+}
+
+#confirmado{
+	padding: 10px;
+	font-size: 30px;
+}

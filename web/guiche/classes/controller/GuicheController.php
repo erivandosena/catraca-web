@@ -85,7 +85,8 @@ class GuicheController{
 								INNER JOIN vinculo ON vinculo.usua_id = usuario.usua_id
 								LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
 								LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id
-								WHERE cartao.cart_numero = '$numeroCartao'";			
+								WHERE cartao.cart_numero = '$numeroCartao'";
+			
 			$result = $dao->getConexao()->query($sqlVerificaNumero);			
 			$usuario = new Usuario();
 			$idCartao = 0;

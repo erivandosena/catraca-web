@@ -153,9 +153,7 @@ class CatracaVirtual{
 			if($_GET['numero_cartao'] == NULL || $_GET['numero_cartao'] == "")
 				return;
 			$i = 0;
-			$turnoAtual = new Turno();
-			$cartaoPagina2 = "";
-			$cartaoPagina2 = $_SESSION['numero_cartao'];
+			$turnoAtual = new Turno();			
 			$selectTurno = "Select * FROM turno 
 				WHERE '$data' BETWEEN turno.turn_hora_inicio AND turno.turn_hora_fim";
 			$result = $this->dao->getConexao()->query($selectTurno);

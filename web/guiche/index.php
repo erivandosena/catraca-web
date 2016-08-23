@@ -47,12 +47,13 @@ if (isset ( $_GET ["sair"] )) {
 <link rel="stylesheet" href="css/estilo.css" type="text/css" media="screen"/>
 <link rel="stylesheet" href="css/estilo_responsivo.css" type="text/css" media="screen"/>
 <script type="text/javascript" src="js/jquery.min.js"></script>
-<script type="text/javascript" src="js/javascript.js"></script>
+<script type="text/javascript" src="js/mostra_troco.js"></script>
+<script type="text/javascript" src="js/identificador.js"></script>
 </head>
 
 <body>
 	<div class="pagina fundo-cinza1">
-	
+		
 		<div class="acessibilidade">
 			<div class="config">
 				<div class="a-esquerda">
@@ -212,6 +213,12 @@ if (isset ( $_GET ["sair"] )) {
 								break;
 							case 'abertura' :
 								AberturaGuicheController::main($sessao->getNivelAcesso());
+								break;
+							case 'identificador' :
+								IdentificadorController::main($sessao->getNivelAcesso());
+								break;
+							case 'identificador_cliente' :
+								IdentificadorClienteController::main($sessao->getNivelAcesso());
 								break;
 							default :
 								echo '404 NOT FOUND';

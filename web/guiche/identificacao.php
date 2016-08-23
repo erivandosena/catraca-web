@@ -16,6 +16,12 @@ echo'
 		<link rel="stylesheet" href="css/estilo_responsivo.css" type="text/css" media="screen">
 		<script type = "text/javascript" src="js/jquery-1.12.0.min.js"></script>
 		<script type="text/javascript" src="js/javascript.js"></script>
+		<script type="text/javascript">
+		
+		
+		
+		</script>
+		
 	
 	</head>
 
@@ -122,11 +128,13 @@ echo'
 											Cartão: <input type="number" autofocus>
 										</label>
 									</form><br><br><br>
-									
-									<span >Nº Cartão:</span><br>
-									<span >Nome: Giovanildo Teixeira</span><br>
-									<span >Aluno</span><br>
-									<span >Matrícula: 123456789</span>					
+								
+									<div id="dados" class="dados">
+										<span >Nº Cartão:</span><br>
+										<span >Nome: Giovanildo Teixeira</span><br>
+										<span >Aluno</span><br>
+										<span >Matrícula: 123456789</span>					
+									</div>
 								</div>
 							</div>
 						</div>				
