@@ -61,7 +61,9 @@ class UnidadeDAO extends DAO {
 					LEFT JOIN catraca_unidade
 					ON catraca.catr_id = catraca_unidade.catr_id
 					LEFT JOIN unidade
-					ON unidade.unid_id = catraca_unidade.unid_id";
+					ON unidade.unid_id = catraca_unidade.unid_id
+					ORDER BY catraca.catr_id ASC
+					";
 		}
 		
 		foreach ( $this->getConexao ()->query ( $sql ) as $linha ) {
@@ -76,6 +78,7 @@ class UnidadeDAO extends DAO {
 			$catraca->setInterfaceRede($linha['catr_interface_rede']);
 			$catraca->setUnidade(new Unidade());
 			$catraca->getUnidade()->setNome($linha['unid_nome']);
+			$catraca->setFinanceiro($linha['catr_financeiro']);
 			
 			
 			$lista [] = $catraca;
@@ -157,6 +160,7 @@ class UnidadeDAO extends DAO {
 			$catraca->setTempoDeGiro($linha['catr_tempo_giro']);
 			$catraca->setIp($linha['catr_ip']);
 			$catraca->setInterfaceRede($linha['catr_interface_rede']);
+			$catraca->setFinanceiro($linha['catr_financeiro']);
 			
 			$catraca->setUnidade(new Unidade());
 			$catraca->getUnidade()->setNome($linha['unid_nome']);
