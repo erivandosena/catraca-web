@@ -15,7 +15,8 @@ class UnidadeDAO extends DAO {
 	 */
 	public function retornaLista() {
 		$lista = array ();
-		$result = $this->getConexao ()->query ( "SELECT * FROM unidade LIMIT 100" );
+		$sql = "SELECT * FROM unidade LIMIT 100";
+		$result = $this->getConexao ()->query ( $sql );
 		
 		foreach ( $result as $linha ) {
 			$unidade = new Unidade ();
@@ -60,10 +61,7 @@ class UnidadeDAO extends DAO {
 					LEFT JOIN catraca_unidade
 					ON catraca.catr_id = catraca_unidade.catr_id
 					LEFT JOIN unidade
-					ON unidade.unid_id = catraca_unidade.unid_id
-					ORDER BY catraca.catr_id ASC
-					
-					";
+					ON unidade.unid_id = catraca_unidade.unid_id";
 		}
 		
 		foreach ( $this->getConexao ()->query ( $sql ) as $linha ) {
@@ -73,9 +71,12 @@ class UnidadeDAO extends DAO {
 			$catraca->setTempoDeGiro($linha['catr_tempo_giro']);
 			$catraca->setIp($linha['catr_ip']);
 			$catraca->setId($linha['catraca_id']);
+			$catraca->setMacLan($linha['catr_mac_lan']);
+			$catraca->setMacWlan($linha['catr_mac_wlan']);
+			$catraca->setInterfaceRede($linha['catr_interface_rede']);
 			$catraca->setUnidade(new Unidade());
 			$catraca->getUnidade()->setNome($linha['unid_nome']);
-			$catraca->setFinanceiro($linha['catr_financeiro']);
+			
 			
 			$lista [] = $catraca;
 		}
@@ -86,12 +87,14 @@ class UnidadeDAO extends DAO {
 		$idCatraca = $catraca->getId();
 		$filtro = "";
 		
-		$sql = "SELECT sum(1) as resultado FROM registro INNER JOIN catraca ON registro.catr_id = catraca.catr_id
+		$sql = "SELECT sum(1) as resultado 
+				FROM registro INNER JOIN catraca ON registro.catr_id = catraca.catr_id
 				WHERE catraca.catr_id = $idCatraca $filtro";
 		
 		$resultado = 0;
 		foreach ($this->getConexao()->query($sql) as $linha){
 			$resultado = $linha['resultado'];
+			
 		}
 		return $resultado;
 	}
@@ -120,13 +123,11 @@ class UnidadeDAO extends DAO {
 
 			foreach ($this->getConexao()->query($sql) as $linha){
 				$resultado = $linha['resultado'];
-			}
-			
-		}
-		
-		
+			}			
+		}		
 		return $resultado;
 	}
+	
 	public function pegaTurnoAtualSeExistir(){
 		$dataTimeAtual = date ( "G:i:s" );
 		$sql = "Select * FROM turno WHERE '$dataTimeAtual' BETWEEN turno.turn_hora_inicio AND turno.turn_hora_fim";
@@ -155,7 +156,8 @@ class UnidadeDAO extends DAO {
 			$catraca->setOperacao($linha['catr_operacao']);
 			$catraca->setTempoDeGiro($linha['catr_tempo_giro']);
 			$catraca->setIp($linha['catr_ip']);
-			$catraca->setFinanceiro($linha['catr_financeiro']);
+			$catraca->setInterfaceRede($linha['catr_interface_rede']);
+			
 			$catraca->setUnidade(new Unidade());
 			$catraca->getUnidade()->setNome($linha['unid_nome']);
 				
@@ -169,33 +171,66 @@ class UnidadeDAO extends DAO {
 	public function atualizarCatraca(Catraca $catraca){
 		$giro = $catraca->getTempodeGiro();
 		$id = $catraca->getId();
+		$nomeCatraca = $catraca->getNome();
 		$operacao = $catraca->getOperacao();
 		$idUnidade= $catraca->getUnidade()->getId();
-		
+		$interface = $catraca->getInterfaceRede();
 		
 		$this->getConexao()->beginTransaction();
-		$sqlUpdate = "UPDATE catraca SET catr_tempo_giro = $giro, 
-						catr_operacao = $operacao
+		$sqlUpdate = "UPDATE catraca SET catr_tempo_giro = $giro,						
+						catr_operacao = $operacao,
+						catr_nome = '$nomeCatraca',
+						catr_interface_rede = '$interface'
 						WHERE catr_id = $id";
+		
 		if(!$this->getConexao()->exec($sqlUpdate))
 		{
 			$this->getConexao()->rollBack();
 			echo $sqlUpdate;
 			return false;
-		}		
-		$this->getConexao()->exec("DELETE FROM catraca_unidade WHERE catr_id = $id");
+		}
+		
+ 		$this->getConexao()->exec("DELETE FROM catraca_unidade WHERE catr_id = $id");
+		
 		if(!$this->getConexao()->exec("INSERT into catraca_unidade(catr_id, unid_id) VALUES($id, $idUnidade)"))
 		{
 			$this->getConexao()->rollBack();
 
 			return false;
 		}
+		
 		$this->getConexao()->commit();
 		return true;
 		
 		
 		
 	}
+	
+	function inserirRegistro() {
+		$request = \Slim\Slim::getInstance()->request();
+		$body = $request->getBody();
+		$dados = json_decode($body);
+	
+		$sql = "INSERT INTO registro(regi_data, regi_valor_pago, regi_valor_custo, cart_id, catr_id, vinc_id)
+	VALUES (:data, :pago, :custo, :cartao, :catraca, :vinculo);";
+	
+		try {
+			$db = getDB();
+			$stmt = $db->prepare($sql);
+			$stmt->bindParam("data", ($dados->regi_data == '') ? NULL : $dados->regi_data ); //NULL if $dados->regi_data == NULL else $dados->regi_data );
+			$stmt->bindParam("pago", $dados->regi_valor_pago);
+			$stmt->bindParam("custo", $dados->regi_valor_custo);
+			$stmt->bindParam("cartao", $dados->cart_id);
+			$stmt->bindParam("catraca", $dados->catr_id);
+			$stmt->bindParam("vinculo", $dados->vinc_id);
+			$stmt->execute();
+			$db = null;
+		} catch(PDOException $e) {
+			echo '{"erro":{"text":'. $e->getMessage() .'}}';
+		}
+	}
+	
+	
 	public function preenchePorId(Unidade $unidade) {
 		$idUnidade = $unidade->getId ();
 		if (! is_int ( $idUnidade ) && $idUnidade <= 0)
