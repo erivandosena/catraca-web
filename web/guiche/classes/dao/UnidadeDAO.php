@@ -74,6 +74,7 @@ class UnidadeDAO extends DAO {
 			$catraca->setMacLan($linha['catr_mac_lan']);
 			$catraca->setMacWlan($linha['catr_mac_wlan']);
 			$catraca->setInterfaceRede($linha['catr_interface_rede']);
+			$catraca->setFinanceiro($linha['catr_financeiro']);
 			$catraca->setUnidade(new Unidade());
 			$catraca->getUnidade()->setNome($linha['unid_nome']);
 			
@@ -157,7 +158,7 @@ class UnidadeDAO extends DAO {
 			$catraca->setTempoDeGiro($linha['catr_tempo_giro']);
 			$catraca->setIp($linha['catr_ip']);
 			$catraca->setInterfaceRede($linha['catr_interface_rede']);
-			
+			$catraca->setFinanceiro($linha['catr_financeiro']);
 			$catraca->setUnidade(new Unidade());
 			$catraca->getUnidade()->setNome($linha['unid_nome']);
 				
@@ -175,12 +176,14 @@ class UnidadeDAO extends DAO {
 		$operacao = $catraca->getOperacao();
 		$idUnidade= $catraca->getUnidade()->getId();
 		$interface = $catraca->getInterfaceRede();
+		$financeiro = $catraca->getFinanceiro();
 		
 		$this->getConexao()->beginTransaction();
 		$sqlUpdate = "UPDATE catraca SET catr_tempo_giro = $giro,						
 						catr_operacao = $operacao,
 						catr_nome = '$nomeCatraca',
-						catr_interface_rede = '$interface'
+						catr_interface_rede = '$interface',
+						catr_financeiro = '$financeiro'
 						WHERE catr_id = $id";
 		
 		if(!$this->getConexao()->exec($sqlUpdate))

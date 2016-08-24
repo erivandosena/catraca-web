@@ -17,19 +17,20 @@ $(function(){
 		$("#barra-governo").css("display","none");
 		$(".acessibilidade").css("display","none");		
 		$(".barra-menu").css("display","none");
-		$(".config").css({	"max-width": largura, "height": altura })		
+		$(".config").css({	"max-width": largura, "height": altura })
+	
+		$(document).keydown(function(e){
+			if(e.wich == 122 || e.keyCode == 122){
+				window.location.href="?pagina=identificador_cliente"			
+			}
+		})
+		
+		$(document).keydown(function(e){
+			if(e.wich == 27 || e.keyCode == 27){
+				window.location.href="?pagina=identificador"
+			}
+		})
+		
 	}
-	
-	$(document).keydown(function(e){
-		if(e.wich == 122 || e.keyCode == 122){
-			window.location.href="?pagina=identificador_cliente"			
-		}
-	})
-	
-	$(document).keydown(function(e){
-		if(e.wich == 27 || e.keyCode == 27){
-			window.location.href="?pagina=identificador"
-		}
-	})
 	
 });

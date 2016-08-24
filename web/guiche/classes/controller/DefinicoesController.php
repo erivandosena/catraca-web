@@ -169,6 +169,7 @@ class DefinicoesController {
 				$catraca->setOperacao($_POST['operacao']);
 				$catraca->setTempoDeGiro($_POST['tempo_giro']);
 				$catraca->setInterfaceRede($_POST['interface']);
+				$catraca->setFinanceiro($_POST['financeiro']);
 				$catraca->setUnidade(new Unidade());
 				$catraca->getUnidade()->setId($_POST['id_unidade']);
 				
@@ -211,8 +212,7 @@ class DefinicoesController {
 			$stmt = $this->dao->getConexao()->prepare( "INSERT INTO turno(turn_hora_inicio,turn_hora_fim,turn_descricao) VALUES(?, ?, ?);");
 			$stmt->bindParam(1, $horaInicio);
 			$stmt->bindParam(2, $horaFim);
-			$stmt->bindParam(3, $turnoNome);
-			
+			$stmt->bindParam(3, $turnoNome);			
 			
 			if ($stmt->execute()) {
 				$this->view->mostraSucesso ( "Sucesso" );

@@ -47,7 +47,7 @@ if (isset ( $_GET ["sair"] )) {
 <link rel="stylesheet" href="css/estilo.css" type="text/css" media="screen"/>
 <link rel="stylesheet" href="css/estilo_responsivo.css" type="text/css" media="screen"/>
 <script type="text/javascript" src="js/jquery.min.js"></script>
-<script type="text/javascript" src="js/mostra_troco.js"></script>
+<script type="text/javascript" src="js/javascript.js"></script>
 <script type="text/javascript" src="js/identificador.js"></script>
 </head>
 

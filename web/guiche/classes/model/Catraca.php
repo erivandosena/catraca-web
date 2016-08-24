@@ -11,6 +11,8 @@ class Catraca{
 	private $macWlan;
 	private $interfaceRede;
 	private $unidade;
+	private $financeiro;
+	
 	public function Catraca(){
 		$this->unidade = new Unidade();
 	}
@@ -120,6 +122,30 @@ class Catraca{
 		}
 		return $interface;
 	}
+	
+	public function getFinanceiro(){
+		return $this->financeiro;
+	}
+	
+	public function setFinanceiro($financeiro){
+		$this->financeiro = $financeiro;
+	}
+	
+	public function getStrFincaneito(){
+		$financeiro = "";
+		switch ($this->getFinanceiro()){
+			case true:
+				$financeiro = "Habilitado";
+				break;
+			case false:
+				$financeiro = "Desabilitado";
+				break;
+			default:
+				$financeiro = "Não Identificado";
+				break;
+		}return $financeiro;
+	}
+	
 	/*
 	 * 1 = Horario Validado -> Anti-horário Bloqueado;
 	 * 2 = Anti-horário Validado -> Horario Bloqueado;
@@ -127,6 +153,8 @@ class Catraca{
 	 * 4 = Hoário Livre -> Anti-horário Validado;
 	 * 5 = Livre em abos os sentidos.
 	 */
+	const FINANCEIRO_HAB = TRUE;
+	const FINANCEIRO_DES = FALSE;
 	const GIRO_HOR_VAL_ANTI_BLOQ = 1;
 	const GIRO_ANTI_VAL_HOR_BLOQ = 2;
 	const GIRO_ANTI_LIVRE_HOR_VAL = 3;
