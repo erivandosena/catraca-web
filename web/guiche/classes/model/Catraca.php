@@ -153,8 +153,6 @@ class Catraca{
 	 * 4 = Hoário Livre -> Anti-horário Validado;
 	 * 5 = Livre em abos os sentidos.
 	 */
-	const FINANCEIRO_HAB = TRUE;
-	const FINANCEIRO_DES = FALSE;
 	const GIRO_HOR_VAL_ANTI_BLOQ = 1;
 	const GIRO_ANTI_VAL_HOR_BLOQ = 2;
 	const GIRO_ANTI_LIVRE_HOR_VAL = 3;

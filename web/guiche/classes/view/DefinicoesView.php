@@ -375,11 +375,19 @@ class DefinicoesView{
 		
 		echo '	<label for="interface">
 				<object class="rotulo">Interface de Rede: </object>
-				<select name="interface" id="interface">
-					<option selected="selected" value="'.$catraca->getInterfaceRede().'">'.$catraca->getStrIterfaceRede().'</option>
-					<option value="eth0">Rede Cabeada</option>
-					<option value="wlan0">Rede Sem fio</option>
-				</select>
+				<select name="interface" id="interface">';
+		if ($catraca->getInterfaceRede() == 'eth0'){
+		echo '  <option selected="selected" value="eth0">Rede Cabeada</option>
+				<option value="wlan0">Rede Sem fio</option>';
+		} elseif ($catraca->getInterfaceRede() == 'wlan0'){
+		echo '	<option value="eth0">Rede Cabeada</option>
+				<option selected="selected" value="wlan0">Rede Sem fio</option>';
+		}else{
+		echo '	<option selected="selected" value="eth0">Não Identificado</option>
+				<option value="eth0">Rede Cabeada</option>
+				<option value="wlan0">Rede Sem fio</option>';
+		}		
+		echo'	</select>
 				</label><br>
 				<label for="financeiro">
 				<object class="rotulo">Financeiro: </object>
