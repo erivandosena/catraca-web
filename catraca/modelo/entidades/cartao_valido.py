@@ -23,6 +23,8 @@ class CartaoValido(object):
         self.__tipo_valor = None
         self.__vinc_refeicoes = None
         self.__vinc_descricao = None
+        self.__vinc_inicio = None
+        self.__vinc_fim = None
         self.__nome_usuario = None
         self.__tipo = None
         self.__vinculo = None
@@ -88,6 +90,23 @@ class CartaoValido(object):
     @descricao.setter
     def descricao(self, valor):
         self.__vinc_descricao = valor
+        
+    @property
+    def inicio(self):
+        return self.__vinc_inicio
+    
+    @inicio.setter
+    def inicio(self, valor):
+        self.__vinc_inicio = valor
+        
+    @property
+    def fim(self):
+        return self.__vinc_fim
+    
+    @fim.setter
+    def fim(self, valor):
+        self.__vinc_fim = valor
+        
     @property
     def nome(self):
         return self.__nome_usuario

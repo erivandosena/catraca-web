@@ -93,7 +93,10 @@ class Aviso(object):
         self.display.mensagem("CREDITO".center(16) +"\n"+ "INSUFICIENTE!".center(16), 1, False, False)
         
     def exibir_cartao_nao_cadastrado(self):
-        self.display.mensagem("CARTAO".center(16) +"\n"+ "NAO CADASTRADO!".center(16), 1, False, False)
+        self.display.mensagem("CARTAO".center(16) +"\n"+ "NAO CADASTRADO!".center(16), 2, False, False)
+        
+    def exibir_vinculo_invalido(self):
+        self.display.mensagem("CARTAO COM".center(16) +"\n"+ "VINCULO EXPIRADO".center(16), 2, False, False)
         
     def exibir_cartao_isento(self, dada_hora_fim):
         self.display.mensagem("ISENTO ATE".center(16) +"\n"+ dada_hora_fim.center(16), 2, False, False)

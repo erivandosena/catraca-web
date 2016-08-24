@@ -38,17 +38,20 @@ class ConexaoGenerica(object):
         return self.__con.rollback()
     
     def fecha_conexao(self):
-        #print "BD-CONEXAO FECHADA!"
-        return self.__con.close()
-    
-    def conexao_status(self):
-        if self.__con is not None:
-            if self.__con.closed:
-                return False
-            else:
-                return True
-        else:
-            return False
+        if not self.__con.closed:
+            #print "BD-CONEXAO FECHADA!"
+            return self.__con.close()
+#         else:
+#             print "BD-Nao existe conexao aberta!"
+#     
+#     def conexao_status(self):
+#         if self.__con is not None:
+#             if self.__con.closed:
+#                 return False
+#             else:
+#                 return True
+#         else:
+#             return False
         
     @property
     def extras(self):

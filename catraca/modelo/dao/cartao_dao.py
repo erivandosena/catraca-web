@@ -2,7 +2,7 @@
 # -*- coding: latin-1 -*-
 
 
-from contextlib import closing
+#from contextlib import closing
 from catraca.logs import Logs
 from catraca.util import Util
 #from catraca.modelo.dados.conexao import ConexaoFactory
@@ -22,7 +22,7 @@ __status__ = "Prototype" # Prototype | Development | Production
 class CartaoDAO(DAOGenerico):
     
     log = Logs()
-
+    
     def __init__(self):
         super(CartaoDAO, self).__init__()
         DAOGenerico.__init__(self)
@@ -32,7 +32,7 @@ class CartaoDAO(DAOGenerico):
         if arg:
             sql = "SELECT "\
                 "cart_numero as numero, "\
-                "cart_creditos creditos, "\
+                "cart_creditos as creditos, "\
                 "cart_id as id, "\
                 "tipo_id as tipo "\
                 "FROM cartao WHERE "\
@@ -40,7 +40,7 @@ class CartaoDAO(DAOGenerico):
         else:
             sql = "SELECT "\
                 "cart_numero as numero, "\
-                "cart_creditos creditos, "\
+                "cart_creditos as creditos, "\
                 "cart_id as id, "\
                 "tipo_id as tipo "\
                 "FROM cartao ORDER BY cart_id"
@@ -55,7 +55,10 @@ class CartaoDAO(DAOGenerico):
             "tipo_id "\
             ") VALUES ("\
             "%s, %s, %s, %s)"
-        return self.inclui(sql, obj)
+        try:
+            self.inclui(sql, obj)
+        finally:
+            self.fecha_conexao()
     
     def atualiza(self, obj):
         sql = "UPDATE cartao SET "\
@@ -226,4 +229,3 @@ class CartaoDAO(DAOGenerico):
 # #             return False
 # #         finally:
 # #             pass
-        

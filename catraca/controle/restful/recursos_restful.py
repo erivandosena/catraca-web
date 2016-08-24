@@ -53,7 +53,7 @@ class RecursosRestful(object):
     def obtem_recursos(self, display=False, limpa_tabela=False):
         RecursosRestful.obtendo_recurso = True
         print "\nObtendo recursos do servidor RESTful..."
-        #self.obtem_catraca(display, mantem_tabela, limpa_tabela) #*             # 3ºGRAU DE PRIORIDADE DE SINCRONIA
+        self.obtem_catraca(display, limpa_tabela) #*             # 3ºGRAU DE PRIORIDADE DE SINCRONIA
         self.obtem_tipo(display, limpa_tabela)
         self.obtem_cartao(display, limpa_tabela)             # 2ºGRAU DE PRIORIDADE DE SINCRONIA
         self.obtem_usuario(display, limpa_tabela)

@@ -45,7 +45,7 @@ class IsencaoDAO(DAOGenerico):
                 "FROM isencao ORDER BY isen_id"
         return self.seleciona(Isencao, sql, arg)
     
-    def busca_isencao(Isencao, numero_cartao=None, data=None):
+    def busca_isencao(self, numero_cartao=None, data=None):
         data_atual = Util().obtem_datahora_postgresql() if data is None else data
         sql = "SELECT "\
             "isencao.isen_inicio as inicio, "\

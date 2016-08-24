@@ -25,6 +25,7 @@ class CatracaDAO(DAOGenerico):
         arg = [a for a in arg][0] if arg else None
         if arg:
             sql = "SELECT "\
+                "catr_financeiro as financeiro, "\
                 "catr_id as id, "\
                 "catr_interface_rede as interface, "\
                 "catr_ip as ip, "\
@@ -37,6 +38,7 @@ class CatracaDAO(DAOGenerico):
                 "catr_id = %s"
         else:
             sql = "SELECT "\
+                "catr_financeiro as financeiro, "\
                 "catr_id as id, "\
                 "catr_interface_rede as interface, "\
                 "catr_ip as ip, "\
@@ -50,6 +52,7 @@ class CatracaDAO(DAOGenerico):
     
     def busca_por_ip(self, ip):
         sql = "SELECT "\
+            "catr_financeiro as financeiro, "\
             "catr_id as id, "\
             "catr_interface_rede as interface, "\
             "catr_ip as ip, "\
@@ -64,6 +67,7 @@ class CatracaDAO(DAOGenerico):
     
     def busca_por_nome(self, nome):
         sql = "SELECT "\
+            "catr_financeiro as financeiro, "\
             "catr_id as id, "\
             "catr_interface_rede as interface, "\
             "catr_ip as ip, "\
@@ -87,6 +91,7 @@ class CatracaDAO(DAOGenerico):
     def insere(self, obj):
         sql = "INSERT INTO catraca "\
             "("\
+            "catr_financeiro, "\
             "catr_id, "\
             "catr_interface_rede, "\
             "catr_ip, "\
@@ -96,11 +101,12 @@ class CatracaDAO(DAOGenerico):
             "catr_operacao, "\
             "catr_tempo_giro "\
             ") VALUES ("\
-            "%s, %s, %s, %s, %s, %s, %s, %s)"
+            "%s, %s, %s, %s, %s, %s, %s, %s, %s)"
         return self.inclui(sql, obj)
     
     def atualiza(self, obj):
         sql = "UPDATE catraca SET "\
+            "catr_financeiro = %s, "\
             "catr_interface_rede = %s, "\
             "catr_ip = %s, "\
             "catr_mac_lan = %s, "\

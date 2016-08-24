@@ -58,7 +58,8 @@ class CartaoJson(ServidorRestful):
         servidor = self.obter_servidor()
         try:
             if servidor:
-                url = str(self.URL) + "cartao/jcartao/" + str(numero_cartao)+ "/"+str(self.util.obtem_datahora().strftime("%Y%m%d%H%M%S"))
+                #url = str(self.URL) + "cartao/jcartao/" + str(numero_cartao)+ "/"+str(self.util.obtem_datahora().strftime("%Y%m%d%H%M%S"))
+                url = str(self.URL) + "cartao/jcartao/" + str(numero_cartao)
                 r = servidor.get(url)
                 if r.text != '':
                     print json.loads(r.text)
@@ -158,6 +159,10 @@ class CartaoJson(ServidorRestful):
                 cartao_valido.descricao = self.dict_obj_cartao_valido(formato_json[item]) if \
                 self.dict_obj_cartao_valido(formato_json[item]) is None else \
                 self.dict_obj_cartao_valido(formato_json[item]).encode('utf-8')
+            if item == "vinc_inicio":
+                cartao_valido.inicio = self.dict_obj_cartao_valido(formato_json[item])
+            if item == "vinc_fim":
+                cartao_valido.fim = self.dict_obj_cartao_valido(formato_json[item])
             if item == "usua_nome":
                 cartao_valido.nome = self.dict_obj_cartao_valido(formato_json[item]) \
                 if self.dict_obj_cartao_valido(formato_json[item]) is None else \

@@ -10,7 +10,7 @@ from catraca.util import Util
 from catraca.modelo.dao.dao_generico import DAOGenerico
 from catraca.modelo.entidades.registro import Registro
 # from catraca.modelo.dao.cartao_dao import CartaoDAO
-from catraca.modelo.dao.turno_dao import TurnoDAO
+#from catraca.modelo.dao.turno_dao import TurnoDAO
 # from catraca.modelo.dao.catraca_dao import CatracaDAO
 # from catraca.modelo.dao.vinculo_dao import VinculoDAO
 
@@ -40,7 +40,7 @@ class RegistroDAO(DAOGenerico):
                 "cart_id as cartao, "\
                 "catr_id as catraca, "\
                 "vinc_id as vinculo "\
-                "FROM usuario WHERE "\
+                "FROM registro WHERE "\
                 "regi_id = %s"
         else:
             sql = "SELECT "\
@@ -51,13 +51,13 @@ class RegistroDAO(DAOGenerico):
                 "cart_id as cartao, "\
                 "catr_id as catraca, "\
                 "vinc_id as vinculo "\
-                "FROM usuario ORDER BY regi_id"
+                "FROM registro ORDER BY regi_id"
         return self.seleciona(Registro, sql, arg)
     
-    def busca_por_turno(self, obj):
-        return TurnoDAO().busca(obj.id)
+#     def busca_por_turno(self, obj):
+#         return TurnoDAO().busca(obj.id)
     
-    def busca_utilizacao(self, hora_ini, hora_fim, obj):
+    def busca_utilizacao(self, hora_ini, hora_fim, cartao_id):
         data = Util().obtem_datahora()
         data_ini = str(data.strftime("%Y-%m-%d")) + " " + str(hora_ini)
         data_fim = str(data.strftime("%Y-%m-%d")) + " " + str(hora_fim)
@@ -65,8 +65,8 @@ class RegistroDAO(DAOGenerico):
             "COUNT(regi_data) "\
             "FROM registro "\
             "WHERE "\
-            "(regi_data BETWEEN %s AND %s) AND (cart_id = %s)"
-        return self.seleciona(Registro, sql, obj, hora_ini, hora_fim)
+            "regi_data BETWEEN %s AND %s AND cart_id = %s"
+        return self.seleciona(Registro, sql, data_ini, data_fim, cartao_id)
     
 #     def busca_utilizacao(self, hora_ini, hora_fim, cartao_id):
 #         data = Util().obtem_datahora()
@@ -129,27 +129,32 @@ class RegistroDAO(DAOGenerico):
 #             self.log.logger.error('[registro] Erro ao realizar SELECT.', exc_info=True)
 #         finally:
 #             pass
-           
+
     def busca_ultimo_registro(self):
         sql = "SELECT MAX(regi_id) FROM registro"
-        try:
-            with closing(self.abre_conexao().cursor()) as cursor:
-                cursor.execute(sql)
-                obj = cursor.fetchone()
-#                 if obj != (None,):
-                if obj[0] > 0:
-                    return obj[0]
-                else:
-                    return 0
-                 
-        except Exception as excecao:
-            self.aviso = str(excecao)
-            self.log.logger.error('[registro] Erro ao realizar SELECT.', exc_info=True)
-        finally:
-            pass
+        obj = self.seleciona(Registro, sql)
+        return obj[0][0] if obj[0][0] else 0
+    
+#     def busca_ultimo_registro(self):
+#         sql = "SELECT MAX(regi_id) FROM registro"
+#         try:
+#             with closing(self.abre_conexao().cursor()) as cursor:
+#                 cursor.execute(sql)
+#                 obj = cursor.fetchone()
+# #                 if obj != (None,):
+#                 if obj[0] > 0:
+#                     return obj[0]
+#                 else:
+#                     return 0
+#                  
+#         except Exception as excecao:
+#             self.aviso = str(excecao)
+#             self.log.logger.error('[registro] Erro ao realizar SELECT.', exc_info=True)
+#         finally:
+#             pass
     
     def insere(self, obj):
-        sql = "INSERT INTO usuario "\
+        sql = "INSERT INTO registro "\
             "("\
             "cart_id, "\
             "catr_id, "\
@@ -163,7 +168,7 @@ class RegistroDAO(DAOGenerico):
         return self.inclui(sql, obj)
      
     def atualiza(self, obj):
-        sql = "UPDATE usuario SET "\
+        sql = "UPDATE registro SET "\
             "cart_id = %s, "\
             "catr_id = %s, "\
             "regi_valor_custo = %s, "\
@@ -175,7 +180,7 @@ class RegistroDAO(DAOGenerico):
      
     def exclui(self, *arg):
         obj = [a for a in arg][0] if arg else None
-        sql = "DELETE FROM usuario"
+        sql = "DELETE FROM registro"
         if obj:
             sql = str(sql) + " WHERE regi_id = %s"
         return self.deleta(sql, obj)

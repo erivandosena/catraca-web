@@ -45,7 +45,7 @@ class Painel(object):
         try:
 #             Rede().start()
 #             Relogio().start()
-            #Alerta().start()
+#             Alerta().start()
             Sincronia().start()
             LeitorCartao().start()
         except Exception as excecao:

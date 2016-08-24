@@ -59,36 +59,39 @@ class Sincronia(Relogio):
                             self.relogio.join()
                             
                         #fecha conexoes com o bd
-                        ConexaoGenerica().fecha_todas_conexoes()
+                        #ConexaoGenerica().fecha_todas_conexoes()
                         
                         self.aviso.exibir_aguarda_sincronizacao()
                         
 
                         # realiza limpeza das tabelas locais
                         print "\nLimpando... tabela local CATRACA"
-                        self.recursos_restful.catraca_json(True)
+                        self.recursos_restful.catraca_json.catraca_get(True)
                         print "Concluido!\n"
                         print "\nLimpando... tabela local UNIDADE"
-                        self.recursos_restful.unidade_json(True)
+                        self.recursos_restful.unidade_json.unidade_get(True)
                         print "Concluido!\n"
                         print "\nLimpando... tabela local TURNO"
-                        self.recursos_restful.turno_json(True)
+                        self.recursos_restful.turno_json.turno_get(True)
                         print "Concluido!\n"
                         print "\nLimpando... tabela local TIPO"
-                        self.recursos_restful.tipo_json(True)
+                        self.recursos_restful.tipo_json.tipo_get(True)
                         print "Concluido!\n"
                         print "\nLimpando... tabela local USUARIO"
-                        self.recursos_restful.usuario_json(True)
+                        self.recursos_restful.usuario_json.usuario_get(True)
                         print "Concluido!\n"
                         print "\nLimpando... tabela local CUSTO-REFEICAO"
-                        self.recursos_restful.custo_refeicao_json(True)
+                        self.recursos_restful.custo_refeicao_json.custo_refeicao_get(True)
                         print "Concluido!\n"
                         print "Iniciando a sincronia com o servidor RESTful..."
                         
-                        print "esperando 10"
+                        print "espera 10"
                         sleep(10)
                         
                         self.recursos_restful.obtem_recursos()
+                        
+                        print "espera 10"
+                        sleep(10)
                         
                         if not self.rede.isAlive():
                             self.rede = Rede()

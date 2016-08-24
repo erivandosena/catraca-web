@@ -55,21 +55,28 @@ class CatracaJson(ServidorRestful):
                                         catraca_local = obj
                                         ip_local = self.util.obtem_ip_por_interface(obj.interface.lower())
                                         mac_local = self.util.obtem_MAC_por_interface(obj.interface.lower())
-                                         
+                                        
                                         if ip_local != "127.0.0.1":
+                                            
                                             if obj.ip != ip_local:
                                                  catraca_local.ip = ip_local
+                                                 self.objeto_json(catraca_local, "PUT")
+                                                 return self.catraca_get()
 
                                             if obj.interface.lower() == "eth0":
                                                 if mac_local != obj.maclan:
                                                     catraca_local.maclan = mac_local
+                                                    self.objeto_json(catraca_local, "PUT")
+                                                    return self.catraca_get()
                                                        
                                             if obj.interface.lower() == "wlan0":
                                                 if mac_local != obj.macwlan:
                                                     catraca_local.macwlan = mac_local
+                                                    self.objeto_json(catraca_local, "PUT")
+                                                    return self.catraca_get()
                                                      
-                                            if self.mantem_tabela_local(obj):
-                                                print "catraca fisica local atualizada"
+#                                             if self.mantem_tabela_local(obj):
+#                                                 print "catraca fisica local atualizada"
  
                                         if obj.nome.lower() != self.util.obtem_nome_rpi().lower():
                                             print "REINICIAR SISTEMA...."
@@ -169,6 +176,8 @@ class CatracaJson(ServidorRestful):
                 catraca.macwlan = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
             if item == "catr_interface_rede":
                 catraca.interface = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
+            if item == "catr_financeiro":
+                catraca.financeiro = self.dict_obj(formato_json[item])
                 
         return catraca
     
@@ -182,7 +191,8 @@ class CatracaJson(ServidorRestful):
                     "catr_nome":str(item[4]),
                     "catr_mac_lan":str(item[5]),
                     "catr_mac_wlan":str(item[6]),
-                    "catr_interface_rede":str(item[7])
+                    "catr_interface_rede":str(item[7]),
+                    "catr_financeiro":str(item[8])
                 }
                 self.catraca_post(catraca)
                 
@@ -195,7 +205,8 @@ class CatracaJson(ServidorRestful):
                 "catr_nome":str(obj.nome),
                 "catr_mac_lan":str(obj.maclan),
                 "catr_mac_wlan":str(obj.macwlan),
-                "catr_interface_rede":str(obj.interface)
+                "catr_interface_rede":str(obj.interface),
+                "catr_financeiro":str(obj.financeiro)
             }
             if operacao == "POST":
                 self.catraca_post(catraca)
@@ -239,5 +250,6 @@ class CatracaJson(ServidorRestful):
         catraca.maclan = self.util.obtem_MAC_por_interface('eth0')
         catraca.macwlan = self.util.obtem_MAC_por_interface('wlan0')
         catraca.interface = interface_padrao
+        catraca.financeiro = False
         self.objeto_json(catraca)
         

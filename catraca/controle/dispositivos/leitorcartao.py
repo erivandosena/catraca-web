@@ -160,9 +160,16 @@ class LeitorCartao(Relogio):
                 return None
             else:
                 ##############################################################
+                ## OBTEM INFORMACOES SOBRE A VALIDADE DO VINCULO DO CARTAO
+                ##############################################################
+                if not self.obtem_vinculo(self.CARTAO):
+                    self.util.beep_buzzer(250, .1, 3)
+                    self.aviso.exibir_vinculo_invalido()
+                    return None
+                ##############################################################
                 ## OBTEM AS INFORMACOES DO CARTAO CONSULTADO NO BANCO DE DADOS
                 ##############################################################
-                self.log.logger.info('Identificacao valida. [cartao n.] ' + str(numero))
+                #self.log.logger.info('Identificacao valida. [cartao n.] ' + str(numero))
                 cartao_id = self.CARTAO.id
                 self.numero_cartao = self.CARTAO.numero
                 cartao_total_creditos = self.CARTAO.creditos
@@ -171,41 +178,43 @@ class LeitorCartao(Relogio):
                 cartao_tipo_id = self.CARTAO.tipo
                 cartao_vinculo_id = self.CARTAO.vinculo
                 cartao_vinculo_descricao = self.CARTAO.descricao
+                cartao_vinculo_inicio = self.CARTAO.inicio
+                cartao_vinculo_fim = self.CARTAO.fim
                 cartao_usuario_nome = self.CARTAO.nome
                 ##############################################################
-                ## VERIFICA SE O CARTAO POSSUI ISENCAO DE PAGAMENTO
+                ## VERIFICA O STATUS DO MODO FINANCEIRO DA CATRACA
                 ##############################################################
-                self.aviso.exibir_saldo_cartao(cartao_usuario_nome, locale.currency(float(cartao_total_creditos)).format())
                 saldo_creditos = 0.00
-                cartao_isento = True
-                """ DESABILITADO TEMPORARIAMENTE
-                """
                 cartao_isento = False
-                ISENCAO = self.obtem_isencao(self.numero_cartao)
-                if ISENCAO is None:
+                if Relogio.catraca.financeiro:
                     ##############################################################
-                    ## VERIFICA SE O CARTAO POSSUI CREDITO(S) PARA UTILIZACAO
+                    ## VERIFICA SE O CARTAO POSSUI ISENCAO DE PAGAMENTO
                     ##############################################################
-                    if (float(cartao_total_creditos) < float(cartao_valor_tipo)):
-                        self.log.logger.info('Credito invalido. [cartao n.] ' + str(self.numero_cartao))
-                        self.aviso.exibir_saldo_insuficiente()
-                        self.util.beep_buzzer(250, .1, 3)
-                        return None
+                    self.aviso.exibir_saldo_cartao(cartao_usuario_nome, locale.currency(float(cartao_total_creditos)).format())
+#                     saldo_creditos = 0.00
+#                     cartao_isento = False
+                    ISENCAO = self.obtem_isencao(self.numero_cartao)
+                    if ISENCAO is None:
+                        ##############################################################
+                        ## VERIFICA SE O CARTAO POSSUI CREDITO(S) PARA UTILIZACAO
+                        ##############################################################
+                        if (float(cartao_total_creditos) < float(cartao_valor_tipo)):
+                            #self.log.logger.info('Credito invalido. [cartao n.] ' + str(self.numero_cartao))
+                            self.aviso.exibir_saldo_insuficiente()
+                            self.util.beep_buzzer(250, .1, 3)
+                            return None
+                        else:
+                            #self.log.logger.info('Credito valido. [cartao n.] ' + str(self.numero_cartao))
+                            saldo_creditos = float(cartao_total_creditos) - float(cartao_valor_tipo)
                     else:
-                        self.log.logger.info('Credito valido. [cartao n.] ' + str(self.numero_cartao))
-                        saldo_creditos = float(cartao_total_creditos) - float(cartao_valor_tipo)
-                else:
-                    self.log.logger.info('Isento. [cartao n.] ' + str(self.numero_cartao))
-                    cartao_isento = True
-                    self.aviso.exibir_cartao_isento( datetime.datetime.strptime(str(ISENCAO.fim),'%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y %H:%M') )
-
+                        #self.log.logger.info('Isento. [cartao n.] ' + str(self.numero_cartao))
+                        cartao_isento = True
+                        self.aviso.exibir_cartao_isento( datetime.datetime.strptime(str(ISENCAO.fim),'%Y-%m-%d %H:%M:%S').strftime('%d/%m/%Y %H:%M') )
                 ##############################################################
                 ## VERIFICA O LIMITE PERMITIDO DE USO DO CARTAO DURANTE TURNO
                 ##############################################################
-#                 if False:
-#                     pass
-                if self.obtem_limite_utilizacao(cartao_id) >= cartao_limite_utilizacao:
-                    self.log.logger.info('Limite de uso atingido. [cartao n.] ' + str(self.numero_cartao))
+                elif self.obtem_limite_utilizacao(cartao_id) >= cartao_limite_utilizacao:
+                    #self.log.logger.info('Limite de uso atingido. [cartao n.] ' + str(self.numero_cartao))
                     self.util.beep_buzzer(250, .1, 3)
                     self.aviso.exibir_cartao_utilizado(Relogio.turno.descricao)
                     return None
@@ -216,12 +225,12 @@ class LeitorCartao(Relogio):
                     cartao.creditos =  cartao_total_creditos if cartao_isento else saldo_creditos
                     cartao.tipo = cartao_tipo_id
                     
-#                     print "exibindo cartao utilizado"
-#                     print "*" * 40
-#                     print cartao.id
-#                     print cartao.numero
-#                     print cartao.creditos
-#                     print cartao.tipo
+                    print "exibindo cartao utilizado"
+                    print "*" * 40
+                    print cartao.id
+                    print cartao.numero
+                    print cartao.creditos
+                    print cartao.tipo
 
                     #registro
                     registro.data = self.util.obtem_datahora_postgresql()
@@ -231,15 +240,15 @@ class LeitorCartao(Relogio):
                     registro.catraca = Relogio.catraca.id
                     registro.vinculo = cartao_vinculo_id
                     
-#                     print "exibindo registro utilizado"
-#                     print "*" * 40
-#                     print self.registro_dao.busca_ultimo_registro() + 1
-#                     print registro.data
-#                     print registro.pago
-#                     print registro.custo
-#                     print registro.cartao
-#                     print registro.catraca
-#                     print registro.vinculo
+                    print "exibindo registro utilizado"
+                    print "*" * 40
+                    print self.registro_dao.busca_ultimo_registro() + 1
+                    print registro.data
+                    print registro.pago
+                    print registro.custo
+                    print registro.cartao
+                    print registro.catraca
+                    print registro.vinculo
                     
                     ##############################################################
                     ## LIBERA O ACESSO E SINALIZA O MESMO AO UTILIZADOR
@@ -272,7 +281,7 @@ class LeitorCartao(Relogio):
                     cartao_json.objeto_json(cartao)
                 else:
                     # insere registro local
-                    #registro.id = self.registro_dao.busca_ultimo_registro() + 1000
+                    registro.id = self.registro_dao.busca_ultimo_registro() + 1000
                     self.registro_dao.insere(registro)
                     self.registro_dao.aviso
                     # atualiza cartao local
@@ -310,6 +319,21 @@ class LeitorCartao(Relogio):
             else:
                 return None
             
+    def obtem_vinculo(self, cartao):
+        atual = self.util.obtem_datahora()
+        if cartao:
+            atual = datetime.datetime(atual.year, atual.month, atual.day, atual.hour, atual.minute, atual.second)
+            inicio = datetime.datetime.strptime(str(cartao.inicio), "%Y-%m-%d %H:%M:%S")
+            inicio = datetime.datetime(inicio.year, inicio.month, inicio.day, inicio.hour, inicio.minute, inicio.second)
+            fim = datetime.datetime.strptime(str(cartao.fim), "%Y-%m-%d %H:%M:%S")
+            fim = datetime.datetime(fim.year, fim.month, fim.day, fim.hour, fim.minute, fim.second)
+            if inicio <= atual <= fim:
+                print "VINCULO ATIVO"
+                return True
+            else:
+                print "VINCULO VENCIDO"
+                return False
+            
     def obtem_isencao(self, numero_cartao):
         #remoto
         if Rede.status:
@@ -318,7 +342,7 @@ class LeitorCartao(Relogio):
             return isencao_ativa
         else:
             #local
-            isencao_ativa = self.isencao_dao.busca_isencao(numero_cartao)
+            isencao_ativa = self.isencao_dao.busca_isencao(self.numero_cartao)
             if isencao_ativa:
                 print "[ACESSO LOCAL] "+ str(isencao_ativa)
                 return isencao_ativa

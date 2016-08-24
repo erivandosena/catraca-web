@@ -24,7 +24,8 @@ class Catraca(object):
         self.__catr_mac_lan = None
         self.__catr_mac_wlan = None
         self.__catr_interface_rede = None
-         
+        self.__catr_financeiro = None
+        
     def __eq__(self, outro):
         return self.hash_dict(self) == self.hash_dict(outro)
     
@@ -97,4 +98,12 @@ class Catraca(object):
     @interface.setter
     def interface(self, valor):
         self.__catr_interface_rede = valor
+        
+    @property
+    def financeiro(self):
+        return self.__catr_financeiro
+        
+    @financeiro.setter
+    def financeiro(self, valor):
+        self.__catr_financeiro = valor
         
