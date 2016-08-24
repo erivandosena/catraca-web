@@ -16,7 +16,7 @@ class DefinicoesView{
 	}
 	public function listarCatracas($catracas){
 		
-		echo '<div class="doze linhas borda">
+		echo '	<div class="doze linhas borda">
 							<table id="turno" class="tabela borda-vertical zebrada texto-preto no-centro">
 							<thead>
 							<tr>
@@ -26,6 +26,7 @@ class DefinicoesView{
 							<th>Operação</th>
 							<th>Nome</th>
 							<th>Unidade Acadêmica</th>
+							<th>Interface de Rede</th>
 							<th class="centralizado">Ações</th>
 							</tr>
 							</thead>
@@ -51,10 +52,16 @@ class DefinicoesView{
 		echo '<td>'.$catraca->getStrOperacao().'</td>';
 		echo '<td>'.$catraca->getNome().'</td>';
 		echo '<td>'.$catraca->getUnidade()->getNome().'</td>';
+		echo '<td>'.$catraca->getStrIterfaceRede().'</td>';
 		echo '<td>
 				
-			<a href="?pagina=definicoes&editar_catraca='.$catraca->getId().'"><span class="icone-pencil2 botao texto-amarelo2" title="Editar"></span></a>
-			</td>';
+			<a href="?pagina=definicoes&editar_catraca='.$catraca->getId().'"><span class="icone-pencil2 botao texto-amarelo2" title="Editar"></span></a>';
+			if (!$catraca->getUnidade()->getNome()){
+				echo '<a href="?pagina=definicoes&editar_catraca='.$catraca->getId().'"><span class="icone-pencil2 botao texto-amarelo2" title="Editar"></span></a>';
+				
+			}
+			
+		echo '</td>';
 		echo '</tr>';
 	}
 	
@@ -160,11 +167,10 @@ class DefinicoesView{
 										            <td>'.$turno->getHoraInicial().'</td>
 										            <td>'.$turno->getHoraFinal().'</td>
 										            <td class="centralizado">
-										            	<a href=""><span class="icone-pencil2 botao texto-amarelo2" title="Editar"></span></a>
+										            	<a href="?pagina=definicoes&id_turno='.$turno->getId().'&editar"><span class="icone-pencil2 botao texto-amarelo2" title="Editar"></span></a>
 										            	<a href=""><span class="icone-cross botao texto-vermelho2" title="Excluir"></span></a>
 										            </td>
-										        </tr>';
-		
+										        </tr>';		
 	}
 	
 	public function formAdicionarTurno(){
@@ -172,13 +178,13 @@ class DefinicoesView{
 									<div class="borda">
 											<form method="get" action="" class="formulario" >										
 											<label for="turno_nome" class="">
-										        Turno: <input type="text" name="turno_nome" id="turno" required />
+										        Turno: <input type="text" name="turno_nome" id="turno" />
 										    </label><br>
 										    <label for="hora_inicio" class="">
-										        Hora Inicio: <input type="time" name="hora_inicio" id="hora_inicio" required />
+										        Hora Inicio: <input type="time" name="hora_inicio" id="hora_inicio"/>
 										    </label><br>
 										    <label for="hora_fim" class="">
-										        Hora Fim: <input type="time" name="hora_fim" id="hora_fim" required />
+										        Hora Fim: <input type="time" name="hora_fim" id="hora_fim"/>
 										    </label><br>
 										    <input type="hidden" name="pagina" value="definicoes" />
 										    <input type="submit" name="cadastrar_turno" value="Salvar" />
@@ -202,6 +208,7 @@ class DefinicoesView{
 									</form>
 								</div>';
 	}
+	
 	public function listarTiposDeUsuarios($tipos){
 		
 		echo '
@@ -226,24 +233,39 @@ class DefinicoesView{
 									</table>																			
 								</div>';
 	}
+	
 	public function mostrarLinhaTipo(Tipo $tipo){
 		echo '<tr>
 				<td>'.$tipo->getId().'</td>
-									            <td>'.$tipo->getNome().'</td>
-									            <td>R$' . number_format($tipo->getValorCobrado(), 2, ',', '.').'</td>
-									            <td>Ativado</td>								           					            
-									            <td class="centralizado">
-									            	<a href=""><span class="icone-pencil2 botao texto-amarelo2" title="Editar"></span></a>
-									            	<a href=""><span class="icone-checkmark botao texto-verde2" title="Ativar"></span></a>
-									            </td>
-									        </tr>	';
+				<td>'.$tipo->getNome().'</td>
+				<td>R$' . number_format($tipo->getValorCobrado(), 2, ',', '.').'</td>
+				<td>Ativado</td>								           					            
+				<td class="centralizado">
+				<a href="?pagina=definicoes&editar_tipo='.$tipo->getId().'"><span class="icone-pencil2 botao texto-amarelo2" title="Editar"></span></a>
+				<a href=""><span class="icone-checkmark botao texto-verde2" title="Ativar"></span></a>
+				</td>
+				</tr>	';
 		
+	}
+	
+	public function formEditarTipo(Tipo $tipo){
+		echo '	<div class="borda relatorio">
+					<h2 id="titulo-caixa" class="texto-branco fundo-azul2 centralizado">
+					Editar Tipo : '.$tipo->getNome().'<br></h2>
+					<form method="post" class="formulario em-linha">
+						<label for="valor_tipo">
+							Novo valor: <input type="number" max="100" step="0.01" name="valor_tipo" value="'.$tipo->getValorCobrado().'">
+						</label>
+						<input type="submit" name="alterar" value="Alterar">				
+					</form>
+				</div>';
 	}
 	
 	public function formAlterarCustoRefeicao($custoAtualRefeicao){
 		$custoAtualRefeicao = floatval($custoAtualRefeicao);
-		echo '<div class="borda">
-							Custo Atual da Refeição Pago à empresa por prato servido: R$' . number_format($custoAtualRefeicao, 2, ',', '.').'
+		echo '	<div class="borda relatorio">
+					<h2 id="titulo-caixa" class="texto-branco fundo-azul2 centralizado">
+					Custo Atual da Refeição Pago à empresa por prato servido: R$' . number_format($custoAtualRefeicao, 2, ',', '.').'</h2>
 									<form action="" class="formulario sequencial">
 										<label for="custo_refeicao" class="">
 										    Valor de Custo Refeição:  <input type="number"  max="100"  step="0.01" name="custo_refeicao" id="custo_refeicao" value="'.$custoAtualRefeicao.'" />
@@ -256,8 +278,9 @@ class DefinicoesView{
 	
 	public function formAlterarCustoCartao($custoAtualCartao){
 		$custoAtualCartao= floatval($custoAtualCartao);
-		echo '<div class="borda">
-							Custo do cartão: R$' . number_format($custoAtualCartao, 2, ',', '.').'
+		echo '<div class="borda relatorio">
+					<h2 id="titulo-caixa" class="texto-branco fundo-azul2 centralizado">
+					Custo do cartão: R$' . number_format($custoAtualCartao, 2, ',', '.').'</h2>							
 									<form action="" class="formulario sequencial">
 										<label for="custo_cartao" class="">
 										    Valor de Custo Refeição: <input type="number"  max="100"  step="0.01" name="custo_cartao" id="custo_cartao" value="'.$custoAtualCartao.'" />
@@ -271,16 +294,19 @@ class DefinicoesView{
 		echo '<div class="borda"><p>'.$mensagem.'</p></div>';
 	
 	}
-	public function formEditarCatraca(Catraca $catraca, $listaDeUnidades){
-	
+	public function formEditarCatraca(Catraca $catraca, $listaDeUnidades){	
 		
-		echo '<div class="borda">
-						Editar Catraca : '.$catraca->getNome().' IP: '.$catraca->getIp().'
-						<form action="" method="post" class="formulario sequencial">';
+		echo '<div class="borda relatorio">
+						<h2 id="titulo-caixa" class="texto-branco fundo-azul2 centralizado">
+							Editar Catraca : '.$catraca->getNome().'<br> 
+							IP: '.$catraca->getIp().'</h2>
+						<form action="" method="post" class="formulario em-linha">';	
 		
-		
-		
-		echo '<label for="unidade_academica">Unidade Acadêmica</label>';					
+		echo '	<label for="nome_catraca">
+					Nome da Catraca: <input  type="text" name="nome_catraca" id="nome_catraca" value="'.$catraca->getNome().'">
+				</label><br>				
+				<label for="unidade_academica">
+				<object class="rotulo">Unidade Acadêmica: </object>';		
 		echo '<select name="id_unidade" id="unidade_academica">';
 		foreach ($listaDeUnidades as $unidade){
 			$atributo = "";
@@ -288,40 +314,71 @@ class DefinicoesView{
 				$atributo = "selected";
 			echo '<option value="'.$unidade->getId().'"'.$atributo.'>'.$unidade->getNome().'</option>';
 		}
-		echo '</select>';
+		echo '</select></label><br>';
 	
 		switch ($catraca->getOperacao()){
-			case Catraca::GIRO_ANTI_HORARIO:
+			case Catraca::GIRO_ANTI_VAL_HOR_BLOQ:
 				$horario = "";
 				$anti = "selected";
 				$livre = "";
+				$horario_anti = "";
+				$anti_horario = "";
 			break;
-			case Catraca::GIRO_HORARIO:
+			case Catraca::GIRO_HOR_VAL_ANTI_BLOQ:
 				$horario = "selected";
 				$anti = "";
 				$livre = "";
+				$horario_anti = "";
+				$anti_horario = "";
 				break;
 			case Catraca::GIRO_LIVRE:
 				$horario = "";
 				$anti = "";
 				$livre = "selected";
+				$horario_anti = "";
+				$anti_horario = "";
+				break;
+			case Catraca::GIRO_ANTI_LIVRE_HOR_VAL:
+				$horario = "";
+				$anti = "";
+				$livre = "";
+				$horario_anti = "";
+				$anti_horario = "selected";
+				break;
+			case Catraca::GIRO_HOR_LIVRE_ANTI_VAL:
+				$horario = "";
+				$anti = "";
+				$livre = "";
+				$horario_anti = "selected";
+				$anti_horario = "";
 				break;
 			default:
 				$horario = "selected";
 				$anti = "";
 				$livre = "";
-			break;
-			
+				$horario_anti = "";
+				$anti_horario = "";
+			break;			
 		}
-		echo '<label for="operacao">Operação</label>';
+		echo '<label for="operacao"><object class="rotulo">Operação: </object>';
 		echo '<select name="operacao" id="operacao">';
-		echo '<option '.$horario.' value="'.Catraca::GIRO_HORARIO.'" '.$horario.'>Sentido Horário</option>';
-		echo '<option '.$anti.' value="'.Catraca::GIRO_ANTI_HORARIO.'" '.$anti.'>Sentido Anti-Horário</option>';
+		echo '<option '.$horario.' value="'.Catraca::GIRO_HOR_VAL_ANTI_BLOQ.'" '.$horario.'>Sentido Horário</option>';
+		echo '<option '.$anti.' value="'.Catraca::GIRO_ANTI_VAL_HOR_BLOQ.'" '.$anti.'>Sentido Anti-Horário</option>';
+		echo '<option '.$horario_anti.' value="'.Catraca::GIRO_HOR_LIVRE_ANTI_VAL.'" '.$horario_anti.'>Horário(LIVRE) / Anti-Horário(VALIDADO)</option>';
+		echo '<option '.$anti_horario.' value="'.Catraca::GIRO_ANTI_LIVRE_HOR_VAL.'" '.$anti_horario.'>Anti-Horário(LIVRE) / Horário(VALIDADO)</option>';
 		echo '<option  '.$livre.' value="'.Catraca::GIRO_LIVRE.'" '.$livre.'>Livre</option>';
-		echo '</select>';
-		echo '<label for="tempo_giro">Tempo De Giro</label>';
-		echo '<input type="number" min="0" max="100" step="1" name="tempo_giro" id="tempo_giro" value="'.$catraca->getTempodeGiro().'"/>';
+		echo '</select></label><br>';
+		echo '<label for="tempo_giro">Tempo De Giro: ';
+		echo '<input type="number" min="0" max="100" step="1" name="tempo_giro" id="tempo_giro" value="'.$catraca->getTempodeGiro().'"/></label><br>';
 		
+		echo '	<label for="interface">
+				<object class="rotulo">Interface de Rede: </object>
+				<select name="interface" id="interface">
+					<option selected="selected" value="'.$catraca->getInterfaceRede().'">'.$catraca->getStrIterfaceRede().'</option>
+					<option value="eth0">Rede Cabeada</option>
+					<option value="wlan0">Rede Sem fio</option>
+				</select>
+				</label><br>';	
 		echo '<input type="hidden" name="id_catraca" value="' . $catraca->getId() . '"><br>';
 		echo '<input type="submit" name="salvar" value="Salvar"></form></div>';
 	
@@ -357,6 +414,73 @@ class DefinicoesView{
 	
 	
 	}
+	
+	public function formAdicionarCatracaVirtual(){
+		
+		echo '	<div class="borda relatorio">
+				<h2 id="titulo-caixa" class="texto-branco fundo-azul2 centralizado">
+				Adicionar Catraca Virtual<br></h2>
+				<form action="" method="get" class="formulario em-linha">
+				<label for="nome_catraca">
+					Nome da Catraca: <input type="text" name="nome_catraca" id="nome_catraca" value="">
+				</label><br>
+					<input type="hidden" name="pagina" value="definicoes" />
+					<input type="submit" name="adicionar" value="Adicionar">
+				</form></div>';
+		
+	}
+	
+	public function formEditarTurno(Turno $turno){
+		echo'	<div class="borda relatorio">
+					<h2 id="titulo-caixa" class="texto-branco fundo-azul2 centralizado">
+					Editar turno: '.$turno->getDescricao().'</h2>
+					<form method="post" class="formulario-organizado">
+						<label for="hora_inicio">
+							Hora Inicio: <input type="time" name="hora_inicio" value="'.$turno->getHoraInicial().'">
+						</label>
+						<label for="hora_inicio">
+							Hora Fim: <input type="time" name="hora_fim" value="'.$turno->getHoraFinal().'">
+						</label>
+						<input type="submit" class="botao" value="Alterar" name="confirmar">
+					</form>
+				</div>';
+	}
+	
+	public function formNivel(Usuario $usuario){
+		echo'	<div class="borda relatorio">
+	
+						<span>Usuario: '.$usuario->getNome().'</span>
+						<span>Login: '.$usuario->getLogin().'</span>
+						<span>Nível Atual: '.$usuario->strNivelAcesso().'</span><br>
+						<hr class="um"><br>
+	
+					<form class="formulario-organizado" method="post">
+						<label>
+							<object data="" type="" class="rotulo">Novo Nível:</object>
+							<select name="novo_nivel" id="novo_nivel">
+								<option selected="selected" value="'.$usuario->getNivelAcesso().'">'.$usuario->strNivelAcesso().'</option>
+								<option value="1">Padrão</option>
+								<option value="2">Admin</option>
+								<option value="3">Super</option>
+								<option value="4">Guichê</option>
+								<option value="5">Suporte</option>
+							</select>
+							</label>
+						<input class="botao" type="submit" name="alterar" value="Alterar Nível">
+					</form><br>
+				</div>';
+	}
+	
+	public function formMensagem($tipo, $texto){
+ 		//Tipo = -sucesso, -erro, -ajuda
+ 		echo '	<div class="alerta'.$tipo.'">
+				    	<div class="icone icone-notification ix16"></div>
+				    	<div class="titulo-alerta">Aten&ccedil&atildeo</div>
+				    	<div class="subtitulo-alerta">'.$texto.'</div>
+				</div>';
+ 		
+ 	}
+ 	
 }
 
 
