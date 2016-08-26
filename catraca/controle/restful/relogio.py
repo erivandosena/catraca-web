@@ -52,13 +52,6 @@ class Relogio(ControleGenerico, threading.Thread):
         print "%s Rodando... " % self.name
         self.catraca = self.catraca_dao.busca_por_nome(self.util.obtem_nome_rpi())
         while not self._stopevent.isSet():
-            
-            
-#             obj = self.catraca_dao.busca(1)
-#             if self.catraca_dao.atualiza_exclui(obj, True):
-#                 print self.catraca_dao.aviso
-            #self.obtem_turno()
-
             self.hora_atul = self.util.obtem_hora()
             Relogio.hora = self.hora_atul
             self.datahora = self.util.obtem_datahora().strftime("%d/%m/%Y %H:%M:%S")
@@ -82,11 +75,13 @@ class Relogio(ControleGenerico, threading.Thread):
     def obtem_catraca(self):
         if Rede.status:
             
-            #self.atualiza_remoto()
-
-            catraca = Rede.interface_ativa[3]
-            print "[ACESSO REMOTO] "+ str(catraca)
-            return self.obtem_dependencias_remotas(catraca)
+            print self.lote_off
+            while self.lote_off:
+                self.atualiza_remoto()
+            else:
+                catraca = Rede.interface_ativa[0]
+                print "[ACESSO REMOTO] "+ str(catraca)
+                return self.obtem_dependencias_remotas(catraca)
         else:
             #local
             self.lote_off = True
@@ -167,17 +162,17 @@ class Relogio(ControleGenerico, threading.Thread):
             return None
         
     def atualiza_remoto(self):
-        if self.lote_off:
-            turnos = TurnoDAO().busca()
-            if turnos:
-                for turno in turnos:
-                    registros =  RegistroDAO().busca_por_periodo( str(self.util.obtem_data()) +" " + str(turno[1]) , str(self.util.obtem_data()) +" " + str(turno[2]))
-                    if registros:
-                        for registro in registros:
-                            #registro aqui
-                            print "#registro aqui"
-                            # insere registro remoto
-                            RegistroJson().objeto_json(registro)
+        turnos = TurnoDAO().busca()
+        if turnos:
+            for turno in turnos:
+                registros =  RegistroDAO().busca_por_periodo( str(self.util.obtem_data()) +" " + str(turno[3]) , str(self.util.obtem_data()) +" " + str(turno[1]))
+                if registros:
+                    for registro in registros:
+                        #registro aqui
+                        print "#registro aqui"
+                        # insere registro remoto
+                        if RegistroJson().objeto_json(registro) == 200:
+                            print "Registro inserido no remoto com sucesso!"
                             cartao = CartaoDAO().busca(registro[4])
                             if cartao:
                                 #cartao aqui
@@ -186,42 +181,15 @@ class Relogio(ControleGenerico, threading.Thread):
                                 cartao.creditos = saldo_creditos
                                 print CartaoDAO().atualiza_exclui(cartao, False).aviso
                                 # atualiza cartao remoto
-                                CartaoJson().objeto_json(cartao)
-                                
-
-                
-#         conta_turno = 0
-#         conta_cartao = 0
-#         conta_registro = 0
-#         total_r = 0
-#         total_c = 0
-#         
-#         print self.lote_off
-#         if self.lote_off:
-#             turnos = TurnoDAO().busca()
-#             if turnos:
-#                 for turno in turnos:
-#                     conta_turno += 1
-#                     print "-" * 50
-#                     print "TURNO " + str(conta_turno)
-#                     print "-" * 50
-#                     registros =  RegistroDAO().busca_por_periodo( str(self.util.obtem_data()) +" " + str(turno[1]) , str(self.util.obtem_data()) +" " + str(turno[2]))
-#                     if registros:
-#                         for registro in registros:
-#                             conta_registro += 1
-#                             #aqui
-#                             cartao = CartaoDAO().busca(registro[4])
-#                             if cartao:
-#                                 conta_cartao += 1
-#                                 #aqui
-#                         print str(conta_registro)+ " REGISTROS"
-#                         print str(conta_cartao)+ " CARTOES" 
-#                         total_r += conta_registro
-#                         total_c += conta_cartao
-#                         conta_registro = 0
-#                         conta_cartao = 0
-#                 conta_turno = 0
-#                 print "=" * 50
-#                 print "TOTAL REGISTROS " + str(total_r)
-#                 print "TOTAL CARTOES " + str(total_c)
-        
+                                if CartaoJson().objeto_json(cartao) == 200:
+                                    print "Cartao atualizado no remoto com sucesso!"
+                                    print RegistroDAO().atualiza_exclui(registro, True).aviso
+                                    self.lote_off = False
+                                else:
+                                    print "Erro ao atualizar cartao no remoto!"
+                        else:
+                            print "Erro ao inserir registro no remoto!"
+                else:
+                    print "Sem registos nos turnos."
+                    self.lote_off = False
+                    

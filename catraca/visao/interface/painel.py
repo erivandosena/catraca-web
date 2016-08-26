@@ -8,8 +8,8 @@ from catraca.visao.interface.aviso import Aviso
 from catraca.visao.interface.alerta import Alerta
 from catraca.controle.dispositivos.leitorcartao import LeitorCartao
 from catraca.controle.restful.sincronia import Sincronia
-from catraca.visao.interface.rede import Rede
-from catraca.controle.restful.relogio import Relogio
+#from catraca.visao.interface.rede import Rede
+#from catraca.controle.restful.relogio import Relogio
 
 
 __author__ = "Erivando Sena"

@@ -5,10 +5,9 @@
 import inspect
 from typing import TypeVar
 from typing import Generic
-from contextlib import closing
+#from contextlib import closing
 from catraca.logs import Logs
 from catraca.modelo.dados.conexao_generica import ConexaoGenerica
-from time import sleep
 
 
 __author__ = "Erivando Sena"
@@ -26,183 +25,162 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
     def __init__(self):
         super(DAOGenerico, self).__init__()
         ConexaoGenerica.__init__(self)
+        self.cursor = None
         
     def seleciona(self, T, sql, *arg):
         obj = T()
+        self.cursor = self.abre_conexao().cursor(cursor_factory=self.extras.DictCursor)
         try:
-            with closing(self.abre_conexao().cursor(cursor_factory=self.extras.DictCursor)) as cursor:
-                dic = {}
-                argumentos = []
-                for a in arg:
-                    argumentos.append(a)
-                #print argumentos
-                cursor.execute(sql, argumentos)
-                if arg:
-                    linhas = cursor.fetchone()
-                    #print cursor.query
-#                     colunas = [coluna[0] for coluna in cursor.description]
-#                     print colunas, linhas
-#                     dic = dict(zip(colunas, linhas))
-#                     print dic
-                    if linhas:
-                        #print cursor.query
-                        colunas = [coluna[0] for coluna in cursor.description]
-                        #print colunas, linhas
-                        dic = dict(zip(colunas, linhas))
-                        #print dic
-                        for coluna in sorted(dic):
-                            setattr(obj, coluna, dic[coluna])
-                        msg = cursor.statusmessage
-                        status = msg[len(msg)-1:len(msg)]
-                        if status:
-                            self.aviso = "Selecionado {0} com sucesso!".format(status)
-                            return obj
-                        else:
-                            return None
+            #with closing(self.abre_conexao().cursor(cursor_factory=self.extras.DictCursor)) as cursor:
+            dic = {}
+            argumentos = []
+            for a in arg:
+                argumentos.append(a)
+            if arg:
+                print argumentos
+                self.cursor.execute(sql, argumentos)
+                linhas = self.cursor.fetchone()
+                #print self.cursor.query
+                if linhas:
+                    colunas = [coluna[0] for coluna in self.cursor.description]
+                    dic = dict(zip(colunas, linhas))
+                    for coluna in sorted(dic):
+                        setattr(obj, coluna, dic[coluna])
+                    msg = self.cursor.statusmessage
+                    status = msg[len(msg)-1:len(msg)]
+                    if status:
+                        self.aviso = "Selecionado {0} com sucesso!".format(status)
+                        return obj
                     else:
                         return None
                 else:
-                    linhas = cursor.fetchall()
-                    #print cursor.query
-                    if linhas != []:
-                        listas = []
-                        for linha in linhas:
-                            colunas = [coluna[0] for coluna in cursor.description]
-                            dic.update(zip(colunas, linha))
-                            lista = []
-                            for linha in sorted(dic):
-                                lista.append(dic[linha])
-                            listas.append(lista)
-                        msg = cursor.statusmessage
-                        status = msg[len(msg)-1:len(msg)]
-                        if status:
-                            self.aviso = "Selecionado {0} com sucesso!".format(status)
-                            return listas
-                        else:
-                            return []
-        except (self.DataError, self.ProgrammingError):
-            self.rollback()
+                    return None
+            else:
+                self.cursor.execute(sql)
+                linhas = self.cursor.fetchall()
+                #print self.cursor.query
+                if linhas != []:
+                    listas = []
+                    for linha in linhas:
+                        colunas = [coluna[0] for coluna in self.cursor.description]
+                        dic.update(zip(colunas, linha))
+                        lista = []
+                        for linha in sorted(dic):
+                            lista.append(dic[linha])
+                        listas.append(lista)
+                    msg = self.cursor.statusmessage
+                    status = msg[len(msg)-1:len(msg)]
+                    if status:
+                        self.aviso = "Selecionado {0} com sucesso!".format(status)
+                        return listas
+                    else:
+                        return []
+        except (self.data_error, self.programming_error, self.operational_error):
+            self.cursor = self.abre_conexao().cursor(cursor_factory=self.extras.DictCursor)
         except Exception as excecao:
             self.log.logger.error("ERRO: ", exc_info=True)
         finally:
-            self.fecha_conexao()
+            self.__fecha_conexoes(self.cursor)
             
     def inclui(self, sql, *arg):
         obj = [a for a in arg][0] if arg else None
+        self.cursor = self.abre_conexao().cursor(cursor_factory=self.extras.DictCursor)
         try:
             if obj:
-                with closing(self.abre_conexao().cursor(cursor_factory=self.extras.DictCursor)) as cursor:
-
-                    atributos = inspect.getmembers(obj, lambda m:not(inspect.isroutine(m)))
-                    colunas = [m[0] for m in atributos if '_' not in m[0]]
-                    valores = [m[1] for m in atributos if '_' not in m[0]]
-                    dic = dict(zip(colunas[0::1], valores[0::1]))
-#                     print colunas
-#                     print valores
-                    lista_ordenada = []
-                    for linha in sorted(dic):
-                        lista_ordenada.append(dic[linha])
-#                     print "============================="
-#                     print sorted(dic)
-#                     print lista_ordenada
-#                     print sql
-#                     print "============================="
-                    #print lista_ordenada
-                    cursor.execute(sql, lista_ordenada)
-                    print cursor.query
-                    self.commit()
-                    msg = cursor.statusmessage
-                    status = msg[len(msg)-1:len(msg)]
-                    if status:
-                        self.aviso = "Inserido {0} com sucesso!".format(status)
-                        return True
-                    else:
-                        return False
-            else:
-                return False
-        except (self.DataError, self.ProgrammingError):
-            self.rollback()
-        except Exception as excecao:
-            self.log.logger.error("ERRO: ", exc_info=True)
-        finally:
-            #self.fecha_conexao()
-            pass
-            
-    def altera(self, sql, *arg):
-        obj = [a for a in arg][0] if arg else None
-        try:
-            if obj:
-                with closing(self.abre_conexao().cursor(cursor_factory=self.extras.DictCursor)) as cursor:
-
-                    atributos = inspect.getmembers(obj, lambda m:not(inspect.isroutine(m)))
-                    colunas = [m[0] for m in atributos if '_' not in m[0]]
-                    valores = [m[1] for m in atributos if '_' not in m[0]]
-                    dic = dict(zip(colunas[0::1], valores[0::1]))
-                    dic.pop('id')
-                    #print colunas
-#                     print valores
-#                     print dic
-                    lista_ordenada = []
-                    for linha in sorted(dic):
-                        lista_ordenada.append(dic[linha])
-                    lista_ordenada.append(obj.id)
-                    #print lista_ordenada
-                    cursor.execute(sql, lista_ordenada)
-                    print cursor.query
-                    
-#                     if obj.__class__.__name__ != "Cartao":
-#                         self.commit()
-#                         msg = cursor.statusmessage
-#                         status = msg[len(msg)-1:len(msg)]
-#                         if status:
-#                             self.aviso = "Alterado {0} com sucesso!".format(status)
-#                             return True
-#                         else:
-#                             return False
-#                     else:
-#                         self.aviso = "Favor realizar commit de {0} manualmente!".format(obj.__class__.__name__)
-#                         print self.aviso
-
-                    self.commit()
-                    msg = cursor.statusmessage
-                    status = msg[len(msg)-1:len(msg)]
-                    if status:
-                        self.aviso = "Alterado {0} com sucesso!".format(status)
-                        return True
-                    else:
-                        return False
-            else:
-                return False
-        except (self.DataError, self.ProgrammingError):
-            print "fez rollback"
-            self.rollback()
-        except Exception as excecao:
-            self.log.logger.error("ERRO: ", exc_info=True)
-        finally:
-            self.fecha_conexao()
-            
-    def deleta(self, sql, *arg):
-        obj = [a for a in arg][0] if arg else None
-        try:
-            with closing(self.abre_conexao().cursor(cursor_factory=self.extras.DictCursor)) as cursor:
-                if obj:
-                    cursor.execute(sql, (obj.id,))
-                    #print cursor.query
-                else:
-                    cursor.execute(sql)
-                    #print cursor.query
+                #with closing(self.abre_conexao().cursor(cursor_factory=self.extras.DictCursor)) as cursor:
+                atributos = inspect.getmembers(obj, lambda m:not(inspect.isroutine(m)))
+                colunas = [m[0] for m in atributos if '_' not in m[0]]
+                valores = [m[1] for m in atributos if '_' not in m[0]]
+                dic = dict(zip(colunas[0::1], valores[0::1]))
+                lista_ordenada = []
+                for linha in sorted(dic):
+                    lista_ordenada.append(dic[linha])
+                self.cursor.execute(sql, lista_ordenada)
+                print self.cursor.query
                 self.commit()
-                msg = cursor.statusmessage
+                msg = self.cursor.statusmessage
                 status = msg[len(msg)-1:len(msg)]
                 if status:
-                    self.aviso = "Deletado {0} com sucesso!".format(status)
+                    self.aviso = "Inserido {0} com sucesso!".format(status)
                     return True
                 else:
                     return False
-        except (self.DataError, self.ProgrammingError):
+            else:
+                return False
+        except (self.data_error, self.programming_error, self.operational_error):
+            print "fez rollback (insert)"
             self.rollback()
+            self.cursor = self.abre_conexao().cursor(cursor_factory=self.extras.DictCursor)
         except Exception as excecao:
             self.log.logger.error("ERRO: ", exc_info=True)
         finally:
-            self.fecha_conexao()
+            self.__fecha_conexoes(self.cursor)
             
+    def altera(self, sql, *arg):
+        obj = [a for a in arg][0] if arg else None
+        self.cursor = self.abre_conexao().cursor(cursor_factory=self.extras.DictCursor)
+        try:
+            if obj:
+                #with closing(self.abre_conexao().cursor(cursor_factory=self.extras.DictCursor)) as cursor:
+                atributos = inspect.getmembers(obj, lambda m:not(inspect.isroutine(m)))
+                colunas = [m[0] for m in atributos if '_' not in m[0]]
+                valores = [m[1] for m in atributos if '_' not in m[0]]
+                dic = dict(zip(colunas[0::1], valores[0::1]))
+                dic.pop('id')
+                lista_ordenada = []
+                for linha in sorted(dic):
+                    lista_ordenada.append(dic[linha])
+                lista_ordenada.append(obj.id)
+                self.cursor.execute(sql, lista_ordenada)
+                print self.cursor.query
+                self.commit()
+                msg = self.cursor.statusmessage
+                status = msg[len(msg)-1:len(msg)]
+                if status:
+                    self.aviso = "Alterado {0} com sucesso!".format(status)
+                    return True
+                else:
+                    return False
+            else:
+                return False
+        except (self.data_error, self.programming_error, self.operational_error):
+            print "fez rollback (edit)"
+            self.rollback()
+            self.cursor = self.abre_conexao().cursor(cursor_factory=self.extras.DictCursor)
+        except Exception as excecao:
+            self.log.logger.error("ERRO: ", exc_info=True)
+        finally:
+            self.__fecha_conexoes(self.cursor)
+            
+    def deleta(self, sql, *arg):
+        obj = [a for a in arg][0] if arg else None
+        self.cursor = self.abre_conexao().cursor(cursor_factory=self.extras.DictCursor)
+        try:
+            #with closing(self.abre_conexao().cursor(cursor_factory=self.extras.DictCursor)) as cursor:
+            if obj:
+                self.cursor.execute(sql, (obj.id,))
+            else:
+                self.cursor.execute(sql)
+            self.commit()
+            msg = self.cursor.statusmessage
+            status = msg[len(msg)-1:len(msg)]
+            if status:
+                self.aviso = "Deletado {0} com sucesso!".format(status)
+                return True
+            else:
+                return False
+        except (self.data_error, self.programming_error, self.operational_error):
+            print "fez rollback (delete)"
+            self.rollback()
+            self.cursor = self.abre_conexao().cursor(cursor_factory=self.extras.DictCursor)
+        except Exception as excecao:
+            self.log.logger.error("ERRO: ", exc_info=True)
+        finally:
+            self.__fecha_conexoes(self.cursor)
+            
+    def __fecha_conexoes(self, cursor):
+        if not self.cursor.closed:
+            self.cursor.close()
+            #print "CURSOR FECHADO!"
+            self.fecha_conexao()
+        

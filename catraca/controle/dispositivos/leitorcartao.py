@@ -186,11 +186,13 @@ class LeitorCartao(Relogio):
                 ##############################################################
                 saldo_creditos = 0.00
                 cartao_isento = False
+                self.aviso.exibir_saldo_cartao(cartao_usuario_nome, locale.currency(float(cartao_total_creditos)).format())
                 if Relogio.catraca.financeiro:
+                    print Relogio.catraca.financeiro
                     ##############################################################
                     ## VERIFICA SE O CARTAO POSSUI ISENCAO DE PAGAMENTO
                     ##############################################################
-                    self.aviso.exibir_saldo_cartao(cartao_usuario_nome, locale.currency(float(cartao_total_creditos)).format())
+                    #self.aviso.exibir_saldo_cartao(cartao_usuario_nome, locale.currency(float(cartao_total_creditos)).format())
 #                     saldo_creditos = 0.00
 #                     cartao_isento = False
                     ISENCAO = self.obtem_isencao(self.numero_cartao)
@@ -213,7 +215,8 @@ class LeitorCartao(Relogio):
                 ##############################################################
                 ## VERIFICA O LIMITE PERMITIDO DE USO DO CARTAO DURANTE TURNO
                 ##############################################################
-                elif self.obtem_limite_utilizacao(cartao_id) >= cartao_limite_utilizacao:
+                print "TESTE: "+str(self.obtem_limite_utilizacao(cartao_id))+ " >= " +str(cartao_limite_utilizacao)
+                if self.obtem_limite_utilizacao(cartao_id) >= cartao_limite_utilizacao:
                     #self.log.logger.info('Limite de uso atingido. [cartao n.] ' + str(self.numero_cartao))
                     self.util.beep_buzzer(250, .1, 3)
                     self.aviso.exibir_cartao_utilizado(Relogio.turno.descricao)
@@ -274,7 +277,6 @@ class LeitorCartao(Relogio):
             self.bloqueia_acesso()
             if giro_completo:
                 if Rede.status:
-                    print Rede.status
                     # insere registro remoto
                     registro_json.objeto_json(registro)
                     # atualiza cartao remoto
@@ -372,10 +374,10 @@ class LeitorCartao(Relogio):
             return float(custo_refeicao_atual.valor)
         else:
             #local
-            custo_refeicao_atual = self.custo_refeicao_dao.busca()
+            custo_refeicao_atual = self.custo_refeicao_dao.busca_custo()
             if custo_refeicao_atual:
-                print "[ACESSO LOCAL] "+ str(float(custo_refeicao_atual.valor))
-                return float(custo_refeicao_atual.valor)
+                print "[ACESSO LOCAL] "+ str(float(custo_refeicao_atual))
+                return float(custo_refeicao_atual)
             else:
                 return 0.00
         

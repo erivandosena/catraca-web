@@ -53,6 +53,7 @@ class MensagemJson(ServidorRestful):
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json mensagem', exc_info=True)
+            return None
         finally:
             pass
         

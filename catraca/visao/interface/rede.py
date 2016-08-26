@@ -60,17 +60,15 @@ class Rede(threading.Thread):
                         addrs = netifaces.ifaddresses(iface)
                         addresses = [i['addr'] for i in addrs.setdefault(netifaces.AF_INET, [{'addr':None}] )]
                         if addresses[0]:
-                            Rede.interface_ativa.append(addresses[0])
-                            Rede.interface_ativa.append(iface)
-                            Rede.interface_ativa.append(addrs[netifaces.AF_LINK][0]['addr'])
-                            Rede.interface_ativa.append(catraca_remota)
+                            Rede.interface_ativa.insert(0, catraca_remota)
+                            Rede.interface_ativa.insert(1, iface)
                             if not self.status:
                                 self.interface_atual = Rede.interface_ativa[1]
                                 self.aviso.exibir_estatus_rede(interface, Rede.interface_ativa)
                             if self.interface_atual != Rede.interface_ativa[1]:
                                 self.interface_atual = Rede.interface_ativa[1]
                                 self.aviso.exibir_estatus_rede(interface, Rede.interface_ativa)
-                            #print Rede.interface_ativa
+                                
                             return Rede.interface_ativa
                 else:
                     return []

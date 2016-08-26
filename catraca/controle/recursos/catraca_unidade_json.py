@@ -49,6 +49,7 @@ class CatracaUnidadeJson(ServidorRestful):
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json catraca-unidade', exc_info=True)
+            return None
         finally:
             pass
         

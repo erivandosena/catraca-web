@@ -26,30 +26,34 @@ class TurnoDAO(DAOGenerico):
         
     def busca(self, *arg):
         arg = [a for a in arg][0] if arg else None
-        if arg:
-            sql = "SELECT "\
-                "turn_descricao as descricao, "\
-                "turn_hora_fim as fim, "\
-                "turn_id as id, "\
-                "turn_hora_inicio as inicio "\
-                "FROM turno WHERE "\
-                "turn_id = %s"
-        else:
-            sql = "SELECT "\
-                "turn_descricao as descricao, "\
-                "turn_hora_fim as fim, "\
-                "turn_id as id, "\
-                "turn_hora_inicio as inicio "\
-                "FROM turno ORDER BY turn_id"
-        return self.seleciona(Turno, sql, arg)
+        try:
+            if arg:
+                sql = "SELECT "\
+                    "turn_descricao as descricao, "\
+                    "turn_hora_fim as fim, "\
+                    "turn_id as id, "\
+                    "turn_hora_inicio as inicio "\
+                    "FROM turno WHERE "\
+                    "turn_id = %s"
+                return self.seleciona(Turno, sql, arg)
+            else:
+                sql = "SELECT "\
+                    "turn_descricao as descricao, "\
+                    "turn_hora_fim as fim, "\
+                    "turn_id as id, "\
+                    "turn_hora_inicio as inicio "\
+                    "FROM turno ORDER BY turn_id"
+                return self.seleciona(Turno, sql)
+        finally:
+            pass
     
     def busca_por_catraca(self, obj, hora_atual):
         nome = obj.nome if obj else self.util.obtem_nome_rpi().upper()
         sql = "SELECT DISTINCT "\
-            "turno.turn_id as id , "\
-            "turno.turn_hora_inicio as inicio, "\
+            "turno.turn_descricao as descricao, "\
             "turno.turn_hora_fim as fim, "\
-            "turno.turn_descricao as descricao "\
+            "turno.turn_id as id , "\
+            "turno.turn_hora_inicio as inicio "\
             "FROM turno "\
             "INNER JOIN unidade_turno ON turno.turn_id = unidade_turno.turn_id "\
             "INNER JOIN catraca_unidade ON unidade_turno.unid_id = catraca_unidade.unid_id "\
@@ -58,15 +62,21 @@ class TurnoDAO(DAOGenerico):
             "catraca.catr_nome = %s AND "\
             "turno.turn_hora_inicio <= %s "\
             "AND turno.turn_hora_fim >= %s"
-        return self.seleciona(Turno, sql, nome, str(hora_atual), str(hora_atual))
+        try:
+            return self.seleciona(Turno, sql, nome, str(hora_atual), str(hora_atual))
+        finally:
+            pass
     
     def obtem_turno(self, catraca=None, hora=None):
         turno = None
-        if (catraca is None) or (hora is None):
-            turno = self.busca_por_catraca( CatracaDAO().busca_por_ip(self.util.obtem_ip_por_interface()), self.util.obtem_hora() )
-        else:
-            turno = self.busca_por_catraca(catraca, hora)
-        return turno
+        try:
+            if (catraca is None) or (hora is None):
+                turno = self.busca_por_catraca( CatracaDAO().busca_por_ip(self.util.obtem_ip_por_interface()), self.util.obtem_hora() )
+            else:
+                turno = self.busca_por_catraca(catraca, hora)
+            return turno
+        finally:
+            pass
     
     def insere(self, obj):
         sql = "INSERT INTO turno "\
@@ -77,7 +87,10 @@ class TurnoDAO(DAOGenerico):
             "turn_hora_inicio "\
             ") VALUES ("\
             "%s, %s, %s, %s)"
-        return self.inclui(sql, obj)
+        try:
+            return self.inclui(sql, obj)
+        finally:
+            pass
     
     def atualiza(self, obj):
         sql = "UPDATE turno SET "\
@@ -85,22 +98,31 @@ class TurnoDAO(DAOGenerico):
             "turn_hora_fim = %s, "\
             "turn_hora_inicio = %s "\
             "WHERE turn_id = %s"
-        return self.altera(sql, obj)
+        try:
+            return self.altera(sql, obj)
+        finally:
+            pass
     
     def exclui(self, *arg):
         obj = [a for a in arg][0] if arg else None
         sql = "DELETE FROM turno"
         if obj:
             sql = str(sql) + " WHERE turn_id = %s"
-        return self.deleta(sql, obj)
+        try:
+            return self.deleta(sql, obj)
+        finally:
+            pass
     
     def atualiza_exclui(self, obj, boleano):
         if obj or boleano:
-            if boleano:
-                if obj is None:
-                    return self.exclui()
+            try:
+                if boleano:
+                    if obj is None:
+                        return self.exclui()
+                    else:
+                        self.exclui(obj)
                 else:
-                    self.exclui(obj)
-            else:
-                return self.atualiza(obj)
-            
+                    return self.atualiza(obj)
+            finally:
+                pass
+                

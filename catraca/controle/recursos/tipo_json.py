@@ -49,6 +49,7 @@ class TipoJson(ServidorRestful):
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json tipo', exc_info=True)
+            return None
         finally:
             pass
         
@@ -87,26 +88,6 @@ class TipoJson(ServidorRestful):
         if self.tipo_dao.insere(obj):
             print self.tipo_dao.aviso
             return obj
-        
-#     def mantem_tabela_local(self, obj, limpa_tabela=False):
-#         if limpa_tabela:
-#             self.atualiza_exclui(None, limpa_tabela)
-#         if obj:
-#             resultado = self.tipo_dao.busca(obj.id)
-#             if resultado:
-#                 self.atualiza_exclui(obj, False)
-#             else:
-#                 self.insere(obj)
-#         else:
-#             return None
-#         
-#     def atualiza_exclui(self, obj, boleano):
-#         self.tipo_dao.atualiza_exclui(obj, boleano)
-#         print self.tipo_dao.aviso
-#         
-#     def insere(self, obj):
-#         self.tipo_dao.insere(obj)
-#         print self.tipo_dao.aviso
         
     def dict_obj(self, formato_json):
         tipo = Tipo()

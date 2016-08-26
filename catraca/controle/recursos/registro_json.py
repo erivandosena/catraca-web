@@ -66,6 +66,7 @@ class RegistroJson(ServidorRestful):
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json registro', exc_info=True)
+            return None
         finally:
             pass
         
@@ -93,6 +94,7 @@ class RegistroJson(ServidorRestful):
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json registro', exc_info=True)
+            return None
         finally:
             pass
         

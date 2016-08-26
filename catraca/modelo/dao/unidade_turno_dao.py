@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 
-# from contextlib import closing
 from catraca.logs import Logs
 from catraca.modelo.dao.dao_generico import DAOGenerico
 from catraca.modelo.entidades.unidade_turno import UnidadeTurno
@@ -24,20 +23,24 @@ class UnidadeTurnoDAO(DAOGenerico):
         
     def busca(self, *arg):
         arg = [a for a in arg][0] if arg else None
-        if arg:
-            sql = "SELECT "\
-                "turn_id as turno, "\
-                "unid_id as unidade, "\
-                "untu_id as id "\
-                "FROM unidade_turno WHERE "\
-                "untu_id = %s"
-        else:
-            sql = "SELECT "\
-                "turn_id as turno, "\
-                "unid_id as unidade, "\
-                "untu_id as id "\
-                "FROM unidade_turno ORDER BY untu_id"
-        return self.seleciona(UnidadeTurno, sql, arg)
+        try:
+            if arg:
+                sql = "SELECT "\
+                    "turn_id as turno, "\
+                    "unid_id as unidade, "\
+                    "untu_id as id "\
+                    "FROM unidade_turno WHERE "\
+                    "untu_id = %s"
+                return self.seleciona(UnidadeTurno, sql, arg)
+            else:
+                sql = "SELECT "\
+                    "turn_id as turno, "\
+                    "unid_id as unidade, "\
+                    "untu_id as id "\
+                    "FROM unidade_turno ORDER BY untu_id"
+                return self.seleciona(UnidadeTurno, sql)
+        finally:
+            pass
     
     def insere(self, obj):
         sql = "INSERT INTO unidade_turno "\
@@ -47,29 +50,41 @@ class UnidadeTurnoDAO(DAOGenerico):
             "unid_id "\
             ") VALUES ("\
             "%s, %s, %s)"
-        return self.inclui(sql, obj)
+        try:
+            return self.inclui(sql, obj)
+        finally:
+            pass
     
     def atualiza(self, obj):
         sql = "UPDATE unidade_turno SET "\
             "turn_id = %s, "\
             "unid_id = %s "\
             "WHERE untu_id = %s"
-        return self.altera(sql, obj)
+        try:
+            return self.altera(sql, obj)
+        finally:
+            pass
     
     def exclui(self, *arg):
         obj = [a for a in arg][0] if arg else None
         sql = "DELETE FROM unidade_turno"
         if obj:
             sql = str(sql) + " WHERE untu_id = %s"
-        return self.deleta(sql, obj)
+        try:
+            return self.deleta(sql, obj)
+        finally:
+            self.fecha_conexao()
     
     def atualiza_exclui(self, obj, boleano):
         if obj or boleano:
-            if boleano:
-                if obj is None:
-                    return self.exclui()
+            try:
+                if boleano:
+                    if obj is None:
+                        return self.exclui()
+                    else:
+                        self.exclui(obj)
                 else:
-                    self.exclui(obj)
-            else:
-                return self.atualiza(obj)
-            
+                    return self.atualiza(obj)
+            finally:
+                pass
+                

@@ -3,7 +3,6 @@
 
 
 import json
-import requests
 import traceback
 from catraca.logs import Logs
 from catraca.util import Util
@@ -222,6 +221,7 @@ class CatracaJson(ServidorRestful):
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro enviando json catraca.', exc_info=True)
+            return None
         finally:
             pass
         
@@ -237,6 +237,7 @@ class CatracaJson(ServidorRestful):
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro enviando json catraca.', exc_info=True)
+            return None
         finally:
             pass
         

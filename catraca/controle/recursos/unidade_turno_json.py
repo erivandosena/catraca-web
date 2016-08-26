@@ -49,6 +49,7 @@ class UnidadeTurnoJson(ServidorRestful):
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json unidade_turno', exc_info=True)
+            return None
         finally:
             pass
         

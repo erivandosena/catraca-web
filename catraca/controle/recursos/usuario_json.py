@@ -49,6 +49,7 @@ class UsuarioJson(ServidorRestful):
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json usuario', exc_info=True)
+            return None
         finally:
             pass
         

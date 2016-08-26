@@ -51,6 +51,7 @@ class CartaoJson(ServidorRestful):
                     return None
         except Exception as excecao:
             print excecao
+            return None
         finally:
             pass
         
@@ -75,6 +76,7 @@ class CartaoJson(ServidorRestful):
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json cartao', exc_info=True)
+            return None
         finally:
             pass
         
@@ -198,6 +200,7 @@ class CartaoJson(ServidorRestful):
                 return r.status_code
         except Exception as excecao:
             print excecao
+            return None
         finally:
             pass
         

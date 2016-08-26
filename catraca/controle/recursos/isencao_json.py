@@ -51,6 +51,7 @@ class IsencaoJson(ServidorRestful):
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json isencao', exc_info=True)
+            return None
         finally:
             pass
         
@@ -75,6 +76,7 @@ class IsencaoJson(ServidorRestful):
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json isencao', exc_info=True)
+            return None
         finally:
             pass
         

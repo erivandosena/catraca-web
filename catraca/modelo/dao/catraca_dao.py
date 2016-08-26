@@ -23,32 +23,36 @@ class CatracaDAO(DAOGenerico):
         
     def busca(self, *arg):
         arg = [a for a in arg][0] if arg else None
-        if arg:
-            sql = "SELECT "\
-                "catr_financeiro as financeiro, "\
-                "catr_id as id, "\
-                "catr_interface_rede as interface, "\
-                "catr_ip as ip, "\
-                "catr_mac_lan as maclan, "\
-                "catr_mac_wlan as macwlan, "\
-                "catr_nome as nome, "\
-                "catr_operacao as operacao, "\
-                "catr_tempo_giro as tempo "\
-                "FROM catraca WHERE "\
-                "catr_id = %s"
-        else:
-            sql = "SELECT "\
-                "catr_financeiro as financeiro, "\
-                "catr_id as id, "\
-                "catr_interface_rede as interface, "\
-                "catr_ip as ip, "\
-                "catr_mac_lan as maclan, "\
-                "catr_mac_wlan as macwlan, "\
-                "catr_nome as nome, "\
-                "catr_operacao as operacao, "\
-                "catr_tempo_giro as tempo "\
-                "FROM catraca ORDER BY catr_id"
-        return self.seleciona(Catraca, sql, arg)
+        try:
+            if arg:
+                sql = "SELECT "\
+                    "catr_financeiro as financeiro, "\
+                    "catr_id as id, "\
+                    "catr_interface_rede as interface, "\
+                    "catr_ip as ip, "\
+                    "catr_mac_lan as maclan, "\
+                    "catr_mac_wlan as macwlan, "\
+                    "catr_nome as nome, "\
+                    "catr_operacao as operacao, "\
+                    "catr_tempo_giro as tempo "\
+                    "FROM catraca WHERE "\
+                    "catr_id = %s"
+                return self.seleciona(Catraca, sql, arg)
+            else:
+                sql = "SELECT "\
+                    "catr_financeiro as financeiro, "\
+                    "catr_id as id, "\
+                    "catr_interface_rede as interface, "\
+                    "catr_ip as ip, "\
+                    "catr_mac_lan as maclan, "\
+                    "catr_mac_wlan as macwlan, "\
+                    "catr_nome as nome, "\
+                    "catr_operacao as operacao, "\
+                    "catr_tempo_giro as tempo "\
+                    "FROM catraca ORDER BY catr_id"
+                return self.seleciona(Catraca, sql)
+        finally:
+            pass
     
     def busca_por_ip(self, ip):
         sql = "SELECT "\
@@ -63,7 +67,10 @@ class CatracaDAO(DAOGenerico):
             "catr_tempo_giro as tempo "\
             "FROM catraca WHERE "\
             "catr_ip = %s"
-        return self.seleciona(Catraca, sql, ip)
+        try:
+            return self.seleciona(Catraca, sql, ip)
+        finally:
+            pass
     
     def busca_por_nome(self, nome):
         sql = "SELECT "\
@@ -78,15 +85,21 @@ class CatracaDAO(DAOGenerico):
             "catr_tempo_giro as tempo "\
             "FROM catraca WHERE "\
             "catr_nome = %s"
-        print "LENDO TABELA CATRACA"
-        return self.seleciona(Catraca, sql, nome.upper())
+        try:
+            return self.seleciona(Catraca, sql, nome.upper())
+        finally:
+            pass
     
     def obtem_interface_rede(self, hostname):
         sql = "SELECT "\
             "catr_interface_rede as interface "\
             "FROM catraca WHERE "\
             "catr_nome = %s LIMIT 1"
-        return self.seleciona(Catraca, sql, hostname.upper())
+        try:
+            return self.seleciona(Catraca, sql, hostname.upper())
+        finally:
+            #self.fecha_conexao()
+            pass
     
     def insere(self, obj):
         sql = "INSERT INTO catraca "\
@@ -102,7 +115,10 @@ class CatracaDAO(DAOGenerico):
             "catr_tempo_giro "\
             ") VALUES ("\
             "%s, %s, %s, %s, %s, %s, %s, %s, %s)"
-        return self.inclui(sql, obj)
+        try:
+            return self.inclui(sql, obj)
+        finally:
+            pass
     
     def atualiza(self, obj):
         sql = "UPDATE catraca SET "\
@@ -115,22 +131,31 @@ class CatracaDAO(DAOGenerico):
             "catr_operacao = %s, "\
             "catr_tempo_giro = %s "\
             "WHERE catr_id = %s"
-        return self.altera(sql, obj)
+        try:
+            return self.altera(sql, obj)
+        finally:
+            self.fecha_conexao()
     
     def exclui(self, *arg):
         obj = [a for a in arg][0] if arg else None
         sql = "DELETE FROM catraca"
         if obj:
             sql = str(sql) + " WHERE catr_id = %s"
-        return self.deleta(sql, obj)
+        try:
+            return self.deleta(sql, obj)
+        finally:
+            pass
     
     def atualiza_exclui(self, obj, boleano):
         if obj or boleano:
-            if boleano:
-                if obj is None:
-                    return self.exclui()
+            try:
+                if boleano:
+                    if obj is None:
+                        return self.exclui()
+                    else:
+                        self.exclui(obj)
                 else:
-                    self.exclui(obj)
-            else:
-                return self.atualiza(obj)
-            
+                    return self.atualiza(obj)
+            finally:
+                pass
+                

@@ -49,6 +49,7 @@ class VinculoJson(ServidorRestful):
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json vinculo', exc_info=True)
+            return None
         finally:
             pass
         

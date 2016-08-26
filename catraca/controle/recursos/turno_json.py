@@ -51,6 +51,7 @@ class TurnoJson(ServidorRestful):
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json turno', exc_info=True)
+            return None
         finally:
             pass
         
@@ -76,6 +77,7 @@ class TurnoJson(ServidorRestful):
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro obtendo json turno', exc_info=True)
+            return None
         finally:
             pass
         
