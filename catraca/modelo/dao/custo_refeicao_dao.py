@@ -50,7 +50,7 @@ class CustoRefeicaoDAO(DAOGenerico):
                 "cure_id as id "\
                 "FROM custo_refeicao ORDER BY cure_id DESC LIMIT 1"
             lista = self.seleciona(CustoRefeicao, sql)
-            return lista[0] if lista else 0
+            return lista[0][2] if lista else 0
         finally:
             pass
     
@@ -63,7 +63,7 @@ class CustoRefeicaoDAO(DAOGenerico):
             ") VALUES ("\
             "%s, %s, %s)"
         try:
-            return self.inclui(sql, obj)
+            return self.inclui(CustoRefeicao, sql, obj)
         finally:
             pass
     

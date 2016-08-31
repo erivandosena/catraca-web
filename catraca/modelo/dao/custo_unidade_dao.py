@@ -4,7 +4,7 @@
 
 from catraca.logs import Logs
 from catraca.modelo.dao.dao_generico import DAOGenerico
-from catraca.modelo.entidades.catraca_unidade import CatracaUnidade
+from catraca.modelo.entidades.custo_unidade import CustoUnidade
 
 
 __author__ = "Erivando Sena"
@@ -13,12 +13,12 @@ __email__ = "erivandoramos@unilab.edu.br"
 __status__ = "Prototype" # Prototype | Development | Production
 
 
-class CatracaUnidadeDAO(DAOGenerico):
+class CustoUnidadeDAO(DAOGenerico):
     
     log = Logs()
     
     def __init__(self):
-        super(CatracaUnidadeDAO, self).__init__()
+        super(CustoUnidadeDAO, self).__init__()
         DAOGenerico.__init__(self)
         
     def busca(self, *arg):
@@ -26,40 +26,52 @@ class CatracaUnidadeDAO(DAOGenerico):
         try:
             if arg:
                 sql = "SELECT "\
-                    "catr_id as catraca, "\
-                    "unid_id as unidade, "\
-                    "caun_id as id "\
-                    "FROM catraca_unidade WHERE "\
-                    "caun_id = %s"
-                return self.seleciona(CatracaUnidade, sql, arg)
+                    "cure_id as custo, "\
+                    "cuun_id as id, "\
+                    "unid_id as unidade "\
+                    "FROM custo_unidade WHERE "\
+                    "cuun_id = %s"
+                return self.seleciona(CustoUnidade, sql, arg)
             else:
                 sql = "SELECT "\
-                    "catr_id as catraca, "\
-                    "unid_id as unidade, "\
-                    "caun_id as id "\
-                    "FROM catraca_unidade ORDER BY caun_id"
-                return self.seleciona(CatracaUnidade, sql)
+                    "cure_id as custo, "\
+                    "cuun_id as id, "\
+                    "unid_id as unidade "\
+                    "FROM custo_unidade ORDER BY cure_id"
+                return self.seleciona(CustoUnidade, sql)
         finally:
             pass
+        
+#     def busca_custo(self):
+#         try:
+#             sql = "SELECT "\
+#                 "cure_id as custo, "\
+#                 "cuun_id as id, "\
+#                 "unid_id as unidade "\
+#                 "FROM custo_unidade ORDER BY cuun_id DESC LIMIT 1"
+#             lista = self.seleciona(CustoUnidade, sql)
+#             return lista[0][2] if lista else 0
+#         finally:
+#             pass
     
     def insere(self, obj):
-        sql = "INSERT INTO catraca_unidade "\
+        sql = "INSERT INTO custo_unidade "\
             "("\
-            "catr_id, "\
-            "caun_id, "\
+            "cure_id, "\
+            "cuun_id, "\
             "unid_id "\
             ") VALUES ("\
             "%s, %s, %s)"
         try:
-            return self.inclui(CatracaUnidade, sql, obj)
+            return self.inclui(CustoUnidade, sql, obj)
         finally:
             pass
     
     def atualiza(self, obj):
-        sql = "UPDATE catraca_unidade SET "\
-            "catr_id = %s, "\
+        sql = "UPDATE custo_unidade SET "\
+            "cure_id = %s, "\
             "unid_id = %s "\
-            "WHERE caun_id = %s"
+            "WHERE cuun_id = %s"
         try:
             return self.altera(sql, obj)
         finally:
@@ -67,9 +79,9 @@ class CatracaUnidadeDAO(DAOGenerico):
     
     def exclui(self, *arg):
         obj = [a for a in arg][0] if arg else None
-        sql = "DELETE FROM catraca_unidade"
+        sql = "DELETE FROM custo_unidade"
         if obj:
-            sql = str(sql) + " WHERE caun_id = %s"
+            sql = str(sql) + " WHERE cuun_id = %s"
         try:
             return self.deleta(sql, obj)
         finally:

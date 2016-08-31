@@ -50,10 +50,10 @@ class MensagemJson(ServidorRestful):
                         return lista
                 else:
                     return None
-        except Exception as excecao:
-            print excecao
-            self.log.logger.error('Erro obtendo json mensagem', exc_info=True)
-            return None
+#         except Exception as excecao:
+#             print excecao
+#             self.log.logger.error('Erro obtendo json mensagem', exc_info=True)
+#             return None
         finally:
             pass
         
@@ -65,7 +65,7 @@ class MensagemJson(ServidorRestful):
                     if not objeto.__eq__(obj):
                         return self.atualiza_exclui(obj, mantem_tabela)
                     else:
-                        print "[MENSAGEM]Acao de atualizacao nao necessaria!"
+                        #print "[MENSAGEM]Acao de atualizacao nao necessaria!"
                         return None
                 else:
                     return self.insere(obj)

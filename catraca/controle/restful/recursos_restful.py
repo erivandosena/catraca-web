@@ -13,6 +13,7 @@ from catraca.controle.recursos.unidade_turno_json import UnidadeTurnoJson
 from catraca.controle.recursos.tipo_json import TipoJson
 from catraca.controle.recursos.usuario_json import UsuarioJson
 from catraca.controle.recursos.custo_refeicao_json import CustoRefeicaoJson
+from catraca.controle.recursos.custo_unidade_json import CustoUnidadeJson
 from catraca.controle.recursos.cartao_json import CartaoJson
 from catraca.controle.recursos.isencao_json import IsencaoJson
 from catraca.controle.recursos.vinculo_json import VinculoJson
@@ -40,6 +41,7 @@ class RecursosRestful(object):
     tipo_json = TipoJson()
     usuario_json = UsuarioJson()
     custo_refeicao_json = CustoRefeicaoJson()
+    custo_unidade_json = CustoUnidadeJson()
     cartao_json = CartaoJson()
     isencao_json = IsencaoJson()
     vinculo_json = VinculoJson()
@@ -53,21 +55,21 @@ class RecursosRestful(object):
     def obtem_recursos(self, display=False, limpa_tabela=False):
         RecursosRestful.obtendo_recurso = True
         print "\nObtendo recursos do servidor RESTful..."
-        self.obtem_catraca(display, limpa_tabela) #*             # 3ºGRAU DE PRIORIDADE DE SINCRONIA
+        #self.obtem_catraca(display, limpa_tabela)
+        self.obtem_unidade(display, limpa_tabela)
+        self.obtem_catraca_unidade(display, limpa_tabela)
+        self.obtem_turno(display, limpa_tabela)
+        self.obtem_unidade_turno(display, limpa_tabela)
+        self.obtem_custo_refeicao(display, limpa_tabela)
+        self.obtem_custo_unidade(display, limpa_tabela)
         self.obtem_tipo(display, limpa_tabela)
-        self.obtem_cartao(display, limpa_tabela)             # 2ºGRAU DE PRIORIDADE DE SINCRONIA
+        self.obtem_cartao(display, limpa_tabela)
         self.obtem_usuario(display, limpa_tabela)
         self.obtem_vinculo(display, limpa_tabela)
-        self.obtem_registro(display, limpa_tabela)           # 1ºGRAU DE PRIORIDADE DE SINCRONIA
-        self.obtem_turno(display, limpa_tabela) #*            # 4ºGRAU DE PRIORIDADE DE SINCRONIA
-        self.obtem_isencao(display, limpa_tabela)            # 5ºGRAU DE PRIORIDADE DE SINCRONIA
-        self.obtem_unidade(display, limpa_tabela) #* 
-        self.obtem_unidade_turno(display, limpa_tabela) #* 
-        self.obtem_catraca_unidade(display, limpa_tabela) #* 
-        self.obtem_custo_refeicao(display, limpa_tabela) #* 
+        self.obtem_isencao(display, limpa_tabela)
         self.obtem_mensagem(display, limpa_tabela)
         RecursosRestful.obtendo_recurso = False
-        return RecursosRestful.obtendo_recurso
+        #return RecursosRestful.obtendo_recurso
         
     def obtem_catraca(self, display=False, limpa_tabela=False):
         if Rede.status:
@@ -85,7 +87,7 @@ class RecursosRestful(object):
                 print "Recurso CATRACA nulo!"
                 print "-------------------------------"
             return catraca
-                
+        
     def obtem_mensagem(self, display=False, limpa_tabela=False):
         if Rede.status:
             if display:
@@ -221,6 +223,23 @@ class RecursosRestful(object):
                 print "Recurso CUSTO-REFEICAO nulo!"
                 print "-------------------------------"
             return custo_refeicao
+        
+    def obtem_custo_unidade(self, display=False, limpa_tabela=False):
+        if Rede.status:
+            if display:
+                self.aviso.exibir_obtendo_recursos("Custo Unidade")
+            custo_unidade = self.custo_unidade_json.custo_unidade_get(limpa_tabela)
+            if display:
+                self.aviso.exibir_aguarda_cartao()
+            if custo_unidade:
+                print "-------------------------------"
+                print "Recurso CUSTO-UNIDADE obtido!"
+                print "-------------------------------"
+            else:
+                print "-------------------------------"
+                print "Recurso CUSTO-UNIDADE nulo!"
+                print "-------------------------------"
+            return custo_unidade
                 
     def obtem_cartao(self, display=False, limpa_tabela=False):
         if Rede.status:

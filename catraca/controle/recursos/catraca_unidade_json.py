@@ -46,10 +46,10 @@ class CatracaUnidadeJson(ServidorRestful):
                         return lista
                 else:
                     return None
-        except Exception as excecao:
-            print excecao
-            self.log.logger.error('Erro obtendo json catraca-unidade', exc_info=True)
-            return None
+#         except Exception as excecao:
+#             print excecao
+#             self.log.logger.error('Erro obtendo json catraca-unidade', exc_info=True)
+#             return None
         finally:
             pass
         
@@ -61,7 +61,7 @@ class CatracaUnidadeJson(ServidorRestful):
                     if not objeto.__eq__(obj):
                         return self.atualiza_exclui(obj, mantem_tabela)
                     else:
-                        print "[CATRACA UNIDADE]Acao de atualizacao nao necessaria!"
+                        #print "[CATRACA UNIDADE]Acao de atualizacao nao necessaria!"
                         return None
                 else:
                     return self.insere(obj)

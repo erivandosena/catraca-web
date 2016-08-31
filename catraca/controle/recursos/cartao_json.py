@@ -49,9 +49,9 @@ class CartaoJson(ServidorRestful):
                         return lista
                 else:
                     return None
-        except Exception as excecao:
-            print excecao
-            return None
+#         except Exception as excecao:
+#             print excecao
+#             return None
         finally:
             pass
         
@@ -89,7 +89,7 @@ class CartaoJson(ServidorRestful):
                     if not objeto.__eq__(obj):
                         return self.atualiza_exclui(obj, mantem_tabela)
                     else:
-                        print "[CARTAO]Acao de atualizacao nao necessaria!"
+                        #print "[CARTAO]Acao de atualizacao nao necessaria!"
                         return None
                 else:
                     return self.insere(obj)
@@ -106,7 +106,7 @@ class CartaoJson(ServidorRestful):
             
     def atualiza_exclui(self, obj, boleano):
         if self.cartao_dao.atualiza_exclui(obj, boleano):
-            self.cartao_dao.commit()
+            #self.cartao_dao.commit()
             print self.cartao_dao.aviso
             if not boleano:
                 return obj
@@ -115,7 +115,7 @@ class CartaoJson(ServidorRestful):
             
     def insere(self, obj):
         if self.cartao_dao.insere(obj):
-            self.cartao_dao.commit()
+            #self.cartao_dao.commit()
             print self.cartao_dao.aviso
             return obj
         
@@ -179,7 +179,7 @@ class CartaoJson(ServidorRestful):
                     "cart_creditos":float(item[2]),
                     "tipo_id":item[3]
                 }
-                self.cartao_put(cartao, item[0])
+                return self.cartao_put(cartao, item[0])
                 
     def objeto_json(self, obj):
         if obj:
@@ -196,11 +196,12 @@ class CartaoJson(ServidorRestful):
             if servidor:
                 url = str(self.URL) + "cartao/atualiza/"+ str(id)
                 r = servidor.put(url, data=json.dumps(formato_json))
-                print r.status_code
                 return r.status_code
+            else:
+                return 0
         except Exception as excecao:
             print excecao
-            return None
+            return 0
         finally:
             pass
         

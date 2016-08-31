@@ -4,6 +4,12 @@
 
 import threading
 import netifaces
+import traceback
+from requests.exceptions import Timeout
+from requests.exceptions import HTTPError
+from requests.exceptions import TooManyRedirects
+from requests.exceptions import RequestException
+from requests.exceptions import ConnectionError
 from time import sleep
 from catraca.logs import Logs
 from catraca.util import Util
@@ -23,6 +29,7 @@ class Rede(threading.Thread):
     aviso = Aviso()
     interface_ativa = []
     status = False
+    interface_atual = ""
 
     def __init__(self, intervalo=10):
         super(Rede, self).__init__()
@@ -39,7 +46,7 @@ class Rede(threading.Thread):
                     Rede.status = True
             else:
                  Rede.status = False
-
+            print "Rede.status = " +str(Rede.status)
             self._stopevent.wait(self._sleepperiod)
         print "%s Finalizando..." % (self.getName(),)
             
@@ -54,29 +61,48 @@ class Rede(threading.Thread):
                 interface = catraca_remota.interface
                 interfaces = netifaces.interfaces()
                 for iface in interfaces:
-                    #print iface
                     if iface == interface:
-                        #print str(iface) + " == " + str(interface)
+                        print str(iface) + " == " + str(interface)
                         addrs = netifaces.ifaddresses(iface)
                         addresses = [i['addr'] for i in addrs.setdefault(netifaces.AF_INET, [{'addr':None}] )]
                         if addresses[0]:
                             Rede.interface_ativa.insert(0, catraca_remota)
                             Rede.interface_ativa.insert(1, iface)
-                            if not self.status:
+                            if not Rede.status:
                                 self.interface_atual = Rede.interface_ativa[1]
                                 self.aviso.exibir_estatus_rede(interface, Rede.interface_ativa)
                             if self.interface_atual != Rede.interface_ativa[1]:
                                 self.interface_atual = Rede.interface_ativa[1]
                                 self.aviso.exibir_estatus_rede(interface, Rede.interface_ativa)
-                                
                             return Rede.interface_ativa
                 else:
                     return []
             else:
                 print "Servidor AUSENTE!"
                 return []
-        except Exception as excecao:
-            print excecao
+        except Timeout as e:
+            print "Tempo de solicitacao expirada!", e
+            self.log.logger.error("REDE: "+ str(e))
+            return []
+        except HTTPError as e:
+            print "Resposta HTTP invalida!", e
+            sself.log.logger.error("REDE: "+ str(e))
+            return []
+        except TooManyRedirects as e:
+            print "Numero de redirecionamentos excedido!", e
+            self.log.logger.error("REDE: "+ str(e))
+            return []
+        except RequestException as e:
+            print "Erro no request!", e
+            self.log.logger.error("REDE: "+ str(e))
+            return []
+        except ConnectionError as e:
+            print "Falha na conexao com o host!", e
+            self.log.logger.error("REDE: "+ str(e))
+            return []
+        except Exception:
+            print "Stack Trace:", traceback.format_exc()
+            self.log.logger.error("REDE: ", exc_info=True)
             return []
         finally:
             pass

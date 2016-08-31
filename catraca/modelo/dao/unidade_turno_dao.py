@@ -51,7 +51,7 @@ class UnidadeTurnoDAO(DAOGenerico):
             ") VALUES ("\
             "%s, %s, %s)"
         try:
-            return self.inclui(sql, obj)
+            return self.inclui(UnidadeTurno, sql, obj)
         finally:
             pass
     

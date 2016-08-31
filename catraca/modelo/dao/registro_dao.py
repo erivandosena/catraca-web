@@ -51,47 +51,63 @@ class RegistroDAO(DAOGenerico):
         finally:
             pass
             
-    def busca_utilizacao(self, hora_ini, hora_fim, cartao_id):
-        data = Util().obtem_datahora()
-        data_ini = str(data.strftime("%Y-%m-%d")) + " " + str(hora_ini)
-        data_fim = str(data.strftime("%Y-%m-%d")) + " " + str(hora_fim)
-        sql = "SELECT "\
-            "COUNT(regi_data) as quantidade "\
-            "FROM registro "\
-            "WHERE "\
-            "regi_data BETWEEN %s AND %s AND cart_id = %s"
-        try:
-            obj = self.seleciona(Registro, sql, data_ini, data_fim, cartao_id)
-            print obj.quantidade
-            return int(obj.quantidade) if obj else None
-        
-        finally:
-            pass
+#     def busca_utilizacao(self, hora_ini, hora_fim, cartao_id):
+#         data = Util().obtem_datahora()
+#         data_ini = str(data.strftime("%Y-%m-%d")) + " " + str(hora_ini)
+#         data_fim = str(data.strftime("%Y-%m-%d")) + " " + str(hora_fim)
+#         sql = "SELECT "\
+#             "COUNT(regi_data)"\
+#             "FROM registro "\
+#             "WHERE "\
+#             "regi_data BETWEEN %s AND %s AND cart_id = %s"
+#         try:
+# #             obj = self.seleciona(Registro, sql, data_ini, data_fim, cartao_id)
+# #             print obj.quantidade
+# #             return int(obj.quantidade) if obj else None
+#         
+# #             lista = self.seleciona(Registro, sql, data_ini, data_fim, cartao_id)
+# #             if lista:
+# #                 registro = Registro()
+# #                 for item in lista:
+# #                     turno.descricao = item[0]
+# #                     turno.fim = item[1]
+# #                     turno.id = item[2]
+# #                     turno.inicio = item[3]
+# #                 return turno
+# #             else:
+# #                 return None
+#             lista = self.seleciona(Registro, sql, data_ini, data_fim, cartao_id)
+#             print lista
+#             print lista[0][0]
+#             return int(lista[0][0]) if lista else 0
+#         
+#         finally:
+#             pass
             
-    def busca_por_periodo(self, data_ini, data_fim):
-        sql = "SELECT "\
-            "regi_id as id, "\
-            "regi_data as data, "\
-            "regi_valor_pago as pago, "\
-            "regi_valor_custo as custo, "\
-            "cart_id as cartao, "\
-            "catr_id as catraca, "\
-            "vinc_id as vinculo "\
-            "FROM registro WHERE "\
-            "regi_data::timestamp::time BETWEEN %s AND %s"
-        try:
-            return self.seleciona(Registro, sql, data_ini, data_fim)
-        finally:
-            pass
+#     def busca_por_periodo(self, data_ini, data_fim):
+#         sql = "SELECT "\
+#             "regi_id as id, "\
+#             "regi_data as data, "\
+#             "regi_valor_pago as pago, "\
+#             "regi_valor_custo as custo, "\
+#             "cart_id as cartao, "\
+#             "catr_id as catraca, "\
+#             "vinc_id as vinculo "\
+#             "FROM registro WHERE "\
+#             "regi_data::timestamp::time BETWEEN %s AND %s"
+#         try:
+#             return self.seleciona(Registro, sql, data_ini, data_fim)
+#         finally:
+#             pass
             
-    def busca_ultimo_registro(self):
-        sql = "SELECT MAX(regi_id) FROM registro"
-        obj = self.seleciona(Registro, sql)
-        try:
-            return obj[0][0] if obj[0][0] else 0
-        finally:
-            #self.fecha_conexao()
-            pass
+#     def busca_ultimo_registro(self):
+#         sql = "SELECT MAX(regi_id) FROM registro"
+#         obj = self.seleciona(Registro, sql)
+#         try:
+#             return obj[0][0] if obj[0][0] else 0
+#         finally:
+#             #self.fecha_conexao()
+#             pass
             
     def insere(self, obj):
         sql = "INSERT INTO registro "\
@@ -106,7 +122,7 @@ class RegistroDAO(DAOGenerico):
             ") VALUES ("\
             "%s, %s, %s, %s, %s, %s, %s)"
         try:
-            return self.inclui(sql, obj)
+            return self.inclui(Registro, sql, obj)
         finally:
             pass
      

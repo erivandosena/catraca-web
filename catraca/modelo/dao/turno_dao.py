@@ -63,7 +63,17 @@ class TurnoDAO(DAOGenerico):
             "turno.turn_hora_inicio <= %s "\
             "AND turno.turn_hora_fim >= %s"
         try:
-            return self.seleciona(Turno, sql, nome, str(hora_atual), str(hora_atual))
+            lista = self.seleciona(Turno, sql, nome, str(hora_atual), str(hora_atual))
+            if lista:
+                turno = Turno()
+                for item in lista:
+                    turno.descricao = item[0]
+                    turno.fim = item[1]
+                    turno.id = item[2]
+                    turno.inicio = item[3]
+                return turno
+            else:
+                return None
         finally:
             pass
     
@@ -88,7 +98,7 @@ class TurnoDAO(DAOGenerico):
             ") VALUES ("\
             "%s, %s, %s, %s)"
         try:
-            return self.inclui(sql, obj)
+            return self.inclui(Turno, sql, obj)
         finally:
             pass
     

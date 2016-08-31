@@ -48,7 +48,7 @@ class UnidadeDAO(DAOGenerico):
             ") VALUES ("\
             "%s, %s)"
         try:
-            return self.inclui(sql, obj)
+            return self.inclui(Unidade, sql, obj)
         finally:
             self.fecha_conexao()
     

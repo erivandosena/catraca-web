@@ -46,10 +46,10 @@ class VinculoJson(ServidorRestful):
                         return lista
                 else:
                     return None
-        except Exception as excecao:
-            print excecao
-            self.log.logger.error('Erro obtendo json vinculo', exc_info=True)
-            return None
+#         except Exception as excecao:
+#             print excecao
+#             self.log.logger.error('Erro obtendo json vinculo', exc_info=True)
+#             return None
         finally:
             pass
         
@@ -61,7 +61,7 @@ class VinculoJson(ServidorRestful):
                     if not objeto.__eq__(obj):
                         return self.atualiza_exclui(obj, mantem_tabela)
                     else:
-                        print "[VINCULO]Acao de atualizacao nao necessaria!"
+                        #print "[VINCULO]Acao de atualizacao nao necessaria!"
                         return None
                 else:
                     return self.insere(obj)

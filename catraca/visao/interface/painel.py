@@ -8,8 +8,6 @@ from catraca.visao.interface.aviso import Aviso
 from catraca.visao.interface.alerta import Alerta
 from catraca.controle.dispositivos.leitorcartao import LeitorCartao
 from catraca.controle.restful.sincronia import Sincronia
-#from catraca.visao.interface.rede import Rede
-#from catraca.controle.restful.relogio import Relogio
 
 
 __author__ = "Erivando Sena"
@@ -34,6 +32,8 @@ class Painel(object):
         print 'Numero de Processos: '+str(self.util.obtem_process_count())
         print 'Numero de Conexoes: '+str(self.util.obtem_connections())
         print 'Temperatura do Processador: ' +str(self.util.obtem_temperature()) +' C'
+        print 'IP LAN: ' +str(self.util.obtem_ip_por_interface('eth0'))
+        print 'IP WLAN: ' +str(self.util.obtem_ip_por_interface('wlan0'))
         print "=" * 50
         print ''
         self.aviso.exibir_inicializacao()
@@ -41,10 +41,7 @@ class Painel(object):
         self.threads()
             
     def threads(self):
-        #os.system("echo 'Sistema da Catraca iniciado!' | mail -s 'Raspberry Pi B' erivandoramos@bol.com.br")
         try:
-#             Rede().start()
-#             Relogio().start()
 #             Alerta().start()
             Sincronia().start()
             LeitorCartao().start()
@@ -52,4 +49,3 @@ class Painel(object):
             print excecao
             self.log.logger.error('Erro executando Painel.', exc_info=True)
             
-        

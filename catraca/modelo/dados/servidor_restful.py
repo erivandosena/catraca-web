@@ -3,11 +3,6 @@
 
 
 import requests
-from requests.exceptions import Timeout
-from requests.exceptions import HTTPError
-from requests.exceptions import TooManyRedirects
-from requests.exceptions import RequestException
-from requests.exceptions import ConnectionError
 
 
 __author__ = "Erivando Sena" 
@@ -46,35 +41,19 @@ class ServidorRestful(object):
         self.__senha = valor
         
     def obter_conexao(self):
-#         sessao = requests.Session()    
-        with requests.Session() as sessao:
+        sessao = requests.Session() 
+        try:   
+            #with requests.Session() as sessao:
             sessao.timeout = 10
             sessao.auth = (self.usuario, self.senha)
             sessao.headers = {'Content-type': 'application/json'}
             return sessao
+        finally:
+            sessao.close()
 
     def obter_servidor(self):
-        #Singleton
-        try:
-            if self.instancia_sessao is None:
-                self.instancia_sessao = self.obter_conexao()
-            return self.instancia_sessao
-        except Timeout as e:
-            print "Tempo desolicitacao expirada!", e
-            return None
-        except HTTPError as e:
-            print "Resposta HTTP invalida!", e
-            return None
-        except TooManyRedirects as e:
-            print "Numero de redirecionamentos excedido!", e
-            return None
-        except RequestException as e:
-            print "Erro no request!", e
-            return None
-        except ConnectionError as e:
-            print "Falha na conexao com o host!", e
-            return None
-        except Exception as e:
-            print "Erro geral!", e
-            return None
-        
+        return self.obter_conexao()
+#         #Singleton
+#         if self.instancia_sessao is None:
+#             self.instancia_sessao = self.obter_conexao()
+#         return self.instancia_sessao

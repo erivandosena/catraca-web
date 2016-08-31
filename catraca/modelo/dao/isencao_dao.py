@@ -72,7 +72,7 @@ class IsencaoDAO(DAOGenerico):
             ") VALUES ("\
             "%s, %s, %s, %s)"
         try:
-            return self.inclui(sql, obj)
+            return self.inclui(Isencao, sql, obj)
         finally:
             self.fecha_conexao()
     

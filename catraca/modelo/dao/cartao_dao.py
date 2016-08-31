@@ -43,6 +43,20 @@ class CartaoDAO(DAOGenerico):
                 return self.seleciona(Cartao, sql)
         finally:
             pass
+        
+    def busca_cartao(self, id):
+        sql = "SELECT "\
+            "cartao.cart_creditos as creditos, "\
+            "cartao.cart_id as id, "\
+            "cartao.cart_numero as numero, "\
+            "tipo.tipo_valor as valor "\
+            "FROM cartao "\
+            "INNER JOIN tipo ON cartao.tipo_id = tipo.tipo_id "\
+            "WHERE cartao.cart_id = %s"
+        try:
+            return self.seleciona(Cartao, sql, id)
+        finally:
+            pass
     
     def insere(self, obj):
         sql = "INSERT INTO cartao "\
@@ -54,7 +68,7 @@ class CartaoDAO(DAOGenerico):
             ") VALUES ("\
             "%s, %s, %s, %s)"
         try:
-            self.inclui(sql, obj)
+            self.inclui(Cartao, sql, obj)
         finally:
             pass
     

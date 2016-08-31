@@ -2,7 +2,7 @@
 -- Autor_script : Erivando Sena											  --
 -- Copyright    : Unilab											      --
 -- Data_criacao : 16/10/2015											  --
--- Data_revisao : 17/03/2016											  --
+-- Data_revisao : 30/08/2016											  --
 -- Status       : Desenvolvimento										  --
 ----------------------------------------------------------------------------
 
@@ -10,10 +10,10 @@
 --                             BANCO DE DADOS                             --
 ----------------------------------------------------------------------------
 
--- Database: raspberrypi
+-- Database: desenvolvimento
 
-CREATE DATABASE raspberrypi WITH OWNER = catraca ENCODING = 'UTF8';
-COMMENT ON DATABASE raspberrypi IS 'Bando de dados de desenvolvimento.';
+CREATE DATABASE desenvolvimento WITH OWNER = catraca ENCODING = 'UTF8';
+COMMENT ON DATABASE desenvolvimento IS 'Bando de dados de desenvolvimento.';
 
 -- Conectar a base raspberrypi
 \connect raspberrypi;
@@ -90,8 +90,8 @@ CREATE TABLE custo_unidade
   unid_id integer NOT NULL, -- Chave estrangeira da tabela unidade.
   cure_id integer NOT NULL, -- Chave estrangeira da tabela custo_refeicao.
   CONSTRAINT pk_cuun_id PRIMARY KEY (cuun_id ), -- Chave primaria da tabela custo_unidade.
-  CONSTRAINT fk_cure_id FOREIGN KEY (cure_id) REFERENCES custo_refeicao (cure_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, -- Chave estrangeira da tabela custo_refeicao.
-  CONSTRAINT fk_unid_id FOREIGN KEY (unid_id) REFERENCES unidade (unid_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION -- Chave estrangeira da tabela unidade.
+  CONSTRAINT fk_cure_id FOREIGN KEY (cure_id) REFERENCES custo_refeicao (cure_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE CASCADE, -- Chave estrangeira da tabela custo_refeicao.
+  CONSTRAINT fk_unid_id FOREIGN KEY (unid_id) REFERENCES unidade (unid_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE CASCADE -- Chave estrangeira da tabela unidade.
 );
 ALTER TABLE custo_unidade OWNER TO postgres;
 COMMENT ON TABLE custo_unidade IS 'Tabela que armazena os custo de refeicoes por unidade.';
@@ -129,20 +129,20 @@ CREATE TABLE catraca
   catr_id integer NOT NULL, -- Campo para chave primaria da tabela.
   catr_ip character varying(12), -- Numero IP da catraca.
   catr_tempo_giro integer, -- Tempo para o giro na catraca em segundos.
-  catr_operacao integer, -- 1=Giro Horario(Entrada controlada com saida bloqueada),2=Giros Horario/Anti-horario(Entrada controlada com saida liberada),3=Giros Horario/Anti-horario(Entrada e saida liberadas).
+  catr_operacao integer, -- 1=Giro Horario(Entrada controlada com saida bloqueada),2=Giro Anti-horario(Entrada controlada com saida liberada),3=Giro Horario/Anti-horario(Entrada e saida liberadas).
   catr_nome character varying(25), -- Nome da catraca formado pelo nome do host, nome da unidade e numero da catraca.
   catr_mac_lan character varying(23), -- Registro do endereco fisico do hardware fixo LAN.
   catr_mac_wlan character varying(23), -- Registro do endereco fisico do hardware fixo ou plugue de rede WLAN.
   catr_interface_rede character varying(10), -- Informa se a interface de rede utilizada sera eth0 ou wlan0
   catr_financeiro boolean NOT NULL DEFAULT false, -- Habilita ou desabilita a debitacao de creditos do cartao com relacao ao financeiro.
-  CONSTRAINT pk_catr_id PRIMARY KEY (catr_id) -- Chave primaria da tabela catraca.
+  CONSTRAINT pk_catr_id PRIMARY KEY (catr_id ) -- Chave primaria da tabela catraca.
 );
 ALTER TABLE catraca OWNER TO postgres;
-COMMENT ON TABLE catraca IS 'Tabela que armazena as predefinicoes e configuracoes para o funcionamento da catraca.';
+COMMENT ON TABLE catraca IS 'Tabela que armazena as predefinicoes e configuracoes para o funcionamento da catraca..';
 COMMENT ON COLUMN catraca.catr_id IS 'Campo para chave primaria da tabela.';
 COMMENT ON COLUMN catraca.catr_ip IS 'Numero IP da catraca.';
 COMMENT ON COLUMN catraca.catr_tempo_giro IS 'Tempo para o giro na catraca em segundos.';
-COMMENT ON COLUMN catraca.catr_operacao IS '1=Giro Horario(Entrada controlada com saida bloqueada),2=Giros Horario/Anti-horario(Entrada controlada com saida liberada),3=Giros Horario/Anti-horario(Entrada e saida liberadas).';
+COMMENT ON COLUMN catraca.catr_operacao IS '1=Giro Horario(Entrada controlada com saida bloqueada),2=Giro Anti-horario(Entrada controlada com saida liberada),3=Giro Horario/Anti-horario(Entrada e saida liberadas).';
 COMMENT ON COLUMN catraca.catr_nome IS 'Nome da catraca formado pelo nome do host, nome da unidade e numero da catraca. ';
 COMMENT ON COLUMN catraca.catr_mac_lan IS 'Registro do endereco fisico do hardware fixo LAN.';
 COMMENT ON COLUMN catraca.catr_mac_wlan IS 'Registro do endereco fisico do hardware fixo ou plugue de rede WLAN.';
@@ -160,7 +160,7 @@ CREATE TABLE mensagem
   mens_institucional4 character varying(80), -- Texto 04 livre para avisos, informes, etc.
   catr_id integer NOT NULL, -- Campo para chave estrangeira da tabela catraca.
   CONSTRAINT pk_mens_id PRIMARY KEY (mens_id), -- Chave primaria da tabela mensagem.
-  CONSTRAINT fk_catr_id FOREIGN KEY (catr_id) REFERENCES catraca (catr_id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE -- Chave estrangeira da tabela catraca.
+  CONSTRAINT fk_catr_id FOREIGN KEY (catr_id) REFERENCES catraca (catr_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE CASCADE -- Chave estrangeira da tabela catraca.
 );
 ALTER TABLE mensagem OWNER TO postgres;
 COMMENT ON TABLE mensagem IS 'Tabela que armazena as mensagens para exibicao em display LCD de 2 linhas de 16 caracteres.';
@@ -180,9 +180,9 @@ CREATE TABLE cartao
   cart_numero character varying(10), -- Numero ID do cartao Smart Card sem permissao de duplicidade.
   cart_creditos numeric(8,2), -- Total de creditos em R$ para uso do cartao.
   tipo_id integer NOT NULL, -- Campo para chave estrangeira da tabela tipo.
-  CONSTRAINT pk_cart_id PRIMARY KEY (cart_id), -- Chave primaria da tabela cartao.
-  CONSTRAINT fk_tipo_id FOREIGN KEY (tipo_id) REFERENCES tipo (tipo_id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE, -- Chave estrangeira da tabela tipo.
-  CONSTRAINT uk_cart_numero UNIQUE (cart_numero) -- Restricao de duplicidades para o campo cart_numero.
+  CONSTRAINT pk_cart_id PRIMARY KEY (cart_id ), -- Chave primaria da tabela cartao.
+  CONSTRAINT fk_tipo_id FOREIGN KEY (tipo_id) REFERENCES tipo (tipo_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE CASCADE, -- Chave estrangeira da tabela tipo.
+  CONSTRAINT uk_cart_numero UNIQUE (cart_numero ) -- Restricao de duplicidades para o campo cart_numero.
 );
 ALTER TABLE cartao OWNER TO postgres;
 COMMENT ON TABLE cartao IS 'Tabela que armazena os registros de uso do cartao RFID.';
@@ -206,8 +206,8 @@ CREATE TABLE vinculo
   cart_id integer NOT NULL, -- Campo para chave estrangeira da tabela cartao.
   usua_id integer NOT NULL, -- Campo para chave estrangeira da tabela usuario.(Usuario responsavel por realizar a operacao de vinculo).
   CONSTRAINT pk_vinc_id PRIMARY KEY (vinc_id),
-  CONSTRAINT fk_cart_id FOREIGN KEY (cart_id) REFERENCES cartao (cart_id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE, -- Chave estrangeira da tabela cartao.
-  CONSTRAINT fk_usua_id FOREIGN KEY (usua_id) REFERENCES usuario (usua_id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE -- Chave estrangeira da tabela usuario.
+  CONSTRAINT fk_cart_id FOREIGN KEY (cart_id) REFERENCES cartao (cart_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE CASCADE, -- Chave estrangeira da tabela cartao.
+  CONSTRAINT fk_usua_id FOREIGN KEY (usua_id) REFERENCES usuario (usua_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE CASCADE -- Chave estrangeira da tabela usuario.
 );
 ALTER TABLE vinculo OWNER TO postgres;
 COMMENT ON TABLE vinculo IS 'Tabela que armazena as informacoes de vinculo entre o usuario e o tipo de cartao.';
@@ -231,7 +231,7 @@ CREATE TABLE isencao
   isen_fim timestamp without time zone, -- Data e hora do fim da validade para isencao de pagamento.
   cart_id integer NOT NULL, -- Campo para chave estrangeira da tabela cartao.
   CONSTRAINT pk_isen_id PRIMARY KEY (isen_id), -- Chave primaria da tabela isencao.
-  CONSTRAINT fk_cart_id FOREIGN KEY (cart_id) REFERENCES cartao (cart_id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE -- Chave estrangeira da tabela cartao.
+  CONSTRAINT fk_cart_id FOREIGN KEY (cart_id) REFERENCES cartao (cart_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE CASCADE -- Chave estrangeira da tabela cartao.
 );
 ALTER TABLE isencao OWNER TO postgres;
 COMMENT ON TABLE isencao IS 'Tabela que armazena as validades para isencao das refeicoes.';
@@ -249,8 +249,8 @@ CREATE TABLE unidade_turno
   turn_id integer NOT NULL, -- Campo para chave estrangeira da tabela turno.
   unid_id integer NOT NULL, -- Campo para chave estrangeira da tabela unidade.
   CONSTRAINT pk_untu_id PRIMARY KEY (untu_id), -- Chave primaria da tabela unidade_turno.
-  CONSTRAINT fk_turn_id FOREIGN KEY (turn_id) REFERENCES turno (turn_id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE, -- Chave estrangeira da tabela turno.
-  CONSTRAINT fk_unid_id FOREIGN KEY (unid_id) REFERENCES unidade (unid_id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE -- Chave estrangeira da tabela unidade.
+  CONSTRAINT fk_turn_id FOREIGN KEY (turn_id) REFERENCES turno (turn_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE CASCADE, -- Chave estrangeira da tabela turno.
+  CONSTRAINT fk_unid_id FOREIGN KEY (unid_id) REFERENCES unidade (unid_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE CASCADE -- Chave estrangeira da tabela unidade.
 );
 ALTER TABLE unidade_turno OWNER TO postgres;
 COMMENT ON TABLE unidade_turno IS 'Tabela que armazena o local fisico de funcionamento das catracas para o turno.';
@@ -268,8 +268,8 @@ CREATE TABLE catraca_unidade
   catr_id integer NOT NULL, -- Campo para chave estrangeira da tabela catraca.
   unid_id integer NOT NULL, -- Campo para chave estrangeira da tabela unidade.
   CONSTRAINT pk_caun_id PRIMARY KEY (caun_id), -- Chave primaria da tabela catraca_unidade.
-  CONSTRAINT fk_catr_id FOREIGN KEY (catr_id) REFERENCES catraca (catr_id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE, -- Chave estrangeira da tabela catraca.
-  CONSTRAINT fk_unid_id FOREIGN KEY (unid_id) REFERENCES unidade (unid_id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE -- Chave estrangeira da tabela unidade.
+  CONSTRAINT fk_catr_id FOREIGN KEY (catr_id) REFERENCES catraca (catr_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE CASCADE, -- Chave estrangeira da tabela catraca.
+  CONSTRAINT fk_unid_id FOREIGN KEY (unid_id) REFERENCES unidade (unid_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE CASCADE -- Chave estrangeira da tabela unidade.
 );
 ALTER TABLE catraca_unidade OWNER TO postgres;
 COMMENT ON TABLE catraca_unidade IS 'Tabela que armazena as informacoes da unidade e da catraca.';
@@ -290,10 +290,10 @@ CREATE TABLE registro
   cart_id integer NOT NULL, -- Campo para chave estrangeira da tabela cartao.
   catr_id integer NOT NULL, -- Campo para chave estrangeira da tabela catraca.
   vinc_id integer NOT NULL, -- Campo para chave estrangeira da tabela vinculo.
-  CONSTRAINT pk_regi_id PRIMARY KEY (regi_id), -- Chave primaria da tabela registro.
-  CONSTRAINT fk_cart_id FOREIGN KEY (cart_id) REFERENCES cartao (cart_id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE, -- Chave estrangeira da tabela cartao.
-  CONSTRAINT fk_catr_id FOREIGN KEY (catr_id) REFERENCES catraca (catr_id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE, -- Chave estrangeira da tabela catraca.
-  CONSTRAINT fk_vinc_id FOREIGN KEY (vinc_id) REFERENCES vinculo (vinc_id) MATCH SIMPLE ON UPDATE CASCADE ON DELETE CASCADE -- Chave estrangeira da tabela vinculo.
+  CONSTRAINT pk_regi_id PRIMARY KEY (regi_id ), -- Chave primaria da tabela registro.
+  CONSTRAINT fk_cart_id FOREIGN KEY (cart_id) REFERENCES cartao (cart_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE CASCADE, -- Chave estrangeira da tabela cartao.
+  CONSTRAINT fk_catr_id FOREIGN KEY (catr_id) REFERENCES catraca (catr_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE CASCADE, -- Chave estrangeira da tabela catraca.
+  CONSTRAINT fk_vinc_id FOREIGN KEY (vinc_id) REFERENCES vinculo (vinc_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE CASCADE -- Chave estrangeira da tabela vinculo.
 );
 ALTER TABLE registro OWNER TO postgres;
 COMMENT ON TABLE registro IS 'Tabela que armazena os registros de uso do cartao na catraca.';
@@ -307,3 +307,33 @@ COMMENT ON COLUMN registro.vinc_id IS 'Campo para chave estrangeira da tabela vi
 COMMENT ON CONSTRAINT pk_regi_id ON registro IS 'Chave primaria da tabela registro.';
 COMMENT ON CONSTRAINT fk_cart_id ON registro IS 'Chave estrangeira da tabela cartao.';
 COMMENT ON CONSTRAINT fk_catr_id ON registro IS 'Chave estrangeira da tabela catraca.';
+COMMENT ON CONSTRAINT fk_vinc_id ON registro IS 'Chave estrangeira da tabela vinculo.';
+
+-- Table: registro_offline
+CREATE TABLE registro_offline
+(
+  reof_id bigserial NOT NULL, -- Campo para chave primaria da tabela.
+  reof_data timestamp without time zone, -- Data e hora que efetivou o giro na catraca.
+  reof_valor_pago numeric(8,2), -- Valor em R$ da refeicao.
+  reof_valor_custo numeric(8,2), -- Valor em R$ do custo da refeicao.
+  cart_id integer NOT NULL, -- Campo para chave estrangeira da tabela cartao.
+  catr_id integer NOT NULL, -- Campo para chave estrangeira da tabela catraca.
+  vinc_id integer NOT NULL, -- Campo para chave estrangeira da tabela vinculo.
+  CONSTRAINT pk_reof_id PRIMARY KEY (reof_id ), -- Chave primaria da tabela registro_offline.
+  CONSTRAINT fk_cart_id FOREIGN KEY (cart_id) REFERENCES cartao (cart_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE CASCADE, -- Chave estrangeira da tabela cartao.
+  CONSTRAINT fk_catr_id FOREIGN KEY (catr_id) REFERENCES catraca (catr_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE CASCADE, -- Chave estrangeira da tabela catraca.
+  CONSTRAINT fk_vinc_id FOREIGN KEY (vinc_id) REFERENCES vinculo (vinc_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE CASCADE -- Chave estrangeira da tabela vinculo.
+);
+ALTER TABLE registro_offline OWNER TO postgres;
+COMMENT ON TABLE registro_offline IS 'Tabela que armazena os registros off-lines de uso do cartao na catraca.';
+COMMENT ON COLUMN registro_offline.reof_id IS 'Campo para chave primaria da tabela.';
+COMMENT ON COLUMN registro_offline.reof_data IS 'Data e hora que efetivou o giro na catraca.';
+COMMENT ON COLUMN registro_offline.reof_valor_pago IS 'Valor em R$ da refeicao.';
+COMMENT ON COLUMN registro_offline.reof_valor_custo IS 'Valor em R$ do custo da refeicao.';
+COMMENT ON COLUMN registro_offline.cart_id IS 'Campo para chave estrangeira da tabela cartao.';
+COMMENT ON COLUMN registro_offline.catr_id IS 'Campo para chave estrangeira da tabela catraca.';
+COMMENT ON COLUMN registro_offline.vinc_id IS 'Campo para chave estrangeira da tabela vinculo.';
+COMMENT ON CONSTRAINT pk_reof_id ON registro_offline IS 'Chave primaria da tabela registro_offline.';
+COMMENT ON CONSTRAINT fk_cart_id ON registro_offline IS 'Chave estrangeira da tabela cartao.';
+COMMENT ON CONSTRAINT fk_catr_id ON registro_offline IS 'Chave estrangeira da tabela catraca.';
+COMMENT ON CONSTRAINT fk_vinc_id ON registro_offline IS 'Chave estrangeira da tabela vinculo.';

@@ -63,10 +63,10 @@ class RegistroJson(ServidorRestful):
                         return None
             else:
                 return None
-        except Exception as excecao:
-            print excecao
-            self.log.logger.error('Erro obtendo json registro', exc_info=True)
-            return None
+#         except Exception as excecao:
+#             print excecao
+#             self.log.logger.error('Erro obtendo json registro', exc_info=True)
+#             return None
         finally:
             pass
         
@@ -106,7 +106,7 @@ class RegistroJson(ServidorRestful):
                     if not objeto.__eq__(obj):
                         return self.atualiza_exclui(obj, mantem_tabela)
                     else:
-                        print "[REGISTRO]Acao de atualizacao nao necessaria!"
+                        #print "[REGISTRO]Acao de atualizacao nao necessaria!"
                         return None
                 else:
                     return self.insere(obj)
@@ -179,7 +179,7 @@ class RegistroJson(ServidorRestful):
                     "catr_id":item[5],
                     "vinc_id":item[6]
                 }
-                self.registro_post(registro)
+                return self.registro_post(registro)
 
     def objeto_json(self, obj):
         if obj:
@@ -199,11 +199,12 @@ class RegistroJson(ServidorRestful):
             if servidor:
                 url = str(self.URL) + "registro/insere"
                 r = servidor.post(url, data=json.dumps(formato_json))
-                print r.status_code
                 return r.status_code
+            else:
+                return 0
         except Exception as excecao:
             print excecao
-            self.log.logger.error('Erro enviando json registro.', exc_info=True)
+            return 0
         finally:
             pass
 

@@ -9,7 +9,6 @@ from psycopg2 import extensions
 from psycopg2 import DataError
 from psycopg2 import ProgrammingError
 from psycopg2 import OperationalError
-#from contextlib import closing
 from catraca.logs import Logs
 
 
@@ -27,22 +26,12 @@ class ConexaoFactory(object):
         super(ConexaoFactory, self).__init__()
         self.__POSTGRESQL = 1
         self.__SQLITE = 2
-#         self.__erroCon = None
-#         self.__factory = None
         self.__extras = extras
         self.__extensoes = extensions
         self.data_error = DataError
         self.programming_error = ProgrammingError
         self.operational_error = OperationalError
-        
-#     @property
-#     def erro_conexao(self):
-#         return self.__erroCon
-    
-#     @property
-#     def factory(self):
-#         return self.__factory
-    
+
     @property
     def extras(self):
         return self.__extras
@@ -63,16 +52,10 @@ class ConexaoFactory(object):
             if (tipo_banco == self.__SQLITE):
                 str_conexao = "'%s'" % (os.path.join(os.path.dirname(os.path.abspath(__file__)),"banco.db"))
                 con = sqlite3.connect(str_conexao)
-            
             #print "BD-CONEXAO ABERTA!"
             return con
         
         except Exception as excecao:
-#             self.__erroCon = str(excecao)
             print excecao
             self.log.logger.critical('Erro na conexao com banco de dados.', exc_info=True)
-        
-    #metodo destrutor
-#     def __del__(self):
-#         print "ConexÃ£o BD finalizada!"
-#         del self
+            

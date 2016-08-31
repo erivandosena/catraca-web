@@ -135,27 +135,31 @@ class Aviso(object):
         self.display.mensagem('TURNO INICIADO'.center(16) +'\n'+ nome_turno.center(16), 2, False, False)
         
     def exibir_catraca_nao_cadastrada(self):
-        self.display.mensagem("FAVOR, CADASTRAR".center(16) +"\n"+ "A CATRACA".center(16), 5, False, False)
+        self.display.mensagem("FAVOR, CADASTRAR".center(16) +"\n"+ "A CATRACA".center(16), 3, False, False)
         self.display.limpa_lcd()
 
     def exibir_unidade_nao_cadastrada(self):
-        self.display.mensagem("FAVOR, CADASTRAR".center(16) +"\n"+ "A UNIDADE".center(16), 5, False, False)
+        self.display.mensagem("FAVOR, CADASTRAR".center(16) +"\n"+ "A UNIDADE".center(16), 3, False, False)
         self.display.limpa_lcd()
         
     def exibir_catraca_unidade_nao_cadastrada(self):
-        self.display.mensagem("FAVOR, CADASTRAR".center(16) +"\n"+ "CATRACA NA UNID.".center(16), 5, False, False) 
+        self.display.mensagem("FAVOR, CADASTRAR".center(16) +"\n"+ "CATRACA NA UNID.".center(16), 3, False, False) 
         self.display.limpa_lcd()
         
     def exibir_turno_nao_cadastrado(self):
-        self.display.mensagem("FAVOR, CADASTRAR".center(16) +"\n"+ "O TURNO".center(16), 5, False, False)
+        self.display.mensagem("FAVOR, CADASTRAR".center(16) +"\n"+ "O TURNO".center(16), 3, False, False)
         self.display.limpa_lcd()
         
     def exibir_unidade_turno_nao_cadastrada(self):
-        self.display.mensagem("FAVOR, CADASTRAR".center(16) +"\n"+ "O TURNO NA UNID.".center(16), 5, False, False)
+        self.display.mensagem("FAVOR, CADASTRAR".center(16) +"\n"+ "O TURNO NA UNID.".center(16), 3, False, False)
         self.display.limpa_lcd()
         
     def exibir_custo_refeicao_nao_cadastrado(self):
-        self.display.mensagem("FAVOR, CADASTRAR".center(16) +"\n"+ "O CUSTO REFEICAO".center(16), 5, False, False)
+        self.display.mensagem("FAVOR, CADASTRAR".center(16) +"\n"+ "O CUSTO REFEICAO".center(16), 3, False, False)
+        self.display.limpa_lcd()
+        
+    def exibir_custo_unidade_nao_cadastrado(self):
+        self.display.mensagem("FAVOR, CADASTRAR".center(16) +"\n"+ "CUSTO NA UNID.".center(16), 3, False, False)
         self.display.limpa_lcd()
         
     def exibir_obtendo_recursos(self, nome_recurso):

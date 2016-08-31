@@ -46,10 +46,10 @@ class CustoRefeicaoJson(ServidorRestful):
                         return lista
                 else:
                     return None
-        except Exception as excecao:
-            print excecao
-            self.log.logger.error('Erro obtendo json custo-refeicao', exc_info=True)
-            return None
+#         except Exception as excecao:
+#             print excecao
+#             self.log.logger.error('Erro obtendo json custo-refeicao', exc_info=True)
+#             return None
         finally:
             pass
         
@@ -65,10 +65,7 @@ class CustoRefeicaoJson(ServidorRestful):
                     if LISTA_JSON != []:
                         for item in LISTA_JSON:
                             obj = self.dict_obj(item)
-                            if obj:
-                                return obj
-                            else:
-                                return None
+                            return obj.valor if obj else 0
                 else:
                     return None
         except Exception as excecao:
@@ -86,7 +83,7 @@ class CustoRefeicaoJson(ServidorRestful):
                     if not objeto.__eq__(obj):
                         return self.atualiza_exclui(obj, mantem_tabela)
                     else:
-                        print "[CUSTO REFEICAO]Acao de atualizacao nao necessaria!"
+                        #print "[CUSTO REFEICAO]Acao de atualizacao nao necessaria!"
                         return None
                 else:
                     return self.insere(obj)

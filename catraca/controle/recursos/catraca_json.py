@@ -92,11 +92,13 @@ class CatracaJson(ServidorRestful):
                             return catraca_local
                     else:
                         return None
-        except Exception:
-            print traceback.format_exc()
-            return None
+#         except Exception as excecao:
+#             pass
+#             print excecao
+#             print traceback.format_exc()
+#             return None
         finally:
-            pass
+            print "FIM get catraca rest"
         
     def mantem_tabela_local(self, obj, mantem_tabela=False):
         #se o obj existir
@@ -107,6 +109,7 @@ class CatracaJson(ServidorRestful):
             if not mantem_tabela:
                 #se o objeto existir
                 if objeto:
+                    print "CATRACA EXISTE"
                     # se o objeto for diferente de obj
                     if not objeto.__eq__(obj):
                         #atualiza o objeto
@@ -118,6 +121,7 @@ class CatracaJson(ServidorRestful):
                         return None
                 #se o objeto nao existir
                 else:
+                    print "CATRACA NAO EXISTE"
                      #insere novo obj
                     return self.insere(obj)
             #se mantem_tabela for True
@@ -193,7 +197,7 @@ class CatracaJson(ServidorRestful):
                     "catr_interface_rede":str(item[7]),
                     "catr_financeiro":str(item[8])
                 }
-                self.catraca_post(catraca)
+                return self.catraca_post(catraca)
                 
     def objeto_json(self, obj, operacao="POST"):
         if obj:
@@ -208,9 +212,9 @@ class CatracaJson(ServidorRestful):
                 "catr_financeiro":str(obj.financeiro)
             }
             if operacao == "POST":
-                self.catraca_post(catraca)
+                return self.catraca_post(catraca)
             if operacao == "PUT":
-                self.catraca_put(catraca, obj.id)
+                return self.catraca_put(catraca, obj.id)
                 
     def catraca_post(self, formato_json):
         servidor = self.obter_servidor()
@@ -218,10 +222,12 @@ class CatracaJson(ServidorRestful):
             if servidor:
                 url = str(self.URL) + "catraca/insere"
                 r = servidor.post(url, data=json.dumps(formato_json))
+                return r.status_code
+            else:
+                return 0
         except Exception as excecao:
             print excecao
-            self.log.logger.error('Erro enviando json catraca.', exc_info=True)
-            return None
+            return 0
         finally:
             pass
         
@@ -231,13 +237,12 @@ class CatracaJson(ServidorRestful):
             if servidor:
                 url = str(self.URL) + "catraca/atualiza/"+ str(id)
                 r = servidor.put(url, data=json.dumps(formato_json))
-                return True
+                return r.status_code
             else:
-                return False
+                return 0
         except Exception as excecao:
             print excecao
-            self.log.logger.error('Erro enviando json catraca.', exc_info=True)
-            return None
+            return 0
         finally:
             pass
         
@@ -252,5 +257,5 @@ class CatracaJson(ServidorRestful):
         catraca.macwlan = self.util.obtem_MAC_por_interface('wlan0')
         catraca.interface = interface_padrao
         catraca.financeiro = False
-        self.objeto_json(catraca)
+        return self.objeto_json(catraca)
         

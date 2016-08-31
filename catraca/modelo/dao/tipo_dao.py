@@ -51,7 +51,7 @@ class TipoDAO(DAOGenerico):
             ") VALUES ("\
             "%s, %s, %s)"
         try:
-            return self.inclui(sql, obj)
+            return self.inclui(Tipo, sql, obj)
         finally:
             pass
     

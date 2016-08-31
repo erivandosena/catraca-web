@@ -48,10 +48,10 @@ class TurnoJson(ServidorRestful):
                         return lista
                 else:
                     return None
-        except Exception as excecao:
-            print excecao
-            self.log.logger.error('Erro obtendo json turno', exc_info=True)
-            return None
+#         except Exception as excecao:
+#             print excecao
+#             self.log.logger.error('Erro obtendo json turno', exc_info=True)
+#             return None
         finally:
             pass
         
@@ -89,7 +89,7 @@ class TurnoJson(ServidorRestful):
                     if not objeto.__eq__(obj):
                         return self.atualiza_exclui(obj, mantem_tabela)
                     else:
-                        print "[TURNO]Acao de atualizacao nao necessaria!"
+                        #print "[TURNO]Acao de atualizacao nao necessaria!"
                         return None
                 else:
                     return self.insere(obj)

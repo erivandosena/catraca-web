@@ -36,8 +36,8 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
             argumentos = []
             for a in arg:
                 argumentos.append(a)
-            if arg:
-                print argumentos
+            if len(arg) == 1:
+                #print argumentos
                 self.cursor.execute(sql, argumentos)
                 linhas = self.cursor.fetchone()
                 #print self.cursor.query
@@ -47,18 +47,20 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
                     for coluna in sorted(dic):
                         setattr(obj, coluna, dic[coluna])
                     msg = self.cursor.statusmessage
-                    status = msg[len(msg)-1:len(msg)]
-                    if status:
-                        self.aviso = "Selecionado {0} com sucesso!".format(status)
-                        return obj
-                    else:
-                        return None
+                    if msg:
+                        status = msg[len(msg)-1:len(msg)]
+                        if status:
+                            self.aviso = "Selecionado {0} com sucesso!".format(status)
+                            return obj
+                        else:
+                            return None
                 else:
                     return None
             else:
-                self.cursor.execute(sql)
+                #print argumentos
+                self.cursor.execute(sql, argumentos)
                 linhas = self.cursor.fetchall()
-                #print self.cursor.query
+                print self.cursor.query
                 if linhas != []:
                     listas = []
                     for linha in linhas:
@@ -69,12 +71,15 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
                             lista.append(dic[linha])
                         listas.append(lista)
                     msg = self.cursor.statusmessage
-                    status = msg[len(msg)-1:len(msg)]
-                    if status:
-                        self.aviso = "Selecionado {0} com sucesso!".format(status)
-                        return listas
-                    else:
-                        return []
+                    if msg:
+                        status = msg[len(msg)-1:len(msg)]
+                        if status:
+                            self.aviso = "Selecionado {0} com sucesso!".format(status)
+                            return listas
+                        else:
+                            return []
+                else:
+                    return []
         except (self.data_error, self.programming_error, self.operational_error):
             self.cursor = self.abre_conexao().cursor(cursor_factory=self.extras.DictCursor)
         except Exception as excecao:
@@ -82,29 +87,57 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
         finally:
             self.__fecha_conexoes(self.cursor)
             
-    def inclui(self, sql, *arg):
-        obj = [a for a in arg][0] if arg else None
+    def inclui(self, T, sql, *arg):
+        arg = [a for a in arg][0]
+        obj = None
+        lista = []
+        classe = None
+        if isinstance(arg, list):
+            lista = arg
+            print lista
+        if isinstance(arg, T):
+            obj = arg
+            print obj
+        atributos = []
+        colunas = []
+        valores = []
+        lista_ordenada = []
         self.cursor = self.abre_conexao().cursor(cursor_factory=self.extras.DictCursor)
         try:
+            if lista:
+                atributos = inspect.getmembers(T(), lambda m:not(inspect.isroutine(m)))
+                colunas = [m[0] for m in atributos if '_' not in m[0] and 'id' not in m[0]]
+                valores = lista
+                print colunas
+                print valores
+                dic = dict(zip(colunas[0::1], valores[0::1]))
+                print dic
+                for linha in sorted(dic):
+                    lista_ordenada.append(dic[linha])
+                #print lista_ordenada
             if obj:
-                #with closing(self.abre_conexao().cursor(cursor_factory=self.extras.DictCursor)) as cursor:
                 atributos = inspect.getmembers(obj, lambda m:not(inspect.isroutine(m)))
                 colunas = [m[0] for m in atributos if '_' not in m[0]]
                 valores = [m[1] for m in atributos if '_' not in m[0]]
+                print colunas
+                print valores
                 dic = dict(zip(colunas[0::1], valores[0::1]))
-                lista_ordenada = []
+                print dic
                 for linha in sorted(dic):
                     lista_ordenada.append(dic[linha])
-                self.cursor.execute(sql, lista_ordenada)
-                print self.cursor.query
-                self.commit()
+                #print lista_ordenada
+            self.cursor.execute(sql, lista_ordenada)
+            print self.cursor.query
+            self.commit()
+            if lista != [] or obj:
                 msg = self.cursor.statusmessage
-                status = msg[len(msg)-1:len(msg)]
-                if status:
-                    self.aviso = "Inserido {0} com sucesso!".format(status)
-                    return True
-                else:
-                    return False
+                if msg:
+                    status = msg[len(msg)-1:len(msg)]
+                    if status:
+                        self.aviso = "Inserido {0} com sucesso!".format(status)
+                        return True
+                    else:
+                        return False
             else:
                 return False
         except (self.data_error, self.programming_error, self.operational_error):
@@ -135,12 +168,13 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
                 print self.cursor.query
                 self.commit()
                 msg = self.cursor.statusmessage
-                status = msg[len(msg)-1:len(msg)]
-                if status:
-                    self.aviso = "Alterado {0} com sucesso!".format(status)
-                    return True
-                else:
-                    return False
+                if msg:
+                    status = msg[len(msg)-1:len(msg)]
+                    if status:
+                        self.aviso = "Alterado {0} com sucesso!".format(status)
+                        return True
+                    else:
+                        return False
             else:
                 return False
         except (self.data_error, self.programming_error, self.operational_error):
@@ -161,14 +195,16 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
                 self.cursor.execute(sql, (obj.id,))
             else:
                 self.cursor.execute(sql)
+            print self.cursor.query
             self.commit()
             msg = self.cursor.statusmessage
-            status = msg[len(msg)-1:len(msg)]
-            if status:
-                self.aviso = "Deletado {0} com sucesso!".format(status)
-                return True
-            else:
-                return False
+            if msg:
+                status = msg[len(msg)-1:len(msg)]
+                if status:
+                    self.aviso = "Deletado {0} com sucesso!".format(status)
+                    return True
+                else:
+                    return False
         except (self.data_error, self.programming_error, self.operational_error):
             print "fez rollback (delete)"
             self.rollback()
