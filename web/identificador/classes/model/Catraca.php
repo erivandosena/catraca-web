@@ -15,7 +15,20 @@ class Catraca{
 	public function Catraca(){
 		$this->unidade = new Unidade();
 	}
-	
+	public function getStrFincaneito(){
+		$financeiro = "";
+		switch ($this->financeiroAtivo()){
+			case true:
+				$financeiro = "Habilitado";
+				break;
+			case false:
+				$financeiro = "Desabilitado";
+				break;
+			default:
+				$financeiro = "Não Identificado";
+				break;
+		}return $financeiro;
+	}
 	public function setUnidade(Unidade $unidade){
 		$this->unidade = $unidade;
 	}

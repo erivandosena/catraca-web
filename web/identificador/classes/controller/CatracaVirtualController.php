@@ -189,7 +189,6 @@ class CatracaVirtualController{
 					
 					$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'G:00:01' );
 					$vinculo->setFinalValidade($daqui3Meses);
-					
 					$vinculoDao->atualizaValidade($vinculo);
 						
 					

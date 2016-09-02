@@ -27,6 +27,7 @@ class DefinicoesView{
 							<th>Nome</th>
 							<th>Unidade Acadêmica</th>
 							<th>Interface de Rede</th>
+							<th>Financeiro</th>
 							<th class="centralizado">Ações</th>
 							</tr>
 							</thead>
@@ -53,6 +54,7 @@ class DefinicoesView{
 		echo '<td>'.$catraca->getNome().'</td>';
 		echo '<td>'.$catraca->getUnidade()->getNome().'</td>';
 		echo '<td>'.$catraca->getStrIterfaceRede().'</td>';
+		echo '<td>'.$catraca->getStrFincaneito().'</td>';
 		echo '<td>
 				
 			<a href="?pagina=definicoes&editar_catraca='.$catraca->getId().'"><span class="icone-pencil2 botao texto-amarelo2" title="Editar"></span></a>';
@@ -309,10 +311,14 @@ class DefinicoesView{
 				<object class="rotulo">Unidade Acadêmica: </object>';		
 		echo '<select name="id_unidade" id="unidade_academica">';
 		foreach ($listaDeUnidades as $unidade){
+			
+
 			$atributo = "";
-			if($unidade->getId() == $catraca->getUnidade()->getId())
+			if($unidade->getId() == $catraca->getUnidade()->getId()){
 				$atributo = "selected";
-			echo '<option value="'.$unidade->getId().'"'.$atributo.'>'.$unidade->getNome().'</option>';
+			}
+			
+			echo '<option value="'.$unidade->getId().'" '.$atributo.'>'.$unidade->getNome().'</option>';
 		}
 		echo '</select></label><br>';
 	
@@ -378,7 +384,25 @@ class DefinicoesView{
 					<option value="eth0">Rede Cabeada</option>
 					<option value="wlan0">Rede Sem fio</option>
 				</select>
-				</label><br>';	
+				</label><br>
+				<label for="financeiro">
+				<object class="rotulo">Financeiro: </object>
+				<select name="financeiro" id="financeiro">';
+
+		if(!$catraca->financeiroAtivo()){
+		echo '	<option selected="selected" value="0">Desabilitado</option>
+				<option value="1">Habilitado</option>';
+		}else{
+		echo '	<option value="0">Desabilitado</option>
+				<option selected="selected" value="1">Habilitado</option>';
+			
+		}
+		echo '
+				</select>
+				</label>';	
+		
+		
+		
 		echo '<input type="hidden" name="id_catraca" value="' . $catraca->getId() . '"><br>';
 		echo '<input type="submit" name="salvar" value="Salvar"></form></div>';
 	

@@ -175,6 +175,7 @@ class DefinicoesController {
 				$catraca->setInterfaceRede($_POST['interface']);
 				$catraca->setUnidade(new Unidade());
 				$catraca->getUnidade()->setId($_POST['id_unidade']);
+				$catraca->setFinanceiro($_POST['financeiro']);
 				
 				if($unidadeDao->atualizarCatraca($catraca))
 					$this->view->mostraSucesso("Catraca editada com sucesso");
@@ -540,119 +541,6 @@ class DefinicoesController {
 		return ;
 	}		
 	
-// 	public function telaMensagem(){
-	
-// 		$unidade = new Unidade();
-// 		$catraca = new Catraca();
-// 		$dao = new DAO();
-// 		$unidadeDao = new UnidadeDAO();
-// 		$unidades = $unidadeDao->retornaLista();
-// 		$mensagem = new MensagensController();
-	
-// 		echo'	<div class="borda relatorio">
-// 					<form action="" class="formulario-organizado" method="">
-// 						<label for="">
-// 							<object class="rotulo">Unidade Acadêmica: </object>
-// 							<select name="unidade_id" id="unidade_id">';
-// 		foreach ($unidades as $unidade){
-// 			echo'				<option value="'.$unidade->getId().'">'.$unidade->getNome().'</option>';
-// 		}
-// 		echo'				</select>
-// 						</label>
-				
-// 						<label for="">
-// 							<object class="rotulo">Unidade Acadêmica: </object>
-// 							<select name="unidade_id" id="unidade_id">';
-		
-// 		$idUnidade = $_GET['unidade_id'];
-// 		$sql = "SELECT * FROM catraca
-// 				INNER JOIN unidade_catraca ON unidade_catraca.catr_id = catraca.catr_id
-// 				INNER JOIN unidade ON unidade.unid_id = unidade_catraca.unid_id
-// 				WHERE unidade.unid_id = $idUnidade";
-// 		$stm = $this->dao->getConexao()->prepare($sql);
-		
-// 		foreach ($stm as $linha){
-// 			echo'				<option value="'.$linha['catr_id'].'">'.$linha['catr_nome'].'</option>';
-// 		}
-// 		echo'				</select>
-// 						</label>
-				
-// 						<label for="">
-// 							1ª Mensagem: <input type="text" name="msg_um">
-// 						</label>
-// 						<label for="">
-// 							2ª Mensagem: <input type="text" name="msg_dois">
-// 						</label>
-// 						<label for="">
-// 							3ª Mensagem: <input type="text" name="msg_tres">
-// 						</label>
-// 						<label for="unidade_id">
-// 							4ª Mensagem: <input type="text" name="msg_quatro">
-// 						</label>						
-// 						<input type="hidden" name="pagina" value="definicoes" />
-// 						<input type="submit" name="salvar" value="Salvar">
-// 					</form>
-				
-// 				</div>';
-		
-		
-		
-// 		echo json_encode($stm->fetchAll(PDO::FETCH_ASSOC));
-		
-// 		if (isset($_GET['unidade_id'])){
-// 			if (isset($_POST['confirmar'])){
-// 				echo'ok';
-// 			}
-// 			echo'	<form class="formulario-organizado" method="post">
-// 						<input type="submit" name="confirmar" value="Confirmar">
-// 					</form>
-// 					';
-// 		}
-	
-	
-// 		echo'	<div class="borda relatorio">
-// 					<h2 id="titulo-caixa" class="texto-branco fundo-azul2 centralizado">Mensagens</h2>
-// 					<table class="tabela borda-vertical zebrada no-centro">
-// 						<thead>
-// 							<tr class="centralizado">
-// 								<th>Catraca</th>
-// 								<th>Mesnagem 1</th>
-// 								<th>Mesnagem 2</th>
-// 								<th>Mesnagem 3</th>
-// 								<th>Mesnagem 4</th>
-// 								<th>-</th>
-// 							</tr>
-// 						</thead>
-// 					<tbody>';
-				
-// 		$idUnidade = $unidade->setId($_GET['unidade_id']);
-// 		$sql = "SELECT * FROM unidade				
-// 				INNER JOIN catraca_unidade ON catraca_unidade.unid_id = unidade.unid_id
-// 				INNER JOIN catraca ON catraca.catr_id = catraca_unidade.catr_id
-// 				INNER JOIN mensagem ON catraca.catr_id = mensagem.catr_id
-// 				WHERE unid_id = $idUnidade";
-				
-// 		$result = $dao->getConexao()->query($sql);
-// 		foreach ($result as $linha){
-					
-// 		echo'				<tr>
-// 								<td>'.$linha['mens_institucional1'].'</td>
-// 								<td>'.$linha['mens_institucional1'].'</td>
-// 								<td>'.$linha['mens_institucional2'].'</td>
-// 								<td>'.$linha['mens_institucional3'].'</td>
-// 								<td>'.$linha['mens_institucional4'].'</td>
-// 								<td><a href="" class="botao">Editar</a></td>
-// 							</tr>';
-// 		}
-// 		echo'			</tbody>
-// 					</table>
-// 				</div>';
-				
-				
-// 	}
-	
-	
-	
 	public function telaDefinicoes() {
 		$this->dao = new DAO ();
 		$this->view = new DefinicoesView ();
@@ -721,11 +609,6 @@ class DefinicoesController {
 		  
 		  echo '</div>
 		        <div class = "simpleTabsContent">';
-		  
-// 		  $this->telaMensagem();
-		 
-// 		  echo '</div>
-// 		  		<div class = "simpleTabsContent">';
 		  
 		  $this->telaTiposDeUsuarios ();
 		  

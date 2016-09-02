@@ -26,7 +26,7 @@ if (isset ( $_GET ["sair"] )) {
 	header ( "Location:./index.php" );
 }
 
-if($sessao->getNivelAcesso() != Sessao::NIVEL_SUPER)
+if($sessao->getNivelAcesso() != Sessao::NIVEL_SUPER || $sessao->getNivelAcesso() != Sessao::NIVEL_ADMIN)
 	exit(0);
 
 

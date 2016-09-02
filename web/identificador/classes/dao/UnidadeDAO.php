@@ -164,6 +164,7 @@ class UnidadeDAO extends DAO {
 			
 			$catraca->setUnidade(new Unidade());
 			$catraca->getUnidade()->setNome($linha['unid_nome']);
+			$catraca->getUnidade()->setId($linha['unid_id']);
 				
 		}
 		
@@ -180,26 +181,34 @@ class UnidadeDAO extends DAO {
 		$idUnidade= $catraca->getUnidade()->getId();
 		$interface = $catraca->getInterfaceRede();
 		
+		if($catraca->financeiroAtivo()){
+			$financeiro = 'TRUE';
+		}else{
+			$financeiro = 'FALSE';
+		}
+		
+		
+		
 		$this->getConexao()->beginTransaction();
 		$sqlUpdate = "UPDATE catraca SET catr_tempo_giro = $giro,						
 						catr_operacao = $operacao,
 						catr_nome = '$nomeCatraca',
-						catr_interface_rede = '$interface'
+						catr_interface_rede = '$interface',
+						catr_financeiro = '$financeiro'
 						WHERE catr_id = $id";
 		
 		if(!$this->getConexao()->exec($sqlUpdate))
 		{
 			$this->getConexao()->rollBack();
 			echo $sqlUpdate;
+			echo 'Foi aqui Nao consegui Atualizar';
 			return false;
 		}
-		
  		$this->getConexao()->exec("DELETE FROM catraca_unidade WHERE catr_id = $id");
 		
 		if(!$this->getConexao()->exec("INSERT into catraca_unidade(catr_id, unid_id) VALUES($id, $idUnidade)"))
 		{
 			$this->getConexao()->rollBack();
-
 			return false;
 		}
 		
