@@ -1,4 +1,7 @@
 <?php
+/*
+ * Daqui pra Baixo Ficou foda
+ */
 
 
 class CatracaVirtualController{

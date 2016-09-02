@@ -146,6 +146,7 @@ class NivelAcessoController{
 				
 				echo '</h1>';
 				echo '<a class="botao b-primario" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_COMUM.'">Tornar Padr&atilde;o</a>';
+				echo '<a class="botao b-sucesso" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_GUICHE.'">Tornar Guichê</a>';
 				echo '<a class="botao b-secundario" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_CADASTRO.'">Tornar Cadastro</a>';
 				echo '<a class="botao b-sucesso" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_ADMIN.'">Tornar Administrador</a>';
 				echo '<a class="botao b-erro" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_RELATORIO.'">Somente Relatorios</a>';
@@ -280,6 +281,7 @@ class NivelAcessoController{
 			if($usuario->getNivelAcesso() == null)
 				return;
 			echo '<a class="botao b-primario" href="?pagina=nivel_acesso&id_usuario='.$usuario->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_COMUM.'">Tornar Padr&atilde;o</a>';
+			echo '<a class="botao b-erro" href="?pagina=nivel_acesso&id_usuario='.$usuario->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_GUICHE.'">Guiche</a>';
 			echo '<a class="botao b-secundario" href="?pagina=nivel_acesso&id_usuario='.$usuario->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_CADASTRO.'">Somente Cadastro</a>';
 			echo '<a class="botao b-sucesso" href="?pagina=nivel_acesso&id_usuario='.$usuario->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_ADMIN.'">Tornar Administrador</a>';
 			echo '<a class="botao b-erro" href="?pagina=nivel_acesso&id_usuario='.$usuario->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_RELATORIO.'">Somente Relatorios</a>';
