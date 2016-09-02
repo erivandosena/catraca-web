@@ -80,6 +80,7 @@ class Display(object):
             self.lcd.blink(cursor)
             # exibe texto(s)
             self.lcd.message(texto)
+            #print texto
             # rolagem do(s) texto(s)
             if scroll:
                 self.lcd_scroll(texto)

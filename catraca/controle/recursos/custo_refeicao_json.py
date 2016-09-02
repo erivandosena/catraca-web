@@ -30,6 +30,7 @@ class CustoRefeicaoJson(ServidorRestful):
         try:
             if servidor:
                 url = str(self.URL) + "custo_refeicao/jcusto_refeicao"
+                print url
                 r = servidor.get(url)
                 if r.text != '':
                     dados  = json.loads(r.text)
@@ -44,6 +45,7 @@ class CustoRefeicaoJson(ServidorRestful):
                                 lista.append(obj)
                                 self.mantem_tabela_local(obj)  
                         return lista
+                        #return None
                 else:
                     return None
 #         except Exception as excecao:

@@ -31,6 +31,7 @@ class UsuarioJson(ServidorRestful):
             if servidor:
                 url = str(self.URL) + "usuario/jusuario"
                 r = servidor.get(url)
+                print url
                 if r.text != '':
                     dados  = json.loads(r.text)
                     LISTA_JSON = dados["usuarios"]

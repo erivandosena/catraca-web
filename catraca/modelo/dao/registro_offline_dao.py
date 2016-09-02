@@ -28,24 +28,24 @@ class RegistroOfflineDAO(DAOGenerico):
         try:
             if arg:
                 sql = "SELECT "\
-                    "reof_id as id, "\
-                    "reof_data as data, "\
-                    "reof_valor_pago as pago, "\
-                    "reof_valor_custo as custo, "\
                     "cart_id as cartao, "\
                     "catr_id as catraca, "\
+                    "reof_valor_custo as custo, "\
+                    "reof_data as data, "\
+                    "reof_id as id, "\
+                    "reof_valor_pago as pago, "\
                     "vinc_id as vinculo "\
                     "FROM registro_offline WHERE "\
                     "reof_id = %s"
                 return self.seleciona(Registro, sql, arg)
             else:
                 sql = "SELECT "\
-                    "reof_id as id, "\
-                    "reof_data as data, "\
-                    "reof_valor_pago as pago, "\
-                    "reof_valor_custo as custo, "\
                     "cart_id as cartao, "\
                     "catr_id as catraca, "\
+                    "reof_valor_custo as custo, "\
+                    "reof_data as data, "\
+                    "reof_id as id, "\
+                    "reof_valor_pago as pago, "\
                     "vinc_id as vinculo "\
                     "FROM registro_offline ORDER BY reof_id"
                 return self.seleciona(Registro, sql)
@@ -70,12 +70,12 @@ class RegistroOfflineDAO(DAOGenerico):
             
     def busca_por_periodo(self, data_ini, data_fim):
         sql = "SELECT "\
-            "reof_id as id, "\
-            "reof_data as data, "\
-            "reof_valor_pago as pago, "\
-            "reof_valor_custo as custo, "\
             "cart_id as cartao, "\
             "catr_id as catraca, "\
+            "reof_valor_custo as custo, "\
+            "reof_data as data, "\
+            "reof_id as id, "\
+            "reof_valor_pago as pago, "\
             "vinc_id as vinculo "\
             "FROM registro_offline WHERE "\
             "reof_data::timestamp::time BETWEEN %s AND %s"

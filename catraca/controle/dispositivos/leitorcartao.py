@@ -6,6 +6,7 @@ import csv
 import locale
 import threading
 import datetime
+import traceback
 from time import sleep
 from contextlib import closing
 from catraca.controle.raspberrypi.pinos import PinoControle
@@ -17,7 +18,7 @@ from catraca.modelo.dao.cartao_dao import CartaoDAO
 from catraca.modelo.dao.registro_offline_dao import RegistroOfflineDAO
 from catraca.modelo.dao.custo_refeicao_dao import CustoRefeicaoDAO
 from catraca.modelo.entidades.cartao import Cartao
-#from catraca.modelo.entidades.registro import Registro
+from catraca.modelo.entidades.registro import Registro
 from catraca.controle.recursos.cartao_json import CartaoJson
 from catraca.controle.recursos.registro_json import RegistroJson
 from catraca.controle.restful.relogio import Relogio
@@ -145,7 +146,7 @@ class LeitorCartao(Relogio):
         
     def valida_cartao(self, numero):
         cartao = Cartao()
-        #registro = Registro()
+        reg = Registro()
         registro = []
         cartao_json = CartaoJson()
         registro_json = RegistroJson()
@@ -218,7 +219,7 @@ class LeitorCartao(Relogio):
                     #cartao
                     cartao.id = cartao_id
                     cartao.numero = self.numero_cartao
-                    cartao.creditos =  cartao_total_creditos if cartao_isento else saldo_creditos
+                    cartao.creditos =  cartao_total_creditos if cartao_isento or not Relogio.catraca.financeiro else saldo_creditos
                     cartao.tipo = cartao_tipo_id
                     
                     print "exibindo cartao utilizado"
@@ -227,7 +228,7 @@ class LeitorCartao(Relogio):
                     print cartao.numero
                     print cartao.creditos
                     print cartao.tipo
-
+                    
                     #registro
 #                     registro.cartao = cartao_id
 #                     registro.catraca = Relogio.catraca.id
@@ -235,6 +236,14 @@ class LeitorCartao(Relogio):
 #                     registro.custo = self.obtem_custo_refeicao()
 #                     registro.pago = 0.00 if cartao_isento else float(cartao_valor_tipo)
 #                     registro.vinculo = cartao_vinculo_id
+
+                    reg.cartao = cartao_id
+                    reg.catraca = Relogio.catraca.id
+                    reg.data = self.util.obtem_datahora_postgresql()
+                    reg.custo = self.obtem_custo_refeicao()
+                    reg.pago = 0.00 if cartao_isento else float(cartao_valor_tipo)
+                    reg.vinculo = cartao_vinculo_id
+
                     registro.insert(0, cartao_id)
                     registro.insert(1, Relogio.catraca.id)
                     registro.insert(2, self.util.obtem_datahora_postgresql())
@@ -271,9 +280,9 @@ class LeitorCartao(Relogio):
                             print "NAO GIROU!"
                             #self.log.logger.info('Nao girou catraca. [cartao n.] ' + str(self.numero_cartao))
                             return None
-        except Exception as excecao:
-            print excecao
-            self.log.logger.error('Erro ao validar informacoes. [cartao n.] ' + str(self.numero_cartao), exc_info=True)
+        except Exception:
+            print "Stack Trace:", traceback.format_exc()
+            self.log.logger.critical("[LEITOR CARTAO] Stack Trace: "+str(traceback.format_exc()), exc_info=True)
         finally:
             ##############################################################
             ## BLOQUEIA O ACESSO E SINALIZA O MESMO AO UTILIZADOR
@@ -282,9 +291,19 @@ class LeitorCartao(Relogio):
             if giro_completo:
                 if Rede.status:
                     # insere registro remoto
-                    registro_json.objeto_json(registro)
+                    #registro_json.lista_json(registro)
+
+                    if registro_json.objeto_json(reg) == 200:
+                        print ">>> Registro inserido no remoto com sucesso!"
+                    else:
+                        print "ERRO ENVIANDO REGISTRO..."
                     # atualiza cartao remoto
-                    cartao_json.objeto_json(cartao)
+                    #cartao_json.objeto_json(cartao)
+                    if Relogio.catraca.financeiro:
+                        if cartao_json.objeto_json(cartao) == 200:
+                            print ">>> Cartao atualizado no remoto com sucesso!"
+                        else:
+                            print "ERRO ENVIANDO CARTAO..."
                 else:
                     # insere registro local
                     #registro.id = self.registro_dao.busca_ultimo_registro() + 1000

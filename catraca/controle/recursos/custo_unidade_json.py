@@ -30,6 +30,7 @@ class CustoUnidadeJson(ServidorRestful):
         try:
             if servidor:
                 url = str(self.URL) + "custo_unidade/jcusto_unidade"
+                print url
                 r = servidor.get(url)
                 if r.text != '':
                     dados  = json.loads(r.text)

@@ -29,12 +29,13 @@ class CatracaJson(ServidorRestful):
     def __init__(self):
         super(CatracaJson, self).__init__()
         ServidorRestful.__init__(self)
-         
+        
     def catraca_get(self, limpa_tabela=False):
         servidor = self.obter_servidor()
         try:
             if servidor:
                 url = str(self.URL) + "catraca/jcatraca"
+                print url
                 r = servidor.get(url)
                 if r.text != '':
                     dados  = json.loads(r.text)
@@ -73,10 +74,7 @@ class CatracaJson(ServidorRestful):
                                                     catraca_local.macwlan = mac_local
                                                     self.objeto_json(catraca_local, "PUT")
                                                     return self.catraca_get()
-                                                     
-#                                             if self.mantem_tabela_local(obj):
-#                                                 print "catraca fisica local atualizada"
- 
+                                                
                                         if obj.nome.lower() != self.util.obtem_nome_rpi().lower():
                                             print "REINICIAR SISTEMA...."
                                             self.util.altera_hostname( self.util.obtem_string_normalizada( obj.nome.lower() ) )
@@ -88,7 +86,6 @@ class CatracaJson(ServidorRestful):
                             self.cadastra_catraca_remoto()
                             return self.catraca_get()
                         else:
-                            #print "Catraca em modo >>>> " + str("[CABO]" if catraca_local.interface == 'eth0' else "[SEM FIO]")
                             return catraca_local
                     else:
                         return None

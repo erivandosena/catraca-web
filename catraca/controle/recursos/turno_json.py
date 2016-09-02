@@ -33,6 +33,7 @@ class TurnoJson(ServidorRestful):
             if servidor:
                 url = str(self.URL) + "turno/jturno"
                 r = servidor.get(url)
+                print url
                 if r.text != '':
                     dados  = json.loads(r.text)
                     LISTA_JSON = dados["turnos"]

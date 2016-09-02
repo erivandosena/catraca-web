@@ -33,7 +33,7 @@ class ControleGenerico(object):
     hora_fim = datetime.datetime.strptime('00:00:00','%H:%M:%S').time()
     
     def __init__(self):
-        super(ControleGenerico, self).__init__()
+        #super(ControleGenerico, self).__init__()
         self.__hora_atual = self.util.obtem_hora()
         self.__datahora_atual = self.util.obtem_datahora().strftime("%d/%m/%Y %H:%M:%S")
         self.__obtendo_recurso = False
@@ -57,5 +57,9 @@ class ControleGenerico(object):
     @property
     def obtendo_recurso(self):
         return RecursosRestful.obtendo_recurso
+    
+    @obtendo_recurso.setter
+    def obtendo_recurso(self, valor):
+        RecursosRestful.obtendo_recurso = valor
     
         

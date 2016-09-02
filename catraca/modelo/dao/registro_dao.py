@@ -27,24 +27,24 @@ class RegistroDAO(DAOGenerico):
         try:
             if arg:
                 sql = "SELECT "\
-                    "regi_id as id, "\
-                    "regi_data as data, "\
-                    "regi_valor_pago as pago, "\
-                    "regi_valor_custo as custo, "\
                     "cart_id as cartao, "\
                     "catr_id as catraca, "\
+                    "regi_valor_custo as custo, "\
+                    "regi_data as data, "\
+                    "regi_id as id, "\
+                    "regi_valor_pago as pago, "\
                     "vinc_id as vinculo "\
                     "FROM registro WHERE "\
                     "regi_id = %s"
                 return self.seleciona(Registro, sql, arg)
             else:
                 sql = "SELECT "\
-                    "regi_id as id, "\
-                    "regi_data as data, "\
-                    "regi_valor_pago as pago, "\
-                    "regi_valor_custo as custo, "\
                     "cart_id as cartao, "\
                     "catr_id as catraca, "\
+                    "regi_valor_custo as custo, "\
+                    "regi_data as data, "\
+                    "regi_id as id, "\
+                    "regi_valor_pago as pago, "\
                     "vinc_id as vinculo "\
                     "FROM registro ORDER BY regi_id"
                 return self.seleciona(Registro, sql)

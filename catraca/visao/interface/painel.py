@@ -7,7 +7,9 @@ from catraca.util import Util
 from catraca.visao.interface.aviso import Aviso
 from catraca.visao.interface.alerta import Alerta
 from catraca.controle.dispositivos.leitorcartao import LeitorCartao
-from catraca.controle.restful.sincronia import Sincronia
+#from catraca.controle.restful.sincronia import Sincronia
+#from catraca.visao.interface.rede import Rede
+from catraca.controle.restful.relogio import Relogio
 
 
 __author__ = "Erivando Sena"
@@ -42,9 +44,10 @@ class Painel(object):
             
     def threads(self):
         try:
-#             Alerta().start()
-            Sincronia().start()
+            Relogio().start()
+            #Sincronia().start()
             LeitorCartao().start()
+#             Alerta().start()
         except Exception as excecao:
             print excecao
             self.log.logger.error('Erro executando Painel.', exc_info=True)

@@ -40,7 +40,7 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
                 #print argumentos
                 self.cursor.execute(sql, argumentos)
                 linhas = self.cursor.fetchone()
-                #print self.cursor.query
+                print self.cursor.query
                 if linhas:
                     colunas = [coluna[0] for coluna in self.cursor.description]
                     dic = dict(zip(colunas, linhas))

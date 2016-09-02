@@ -33,6 +33,7 @@ class CartaoJson(ServidorRestful):
         try:
             if servidor:
                 url = str(self.URL) + "cartao/jcartao"
+                print url
                 r = servidor.get(url)
                 if r.text != '':
                     dados  = json.loads(r.text)

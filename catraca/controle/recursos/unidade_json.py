@@ -31,6 +31,7 @@ class UnidadeJson(ServidorRestful):
             if servidor:
                 url = str(self.URL) + "unidade/junidade"
                 r = servidor.get(url)
+                print url
                 if r.text != '':
                     dados  = json.loads(r.text)
                     LISTA_JSON = dados["unidades"]

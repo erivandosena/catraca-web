@@ -31,6 +31,7 @@ class UnidadeTurnoJson(ServidorRestful):
             if servidor:
                 url = str(self.URL) + "unidade_turno/junidade_turno"
                 r = servidor.get(url)
+                print url
                 if r.text != '':
                     dados  = json.loads(r.text)
                     LISTA_JSON = dados["unidade_turnos"]

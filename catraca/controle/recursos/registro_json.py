@@ -141,18 +141,18 @@ class RegistroJson(ServidorRestful):
         if not isinstance(formato_json, dict):
             return formato_json
         for item in formato_json:
+            if item == "cart_id":
+                registro.cartao = self.dict_obj(formato_json[item])
+            if item == "catr_id":
+                registro.catraca = self.dict_obj(formato_json[item])
+            if item == "regi_valor_custo":
+                registro.custo = self.dict_obj(formato_json[item])
             if item == "regi_id":
                 registro.id = self.dict_obj(formato_json[item])
             if item == "regi_data":
                 registro.data = self.dict_obj(formato_json[item])
             if item == "regi_valor_pago":
                 registro.pago = self.dict_obj(formato_json[item])
-            if item == "regi_valor_custo":
-                registro.custo = self.dict_obj(formato_json[item])
-            if item == "cart_id":
-                registro.cartao = self.dict_obj(formato_json[item])
-            if item == "catr_id":
-                registro.catraca = self.dict_obj(formato_json[item])
             if item == "vinc_id":
                 registro.vinculo = self.dict_obj(formato_json[item])
         return registro
@@ -172,11 +172,11 @@ class RegistroJson(ServidorRestful):
         if lista:
             for item in lista:
                 registro = {
-                    "regi_data":str(item[1]),
-                    "regi_valor_pago":float(item[2]),
+                    "cart_id":item[1],
+                    "catr_id":item[2], 
                     "regi_valor_custo":float(item[3]),
-                    "cart_id":item[4],
-                    "catr_id":item[5],
+                    "regi_data":str(item[4]),
+                    "regi_valor_pago":float(item[5]),
                     "vinc_id":item[6]
                 }
                 return self.registro_post(registro)
@@ -184,11 +184,11 @@ class RegistroJson(ServidorRestful):
     def objeto_json(self, obj):
         if obj:
             registro = {
+                "cart_id":obj.cartao,
+                "catr_id":obj.catraca, 
+                "regi_valor_custo":float(obj.custo),
                 "regi_data":str(obj.data),
                 "regi_valor_pago":float(obj.pago),
-                "regi_valor_custo":float(obj.custo),
-                "cart_id":obj.cartao,
-                "catr_id":obj.catraca,
                 "vinc_id":obj.vinculo
             }
             return self.registro_post(registro)

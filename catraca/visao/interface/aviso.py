@@ -42,19 +42,7 @@ class Aviso(object):
 
     def exibir_inicializacao(self):
         self.display.mensagem('Iniciando...\n'+self.util.obtem_nome_sistema().center(16), 5, False, False)
-
-#     def exibir_estatus_catraca(self, status_catraca):
-#         if status_catraca:
-#             self.display.mensagem(self.util.obtem_nome_rpi().center(16) +"\n"+ 'ON-LINE!'.center(16), 3, False, False)
-#         else:
-#             self.display.mensagem(self.util.obtem_nome_rpi().center(16) +"\n"+ 'OFF-LINE!'.center(16), 3, False, False)
-            
-    def exibir_estatus_rede(self, interface, status_rede):
-        if status_rede:
-            self.display.mensagem(str("LAN" if interface == "eth0" else "WLAN").center(16) +"\n"+ 'HABILITADA!'.center(16), 3, False, False)
-        else:
-            self.display.mensagem(str("LAN" if interface == "eth0" else "WLAN").center(16) +"\n"+ 'DESABILITADA!'.center(16), 3, False, False)
-            
+        
     def exibir_saldacao(self, saldacao, mensagem=''):
         self.display.mensagem(saldacao.center(16) + "\n"+ mensagem.center(16), 5, False, False)
 
@@ -135,33 +123,45 @@ class Aviso(object):
         self.display.mensagem('TURNO INICIADO'.center(16) +'\n'+ nome_turno.center(16), 2, False, False)
         
     def exibir_catraca_nao_cadastrada(self):
-        self.display.mensagem("FAVOR, CADASTRAR".center(16) +"\n"+ "A CATRACA".center(16), 3, False, False)
-        self.display.limpa_lcd()
+        self.display.mensagem("FAVOR, CADASTRAR".center(16) +"\n"+ "A CATRACA.".center(16), 3, False, False)
+        #self.display.limpa_lcd()
 
     def exibir_unidade_nao_cadastrada(self):
-        self.display.mensagem("FAVOR, CADASTRAR".center(16) +"\n"+ "A UNIDADE".center(16), 3, False, False)
-        self.display.limpa_lcd()
+        self.display.mensagem("FAVOR, CADASTRAR".center(16) +"\n"+ "A UNIDADE.".center(16), 3, False, False)
+        #self.display.limpa_lcd()
         
     def exibir_catraca_unidade_nao_cadastrada(self):
         self.display.mensagem("FAVOR, CADASTRAR".center(16) +"\n"+ "CATRACA NA UNID.".center(16), 3, False, False) 
-        self.display.limpa_lcd()
+        #self.display.limpa_lcd()
         
     def exibir_turno_nao_cadastrado(self):
-        self.display.mensagem("FAVOR, CADASTRAR".center(16) +"\n"+ "O TURNO".center(16), 3, False, False)
-        self.display.limpa_lcd()
+        self.display.mensagem("FAVOR, CADASTRAR".center(16) +"\n"+ "O TURNO.".center(16), 3, False, False)
+        #self.display.limpa_lcd()
         
     def exibir_unidade_turno_nao_cadastrada(self):
         self.display.mensagem("FAVOR, CADASTRAR".center(16) +"\n"+ "O TURNO NA UNID.".center(16), 3, False, False)
-        self.display.limpa_lcd()
+        #self.display.limpa_lcd()
         
     def exibir_custo_refeicao_nao_cadastrado(self):
         self.display.mensagem("FAVOR, CADASTRAR".center(16) +"\n"+ "O CUSTO REFEICAO".center(16), 3, False, False)
-        self.display.limpa_lcd()
+        #self.display.limpa_lcd()
         
     def exibir_custo_unidade_nao_cadastrado(self):
         self.display.mensagem("FAVOR, CADASTRAR".center(16) +"\n"+ "CUSTO NA UNID.".center(16), 3, False, False)
-        self.display.limpa_lcd()
+        #self.display.limpa_lcd()
+
+    def exibir_tipo_nao_cadastrada(self):
+        self.display.mensagem("FAVOR, CADASTRAR".center(16) +"\n"+ "TIPO DE USAURIO.".center(16), 3, False, False)
+        #self.display.limpa_lcd()
         
+    def exibir_usuario_nao_cadastrado(self):
+        self.display.mensagem("FAVOR, CADASTRAR".center(16) +"\n"+ "USUARIO.".center(16), 3, False, False)
+        #self.display.limpa_lcd()
+        
+    def exibir_cartao_nao_cadastrada(self):
+        self.display.mensagem("FAVOR, CADASTRAR".center(16) +"\n"+ "CARTAO.".center(16), 3, False, False)
+        #self.display.limpa_lcd()
+
     def exibir_obtendo_recursos(self, nome_recurso):
         self.display.mensagem("OBTENDO...".center(16) +"\n"+ nome_recurso.center(16), 1, False, False)
         
@@ -169,11 +169,14 @@ class Aviso(object):
         self.display.mensagem("USO INCORRETO".center(16) +"\n"+ "DA CATRACA".center(16), 0, False, False)
         
     def exibir_falha_servidor(self):
-        self.display.mensagem('ERRO NO SERVIDOR'.center(16) +'\n'+ 'WEB SERVICE'.center(16), 6, False, False)
+        self.display.mensagem("ERRO NO SERVIDOR".center(16) +'\n'+ "WEBSERVICE".center(16), 10, False, False)
         
     def exibir_falha_rede(self):
         self.display.mensagem('FALHA NA REDE'.center(16) +'\n'+ 'AGUARDANDO REDE!'.center(16), 2, False, False)
         self.display.limpa_lcd()
+        
+    def exibir_status_interface_rede(self, interface):
+        self.display.mensagem(str("LAN" if interface == "eth0" else "WLAN").center(16) +"\n"+ 'HABILITADA!'.center(16), 3, False, False)
         
     def limpa_display(self):
         self.display.limpa_lcd()
