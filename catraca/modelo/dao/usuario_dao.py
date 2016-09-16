@@ -26,23 +26,25 @@ class UsuarioDAO(DAOGenerico):
         try:
             if arg:
                 sql = "SELECT "\
-                    "usua_id as id, "\
-                    "usua_nome as nome, "\
                     "usua_email as email, "\
+                    "usua_id as id, "\
+                    "id_base_externa as idexterno, "\
                     "usua_login as login, "\
-                    "usua_senha as senha, "\
-                    "usua_nivel as nivel "\
+                    "usua_nivel as nivel, "\
+                    "usua_nome as nome, "\
+                    "usua_senha as senha "\
                     "FROM usuario WHERE "\
                     "usua_id = %s"
                 return self.seleciona(Usuario, sql, arg)
             else:
                 sql = "SELECT "\
-                    "usua_id as id, "\
-                    "usua_nome as nome, "\
                     "usua_email as email, "\
+                    "usua_id as id, "\
+                    "id_base_externa as idexterno, "\
                     "usua_login as login, "\
-                    "usua_senha as senha, "\
-                    "usua_nivel as nivel "\
+                    "usua_nivel as nivel, "\
+                    "usua_nome as nome, "\
+                    "usua_senha as senha "\
                     "FROM usuario ORDER BY usua_id"
                 return self.seleciona(Usuario, sql)
         finally:
@@ -53,12 +55,13 @@ class UsuarioDAO(DAOGenerico):
             "("\
             "usua_email, "\
             "usua_id, "\
+            "id_base_externa, "\
             "usua_login, "\
             "usua_nivel, "\
             "usua_nome, "\
             "usua_senha "\
             ") VALUES ("\
-            "%s, %s, %s, %s, %s, %s)"
+            "%s, %s, %s, %s, %s, %s, %s)"
         try:
             return self.inclui(Usuario, sql, obj)
         finally:
@@ -67,6 +70,7 @@ class UsuarioDAO(DAOGenerico):
     def atualiza(self, obj):
         sql = "UPDATE usuario SET "\
             "usua_email = %s, "\
+            "id_base_externa = %s, "\
             "usua_login = %s, "\
             "usua_nivel = %s, "\
             "usua_nome = %s, "\

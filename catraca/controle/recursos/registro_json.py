@@ -5,6 +5,13 @@
 import json
 import requests
 import datetime
+
+from requests.exceptions import Timeout
+from requests.exceptions import HTTPError
+from requests.exceptions import TooManyRedirects
+from requests.exceptions import RequestException
+from requests.exceptions import ConnectionError
+
 from catraca.logs import Logs
 from catraca.util import Util
 from catraca.modelo.dados.servidor_restful import ServidorRestful
@@ -63,13 +70,19 @@ class RegistroJson(ServidorRestful):
                         return None
             else:
                 return None
-#         except Exception as excecao:
-#             print excecao
-#             self.log.logger.error('Erro obtendo json registro', exc_info=True)
-#             return None
-        finally:
-            pass
-        
+        except Timeout:
+            self.log.logger.error("Timeout", exc_info=True)
+        except HTTPError:
+            self.log.logger.error("HTTPError", exc_info=True)
+        except TooManyRedirects:
+            self.log.logger.error("TooManyRedirects", exc_info=True)
+        except RequestException:
+            self.log.logger.error("RequestException", exc_info=True)
+        except ConnectionError:
+            self.log.logger.error("ConnectionError", exc_info=True)
+        except Exception:
+            self.log.logger.error("Exception", exc_info=True)
+            
     def registro_utilizacao_get(self, hora_ini, hora_fim, cartao_id):
         data_atual = str(self.util.obtem_datahora().strftime("%Y%m%d"))
         self.hora_inicio = datetime.datetime.strptime(str(hora_ini),'%H:%M:%S').time().strftime('%H%M%S')
@@ -91,13 +104,19 @@ class RegistroJson(ServidorRestful):
                                 return 0
                 else:
                     return None
-        except Exception as excecao:
-            print excecao
-            self.log.logger.error('Erro obtendo json registro', exc_info=True)
-            return None
-        finally:
-            pass
-        
+        except Timeout:
+            self.log.logger.error("Timeout", exc_info=True)
+        except HTTPError:
+            self.log.logger.error("HTTPError", exc_info=True)
+        except TooManyRedirects:
+            self.log.logger.error("TooManyRedirects", exc_info=True)
+        except RequestException:
+            self.log.logger.error("RequestException", exc_info=True)
+        except ConnectionError:
+            self.log.logger.error("ConnectionError", exc_info=True)
+        except Exception:
+            self.log.logger.error("Exception", exc_info=True)
+            
     def mantem_tabela_local(self, obj, mantem_tabela=False):
         if obj:
             objeto = self.registro_dao.busca(obj.id)
@@ -202,12 +221,25 @@ class RegistroJson(ServidorRestful):
                 return r.status_code
             else:
                 return 0
-        except Exception as excecao:
-            print excecao
+        except Timeout:
+            self.log.logger.error("Timeout", exc_info=True)
             return 0
-        finally:
-            pass
-
+        except HTTPError:
+            self.log.logger.error("HTTPError", exc_info=True)
+            return 0
+        except TooManyRedirects:
+            self.log.logger.error("TooManyRedirects", exc_info=True)
+            return 0
+        except RequestException:
+            self.log.logger.error("RequestException", exc_info=True)
+            return 0
+        except ConnectionError:
+            self.log.logger.error("ConnectionError", exc_info=True)
+            return 0
+        except Exception:
+            self.log.logger.error("Exception", exc_info=True)
+            return 0
+        
     def obtem_turno_valido(self):
         #remoto
         turno_ativo = TurnoJson().turno_funcionamento_get()

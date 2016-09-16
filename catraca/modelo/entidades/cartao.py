@@ -19,7 +19,7 @@ class Cartao(object):
         self.__cart_id = None
         self.__cart_numero = None
         self.__cart_creditos = None
-        self.__tipo = None
+        self.__tipo_id = None
         
     def __eq__(self, outro):
         return self.hash_dict(self) == self.hash_dict(outro)
@@ -61,9 +61,9 @@ class Cartao(object):
     
     @property
     def tipo(self):
-        return self.__tipo
+        return self.__tipo_id
     
     @tipo.setter
     def tipo(self, obj):
-        self.__tipo = obj
+        self.__tipo_id = obj
         

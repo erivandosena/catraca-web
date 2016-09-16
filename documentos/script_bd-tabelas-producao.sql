@@ -58,8 +58,10 @@ CREATE TABLE transacao
   tran_descricao character varying(150), -- Descricao referente a transacao contabilizada do turno.
   tran_data timestamp without time zone, -- Data e hora da execucao.
   usua_id integer NOT NULL, -- Campo para chave estrangeira da tabela usuario.(Usuario responsavel por realizar a operacao de transacao).
-  CONSTRAINT pk_tran_id PRIMARY KEY (tran_id), -- Chave primaria da tabela transacao.
-  CONSTRAINT fk_usua_id FOREIGN KEY (usua_id) REFERENCES usuario (usua_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION -- Chave estrangeira da tabela usuario.
+  usua_id1 integer NOT NULL, -- Campo para chave estrangeira da tabela usuario.(usua_id1 tem a finalidade de realizar sincronia nos valores de creditos, etc).
+  CONSTRAINT pk_tran_id PRIMARY KEY (tran_id ), -- Chave primaria da tabela transacao.
+  CONSTRAINT fk_usua_id FOREIGN KEY (usua_id) REFERENCES usuario (usua_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, -- Chave estrangeira da tabela usuario.
+  CONSTRAINT fk_usua_id1 FOREIGN KEY (usua_id1) REFERENCES usuario (usua_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION -- Chave estrangeira da tabela usuario.
 );
 ALTER TABLE transacao OWNER TO catraca;
 COMMENT ON TABLE transacao IS 'Tabela que armazena a contabilidade do guiche durante o turno.';
@@ -68,8 +70,10 @@ COMMENT ON COLUMN transacao.tran_valor IS 'Valor total em R$ contabil do turno.'
 COMMENT ON COLUMN transacao.tran_descricao IS 'Descricao referente a transacao contabilizada do turno.';
 COMMENT ON COLUMN transacao.tran_data IS 'Data e hora da execucao.';
 COMMENT ON COLUMN transacao.usua_id IS 'Campo para chave estrangeira da tabela usuario.(Usuario responsavel por realizar a operacao de transacao).';
+COMMENT ON COLUMN transacao.usua_id1 IS 'Campo para chave estrangeira da tabela usuario.(usua_id1 tem a finalidade de realizar sincronia nos valores de creditos, etc).';
 COMMENT ON CONSTRAINT pk_tran_id ON transacao IS 'Chave primaria da tabela transacao.';
 COMMENT ON CONSTRAINT fk_usua_id ON transacao IS 'Chave estrangeira da tabela usuario.';
+COMMENT ON CONSTRAINT fk_usua_id1 ON transacao IS 'Chave estrangeira da tabela usuario.';
 
 -- Table: tipo
 CREATE TABLE tipo
@@ -419,7 +423,7 @@ COMMENT ON COLUMN atividade_tipo.atti_id IS 'Campo autoincremento para chave pri
 COMMENT ON COLUMN atividade_tipo.atti_ativo IS 'Campo boleano para true/false.';
 COMMENT ON COLUMN atividade_tipo.tipo_id IS 'Campo para chave estrangeira da tabela tipo.';
 COMMENT ON CONSTRAINT pk_atti_id ON atividade_tipo IS 'Chave primaria da tabela.';
-COMMENT ON CONSTRAINT fk_atti_id ON atividade_tipo IS 'Chave primaria da tabela tipo.';
+COMMENT ON CONSTRAINT fk_atti_id ON atividade_tipo IS 'Chave estrangeira da tabela tipo.';
 
 -- Table: vinculo_tipo
 CREATE TABLE vinculo_tipo

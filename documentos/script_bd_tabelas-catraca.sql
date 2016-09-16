@@ -2,7 +2,7 @@
 -- Autor_script : Erivando Sena											  --
 -- Copyright    : Unilab											      --
 -- Data_criacao : 16/10/2015											  --
--- Data_revisao : 30/08/2016											  --
+-- Data_revisao : 14/09/2016											  --
 -- Status       : Desenvolvimento										  --
 ----------------------------------------------------------------------------
 
@@ -111,6 +111,7 @@ CREATE TABLE usuario
   usua_login character varying(25), -- Nome de usuario no SIG.
   usua_senha character varying(50), -- Senha cadastrada no SIG.
   usua_nivel integer, -- Status atual do usuario no SIG.
+  id_base_externa integer, -- Campo da chave primaria (uid) no sistema SIG.
   CONSTRAINT pk_usua_id PRIMARY KEY (usua_id) -- Chave primaria da tabela usuario.
 );
 ALTER TABLE usuario OWNER TO postgres;
@@ -121,6 +122,7 @@ COMMENT ON COLUMN usuario.usua_email IS 'Endereco de e-mail do usuario no SIG.';
 COMMENT ON COLUMN usuario.usua_login IS 'Nome de usuario no SIG.';
 COMMENT ON COLUMN usuario.usua_senha IS 'Senha cadastrada no SIG.';
 COMMENT ON COLUMN usuario.usua_nivel IS 'Status atual do usuario no SIG.';
+COMMENT ON COLUMN usuario.id_base_externa IS 'Campo da chave primaria (uid) no sistema SIG.';
 COMMENT ON CONSTRAINT pk_usua_id ON usuario IS 'Chave primaria da tabela usuario.';
 
 -- Table: catraca

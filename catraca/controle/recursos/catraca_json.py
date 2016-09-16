@@ -3,7 +3,13 @@
 
 
 import json
-import traceback
+
+from requests.exceptions import Timeout
+from requests.exceptions import HTTPError
+from requests.exceptions import TooManyRedirects
+from requests.exceptions import RequestException
+from requests.exceptions import ConnectionError
+
 from catraca.logs import Logs
 from catraca.util import Util
 from catraca.visao.interface.aviso import Aviso
@@ -89,13 +95,24 @@ class CatracaJson(ServidorRestful):
                             return catraca_local
                     else:
                         return None
-#         except Exception as excecao:
-#             pass
-#             print excecao
-#             print traceback.format_exc()
-#             return None
-        finally:
-            print "FIM get catraca rest"
+        except Timeout:
+            self.log.logger.error("Timeout", exc_info=True)
+            return None
+        except HTTPError:
+            self.log.logger.error("HTTPError", exc_info=True)
+            return None
+        except TooManyRedirects:
+            self.log.logger.error("TooManyRedirects", exc_info=True)
+            return None
+        except RequestException:
+            self.log.logger.error("RequestException", exc_info=True)
+            return None
+        except ConnectionError:
+            self.log.logger.error("ConnectionError", exc_info=True)
+            return None
+        except Exception:
+            self.log.logger.error("Exception", exc_info=True)
+            return None
         
     def mantem_tabela_local(self, obj, mantem_tabela=False):
         #se o obj existir
@@ -106,7 +123,7 @@ class CatracaJson(ServidorRestful):
             if not mantem_tabela:
                 #se o objeto existir
                 if objeto:
-                    print "CATRACA EXISTE"
+                    #print "CATRACA EXISTE"
                     # se o objeto for diferente de obj
                     if not objeto.__eq__(obj):
                         #atualiza o objeto
@@ -114,7 +131,7 @@ class CatracaJson(ServidorRestful):
                     # se o objeto for igual ao obj
                     else:
                         #nao faz nada
-                        print "[CATRACA]Acao de atualizacao nao necessaria!"
+                        #print "[CATRACA]Acao de atualizacao nao necessaria!"
                         return None
                 #se o objeto nao existir
                 else:
@@ -178,7 +195,6 @@ class CatracaJson(ServidorRestful):
                 catraca.interface = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
             if item == "catr_financeiro":
                 catraca.financeiro = self.dict_obj(formato_json[item])
-                
         return catraca
     
     def lista_json(self, lista):
@@ -222,11 +238,24 @@ class CatracaJson(ServidorRestful):
                 return r.status_code
             else:
                 return 0
-        except Exception as excecao:
-            print excecao
+        except Timeout:
+            self.log.logger.error("Timeout", exc_info=True)
             return 0
-        finally:
-            pass
+        except HTTPError:
+            self.log.logger.error("HTTPError", exc_info=True)
+            return 0
+        except TooManyRedirects:
+            self.log.logger.error("TooManyRedirects", exc_info=True)
+            return 0
+        except RequestException:
+            self.log.logger.error("RequestException", exc_info=True)
+            return 0
+        except ConnectionError:
+            self.log.logger.error("ConnectionError", exc_info=True)
+            return 0
+        except Exception:
+            self.log.logger.error("Exception", exc_info=True)
+            return 0
         
     def catraca_put(self, formato_json, id):
         servidor = self.obter_servidor()
@@ -237,11 +266,24 @@ class CatracaJson(ServidorRestful):
                 return r.status_code
             else:
                 return 0
-        except Exception as excecao:
-            print excecao
+        except Timeout:
+            self.log.logger.error("Timeout", exc_info=True)
             return 0
-        finally:
-            pass
+        except HTTPError:
+            self.log.logger.error("HTTPError", exc_info=True)
+            return 0
+        except TooManyRedirects:
+            self.log.logger.error("TooManyRedirects", exc_info=True)
+            return 0
+        except RequestException:
+            self.log.logger.error("RequestException", exc_info=True)
+            return 0
+        except ConnectionError:
+            self.log.logger.error("ConnectionError", exc_info=True)
+            return 0
+        except Exception:
+            self.log.logger.error("Exception", exc_info=True)
+            return 0
         
     def cadastra_catraca_remoto(self):
         interface_padrao = "eth0"

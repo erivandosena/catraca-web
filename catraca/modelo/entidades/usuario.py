@@ -21,6 +21,7 @@ class Usuario(object):
         self.__usua_login = None
         self.__usua_senha = None
         self.__usua_nivel = None
+        self.__id_base_externa = None
         
     def __eq__(self, outro):
         return self.hash_dict(self) == self.hash_dict(outro)
@@ -79,4 +80,11 @@ class Usuario(object):
     def nivel(self, valor):
         self.__usua_nivel = valor
         
+    @property
+    def idexterno(self):
+        return self.id_base_externa
+    
+    @idexterno.setter
+    def idexterno(self, valor):
+        self.id_base_externa = valor
         

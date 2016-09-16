@@ -1,12 +1,14 @@
 #!/usr/bin/env python
-# -*- coding: latin-1 -*-
+# -*- coding: utf-8 -*-
 
 
+import sys
 from time import sleep
 import Adafruit_CharLCD as LCD
 from unicodedata import normalize
 from catraca.logs import Logs
 from catraca.controle.raspberrypi.pinos import PinoControle
+from catraca.logs import Logs
 
 
 __author__ = "Erivando Sena"
@@ -38,6 +40,7 @@ __status__ = "Prototype" # Prototype | Development | Production
 class Display(object):
     
     rpi = PinoControle()
+    log = Logs()
     
     # Definicao pinos GPIO para mapeamento LCD
     lcd_rs        = rpi.ler(20)['gpio']
@@ -65,33 +68,38 @@ class Display(object):
                                lcd_backlight, 
                                enable_pwm=False)
     
-    def __init__(self):
-        super(Display, self).__init__()
-        # print help(LCD.Adafruit_CharLCD)
+#     def __init__(self):
+#         #super(Display, self).__init__()
 
-    def mensagem(self, texto, duracao, cursor, scroll, limpa=True):
-        texto = self.remove_acentos(texto).upper()
+    def mensagem(self, texto, duracao, cursor, scroll, limpa):
+        texto = self.remove_acentos(texto)
         try:
+            self.lcd.home()
             # limpa
             if limpa:
                 self.lcd.clear()
             # exibe cursores
             self.lcd.show_cursor(cursor)
             self.lcd.blink(cursor)
-            # exibe texto(s)
-            self.lcd.message(texto)
-            #print texto
+
             # rolagem do(s) texto(s)
             if scroll:
                 self.lcd_scroll(texto)
+#                 if "\n" in texto:
+#                     l1, l2, = texto.split('\n')
+#                     texto = l1+ " "+l2
+#                 texto = "\n".join(texto)
+#                 self.lcd.move_left()
+#                 self.lcd.message(texto)
+            else:
+                # exibe texto(s)
+                self.lcd.message(texto)
+                
             # tempo de exibicao
             sleep(duracao)
-        except Exception as excecao:
-            print excecao
-            Logs().logger.error('Erro escrevendo no display.', exc_info=True)
-        finally:
-            Logs().logger.debug('Tempo de display finalizado.')
-    
+        except Exception:
+            self.log.logger.error("Exception", exc_info=True)
+            
     def lcd_scroll(self, texto):
         for i in range(self.lcd_columns-len(texto)):
             sleep(0.5)
@@ -99,7 +107,7 @@ class Display(object):
         for i in range(self.lcd_columns-len(texto)):
             sleep(0.5)
             self.lcd.move_left()
-            
+
     def lcd_retroiluminacao(self, estado):
         if estado:
             # Turn backlight on.
@@ -111,7 +119,12 @@ class Display(object):
     def limpa_lcd(self):
         self.lcd.clear()
         
-    def remove_acentos(self, texto, codif='utf-8'):
-        return normalize('NFKD', texto.decode(codif)).encode('ASCII','ignore')
-    
-    
+    def remove_acentos(self, texto):
+        reload(sys)
+        sys.setdefaultencoding('utf-8')
+        try:
+            return normalize('NFKD', texto.decode("utf-8","ignore")).encode('ascii','ignore')
+        except UnicodeDecodeError:
+            self.log.logger.error("UnicodeDecodeError", exc_info=True)
+            
+              

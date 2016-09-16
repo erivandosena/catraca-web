@@ -5,7 +5,6 @@
 import inspect
 from typing import TypeVar
 from typing import Generic
-#from contextlib import closing
 from catraca.logs import Logs
 from catraca.modelo.dados.conexao_generica import ConexaoGenerica
 
@@ -31,7 +30,6 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
         obj = T()
         self.cursor = self.abre_conexao().cursor(cursor_factory=self.extras.DictCursor)
         try:
-            #with closing(self.abre_conexao().cursor(cursor_factory=self.extras.DictCursor)) as cursor:
             dic = {}
             argumentos = []
             for a in arg:
@@ -40,7 +38,7 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
                 #print argumentos
                 self.cursor.execute(sql, argumentos)
                 linhas = self.cursor.fetchone()
-                print self.cursor.query
+                #print self.cursor.query
                 if linhas:
                     colunas = [coluna[0] for coluna in self.cursor.description]
                     dic = dict(zip(colunas, linhas))
@@ -60,7 +58,7 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
                 #print argumentos
                 self.cursor.execute(sql, argumentos)
                 linhas = self.cursor.fetchall()
-                print self.cursor.query
+                #print self.cursor.query
                 if linhas != []:
                     listas = []
                     for linha in linhas:
@@ -75,15 +73,15 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
                         status = msg[len(msg)-1:len(msg)]
                         if status:
                             self.aviso = "Selecionado {0} com sucesso!".format(status)
+                            #print listas
                             return listas
                         else:
                             return []
                 else:
                     return []
-        except (self.data_error, self.programming_error, self.operational_error):
+        except Exception:
+            self.log.logger.error("Exception", exc_info=True)
             self.cursor = self.abre_conexao().cursor(cursor_factory=self.extras.DictCursor)
-        except Exception as excecao:
-            self.log.logger.error("ERRO: ", exc_info=True)
         finally:
             self.__fecha_conexoes(self.cursor)
             
@@ -94,10 +92,8 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
         classe = None
         if isinstance(arg, list):
             lista = arg
-            print lista
         if isinstance(arg, T):
             obj = arg
-            print obj
         atributos = []
         colunas = []
         valores = []
@@ -106,12 +102,9 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
         try:
             if lista:
                 atributos = inspect.getmembers(T(), lambda m:not(inspect.isroutine(m)))
-                colunas = [m[0] for m in atributos if '_' not in m[0] and 'id' not in m[0]]
+                colunas = [ m[0] for m in atributos if '_' not in m[0] and 'id' not in m[0] ]
                 valores = lista
-                print colunas
-                print valores
                 dic = dict(zip(colunas[0::1], valores[0::1]))
-                print dic
                 for linha in sorted(dic):
                     lista_ordenada.append(dic[linha])
                 #print lista_ordenada
@@ -119,10 +112,10 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
                 atributos = inspect.getmembers(obj, lambda m:not(inspect.isroutine(m)))
                 colunas = [m[0] for m in atributos if '_' not in m[0]]
                 valores = [m[1] for m in atributos if '_' not in m[0]]
-                print colunas
-                print valores
                 dic = dict(zip(colunas[0::1], valores[0::1]))
-                print dic
+                #print colunas
+                #print valores
+                #print dic
                 for linha in sorted(dic):
                     lista_ordenada.append(dic[linha])
                 #print lista_ordenada
@@ -144,8 +137,8 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
             print "fez rollback (insert)"
             self.rollback()
             self.cursor = self.abre_conexao().cursor(cursor_factory=self.extras.DictCursor)
-        except Exception as excecao:
-            self.log.logger.error("ERRO: ", exc_info=True)
+        except Exception:
+            self.log.logger.error("Exception", exc_info=True)
         finally:
             self.__fecha_conexoes(self.cursor)
             
@@ -164,6 +157,7 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
                 for linha in sorted(dic):
                     lista_ordenada.append(dic[linha])
                 lista_ordenada.append(obj.id)
+                #print lista_ordenada
                 self.cursor.execute(sql, lista_ordenada)
                 print self.cursor.query
                 self.commit()
@@ -181,8 +175,8 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
             print "fez rollback (edit)"
             self.rollback()
             self.cursor = self.abre_conexao().cursor(cursor_factory=self.extras.DictCursor)
-        except Exception as excecao:
-            self.log.logger.error("ERRO: ", exc_info=True)
+        except Exception:
+            self.log.logger.error("Exception", exc_info=True)
         finally:
             self.__fecha_conexoes(self.cursor)
             
@@ -190,7 +184,6 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
         obj = [a for a in arg][0] if arg else None
         self.cursor = self.abre_conexao().cursor(cursor_factory=self.extras.DictCursor)
         try:
-            #with closing(self.abre_conexao().cursor(cursor_factory=self.extras.DictCursor)) as cursor:
             if obj:
                 self.cursor.execute(sql, (obj.id,))
             else:
@@ -209,8 +202,8 @@ class DAOGenerico(ConexaoGenerica, Generic[T]):
             print "fez rollback (delete)"
             self.rollback()
             self.cursor = self.abre_conexao().cursor(cursor_factory=self.extras.DictCursor)
-        except Exception as excecao:
-            self.log.logger.error("ERRO: ", exc_info=True)
+        except Exception:
+            self.log.logger.error("Exception", exc_info=True)
         finally:
             self.__fecha_conexoes(self.cursor)
             

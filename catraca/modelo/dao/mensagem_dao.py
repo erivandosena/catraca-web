@@ -47,6 +47,19 @@ class MensagemDAO(DAOGenerico):
                 return self.seleciona(Mensagem, sql)
         finally:
             pass
+        
+    def busca_por_catraca(self, id):
+        try:
+            sql = "SELECT "\
+                "mens_institucional1 as institucional1, "\
+                "mens_institucional2 as institucional2, "\
+                "mens_institucional3 as institucional3, "\
+                "mens_institucional4 as institucional4 "\
+                "FROM mensagem WHERE "\
+                "catr_id = %s"
+            return self.seleciona(Mensagem, sql, id)
+        finally:
+            pass
      
     def insere(self, obj):
         sql = "INSERT INTO mensagem "\

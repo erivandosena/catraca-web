@@ -4,6 +4,13 @@
 
 import json
 import requests
+
+from requests.exceptions import Timeout
+from requests.exceptions import HTTPError
+from requests.exceptions import TooManyRedirects
+from requests.exceptions import RequestException
+from requests.exceptions import ConnectionError
+
 from catraca.logs import Logs
 from catraca.util import Util
 from catraca.modelo.dados.servidor_restful import ServidorRestful
@@ -50,23 +57,30 @@ class CartaoJson(ServidorRestful):
                         return lista
                 else:
                     return None
-#         except Exception as excecao:
-#             print excecao
-#             return None
-        finally:
-            pass
-        
+        except Timeout:
+            self.log.logger.error("Timeout", exc_info=True)
+        except HTTPError:
+            self.log.logger.error("HTTPError", exc_info=True)
+        except TooManyRedirects:
+            self.log.logger.error("TooManyRedirects", exc_info=True)
+        except RequestException:
+            self.log.logger.error("RequestException", exc_info=True)
+        except ConnectionError:
+            self.log.logger.error("ConnectionError", exc_info=True)
+        except Exception:
+            self.log.logger.error("Exception", exc_info=True)
+            
     def cartao_valido_get(self, numero_cartao):
         servidor = self.obter_servidor()
         try:
             if servidor:
-                #url = str(self.URL) + "cartao/jcartao/" + str(numero_cartao)+ "/"+str(self.util.obtem_datahora().strftime("%Y%m%d%H%M%S"))
                 url = str(self.URL) + "cartao/jcartao/" + str(numero_cartao)
                 r = servidor.get(url)
+                print url
                 if r.text != '':
-                    print json.loads(r.text)
                     dados  = json.loads(r.text)
-                    LISTA_JSON = dados["cartao"]
+                    LISTA_JSON = dados["cartao_valido"]
+                    print LISTA_JSON
                     if LISTA_JSON != []:
                         for item in LISTA_JSON:
                             obj = self.dict_obj_cartao_valido(item)
@@ -74,14 +88,19 @@ class CartaoJson(ServidorRestful):
                                 return obj
                     else:
                         return None
-        except Exception as excecao:
-            print excecao
-            self.log.logger.error('Erro obtendo json cartao', exc_info=True)
-            return None
-        finally:
-            pass
-        
-        
+        except Timeout:
+            self.log.logger.error("Timeout", exc_info=True)
+        except HTTPError:
+            self.log.logger.error("HTTPError", exc_info=True)
+        except TooManyRedirects:
+            self.log.logger.error("TooManyRedirects", exc_info=True)
+        except RequestException:
+            self.log.logger.error("RequestException", exc_info=True)
+        except ConnectionError:
+            self.log.logger.error("ConnectionError", exc_info=True)
+        except Exception:
+            self.log.logger.error("Exception", exc_info=True)
+            
     def mantem_tabela_local(self, obj, mantem_tabela=False):
         if obj:
             objeto = self.cartao_dao.busca(obj.id)
@@ -170,6 +189,14 @@ class CartaoJson(ServidorRestful):
                 cartao_valido.nome = self.dict_obj_cartao_valido(formato_json[item]) \
                 if self.dict_obj_cartao_valido(formato_json[item]) is None else \
                 self.dict_obj_cartao_valido(formato_json[item]).encode('utf-8')
+            if item == "tipo_nome":
+                cartao_valido.tiponome = self.dict_obj_cartao_valido(formato_json[item]) \
+                if self.dict_obj_cartao_valido(formato_json[item]) is None else \
+                self.dict_obj_cartao_valido(formato_json[item]).encode('utf-8')
+            if item == "id_base_externa":
+                cartao_valido.idexterno = self.dict_obj_cartao_valido(formato_json[item])
+            if item == "vinc_avulso":
+                cartao_valido.avulso = self.dict_obj_cartao_valido(formato_json[item])
         return cartao_valido
     
     def lista_json(self, lista):
@@ -200,9 +227,22 @@ class CartaoJson(ServidorRestful):
                 return r.status_code
             else:
                 return 0
-        except Exception as excecao:
-            print excecao
+        except Timeout:
+            self.log.logger.error("Timeout", exc_info=True)
             return 0
-        finally:
-            pass
+        except HTTPError:
+            self.log.logger.error("HTTPError", exc_info=True)
+            return 0
+        except TooManyRedirects:
+            self.log.logger.error("TooManyRedirects", exc_info=True)
+            return 0
+        except RequestException:
+            self.log.logger.error("RequestException", exc_info=True)
+            return 0
+        except ConnectionError:
+            self.log.logger.error("ConnectionError", exc_info=True)
+            return 0
+        except Exception:
+            self.log.logger.error("Exception", exc_info=True)
+            return 0
         

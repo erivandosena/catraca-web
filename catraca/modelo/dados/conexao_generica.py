@@ -30,7 +30,8 @@ class ConexaoGenerica(ConexaoFactory):
     
     def fecha_conexao(self):
         #print "BD-CONEXAO FECHADA!"
-        self.__con.close()
+        if not self.__con.closed:
+            self.__con.close()
         
     def abre_conexao(self):
         try:

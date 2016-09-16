@@ -5,7 +5,6 @@
 from catraca.logs import Logs
 from catraca.util import Util
 from catraca.modelo.dao.dao_generico import DAOGenerico
-#from catraca.modelo.entidades.registro_offline import RegistroOffline
 from catraca.modelo.entidades.registro import Registro
 
 
@@ -83,15 +82,6 @@ class RegistroOfflineDAO(DAOGenerico):
             return self.seleciona(Registro, sql, data_ini, data_fim)
         finally:
             pass
-            
-#     def busca_ultimo_registro_offline(self):
-#         sql = "SELECT MAX(reof_id) FROM registro_offline"
-#         obj = self.seleciona(RegistroOffline, sql)
-#         try:
-#             return obj[0][0] if obj[0][0] else 0
-#         finally:
-#             #self.fecha_conexao()
-#             pass
             
     def insere(self, obj):
         sql = "INSERT INTO registro_offline "\

@@ -4,6 +4,13 @@
 
 import json
 import requests
+
+from requests.exceptions import Timeout
+from requests.exceptions import HTTPError
+from requests.exceptions import TooManyRedirects
+from requests.exceptions import RequestException
+from requests.exceptions import ConnectionError
+
 from catraca.logs import Logs
 from catraca.modelo.dados.servidor_restful import ServidorRestful
 from catraca.modelo.dao.vinculo_dao import VinculoDAO
@@ -47,22 +54,59 @@ class VinculoJson(ServidorRestful):
                         return lista
                 else:
                     return None
-#         except Exception as excecao:
-#             print excecao
-#             self.log.logger.error('Erro obtendo json vinculo', exc_info=True)
-#             return None
-        finally:
-            pass
-        
+        except Timeout:
+            self.log.logger.error("Timeout", exc_info=True)
+        except HTTPError:
+            self.log.logger.error("HTTPError", exc_info=True)
+        except TooManyRedirects:
+            self.log.logger.error("TooManyRedirects", exc_info=True)
+        except RequestException:
+            self.log.logger.error("RequestException", exc_info=True)
+        except ConnectionError:
+            self.log.logger.error("ConnectionError", exc_info=True)
+        except Exception:
+            self.log.logger.error("Exception", exc_info=True)
+            
+    def obtem_vinculo_id_get(self, id):
+        servidor = self.obter_servidor()
+        try:
+            if servidor:
+                url = str(self.URL) + "vinculo/jvinculo/" + str(id)
+                r = servidor.get(url)
+                print url
+                if r.text != '':
+                    dados  = json.loads(r.text)
+                    LISTA_JSON = dados["vinculo"]
+                    if LISTA_JSON != []:
+                        for item in LISTA_JSON:
+                            obj = self.dict_obj(item)
+                        if obj:
+                            return obj
+                else:
+                    return None
+        except Timeout:
+            self.log.logger.error("Timeout", exc_info=True)
+        except HTTPError:
+            self.log.logger.error("HTTPError", exc_info=True)
+        except TooManyRedirects:
+            self.log.logger.error("TooManyRedirects", exc_info=True)
+        except RequestException:
+            self.log.logger.error("RequestException", exc_info=True)
+        except ConnectionError:
+            self.log.logger.error("ConnectionError", exc_info=True)
+        except Exception:
+            self.log.logger.error("Exception", exc_info=True)
+            
     def mantem_tabela_local(self, obj, mantem_tabela=False):
         if obj:
             objeto = self.vinculo_dao.busca(obj.id)
             if not mantem_tabela:
                 if objeto:
+                    print "CATRACA EXISTE"
                     if not objeto.__eq__(obj):
                         return self.atualiza_exclui(obj, mantem_tabela)
                     else:
-                        #print "[VINCULO]Acao de atualizacao nao necessaria!"
+                        print "[VINCULO]Acao de atualizacao nao necessaria!"
                         return None
                 else:
                     return self.insere(obj)
@@ -107,7 +151,7 @@ class VinculoJson(ServidorRestful):
             if item == "vinc_fim":
                 vinculo.fim = self.dict_obj(formato_json[item])
             if item == "vinc_descricao":
-                    vinculo.descricao = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
+                vinculo.descricao = self.dict_obj(formato_json[item]) if self.dict_obj(formato_json[item]) is None else self.dict_obj(formato_json[item]).encode('utf-8')
             if item == "vinc_refeicoes":
                 vinculo.refeicoes = self.dict_obj(formato_json[item])
             if item == "cart_id":
@@ -116,4 +160,46 @@ class VinculoJson(ServidorRestful):
                 vinculo.usuario = self.dict_obj(formato_json[item])
                 
         return vinculo
+    
+    def objeto_json(self, obj):
+        if obj:
+            vinculo = {
+                "vinc_avulso":obj.avulso,
+                "cart_id":obj.cartao,
+                "vinc_descricao":obj.descricao,
+                "vinc_fim":obj.fim,
+                "vinc_inicio":obj.inicio,
+                "vinc_refeicoes":obj.refeicoes,
+                "usua_id":obj.usuario
+            }
+            print vinculo
+            return self.vinculo_put(vinculo, obj.id)
+    
+    def vinculo_put(self, formato_json, id):
+        servidor = self.obter_servidor()
+        try:
+            if servidor:
+                url = str(self.URL) + "vinculo/atualiza/"+ str(id)
+                r = servidor.put(url, data=json.dumps(formato_json))
+                return r.status_code
+            else:
+                return 0
+        except Timeout:
+            self.log.logger.error("Timeout", exc_info=True)
+            return 0
+        except HTTPError:
+            self.log.logger.error("HTTPError", exc_info=True)
+            return 0
+        except TooManyRedirects:
+            self.log.logger.error("TooManyRedirects", exc_info=True)
+            return 0
+        except RequestException:
+            self.log.logger.error("RequestException", exc_info=True)
+            return 0
+        except ConnectionError:
+            self.log.logger.error("ConnectionError", exc_info=True)
+            return 0
+        except Exception:
+            self.log.logger.error("Exception", exc_info=True)
+            return 0
     

@@ -32,11 +32,11 @@ class Logs(object):
     def main(self):
         LOG_FILENAME = '/home/pi/CatracaEletronica/log/catraca.log'
         logging.basicConfig(
-                            level=logging.CRITICAL, 
+                            level=logging.ERROR, 
                             filename= LOG_FILENAME, 
                             #filemode='w',
                             handler = logging.handlers.RotatingFileHandler(LOG_FILENAME, maxBytes=20, backupCount=5),
-                            format='%(asctime)-15s %(name)-5s %(levelname)-8s %(message)s')
+                            format='\n%(asctime)-15s %(name)-5s %(levelname)-8s %(message)s')
     
     if __name__ == '__main__':
         main()

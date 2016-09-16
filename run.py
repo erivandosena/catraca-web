@@ -3,7 +3,7 @@
 
 
 from catraca.logs import Logs
-from catraca.visao.interface.painel import Painel
+from catraca.visao.interface.inicializador import Inicializador
 
 
 __author__ = "Erivando Sena" 
@@ -13,7 +13,6 @@ __status__ = "Prototype" # Prototype | Development | Production
 
 
 if __name__ == '__main__':
-    
     print "\nIniciando..."
     print ''
     print '|||||| |||||| ||'
@@ -37,6 +36,9 @@ if __name__ == '__main__':
     print '    CONTROLE    ADMINISTRATIVO    DE    TRAFEGO    ACADEMICO    AUTOMATIZADO'
     print '                        © 2015-2016  www.catraca.unilab.edu.br'
     
-    Logs().main()
-    Painel().main()
+    try:
+        Logs().main()
+        Inicializador().start()
+    except Exception:
+        Logs().logger.error("Exception", exc_info=True)
     

@@ -4,6 +4,13 @@
 
 import json
 import requests
+
+from requests.exceptions import Timeout
+from requests.exceptions import HTTPError
+from requests.exceptions import TooManyRedirects
+from requests.exceptions import RequestException
+from requests.exceptions import ConnectionError
+
 from catraca.logs import Logs
 from catraca.modelo.dados.servidor_restful import ServidorRestful
 from catraca.modelo.dao.custo_unidade_dao import CustoUnidadeDAO
@@ -47,35 +54,19 @@ class CustoUnidadeJson(ServidorRestful):
                         return lista
                 else:
                     return None
-#         except Exception as excecao:
-#             print excecao
-#             self.log.logger.error('Erro obtendo json custo-unidade', exc_info=True)
-#             return None
-        finally:
-            pass
-        
-#     def custo_unidade_atual_get(self):
-#         servidor = self.obter_servidor()
-#         try:
-#             if servidor:
-#                 url = str(self.URL) + "custo_unidade/jcusto_unidade"
-#                 r = servidor.get(url)
-#                 if r.text != '':
-#                     dados  = json.loads(r.text)
-#                     LISTA_JSON = dados["custo_unidade"]
-#                     if LISTA_JSON != []:
-#                         for item in LISTA_JSON:
-#                             obj = self.dict_obj(item)
-#                             return obj.valor if obj else 0
-#                 else:
-#                     return None
-#         except Exception as excecao:
-#             print excecao
-#             self.log.logger.error('Erro obtendo json custo-unidade', exc_info=True)
-#             return None
-#         finally:
-#             pass
-        
+        except Timeout:
+            self.log.logger.error("Timeout", exc_info=True)
+        except HTTPError:
+            self.log.logger.error("HTTPError", exc_info=True)
+        except TooManyRedirects:
+            self.log.logger.error("TooManyRedirects", exc_info=True)
+        except RequestException:
+            self.log.logger.error("RequestException", exc_info=True)
+        except ConnectionError:
+            self.log.logger.error("ConnectionError", exc_info=True)
+        except Exception:
+            self.log.logger.error("Exception", exc_info=True)
+            
     def mantem_tabela_local(self, obj, mantem_tabela=False):
         if obj:
             objeto = self.custo_unidade_dao.busca(obj.id)

@@ -19,15 +19,18 @@ class CartaoValido(object):
         super(CartaoValido, self).__init__()
         self.__cart_id = None
         self.__cart_numero = None
+        self.__vinc_avulso = None
         self.__cart_creditos = None
         self.__tipo_valor = None
+        self.__tipo_nome = None
         self.__vinc_refeicoes = None
         self.__vinc_descricao = None
         self.__vinc_inicio = None
         self.__vinc_fim = None
         self.__nome_usuario = None
-        self.__tipo = None
+        self.__tipo_id = None
         self.__vinculo = None
+        self.__id_base_externa = None
         
     def __eq__(self, outro):
         return self.hash_dict(self) == self.hash_dict(outro)
@@ -76,6 +79,14 @@ class CartaoValido(object):
         self.__tipo_valor = valor
         
     @property
+    def nometipo(self):
+        return self.__tipo_nome
+    
+    @nometipo.setter
+    def nometipo(self, valor):
+        self.__tipo_nome = valor
+        
+    @property
     def refeicoes(self):
         return self.__vinc_refeicoes
     
@@ -117,17 +128,33 @@ class CartaoValido(object):
 
     @property
     def tipo(self):
-        return self.__tipo
+        return self.__tipo_id
     
     @tipo.setter
-    def tipo(self, obj):
-        self.__tipo = obj
+    def tipo(self, valor):
+        self.__tipo_id = valor
         
     @property
     def vinculo(self):
         return self.__vinculo
     
     @vinculo.setter
-    def vinculo(self, obj):
-        self.__vinculo = obj
+    def vinculo(self, valor):
+        self.__vinculo = valor
+        
+    @property
+    def idexterno(self):
+        return self.__id_base_externa
+    
+    @idexterno.setter
+    def idexterno(self, valor):
+        self.__id_base_externa = valor
+        
+    @property
+    def avulso(self):
+        return self.__vinc_avulso
+    
+    @avulso.setter
+    def avulso(self, valor):
+        self.__vinc_avulso = valor
         

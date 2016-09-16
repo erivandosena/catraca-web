@@ -4,6 +4,13 @@
 
 import json
 import requests
+
+from requests.exceptions import Timeout
+from requests.exceptions import HTTPError
+from requests.exceptions import TooManyRedirects
+from requests.exceptions import RequestException
+from requests.exceptions import ConnectionError
+
 from catraca.logs import Logs
 from catraca.util import Util
 from catraca.modelo.dados.servidor_restful import ServidorRestful
@@ -49,13 +56,19 @@ class TurnoJson(ServidorRestful):
                         return lista
                 else:
                     return None
-#         except Exception as excecao:
-#             print excecao
-#             self.log.logger.error('Erro obtendo json turno', exc_info=True)
-#             return None
-        finally:
-            pass
-        
+        except Timeout:
+            self.log.logger.error("Timeout", exc_info=True)
+        except HTTPError:
+            self.log.logger.error("HTTPError", exc_info=True)
+        except TooManyRedirects:
+            self.log.logger.error("TooManyRedirects", exc_info=True)
+        except RequestException:
+            self.log.logger.error("RequestException", exc_info=True)
+        except ConnectionError:
+            self.log.logger.error("ConnectionError", exc_info=True)
+        except Exception:
+            self.log.logger.error("Exception", exc_info=True)
+            
     def turno_funcionamento_get(self):
         IP = Util().obtem_ip_por_interface()
         servidor = self.obter_servidor()
@@ -75,13 +88,19 @@ class TurnoJson(ServidorRestful):
                                 return None
                 else:
                     return None
-        except Exception as excecao:
-            print excecao
-            self.log.logger.error('Erro obtendo json turno', exc_info=True)
-            return None
-        finally:
-            pass
-        
+        except Timeout:
+            self.log.logger.error("Timeout", exc_info=True)
+        except HTTPError:
+            self.log.logger.error("HTTPError", exc_info=True)
+        except TooManyRedirects:
+            self.log.logger.error("TooManyRedirects", exc_info=True)
+        except RequestException:
+            self.log.logger.error("RequestException", exc_info=True)
+        except ConnectionError:
+            self.log.logger.error("ConnectionError", exc_info=True)
+        except Exception:
+            self.log.logger.error("Exception", exc_info=True)
+            
     def mantem_tabela_local(self, obj, mantem_tabela=False):
         if obj:
             objeto = self.turno_dao.busca(obj.id)

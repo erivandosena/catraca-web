@@ -23,12 +23,15 @@ class CartaoValidoDAO(DAOGenerico):
         
     def busca_cartao_valido(self, numero):
         sql = "SELECT "\
+            "vinculo.vinc_avulso as avulso, "\
             "cartao.cart_creditos as creditos, "\
             "vinculo.vinc_descricao as descricao, "\
             "vinculo.vinc_fim as fim, "\
             "cartao.cart_id as id, "\
+            "usuario.id_base_externa as idexterno, "\
             "vinculo.vinc_inicio as inicio, "\
             "SUBSTR(TRIM(usuario.usua_nome), 0, 16) || '.' as nome, "\
+            "tipo.tipo_nome as nometipo, "\
             "cartao.cart_numero as numero, "\
             "vinculo.vinc_refeicoes as refeicoes, "\
             "tipo.tipo_id as tipo, "\
