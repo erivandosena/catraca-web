@@ -38,6 +38,7 @@ from catraca.modelo.dao.tipo_dao import TipoDAO
 from catraca.modelo.entidades.vinculo import Vinculo
 from catraca.modelo.dao.vinculo_dao import VinculoDAO
 from catraca.controle.recursos.vinculo_json import VinculoJson
+from _ast import Return
 
 __author__ = "Erivando Sena" 
 __copyright__ = "(C) Copyright 2015, Unilab" 
@@ -184,11 +185,9 @@ class LeitorCartao(threading.Thread):
                 ## OBTEM INFORMACOES SOBRE A VALIDADE DO VINCULO DO CARTAO
                 ##############################################################
                 if not self.obtem_vinculo(self.CARTAO):
-                    
-                    self.renova_vinculo(self.CARTAO)
-                    
                     self.util.beep_buzzer(250, .1, 3)
-                    self.aviso.exibir_vinculo_invalido()
+                    if not self.CARTAO.avulso:
+                        return self.renova_vinculo(self.CARTAO)
                     return None
                 ##############################################################
                 ## OBTEM AS INFORMACOES DO CARTAO CONSULTADO NO BANCO DE DADOS
@@ -388,11 +387,13 @@ class LeitorCartao(threading.Thread):
                     return True
                 else:
                     print "VINCULO VENCIDO"
+                    self.aviso.exibir_vinculo_invalido()
                     return False
         except Exception:
             self.log.logger.error("Exception", exc_info=True)
             
     def renova_vinculo(self, cartao_valido):
+        self.aviso.exibir_renova_vinculo_vencido()
         try:
             if cartao_valido:
                 usuario_json = UsuarioJson()
@@ -400,50 +401,24 @@ class LeitorCartao(threading.Thread):
                 
                 if usuario_externo:
                     id_status_servidor  = usuario_externo.id_status_servidor
-#                     categoria           = usuario_externo.categoria.strip().lower() if usuario_externo.categoria else usuario_externo.categoria
-#                     cpf_cnpj            = usuario_externo.cpf_cnpj
-#                     email               = usuario_externo.email.strip().lower() if usuario_externo.email else usuario_externo.email
-#                     id_categoria        = usuario_externo.id_categoria
-#                     id_usuario          = usuario_externo.id_usuario
-#                     identidade          = usuario_externo.identidade.strip() if usuario_externo.identidade else usuario_externo.identidade
-#                     login               = usuario_externo.login.strip().lower() if usuario_externo.login else usuario_externo.login
-#                     matricula_disc      = usuario_externo.matricula_disc
-#                     nivel_discente      = usuario_externo.nivel_discente
-#                     nome                = usuario_externo.nome.strip().upper() if usuario_externo.nome else usuario_externo.nome
-#                     passaporte          = usuario_externo.passaporte
                     status_discente     = usuario_externo.status_discente.strip().lower() if usuario_externo.status_discente else usuario_externo.status_discente
                     status_servidor     = usuario_externo.status_servidor.strip().lower() if usuario_externo.status_servidor else usuario_externo.status_servidor
-#                     tipo_usuario        = usuario_externo.tipo_usuario.strip().lower() if usuario_externo.tipo_usuario else usuario_externo.tipo_usuario
-                    
-                    print "\nID_STATUS_SERVIDOR: " + str(id_status_servidor)
-#                     print "CATEGORIA: " + str(categoria)
-#                     print "CPF_CNPJ: " + str(cpf_cnpj)
-#                     print "EMAIL: " + str(email)
-#                     print "ID_CATEGORIA: " + str(id_categoria)
-#                     print "ID_USUARIO: " + str(id_usuario)
-#                     print "IDENTIDADE: " + str(identidade)
-#                     print "LOGIN: " + str(login)
-#                     print "MATRICULA_DISC: " + str(matricula_disc)
-#                     print "NIVEL_DISCENTE: " + str(nivel_discente)
-#                     print "NOME: " + str(nome)
-#                     print "PASSAPORTE: " + str(passaporte)
-                    print "STATUS_DISCENTE: " + str(status_discente)
-                    print "STATUS_SERVIDOR: " + str(status_servidor)
-#                     print "TIPO_USUARIO: " + str(tipo_usuario)
+
+#                     print "\nID_STATUS_SERVIDOR: " + str(id_status_servidor)
+#                     print "STATUS_DISCENTE: " + str(status_discente)
+#                     print "STATUS_SERVIDOR: " + str(status_servidor)
                     
                     status = False
-                    if not cartao_valido.avulso:
-                        if id_status_servidor is not None and id_status_servidor == 1:
-                            status = True
+                    if id_status_servidor is not None and id_status_servidor == 1:
+                        status = True
+                    else:
+                        if status_discente is not None and "ativo" in status_discente:
+                                status = True
                         else:
-                            if status_discente is not None and "ativo" in status_discente:
-                                    status = True
-                            else:
-                                if status_servidor is not None and "ativo" in status_servidor:
-                                    status = True    
+                            if status_servidor is not None and "ativo" in status_servidor:
+                                status = True    
                     if status:
-                        print "----------------------->RENOVA VINCULO."
-                        
+                        #RENOVA
                         vinculo = None
                         vinculo_dao = VinculoDAO()
                         #remoto
@@ -454,32 +429,27 @@ class LeitorCartao(threading.Thread):
                             #local
                             vinculo = vinculo_dao.busca(cartao_valido.vinculo)
                             print "[ACESSO LOCAL ->] "+ str(vinculo)
-#                         vinculo_dao = VinculoDAO()
-#                         vinculo = vinculo_dao.busca(cartao_valido.vinculo)
-                        if vinculo:
-                            data_fim = datetime.datetime.strptime(str(vinculo.fim), "%Y-%m-%d %H:%M:%S")
-                            nova_data = datetime.datetime(data_fim.year, data_fim.month + 3, data_fim.day, data_fim.hour, data_fim.minute, data_fim.second)
-                            vinculo.inicio = vinculo.fim
+                        if vinculo and Rede.status:
+                            data_atual = self.util.obtem_datahora()
+                            nova_data = datetime.datetime(data_atual.year, data_atual.month + 3, data_atual.day, data_atual.hour, data_atual.minute, data_atual.second)
                             vinculo.fim = nova_data.strftime("%Y-%m-%d %H:%M:%S")
                             nova_data.strftime("%Y-%m-%d %H:%M:%S")
-                            print vinculo.fim
                             #atualiza vinculo remoto
                             if VinculoJson().objeto_json(vinculo) == 200:
-                                print ">>> Vinculo atualizado no remoto com sucesso!"
                                 # atualiza vinculo local
-                                if vinculo_dao.atualiza_exclui(vinculo, True):
+                                if vinculo_dao.atualiza_exclui(vinculo, False):
                                     print vinculo_dao.aviso
-                                print "----------------------->VINCULO RENOVADO!"
+                                self.aviso.exibir_vinculo_renovado()
+                                self.valida_cartao(self.numero_cartao)
                             else:
-                                print ">>> Erro ao atualizar vinculo no remoto!"
-                                print "----------------------->VINCULO NÃO RENOVADO!"
-                            
-                            
-                            return status
+                                return self.aviso.exibir_vinculo_nao_renovado()
+                        else:
+                            # NAO RENOVA
+                            return self.aviso.exibir_vinculo_nao_renovado()
                     else:
-                        return status
-                        print "----------------------->NÃO RENOVA VINCULO."
-                        print "----------------------->VINCULO NÃO RENOVADO!"
+                        return self.aviso.exibir_vinculo_nao_renovado()
+                else:
+                    return self.aviso.exibir_vinculo_nao_renovado()
                         
         except Exception:
             self.log.logger.error("Exception", exc_info=True)

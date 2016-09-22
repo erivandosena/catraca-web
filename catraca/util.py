@@ -84,13 +84,13 @@ class Util(object):
         return datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     
     def obtem_data_hora_atual(self):
-        old_datetime = datetime = self.obtem_datahora().strftime('%d/%m/%Y %H:%M:%S')
+        datahora_anterior = datahora = self.obtem_datahora().strftime('%d/%m/%Y %H:%M:%S')
         while True:
             try:
-                while old_datetime == datetime:
-                    datetime = self.obtem_datahora().strftime('%d/%m/%Y %H:%M:%S')
-                old_datetime = datetime
-                return [datetime[:-9], datetime[11:]]
+                while datahora_anterior == datahora:
+                    datahora = self.obtem_datahora().strftime('%d/%m/%Y %H:%M:%S')
+                datahora_anterior = datahora
+                return [datahora[:-9], datahora[11:]]
             except Exception:
                 self.log.logger.error("Exception", exc_info=True)
                 

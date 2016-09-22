@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: latin-1 -*-
 
-
+import time
+import datetime
+import calendar
 import threading
 from multiprocessing import Process
 from time import sleep
@@ -37,10 +39,29 @@ class Alerta(threading.Thread):
         self._sleepperiod = intervalo
         self.name = 'Thread Alerta(Sonoro).'
         
+
+
+    # returns the elapsed milliseconds since the start of the program
+    def millis(self, *hora):
+        start_time = datetime.time(12, 0, 0)
+        dt = datetime.datetime.now().time() - start_time
+        ms = (dt.days * 24 * 60 * 60 + dt.seconds) * 1000 + dt.microseconds / 1000.0
+        return ms
+        
+        
     def run(self):
         print "%s Rodando... " % self.name
-        
+        segundo = 0
         while not self._stopevent.isSet():
+            
+            segundo += 1
+            if segundo == 10:
+                if (self.util.obtem_datahora().time().replace(microsecond=0) == datetime.time(0, 0, 0)) or \
+                (self.util.obtem_datahora().time().replace(microsecond=0) == datetime.time(12, 0, 0)) or \
+                (self.util.obtem_datahora().time().replace(microsecond=0) == datetime.time(18, 0, 0)):
+                    self.aviso.exibir_mensagem_institucional_fixa(self.aviso.saldacao(), str(self.util.obtem_hora()), 2)
+                segundo = 0
+            
             catraca = Gerenciador.catraca
             if (catraca and Gerenciador.catraca.operacao == 1) or (catraca and Gerenciador.catraca.operacao == 2) or (catraca and Gerenciador.catraca.operacao == 3) or (catraca and Gerenciador.catraca.operacao == 4) or (catraca and Gerenciador.catraca.operacao == 5):
                 #print "passou inicio"

@@ -82,7 +82,7 @@ class Aviso(object):
                 break
             
     def exibir_aguarda_cartao(self):
-        self.display.mensagem("APROXIME".center(16) +"\n"+ "((( O CARTAO ))", 1, True, False, True)
+        self.display.mensagem("APROXIME".center(16) +"\n"+ " (( O CARTAO ))", 1, True, False, True)
         
     def exibir_erro_leitura_cartao(self):
         self.display.mensagem("APROXIME CARTAO".center(16) +"\n"+ "NOVAMENTE...".center(16), 1, True, False, True)
@@ -101,6 +101,15 @@ class Aviso(object):
         
     def exibir_vinculo_invalido(self):
         self.display.mensagem("CARTAO COM".center(16) +"\n"+ "VINCULO EXPIRADO".center(16), 2, False, False, True)
+        
+    def exibir_renova_vinculo_vencido(self):
+        self.display.mensagem("AGUARDE...".center(16) +"\n"+ "RENOVACAO AUT.".center(16), 2, False, False, True)
+        
+    def exibir_vinculo_renovado(self):
+        self.display.mensagem("VINCULO".center(16) +"\n"+ "RENOVADO!".center(16), 3, False, False, True)
+        
+    def exibir_vinculo_nao_renovado(self):
+        self.display.mensagem("NAO RENOVADO!".center(16) +"\n"+ "INFORME A ADMIN.".center(16), 2, False, False, True)
         
     def exibir_cartao_isento(self, dada_hora_fim):
         self.display.mensagem("ISENTO ATE".center(16) +"\n"+ dada_hora_fim.center(16), 2, False, False, True)

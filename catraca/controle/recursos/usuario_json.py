@@ -4,6 +4,7 @@
 
 from argparse import Namespace
 import simplejson as json
+from simplejson import JSONDecodeError
 import requests
 
 from requests.exceptions import Timeout
@@ -89,6 +90,8 @@ class UsuarioJson(ServidorRestful):
                         return obj
                     else:
                         return None
+        except JSONDecodeError:
+            self.log.logger.error("JSONDecodeError", exc_info=True)
         except Timeout:
             self.log.logger.error("Timeout", exc_info=True)
         except HTTPError:
@@ -107,11 +110,9 @@ class UsuarioJson(ServidorRestful):
             objeto = self.usuario_dao.busca(obj.id)
             if not mantem_tabela:
                 if objeto:
-                    print "CATRACA EXISTE"
                     if not objeto.__eq__(obj):
                         return self.atualiza_exclui(obj, mantem_tabela)
                     else:
-                        print "[USUARIO]Acao de atualizacao nao necessaria!"
                         return None
                 else:
                     return self.insere(obj)
@@ -166,81 +167,4 @@ class UsuarioJson(ServidorRestful):
                 usuario.idexterno = self.dict_obj(formato_json[item])
                 
         return usuario
-    
-#     def dict_obj_usuario_externo(self, formato_json):
-# 
-#         
-#         usuario_externo = json.dumps(formato_json, use_decimal=False, ensure_ascii=True, sort_keys=False, encoding='utf-8')
-#         print usuario_externo
-#         
-#         for usuario in usuario_externo:
-#             
-#             print usuario[0]
-#             
-# 
-# #         usuario_externo = UsuarioExterno()
-# #         if isinstance(formato_json, list):
-# #             formato_json = [self.dict_obj_usuario_externo(x) for x in formato_json]
-# #         if not isinstance(formato_json, dict):
-# #             return formato_json
-# #         for item in formato_json:
-# #             if item == "id_usuario":
-# #                 usuario_externo.idusuario = self.dict_obj_usuario_externo(formato_json[item])
-# #             if item == "id_categoria":
-# #                 usuario_externo.idcategoria = self.dict_obj_usuario_externo(formato_json[item])
-# #             if item == "categoria":
-# #                 usuario_externo.categoria = self.dict_obj_usuario_externo(formato_json[item]) if \
-# #                 self.dict_obj_usuario_externo(formato_json[item]) is None else \
-# #                 self.dict_obj_usuario_externo(formato_json[item]).strip().encode('utf-8','ignore')
-# #             if item == "cpf_cnpj":
-# #                 usuario_externo.cpfcnpj = self.dict_obj_usuario_externo(formato_json[item])
-# #             if item == "email":
-# #                 usuario_externo.email = self.dict_obj_usuario_externo(formato_json[item])
-# #             if item == "identidade":
-# #                 usuario_externo.identidade = self.dict_obj_usuario_externo(formato_json[item])
-# #             if item == "login":
-# #                 usuario_externo.login = self.dict_obj_usuario_externo(formato_json[item])
-# #             if item == "matricula_disc":
-# #                 usuario_externo.matriculadisc = self.dict_obj_usuario_externo(formato_json[item])
-# #             if item == "nivel_discente":
-# #                 usuario_externo.niveldiscente = self.dict_obj_usuario_externo(formato_json[item])
-# #             if item == "nome":
-# #                 usuario_externo.nome = self.dict_obj_usuario_externo(formato_json[item]) if \
-# #                 self.dict_obj_usuario_externo(formato_json[item]) is None else \
-# #                 self.dict_obj_usuario_externo(formato_json[item]).strip().encode('utf-8','ignore')
-# #             if item == "passaporte":
-# #                 usuario_externo.passaporte = self.dict_obj_usuario_externo(formato_json[item])
-# #             if item == "siape":
-# #                 usuario_externo.siape = self.dict_obj_usuario_externo(formato_json[item])
-# #             if item == "status_discente":
-# #                 usuario_externo.statusdiscente = self.dict_obj_usuario_externo(formato_json[item]) \
-# #                 if self.dict_obj_usuario_externo(formato_json[item]) is None else \
-# #                 self.dict_obj_usuario_externo(formato_json[item]).strip().encode('utf-8','ignore')
-# #             if item == "status_servidor":
-# #                 usuario_externo.statusservidor = self.dict_obj_usuario_externo(formato_json[item]) \
-# #                 if self.dict_obj_usuario_externo(formato_json[item]) is None else \
-# #                 self.dict_obj_usuario_externo(formato_json[item]).strip().encode('utf-8','ignore')
-# #             if item == "tipo_usuario":
-# #                 usuario_externo.tipousuario = self.dict_obj_usuario_externo(formato_json[item]) \
-# #                 if self.dict_obj_usuario_externo(formato_json[item]) is None else \
-# #                 self.dict_obj_usuario_externo(formato_json[item]).strip().encode('utf-8','ignore')
-#                 
-# #         print usuario_externo
-# #         
-# #         print usuario_externo.idusuario
-# #         print usuario_externo.idcategoria
-# #         print usuario_externo.categoria
-# #         print usuario_externo.cpfcnpj
-# #         print usuario_externo.email
-# #         print usuario_externo.identidade
-# #         print usuario_externo.login
-# #         print usuario_externo.matriculadisc
-# #         print usuario_externo.niveldiscente
-# #         print usuario_externo.nome
-# #         print usuario_externo.passaporte
-# #         print usuario_externo.statusdiscente
-# #         print usuario_externo.statusservidor
-# #         print usuario_externo.tipousuario
-# 
-#         return usuario_externo
     

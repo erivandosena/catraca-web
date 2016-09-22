@@ -75,9 +75,6 @@ class Gerenciador(threading.Thread):
             Gerenciador.hora_fim = Sincronizador.hora_fim
                      
             self.executa_controle_recursos()
-             
-            if (datetime.datetime.strptime(str(self.util.obtem_hora()),'%H:%M:%S').time() == datetime.datetime.strptime('00:00:00','%H:%M:%S').time()) or (datetime.datetime.strptime(str(self.util.obtem_hora()),'%H:%M:%S').time() == datetime.datetime.strptime('12:00:00','%H:%M:%S').time()) or (datetime.datetime.strptime(str(self.util.obtem_hora()),'%H:%M:%S').time() == datetime.datetime.strptime('18:00:00','%H:%M:%S').time()):
-                self.aviso.exibir_saldacao(self.aviso.saldacao(), self.util.obtem_datahora_display())
                         
             self._stopevent.wait(self._sleepperiod)
         print "%s Finalizando..." % (self.getName(),)
@@ -323,18 +320,21 @@ class Gerenciador(threading.Thread):
                 if mensagens is not None:
                     if mensagens.institucional1:
                         lista.insert(len(lista), mensagens.institucional1)
-                        #self.aviso.exibir_mensagem_institucional_fixa(mensagens.institucional1[0:16], "", 0, False, False, True)
                     if mensagens.institucional2:
                         lista.insert(len(lista), mensagens.institucional2)
                         self.aviso.exibir_mensagem_institucional_scroll(mensagens.institucional1[0:16], mensagens.institucional2, verifica_status, 0.4)
                     if mensagens.institucional3:
                         lista.insert(len(lista), mensagens.institucional3)
-                        #self.aviso.exibir_mensagem_institucional_fixa(mensagens.institucional3[0:16], "", 0, False, False, True)
                     if mensagens.institucional4:
                         lista.insert(len(lista), mensagens.institucional4)
                         self.aviso.exibir_mensagem_institucional_scroll(mensagens.institucional3[0:16], mensagens.institucional4, verifica_status, 0.4)
-#                         for msg in lista[:len(lista)-1]:
-#                             self.aviso.exibir_mensagem_institucional_scroll(msg, 0.4)
+                else:
+                    datahora_anterior = datahora = self.util.obtem_datahora().strftime('%d/%m/%Y %H:%M:%S')
+                    while datahora_anterior == datahora:
+                        datahora = self.util.obtem_datahora().strftime('%d/%m/%Y %H:%M:%S')
+                    datahora_anterior = datahora
+#                             return [datahora[:-9], datahora[11:]]
+                    self.aviso.exibir_mensagem_institucional_fixa(self.aviso.saldacao(), datahora[11:], 0)
         except Exception:
             self.log.logger.error("Exception", exc_info=True)
             

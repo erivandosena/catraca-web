@@ -5,13 +5,6 @@
 import threading
 import netifaces
 from time import sleep
-
-# from requests.exceptions import Timeout
-# from requests.exceptions import HTTPError
-# from requests.exceptions import TooManyRedirects
-# from requests.exceptions import RequestException
-# from requests.exceptions import ConnectionError
-
 from catraca.logs import Logs
 from catraca.util import Util
 from catraca.visao.interface.aviso import Aviso
@@ -32,7 +25,6 @@ class Rede(threading.Thread):
     interface_ativa = []
     status = False
     interface_atual = None
-    #relogio = Relogio()
     contador = 19
 
     def __init__(self, intervalo=10):
@@ -86,5 +78,6 @@ class Rede(threading.Thread):
         finally:
             if self.interface_atual != interface:
                 self.aviso.exibir_status_interface_rede(interface)
+                self.aviso.exibir_aguarda_cartao()
             self.interface_atual = interface
             

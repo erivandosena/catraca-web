@@ -115,7 +115,7 @@ COMMENT ON CONSTRAINT uk_cart_numero ON cartao IS 'Restricao de duplicidades par
 CREATE TABLE vinculo
 (
   vinc_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
-  vinc_avulso boolean NOT NULL, -- Status que informa se o vinculo esta ativo.
+  vinc_avulso boolean NOT NULL DEFAULT false, -- Status que informa se o vinculo esta ativo.
   vinc_inicio timestamp without time zone, -- Data e hora de inicio da validade do vinculo.
   vinc_fim timestamp without time zone, -- Data e hora de fim da validade do vinculo.
   vinc_descricao character varying(250) NOT NULL, -- Descricao sobre a finalidade do vinculo.

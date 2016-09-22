@@ -102,11 +102,10 @@ class VinculoJson(ServidorRestful):
             objeto = self.vinculo_dao.busca(obj.id)
             if not mantem_tabela:
                 if objeto:
-                    print "CATRACA EXISTE"
                     if not objeto.__eq__(obj):
                         return self.atualiza_exclui(obj, mantem_tabela)
                     else:
-                        print "[VINCULO]Acao de atualizacao nao necessaria!"
+#                         print "[VINCULO]Acao de atualizacao nao necessaria!"
                         return None
                 else:
                     return self.insere(obj)
@@ -162,6 +161,7 @@ class VinculoJson(ServidorRestful):
         return vinculo
     
     def objeto_json(self, obj):
+        print obj.fim
         if obj:
             vinculo = {
                 "vinc_avulso":obj.avulso,
@@ -181,6 +181,11 @@ class VinculoJson(ServidorRestful):
             if servidor:
                 url = str(self.URL) + "vinculo/atualiza/"+ str(id)
                 r = servidor.put(url, data=json.dumps(formato_json))
+                
+                print json.dumps(formato_json)
+                print r
+                print url
+                print r.status_code
                 return r.status_code
             else:
                 return 0
