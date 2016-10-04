@@ -212,6 +212,20 @@ class UsuarioDAO extends DAO {
 		
 		
 	}
+	public function preenchePorId(Usuario $usuario){
+	
+		$id = intval($usuario->getId());
+		
+		$sql = "SELECT * FROM usuario WHERE usua_id = $id";
+		foreach($this->getConexao()->query($sql) as $linha){
+			$usuario->setNome($linha['usua_nome']);
+			$usuario->setIdBaseExterna($linha['id_base_externa']);
+			return true;
+		}
+		return false;
+	
+	
+	}
 	/**
 	 * Diferente do outro este está preparado para olhar na base própria
 	 * @param Usuario $usuario

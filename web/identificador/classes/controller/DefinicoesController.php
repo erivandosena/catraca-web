@@ -14,6 +14,11 @@ class DefinicoesController {
 				$controller = new DefinicoesController ();
 				$controller->telaDefinicoes ();
 				break;
+			case Sessao::NIVEL_POLIVALENTE:
+				$controller = new DefinicoesController ();
+				$controller->telaDefinicoes ();
+				break;
+
 			default :
 				UsuarioController::main ( $nivelDeAcesso );
 				break;

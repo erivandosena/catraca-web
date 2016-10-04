@@ -26,9 +26,10 @@ if (isset ( $_GET ["sair"] )) {
 	header ( "Location:./index.php" );
 }
 
-if($sessao->getNivelAcesso() != Sessao::NIVEL_SUPER || $sessao->getNivelAcesso() != Sessao::NIVEL_ADMIN)
+if(!($sessao->getNivelAcesso() == Sessao::NIVEL_SUPER || $sessao->getNivelAcesso() == Sessao::NIVEL_ADMIN)){
+	echo "Nivel de acesso Não permitido: ".$sessao->getNivelAcesso();
 	exit(0);
-
+}
 
 $dao = new DAO();
 

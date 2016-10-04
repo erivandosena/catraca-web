@@ -225,6 +225,38 @@ if (isset ( $_GET ["sair"] )) {
 								    </div>
 								</div>';
 						break;
+
+
+					case Sessao::NIVEL_POLIVALENTE:
+						auditar();
+						echo '
+							<div  class="doze colunas barra-menu">
+								    <div class="menu-horizontal config">
+								        <ol class="a-esquerda">';
+						 
+						echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
+						
+						echo '<li><a href="?pagina=cartao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a>
+							</li>';
+						echo '	<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a></li>';
+						echo ' 	<li><a href="?pagina=guiche" class="item"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a></li>';
+						
+						echo ' 	<li><a href="?pagina=relatorio" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a>
+									<ul>
+										<li><a href="?pagina=relatorio">Relatório RU</a></li>
+									</ul>
+								</li>';
+						
+						echo '</ol>
+								        <ol class="a-direita" start="4">
+
+											<li><a href="" class="item"><span class="item-texto">Status: Pol</span></a></li>
+											<li><a href="?sair=sair" class="item"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
+								        </ol>
+								    </div>
+								</div>';
+						break;
+
 					
 					case Sessao::NIVEL_GUICHE:
 						auditar();
@@ -335,6 +367,30 @@ if (isset ( $_GET ["sair"] )) {
 						    </div>
 						</div>';
 							break;
+							
+					case Sessao::NIVEL_COMUM:
+						auditar();
+						echo '
+							<div  class="doze colunas barra-menu">
+								    <div class="menu-horizontal config">
+								        <ol class="a-esquerda">';
+							
+						
+						
+						/*
+						 * Como deveria ser.
+						 */
+						echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
+						echo '<li><a href="?pagina=pessoal" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Pessoal</span></a></li>';
+						
+						echo '</ol>
+								        <ol class="a-direita" start="4">
+											<li><a href="" class="item"><span class="item-texto">Status: Padrão</span></a></li>
+								            <li><a href="?sair=sair" class="item"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
+								        </ol>
+								    </div>
+								</div>';
+						break;
 					default:
 						break;
 						
@@ -414,6 +470,10 @@ if (isset ( $_GET ["sair"] )) {
 								break;
 							case 'info' :
 								InfoController::main($sessao->getNivelAcesso());
+								break;
+
+							case 'pessoal' :
+								PessoalController::main($sessao->getNivelAcesso());
 								break;
 							default :
 								echo '404 NOT FOUND';

@@ -15,6 +15,11 @@ class GuicheController{
 				$controller = new GuicheController();
 				$controller->telaGuiche();
 				break;
+
+			case Sessao::NIVEL_POLIVALENTE:
+				$controller = new GuicheController();
+				$controller->telaGuiche();
+				break;
 			case Sessao::NIVEL_GUICHE:
 				$controller = new GuicheController();
 				$controller->telaGuiche();
@@ -106,6 +111,7 @@ class GuicheController{
 			$vinculoDao = new VinculoDAO($dao->getConexao());
 			$vinculo = new Vinculo();
 			foreach($result as $linha){
+				
 				$idDoVinculo = $linha['vinc_id'];
 				$tipo->setNome($linha['tipo_nome']);
 				$tipo->setValorCobrado($linha['tipo_valor']);
@@ -154,6 +160,7 @@ class GuicheController{
 						$novoValor = $valorAnt + $valorVendido;					
 						$tipoTransacao = 'Venda de Créditos';										
 						$tipo = "-sucesso";
+						$IDBeneficiado = $usuario->getId();
 						$mensagem = "Valor inserido com sucesso.";
 						
 						if ($valorVendido == 0){
@@ -172,8 +179,8 @@ class GuicheController{
 							
 						$sql = "UPDATE cartao set cart_creditos = $novoValor WHERE cart_id = $idCartao";
 							
-						$sql2 = "INSERT into transacao(tran_valor, tran_descricao, tran_data, usua_id)
-						VALUES($valorVendido, '$tipoTransacao' ,'$dataTimeAtual', $idDoUsuario)";
+						$sql2 = "INSERT into transacao(tran_valor, tran_descricao, tran_data, usua_id, usua_id1)
+						VALUES($valorVendido, '$tipoTransacao' ,'$dataTimeAtual', $idDoUsuario, $IDBeneficiado)";
 							
 						//echo $sql;
 						if(!$dao->getConexao()->exec($sql)){

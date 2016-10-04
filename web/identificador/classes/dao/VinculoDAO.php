@@ -51,6 +51,7 @@ class VinculoDAO extends DAO {
 			$vinculo->setId($linha['vinc_id']);
 			$vinculo->getCartao()->setTipo(new Tipo());
 			$vinculo->getCartao()->setId($linha['cart_id']);
+			$vinculo->getCartao()->setCreditos($linha['cart_creditos']);
 			$vinculo->getCartao()->getTipo()->setNome($linha ['tipo_nome']);
 			$vinculo->getCartao()->setNumero($linha ['cart_numero']);
 			$vinculo->setInicioValidade($linha ['vinc_inicio']);
@@ -81,6 +82,7 @@ class VinculoDAO extends DAO {
 			$vinculo->setResponsavel($usuario);
 			$vinculo->setCartao(new Cartao());
 			$vinculo->setId($linha['vinc_id']);
+			$vinculo->getCartao()->setCreditos($linha['cart_creditos']);
 			$vinculo->getCartao()->setTipo(new Tipo());
 			$vinculo->getCartao()->setId($linha['cart_id']);
 			$vinculo->getCartao()->getTipo()->setNome($linha ['tipo_nome']);

@@ -1,5 +1,4 @@
 <?php
-
 ini_set ( 'display_errors', 1 );
 ini_set ( 'display_startup_erros', 1 );
 error_reporting ( E_ALL );
@@ -20,7 +19,30 @@ function __autoload($classe) {
 }
 
 
-$sessao = new Sessao ();
-$sessao->criaSessao(1, Sessao::NIVEL_COMUM, 'jefponte');
 
-?>
+
+
+
+
+
+
+$dao = new VinculoDAO();
+
+
+
+$data1 = '2016-10-01 01:00:00';
+$data2 = '2016-10-01 14:00:00';
+$sql =  "SELECT * FROM registro 
+	INNER JOIN vinculo ON registro.vinc_id = vinculo.vinc_id
+	WHERE regi_data BETWEEN '$data1' AND '$data2'
+	AND regi_valor_pago = 0";
+$result = $dao->getConexao ()->query ($sql);
+foreach($result as $linha){
+		
+	print_r($linha);
+
+}
+
+
+
+

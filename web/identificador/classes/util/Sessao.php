@@ -119,7 +119,7 @@ class Sessao{
 	const NIVEL_RELATORIO = 8;
 	
 	
-	const NIVEL_SUPORTE = 5;
+	const NIVEL_POLIVALENTE = 5;
 	const NIVEL_COMUM = 1;
 	
 	

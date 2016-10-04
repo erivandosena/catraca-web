@@ -20,6 +20,11 @@ class HomeController{
 				//Acessa tudo que já foi homologado. 
 				CartaoController::main($nivelDeAcesso);
 				break;
+
+			case Sessao::NIVEL_POLIVALENTE:
+				//Acessa tudo que já foi homologado. 
+				CartaoController::main($nivelDeAcesso);
+				break;
 			case Sessao::NIVEL_GUICHE:
 				//Acessa cadastro e venda de creditos. 
 				GuicheController::main($nivelDeAcesso);

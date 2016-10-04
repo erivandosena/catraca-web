@@ -35,24 +35,17 @@ $dao = new DAO();
 
 $sql = "SELECT * FROM auditoria
 	INNER JOIN usuario ON auditoria.usua_id = usuario.usua_id
-	 ORDER BY audi_id DESC LIMIT 500";
+	 ORDER BY audi_id DESC LIMIT 3000";
 $result = $dao->getConexao()->query($sql);
 foreach($result as $linha){
 	
-	echo $linha['audi_id'].' - '.$linha['usua_nome'].' - '.$linha['audi_pagina'].' - '.date("d/m/Y H:i:s", strtotime($linha['audi_data'])).'<br>';
+	echo $linha['audi_id'].' - '.$linha['usua_nome'].' - '.$linha['audi_pagina'].' - '.date("d/m/Y H:i:s", strtotime($linha['audi_data']));
+	if($linha['usua_nivel'] > 1)		
+		echo ' <b> '.$linha['usua_nivel'].'</b>';
+	else
+		echo ' Comum';
 	echo '<hr>';
 	
 }
 
-echo '<h1>Cartoes avulsos</h1>';
-echo '<hr>';
-$sql = "SELECT * FROM cartao INNER JOIN vinculo 
-		ON vinculo";
-$result = $dao->getConexao()->query($sql);
-foreach($result as $linha){
-
-	echo $linha['audi_id'].' - '.$linha['usua_nome'].' - '.$linha['audi_pagina'].' - '.date("d/m/Y H:i:s", strtotime($linha['audi_data'])).'<br>';
-	echo '<hr>';
-
-}
 

@@ -8,8 +8,7 @@ class UsuarioController{
 	
 	public static function main($nivelDeAcesso){
 		switch ($nivelDeAcesso){
-			case Sessao::NIVEL_SUPER:
-				break;
+
 			case Sessao::NIVEL_DESLOGADO:
 				$usuarioController = new UsuarioController();
 				$usuarioController->telaLogin();
@@ -23,13 +22,14 @@ class UsuarioController{
 				$usuarioDao = new UsuarioDAO();
 				
 				$usuarioDao->preenchePorLogin($usuario);
+				$nome = $usuario->getNome();
+				$lista = explode(' ', $nome);
+				$nome = $lista[0];
+				echo '<p>Olá, '.ucfirst  ( strtolower ($nome)).'!</p>
+						<p>Visualize abaixo seus dados referentes ao Restaurante Universitário</p>';
 				
-				echo '<div class="borda"><br><br><p>Olá, '.lcfirst ( strtolower ($usuario->getNome())).'!</p>
-						Esta é a página do sistema catraca. Ainda está em construção.  
-						Em breve muitas informações serão disponibilizadas a você nesta página. 
-						
-						<h1><a href="?sair=1">sair</a></h1> </div>
-						';
+				PessoalController::main($nivelDeAcesso);		
+
 				break;
 		}
 

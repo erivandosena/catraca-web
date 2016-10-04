@@ -226,9 +226,12 @@ class Usuario{
 			case Sessao::NIVEL_COMUM:
 				$strNivelAcesso = "Padr&atilde;o";
 				break;
+			case Sessao::NIVEL_POLIVALENTE:
+				$strNivelAcesso = "Polivalente";
+				break;
 		
 			default:
-				$strNivelAcesso = "Sem Cadastro";
+				$strNivelAcesso = "Nao Listado: ".$this->getNivelAcesso();
 					
 				break;
 					

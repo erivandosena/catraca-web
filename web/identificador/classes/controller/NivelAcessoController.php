@@ -14,6 +14,11 @@ class NivelAcessoController{
 				$controller = new NivelAcessoController();
 				$controller->telaCartao();
 				break;
+			case Sessao::NIVEL_POLIVALENTE:
+				$controller = new NivelAcessoController();
+				$controller->telaCartao();
+				break;
+
 			case Sessao::NIVEL_SUPER:
 				$controller = new NivelAcessoController();
 				$controller->telaCartao();
@@ -284,6 +289,7 @@ class NivelAcessoController{
 			echo '<a class="botao b-erro" href="?pagina=nivel_acesso&id_usuario='.$usuario->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_GUICHE.'">Guiche</a>';
 			echo '<a class="botao b-secundario" href="?pagina=nivel_acesso&id_usuario='.$usuario->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_CADASTRO.'">Somente Cadastro</a>';
 			echo '<a class="botao b-sucesso" href="?pagina=nivel_acesso&id_usuario='.$usuario->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_ADMIN.'">Tornar Administrador</a>';
+			echo '<a class="botao b-primario" href="?pagina=nivel_acesso&id_usuario='.$usuario->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_POLIVALENTE.'">Polivalente</a>';
 			echo '<a class="botao b-erro" href="?pagina=nivel_acesso&id_usuario='.$usuario->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_RELATORIO.'">Somente Relatorios</a>';
 			echo '<a class="botao b-secundario" href="?pagina=nivel_acesso&id_usuario='.$usuario->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_CATRACA_VIRTUAL.'">Catraca Virtual</a>';
 			$sessao = new Sessao();
