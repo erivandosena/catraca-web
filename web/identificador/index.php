@@ -167,10 +167,12 @@ if (isset ( $_GET ["sair"] )) {
 						
 						echo '<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a></li>';
 						echo ' <li><a href="?pagina=guiche" class="item"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a></li>';
-						echo ' <li><a href="?pagina=relatorio" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a>
-
-				
-						</li>';
+						echo ' 	<li><a href="?pagina=relatorio" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a>
+									<ul>
+										<li><a href="?pagina=relatorio">Relatório RU</a></li>
+										<li><a href="?pagina=relatorio_guiche">Relatório Guichê</a></li>
+									</ul>
+								</li>';
 						echo ' <li><a href="?pagina=nivel_acesso" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Nivel de Acesso</span></a></li>';
 
 							

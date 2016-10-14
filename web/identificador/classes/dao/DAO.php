@@ -1,6 +1,6 @@
  <?php
  
- /*
+ /* Esse era producao
   * Descomente esta e comente a de baixo para colocar em produção.
   */ 
  
@@ -72,7 +72,6 @@ class DAO {
 
 
 ?>
-
 
  <?php
 

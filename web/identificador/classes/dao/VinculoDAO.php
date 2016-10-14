@@ -531,8 +531,7 @@ class VinculoDAO extends DAO {
 			
 			return $linha['usua_id'];
 		}
-		$daoSistemasComum = new DAO(null, DAO::TIPO_PG_SISTEMAS_COMUM);
-		$result2 = 	$daoSistemasComum->getConexao()->query("SELECT * FROM vw_usuarios_autenticacao_catraca WHERE id_usuario = $idBaseExterna");
+		$result2 = 	$this->getConexao()->query("SELECT * FROM vw_usuarios_autenticacao_catraca WHERE id_usuario = $idBaseExterna");
 		foreach($result2 as $linha){
 			
 			$nivel = Sessao::NIVEL_COMUM;

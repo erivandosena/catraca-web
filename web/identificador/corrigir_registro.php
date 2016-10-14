@@ -22,7 +22,10 @@ function __autoload($classe) {
 
 
 
-
+if(!($sessao->getNivelAcesso() == Sessao::NIVEL_SUPER || $sessao->getNivelAcesso() == Sessao::NIVEL_ADMIN)){
+	echo "Nivel de acesso Não permitido: ".$sessao->getNivelAcesso();
+	exit(0);
+}
 $dao = new DAO();
 
 $tipoDao = new TipoDAO($dao->getConexao());

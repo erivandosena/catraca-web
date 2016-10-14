@@ -113,7 +113,7 @@ class CartaoAvulsoController{
 				
 					if(isset($_GET['cartao_renovar'])){
 						if(isset($_POST['certeza'])){
-							$usuarioDao = new UsuarioDAO(null, DAO::TIPO_PG_SIGAAA);
+							$usuarioDao = new UsuarioDAO();
 							
 							
 							$usuarioDao->retornaPorIdBaseExterna($usuario);
@@ -180,7 +180,7 @@ class CartaoAvulsoController{
 		if (isset ( $_GET ['selecionado'] )) {
 			
 			$idDoSelecionado = $_GET['selecionado'];
-			$usuarioDao = new UsuarioDAO(null, DAO::TIPO_PG_SIGAAA);
+			$usuarioDao = new UsuarioDAO();
 			$usuario = new Usuario();
 			$usuario->setIdBaseExterna($idDoSelecionado);
 			
@@ -371,7 +371,7 @@ class CartaoAvulsoController{
 		
 
 		if (isset ( $_GET ['nome'] )) {
-			$usuarioDao = new UsuarioDAO(null, DAO::TIPO_PG_SIGAAA);
+			$usuarioDao = new UsuarioDAO();
 			$listaDeUsuarios = $usuarioDao->pesquisaNoSigaa( $_GET ['nome']);
 			$this->view->mostraResultadoBuscaDeUsuarios($listaDeUsuarios);
 			$usuarioDao->fechaConexao();

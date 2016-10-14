@@ -32,8 +32,7 @@ class UsuarioDAO extends DAO {
 		}
 		//N�o deu. 
 		//Vou verificar na base do SIG. 
-		$daoSistemasComum = new DAO(null, DAO::TIPO_PG_SISTEMAS_COMUM);
-		$result2 = 	$daoSistemasComum->getConexao()->query("SELECT * FROM vw_usuarios_autenticacao_catraca WHERE login ='$login' AND senha = '$senha' LIMIT 1");
+		$result2 = 	$this->getConexao()->query("SELECT * FROM vw_usuarios_autenticacao_catraca WHERE login ='$login' AND senha = '$senha' LIMIT 1");
 		foreach($result2 as $linha){
 			
 			//Se eu to procurando aqui � pq houve algo errado no banco local. 

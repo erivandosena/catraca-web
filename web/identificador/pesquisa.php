@@ -171,18 +171,4 @@ if(isset($_GET['nome'])){
 }
 
 
-
-
-// $sql = "DELETE FROM vinculo_tipo";
-// $sql = "DELETE FROM vinculo WHERE vinc_avulso <> 'TRUE'";
-//$sql = "INSERT INTO vinculo_tipo (vinc_id, tipo_id) VALUES(8, 13)";
-// $sql = "DELETE FROM catraca WHERE catr_id > 5";
-
-// $sql = "UPDATE turno set turn_hora_fim = '13:30:00'
-// 		WHERE turn_id = 1";
-
-// $i = $result = $dao->getConexao()->exec($sql);
-// echo $i;
-
-
 ?>

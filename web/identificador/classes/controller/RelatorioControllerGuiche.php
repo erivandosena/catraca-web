@@ -42,7 +42,7 @@ class RelatorioControllerGuiche{
 						<option value="'.$linha['usua_id'].'">'.ucwords(strtolower(htmlentities($linha['usua_nome']))).'</option>';
 		}
 			
-		echo'			<option value="">Todos os Operadores</option>	
+		echo'			<option value="" selected>Todos os Operadores</option>	
 						</select>
 						</label><br>
 						<label for="data_inicio">
