@@ -20,11 +20,42 @@ function __autoload($classe) {
 }
 
 
+/******
+ * Upload de imagens
+ ******/
 
-$dao = new DAO();
+$uploaddir = '/dados/sites/adm/catraca/interface/alanteste/fotos/';
+$uploadfile = $uploaddir . basename($_FILES['arquivo']['name']);
+
+echo '<pre>';
+if (move_uploaded_file($_FILES['arquivo']['tmp_name'], $uploadfile)) {
+	echo "Arquivo válido e enviado com sucesso.\n";
+} else {
+	echo "Possível ataque de upload de arquivo!\n";
+}
+
+echo 'Aqui está mais informações de debug:';
+print_r($_FILES);
+
+print "</pre>";
+
+
+echo '
+		<html>
+			<body>
+				
+				<form method="post" enctype="multipart/form-data">
+					Selecione uma imagem: <input name="arquivo" type="file" />					
+					<input type="submit" value="Salvar" />
+				</form>
+		
+			</body>		
+		</html>
+		
+		';
 
 // $dataAtual = date("Y-m-d G:i:s");
-//$sql = "UPDATE guiche SET guic_encerramento = '2016-05-03 17:37:55', guic_ativo = '0' WHERE guic_id = 64";
+// $sql = "UPDATE guiche SET guic_encerramento = '2016-05-03 17:37:55', guic_ativo = '0' WHERE guic_id = 64";
 //$sql = "UPDATE usuario set usua_nivel = 3 WHERE usua_login = 'jefponte';";
 // $sql = "INSERT INTO guiche (guic_abertura, guic_ativo, unid_id, usua_id)
 // 		VALUES('2016-05-03 10:32:47', '1', 1, 3)";
@@ -42,7 +73,9 @@ $dao = new DAO();
 // $i = $result = $dao->getConexao()->exec($sql);
 // echo $i;
 
-$sql = "DELETE FROM custo_refeicao WHERE cure_id = 4";
-echo $dao->getConexao()->exec($sql);
+
+
+// // $sql = "DELETE FROM custo_refeicao WHERE cure_id = 4";
+// echo $dao->getConexao()->exec($sql);
 
 ?>

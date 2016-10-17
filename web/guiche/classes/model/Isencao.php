@@ -18,6 +18,7 @@ class Isencao{
 		$this->dataDeInicio = $dataInicio;
 	}
 	public function getDataDeInicio(){
+		
 		return $this->dataDeInicio;
 	}
 	public function setDataFinal($dataFinal){

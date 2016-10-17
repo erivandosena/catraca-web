@@ -10,14 +10,23 @@ class Usuario{
 	private $login;
 	private $senha;
 	private $nivelAcesso;
+	private $idCategoria;
 	
 	public function Usuario(){
 		$this->id = 0;
 	}
 	
 	
+	public function setIDCategoria($idCategoria){	
+		$idBaseExterna = intval ( $idCategoria ) ;
+		if(is_int($idCategoria))
+			$this->idCategoria = $idCategoria;
+	}
 	
-	
+	public function getIDCategoria(){
+		
+		return $this->idCategoria;
+	}
 	public function setId($id){
 		$idBaseExterna = intval ( $id) ;
 		if(is_int($id))
@@ -52,34 +61,12 @@ class Usuario{
             return $this->senha;
         }
 	public function setNivelAcesso($nivelAcesso){
-		$this->nivelAcesso = $nivelAcesso;	
+		$nivelAcesso = intval ( $nivelAcesso) ;
+		if(is_int($nivelAcesso))
+			$this->nivelAcesso = $nivelAcesso;
 	}
 	public function getNivelAcesso(){
 		return $this->nivelAcesso;
-	}
-	
-	public function strNivelAcesso(){
-		
-		switch ($this->getNivelAcesso()){				
-			case 1 : $nivelAtual = "Padrão";
-			break;
-		
-			case 2 : $nivelAtual = "Admin";
-			break;
-		
-			case 3 : $nivelAtual = "Super";
-			break;
-				
-			case 4 : $nivelAtual = "Guichê";
-			break;
-				
-			case 5 : $nivelAtual = "Suporte";
-			break;
-				
-			default: $nivelAtual = "Padrão";
-			break;		
-		}
-		return $nivelAtual;
 	}
 	
 	public function __toString(){
@@ -224,5 +211,47 @@ class Usuario{
 		return $tipo;
 		
 	}
+	public function toStrNivel(){
+		
+		switch ($this->getNivelAcesso()){
+			case Sessao::NIVEL_ADMIN:
+				$strNivelAcesso =  " Administrador";
+				break;
+			case Sessao::NIVEL_SUPER:
+				$strNivelAcesso = "Super Usu&aacute;rio";
+				break;
+			case Sessao::NIVEL_GUICHE:
+				$strNivelAcesso = "Guich&ecirc;";
+				break;
+			case Sessao::NIVEL_COMUM:
+				$strNivelAcesso = "Padr&atilde;o";
+				break;
+		
+			default:
+				$strNivelAcesso = "Sem Cadastro";
+					
+				break;
+					
+		}
+		return $strNivelAcesso;
+		
+		
+	}
+	public function verificaSeAtivo(){
+		if(strtolower (trim($this->getStatusServidor())) == 'ativo'){
+				
+			return true;
+		}
+		if(strtolower (trim($this->getStatusDiscente())) == 'ativo' || strtolower (trim($this->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($this->getStatusDiscente())) == 'ativo - graduando'){
+			return true;
+		}
+	
+		if(strtolower (trim($this->getTipodeUsuario())) == 'terceirizado' || strtolower (trim($this->getTipodeUsuario())) == 'outros'){
+			return true;
+		}
+	
+		return false;
+	}
+	
 	
 }

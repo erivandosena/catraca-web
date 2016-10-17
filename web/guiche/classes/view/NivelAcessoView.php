@@ -1,5 +1,11 @@
 <?php
-class CartaoView {
+
+/**
+ * 
+ * @author Jefferson Uchoa Ponte
+ *
+ */
+class NivelAcessoView {
 	
 	public function formBuscaCartao(){
 		echo '				
@@ -11,18 +17,48 @@ class CartaoView {
   });
 </script>
 				
-				<div class="doze colunas borda">
+				<div class="borda">
 									<form method="get" action="" class="formulario em-linha" >
-										<input type="hidden" name="pagina" value="cartao" />
-										<label for="numero_cartao">												
-											Buscar por Número:<input type="number" name="numero_cartao" id="numero_cartao" autofocus /><br>
-											<script>$(document).trigger(\'autofocus_ready\');</script>
-											<input type="submit" value="Buscar" />
-										</label>		
+										<input type="hidden" name="pagina" value="nivel_acesso" />
+										<label for="numero_cartao">
+											<object class="rotulo texto-preto">Buscar por Número: </object><br><br>
+											
+											<input class="texto-preto" type="number" name="numero_cartao" id="numero_cartao" autofocus /><br>
+											 <script>$(document).trigger(\'autofocus_ready\');</script>
+											<input type="submit" />
+										</label>
+		
 									</form>
 				
 									</div>';
 	}
+	
+	public function formAlteraNivel(Usuario $usuario){
+		echo '
+								<script>
+				  $(document).bind(\'autofocus_ready\', function() {
+				    if (!("autofocus" in document.createElement("input"))) {
+				      $("#numero_cartao").focus();
+				    }
+				  });
+				</script>
+	
+				<div class="borda">
+									<form method="post" action="" class="formulario em-linha" >
+										<input type="hidden" name="pagina" value="nivel_acesso" />
+										<label for="numero_cartao">
+											
+											<object class="rotulo texto-preto">Tem certeza que deseja alterar o nível do : '.$usuario->getNome().'? </object><br><br>
+											<input type="hidden" name="certeza" value="sim" />
+											<input type="submit" name="confirmado" id="numero_cartao" autofocus /><br>
+											 <script>$(document).trigger(\'autofocus_ready\');</script>
+										</label>
+	
+									</form>
+	
+									</div>';
+	}
+	
 	public function mostraResultadoBuscaDeCartoes($cartoes) {
 		echo '<div class="doze linhas">';
 		echo '<br><h2 class="texto-preto">Busca de CartÃµes:</h2>';
@@ -63,13 +99,18 @@ class CartaoView {
 									<form method="get" action="" class="formulario em-linha" >
 		
 										<label for="opcoes-1">
-											<object class="rotulo texto-preto">Nome do Usuario: </object>
-											<input class="texto-preto" type="text" name="nome" id="campo-texto" /><br>										
+											<object class="rotulo texto-preto">Buscar por: </object>
+											<select name="opcoes-1" id="opcoes-1" class="texto-preto">
+												<option value="1">Nome</option>
+		
+											</select>
+											<input type="hidden" name="pagina" value="nivel_acesso" />
+											<input class="texto-preto" type="text" name="nome" id="campo-texto-2" /><br>
+											<input type="submit" />
 										</label>
-										<input type="hidden" name="pagina" value="cartao" />
-										<input type="submit" value="Buscar"/>
+		
 									</form>
-								</div>';
+									</div>';
 	}
 	public function formBuscaVinculo() {
 		echo '					<div class="borda">
@@ -142,9 +183,9 @@ class CartaoView {
 	 * @param array $usuarios        	
 	 */
 	public function mostraResultadoBuscaDeUsuarios($usuarios) {
-		echo '<h2 class="titulo">Resultado da busca:</h2>';
-		echo '<div class="doze colunas">';		
-		echo '<div class="borda">
+		echo '<div class="doze linhas">';
+		echo '<br><h2 class="texto-preto">Resultado da busca:</h2>';
+		echo '</div><div class="borda">
 				<table class="tabela borda-vertical zebrada texto-preto">
 				<thead>
 					<tr>
@@ -174,122 +215,113 @@ class CartaoView {
 		echo '<td>' . $usuario->getStatusDiscente () . '</td>';
 		echo '<td>' . $usuario->getStatusServidor () . '</td>';
 		echo '<td>' . $usuario->getTipodeUsuario () . '</td>';
-		echo '<td class="centralizado"><a href="?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna () . '"><span class="icone-checkmark texto-verde2 botao" title="Selecionar"></span></a></td>';
+		echo '<td class="centralizado"><a href="?pagina=nivel_acesso&selecionado=' . $usuario->getIdBaseExterna () . '"><span class="icone-checkmark texto-verde2 botao" title="Selecionar"></span></a></td>';
 		echo '</tr>';
 	}
 	
 
-	public function mostraSelecionado(Usuario $usuario) {
-		echo '<div class="doze colunas borda">';
-		
-		
+	public function mostraSelecionado(Usuario $usuario) {		
 				
 		//Descomente esta linha para ativar o botão para cadastrar foto.	
-		echo '<a href="?pagina=cartao&selecionado='.$_GET['selecionado'].'&foto=1" class="botao">Adicionar Foto</a>';
-		
+		//echo '		<a href="?pagina=cartao&selecionado='.$_GET['selecionado'].'&foto=1" class="botao">Adicionar Foto</a>';		
 		
 		if(isset($_GET['foto'])){
 		
-			echo '	<div class="doze colunas fotos">
-					    <div class="quatro colunas">
-							<div class="borda-foto">								
-								<div class="foto-salva">';
-	
-			if(file_exists('fotos/'.$_GET['selecionado'].'.png')){
-	
-				echo '<img src="fotos/'.$_GET['selecionado'].'.png" />';
-	
-			}else{
-	
-				echo '<img src="img/camera.png" />';
-			}
-	
-			echo '				</div>
+			echo '	<div class="borda doze colunas">
+						<div class="doze colunas">
+			
+							<div class="fundo" style="left:20%;top: 35%;">
+								<img class="imagem-fundo" src="img/Simbolo_da_UNILAB.png" alt="">
 							</div>
+			
+							<div class="duas colunas">
+								<a href="http://www.unilab.edu.br">
+									<img class="imagem-responsiva centralizada" src="img/logo-unilab.png" alt="">
+								</a>
+							</div>
+							<div class="oito colunas">
+								<h1 class="titulo centralizado">Restaurante Universitário</h2>
+							</div>
+							<div class="duas colunas">
+								<a href="http://www.unilab.edu.br">
+									<img class="imagem-responsiva centralizada" src="img/pp.jpg" alt="">
+								</a>
+							</div>
+							<hr class="um"><br>
 						</div>
-	
-					    <div class="quatro colunas">
-							<div class="borda-foto">
-								
-								<img id="marcacao" src="img/avatar.png"/>
-								
-					        	<div class="tela">									
-									<video width="320" height="200" id="video" autoplay></video>
-					        	</div>
-								<div class="centralizado">	
-					                <button id="btnStart" class="botao icone-switch title="Ligar Câmera"></button>
-					                <button id="btnStop" class="botao icone-cross"></button>
-					                <button id="btnPhoto" class="botao icone-camera"></button>
-									<button id="btnUser" class="botao icone-user"></button>
+						<div class="doze colunas dados-usuario">
+							<h2 class="titulo centralizado">Identificação do Usuario</h1><br>
+							<hr class="um">
+							<div class="nove colunas">
+								<div id="informacao" class="fundo-cinza1">
+										<div id="dados" class="dados">
+										<span>Nº Cartão: '.$cartao->getNumero().'</span>
+										<span>Nome: '.ucwords(strtolower(htmlentities($usuario->getNome()))).'</span>
+										<span>Tipo: '.$tipo->getNome().'</span>
+									</div>
 								</div>
 							</div>
-					    </div>
-	
-					    <div class="quatro colunas">
-							<div class="borda-foto ">
-								<div class="foto-salva">
-							    	<canvas id="canvas" width="320" height="240"></canvas>									
-							    </div>
-								<div class="centralizado">
-									<form class="formulario" id="formulario" enctype="multipart/form-data" action="enviar.php" method="POST" id="youform" name="youform">
-								        <input type="hidden" name="MAX_FILE_SIZE" value="30000" />
-								        <input name="img64" id="img64" type="hidden" />
-								        <input name="id_usuario" id="id_usuario" value="'.$_GET['selecionado'].'" type="hidden" />
-								        <input class="" type="submit" value="Enviar arquivo" onsubmit="document.getElementById(\'img64\').value = img" />
-							        </form>								   
-							    </div>
-					    	</div>
-					    </div>
-	
-					</div>
-					<hr class="um"/>
-					';
+							<div class="tres colunas zoom">
+								<img id="imagem" src="fotos/'.$imagem.'.png" alt="">
+							</div>
+						</div>
+					</div>';
+			
 
-// 			echo '
+			echo '
 			
-// 								<table  class="tabela borda-vertical zebrada texto-preto">
-// 					<tr>
-// 						<td>';
-// 			if(file_exists('fotos/'.$_GET['selecionado'].'.png')){
+								<table  class="tabela borda-vertical zebrada texto-preto">
+					<tr>
+						<td>';
+			if(file_exists('fotos/'.$_GET['selecionado'].'.png')){
 			
-// 				echo '<img width="300"  src="fotos/'.$_GET['selecionado'].'.png" />';
+				echo '<img width="300"  src="fotos/'.$_GET['selecionado'].'.png" />';
 			
-// 			}else{
+			}else{
 			
-// 				echo '<img width="300" src="img/camera.png" />';
+				echo '<img width="300" src="img/camera.png" />';
 			
-// 			}
+			}
 			
-// 			echo '				</td>
+			echo '				</td>
 			
 			
-// 						<td>
-// 				<video  id="video" width="320" height="200" autoplay></video>
-// 		            <section>
-// 		                <button id="btnStart">Iniciar Video</button>
-// 		                <button id="btnStop">Parar</button>
-// 		                <button id="btnPhoto">Bater Foto</button>
-// 		            </section>
-// 						</td>
-// 						<td>
-// 				 <canvas id="canvas" width="320" height="240"></canvas>
-// 				 <form id="formulario" enctype="multipart/form-data" action="enviar.php" method="POST" id="youform" name="youform">
-// 	            <input type="hidden" name="MAX_FILE_SIZE" value="30000" />
-// 	            <input name="img64" id="img64" type="hidden" />
-// 	            <input name="id_usuario" id="id_usuario" value="'.$_GET['selecionado'].'" type="hidden" />
+						<td>
+				<video  id="video" width="320" height="200" autoplay></video>
+		            <section>
+		                <button id="btnStart">Iniciar Video</button>
+		                <button id="btnStop">Parar</button>
+		                <button id="btnPhoto">Bater Foto</button>
+		            </section>
+						</td>
+						<td>
+				 <canvas id="canvas" width="320" height="240"></canvas>
+				 <form id="formulario" enctype="multipart/form-data" action="enviar.php" method="POST" id="youform" name="youform">
+	            <input type="hidden" name="MAX_FILE_SIZE" value="30000" />
+	            <input name="img64" id="img64" type="hidden" />
+	            <input name="id_usuario" id="id_usuario" value="'.$_GET['selecionado'].'" type="hidden" />
 	      
-// 	            <input type="submit" value="Enviar arquivo" onsubmit="document.getElementById(\'img64\').value = img" />
-// 	        </form>
-// 						</td>
+	            <input type="submit" value="Enviar arquivo" onsubmit="document.getElementById(\'img64\').value = img" />
+	        </form>
+						</td>
 			
-// 					</tr>
-// 				</table>';
+					</tr>
+				</table>';
 		}
 		
-		echo '<div class="doze colunas">				
-				<table  class="tabela borda-vertical zebrada">
-					<tr><th>Nome:</th><td> ' . $usuario->getNome () . '.</td>';
 		echo '
+				
+				<table  class="tabela borda-vertical zebrada texto-preto">
+					<tr><th>Nome:</th><td> ' . $usuario->getNome () . '.</td>';
+		
+		
+		
+		
+		echo '
+        
+							
+             		
+             		
              		</tr>
 					<tr><th>Login:</th><td>'. $usuario->getLogin () .'.</td></tr>
 					<tr><th>Identidade: </th><td>' . $usuario->getIdentidade () . '.</td></tr>
@@ -338,10 +370,9 @@ class CartaoView {
 		if(strtolower (trim($usuario->getTipodeUsuario())) == 'terceirizado'){
 			echo '<tr><th colspan=2>Terceirizado Sem Informação de Status</th></tr>';
 		}
-		
+		echo '<tr><th>Nivel de Acesso</th><td>'.$usuario->toStrNivel().'</td></tr>';
 		
 		echo '</table>
-				</div>
 				
 				
 
@@ -422,18 +453,24 @@ class CartaoView {
 		echo '</div>';
 	}
 	public function formConfirmacaoEliminarVinculo(Vinculo $vinculo){
-		echo '	<div class="borda doze colunas">';
-		$this->formMensagem("-ajuda", "Deseja eliminar esse vínculo?");		
-		echo '		<form action="" method="post">
-						<input type="submit" class="botao" value="Confirmar" name="certeza" />	
-					</form>
-				</div>';
-	}
-	public function formConfirmacaoRenovarVinculo(){		
-		$this->formMensagem("-ajuda", "Tem certeza que deseja renovar esse vínculo?");		
-		echo '	<form id="form-confirma-cartao" action="" method="post">
-					<input type="submit" class="botao" value="certeza" name="certeza" />	
+		echo '<div class="borda">';
+		echo '<p>Tem certeza que deseja eliminar esse vínculo? </p>';
+		echo '<form action="" method="post">
+				<input type="submit" class="botao" value="certeza" name="certeza" />
+	
 				</form>';
+	
+		echo '</div>';
+	}
+	public function formConfirmacaoRenovarVinculo(){
+		echo '<div class="borda">';
+		echo '<p>Tem certeza que deseja renovar esse vínculo? </p>';
+		echo '<form action="" method="post">
+				<input type="submit" class="botao" value="certeza" name="certeza" />
+	
+				</form>';
+	
+		echo '</div>';
 	}
 	
 	
@@ -586,53 +623,56 @@ class CartaoView {
 	
 	}
 	
-	public function formIdentificacao(Cartao $cartao, Usuario $usuario, Tipo $tipo, $imagem){
-		
+	public function formIdentificacao($args){
+	
 		echo '	<div class="borda doze colunas">
-						<div class="doze colunas">
-				
-							<div class="fundo" style="left:20%;top: 35%;">
+						<div class="doze colunas">	
+							<div class="fundo" style="left:23%;top:20%;">
 								<img class="imagem-fundo" src="img/Simbolo_da_UNILAB.png" alt="">
-							</div>
-				
-							<div class="duas colunas">
-								<a href="http://www.unilab.edu.br">
-									<img class="imagem-responsiva centralizada" src="img/logo-unilab.png" alt="">
-								</a>
-							</div>
-							<div class="oito colunas">
-								<h1 class="titulo centralizado">Restaurante Universitário</h2>
-							</div>
-							<div class="duas colunas">
-								<a href="http://www.unilab.edu.br">
-									<img class="imagem-responsiva centralizada" src="img/pp.jpg" alt="">
-								</a>
-							</div>		
-							<hr class="um"><br>
-						</div>		
-						<div class="doze colunas dados-usuario">		
-							<h2 class="titulo centralizado">Identificação do Usuario</h1><br>				
+							</div>						
+						</div>
+						<div class="doze colunas dados-usuario">
+							<h2 class="titulo centralizado">Identificação do Usuario</h2><br>
 							<hr class="um">
 							<div class="nove colunas">
 								<div id="informacao" class="fundo-cinza1">
-										<div id="dados" class="dados">
-										<span>Nº Cartão: '.$cartao->getNumero().'</span>
-										<span>Nome: '.ucwords(strtolower(htmlentities($usuario->getNome()))).'</span>
-										<span>Tipo: '.$tipo->getNome().'</span>
+									<div id="dados" class="dados">
+										<span>Nº Cartão: '.$args[0]->getNumero().'</span>
+										<span>Nome: '.ucwords(strtolower(htmlentities($args[1]->getNome()))).'</span>
+										<span>Tipo: '.$args[2]->getNome().'</span>
+										<span>Nível de Acesso: '.$args[3].'</span>
 									</div>
 								</div>
 							</div>
-							<div class="tres colunas zoom">
-								<img id="imagem" src="fotos/'.$imagem.'.png" alt="">
+							<div class="tres colunas zoom" style="width:278px;">
+								<img id="imagem" src="fotos/'.$args[4].'.png" alt="">
 							</div>
-						</div>
-					</div>';				
-	}	
+							<div class="doze colunas centralizado">
+								<a class="botao b-primario" href="?pagina=nivel_acesso&usua_id='.$args[5]->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_COMUM.'">Tornar Padr&atilde;o</a>
+								<a class="botao b-secundario" href="?pagina=nivel_acesso&usua_id='.$args[5]->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_CADASTRO.'">Tornar Cadastro</a>
+								<a class="botao b-sucesso" href="?pagina=nivel_acesso&usua_id='.$args[5]->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_ADMIN.'">Tornar Administrador</a>
+								<a class="botao b-erro" href="?pagina=nivel_acesso&usua_id='.$args[5]->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_RELATORIO.'">Somente Relatorios</a>
+								<a class="botao b-secundario" href="?pagina=nivel_acesso&usua_id='.$args[5]->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_CATRACA_VIRTUAL.'">Tornar Catraca Virtual</a>';		
+			$sessao = new Sessao();
+			if($sessao->getNivelAcesso() == Sessao::NIVEL_SUPER)
+				echo '			<a class="botao b-erro" href="?pagina=nivel_acesso&usua_id='.$args[5]->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_SUPER.'">Tornar Super Usu&aacute;rio</a>';
+	echo'					</div>			
+						</div>						
+					</div>';
+	}
 	
+	public function listaBotoes(Vinculo $vinculo){
+		echo '</h1>';
+		echo '<a class="botao b-primario" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_COMUM.'">Tornar Padr&atilde;o</a>';
+		echo '<a class="botao b-secundario" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_CADASTRO.'">Tornar Cadastro</a>';
+		echo '<a class="botao b-sucesso" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_ADMIN.'">Tornar Administrador</a>';
+		echo '<a class="botao b-erro" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_RELATORIO.'">Somente Relatorios</a>';
+		echo '<a class="botao b-secundario" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_CATRACA_VIRTUAL.'">Tornar Catraca Virtual</a>';
+	}
 	
 	public function formMensagem($tipo, $texto){
 		//Tipo = -sucesso, -erro, -ajuda
-		echo '		<div class="alerta'.$tipo.'">
+		echo '		<div class="alerta-'.$tipo.'">
 				    	<div class="icone icone-notification ix16"></div>
 				    	<div class="titulo-alerta">Aten&ccedil&atildeo</div>
 				    	<div class="subtitulo-alerta">'.$texto.'</div>

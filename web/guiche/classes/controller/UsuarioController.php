@@ -1,5 +1,9 @@
 <?php
 
+
+
+
+
 class UsuarioController{
 	
 	public static function main($nivelDeAcesso){
@@ -20,10 +24,11 @@ class UsuarioController{
 				
 				$usuarioDao->preenchePorLogin($usuario);
 				
-				echo '<div class="borda"><br><br><p>Olá, '.lcfirst ( strtolower ($usuario->getNome())).'! Seu acesso não foi autorizado. 
-						Para obter acesso ao sistema faça uma solicitação via 3s informando seu nome e descrevendo o problema. 
-								Depois clique em sair logo abaixo:  </p><h1><a href="?sair=1">sair</a></h1> e tente logar novamente.
-								</div>
+				echo '<div class="borda"><br><br><p>Olá, '.lcfirst ( strtolower ($usuario->getNome())).'!</p>
+						Esta é a página do sistema catraca. Ainda está em construção.  
+						Em breve muitas informações serão disponibilizadas a você nesta página. 
+						
+						<h1><a href="?sair=1">sair</a></h1> </div>
 						';
 				break;
 		}
@@ -101,7 +106,10 @@ class UsuarioController{
 						
 				}
 				echo "Sucesso";
-				return;				
+				return;
+				
+				
+				
 				
 			}
 			

@@ -61,7 +61,9 @@ class UnidadeDAO extends DAO {
 					LEFT JOIN catraca_unidade
 					ON catraca.catr_id = catraca_unidade.catr_id
 					LEFT JOIN unidade
-					ON unidade.unid_id = catraca_unidade.unid_id";
+					ON unidade.unid_id = catraca_unidade.unid_id
+					ORDER BY catraca.catr_id ASC
+					";
 		}
 		
 		foreach ( $this->getConexao ()->query ( $sql ) as $linha ) {
@@ -74,9 +76,9 @@ class UnidadeDAO extends DAO {
 			$catraca->setMacLan($linha['catr_mac_lan']);
 			$catraca->setMacWlan($linha['catr_mac_wlan']);
 			$catraca->setInterfaceRede($linha['catr_interface_rede']);
-			$catraca->setFinanceiro($linha['catr_financeiro']);
 			$catraca->setUnidade(new Unidade());
 			$catraca->getUnidade()->setNome($linha['unid_nome']);
+			$catraca->setFinanceiro($linha['catr_financeiro']);
 			
 			
 			$lista [] = $catraca;
@@ -159,6 +161,7 @@ class UnidadeDAO extends DAO {
 			$catraca->setIp($linha['catr_ip']);
 			$catraca->setInterfaceRede($linha['catr_interface_rede']);
 			$catraca->setFinanceiro($linha['catr_financeiro']);
+			
 			$catraca->setUnidade(new Unidade());
 			$catraca->getUnidade()->setNome($linha['unid_nome']);
 				
@@ -177,7 +180,7 @@ class UnidadeDAO extends DAO {
 		$idUnidade= $catraca->getUnidade()->getId();
 		$interface = $catraca->getInterfaceRede();
 		$financeiro = $catraca->getFinanceiro();
-		
+						
 		$this->getConexao()->beginTransaction();
 		$sqlUpdate = "UPDATE catraca SET catr_tempo_giro = $giro,						
 						catr_operacao = $operacao,
@@ -292,6 +295,23 @@ class UnidadeDAO extends DAO {
 			$turno->setHoraInicial ( $linha ['turn_hora_inicio'] );
 			$unidade->adicionaTurno ( $turno );
 		}
+	}
+	
+	public function custosDaUnidade(){
+		
+		$lista = array ();
+		$sql = "SELECT * FROM unidade
+				LEFT JOIN custo_unidade ON custo_unidade.unid_id = unidade.unid_id
+				LEFT JOIN custo_refeicao ON custo_refeicao.cure_id = custo_unidade.cure_id";
+		$result = $this->getConexao()->query($sql);
+		foreach ($result as $linha){
+			$unidade = new Unidade();
+			$unidade->setId($linha['unid_id']);
+			$unidade->setNome($linha['unid_nome']);
+			$unidade->setCustoUnidade($linha['cure_valor']);
+			$lista[] = $unidade;
+		}
+		return $lista;		
 	}
 
 }

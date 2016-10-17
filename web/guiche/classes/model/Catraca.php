@@ -12,7 +12,6 @@ class Catraca{
 	private $interfaceRede;
 	private $unidade;
 	private $financeiro;
-	
 	public function Catraca(){
 		$this->unidade = new Unidade();
 	}
@@ -122,13 +121,36 @@ class Catraca{
 		}
 		return $interface;
 	}
-	
-	public function getFinanceiro(){
-		return $this->financeiro;
+	/*
+	 * 1 = Horario Validado -> Anti-horário Bloqueado;
+	 * 2 = Anti-horário Validado -> Horario Bloqueado;
+	 * 3 = Anti-horário Livre -> Horario Validado;
+	 * 4 = Hoário Livre -> Anti-horário Validado;
+	 * 5 = Livre em abos os sentidos.
+	 */
+	 public function __toString(){
+		$str = $this->getStrOperacao();
+		$str .= $this->getUnidade()->getNome();
+		if($this->financeiroAtivo())
+			$str .= "Financeiro Habilitado";
+		else
+			$str .= "Financeiro Desabilitado";
+		return $str;
 	}
 	
-	public function setFinanceiro($financeiro){
-		$this->financeiro = $financeiro;
+// 	public function setFinanceiro($financeiro){		
+// 		if($financeiro)
+// 			$this->financeiro = true;
+// 		else
+// 			$this->financeiro = false;
+		
+// 	}
+	
+	public function financeiroAtivo(){
+		if($this->financeiro)
+			return true;
+		return false;
+		
 	}
 	
 	public function getStrFincaneito(){
@@ -146,13 +168,14 @@ class Catraca{
 		}return $financeiro;
 	}
 	
-	/*
-	 * 1 = Horario Validado -> Anti-horário Bloqueado;
-	 * 2 = Anti-horário Validado -> Horario Bloqueado;
-	 * 3 = Anti-horário Livre -> Horario Validado;
-	 * 4 = Hoário Livre -> Anti-horário Validado;
-	 * 5 = Livre em abos os sentidos.
-	 */
+	public function getFinanceiro(){
+		return $this->financeiro;
+	}
+	
+	public function setFinanceiro($financeiro){
+		$this->financeiro = $financeiro;
+	}
+	
 	const GIRO_HOR_VAL_ANTI_BLOQ = 1;
 	const GIRO_ANTI_VAL_HOR_BLOQ = 2;
 	const GIRO_ANTI_LIVRE_HOR_VAL = 3;

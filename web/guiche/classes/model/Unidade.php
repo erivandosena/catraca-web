@@ -8,21 +8,20 @@
  *
  */
 class Unidade {
+	
 	private $id;
 	private $nome;
 	private $turnosValidos;
 	private $catracas;
-	public function Unidade() {
-		$this->turnosValidos = array();
-		
-	}
+	private $custoUnidade;
 	
-
+	public function Unidade() {
+		$this->turnosValidos = array();		
+	}
 	
 	public function getTurnosValidos() {
 		return $this->turnosValidos;
-	}
-	
+	}	
 
 	public function adicionaTurno(Turno $turno){
 		$this->turnosValidos[] = $turno;
@@ -38,5 +37,13 @@ class Unidade {
 	}
 	public function getNome() {
 		return $this->nome;
+	}
+	
+	public function getCustoUnidade(){
+		return $this->custoUnidade;
+	}
+	
+	public function setCustoUnidade($custoUnidade){
+		$this->custoUnidade = $custoUnidade;
 	}
 }

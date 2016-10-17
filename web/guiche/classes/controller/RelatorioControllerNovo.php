@@ -33,9 +33,19 @@ class RelatorioControllerNovo {
 			echo '<option value="' . $unidade->getId () . '">' . $unidade->getNome () . '</option>';
 		}
 		echo '<option value="">Todos as Unidades</option>';
-		echo '								            										            
-												    </select>
-												</label><br>
+		
+		echo '	</select>';
+		
+		echo '	<div id="carrega_turno">
+					<label>
+						<object class="rotulo">Turnos: </object>
+						<select name="turno" id="turno">
+							<option values=""></option>				
+						</select>
+					</label>
+				</div>';
+												    
+		echo'  									</label><br>
 												<label for="data_inicial" class="texto-preto">
 												    Data Inicial: <input id="data_inicial" type="date" name="data_inicial"/>
 												</label><br>

@@ -13,8 +13,14 @@ class Vinculo{
 	private $quantidadeDeAlimentosPorTurno;
 	private $descricao;
 	private $cartao;
-
-	
+	private $refeicoesRestantes;
+	public function setRefeicoesRestantes($refeicoesRestantes){
+		$this->refeicoesRestantes = intval($refeicoesRestantes);
+	}
+	public function getRefeicoesRestantes(){
+		return $this->refeicoesRestantes;
+		
+	}
 	
 	private $isento;
 	public $isencao;
@@ -34,13 +40,18 @@ class Vinculo{
 	
 	
 	public function Vinculo(){
+		$this->setIsento(false);
 		$this->isencao  = new Isencao();
 		$this->setAvulso(false);
 		$this->responsavel = new Usuario();
 		$this->cartao= new Cartao();
 		
 	}
-	
+	public function ehIsento(){
+		if($this->isento)
+			return true;
+		return false;
+	}
 	public function setInicioValidade($inicioValidade){
 		$this->inicioValidade = $inicioValidade;
 	}

@@ -8,6 +8,18 @@ class RelatorioController {
 				$controller = new RelatorioController ();
 				$controller->relatorio ();
 				break;
+			case Sessao::NIVEL_ADMIN :
+				$controller = new RelatorioController ();
+				$controller->relatorio ();
+				break;
+			case Sessao::NIVEL_CATRACA_VIRTUAL:
+				$controller = new RelatorioController ();
+				$controller->relatorio ();
+				break;
+			case Sessao::NIVEL_RELATORIO:
+				$controller = new RelatorioController ();
+				$controller->relatorio ();
+				break;
 			default :
 				UsuarioController::main ( $nivelDeAcesso );
 				break;
@@ -18,32 +30,41 @@ class RelatorioController {
 		$listaDeUnidades = $this->dao->retornaLista ();
 		
 		echo '<div class="doze colunas borda relatorio">
-									<form action="" class="formulario sequencial">									
+									<form action="" class="formulario em-linha">									
 											<div id="data">
 												<label for="opcoes-1">
 													<object class="rotulo texto-preto">Unidade Acadêmica: </object>
-													<select name="unidade" id="unidade" class="texto-preto">';
+													<select name="unidade" id="unidade" class="texto-preto">
+													<option value="">Selecione uma Unidade</option>';
 		foreach ( $listaDeUnidades as $unidade ) {
 			echo '<option value="' . $unidade->getId () . '">' . $unidade->getNome () . '</option>';
 		}
-		echo '<option value="">Todos as Unidades</option>';
+		//echo '<option value="">Todos as Unidades</option>';
 		echo '								            										            
 												    </select>
-												</label><br>
+												</label>';
+		
+		echo '									<label>
+													<object class="rotulo">Catraca: </object>
+													<select name="catraca" id="catraca">
+														<option value="">Selecione uma Catraca</option>
+													</select>		
+												</label>												
+				
 												<label for="data_inicial" class="texto-preto">
 												    Data Inicial: <input id="data_inicial" type="date" name="data_inicial"/>
-												</label><br>
+												</label>
 												<label for="data_final" class="texto-preto">
 												    Data Final: <input id="data_final" type="date" name="data_final"/>
-												</label><br>
-												<label for="tipo_de_relatorio">
-													Tipo De Relatório
 												</label>
-												<select id="tipo_de_relatorio" name="tipo_de_relatorio">
-													<option value="1">Pratos Consumidos</option>
-													<option value="2">Valores Arrecadados</option>
+												<label for="tipo_de_relatorio">													
+												<object class="rotulo">Tipo De Relatório: </object>
+												<select id="tipo_de_relatorio" name="tipo_de_relatorio">										
 													<option value="3">Relação Pratos e Valores</option>
+													<option value="1">Pratos Consumidos</option>
+ 													<option value="2">Valores Arrecadados</option>										
 												</select>
+												</label>
 												<input type="hidden" name="pagina" value="relatorio" />
 												<input  type="submit"  name="gerar" value="Gerar"/>
 											</div>									    							
@@ -53,21 +74,25 @@ class RelatorioController {
 		if (isset ( $_GET ['gerar'] )) {
 			switch ($_GET ['tipo_de_relatorio']) {
 				case "1" :
-					$this->gerarPratosConsumidos ( $_GET ['unidade'], $_GET ['data_inicial'], $_GET ['data_final'] );
+					$this->gerarPratosConsumidos ( $_GET ['unidade'], $_GET['catraca'], $_GET ['data_inicial'], $_GET ['data_final'] );
 					break;
 				case "2" :
-					$this->geraValoresArrecadados ( $_GET ['unidade'], $_GET ['data_inicial'], $_GET ['data_final'] );
+					$this->geraValoresArrecadados ( $_GET ['unidade'],  $_GET ['data_inicial'], $_GET ['data_final'] );
 					break;
 				case "3" :
-					$this->geraRelacaoPratosValores ( $_GET ['unidade'], $_GET ['data_inicial'], $_GET ['data_final'] );
+					$this->geraRelacaoPratosValores ( $_GET ['unidade'],  $_GET ['data_inicial'], $_GET ['data_final'] );
 					break;
 				default :
-					$this->gerarPratosConsumidos ( $_GET ['unidade'], $_GET ['data_inicial'], $_GET ['data_final'] );
+					$this->geraRelacaoPratosValores ( $_GET ['unidade'],  $_GET ['data_inicial'], $_GET ['data_final'] );
 					break;
 			}
+		}else{
+			$this->geraRelacaoPratosValores ();
+				
 		}
 	}
-	public function gerarPratosConsumidos($idUnidade = NULL, $dateStart = null, $dataEnd = null) {
+	public function gerarPratosConsumidos($idUnidade = NULL, $idCatraca=NULL, $idTurno = NULL, $dateStart = null, $dataEnd = null) {
+
 		if ($dateStart == null)
 			$dateStart = date ( 'Y-m-d' );
 		if ($dataEnd == null)
@@ -85,6 +110,11 @@ class RelatorioController {
 			$unidade->setId($idUnidade);
 			$unidadeDao->preenchePorId($unidade);
 			$strUnidade =  $unidade->getNome();
+		}
+		
+		if ($idCatraca != NULL){
+			$idCatraca = intval($idCatraca);
+			$strCatraca = "AND catraca.catr_id = $idCatraca";
 		}
 		
 		$dao = new TipoDAO ();
@@ -115,7 +145,8 @@ class RelatorioController {
 				INNER JOIN catraca ON registro.catr_id = catraca.catr_id
 				INNER JOIN catraca_unidade ON catraca.catr_id = catraca_unidade.catr_id
 				WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') AND vinculo_tipo.tipo_id =  $tipoId
-				$strFiltroUnidade;";
+				$strFiltroUnidade $strCatraca;";
+				
 				foreach ( $dao->getConexao ()->query ( $sql ) as $linha ) {
 					$valor = $linha ['valor'];
 				}
@@ -150,7 +181,7 @@ class RelatorioController {
 					INNER JOIN catraca ON registro.catr_id = catraca.catr_id
 					INNER JOIN catraca_unidade ON catraca.catr_id = catraca_unidade.catr_id
 					WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') AND vinculo_tipo.tipo_id =  $tipoId
-					$strFiltroUnidade;";
+					$strFiltroUnidade $strCatraca;";
 					foreach ( $dao->getConexao ()->query ( $sql ) as $linha ) {
 						$valor = $linha ['valor'];
 					}
@@ -267,7 +298,29 @@ class RelatorioController {
 			$this->mostraListaDeDados ( $listaDeDados, $strUnidade.' - turno: ' . $turno->getDescricao () . ' - entre: ' . $turno->getHoraInicial () . ' e ' . $turno->getHoraFinal (), $tipos, $listaDeDatas );
 		}
 	}
-	public function pegaUltimoCusto(){
+	public function pegaUltimoCusto($idUnidade = null){
+		
+		if($idUnidade != null){
+			
+
+			$sql = "SELECT cure_valor FROM custo_refeicao
+			INNER JOIN custo_unidade
+			ON custo_unidade.cure_id = custo_refeicao.cure_id
+			INNER JOIN unidade
+			ON unidade.unid_id = custo_unidade.unid_id
+			INNER JOIN catraca_unidade
+			ON catraca_unidade.unid_id = unidade.unid_id
+			WHERE catraca_unidade.unid_id = $idUnidade
+			ORDER BY custo_unidade.cure_id DESC LIMIT 1
+			";
+			
+			foreach($this->dao->getConexao()->query($sql) as $linha){
+				return $linha['cure_valor'];
+			}
+			
+			
+		}
+		
 		$ultimoCusto = 0;
 		foreach ( $this->dao->getConexao ()->query ( "SELECT * FROM custo_refeicao ORDER BY cure_id DESC LIMIT 1" ) as $linha ) {
 			$ultimoCusto = $linha ['cure_valor'];
@@ -275,6 +328,9 @@ class RelatorioController {
 		return $ultimoCusto;
 	}
 	public function geraRelacaoPratosValores($idUnidade = NULL, $data1 = null, $data2 = null) {
+		
+		if($idUnidade == NULL)
+			$idUnidade = 1;
 		if ($data1 == null)
 			$data1 = date ( 'Y-m-d' );
 		if ($data2 == null)
@@ -322,14 +378,16 @@ class RelatorioController {
 				$dataInicial = $data . ' 00:00:00';
 				$dataFinal = $data . ' 23:59:59';
 				$tipoId = $tipo->getId ();
-				$sql = "SELECT sum(1) pratos,sum(regi_valor_pago) valor  FROM registro
-				INNER JOIN vinculo ON vinculo.vinc_id = registro.vinc_id
-				INNER JOIN vinculo_tipo ON vinculo.vinc_id = vinculo_tipo.vinc_id
-				INNER JOIN catraca ON catraca.catr_id = registro.catr_id
-				INNER JOIN catraca_unidade ON catraca.catr_id = catraca_unidade.catr_id
-				WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') AND vinculo_tipo.tipo_id =  $tipoId
+				$sql = "SELECT  sum(1) pratos,sum(regi_valor_pago) valor FROM registro
+					INNER JOIN vinculo ON vinculo.vinc_id = registro.vinc_id
+					INNER JOIN vinculo_tipo ON vinculo.vinc_id = vinculo_tipo.vinc_id
+					INNER JOIN catraca ON catraca.catr_id = registro.catr_id
+					INNER JOIN catraca_unidade ON catraca.catr_id = catraca_unidade.catr_id
+					WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') AND vinculo_tipo.tipo_id =  $tipoId
 				$strFiltroUnidade;";
 				foreach ( $dao->getConexao ()->query ( $sql ) as $linha ) {
+					//print_r($linha);
+					$ultimoCusto = $this->pegaUltimoCusto($idUnidade);
 					$pratos = floatval($linha ['pratos']);
 					$valor = floatval($linha ['valor']);
 
@@ -356,21 +414,7 @@ class RelatorioController {
 
 		
 		echo '<div class=" doze colunas borda relatorio">';		
-		echo '<div class="doze colunas">
-					<div class="tres colunas">
-						<a href="http://www.dti.unilab.edu.br">
-							<img class="imagem-responsiva no-centro" src="img/logo-dti-preto.png" alt=""/>
-						</a>
-					</div>
-					<div class="seis colunas">
-						<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>
-					</div>
-					<div class="tres colunas">
-						<a href="http://www.unilab.edu.br"><br>
-						<img class="imagem-responsiva no-centro" src="img/logo-unilab.png" alt="">
-						</a>
-					</div>
-				</div>
+		echo '<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>
 				<hr class="um">
 				<h3>'.$strUnidade.'</h3>
 				<span>De '. date ( 'd/m/Y', strtotime ( $data1 ) ) . ' a ' . date ( 'd/m/Y', strtotime ( $data2 ) ) .'</span>
@@ -458,6 +502,7 @@ class RelatorioController {
 				WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') AND vinculo_tipo.tipo_id =  $tipoId
 				$strFiltroUnidade;";
 					foreach ( $dao->getConexao ()->query ( $sql ) as $linha ) {
+						$ultimoCusto = $this->pegaUltimoCusto($idUnidade);
 						$pratos = $linha ['pratos'];
 						$valor = $linha ['valor'];
 						$listaDeDados [$tipo->getId ()] ['pratos'] += $pratos;
@@ -475,21 +520,7 @@ class RelatorioController {
 			}
 			
 		echo '<div class="doze colunas borda relatorio">
-				<div class="doze colunas">
-					<div class="tres colunas">
-						<a href="http://www.dti.unilab.edu.br">
-							<img class="imagem-responsiva no-centro" src="img/logo-dti-preto.png" alt=""/>
-						</a>
-					</div>
-					<div class="seis colunas">
-						<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>
-					</div>
-					<div class="tres colunas">
-						<a href="http://www.unilab.edu.br"><br>
-						<img class="imagem-responsiva no-centro" src="img/logo-unilab.png" alt="">
-						</a>
-					</div>
-				</div>
+				<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>
 				<hr class="um">
 				<h3>'.$strUnidade.'</h3>
 				<span>Data: '. date ( 'd/m/Y', strtotime ( $data1 ) ) . ' e ' . date ( 'd/m/Y', strtotime ( $data2 ) ) .'</span>
@@ -547,21 +578,7 @@ class RelatorioController {
 	
 		
 		echo '<div class=" doze colunas borda relatorio">
-				<div class="doze colunas">
-					<div class="tres colunas">
-						<a href="http://www.dti.unilab.edu.br">
-							<img class="imagem-responsiva no-centro" src="img/logo-dti-preto.png" alt=""/>
-						</a>
-					</div>
-					<div class="seis colunas">
-						<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>
-					</div>
-					<div class="tres colunas">
-						<a href="http://www.unilab.edu.br"><br>
-						<img class="imagem-responsiva no-centro" src="img/logo-unilab.png" alt="">
-						</a>
-					</div>
-				</div>	
+				<h2>UNILAB<small class="fim">Universidade da Integraçao Internacional da Lusofonia Afro-Brasileira</small></h2>	
 				<hr class="um">
 				<h3>'.$titulo.'</h3>
 				<hr class="dois">';
@@ -616,21 +633,7 @@ class RelatorioController {
 		$subTotal ['total'] = 0;
 	
 		echo '<div class=" doze colunas borda relatorio">
-				<div class="doze colunas">
-					<div class="tres colunas">
-						<a href="http://www.dti.unilab.edu.br">
-							<img class="imagem-responsiva no-centro" src="img/logo-dti-preto.png" alt=""/>
-						</a>
-					</div>
-					<div class="seis colunas">
-						<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>
-					</div>
-					<div class="tres colunas">
-						<a href="http://www.unilab.edu.br"><br>
-						<img class="imagem-responsiva no-centro" src="img/logo-unilab.png" alt="">
-						</a>
-					</div>
-				</div>	
+				<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>	
 				<hr class="um">
 				<h3>'.$titulo.'</h3>							
 				<hr class="dois">';
@@ -667,14 +670,7 @@ class RelatorioController {
 		echo '<td>' . $subTotal ['total'] . '</td>';
 		echo '</tr>';
 		
-		$ultimoCusto = $this->pegaUltimoCusto();
-		echo '<tr id="soma">
-				<th id="limpar">Custo</th>';
-		foreach ( $tipos as $tipo ) {
-			echo '<td>R$' . number_format (($ultimoCusto*$subTotal [$tipo->getId ()]), 2, ',', '.' ) . '</td>';
-		}
-		echo '<td>R$' . number_format ( ($ultimoCusto*$subTotal ['total']) , 2, ',', '.' )  . '</td>';
-		echo '</tr>';
+		
 		
 		echo '</table>
 				<div class="doze colunas relatorio-rodape">

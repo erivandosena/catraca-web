@@ -11,10 +11,23 @@ class GuicheController{
 				$controller = new GuicheController();
 				$controller->telaGuiche();
 				break;
-			default :
-				UsuarioController::main ($nivel);
+			case Sessao::NIVEL_ADMIN :
+				$controller = new GuicheController();
+				$controller->telaGuiche();
 				break;
-		}		
+			case Sessao::NIVEL_GUICHE:
+				$controller = new GuicheController();
+				$controller->telaGuiche();
+				break;
+			case Sessao::NIVEL_CATRACA_VIRTUAL:
+				$controller = new GuicheController();
+				$controller->telaGuiche();
+				break;
+			default :
+				UsuarioController::main ( $nivel );
+				break;
+		}
+			
 	}
 	
 	public function telaGuiche(){
@@ -42,7 +55,7 @@ class GuicheController{
 		$sqlTransacao = "SELECT * FROM transacao as trans 
 				LEFT JOIN usuario as usuario
 				on trans.usua_id = usuario.usua_id				
-				WHERE (tran_data BETWEEN '$data1' AND '$data2') AND usuario.usua_id = $idDoUsuario";
+				WHERE (tran_data BETWEEN '$data1' AND '$data2') AND usuario.usua_id = $idDoUsuario ORDER BY tran_id DESC ";
 		
 		$listaDescricao = $dao->getConexao()->query($sqlTransacao);		
 		$this->view->formDescricao($listaDescricao);		
@@ -77,16 +90,15 @@ class GuicheController{
 		 * Realiza a pesquisa pelo numero do cartão identificando se existe vinculo ativo.
 		 */
 		
-		if(isset($_POST['cartao'])){
+		if(isset($_GET['cartao'])){
 			$cartao = new Cartao();
-			$cartao->setNumero($_POST['cartao']);
+			$cartao->setNumero($_GET['cartao']);
 			$numeroCartao = $cartao->getNumero();			
 			$sqlVerificaNumero = "SELECT * FROM usuario 
 								INNER JOIN vinculo ON vinculo.usua_id = usuario.usua_id
 								LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
 								LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id
-								WHERE cartao.cart_numero = '$numeroCartao'";
-			
+								WHERE cartao.cart_numero = '$numeroCartao'";			
 			$result = $dao->getConexao()->query($sqlVerificaNumero);			
 			$usuario = new Usuario();
 			$idCartao = 0;
@@ -119,7 +131,7 @@ class GuicheController{
  				
  				if(!$vinculo->isActive()){
  					
- 					$this->view->mensagem('-erro','O vinculo n&atildeo est&aacute ativo.');
+ 					$this->view->mensagem('erro','O vinculo n&atildeo est&aacute ativo.');
  					
  				}else{			
 									
@@ -130,67 +142,83 @@ class GuicheController{
 				 * Insere os estorna os creditos no usuario pesquisado com vinculo ativo.
 				 */
 				
-				if(isset($_POST['valor'])){
-					if(isset($_POST['finalizar'])){	
+				if(isset($_GET['valor'])){
 					
+					$valor = $_GET['valor'];
+					
+					if ($valor<0){
+						$this->view->mensagem("erro", "Deseja estornar R\$ $valor?");
+					}else{
+						$this->view->mensagem("ajuda", "Deseja inserir R\$ $valor?");
+					}
+					
+					echo '	<form class="formulario" method="post">							
+								<input type="submit" value="Confirmar" name="confirmar" autofocus/>
+							</form>';					
+					
+					if(isset($_POST['confirmar'])){						
 						$valorAnt = $vinculo->getCartao()->getCreditos();
 						$idCartao = $vinculo->getCartao()->getId();					
-						$cartao->setCreditos($_POST['valor']);
+						$cartao->setCreditos($_GET['valor']);
 						$valorVendido = $cartao->getCreditos();					
 						$idUsuario = $usuario->getId();						
 						$dataTimeAtual = date ( "Y-m-d G:i:s" );
 						$novoValor = $valorAnt + $valorVendido;					
 						$tipoTransacao = 'Venda de Créditos';										
-						$tipo = "-sucesso";
+						$tipo = "sucesso";
 						$mensagem = "Valor inserido com sucesso.";
 						
 						if ($valorVendido == 0){
-							$this->view->mensagem("-erro", "Valor Inválido!");
+							$this->view->mensagem("erro", "Valor Inválido!");
 							echo '<meta http-equiv="refresh" content="2; url=.\?pagina=guiche">';
 							return ;
 						}
 						
-						if($valorVendido < 0){
-							$tipo = "-ajuda";
-							$mensagem = "Valor estornado com sucesso!";
-							$tipoTransacao = 'Estorno de valores';							
+						if($valorVendido < 0){							
+							if ($valorAnt <= 0){								
+								$this->view->mensagem("erro", "Saldo Insuficiente para realizar estorno!");
+								echo '<meta http-equiv="refresh" content="2; url=.\?pagina=guiche">';
+								return;								
+							}else if ($novoValor < 0){
+								$this->view->mensagem("erro", "Saldo Insuficiente para realizar estorno!");
+								echo '<meta http-equiv="refresh" content="2; url=.\?pagina=guiche">';
+								return;								
+							}else{
+								$tipo = "ajuda";
+								$mensagem = "Valor estornado com sucesso!";
+								$tipoTransacao = 'Estorno de valores';
+							}
 						}
 						
 						$dao->getConexao()->beginTransaction();
 							
 						$sql = "UPDATE cartao set cart_creditos = $novoValor WHERE cart_id = $idCartao";
 							
-						$sql2 = "INSERT into transacao(tran_valor, tran_descricao, tran_data, usua_id)
-						VALUES($valorVendido, '$tipoTransacao' ,'$dataTimeAtual', $idDoUsuario)";
+						$sql2 = "INSERT into transacao(tran_valor, tran_descricao, tran_data, usua_id,usua_id1 )
+						VALUES($valorVendido, '$tipoTransacao' ,'$dataTimeAtual', $idDoUsuario, $idDoUsuario)";
 							
 						//echo $sql;
 						if(!$dao->getConexao()->exec($sql)){
 							$dao->getConexao()->rollBack();
-							$this->view->mensagem('-erro','Erro ao inserir os creditos.');
+							$this->view->mensagem('erro','Erro ao inserir os creditos.');
 							return false;
 						}
 						if(!$dao->getConexao()->exec($sql2)){
 							$dao->getConexao()->rollBack();
-							$this->view->mensagem('-erro','Erro ao inserir os creditos.');
+							$this->view->mensagem('erro','Erro ao inserir os creditos.');
 							return false;
 						}
 							
 						$dao->getConexao()->commit();
 						$this->view->mensagem($tipo,$mensagem);
 						echo '<meta http-equiv="refresh" content="2; url=.\?pagina=guiche">';
-						}
-						
-					}
- 				
-				}
-				
- 			}else{
- 				
- 				$this->view->mensagem('-erro','Cart&atildeo sem vinculo v&aacutelido.');				
-				
+						}						
+					}				
+				}				
+ 			}else{ 				
+ 				$this->view->mensagem('erro','Cart&atildeo sem vinculo v&aacutelido.');				
  			}			
-		}
-				
+		}				
  	}	
 
 }

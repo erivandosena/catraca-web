@@ -1,11 +1,11 @@
 <?php
 
 class Cartao{
-	
 	private $id;
 	private $numero;
 	private $creditos;
 	private $tipo;
+	
 	
 	
 	public function Cartao(){

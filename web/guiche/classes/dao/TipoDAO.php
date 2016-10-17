@@ -21,11 +21,11 @@ class TipoDAO extends DAO{
 	}
 	
 	public function retornaTipoPorId(Tipo $tipo){
-		
+	
 		$idTipo = $tipo->getId();
 		$sql = "SELECT * FROM tipo WHERE tipo_id = $idTipo";
 		$result = $this->getConexao()->query($sql);
-		
+	
 		foreach ($result as $linha){
 			$tipo->setId($linha['tipo_id']);
 			$tipo->setNome($linha['tipo_nome']);
@@ -34,12 +34,5 @@ class TipoDAO extends DAO{
 		return $tipo;
 	}
 	
-	public function atualizarTipo(Tipo $tipo){
-		
-		$idTipo = $tipo->getId();
-		$tipo->setValorCobrado($_POST['valor_tipo']);
-		$sql = "UPDATE tipo SET tipo_valor WHERE tipo_id= $idTipo";
-		
-	}
 	
 }

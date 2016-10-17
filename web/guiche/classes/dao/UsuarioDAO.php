@@ -75,10 +75,23 @@ class UsuarioDAO extends DAO {
 
 	public function pesquisaNoSigaa($pesquisa){
 		$lista = array();
-		$pesquisa = preg_replace ('/[^a-zA-Z0-9\s]/', '', $pesquisa );
 		$pesquisa = strtoupper ( $pesquisa );
-		$sql = "SELECT * FROM vw_usuarios_catraca WHERE nome LIKE '%$pesquisa%' LIMIT 30";
-		foreach($this->getConexao()->query($sql) as $linha){
+		$pesquisa = "%".$pesquisa."%";
+		
+		$sql = "SELECT * FROM vw_usuarios_catraca WHERE 
+				TRANSLATE(UPPER(nome), 'áéíóúàèìòùãõâêîôôäëïöüçÁÉÍÓÚÀÈÌÒÙÃÕÂÊÎÔÛÄËÏÖÜÇ','aeiouaeiouaoaeiooaeioucAEIOUAEIOUAOAEIOOAEIOUC')
+				LIKE TRANSLATE(:pesquisa, 'áéíóúàèìòùãõâêîôôäëïöüçÁÉÍÓÚÀÈÌÒÙÃÕÂÊÎÔÛÄËÏÖÜÇ','aeiouaeiouaoaeiooaeioucAEIOUAEIOUAOAEIOOAEIOUC') LIMIT 150";
+
+		try{
+			$stmt = $this->getConexao()->prepare($sql);
+			$stmt->bindParam(":pesquisa", $pesquisa, PDO::PARAM_STR);
+			$stmt->execute();
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			
+		}catch (PDOException $e){
+			echo '{"erro":{"text":'. $e->getMessage() .'}}';
+		}
+		foreach($result as $linha){
 			$usuario = new Usuario();
 			$usuario->setNome($linha['nome']);
 			$usuario->setEmail($linha['email']);
@@ -100,9 +113,51 @@ class UsuarioDAO extends DAO {
 		return $lista;
 		
 	}
+	public function pesquisaTesteNoSigaa($pesquisa){
+		$lista = array();
+		$pesquisa = strtoupper ( $pesquisa );
+		$pesquisa = "%".$pesquisa."%";
+		
+		$sql = "SELECT * FROM vw_usuarios_catraca WHERE 
+				TRANSLATE(UPPER(nome), 'áéíóúàèìòùãõâêîôôäëïöüçÁÉÍÓÚÀÈÌÒÙÃÕÂÊÎÔÛÄËÏÖÜÇ','aeiouaeiouaoaeiooaeioucAEIOUAEIOUAOAEIOOAEIOUC')
+				LIKE TRANSLATE(:pesquisa, 'áéíóúàèìòùãõâêîôôäëïöüçÁÉÍÓÚÀÈÌÒÙÃÕÂÊÎÔÛÄËÏÖÜÇ','aeiouaeiouaoaeiooaeioucAEIOUAEIOUAOAEIOOAEIOUC') LIMIT 150";
+
+		try{
+			$stmt = $this->getConexao()->prepare($sql);
+			$stmt->bindParam(":pesquisa", $pesquisa, PDO::PARAM_STR);
+			$stmt->execute();
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			
+		}catch (PDOException $e){
+			echo '{"erro":{"text":'. $e->getMessage() .'}}';
+		}
+		foreach($result as $linha){
+			$usuario = new Usuario();
+			$usuario->setNome($linha['nome']);
+			$usuario->setEmail($linha['email']);
+			$usuario->setLogin($linha['login']);
+			$usuario->setIdBaseExterna($linha['id_usuario']);
+			$usuario->setCpf($linha['cpf_cnpj']);
+			$usuario->setIdentidade($linha['identidade']);
+			$usuario->setPassaporte($linha['passaporte']);
+			$usuario->setSiape($linha['siape']);
+			$usuario->setTipoDeUsuario($linha['tipo_usuario']);
+			$usuario->setMatricula($linha['matricula_disc']);
+			$usuario->setStatusDiscente($linha['status_discente']);
+			$usuario->setNivelDiscente($linha['nivel_discente']);
+			$usuario->setCategoria($linha['categoria']);
+			$usuario->setStatusServidor($linha['status_servidor']);
+			$lista[] = $usuario;
+		}
+	
+		return $lista;
+		
+	
+	}
 	public function retornaPorIdBaseExterna(Usuario $usuario){
 		$id = $usuario->getIdBaseExterna();
-		$sql = "SELECT * FROM vw_usuarios_catraca WHERE id_usuario = $id LIMIT 1";
+		$sql = "SELECT * FROM vw_usuarios_catraca WHERE id_usuario = $id ORDER BY status_discente, status_servidor ASC LIMIT 1";
+		
 		foreach ($this->getConexao ()->query ( $sql ) as $linha){
 			$usuario->setNome($linha['nome']);
 			$usuario->setEmail($linha['email']);
@@ -116,6 +171,7 @@ class UsuarioDAO extends DAO {
 			$usuario->setStatusDiscente($linha['status_discente']);
 			$usuario->setNivelDiscente($linha['nivel_discente']);
 			$usuario->setCategoria($linha['categoria']);
+			$usuario->setIDCategoria($linha['id_categoria']);
 			$usuario->setSiape($linha['siape']);
 			$usuario->setStatusServidor($linha['status_servidor']);
 			return $usuario;
@@ -156,6 +212,23 @@ class UsuarioDAO extends DAO {
 		
 		
 	}
+	/**
+	 * Diferente do outro este está preparado para olhar na base própria
+	 * @param Usuario $usuario
+	 */
+	public function preenchePorIdBaseExterna(Usuario $usuario){	
+		$id = $usuario->getIdBaseExterna();
+		$sql = "SELECT * FROM usuario WHERE id_base_externa  = $id";
+		foreach($this->getConexao()->query($sql) as $linha){
+			$usuario->setId($linha['usua_id']);
+			$usuario->setNome($linha['usua_nome']);
+			$usuario->setNivelAcesso($linha['usua_nivel']);
+			return true;
+		}
+		return false;
+	
+	
+	}
 	public function preenchePorNome(Laboratorio $laboratorio){
 		$nome = $laboratorio->getNome();
 		$sql = "SELECT * FROM laboratorio WHERE nome_laboratorio = '$nome'";
@@ -175,24 +248,84 @@ class UsuarioDAO extends DAO {
 		}
 		return false;
 	}
-	public function adicionaAdministrador(Usuario $usuario, Laboratorio $laboratorio){
-		$novoNivel = Sessao::NIVEL_ADMIN;
-		$idUsuario = $usuario->getId();
-		$idLaboratorio = $laboratorio->getId();
+	/**
+	 * Passe o usuario com id da base externa. 
+	 * @param Usuario $usuario
+	 */
+	public function alteraNivelDeAcesso(Usuario $usuario){
 		
-		$sqlUpdate = "UPDATE usuario set nivel_acesso = $novoNivel WHERE id_usuario = $idUsuario";
-		$sqlInsert = "INSERT into administrador (id_usuario, id_laboratorio) VALUES($idUsuario, $idLaboratorio)";
-		$this->getConexao()->beginTransaction();
-		if($this->getConexao()->query($sqlUpdate)){
-			if($this->getConexao()->query($sqlInsert)){
-				$this->getConexao()->commit();
-				return true;
-			}
-		}
-		$this->getConexao()->rollBack();
-		return false;
+		$idBaseExterna = $usuario->getIdBaseExterna();
+		$novoNivel = $usuario->getNivelAcesso();
+		$update = "UPDATE usuario set usua_nivel = $novoNivel WHERE id_base_externa = $idBaseExterna";
+		return $this->getConexao()->exec($update);
+		
 		
 	}
+	
+// 	function atualizaVinculo(...$vai) {
+		
+// 		// 			$request = \Slim\Slim::getInstance()->request();
+// 		// 			$dados = json_decode($request->getBody());
+		
+// 		$cartao = new Cartao();
+// 		$cartao->setId(50);
+		
+// 		$usuario = new Usuario();
+// 		$usuario->setId(2);
+		
+// 		$vinculo = new Vinculo();
+// 		$vinculo->setAvulso(true);
+// 		$vinculo->setInicioValidade("2016-09-16 15:00:00");
+// 		$vinculo->setFinalValidade("2016-09-16 15:00:00");
+// 		$vinculo->setDescricao("Padrão");
+// 		$vinculo->setRefeicoesRestantes(1);
+// 		$vinculo->setCartao($cartao);
+// 		$vinculo->setResponsavel($usuario);
+// 		$vinculo->setId(70);
+		
+// 		$avulso = $vinculo->isAvulso();
+// 		$inicioValidade = $vinculo->getInicioValidade();
+// 		$finalValidade = $vinculo->getFinalValidade();
+// 		$descricao = $vinculo->getDescricao();
+// 		$refeicoes = $vinculo->getRefeicoesRestantes();
+// 		$cartaoId = $vinculo->getCartao()->getId();
+// 		$responsavel = $vinculo->getResponsavel()->getId();
+// 		$vinculoId = $vinculo->getId();
+		
+// 		$sql = "UPDATE vinculo SET vinc_avulso = :avulso, cart_id = :cartao, vinc_descricao = :descricao, 
+// 				vinc_fim = :fim, vinc_inicio = :inicio, vinc_refeicoes = :refeicoes, usua_id = :usuario WHERE vinc_id = :id";
+// 		// $sql = "UPDATE vinculo SET vinc_avulso=:avulso, vinc_inicio=:inicio, vinc_fim=:fim, vinc_descricao=:descricao, vinc_refeicoes=:refeicoes, cart_id=:cartao, usua_id=:usuario WHERE vinc_id=:id;";
+// 		//$sql = "UPDATE vinculo SET vinc_avulso = false, cart_id = 50, vinc_descricao = 'Padrão', vinc_fim = '2016-09-16 15:00:00', vinc_inicio = '2016-09-16 15:00:00', vinc_refeicoes = 1, usua_id = 2 WHERE vinc_id = 70;";
+	
+// 		echo $sql;
+		
+// // 		echo $dados->vinc_inicio;
+// // 		echo $dados->vinc_fim;
+	
+// // 		echo $stmt->bindParam("inicio",$dados->vinc_inicio);
+// // 		echo $stmt->bindParam("fim",$dados->vinc_fim);
+		
+// 		$dao = new DAO();
+// 		try {
+// 			$db = $dao->getConexao();
+// 			$stmt = $db->prepare($sql);
+// 			$stmt->bindParam(":avulso",$avulso, PDO::PARAM_BOOL);
+// 			$stmt->bindParam(":inicio",$inicioValidade, PDO::PARAM_STR);
+// 			$stmt->bindParam(":fim",$finalValidade, PDO::PARAM_STR);
+// 			$stmt->bindParam(":descricao",$descricao, PDO::PARAM_STR);
+// 			$stmt->bindParam(":refeicoes",$refeicoes, PDO::PARAM_INT);
+// 			$stmt->bindParam(":cartao",$cartaoId, PDO::PARAM_INT);
+// 			$stmt->bindParam(":usuario",$responsavel, PDO::PARAM_INT);
+// 			$stmt->bindParam(":id",$vinculoId, PDO::PARAM_INT);
+// 			$stmt->execute();
+	
+// // 			echo $db;
+	
+// // 			$db = null;
+// 		} catch(PDOException $e) {
+// 			echo '{"erro":{"text":'. $e->getMessage() .'}}';
+// 		}
+// 	}
 	
 }
 

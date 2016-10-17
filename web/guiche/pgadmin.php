@@ -26,10 +26,6 @@ if (isset ( $_GET ["sair"] )) {
 	header ( "Location:./index.php" );
 }
 
-if($sessao->getNivelAcesso() != Sessao::NIVEL_SUPER)
-	exit(0);
-
-
 $dao = new DAO();
 
 $sql = "SELECT schemaname AS esquema, tablename AS tabela, tableowner AS dono
@@ -62,7 +58,8 @@ foreach($result as $linha){
 	$n = 100;
 	
 	echo '<br>'.$n.' primeiros dados<br>';
-	$sqlPrimeirosDados = "SELECT * FROM $nomeDaTabela ORDER BY 1 ASC LIMIT $n";
+// 	$sqlPrimeirosDados = "SELECT * FROM $nomeDaTabela LIMIT $n";
+	$sqlPrimeirosDados = "SELECT * FROM $nomeDaTabela ORDER BY 1 DESC LIMIT $n";
 	$resultPrimeirosDados = $dao->getConexao()->query($sqlPrimeirosDados);
 	$i = 0;
 	echo '<table border=1>';

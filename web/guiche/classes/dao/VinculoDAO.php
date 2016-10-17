@@ -56,6 +56,8 @@ class VinculoDAO extends DAO {
 			$vinculo->setInicioValidade($linha ['vinc_inicio']);
 			$vinculo->setFinalValidade($linha['vinc_fim']);
 			$vinculo->setAvulso($linha['vinc_avulso']);
+			$vinculo->setDescricao($linha['vinc_descricao']);
+			
 			$lista[] = $vinculo;
 						
 
@@ -176,7 +178,6 @@ class VinculoDAO extends DAO {
 		return false;
 		
 	}
-	
 	public function adicionarCreditos(Vinculo $vinculo, $valorVendido, $idUsuario){
 		$novoValor = $vinculo->getCartao()->getCreditos();
 		$idCartao = $vinculo->getCartao()->getId();
@@ -187,7 +188,6 @@ class VinculoDAO extends DAO {
 		
 		$sql2 = "INSERT into transacao(tran_valor, tran_descricao, tran_data, usua_id) 
 				VALUES($valorVendido, 'Venda de Créditos','$dataTimeAtual', $idUsuario)";
-		
 		$this->getConexao()->beginTransaction();
 		
 		
@@ -215,8 +215,13 @@ class VinculoDAO extends DAO {
 		LEFT JOIN tipo ON vinculo_tipo.tipo_id = tipo.tipo_id
 		WHERE vinculo.vinc_id = $idVinculo";
 		$result = $this->getConexao ()->query ($sql);
-		foreach($result as $linha){		
+		foreach($result as $linha){
+
+			
 			$vinculo->getResponsavel()->setNome($linha['usua_nome']);
+			$vinculo->getResponsavel()->setId($linha['usua_id']);
+			
+				
 			$vinculo->getResponsavel()->setIdBaseExterna($linha['id_base_externa']);
 			$vinculo->getCartao()->setId($linha['cart_id']);
 			$vinculo->getCartao()->getTipo()->setNome($linha ['tipo_nome']);
@@ -224,6 +229,7 @@ class VinculoDAO extends DAO {
 			$vinculo->getCartao()->setCreditos($linha['cart_creditos']);
 			$vinculo->setInicioValidade($linha ['vinc_inicio']);
 			$vinculo->setFinalValidade($linha['vinc_fim']);
+			$vinculo->getResponsavel()->setNivelAcesso($linha['usua_nivel']);
 			$vinculo->setQuantidadeDeAlimentosPorTurno($linha['vinc_refeicoes']);
 			$vinculo->setAvulso($linha['vinc_avulso']);
 			return $vinculo;
@@ -241,6 +247,7 @@ class VinculoDAO extends DAO {
 		foreach($result as $linha){
 			if(isset($linha['isen_id'])){
 				$vinculo->setIsencao(new Isencao());
+				$vinculo->setIsento(true);
 				$vinculo->getIsencao()->setId($linha['isen_id']);
 				$vinculo->getIsencao()->setDataDeInicio($linha['isen_inicio']);
 				$vinculo->getIsencao()->setDataFinal($linha['isen_fim']);
@@ -281,7 +288,7 @@ class VinculoDAO extends DAO {
 	}
 	
 	public function retornaVinculoValidoDeCartao(Cartao $cartao){
-		$lista = array();
+
 		$idCartao = $cartao->getId();
 		$dataTimeAtual = date ( "Y-m-d G:i:s" );
 		$sql =  "SELECT * FROM usuario INNER JOIN vinculo
@@ -390,7 +397,7 @@ class VinculoDAO extends DAO {
 		ON vinculo.usua_id = usuario.usua_id
 		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
 		LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id WHERE (usuario.id_base_externa = $idBaseExterna)
-		AND ('$dataTimeAtual' BETWEEN vinc_inicio AND vinc_fim) ";
+		AND ('$dataTimeAtual' BETWEEN vinc_inicio AND vinc_fim) AND vinc_avulso = FALSE";
 // 		echo $sql;
 		$result = $this->getConexao ()->query ($sql );
 		foreach($result as $linha){
@@ -400,18 +407,22 @@ class VinculoDAO extends DAO {
 		return false;
 		
 	}
+	
 	public function adicionaVinculo(Vinculo $vinculo) {
+
 		$inicio = $vinculo->getInicioValidade();
 		$usuarioBaseExterna = $vinculo->getResponsavel()->getIdBaseExterna();
 		$numeroCartao = $vinculo->getCartao()->getNumero();
 		$dataDeValidade = $vinculo->getFinalValidade();
 		$tipoCartao = $vinculo->getCartao()->getTipo()->getId();
 		$this->verificarUsuario($vinculo->getResponsavel());
-		if($vinculo->invalidoParaAdicionar())
+		if($vinculo->invalidoParaAdicionar()){	
 			return false;
-		
-		if(!$vinculo->getResponsavel()->getId())
+		}
+		if(!$vinculo->getResponsavel()->getId()){
+			//echo 'Veio daqui oh';
 			return false;
+		}
 		
 		$idBaseLocal = $vinculo->getResponsavel()->getId();
 		$this->verificaCartao($vinculo->getCartao());
@@ -501,7 +512,7 @@ class VinculoDAO extends DAO {
 	}
 	/**
 	 * Vamos pegar da base exter a ecopiar para a base local.
-	 * Se Nem existir na base externa, � o usuario frescando. Preciso dar nem resposta pra ele. Aborto tudo logo.
+	 * Se Nem existir na base externa, É o usuario frescando. Preciso dar nem resposta pra ele. Aborto tudo logo.
 	 * Fa�amos um insert aqui.
 	 * Apos esse insert iremos pegar o id inserido na base e retornalo. 
 	 * Retorna 0, deu nada certo. Essa parada acaba aqui. 
@@ -515,22 +526,31 @@ class VinculoDAO extends DAO {
 		$result = $this->getConexao()->query("SELECT id_base_externa, usua_id FROM usuario WHERE id_base_externa = $idBaseExterna");
 		foreach ($result as $linha){
 			$usuario->setId($linha['usua_id']);
+			
 			return $linha['usua_id'];
 		}
 		$daoSistemasComum = new DAO(null, DAO::TIPO_PG_SISTEMAS_COMUM);
 		$result2 = 	$daoSistemasComum->getConexao()->query("SELECT * FROM vw_usuarios_autenticacao_catraca WHERE id_usuario = $idBaseExterna");
 		foreach($result2 as $linha){
+			
 			$nivel = Sessao::NIVEL_COMUM;
 			$nome = $linha['nome'];
+			$nome = preg_replace ('/[^a-zA-Z0-9\s]/', '', $nome);
+			$nome = strtoupper ( $nome );
 			$email = $linha['email'];
 			$login = $linha['login'];
 			$senha = $linha['senha'];
 			$idBaseExterna = $linha['id_usuario'];
-			if($this->getConexao()->exec("INSERT into usuario(usua_login,usua_senha, usua_nome,usua_email, usua_nivel, id_base_externa)
-					VALUES	('$login', '$senha', '$nome','$email', $nivel, $idBaseExterna)"))
+			$sqlInserir = "INSERT into usuario(usua_login,usua_senha, usua_nome,usua_email, usua_nivel, id_base_externa)
+					VALUES	('$login', '$senha', '$nome','$email', $nivel, $idBaseExterna)";
+				
+			//echo $sqlInserir;
+			if($this->getConexao()->exec($sqlInserir))
 			{
+				
 				foreach($this->getConexao()->query("SELECT * FROM usuario WHERE id_base_externa = $idBaseExterna") as $linha3){
 					$usuario->setId($linha3['usua_id']);
+					
 					return $linha3['usua_id'];
 				}
 			}

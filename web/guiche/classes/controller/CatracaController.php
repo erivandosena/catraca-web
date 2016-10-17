@@ -2,13 +2,16 @@
 class CatracaController {
 	private $view;
 	public static function main($nivelDeAcesso) {
-		switch ($nivelDeAcesso) {
-			case Sessao::NIVEL_SUPER :
-				
+		switch ($nivelDeAcesso){
+			case Sessao::NIVEL_SUPER:
 				$controller = new CatracaController ();
 				$controller->controlar ();
 				break;
-			default :
+			case Sessao::NIVEL_ADMIN:
+				$controller = new CatracaController ();
+				$controller->controlar ();
+				break;
+			default:
 				UsuarioController::main ( $nivelDeAcesso );
 				break;
 		}

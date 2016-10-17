@@ -3,88 +3,81 @@
 class RelatorioControllerGuiche{
 	
 	public static function main($nivel){
-		
-		$relatorio = new RelatorioControllerGuiche();
-		$relatorio->relatorioGuiche();
-		
+		switch ($nivel) {
+			case Sessao::NIVEL_SUPER :
+				$relatorio = new RelatorioControllerGuiche();
+				$relatorio->relatorioGuiche();
+				break;
+			case Sessao::NIVEL_ADMIN :
+				$relatorio = new RelatorioControllerGuiche();
+				$relatorio->relatorioGuiche();
+								
+				break;
+			default :
+				UsuarioController::main ( $nivel );
+				break;
+		}		
 	}
 	
 	public function relatorioGuiche(){
 		
 		$dao = new DAO();
+		$view = new RelatorioViewGuiche();
 		$usuarioDao = new UsuarioDAO();
 		$usuario = new Usuario();
 		$relatorioGuiche = new RelatorioControllerGuiche();
-		
-		echo'	<div class="borda relatorio">
-					<form action="" method="post" class="formulario-organizado">
-						<label for="operador">
-							<object data="" type="" class="rotulo">Operador:</object>
-							<select name="operador" id="operador">';
-		
 		$sql = "SELECT * FROM usuario WHERE usua_nivel > 1";
-		$result =  $dao->getConexao()->query($sql);		
-		foreach ($result as $linha){
+		$listaOperador =  $dao->getConexao()->query($sql);
+		$view->formPesquisar($listaOperador);
 			
-		echo'
-						<option value="'.$linha['usua_id'].'">'.ucwords(strtolower(htmlentities($linha['usua_nome']))).'</option>';
-		}
-			
-		echo'			<option value="">Todos os Operadores</option>	
-						</select>
-						</label><br>
-						<label for="data_inicio">
-							Data Inicio: <input type="date" name="data_inicio">
-						</label><br>
-						<label for="data_fim">
-							Data Inicio: <input type="date" name="data_fim">
-						</label><br>
-						<input type="submit" value="Gerar" name="gerar">		
-				
-					</form>
-				</div>';		
 		
-		if (isset($_POST['gerar'])){
-			
+		if (isset($_POST['gerar'])){		
+		
 		$dataInicio = date ($_POST['data_inicio']);
 		$dataFim = date ($_POST['data_fim']);
 		$idDoUsuario = ($_POST['operador']);		
-		
-			
+		$horaIni = $_POST['hora_inicio'];
+		$horaFim = $_POST['hora_fim'];
+				
 		if($dataInicio == null){
 			$dataInicio = date('Y-m-d');
 		}
 		if($dataFim == null){
 			$dataFim = date('Y-m-d');
 		}
-			
+		if ($horaIni == null){
+			$horaIni = ('00:00:00');	
+		}		
+		if ($horaFim == null){
+			$horaFim = ('23:59:59');
+		}
+		
 		$operador = "";			
 		if($idDoUsuario != null){
 			$operador = "AND usuario.usua_id = $idDoUsuario";
 		}
 			
-		echo'	<div class="borda relatorio">
+		echo '	<div class="doze colunas borda relatorio">
 				
-				<div class="doze colunas">
-					<div class="tres colunas">
-						<a href="http://www.dti.unilab.edu.br">
-							<img class="imagem-responsiva no-centro" src="img/logo-dti-preto.png" alt=""/>
-						</a>
-					</div>
-					<div class="seis colunas">
-						<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>
-					</div>
-					<div class="tres colunas">
-						<a href="http://www.unilab.edu.br"><br>
-						<img class="imagem-responsiva no-centro" src="img/logo-unilab.png" alt="">
-						</a>
-					</div>
-				</div>
+					<div class="doze colunas">						
 				
-				<hr class="um">
-				<h3 class="centralizado">Relatório de Guichê</h3>				
-				<hr class="um">	
-				<table class="tabela-relatorio">
+						<div class="duas colunas">
+							<a href="http://www.unilab.edu.br">
+								<img class="imagem-responsiva centralizada" src="img/logo-unilab.png" alt="">
+							</a>
+						</div>
+						<div class="oito colunas">
+							<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>				
+						</div>
+						<div class="duas colunas">
+							<a href="http://www.unilab.edu.br">
+								<img class="imagem-responsiva centralizada" src="img/pp.jpg" alt="">
+							</a>
+						</div>		
+						<hr class="um"><br>
+					</div>		
+				
+					<table class="tabela-relatorio">
 						<thead>
 							<tr>
 								<th>Data</th>
@@ -96,8 +89,8 @@ class RelatorioControllerGuiche{
 						</thead>
 						<tbody>';		
 			
-		$inicio = $dataInicio . ' 00:00:00';
-		$fim = $dataFim . ' 23:59:59';
+		$inicio = $dataInicio.' '.$horaIni;
+		$fim = $dataFim.' '.$horaFim;
 			
 		$valorTotal = 0;
 		$sqlTran = "SELECT * FROM transacao as trans 
@@ -106,7 +99,7 @@ class RelatorioControllerGuiche{
 					WHERE (tran_data BETWEEN '$inicio' AND '$fim') $operador ";
 		$result =  $dao->getConexao()->query($sqlTran);			
 		foreach ($result as $dado){			
-			echo'	<tr>
+			echo '	<tr>
 						<td>'.date("d/m/Y",strtotime($dado['tran_data'])).'</td>
 						<td>'.date('H:i:s',strtotime($dado['tran_data'])).'</td>						
 						<td>'.$dado['tran_descricao'].'</td>
@@ -124,7 +117,7 @@ class RelatorioControllerGuiche{
 			}
 		}
 			
-				echo'	<tr id="soma">
+				echo '	<tr id="soma">
 							<th>Somatório</th>							
 							<td> - </td>
 							<td> - </td>
@@ -133,14 +126,19 @@ class RelatorioControllerGuiche{
 						</tr>					
 					</tbody>
 				</table>
-				<div class="relatorio-rodape">
+				<div class="doze colunas relatorio-rodape">
 					<span>CATRACA | Copyright © 2015 - DTI</span>
-					<span>Relatório Emitido em: '.$date = date('d/m/Y H:i:s').'</span>';
-// echo '			<a class="botao icone-printer"> Imprimir</a>';
-		echo '
-				</div>	
+					<span>Relatório Emitido em: '.$date = date('d-m-Y H:i:s').'</span>';
+		
+ 		echo '<a class="botao icone-printer" href="?pagina=relatorio_guiche&gerarpdf=1"> Imprimir</a>	
+ 				</div>
 			</div>';
-		}	
+		
+ 					
+		
+		}
+		
+		
 	}
 	
 	public function retornaUsuario(){
