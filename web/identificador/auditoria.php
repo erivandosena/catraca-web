@@ -21,7 +21,7 @@ function __autoload($classe) {
 
 
 
-
+$sessao= new Sessao();
 if(!($sessao->getNivelAcesso() == Sessao::NIVEL_SUPER || $sessao->getNivelAcesso() == Sessao::NIVEL_ADMIN)){
 	echo "Nivel de acesso Não permitido: ".$sessao->getNivelAcesso();
 	exit(0);
@@ -29,4 +29,37 @@ if(!($sessao->getNivelAcesso() == Sessao::NIVEL_SUPER || $sessao->getNivelAcesso
 
 
 
+
+
+
+
+$dao = new DAO();
+
+
+
+
+
+
+$sql = "SELECT * FROM auditoria
+	INNER JOIN usuario ON auditoria.usua_id = usuario.usua_id
+	 ORDER BY audi_id DESC LIMIT 500";
+$result = $dao->getConexao()->query($sql);
+foreach($result as $linha){
+
+	echo $linha['audi_id'].' - '.$linha['usua_nome'].' - '.$linha['audi_pagina'].' - '.date("d/m/Y H:i:s", strtotime($linha['audi_data'])).'<br>';
+	echo '<hr>';
+
+}
+
+echo '<h1>Cartoes avulsos</h1>';
+echo '<hr>';
+$sql = "SELECT * FROM cartao INNER JOIN vinculo ON vinculo
+";
+$result = $dao->getConexao()->query($sql);
+foreach($result as $linha){
+
+	echo $linha['audi_id'].' - '.$linha['usua_nome'].' - '.$linha['audi_pagina'].' - '.date("d/m/Y H:i:s", strtotime($linha['audi_data'])).'<br>';
+	echo '<hr>';
+
+}
 
