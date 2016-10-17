@@ -24,12 +24,24 @@ function __autoload($classe) {
 
 class Outros{
 	private $dao;
-	
-	public function OUtros(){
+	public function start(){
+		echo '
+		Fiscaliza&ccedil;&atilde;o
+		<form action="" method="get">
+			
+			<input type="date" name="data" />
+			<input type="submit"/>
+		</form>';
+		if(isset($_GET['data']))
+			$this->mostrarFiscal($_GET['data']);
+	}
+	public function mostrarFiscal($data){
+		$time = strtotime($data);
+		echo 'Dados do dia '.date("d/m/Y", $time);
 		$this->dao = new DAO();
 		
-		$hora1 = '2016-10-01 08:00:00';
-		$hora2 = '2016-10-01 15:00:00';
+		$hora1 = date('Y-m-d', $time).' 08:00:00';
+		$hora2 = date('Y-m-d', $time).' 15:00:00';
 		
 		$registroAlmoco = $this->geraNumeroDeRegistros($hora1, $hora2);
 		$transacaoAlmoco = $this->geraNumeroDeTransacoes($hora1, $hora2);
@@ -38,8 +50,8 @@ class Outros{
 
 
 				
-		$hora1 = '2016-09-30 15:00:00';
-		$hora2 = '2016-09-30 20:00:00';
+		$hora1 = date('Y-m-d', $time).' 15:00:00';
+		$hora2 = date('Y-m-d', $time).' 22:00:00';
 		
 		$registroJantar = $this->geraNumeroDeRegistros($hora1, $hora2);
 		$transacaoJantar = $this->geraNumeroDeTransacoes($hora1, $hora2);
@@ -70,6 +82,11 @@ class Outros{
 				<tr><td>Transacoes Guiche: '.$dinheiroJantar .'</td></tr>
 			</table>';
 
+
+	}
+	public function Outros(){
+		$this->start();
+		
 
 	}
 	public function geraNumeroDeRegistros($data1, $data2){
