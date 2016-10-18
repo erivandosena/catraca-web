@@ -146,72 +146,96 @@ class GuicheController{
 					
 					$valor = $_GET['valor'];
 					
-					if ($valor<0){
+					if ($valor < 0){
 						$this->view->mensagem("erro", "Deseja estornar R\$ $valor?");
+						$estorno = true;
 					}else{
 						$this->view->mensagem("ajuda", "Deseja inserir R\$ $valor?");
-					}
+					}				
 					
-					echo '	<form class="formulario" method="post">							
-								<input type="submit" value="Confirmar" name="confirmar" autofocus/>
-							</form>';					
-					
-					if(isset($_POST['confirmar'])){						
-						$valorAnt = $vinculo->getCartao()->getCreditos();
-						$idCartao = $vinculo->getCartao()->getId();					
-						$cartao->setCreditos($_GET['valor']);
-						$valorVendido = $cartao->getCreditos();					
-						$idUsuario = $usuario->getId();						
-						$dataTimeAtual = date ( "Y-m-d G:i:s" );
-						$novoValor = $valorAnt + $valorVendido;					
-						$tipoTransacao = 'Venda de Créditos';										
-						$tipo = "sucesso";
-						$mensagem = "Valor inserido com sucesso.";
+					if ($estorno){
+						$usuarioDao = new UsuarioDAO();
+						echo '	<form class="formulario" method="post">
+									<label>
+										Por Favor digite seu Usuário e Senha para confirmar:
+										<input type="text" placeholder="Usuario Sig" name="login">
+										<input type="text" placeholder="Senha Sig" name="senha">
+									</label>
+									<input type="submit" value="Confirmar" name="estornar">
+								</form>';
 						
-						if ($valorVendido == 0){
-							$this->view->mensagem("erro", "Valor Inválido!");
-							echo '<meta http-equiv="refresh" content="2; url=.\?pagina=guiche">';
-							return ;
-						}
-						
-						if($valorVendido < 0){							
-							if ($valorAnt <= 0){								
-								$this->view->mensagem("erro", "Saldo Insuficiente para realizar estorno!");
-								echo '<meta http-equiv="refresh" content="2; url=.\?pagina=guiche">';
-								return;								
-							}else if ($novoValor < 0){
-								$this->view->mensagem("erro", "Saldo Insuficiente para realizar estorno!");
-								echo '<meta http-equiv="refresh" content="2; url=.\?pagina=guiche">';
-								return;								
-							}else{
+						if (isset($_POST['estornar'])){
+							$usuario->setLogin($login = $_POST['login']);
+							$usuario->setSenha($senha = $_POST['senha']);
+							if ($usuarioDao->autentica($usuario)){
 								$tipo = "ajuda";
 								$mensagem = "Valor estornado com sucesso!";
 								$tipoTransacao = 'Estorno de valores';
+							}else{
+								$this->view->mensagem("erro", "Usuario ou Senha Inválidos!");
+								echo '<meta http-equiv="refresh" content="2; url=.\?pagina=guiche">';
+								return;
 							}
 						}
+					}else{
+						echo '	<form class="formulario" method="post">
+								<input type="submit" value="Confirmar" name="confirmar" autofocus/>
+								</form>';						
+						if(isset($_POST['confirmar'])){
+							$valorAnt = $vinculo->getCartao()->getCreditos();
+							$idCartao = $vinculo->getCartao()->getId();
+							$cartao->setCreditos($_GET['valor']);
+							$valorVendido = $cartao->getCreditos();
+							$idUsuario = $usuario->getId();
+							$dataTimeAtual = date ( "Y-m-d G:i:s" );
+							$novoValor = $valorAnt + $valorVendido;
+							$tipoTransacao = 'Venda de Créditos';
+							$tipo = "sucesso";
+							$mensagem = "Valor inserido com sucesso.";
 						
-						$dao->getConexao()->beginTransaction();
+							if ($valorVendido == 0){
+								$this->view->mensagem("erro", "Valor Inválido!");
+								echo '<meta http-equiv="refresh" content="2; url=.\?pagina=guiche">';
+								return ;
+							}
+						
+							if($valorVendido < 0){
+								if ($valorAnt <= 0){
+									$this->view->mensagem("erro", "Saldo Insuficiente para realizar estorno!");
+									echo '<meta http-equiv="refresh" content="2; url=.\?pagina=guiche">';
+									return;
+								}else if ($novoValor < 0){
+									$this->view->mensagem("erro", "Saldo Insuficiente para realizar estorno!");
+									echo '<meta http-equiv="refresh" content="2; url=.\?pagina=guiche">';
+									return;
+								}else{
+										
+								}
+							}
+					}				
+						
+// 						$dao->getConexao()->beginTransaction();
 							
-						$sql = "UPDATE cartao set cart_creditos = $novoValor WHERE cart_id = $idCartao";
+// 						$sql = "UPDATE cartao set cart_creditos = $novoValor WHERE cart_id = $idCartao";
 							
-						$sql2 = "INSERT into transacao(tran_valor, tran_descricao, tran_data, usua_id,usua_id1 )
-						VALUES($valorVendido, '$tipoTransacao' ,'$dataTimeAtual', $idDoUsuario, $idDoUsuario)";
+// 						$sql2 = "INSERT into transacao(tran_valor, tran_descricao, tran_data, usua_id,usua_id1 )
+// 						VALUES($valorVendido, '$tipoTransacao' ,'$dataTimeAtual', $idDoUsuario, $idDoUsuario)";
 							
-						//echo $sql;
-						if(!$dao->getConexao()->exec($sql)){
-							$dao->getConexao()->rollBack();
-							$this->view->mensagem('erro','Erro ao inserir os creditos.');
-							return false;
-						}
-						if(!$dao->getConexao()->exec($sql2)){
-							$dao->getConexao()->rollBack();
-							$this->view->mensagem('erro','Erro ao inserir os creditos.');
-							return false;
-						}
+// 						//echo $sql;
+// 						if(!$dao->getConexao()->exec($sql)){
+// 							$dao->getConexao()->rollBack();
+// 							$this->view->mensagem('erro','Erro ao inserir os creditos.');
+// 							return false;
+// 						}
+// 						if(!$dao->getConexao()->exec($sql2)){
+// 							$dao->getConexao()->rollBack();
+// 							$this->view->mensagem('erro','Erro ao inserir os creditos.');
+// 							return false;
+// 						}
 							
-						$dao->getConexao()->commit();
+// 						$dao->getConexao()->commit();
 						$this->view->mensagem($tipo,$mensagem);
-						echo '<meta http-equiv="refresh" content="2; url=.\?pagina=guiche">';
+//						echo '<meta http-equiv="refresh" content="2; url=.\?pagina=guiche">';
 						}						
 					}				
 				}				

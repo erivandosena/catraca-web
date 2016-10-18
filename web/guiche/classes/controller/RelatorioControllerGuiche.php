@@ -28,29 +28,29 @@ class RelatorioControllerGuiche{
 		$relatorioGuiche = new RelatorioControllerGuiche();
 		$sql = "SELECT * FROM usuario WHERE usua_nivel > 1";
 		$listaOperador =  $dao->getConexao()->query($sql);
-		$view->formPesquisar($listaOperador);
-			
+		$view->formPesquisar($listaOperador);			
 		
-		if (isset($_POST['gerar'])){		
+		if (isset($_POST['gerar'])){
 		
-		$dataInicio = date ($_POST['data_inicio']);
-		$dataFim = date ($_POST['data_fim']);
-		$idDoUsuario = ($_POST['operador']);		
-		$horaIni = $_POST['hora_inicio'];
-		$horaFim = $_POST['hora_fim'];
+		$operacao = $_POST['operacoes'];
+		$idDoUsuario = ($_POST['operador']);
+		$dataInicio = $_POST['data_inicio'];				
+		$dataFim = $_POST['data_fim'];		
+		$ftrOperacao = "";
 				
+		if ($operacao=='Venda'){
+			$ftrOperacao = "AND trans.tran_descricao = 'Venda de Créditos'";
+		}else if($operacao =='Estorno'){
+			$ftrOperacao = "AND trans.tran_descricao = 'Estorno de valores'";
+		}
+		
 		if($dataInicio == null){
-			$dataInicio = date('Y-m-d');
+			$dataInicio = date('Y-m-d 00:00:00');
 		}
+		
 		if($dataFim == null){
-			$dataFim = date('Y-m-d');
-		}
-		if ($horaIni == null){
-			$horaIni = ('00:00:00');	
+			$dataFim = date('Y-m-d 23:59:59');
 		}		
-		if ($horaFim == null){
-			$horaFim = ('23:59:59');
-		}
 		
 		$operador = "";			
 		if($idDoUsuario != null){
@@ -67,11 +67,11 @@ class RelatorioControllerGuiche{
 							</a>
 						</div>
 						<div class="oito colunas">
-							<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>				
+							<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>		
 						</div>
 						<div class="duas colunas">
 							<a href="http://www.unilab.edu.br">
-								<img class="imagem-responsiva centralizada" src="img/pp.jpg" alt="">
+								<img class="imagem-responsiva centralizada" src="img/pp.jpg" alt=""><br>
 							</a>
 						</div>		
 						<hr class="um"><br>
@@ -89,14 +89,14 @@ class RelatorioControllerGuiche{
 						</thead>
 						<tbody>';		
 			
-		$inicio = $dataInicio.' '.$horaIni;
-		$fim = $dataFim.' '.$horaFim;
+		$inicio = $dataInicio;
+		$fim = $dataFim;
 			
 		$valorTotal = 0;
-		$sqlTran = "SELECT * FROM transacao as trans 
+		$sqlTran = "SELECT * FROM transacao as trans
 					LEFT JOIN usuario as usuario
 					on trans.usua_id = usuario.usua_id 
-					WHERE (tran_data BETWEEN '$inicio' AND '$fim') $operador ";
+					WHERE (tran_data BETWEEN '$inicio' AND '$fim') $operador $ftrOperacao";
 		$result =  $dao->getConexao()->query($sqlTran);			
 		foreach ($result as $dado){			
 			echo '	<tr>
@@ -104,7 +104,7 @@ class RelatorioControllerGuiche{
 						<td>'.date('H:i:s',strtotime($dado['tran_data'])).'</td>						
 						<td>'.$dado['tran_descricao'].'</td>
 						<td>'.$dado['usua_nome'].'</td>	
-						<td>R$ '.$dado['tran_valor'].'</td>
+						<td>R$ '.number_format($dado['tran_valor'], 2,',','.').'</td>
 					</tr>';				
 		}
 			
@@ -122,15 +122,13 @@ class RelatorioControllerGuiche{
 							<td> - </td>
 							<td> - </td>
 							<td> - </td>
-							<td>R$ '.number_format($valorTotal, 2).'</td>
+							<td>R$ '.number_format($valorTotal, 2,',','.').'</td>
 						</tr>					
 					</tbody>
 				</table>
 				<div class="doze colunas relatorio-rodape">
 					<span>CATRACA | Copyright © 2015 - DTI</span>
-					<span>Relatório Emitido em: '.$date = date('d-m-Y H:i:s').'</span>';
-		
- 		echo '<a class="botao icone-printer" href="?pagina=relatorio_guiche&gerarpdf=1"> Imprimir</a>	
+					<span>Relatório Emitido em: '.$date = date('d-m-Y H:i:s').'</span>	
  				</div>
 			</div>';
 		
