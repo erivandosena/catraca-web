@@ -145,7 +145,7 @@ class RelatorioController {
 				INNER JOIN catraca ON registro.catr_id = catraca.catr_id
 				INNER JOIN catraca_unidade ON catraca.catr_id = catraca_unidade.catr_id
 				WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') AND vinculo_tipo.tipo_id =  $tipoId
-				$strFiltroUnidade $strCatraca;";
+				$strFiltroUnidade";
 				
 				foreach ( $dao->getConexao ()->query ( $sql ) as $linha ) {
 					$valor = $linha ['valor'];
@@ -181,7 +181,7 @@ class RelatorioController {
 					INNER JOIN catraca ON registro.catr_id = catraca.catr_id
 					INNER JOIN catraca_unidade ON catraca.catr_id = catraca_unidade.catr_id
 					WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') AND vinculo_tipo.tipo_id =  $tipoId
-					$strFiltroUnidade $strCatraca;";
+					$strFiltroUnidade;";
 					foreach ( $dao->getConexao ()->query ( $sql ) as $linha ) {
 						$valor = $linha ['valor'];
 					}

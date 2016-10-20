@@ -20,6 +20,8 @@ function __autoload($classe) {
 		include_once 'classes/util/' . $classe . '.php';
 	if (file_exists ( 'classes/view/' . $classe . '.php' ))
 		include_once 'classes/view/' . $classe . '.php';
+	if (file_exists ('classes/mpdf60/'.$classe.'.php'))
+		include_once 'classes/mpdf60/'.$classe.'.php';
 }
 
 $sessao = new Sessao ();
@@ -55,6 +57,7 @@ if (isset ( $_GET ["sair"] )) {
 <script type="text/javascript" src="js/atualiza.js"></script>
 <script type="text/javascript" src="js/relogio.js"></script>
 <script type="text/javascript" src="js/combo.js"></script>
+<script type="text/javascript" src="js/modal.js"></script>
 
 </head>
 

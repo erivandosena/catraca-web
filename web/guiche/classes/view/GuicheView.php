@@ -26,7 +26,7 @@ class GuicheView{
 		$i = 1;
 		foreach ($listaDescricao as $linha){				
 			echo'								<tr>
-											        <td>'.$i.'</td>
+											        <td>'.$linha['tran_id'].'</td>
 											        <td>R$ '.$linha['tran_valor'].'</td>
 											        <td>'.$linha['tran_descricao'].'</td>
 											        <td>'.date("d/m/Y",strtotime($linha['tran_data'])).'</td>
@@ -68,7 +68,7 @@ class GuicheView{
 					<hr>
 					<h2>Troco: <output id="troco"></output></h2>
 					<input type="hidden" name="cartao" value="'.$_GET['cartao'].'" />					
-					<input type="submit" value="finalizar" class="botao b-sucesso" name="finalizar">
+					<input type="submit" value="Finalizar" class="botao b-sucesso" name="finalizar" >
 				</form>';
 		
 	}
@@ -87,7 +87,8 @@ class GuicheView{
 				    	<div class="icone icone-notification ix16"></div>
 				    	<div class="titulo-alerta">Aten&ccedil&atildeo</div>
 				    	<div class="subtitulo-alerta">'.$texto.'</div>
-				</div>';
+				</div>
+				';
 			
 	}
 }

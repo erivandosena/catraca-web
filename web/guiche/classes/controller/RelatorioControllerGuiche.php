@@ -30,12 +30,12 @@ class RelatorioControllerGuiche{
 		$listaOperador =  $dao->getConexao()->query($sql);
 		$view->formPesquisar($listaOperador);			
 		
-		if (isset($_POST['gerar'])){
+		if (isset($_GET['gerar'])){
 		
-		$operacao = $_POST['operacoes'];
-		$idDoUsuario = ($_POST['operador']);
-		$dataInicio = $_POST['data_inicio'];				
-		$dataFim = $_POST['data_fim'];		
+		$operacao = $_GET['operacoes'];
+		$idDoUsuario = ($_GET['operador']);
+		$dataInicio = $_GET['data_inicio'];				
+		$dataFim = $_GET['data_fim'];		
 		$ftrOperacao = "";
 				
 		if ($operacao=='Venda'){
@@ -74,8 +74,12 @@ class RelatorioControllerGuiche{
 								<img class="imagem-responsiva centralizada" src="img/pp.jpg" alt=""><br>
 							</a>
 						</div>		
+						<hr class="um">
+						<h2>Relatório Financeiro Guichê</h2>
 						<hr class="um"><br>
 					</div>		
+					
+					
 				
 					<table class="tabela-relatorio">
 						<thead>

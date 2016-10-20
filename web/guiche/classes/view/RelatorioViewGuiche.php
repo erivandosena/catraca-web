@@ -9,7 +9,8 @@ class RelatorioViewGuiche{
 		$data_fim = date ('Y-m-d') . 'T' . date ( '23:59' );
 		
 		echo'	<div class="doze colunas borda relatorio">
-					<form action="" method="post" class="formulario-organizado">
+					<form action="" method="" class="formulario-organizado">
+						<input type="hidden" name="pagina" value="relatorio_guiche">
 						<label for="operador">
 							<object data="" type="" class="rotulo">Operador:</object>
 							<select name="operador" id="operador">
