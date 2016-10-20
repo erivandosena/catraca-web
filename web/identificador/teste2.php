@@ -20,7 +20,16 @@ function __autoload($classe) {
 }
 
 
-$sessao = new Sessao ();
-$sessao->criaSessao(1, Sessao::NIVEL_COMUM, 'jefponte');
+
+$dao = new DAO();
+
+$result = $dao->getConexao()->query("select * FROM vinculo");
+
+foreach($result as $linha){
+
+	print_r($linha);
+	echo '<hr>';
+}
+
 
 ?>

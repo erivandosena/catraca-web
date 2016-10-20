@@ -149,8 +149,9 @@ class GuicheController{
 				 */
 				
 				if(isset($_POST['valor'])){
-					if(isset($_POST['finalizar'])){	
 					
+					if(isset($_POST['finalizar'])){	
+						
 						$valorAnt = $vinculo->getCartao()->getCreditos();
 						$idCartao = $vinculo->getCartao()->getId();					
 						$cartao->setCreditos($_POST['valor']);

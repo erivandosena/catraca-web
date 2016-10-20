@@ -515,7 +515,7 @@ class CartaoIsentoView {
 	
 	public function formAdicionarIsencao($idSelecionado){
 		
-		$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'H:00:01' );
+		$daqui3Meses = date ( 'Y-m-d', strtotime ( "+90 days" ) ) . 'T' . date ( 'H:00:01' );
 		$hoje = date ('Y-m-d') . 'T' . date ( 'H:00:01' );
 		
 		

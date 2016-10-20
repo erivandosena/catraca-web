@@ -158,7 +158,6 @@ class VinculoDAO extends DAO {
 		$inicio = $vinculo->getIsencao()->getDataDeInicio();
 		$fim = $vinculo->getIsencao()->getDataFinal();
 		if(!$vinculo->isActive()){
-			echo '1';
 			return false;
 		}
 		$tempoA = strtotime($vinculo->getIsencao()->getDataDeInicio());
