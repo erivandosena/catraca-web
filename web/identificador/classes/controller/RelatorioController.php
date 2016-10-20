@@ -1,4 +1,4 @@
-gu<?php
+<?php
 class RelatorioController {
 	private $view;
 	private $dao;
