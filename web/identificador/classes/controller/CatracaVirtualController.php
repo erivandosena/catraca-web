@@ -24,6 +24,10 @@ class CatracaVirtualController{
 				$gerador = new CatracaVirtualController();
 				$gerador->verificarSelecaoRU();
 				break;
+			case Sessao::NIVEL_POLIVALENTE:
+				$gerador = new CatracaVirtualController();
+				$gerador->verificarSelecaoRU();
+				break;
 			case Sessao::NIVEL_CATRACA_VIRTUAL:
 				$gerador = new CatracaVirtualController();
 				$gerador->verificarSelecaoRU();
@@ -86,7 +90,7 @@ class CatracaVirtualController{
 		$data = date ( "Y-m-d G:i:s" );
 		$selectTurno = "Select * FROM turno WHERE '$data' BETWEEN turno.turn_hora_inicio AND turno.turn_hora_fim";
 		$result = $this->dao->getConexao()->query($selectTurno);
-		$descricao = "N„o";
+		$descricao = "N√£o";
 		foreach($result as $linha){
 			$turnoAtivo = true;
 			$descricao = $linha['turn_descricao'];
@@ -100,12 +104,12 @@ class CatracaVirtualController{
 		
 		if($catraca->financeiroAtivo()){
 		echo '		<div class="quatro colunas fundo-verde1 texto-branco negrito" >
-				 	<p>MÛdulo Financeiro Habilitado</p>
+				 	<p>M√≥dulo Financeiro Habilitado</p>
 					</div>';
 		}
 		else{
 			echo '	<div class="quatro colunas fundo-vermelho1 texto-branco negrito" >
-				 	<p>MÛdulo Financeiro Desabilitado</p>
+				 	<p>M√≥dulo Financeiro Desabilitado</p>
 					</div>';
 		}		
 		
@@ -203,7 +207,7 @@ class CatracaVirtualController{
 					
 				}else{
 
-					$this->mensagemErro("Verifique o vinculo deste cart„o!");
+					$this->mensagemErro("Verifique o vinculo deste cart√£o!");
 					echo '<meta http-equiv="refresh" content="3; url=?pagina=gerador">';
 					return;
 				}
@@ -213,7 +217,7 @@ class CatracaVirtualController{
 			
 			
 			if(!$catracaVirtualDao->podeContinuarComendo($vinculo, $turnoAtual)){
-				$this->mensagemErro("Usu·rio j· passou neste turno!");
+				$this->mensagemErro("Usu√°rio j√° passou neste turno!");
 				echo '<meta http-equiv="refresh" content="3; url=?pagina=gerador">';
 				return;
 			}
@@ -226,7 +230,7 @@ class CatracaVirtualController{
 				$valorPago = $vinculo->getCartao()->getTipo()->getValorCobrado();
 				if(($vinculo->getCartao()->getCreditos() < $valorPago) && $catraca->financeiroAtivo()){
 					
-					$this->mensagemErro("Usu·rio crÈditos insuficiente. ");
+					$this->mensagemErro("Usu√°rio cr√©ditos insuficiente. ");
 					echo '<meta http-equiv="refresh" content="4; url=?pagina=gerador">';
 					return;
 					
@@ -293,7 +297,7 @@ class CatracaVirtualController{
 				$imagem = $vinculo->getResponsavel()->getIdBaseExterna();
 				
 				/*=======================================================
-				 * Vari·vei de sess„o para a p·gina identidicador_cliente
+				 * VariÔøΩvei de sessÔøΩo para a pÔøΩgina identidicador_cliente
 				 * ======================================================*/
 				$_SESSION['id_base_externa'] = $imagem;
 				$_SESSION['numero_cartao'] = $_GET['numero_cartao'];
@@ -314,17 +318,17 @@ class CatracaVirtualController{
 								<div id="informacao" class="fundo-cinza1">
 										<div id="dados" class="dados">';				
 				if($vinculo->isAvulso()){
-					echo '<span>Confirmar Cadastro de refeiÁ„o para: '.$_SESSION['nome_usuario'] = $vinculo->getDescricao().'</span>';
-					echo '<span>'.$_SESSION['refeicoes_restante'] = $vinculo->getRefeicoesRestantes().' refeiÁıes restantes para este cart„o.</span>';
+					echo '<span>Confirmar Cadastro de refei√ß√£o para: '.$_SESSION['nome_usuario'] = $vinculo->getDescricao().'</span>';
+					echo '<span>'.$_SESSION['refeicoes_restante'] = $vinculo->getRefeicoesRestantes().' refei√ß√µes restantes para este cart√£o.</span>';
 				}else{
-					echo '<span>Confirmar Cadastro de refeiÁ„o para: '.$strNome.' - '.$cartao->getTipo()->getNome().'?</span>';
-					echo '<span>'.$_SESSION['refeicoes_restante'] = $vinculo->getRefeicoesRestantes().' refeiÁ„o restante para este cart„o.</span>';
+					echo '<span>Confirmar Cadastro de refei√ß√£o para: '.$strNome.' - '.$cartao->getTipo()->getNome().'?</span>';
+					echo '<span>'.$_SESSION['refeicoes_restante'] = $vinculo->getRefeicoesRestantes().' refei√ß√µes restante para este cart√£o.</span>';
 				}
 					
 				if($catraca->financeiroAtivo())
-					echo '<span>Quantidade de crÈditos restante: R$ '.number_format($vinculo->getCartao()->getCreditos(), 2, ',', '.').'</span>';
+					echo '<span>Quantidade de cr√©ditos restante: R$ '.number_format($vinculo->getCartao()->getCreditos(), 2, ',', '.').'</span>';
 					if($vinculo->getIsencao()->isActive()){
-						echo '<span>Usu·rio Isento</span>';
+						echo '<span>Usu√°rio Isento</span>';
 						$_SESSION['tipo_usuario'] = "Usuario Isento";
 					}else{
 						echo '<span>Cobrar R$'.number_format($valorPago, 2, ',', '.').'.</span>';
