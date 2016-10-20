@@ -273,6 +273,12 @@ class CatracaVirtualController{
 					}else{
 						$this->dao->getConexao()->commit();
 						$this->mensagemSucesso();
+						$_SESSION['confirmado'] = "confirmado";
+						unset($_SESSION['id_base_externa']);
+						unset($_SESSION['numero_cartao']);
+						unset($_SESSION['nome_usuario']);
+						unset($_SESSION['tipo_usuario']);
+						unset($_SESSION['refeicoes_restante']);
 						echo '<meta http-equiv="refresh" content="2; url=?pagina=gerador">';						
 					}
 					
@@ -282,11 +288,20 @@ class CatracaVirtualController{
 					$sql = "INSERT into registro(regi_data, regi_valor_pago, regi_valor_custo, catr_id, cart_id, vinc_id)
 					VALUES('$data', $valorPago, $custo, $idCatraca, $idCartao, $idVinculo)";
 					//echo $sql;
-					if($this->dao->getConexao()->exec($sql))
+					if($this->dao->getConexao()->exec($sql)){
 						$this->mensagemSucesso();
-						else
+					}else{
 							$this->mensagemErro();
-							echo '<meta http-equiv="refresh" content="2; url=?pagina=gerador">';
+					}
+					$_SESSION['confirmado'] = "confirmado";
+					unset($_SESSION['id_base_externa']);
+					unset($_SESSION['numero_cartao']);
+					unset($_SESSION['nome_usuario']);
+					unset($_SESSION['tipo_usuario']);
+					unset($_SESSION['refeicoes_restante']);
+						
+					echo '<meta http-equiv="refresh" content="2; url=?pagina=gerador">';
+					
 				}			
 				
 			}

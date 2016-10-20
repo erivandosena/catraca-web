@@ -51,7 +51,7 @@ if (isset ( $_GET ["sair"] )) {
 <link rel="stylesheet" href="css/estilo_responsivo.css" type="text/css" media="screen">
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/mostra_troco.js"></script>
-
+<script type="text/javascript" src="js/identificador.js"></script>
 </head>
 
 <body>
@@ -476,6 +476,9 @@ if (isset ( $_GET ["sair"] )) {
 
 							case 'pessoal' :
 								PessoalController::main($sessao->getNivelAcesso());
+								break;
+							case 'identificador' :
+								IdentificadorClienteController::main($sessao->getNivelAcesso());
 								break;
 							default :
 								echo '404 NOT FOUND';
