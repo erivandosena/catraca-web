@@ -22,6 +22,10 @@ class CartaoController{
 				$controller = new CartaoController();
 				$controller->telaCartao();
 				break;
+			case Sessao::NIVEL_POLIVALENTE:
+				$controller = new CartaoController();
+				$controller->telaCartao();
+				break;
 			case Sessao::NIVEL_CADASTRO:
 				$controller = new CartaoController();
 				$controller->telaCartao();
