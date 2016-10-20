@@ -1,7 +1,4 @@
 <?php
-/*
- * Daqui pra Baixo Ficou foda
- */
 
 
 class CatracaVirtualController{
@@ -24,11 +21,6 @@ class CatracaVirtualController{
 				$gerador->verificarSelecaoRU();
 				break;
 			case Sessao::NIVEL_ADMIN:
-				$gerador = new CatracaVirtualController();
-				$gerador->verificarSelecaoRU();
-				break;
-
-			case Sessao::NIVEL_POLIVALENTE:
 				$gerador = new CatracaVirtualController();
 				$gerador->verificarSelecaoRU();
 				break;
@@ -81,36 +73,46 @@ class CatracaVirtualController{
 		$catraca->setId($_SESSION['catraca_id']);
 		$unidadeDao->preencheCatracaPorId($catraca);
 		
-		
 		echo '<div class="navegacao"> 
 				<div class = "simpleTabs">
 			        <ul class = "simpleTabsNavigation">					
-						<li><a href="#">Cadastro</a></li>	
+						<li><a href="#">Catraca Virtual</a></li>	
 			        </ul>
 				
 			        <div class = "simpleTabsContent">
 				
-						<div class="doze colunas borda">';
+						<div id="catraca-virtual" class="doze colunas borda">';
 		$turnoAtivo = false;
 		$data = date ( "Y-m-d G:i:s" );
 		$selectTurno = "Select * FROM turno WHERE '$data' BETWEEN turno.turn_hora_inicio AND turno.turn_hora_fim";
 		$result = $this->dao->getConexao()->query($selectTurno);
-		$descricao = "Turno NÃ£o Iniciado";
+		$descricao = "Não";
 		foreach($result as $linha){
 			$turnoAtivo = true;
 			$descricao = $linha['turn_descricao'];
 			break;
 		}
 		
-		echo '<p>'.date('d/m/Y H:i:s').'/';
+		echo '	<div class="doze colunas conteudo centralizado titulo-com-borda" >
+					<div class="quatro colunas">
+					<p id="hora">'.date('d/m/Y H:i:s').'</p>
+					</div>';
+		
 		if($catraca->financeiroAtivo()){
-			echo ' modulo financeiro ativo/';
+		echo '		<div class="quatro colunas fundo-verde1 texto-branco negrito" >
+				 	<p>Módulo Financeiro Habilitado</p>
+					</div>';
 		}
 		else{
-			echo ' Financeiro desativado /';
-		}
-		echo 'turno '.$descricao.' iniciado</p>';
+			echo '	<div class="quatro colunas fundo-vermelho1 texto-branco negrito" >
+				 	<p>Módulo Financeiro Desabilitado</p>
+					</div>';
+		}		
 		
+		echo '		<div class="quatro colunas">
+					<p>Turno '.$descricao.' iniciado</p>
+					</div>
+				</div>';	
 		
 		$somatorio = 0;
 		foreach ($listaDeTipos as $tipo){
@@ -143,14 +145,13 @@ class CatracaVirtualController{
 			
 			$cartao = new Cartao();
 			$cartao->setNumero($_GET['numero_cartao']);
-			
 			$vinculo = new Vinculo();
 			$vinculo->setCartao($cartao);
 			
 			
 			if(!$catracaVirtualDao->verificaVinculo($vinculo)){
 				//Aqui a gente tenta renovar se tiver vinculo proprio nesse cartao. 
-				$numeroCartao = $vinculo->getCartao()->getNumero();
+				$numeroCartao = $vinculo->getCartao()->getNumero();				
 				$sqlVerificaNumero = "SELECT * FROM usuario
 				INNER JOIN vinculo
 				ON vinculo.usua_id = usuario.usua_id
@@ -186,25 +187,23 @@ class CatracaVirtualController{
 					$vinculo->setId($idDoVinculo);
 					$vinculo->setResponsavel($usuario);
 					$usuarioDao = new UsuarioDAO(null, DAO::TIPO_PG_SIGAAA);
-					$usuarioDao->retornaPorIdBaseExterna($vinculo->getResponsavel());
+					$usuarioDao->retornaPorIdBaseExterna($vinculo->getResponsavel());					
 					break;
 				
-				}
-				
-				
+				}				
+								
 				$vinculoDao = new VinculoDAO($this->dao->getConexao());
 				if(($i != 0) && !$vinculoDao->usuarioJaTemVinculo($usuario) && !$vinculo->isAvulso() && $vinculo->getResponsavel()->verificaSeAtivo()){
 					
-					
-					
 					$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'G:00:01' );
 					$vinculo->setFinalValidade($daqui3Meses);
+					
 					$vinculoDao->atualizaValidade($vinculo);
 						
 					
 				}else{
 
-					$this->mensagemErro("Verifique o vinculo deste cartÃ£o!");
+					$this->mensagemErro("Verifique o vinculo deste cartão!");
 					echo '<meta http-equiv="refresh" content="3; url=?pagina=gerador">';
 					return;
 				}
@@ -214,7 +213,7 @@ class CatracaVirtualController{
 			
 			
 			if(!$catracaVirtualDao->podeContinuarComendo($vinculo, $turnoAtual)){
-				$this->mensagemErro("UsuÃ¡rio jÃ¡ passou neste turno!");
+				$this->mensagemErro("Usuário já passou neste turno!");
 				echo '<meta http-equiv="refresh" content="3; url=?pagina=gerador">';
 				return;
 			}
@@ -227,7 +226,7 @@ class CatracaVirtualController{
 				$valorPago = $vinculo->getCartao()->getTipo()->getValorCobrado();
 				if(($vinculo->getCartao()->getCreditos() < $valorPago) && $catraca->financeiroAtivo()){
 					
-					$this->mensagemErro("UsuÃ¡rio crÃ©ditos insuficiente. ");
+					$this->mensagemErro("Usuário créditos insuficiente. ");
 					echo '<meta http-equiv="refresh" content="4; url=?pagina=gerador">';
 					return;
 					
@@ -235,14 +234,10 @@ class CatracaVirtualController{
 			}
 			
 			$idCartao = $cartao->getId();
+			$strNome = $vinculo->getResponsavel()->getNome();
+					
+			if(isset($_GET['confirmado'])){				
 				
-				
-			
-			
-			if(isset($_GET['confirmado'])){
-				
-				
-				$idCatraca = $_SESSION['catraca_id'];
 				$idVinculo= $vinculo->getId();
 				
 				if($catraca->financeiroAtivo()){
@@ -288,32 +283,64 @@ class CatracaVirtualController{
 						else
 							$this->mensagemErro();
 							echo '<meta http-equiv="refresh" content="2; url=?pagina=gerador">';
-				}
-				
+				}			
 				
 			}
 			
-			else{
+			else{				
 				
 				$strNome = $vinculo->getResponsavel()->getNome();
-
-				echo '<div class="doze colunas borda centralizado">';
+				$imagem = $vinculo->getResponsavel()->getIdBaseExterna();
 				
-
-				if($vinculo->isAvulso())
-					echo '<p>Confirmar Cadastro de refeiÃ§Ã£o para: '.$vinculo->getDescricao().'</p>';
-				else
-					echo '<p>Confirmar Cadastro de refeiÃ§Ã£o para: '.$strNome.' - '.$cartao->getTipo()->getNome().'?</p>';
-				
-				echo '<p>'.$vinculo->getRefeicoesRestantes().' refeiÃ§Ãµes restantes para este cartÃ£o. </p>';
+				/*=======================================================
+				 * Variávei de sessão para a página identidicador_cliente
+				 * ======================================================*/
+				$_SESSION['id_base_externa'] = $imagem;
+				$_SESSION['numero_cartao'] = $_GET['numero_cartao'];
+				$_SESSION['nome_usuario'] = $strNome;
+				$_SESSION['tipo_usuario'] = $cartao->getTipo()->getNome();
+				$_SESSION['confirmado'] = "aguarde";
+				$_SESSION['refeicoes_restante'] = "";
+				/*=======================================================*/
+								
+				echo '	<div class="borda doze colunas">
+						<div class="doze colunas">
+							<div class="fundo">
+								<img class="imagem-fundo" src="img/Simbolo_da_UNILAB.png" alt="" >
+							</div>
+						</div>				
+						<div class="doze colunas dados-usuario">							
+							<div class="nove colunas">
+								<div id="informacao" class="fundo-cinza1">
+										<div id="dados" class="dados">';				
+				if($vinculo->isAvulso()){
+					echo '<span>Confirmar Cadastro de refeição para: '.$_SESSION['nome_usuario'] = $vinculo->getDescricao().'</span>';
+					echo '<span>'.$_SESSION['refeicoes_restante'] = $vinculo->getRefeicoesRestantes().' refeições restantes para este cartão.</span>';
+				}else{
+					echo '<span>Confirmar Cadastro de refeição para: '.$strNome.' - '.$cartao->getTipo()->getNome().'?</span>';
+					echo '<span>'.$_SESSION['refeicoes_restante'] = $vinculo->getRefeicoesRestantes().' refeição restante para este cartão.</span>';
+				}
+					
 				if($catraca->financeiroAtivo())
-					echo '<p>Quantidade de crÃ©ditos restante: R$ '.number_format($vinculo->getCartao()->getCreditos(), 2, ',', '.').'</p>';
-				if($vinculo->getIsencao()->isActive())
-						echo '<p>UsuÃ¡rio Isento</p>';
-				else
-					echo '<p>Cobrar R$'.number_format($valorPago, 2, ',', '.').'.</p>';
-				echo '<a href="?pagina=gerador&numero_cartao='.$_GET['numero_cartao'].'&confirmado=1" class="botao b-sucesso">Confimar</a>';
-				echo '</div>';
+					echo '<span>Quantidade de créditos restante: R$ '.number_format($vinculo->getCartao()->getCreditos(), 2, ',', '.').'</span>';
+					if($vinculo->getIsencao()->isActive()){
+						echo '<span>Usuário Isento</span>';
+						$_SESSION['tipo_usuario'] = "Usuario Isento";
+					}else{
+						echo '<span>Cobrar R$'.number_format($valorPago, 2, ',', '.').'.</span>';
+					}				
+				echo '					</div>
+																				
+								</div>
+						
+								<a href="?pagina=gerador&numero_cartao='.$_GET['numero_cartao'].'&confirmado=1" class="botao b-sucesso no-centro">Confimar</a>
+						
+							</div>
+							<div class="tres colunas zoom">
+								<img id="imagem" src="fotos/'.$imagem.'.png" alt="">
+							</div>
+						</div>
+					</div>';				
 			}
 		}
 		echo '</div>
