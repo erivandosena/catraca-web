@@ -304,6 +304,24 @@ class UnidadeDAO extends DAO {
 		}
 	}
 
+	
+
+	public function custosDaUnidade(){
+	
+		$lista = array ();
+		$sql = "SELECT * FROM unidade
+				LEFT JOIN custo_unidade ON custo_unidade.unid_id = unidade.unid_id
+				LEFT JOIN custo_refeicao ON custo_refeicao.cure_id = custo_unidade.cure_id";
+		$result = $this->getConexao()->query($sql);
+		foreach ($result as $linha){
+			$unidade = new Unidade();
+			$unidade->setId($linha['unid_id']);
+			$unidade->setNome($linha['unid_nome']);
+			$unidade->setCustoUnidade($linha['cure_valor']);
+			$lista[] = $unidade;
+		}
+		return $lista;
+	}
 }
 
 ?>

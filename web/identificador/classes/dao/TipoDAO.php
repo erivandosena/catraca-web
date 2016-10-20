@@ -20,7 +20,20 @@ class TipoDAO extends DAO{
 		return $lista;
 	}
 	
+
+	public function retornaTipoPorId(Tipo $tipo){
 	
+		$idTipo = $tipo->getId();
+		$sql = "SELECT * FROM tipo WHERE tipo_id = $idTipo";
+		$result = $this->getConexao()->query($sql);
+	
+		foreach ($result as $linha){
+			$tipo->setId($linha['tipo_id']);
+			$tipo->setNome($linha['tipo_nome']);
+			$tipo->setValorCobrado($linha['tipo_valor']);
+		}
+		return $tipo;
+	}
 	
 	
 }

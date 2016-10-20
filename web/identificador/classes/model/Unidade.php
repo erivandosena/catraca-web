@@ -12,6 +12,8 @@ class Unidade {
 	private $nome;
 	private $turnosValidos;
 	private $catracas;
+	private $custoUnidade;
+	
 	public function Unidade() {
 		$this->turnosValidos = array();
 		
@@ -38,5 +40,12 @@ class Unidade {
 	}
 	public function getNome() {
 		return $this->nome;
+	}
+	public function getCustoUnidade(){
+		return $this->custoUnidade;
+	}
+	
+	public function setCustoUnidade($custoUnidade){
+		$this->custoUnidade = $custoUnidade;
 	}
 }
