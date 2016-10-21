@@ -451,7 +451,7 @@ class CartaoView {
 				    }
 				  });
 				</script>';
-		echo '<div class="borda">
+		echo '<div class="doze colunas borda">
 				
 				<form method="get" action="" class="formulario texto-preto" >
 						    <label for="numero_cartao2">Número do Cartão</label>
@@ -589,36 +589,16 @@ class CartaoView {
 	public function formIdentificacao(Cartao $cartao, Usuario $usuario, Tipo $tipo, $imagem){
 		
 		echo '	<div class="borda doze colunas">
-						<div class="doze colunas">
-				
-							<div class="fundo" style="left:20%;top: 35%;">
-								<img class="imagem-fundo" src="img/Simbolo_da_UNILAB.png" alt="">
-							</div>
-				
-							<div class="duas colunas">
-								<a href="http://www.unilab.edu.br">
-									<img class="imagem-responsiva centralizada" src="img/logo-unilab.png" alt="">
-								</a>
-							</div>
-							<div class="oito colunas">
-								<h1 class="titulo centralizado">Restaurante Universitário</h2>
-							</div>
-							<div class="duas colunas">
-								<a href="http://www.unilab.edu.br">
-									<img class="imagem-responsiva centralizada" src="img/pp.jpg" alt="">
-								</a>
-							</div>		
-							<hr class="um"><br>
-						</div>		
+								
 						<div class="doze colunas dados-usuario">		
 							<h2 class="titulo centralizado">Identificação do Usuario</h1><br>				
 							<hr class="um">
 							<div class="nove colunas">
 								<div id="informacao" class="fundo-cinza1">
 										<div id="dados" class="dados">
-										<span>Nº Cartão: '.$cartao->getNumero().'</span>
-										<span>Nome: '.ucwords(strtolower(htmlentities($usuario->getNome()))).'</span>
-										<span>Tipo: '.$tipo->getNome().'</span>
+										<p>Cartão: <strong>'.$cartao->getNumero().'</strong></p>
+										<p>Nome: <strong>'.ucwords(strtolower(htmlentities($usuario->getNome()))).'</strong></p>
+										<p>Tipo: <strong>'.$tipo->getNome().'</strong></p>
 									</div>
 								</div>
 							</div>

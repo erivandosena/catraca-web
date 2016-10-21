@@ -63,100 +63,107 @@ class CartaoController{
 		$this->view->formBuscaCartao();
 		
 		if(isset($_GET['numero_cartao'])){
-			$cartao = new Cartao();
-			$cartao->setNumero($_GET['numero_cartao']);
-			$numeroCartao = $cartao->getNumero();
-			$dataTimeAtual = date ( "Y-m-d G:i:s" );
-			$sqlVerificaNumero = "SELECT * FROM usuario
-			INNER JOIN vinculo
-			ON vinculo.usua_id = usuario.usua_id
-			LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
-			LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id
-			WHERE cartao.cart_numero = '$numeroCartao'
-			";
-			$dao = new DAO();
-			$result = $dao->getConexao()->query($sqlVerificaNumero);
-			$idCartao = 0;
-			$usuario = new Usuario();
-			$tipo = new Tipo();
-			$vinculoDao = new VinculoDAO($dao->getConexao());
-			$vinculo = new Vinculo();
-			foreach($result as $linha){
-				$idDoVinculo = $linha['vinc_id'];
-				$tipo->setNome($linha['tipo_nome']);
-				$usuario->setNome($linha['usua_nome']);
-				$usuario->setIdBaseExterna($linha['id_base_externa']);
-				$idCartao = $linha['cart_id'];
-				$vinculo->setAvulso($linha['vinc_avulso']);
-				$avulso = $linha['vinc_avulso'];
-				if($avulso){
-					$usuario->setNome("Avulso");
-				}
-				break;		
-			}
 			
-			if($idCartao){
-		
-				$vinculo->setId($idDoVinculo);
-				$cartao->setId($idCartao);
-				$vinculoDao->vinculoPorId($vinculo);
-				$imagem = null;
-				
-				if(file_exists('fotos/'.$usuario->getIdBaseExterna().'.png')){
-					$imagem = $usuario->getIdBaseExterna();
-				}else {
-					$imagem = "sem-imagem";
-				}
-				
-				$this->view->formIdentificacao($cartao, $usuario, $tipo, $imagem);
-		
-				if(!$vinculo->isActive()){
-					echo '<div id="pergunta">';
-					$this->view->formMensagem("-erro", "vinculo não está ativo.");
-					echo '	<a href="?pagina=cartao&numero_cartao='.$_GET['numero_cartao'].'&cartao_renovar=1" class="botao">Renovar</a> 
-							</div>';
-					if(isset($_GET['cartao_renovar'])){
-						if(isset($_POST['certeza'])){
-							$usuarioDao = new UsuarioDAO();								
-								
-							$usuarioDao->retornaPorIdBaseExterna($usuario);
-								
-							if($vinculoDao->usuarioJaTemVinculo($usuario))
-							{
-								$this->view->formMensagem("-ajuda", "Esse usuário já possui vínculo válido.");
-								echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
-								return;
-							}
-							if($vinculo->isAvulso()){
-								$this->view->formMensagem("-ajuda", "Não existe renovação de vínculos avulsos!");
-								echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
-								return;
-							}								
-								
-							if(!$this->verificaSeAtivo($usuario)){
-								$this->view->formMensagem("-erro", "Esse usuário possui um problema quanto ao status!");								
-								echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
-								return;		
-							}
-		
-							$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'G:00:01' );
-							$vinculo->setFinalValidade($daqui3Meses);
-		
-							if($vinculoDao->atualizaValidade($vinculo)){
-								$this->view->formMensagem("-sucesso", "Vínculo Atualizado com Sucesso!");								
-							}else{
-								$this->view->formMensagem("-erro", "Erro ao tentar renovar vínculo.");		
-							}
-							echo '<meta http-equiv="refresh" content="2; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
-							return;
-						}
-						
-						$this->view->formConfirmacaoRenovarVinculo();
+			if(strlen($_GET['numero_cartao']) > 3){
+
+
+
+				$cartao = new Cartao();
+				$cartao->setNumero($_GET['numero_cartao']);
+				$numeroCartao = $cartao->getNumero();
+				$dataTimeAtual = date ( "Y-m-d G:i:s" );
+				$sqlVerificaNumero = "SELECT * FROM usuario
+				INNER JOIN vinculo
+				ON vinculo.usua_id = usuario.usua_id
+				LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
+				LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id
+				WHERE cartao.cart_numero = '$numeroCartao'
+				";
+				$dao = new DAO();
+				$result = $dao->getConexao()->query($sqlVerificaNumero);
+				$idCartao = 0;
+				$usuario = new Usuario();
+				$tipo = new Tipo();
+				$vinculoDao = new VinculoDAO($dao->getConexao());
+				$vinculo = new Vinculo();
+				foreach($result as $linha){
+					$idDoVinculo = $linha['vinc_id'];
+					$tipo->setNome($linha['tipo_nome']);
+					$usuario->setNome($linha['usua_nome']);
+					$usuario->setIdBaseExterna($linha['id_base_externa']);
+					$idCartao = $linha['cart_id'];
+					$vinculo->setAvulso($linha['vinc_avulso']);
+					$avulso = $linha['vinc_avulso'];
+					if($avulso){
+						$usuario->setNome("Avulso");
 					}
-				}				
-			}else{
-				$this->view->formMensagem("-erro", "Cartão Não possui Vínculo Válido.");	
-			}			
+					break;
+				}
+					
+				if($idCartao){
+				
+					$vinculo->setId($idDoVinculo);
+					$cartao->setId($idCartao);
+					$vinculoDao->vinculoPorId($vinculo);
+					$imagem = null;
+				
+					if(file_exists('fotos/'.$usuario->getIdBaseExterna().'.png')){
+						$imagem = $usuario->getIdBaseExterna();
+					}else {
+						$imagem = "sem-imagem";
+					}
+				
+					
+				
+					if(!$vinculo->isActive()){
+						echo '<div id="pergunta">';
+						$this->view->formMensagem("-erro", "vinculo não está ativo.");
+						echo '	<a href="?pagina=cartao&numero_cartao='.$_GET['numero_cartao'].'&cartao_renovar=1" class="botao">Renovar</a>
+							</div>';
+						if(isset($_GET['cartao_renovar'])){
+							if(isset($_POST['certeza'])){
+								$usuarioDao = new UsuarioDAO();
+				
+								$usuarioDao->retornaPorIdBaseExterna($usuario);
+				
+								if($vinculoDao->usuarioJaTemVinculo($usuario))
+								{
+									$this->view->formMensagem("-ajuda", "Esse usuário já possui vínculo válido.");
+									echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+									return;
+								}
+								if($vinculo->isAvulso()){
+									$this->view->formMensagem("-ajuda", "Não existe renovação de vínculos avulsos!");
+									echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+									return;
+								}
+				
+								if(!$this->verificaSeAtivo($usuario)){
+									$this->view->formMensagem("-erro", "Esse usuário possui um problema quanto ao status!");
+									echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+									return;
+								}
+				
+								$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'G:00:01' );
+								$vinculo->setFinalValidade($daqui3Meses);
+				
+								if($vinculoDao->atualizaValidade($vinculo)){
+									$this->view->formMensagem("-sucesso", "Vínculo Atualizado com Sucesso!");
+								}else{
+									$this->view->formMensagem("-erro", "Erro ao tentar renovar vínculo.");
+								}
+								echo '<meta http-equiv="refresh" content="2; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+								return;
+							}
+				
+							$this->view->formConfirmacaoRenovarVinculo();
+						}
+					}
+					$this->view->formIdentificacao($cartao, $usuario, $tipo, $imagem);
+				}else{
+					$this->view->formMensagem("-erro", "Cartão Não possui Vínculo Válido.");
+				}
+			}
 		}		
 	}
 	

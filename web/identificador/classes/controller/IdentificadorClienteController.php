@@ -57,7 +57,7 @@ class IdentificadorClienteController{
 										<h2 style="font-size:48px">Restaurante Universitário</h2>
 									</div>
 									<div class="duas colunas">
-										<img class="imagem-responsiva centralizada" src="img/pp.jpg" style="width:6cm;height:2cm">
+										<img class="imagem-responsiva centralizada" src="img/logo-dti-preto.png" style="width:6cm;height:2cm">
 									</div>
 									<hr class="um"><br>
 								</div>				
@@ -76,10 +76,9 @@ class IdentificadorClienteController{
 			echo '<span id="aproxime" style="padding:160px;">Por favor, aproxime o seu cartão.</span>';		
 		}else {
 			echo'									
-													<span >Nº Cartão: '.$numeroCartao.'</span><br>
+													<span >Cartão: '.$numeroCartao.'</span><br>
 													<span >Nome: '.$nome.'</span><br>
-													<span >Tipo: '.$tipo.'</span><br>
-													<span >'.$refeicoes.'</span>';
+													<span >Tipo: '.$tipo.'</span><br>';
 		}
 		echo'									</div>
 											</div>
@@ -94,13 +93,13 @@ class IdentificadorClienteController{
 		echo'						<div class="alerta-sucesso dez no-centro">
 										<div class="icone icone-warning ix48"></div>
 										<div class="titulo-alerta">Ok!</div>
-										<div class="subtitulo-alerta">Acesso Liberado!</div>
+										<div class="subtitulo-alerta" style="font-size:22px">Acesso Liberado!</div>
 									</div>';		
 		}elseif ($confirma == "aguarde"){
 		echo'						<div class="alerta-ajuda dez no-centro">
 										<div class="icone icone-checkmark ix48"></div>
 										<div class="titulo-alerta">Aguarde!</div>
-										<div class="subtitulo-alerta">Estamos liberando seu acesso!</div>
+										<div class="subtitulo-alerta" style="font-size:22px">Estamos liberando seu acesso!</div>
 									</div>';
 		}
 		echo'					</div>

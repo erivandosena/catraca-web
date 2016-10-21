@@ -190,7 +190,7 @@ class CatracaVirtualController{
 					$vinculo->setCartao($cartao);
 					$vinculo->setId($idDoVinculo);
 					$vinculo->setResponsavel($usuario);
-					$usuarioDao = new UsuarioDAO(null, DAO::TIPO_PG_SIGAAA);
+					$usuarioDao = new UsuarioDAO();
 					$usuarioDao->retornaPorIdBaseExterna($vinculo->getResponsavel());					
 					break;
 				
@@ -323,36 +323,33 @@ class CatracaVirtualController{
 				/*=======================================================*/
 								
 				echo '	<div class="borda doze colunas">
-						<div class="doze colunas">
-							<div class="fundo">
-								<img class="imagem-fundo" src="img/Simbolo_da_UNILAB.png" alt="" >
-							</div>
-						</div>				
+										
 						<div class="doze colunas dados-usuario">							
 							<div class="nove colunas">
 								<div id="informacao" class="fundo-cinza1">
 										<div id="dados" class="dados">';				
 				if($vinculo->isAvulso()){
-					echo '<span>Confirmar Cadastro de refeição para: '.$_SESSION['nome_usuario'] = $vinculo->getDescricao().'</span>';
-					echo '<span>'.$_SESSION['refeicoes_restante'] = $vinculo->getRefeicoesRestantes().' refeições restantes para este cartão.</span>';
+					echo '<p>Cartão Avulso: <strong>'.$_SESSION['nome_usuario'] = $vinculo->getDescricao().'</strong></p>';
+					echo '<p>Refeições Restantes:<strong>'.$_SESSION['refeicoes_restante'] = $vinculo->getRefeicoesRestantes().' </strong></p>';
 				}else{
-					echo '<span>Confirmar Cadastro de refeição para: '.$strNome.' - '.$cartao->getTipo()->getNome().'?</span>';
-					echo '<span>'.$_SESSION['refeicoes_restante'] = $vinculo->getRefeicoesRestantes().' refeições restante para este cartão.</span>';
+					echo '<p>Usuário: <strong>'.$strNome.'</strong> - '.$cartao->getTipo()->getNome().'</p>';
+					echo '<p>Refeições Restantes:<strong> '.$_SESSION['refeicoes_restante'] = $vinculo->getRefeicoesRestantes().' </strong></p>';
 				}
 					
 				if($catraca->financeiroAtivo())
-					echo '<span>Quantidade de créditos restante: R$ '.number_format($vinculo->getCartao()->getCreditos(), 2, ',', '.').'</span>';
+					echo '<p>Créditos restante: <strong>R$ '.number_format($vinculo->getCartao()->getCreditos(), 2, ',', '.').'</strong></p>';
 					if($vinculo->getIsencao()->isActive()){
-						echo '<span>Usuário Isento</span>';
+						echo '<p>Usuário Isento</p>';
 						$_SESSION['tipo_usuario'] = "Usuario Isento";
 					}else{
-						echo '<span>Cobrar R$'.number_format($valorPago, 2, ',', '.').'.</span>';
+						echo '<p>Valor Cobrado: <strong>R$'.number_format($valorPago, 2, ',', '.').'</strong></p>';
 					}				
 				echo '					</div>
-																				
+								
+						<a href="?pagina=gerador&numero_cartao='.$_GET['numero_cartao'].'&confirmado=1" class="botao b-sucesso no-centro">Confimar</a>
 								</div>
 						
-								<a href="?pagina=gerador&numero_cartao='.$_GET['numero_cartao'].'&confirmado=1" class="botao b-sucesso no-centro">Confimar</a>
+								
 						
 							</div>
 							<div class="tres colunas zoom">

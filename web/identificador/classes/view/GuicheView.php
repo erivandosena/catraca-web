@@ -19,7 +19,7 @@ class GuicheView{
 												    <th>Descri&ccedil&atildeo</th>
 												    <th>Data</th>
 													<th>Hora</th>
-													<th>Operador</th>
+													<th>Cliente</th>
 												</tr>
 											</thead>
 											<tbody>';
@@ -45,10 +45,10 @@ class GuicheView{
 	public function formBuscarCartao(){
 		
 		echo'		<div class="cinco colunas">
-						<form method="" class="formulario-organizado" >
+						<form method="" class="formulario" >
 							<input type="hidden" name="pagina" value="guiche" />
 							<label for="cartao">
-								N&uacutemero Cart&atildeo: <input type="number" name="cartao" id="cartao" autofocus>
+								N&uacutemero Cart&atildeo: <input type="number" name="cartao" id="cartao" autofocus />
 							</label>							
 							<input type="submit" value="Pesquisar">
 						<hr>
@@ -57,18 +57,18 @@ class GuicheView{
 	
 	public function formInserirValor(){
 		
-		echo'	<form method="" class="formulario-organizado" >
+		echo'	<form method="" class="formulario" >
 					<input type="hidden" name="pagina" value="guiche" />
 					<label for="valor">
-					Valor Comprado: <input type="number" name="valor" id="valor" step="0.01">
+					Valor Comprado: <input type="number" name="valor" id="valor" step="0.01"/>
 					</label>
 					<label for="valorrec">
-					Valor Recebido: <input type="number" name="valorrec" id="valorrec" step="0.01">
+					Valor Recebido: <input type="number" name="valorrec" id="valorrec" step="0.01" />
 					</label>
 					<hr>
 					<h2>Troco: <output id="troco"></output></h2>
 					<input type="hidden" name="cartao" value="'.$_GET['cartao'].'" />					
-					<input type="submit" value="Finalizar" class="botao b-sucesso" name="finalizar" >
+					<input type="submit" value="Finalizar" class="botao b-sucesso" name="finalizar" />
 				</form>';
 		
 	}

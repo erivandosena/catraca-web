@@ -351,8 +351,8 @@ hr.linha{
 }
 
 #caixa h2{
-	margin-bottom: 20px;
-	margin-top: 20px;
+	margin-bottom: 3px;
+	margin-top: 3px;
 	color: #0000FF;
 	font-weight: bold;
 }
@@ -489,7 +489,7 @@ span#aproxime{
 }
 
 .zoom img {
-   	width: 100%; 
+   	width: 60%; 
 	border-radius: 2px;
 	
 }

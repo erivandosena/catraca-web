@@ -56,10 +56,13 @@ class GuicheController{
 		$data1 = $dataInicio.' 00:00:00';
 		$data2 = $dataFim.' 23:59:59';
 
-		$sqlTransacao = "SELECT * FROM transacao as trans
-		LEFT JOIN usuario as usuario
-		on trans.usua_id = usuario.usua_id
-		WHERE (tran_data BETWEEN '$data1' AND '$data2') AND usuario.usua_id = $idDoUsuario ORDER BY tran_id DESC ";
+		$sqlTransacao = "SELECT cliente.usua_nome cliente,* FROM transacao
+		INNER JOIN usuario
+		on transacao.usua_id = usuario.usua_id
+		INNER JOIN usuario as cliente
+		ON cliente.usua_id = transacao.usua_id1
+		WHERE (tran_data BETWEEN '$data1' AND '$data2') 
+		AND usuario.usua_id = $idDoUsuario ORDER BY tran_id DESC LIMIT 100 ";
 
 		$listaDescricao = $dao->getConexao()->query($sqlTransacao);
 		$this->view->formDescricao($listaDescricao);
@@ -71,6 +74,7 @@ class GuicheController{
 		$valorTotal = 0;
 		$result = $dao->getConexao()->query($sqlTransacao);
 		foreach ($result as $linha){
+			
 			$valor = $linha['tran_valor'];
 			floatval ($valor);
 			if($linha){
@@ -127,9 +131,9 @@ class GuicheController{
 				}
 				break;
 			}
-				
-			if($idCartao){
-					
+			
+			if($idCartao && $_GET['cartao'] != ''){
+				$idBeneficiado = $usuario->getId();
 				$vinculo->setId($idDoVinculo);
 				$cartao->setId($idCartao);
 				$vinculoDao->vinculoPorId($vinculo);
@@ -193,12 +197,12 @@ class GuicheController{
 								<hr class="um">
 								<form class="formulario sequencial " method="post" id="formIndentificacao">
 									<label>
-										Login<input type="text"  name="login" value="'.$login.'" class="doze">
+										Login<input type="text"  name="login" value="'.$login.'" class="doze"/>
 									</label>
 									<label>
-										Senha<input type="password" placeholder="Senha Sig" name="senha" class="doze" autofocus>
+										Senha<input type="password" placeholder="Senha Sig" name="senha" class="doze" autofocus />
 									</label>
-									<input type="submit" value="Confirmar" name="estornar" class="doze" autofocus>
+									<input type="submit" value="Confirmar" name="estornar" class="doze" />
 								</form>';
 							$this->view->mensagem("erro", "Deseja estornar R\$ $valor?");
 							echo '	</div>';
@@ -249,8 +253,8 @@ class GuicheController{
 
 							$sql = "UPDATE cartao set cart_creditos = $novoValor WHERE cart_id = $idCartao";
 
-							$sql2 = "INSERT into transacao(tran_valor, tran_descricao, tran_data, usua_id,usua_id1 )
-							VALUES($valorVendido, '$tipoTransacao' ,'$dataTimeAtual', $idDoUsuario, $idDoUsuario)";
+							$sql2 = "INSERT into transacao(tran_valor, tran_descricao, tran_data, usua_id,usua_id1)
+							VALUES($valorVendido, '$tipoTransacao' ,'$dataTimeAtual', $idDoUsuario, $idBeneficiado)";
 
 							//echo $sql;
 							if(!$dao->getConexao()->exec($sql)){
