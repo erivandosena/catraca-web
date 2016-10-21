@@ -53,6 +53,7 @@ if (isset ( $_GET ["sair"] )) {
 <script type="text/javascript" src="js/mostra_troco.js"></script>
 <script type="text/javascript" src="js/modal.js"></script>
 <script type="text/javascript" src="js/identificador.js"></script>
+<script type="text/javascript" src="js/combo.js"></script>
 </head>
 
 <body>

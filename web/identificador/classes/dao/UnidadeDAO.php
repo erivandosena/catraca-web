@@ -102,6 +102,7 @@ class UnidadeDAO extends DAO {
 		return $resultado;
 	}
 	
+	
 	public function totalDeGirosDaCatracaTurnoAtual(Catraca $catraca, Tipo $tipo = null){
 		$resultado = 0;
 		$idCatraca = $catraca->getId();
@@ -130,7 +131,61 @@ class UnidadeDAO extends DAO {
 		}		
 		return $resultado;
 	}
+
+
+	public function totalGiroTurnoAtualNaoIsento(Catraca $catraca, Tipo $tipo = null){
+		$resultado = 0;
+		$idCatraca = $catraca->getId();
+		$turno = $this->pegaTurnoAtualSeExistir();
+		if($turno){
+			$horaInicial = date("Y-m-d ").$turno->getHoraInicial();
+			$horaFinal = date("Y-m-d ").$turno->getHoraFinal();
+			if($tipo == null){
 	
+				$sql = "SELECT sum(1) as resultado FROM registro INNER JOIN catraca ON registro.catr_id = catraca.catr_id
+				WHERE (catraca.catr_id = $idCatraca) AND (registro.regi_data BETWEEN '$horaInicial' AND '$horaFinal') AND 
+				(regi_valor_pago > 0)
+				";
+	
+					
+			}
+			else{
+				$idTipo = $tipo->getId();
+				$sql = "SELECT sum(1) as resultado FROM registro INNER JOIN catraca ON registro.catr_id = catraca.catr_id
+				INNER JOIN cartao ON cartao.cart_id = registro.cart_id
+				WHERE (catraca.catr_id = $idCatraca) AND (registro.regi_data BETWEEN '$horaInicial' AND '$horaFinal') AND (cartao.tipo_id = $idTipo) AND 
+				(regi_valor_pago > 0)
+				";
+	
+			}
+	
+			foreach ($this->getConexao()->query($sql) as $linha){
+				$resultado = $linha['resultado'];
+			}
+		}
+		return $resultado;
+	}
+	public function totalGiroTurnoAtualIsento(Catraca $catraca, Tipo $tipo = null){
+		$resultado = 0;
+		$idCatraca = $catraca->getId();
+		$turno = $this->pegaTurnoAtualSeExistir();
+		if($turno){
+			$horaInicial = date("Y-m-d ").$turno->getHoraInicial();
+			$horaFinal = date("Y-m-d ").$turno->getHoraFinal();
+	
+			$sql = "SELECT sum(1) as resultado FROM registro INNER JOIN catraca ON registro.catr_id = catraca.catr_id
+			WHERE catraca.catr_id = $idCatraca AND registro.regi_data BETWEEN '$horaInicial' AND '$horaFinal'
+			AND (regi_valor_pago = 0)
+			";
+	
+					
+	
+			foreach ($this->getConexao()->query($sql) as $linha){
+				$resultado = $linha['resultado'];
+			}
+		}
+		return $resultado;
+	}
 	public function pegaTurnoAtualSeExistir(){
 		$dataTimeAtual = date ( "G:i:s" );
 		$sql = "Select * FROM turno WHERE '$dataTimeAtual' BETWEEN turno.turn_hora_inicio AND turno.turn_hora_fim";

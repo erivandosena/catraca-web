@@ -523,37 +523,40 @@
 			<div id="mensagens">';
 	
 			if (isset($_GET['unidade'])){
-				$idCatraca = $_GET['catraca'];
-				$idUnidade = $_GET['unidade'];
-				$dao = new DAO();
-				$view = new DefinicoesView();
-					
-				$sql = "SELECT * FROM catraca
-				INNER JOIN catraca_unidade ON catraca_unidade.catr_id = catraca.catr_id
-				INNER JOIN unidade ON unidade.unid_id = catraca_unidade.unid_id
-				WHERE unidade.unid_id = $idUnidade AND catraca.catr_id = $idCatraca";
-				$result = $dao->getConexao()->query($sql);
-				foreach ($result as $linha){
-					$nomeCatraca = $linha['catr_nome'];
-					$nomeUnidade = $linha['unid_nome'];
+				if(intval($_GET['catraca']) > 0){
+					$idCatraca = $_GET['catraca'];
+					$idUnidade = $_GET['unidade'];
+					$dao = new DAO();
+					$view = new DefinicoesView();
+						
+					$sql = "SELECT * FROM catraca
+					INNER JOIN catraca_unidade ON catraca_unidade.catr_id = catraca.catr_id
+					INNER JOIN unidade ON unidade.unid_id = catraca_unidade.unid_id
+					WHERE unidade.unid_id = $idUnidade AND catraca.catr_id = $idCatraca";
+					$result = $dao->getConexao()->query($sql);
+					foreach ($result as $linha){
+						$nomeCatraca = $linha['catr_nome'];
+						$nomeUnidade = $linha['unid_nome'];
+					}
+						
+					$sql = "SELECT * FROM mensagem
+					INNER JOIN catraca_unidade ON catraca_unidade.catr_id = mensagem.catr_id
+					INNER JOIN unidade ON unidade.unid_id = catraca_unidade.unid_id
+					INNER JOIN catraca ON catraca_unidade.catr_id = catraca.catr_id
+					WHERE mensagem.catr_id = $idCatraca";
+					$result = $dao->getConexao()->query($sql);
+					foreach ($result as $linha){
+						$msg1 = $linha['mens_institucional1'];
+						$msg2 = $linha['mens_institucional2'];
+						$msg3 = $linha['mens_institucional3'];
+						$msg4 = $linha['mens_institucional4'];
+						$nomeUnidade = $linha['unid_nome'];
+						$nomeCatraca = $linha['catr_nome'];
+					}
+					$args = array($nomeUnidade, $nomeCatraca, @$msg1, @$msg2, @$msg3, @$msg4);
+					$view->formEditarMensagensCatraca($args);
+				
 				}
-					
-				$sql = "SELECT * FROM mensagem
-				INNER JOIN catraca_unidade ON catraca_unidade.catr_id = mensagem.catr_id
-				INNER JOIN unidade ON unidade.unid_id = catraca_unidade.unid_id
-				INNER JOIN catraca ON catraca_unidade.catr_id = catraca.catr_id
-				WHERE mensagem.catr_id = $idCatraca";
-				$result = $dao->getConexao()->query($sql);
-				foreach ($result as $linha){
-					$msg1 = $linha['mens_institucional1'];
-					$msg2 = $linha['mens_institucional2'];
-					$msg3 = $linha['mens_institucional3'];
-					$msg4 = $linha['mens_institucional4'];
-					$nomeUnidade = $linha['unid_nome'];
-					$nomeCatraca = $linha['catr_nome'];
-				}
-				$args = array($nomeUnidade, $nomeCatraca, @$msg1, @$msg2, @$msg3, @$msg4);
-				$view->formEditarMensagensCatraca($args);
 			}
 			echo '</div>';
 	

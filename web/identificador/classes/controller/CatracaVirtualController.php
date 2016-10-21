@@ -71,6 +71,8 @@ class CatracaVirtualController{
 		$tipoDao = new TipoDAO($this->dao->getConexao());
 		$catracaVirtualDao = new CatracaVirtualDAO($this->dao->getConexao());
 		$listaDeTipos = $tipoDao->retornaLista();
+		$tipoIsento = new Tipo();
+		
 		
 		$unidadeDao = new UnidadeDAO($this->dao->getConexao());
 		$catraca = new Catraca();
@@ -120,8 +122,12 @@ class CatracaVirtualController{
 		
 		$somatorio = 0;
 		foreach ($listaDeTipos as $tipo){
-			$quantidades[] = $unidadeDao->totalDeGirosDaCatracaTurnoAtual($catraca, $tipo);	
+			$quantidades[] = $unidadeDao->totalGiroTurnoAtualNaoIsento($catraca, $tipo);	
 		}
+		$isento = new Tipo();
+		$isento->setNome("Isento");
+		$listaDeTipos[] = $isento;
+		$quantidades[] = $unidadeDao->totalGiroTurnoAtualIsento($catraca, $isento);
 		
 		$this->view->exibirQuantidadesDeCadaTipo($listaDeTipos, $quantidades, $catraca);
 		
