@@ -482,6 +482,9 @@ if (isset ( $_GET ["sair"] )) {
 							case 'identificador' :
 								IdentificadorClienteController::main($sessao->getNivelAcesso());
 								break;
+							case 'auditoria':
+								AuditoriaController::main($sessao->getNivelAcesso());
+								break;
 							default :
 								echo '404 NOT FOUND';
 								break;

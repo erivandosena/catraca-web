@@ -88,151 +88,153 @@ class NivelAcessoController{
 		$this->view->formBuscaCartao();
 		
 		if(isset($_GET['numero_cartao'])){
-			$cartao = new Cartao();
-			$cartao->setNumero($_GET['numero_cartao']);
-			$numeroCartao = $cartao->getNumero();
-			$dataTimeAtual = date ( "Y-m-d G:i:s" );
-			$sqlVerificaNumero = "SELECT * FROM usuario 
-				INNER JOIN vinculo
-				ON vinculo.usua_id = usuario.usua_id
-				LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
-				LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id
-				WHERE cartao.cart_numero = '$numeroCartao'
-					";
-			
-			$result = $dao->getConexao()->query($sqlVerificaNumero);
-			$idCartao = 0;
-			$usuario = new Usuario();
-			
-			$tipo = new Tipo();
-			$vinculoDao = new VinculoDAO($dao->getConexao());
-			$vinculo = new Vinculo();
-			
-			foreach($result as $linha){
-				$idDoVinculo = $linha['vinc_id'];
-				$tipo->setNome($linha['tipo_nome']);
-				$usuario->setNome($linha['usua_nome']);
-				$usuario->setIdBaseExterna($linha['id_base_externa']);
-				$idCartao = $linha['cart_id'];
-				$vinculo->setAvulso($linha['vinc_avulso']);
-				$avulso = $linha['vinc_avulso'];
-				if($avulso){
-					$usuario->setNome("Avulso");
-				}
-				break;
-				
-			}
-			if($idCartao){
-				
-				$vinculo->setId($idDoVinculo);
-				$cartao->setId($idCartao);
-				$vinculoDao->vinculoPorId($vinculo);
-				
-				echo '<div class="borda"><h1>'.ucwords(strtolower(htmlentities($usuario->getNome()))).'. Tipo: '.$tipo->getNome();
-				$strNivelAcesso = "Padr&atilde;o";
-				switch ($vinculo->getResponsavel()->getNivelAcesso()){
-					case Sessao::NIVEL_ADMIN: 
-						$strNivelAcesso =  " Administrador";
-						break;
-					case Sessao::NIVEL_SUPER:
-						$strNivelAcesso = "Super Usu&aacute;rio";
-						break;
-					case Sessao::NIVEL_GUICHE:
-						$strNivelAcesso = "Guich&ecirc;";
-						break;
+			if(strlen($_GET['numero_cartao']) > 3){
 					
-					default:
-						$strNivelAcesso = "Padr&atilde;o";
-						break;
-						
-				}
-				echo ' - Nivel de Acesso:  '. $strNivelAcesso;
+				$cartao = new Cartao();
+				$cartao->setNumero($_GET['numero_cartao']);
+				$numeroCartao = $cartao->getNumero();
+				$dataTimeAtual = date ( "Y-m-d G:i:s" );
+				$sqlVerificaNumero = "SELECT * FROM usuario 
+					INNER JOIN vinculo
+					ON vinculo.usua_id = usuario.usua_id
+					LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
+					LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id
+					WHERE cartao.cart_numero = '$numeroCartao'
+						";
 				
+				$result = $dao->getConexao()->query($sqlVerificaNumero);
+				$idCartao = 0;
+				$usuario = new Usuario();
 				
-				echo '</h1>';
-				echo '<a class="botao b-primario" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_COMUM.'">Tornar Padr&atilde;o</a>';
-				echo '<a class="botao b-sucesso" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_GUICHE.'">Tornar Guichê</a>';
-				echo '<a class="botao b-secundario" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_CADASTRO.'">Tornar Cadastro</a>';
-				echo '<a class="botao b-sucesso" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_ADMIN.'">Tornar Administrador</a>';
-				echo '<a class="botao b-erro" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_RELATORIO.'">Somente Relatorios</a>';
-				echo '<a class="botao b-secundario" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_CATRACA_VIRTUAL.'">Tornar Catraca Virtual</a>';
-												
-				$sessao = new Sessao();
-				if($sessao->getNivelAcesso() == Sessao::NIVEL_SUPER)
-					echo '<a class="botao b-erro" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_SUPER.'">Tornar Super Usu&aacute;rio</a>';
+				$tipo = new Tipo();
+				$vinculoDao = new VinculoDAO($dao->getConexao());
+				$vinculo = new Vinculo();
 				
-				
-				
-				
-				
-				if(file_exists('fotos/'.$usuario->getIdBaseExterna().'.png')){
-						
-					echo '<img width="300" src="fotos/'.$usuario->getIdBaseExterna().'.png" />';
-						
-				}
-				
-				if(!$vinculo->isActive()){
-					echo '<p>O vinculo não está ativo </p><br>
-							<a href="?pagina=cartao&numero_cartao='.$_GET['numero_cartao'].'&cartao_renovar=1" class="botao">Renovar</a> ';
-				
-					if(isset($_GET['cartao_renovar'])){
-						if(isset($_POST['certeza'])){
-							$usuarioDao = new UsuarioDAO();
-							
-							
-							$usuarioDao->retornaPorIdBaseExterna($usuario);
-							
-							if($vinculoDao->usuarioJaTemVinculo($usuario))
-							{
-								$this->view->mostraSucesso("Esse usuário já possui vínculo válido.");
-								echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
-								return;
-							}
-							if($vinculo->isAvulso()){
-						
-								$this->view->mostraSucesso("Não existe renovação de vínculos avulsos!");
-								echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
-								return;
-							}
-							
-							
-							
-							if(!$this->verificaSeAtivo($usuario)){
-								$this->view->mostraSucesso("Esse usuário possui um problema quanto ao status!");
-								echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
-								return;
-						
-							}
-								
-							$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'G:00:01' );
-							$vinculo->setFinalValidade($daqui3Meses);
-								
-							if($vinculoDao->atualizaValidade($vinculo)){
-								$this->view->mostraSucesso("Vínculo Atualizado com Sucesso!  ");
-							}else{
-								$this->view->mostraSucesso("Erro ao tentar renovar vínculo.  ");
-								
-							}
-							echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
-							return;
-						}
-						
-						$this->view->formConfirmacaoRenovarVinculo();
+				foreach($result as $linha){
+					$idDoVinculo = $linha['vinc_id'];
+					$tipo->setNome($linha['tipo_nome']);
+					$usuario->setNome($linha['usua_nome']);
+					$usuario->setIdBaseExterna($linha['id_base_externa']);
+					$idCartao = $linha['cart_id'];
+					$vinculo->setAvulso($linha['vinc_avulso']);
+					$avulso = $linha['vinc_avulso'];
+					if($avulso){
+						$usuario->setNome("Avulso");
 					}
+					break;
+					
 				}
-				echo '
+				if($idCartao){
+					
+					$vinculo->setId($idDoVinculo);
+					$cartao->setId($idCartao);
+					$vinculoDao->vinculoPorId($vinculo);
+					
+					echo '<div class="borda"><h1>'.ucwords(strtolower(htmlentities($usuario->getNome()))).'. Tipo: '.$tipo->getNome();
+					$strNivelAcesso = "Padr&atilde;o";
+					switch ($vinculo->getResponsavel()->getNivelAcesso()){
+						case Sessao::NIVEL_ADMIN: 
+							$strNivelAcesso =  " Administrador";
+							break;
+						case Sessao::NIVEL_SUPER:
+							$strNivelAcesso = "Super Usu&aacute;rio";
+							break;
+						case Sessao::NIVEL_GUICHE:
+							$strNivelAcesso = "Guich&ecirc;";
+							break;
 						
-						
-						</div>';
-			}else
-			{
-
-				echo '<div class="borda"><h1>Cartão Não possui Vínculo Válido.</h1></div>';
+						default:
+							$strNivelAcesso = "Padr&atilde;o";
+							break;
+							
+					}
+					echo ' - Nivel de Acesso:  '. $strNivelAcesso;
+					
+					
+					echo '</h1>';
+					echo '<a class="botao b-primario" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_COMUM.'">Tornar Padr&atilde;o</a>';
+					echo '<a class="botao b-sucesso" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_GUICHE.'">Tornar Guichê</a>';
+					echo '<a class="botao b-secundario" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_CADASTRO.'">Tornar Cadastro</a>';
+					echo '<a class="botao b-sucesso" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_ADMIN.'">Tornar Administrador</a>';
+					echo '<a class="botao b-erro" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_RELATORIO.'">Somente Relatorios</a>';
+					echo '<a class="botao b-secundario" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_CATRACA_VIRTUAL.'">Tornar Catraca Virtual</a>';
+													
+					$sessao = new Sessao();
+					if($sessao->getNivelAcesso() == Sessao::NIVEL_SUPER)
+						echo '<a class="botao b-erro" href="?pagina=nivel_acesso&usua_id='.$vinculo->getResponsavel()->getIdBaseExterna().'&novo_nivel='.Sessao::NIVEL_SUPER.'">Tornar Super Usu&aacute;rio</a>';
+					
+					
+					
+					
+					
+					if(file_exists('fotos/'.$usuario->getIdBaseExterna().'.png')){
+							
+						echo '<img width="300" src="fotos/'.$usuario->getIdBaseExterna().'.png" />';
+							
+					}
+					
+					if(!$vinculo->isActive()){
+						echo '<p>O vinculo não está ativo </p><br>
+								<a href="?pagina=cartao&numero_cartao='.$_GET['numero_cartao'].'&cartao_renovar=1" class="botao">Renovar</a> ';
+					
+						if(isset($_GET['cartao_renovar'])){
+							if(isset($_POST['certeza'])){
+								$usuarioDao = new UsuarioDAO();
+								
+								
+								$usuarioDao->retornaPorIdBaseExterna($usuario);
+								
+								if($vinculoDao->usuarioJaTemVinculo($usuario))
+								{
+									$this->view->mostraSucesso("Esse usuário já possui vínculo válido.");
+									echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+									return;
+								}
+								if($vinculo->isAvulso()){
+							
+									$this->view->mostraSucesso("Não existe renovação de vínculos avulsos!");
+									echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+									return;
+								}
+								
+								
+								
+								if(!$this->verificaSeAtivo($usuario)){
+									$this->view->mostraSucesso("Esse usuário possui um problema quanto ao status!");
+									echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+									return;
+							
+								}
+									
+								$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'G:00:01' );
+								$vinculo->setFinalValidade($daqui3Meses);
+									
+								if($vinculoDao->atualizaValidade($vinculo)){
+									$this->view->mostraSucesso("Vínculo Atualizado com Sucesso!  ");
+								}else{
+									$this->view->mostraSucesso("Erro ao tentar renovar vínculo.  ");
+									
+								}
+								echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+								return;
+							}
+							
+							$this->view->formConfirmacaoRenovarVinculo();
+						}
+					}
+					echo '
+							
+							
+							</div>';
+				}else
+				{
+	
+					echo '<div class="borda"><h1>Cartão Não possui Vínculo Válido.</h1></div>';
+					
+				}
 				
+			
 			}
-			
-			
-			
 		}
 		
 		

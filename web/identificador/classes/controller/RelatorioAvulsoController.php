@@ -1,28 +1,7 @@
 <?php
-ini_set ( 'display_errors', 1 );
-ini_set ( 'display_startup_erros', 1 );
-error_reporting ( E_ALL );
-
-date_default_timezone_set ( 'America/Araguaina' );
-
-function __autoload($classe) {
-	if (file_exists ( 'classes/dao/' . $classe . '.php' ))
-		include_once 'classes/dao/' . $classe . '.php';
-		if (file_exists ( 'classes/model/' . $classe . '.php' ))
-			include_once 'classes/model/' . $classe . '.php';
-			if (file_exists ( 'classes/controller/' . $classe . '.php' ))
-				include_once 'classes/controller/' . $classe . '.php';
-				if (file_exists ( 'classes/util/' . $classe . '.php' ))
-					include_once 'classes/util/' . $classe . '.php';
-					if (file_exists ( 'classes/view/' . $classe . '.php' ))
-						include_once 'classes/view/' . $classe . '.php';
-}
 
 
-
-
-
-class Outros{
+class RelatorioAvulsoProprio{
 	private $dao;
 	public function start(){
 		echo '
@@ -84,11 +63,7 @@ class Outros{
 
 
 	}
-	public function Outros(){
-		$this->start();
-		
-
-	}
+	
 	public function geraNumeroDeRegistros($data1, $data2){
 		$result = $this->dao->getConexao()->query("SELECT * From registro
 		WHERE regi_data BETWEEN '$data1' AND '$data2';
@@ -139,8 +114,5 @@ class Outros{
 
 
 }
-
-
-new Outros();
 
 ?>

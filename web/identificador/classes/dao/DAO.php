@@ -28,11 +28,6 @@ class DAO {
 					//$this->conexao = new PDO ( "pgsql:host=localhost dbname=treinamento user=catraca password=CaTraCa@unilab2015" );
 
 					break;
-			case self::TIPO_PG_TREINAMENTO_LOCAL:
-				$this->conexao = new PDO ( "pgsql:host=localhost dbname=treinamento user=catraca password=CaTraCa@unilab2015" );
-				//$this->conexao = new PDO ( "pgsql:host=localhost dbname=treinamento user=catraca password=CaTraCa@unilab2015" );
-			
-				break;
 			case self::TIPO_PG_PRODUCAO_BAHIA:
 						$this->conexao = new PDO ( "pgsql:host=200.128.19.11 dbname=producao user=catraca password=CaTraCa@unilab2015" );
 						break;
@@ -67,12 +62,9 @@ class DAO {
 	const TIPO_PG_SIGAAA = 4;
 	const TIPO_PG_SISTEMAS_COMUM = 6;
 	const TIPO_PG_PRODUCAO_LOCAL = 7;
-	const TIPO_PG_TREINAMENTO_LOCAL = 10;
-	
 	const TIPO_PG_DESENVOLVIMENTO = 8;
 	const TIPO_PG_PRODUCAO_BAHIA = 9;
-	
-	const TIPO_DEFAULT = self::TIPO_PG_TREINAMENTO_LOCAL;
+	const TIPO_DEFAULT = self::TIPO_PG_PRODUCAO_LOCAL;
 	
 }
 
