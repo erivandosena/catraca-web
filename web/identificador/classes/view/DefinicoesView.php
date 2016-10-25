@@ -517,12 +517,16 @@ class DefinicoesView{
 					</form>';		
 		
 		if (@$_REQUEST['unidade']){
-		$this->formMensagem("-ajuda", "Deseja incluir este custo na unidade?");
-		echo '		<form id="form-confirma" method="post" class="formulario-organizado">
-						<input type="hidden" name="unidade" value="'.$_GET['unidade'].'">
-						<input type="hidden" name="valor_custo" value="'.$_GET['valor_custo'].'">
-						<input type="submit" name="confirmar" value="Confirmar">
-					</form>';
+			if(strlen($_GET['valor_custo']) < 1 || strlen($_GET['unidade']) < 1){
+				return;
+			}
+				
+			$this->formMensagem("-ajuda", "Deseja incluir este custo na unidade?");
+			echo '		<form id="form-confirma" method="post" class="formulario-organizado">
+							<input type="hidden" name="unidade" value="'.$_GET['unidade'].'">
+							<input type="hidden" name="valor_custo" value="'.$_GET['valor_custo'].'">
+							<input type="submit" name="confirmar" value="Confirmar">
+						</form>';
 		}
 		$var = "";
 		$var = @$_REQUEST['info_unidade'];

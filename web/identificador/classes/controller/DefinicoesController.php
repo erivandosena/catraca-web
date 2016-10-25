@@ -24,38 +24,46 @@
 			$this->view->formInserirUnidade ();
 			$unidadeDao = new UnidadeDAO ( $this->dao->getConexao () );
 			if (isset ( $_GET ['cadastrar_unidade'] )) {
-				echo '<div class="borda">';
-				$this->view->formMensagem("-ajuda","Deseja adicionar: ".$_GET ['cadastrar_unidade'] ."?");
-				echo '	<form action="" method="post" class="formulario sequencial texto-preto">
+				if (strlen( $_GET ['cadastrar_unidade'] ) > 3) {
+					echo '<div class="borda">';
+					$this->view->formMensagem("-ajuda","Deseja adicionar: ".$_GET ['cadastrar_unidade'] ."?");
+					echo '	<form action="" method="post" class="formulario sequencial texto-preto">
 							<input type="hidden" name="certeza_cadastrar_unidade" value="' . $_GET ['cadastrar_unidade'] . '" />
 							<input  type="submit"  name="certeza" value="Confirmar"/>
 					</form>
 					</div>';
+				}
+				
 	
 			}
+			
+			
 			if (isset ( $_POST ['certeza_cadastrar_unidade'] )) {
-				$unidade = $_POST ['certeza_cadastrar_unidade'];
-				$i = 0;
-				$sql = "SELECT * FROM unidade WHERE unid_nome = '$unidade'";
-				$result = $this->dao->getConexao()->query($sql);
-				foreach ($result as $linha){
-					$i++;
-				}
-				if ($i == 0){
-					$stmt = $this->dao->getConexao()->prepare("INSERT INTO unidade(unid_nome) VALUES(?);");
-					$stmt->bindParam(1, $unidade);
-					if ($stmt->execute()) {
-						$this->view->formMensagem("-sucesso", "Unidade inserida com sucesso!");
-						echo '<meta http-equiv="refresh" content="2; url=.\?pagina=definicoes&">';
-					} else {
-						$this->view->formMensagem("-erro", "Erro ao inseriri a unidade!");
+				if (strlen( $_GET ['cadastrar_unidade'] ) > 3) {
+
+					$unidade = $_POST ['certeza_cadastrar_unidade'];
+					$i = 0;
+					$sql = "SELECT * FROM unidade WHERE unid_nome = '$unidade'";
+					$result = $this->dao->getConexao()->query($sql);
+					foreach ($result as $linha){
+						$i++;
+					}
+					if ($i == 0){
+						$stmt = $this->dao->getConexao()->prepare("INSERT INTO unidade(unid_nome) VALUES(?);");
+						$stmt->bindParam(1, $unidade);
+						if ($stmt->execute()) {
+							$this->view->formMensagem("-sucesso", "Unidade inserida com sucesso!");
+							echo '<meta http-equiv="refresh" content="2; url=.\?pagina=definicoes&">';
+						} else {
+							$this->view->formMensagem("-erro", "Erro ao inseriri a unidade!");
+							echo '<meta http-equiv="refresh" content="2; url=.\?pagina=definicoes">';
+						}
+					}else{
+						$this->view->formMensagem("-erro", "Unidade já cadastrada!");
 						echo '<meta http-equiv="refresh" content="2; url=.\?pagina=definicoes">';
 					}
-				}else{
-					$this->view->formMensagem("-erro", "Unidade já cadastrada!");
-					echo '<meta http-equiv="refresh" content="2; url=.\?pagina=definicoes">';
+					return;
 				}
-				return;
 					
 			} else {
 				$unidadesAcademicas = $unidadeDao->retornaLista ();
@@ -123,7 +131,13 @@
 			$this->view->formAdicionarCatracaVirtual();
 	
 			if(isset($_GET['nome_catraca'])){
-	
+				if(strlen($_GET['nome_catraca']) < 3){
+					echo '<div class="borda">';
+					$this->view->formMensagem("-ajuda", "Insira um nome maior");
+					echo '</div>';
+					echo '<meta http-equiv="refresh" content="4; url=.\?pagina=definicoes&lista_catracas=1">';
+					return;
+				}
 				$nomeCatraca = $_GET['nome_catraca'];
 				$sql1 = "SELECT * FROM catraca WHERE catr_nome = '$nomeCatraca'";
 				$result = $dao->getConexao()->query($sql1);
@@ -168,7 +182,12 @@
 	
 	
 			if(isset($_GET['editar_catraca'])){
-					
+				$id  = intval($_GET['editar_catraca']);
+				if(!$id){
+					$this->view->mostraSucesso("Erro ao tentar editar catraca");
+					echo '<meta http-equiv="refresh" content="4; url=.\?pagina=definicoes&lista_catracas=1">';
+					return;
+				}
 				$catraca = new Catraca();
 				$catraca->setId($_GET['editar_catraca']);
 				$listaDeUnidades = $unidadeDao->retornaLista();
@@ -202,6 +221,19 @@
 			$turnoDao = new TurnoDAO ( $this->dao->getConexao () );
 	
 			if (isset ( $_GET ['cadastrar_turno'] )) {
+				if(strlen($_GET['turno_nome']) < 3){
+					$this->view->mostraSucesso ( "Escreva Um Nome Maior" );
+					return;
+				}
+				if(strlen($_GET['hora_inicio']) < 3){
+					$this->view->mostraSucesso ( "Digite a Hora de Início" );
+					return;
+				}
+				if(strlen($_GET['hora_fim']) < 3){
+					$this->view->mostraSucesso ( "Digite a Hora de fim" );
+					return;
+				}
+				
 				echo '	<div class="borda">';
 				$this->view->formMensagem("-ajuda", "Você tem certeza que quer adicionar esse turno? ".$_GET ['turno_nome']);
 				echo '	<form action="" method="post" class="formulario sequencial texto-preto">
@@ -211,9 +243,15 @@
 						<input  type="submit"  name="certeza_cadastrar_turno" value="Confirmar"/>
 					</form>
 					</div>';
+				
 			}
+			
 	
 			if (isset ( $_POST ['certeza_cadastrar_turno'] )) {
+				if(strlen($_GET['turno_nome']) < 3){
+					$this->view->mostraSucesso ( "Escreva Um Nome Maior" );
+					return;
+				}
 				$turnoNome = $_POST ['turno_nome'];
 					
 				$horaInicio = $_POST ['hora_inicio'];
@@ -348,11 +386,11 @@
 			$this->view->formAlterarCustoRefeicao ( $custoAtualRefeicao );
 	
 			$this->view->formAlterarCustoCartao ( $custoCartao );
-	
+
 			$this->view->formCustoUnidade($listaUnidade, $listaCusto);
 	
 			$this->view->listaCustoUnidade($listaCustoUnidade);
-	
+			
 			if (isset ( $_GET ['custo_refeicao'] )) {
 				if (isset($_POST['confirmar'])){
 					$dataTimeAtual = date ( "Y-m-d G:i:s" );
@@ -395,7 +433,9 @@
 			 * Inclui e altera o custo específico da unidade.
 			 */
 			if (isset($_GET['unidade'])){
+				
 				if (isset($_GET['valor_custo'])){
+					
 					if (isset($_POST['confirmar'])){
 						$idUnidade = $_GET['unidade'];
 						$idValorCusto = $_GET['valor_custo'];
@@ -448,9 +488,9 @@
 	
 			$dao = new DAO();
 			$this->view->formAdicionarCatracaVirtual();
-	
+
 			if(isset($_POST['nome_catraca'])){
-					
+				
 				$nomeCatraca = $_POST['nome_catraca'];
 				$sql1 = "SELECT * FROM catraca WHERE catr_nome = '$nomeCatraca'";
 				$result = $dao->getConexao()->query($sql1);
@@ -523,7 +563,9 @@
 			<div id="mensagens">';
 	
 			if (isset($_GET['unidade'])){
-				if(intval($_GET['catraca']) > 0){
+				
+				if(intval($_GET['catraca']) && intval($_GET['unidade'])){
+					
 					$idCatraca = $_GET['catraca'];
 					$idUnidade = $_GET['unidade'];
 					$dao = new DAO();

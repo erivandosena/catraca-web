@@ -62,7 +62,7 @@ class GuicheController{
 		INNER JOIN usuario as cliente
 		ON cliente.usua_id = transacao.usua_id1
 		WHERE (tran_data BETWEEN '$data1' AND '$data2') 
-		AND usuario.usua_id = $idDoUsuario ORDER BY tran_id DESC LIMIT 100 ";
+		AND usuario.usua_id = $idDoUsuario ORDER BY tran_id DESC ";
 
 		$listaDescricao = $dao->getConexao()->query($sqlTransacao);
 		$this->view->formDescricao($listaDescricao);
