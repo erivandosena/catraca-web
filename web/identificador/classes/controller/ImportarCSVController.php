@@ -7,7 +7,7 @@ class ImportarCSVController{
 	public function importar(){
 		$row = 1;
 		$cartoes = array();
-		if (($handle = fopen ( "almoco181020162.csv", "r" )) !== FALSE) {
+		if (($handle = fopen ( "almoco2.csv", "r" )) !== FALSE) {
 			while ( ($data = fgetcsv ( $handle, 1000, "," )) !== FALSE ) {
 				$num = count ( $data );
 				$row ++;
@@ -20,7 +20,7 @@ class ImportarCSVController{
 			fclose ( $handle );
 		}
 		$dao = new CatracaVirtualDAO();
-// 		$dao->getConexao()->beginTransaction();
+		$dao->getConexao()->beginTransaction();
 		
 
 		
@@ -35,24 +35,31 @@ class ImportarCSVController{
 			if($cartao->getCreditos() == 0){
 				$i++;
 			}
+			$isento = false;
+			$valorPago = $vinculo->getCartao()->getTipo()->getValorCobrado();
+			if($dao->vinculoEhIsento($vinculo)){
+				$valorPago = 0;
+				$isento = true;
+			}
+			
 			echo '<tr>';
-			echo '<td>'.$cartao->getNumero().'</td><td>'.$vinculo->getResponsavel()->getNome().' </td><td>'.$cartao->getCreditos().' </td><td>'.$vinculo->getCartao()->getTipo()->getNome().' '.$vinculo->getCartao()->getTipo()->getValorCobrado().'</td>';
+			echo '<td>'.$cartao->getNumero().'</td><td>'.$vinculo->getResponsavel()->getNome().' </td><td>'.$cartao->getCreditos().' </td><td>'.$vinculo->getCartao()->getTipo()->getNome().' '.$valorPago.'</td>';
 			echo '</tr>';
 			
 			
-			$data = '2016-10-18 12:00:00';
-			$valorPago = $vinculo->getCartao()->getTipo()->getValorCobrado();
+			$data = '2016-10-26 19:00:00';
+
 			$custo = 9.5;
-			$idCatraca = 2;
+			$idCatraca = 3;
 			$idCartao = $cartao->getId();
 			$idVinculo = $vinculo->getId();
 			
 			
-// 			$sql = "INSERT into registro(regi_data, regi_valor_pago, regi_valor_custo, catr_id, cart_id, vinc_id)
-// 			VALUES('$data', $valorPago, $custo, $idCatraca, $idCartao, $idVinculo)";			
+			$sql = "INSERT into registro(regi_data, regi_valor_pago, regi_valor_custo, catr_id, cart_id, vinc_id)
+			VALUES('$data', $valorPago, $custo, $idCatraca, $idCartao, $idVinculo)";			
 			
-// 			$novoValor = floatval($vinculo->getCartao()->getCreditos()) - floatval($valorPago);
-// 			$sqlUpdate = "UPDATE cartao set cart_creditos = $novoValor WHERE cart_id = $idCartao";
+			$novoValor = floatval($vinculo->getCartao()->getCreditos()) - floatval($valorPago);
+			$sqlUpdate = "UPDATE cartao set cart_creditos = $novoValor WHERE cart_id = $idCartao";
 			
 // 			echo '<tr>';
 // 			echo '<td colspan=3>';
@@ -60,10 +67,10 @@ class ImportarCSVController{
 // 			echo $sql;
 // 			echo '</td>';
 // 			if($dao->getConexao()->exec($sql)){
-// 				echo '<td>Sucesso</td>';
+// 				echo '<td>Foi</td>';
 					
 // 			}else{
-// 				echo '<td>Fracasso</td>';
+// 				echo '<td>Erro</td>';
 // 				$dao->getConexao()->rollBack();
 // 				return;
 					
@@ -76,9 +83,9 @@ class ImportarCSVController{
 // 			echo $sqlUpdate;
 // 			echo '</td>';
 // 			if($dao->getConexao()->exec($sqlUpdate)){
-// 				echo '<td>Sucesso</td>';				
+// 				echo '<td>Foi Update</td>';				
 // 			}else{
-// 				echo '<td>Fracasso</td>';
+// 				echo '<td>Erro UPDATE</td>';
 // 				$dao->getConexao()->rollBack();
 // 				return;
 // 			}

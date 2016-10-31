@@ -42,20 +42,29 @@ class Auditoria {
 				audi_pagina character varying(200),audi_data timestamp without time zone,  
 				usua_id integer,  audi_observacao character varying(200),  CONSTRAINT auditoria_pkey PRIMARY KEY (audi_id));" );
 	}
-	public static function mostrar(PDO $conexao) {
+	public static function mostrar(PDO $conexao, $idUsuario = null, $dataInicial = null, $dataFinal = null) {
+		
+		$filtro = "";
+		if($dataInicial != null && $dataFinal != null && $idUsuario != null){
+			$dataInicial = date("Y-m-d :h:i:s", strtotime($dataInicial));
+			$dataFinal= date("Y-m-d H:i:s", strtotime($dataFinal));
+			$idUsuario = intval($idUsuario);
+			$filtro = "Where auditoria.usua_id = $idUsuario AND audi_data Between '$dataInicial' AND '$dataFinal'";
+			
+		}
 		$sql = "SELECT * FROM auditoria 
 				INNER JOIN usuario 
-				ON auditoria.usua_id = usuario.usua_id 
+				ON auditoria.usua_id = usuario.usua_id $filtro
 				ORDER BY audi_id DESC LIMIT 3000";
+
 		$result = $conexao->query ( $sql );
+		echo '<table border="1">';
+		echo '<tr><th>Nome</th><th>Pagina</th><th>Data e Hora</th><th>Nivel de Acesso</th></tr>';
 		foreach ( $result as $linha ) {
-			echo $linha ['audi_id'] . ' - ' . $linha ['usua_nome'] . ' - ' . $linha ['audi_pagina'] . ' - ' . date ( "d/m/Y H:i:s", strtotime ( $linha ['audi_data'] ) );
-			if ($linha ['usua_nivel'] > 1)
-				echo ' <b> ' . $linha ['usua_nivel'] . '</b>';
-			else
-				echo ' Comum';
-			echo '<hr>';
+			echo '<tr><td>'.$linha ['usua_nome'].'</td><td>'.$linha ['audi_pagina'] .'</td><td>'.date ( "d/m/Y H:i:s", strtotime ( $linha ['audi_data'] ) ).'</td><td>'.$linha['usua_nivel'].'</td></tr>';
+			
 		}
+		echo '</table>';
 	}
 }
 
