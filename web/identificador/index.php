@@ -216,6 +216,7 @@ if (isset ( $_GET ["sair"] )) {
 									<ul>
 										<li><a href="?pagina=relatorio">Relatório RU</a></li>
 										<li><a href="?pagina=relatorio_guiche">Relatório Guichê</a></li>
+										<li><a href="?pagina=pessoal">Histórico Pessoal</a></li>
 									</ul>
 								</li>';
 						echo ' <li><a href="?pagina=nivel_acesso" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Nivel de Acesso</span></a></li>';
@@ -472,15 +473,14 @@ if (isset ( $_GET ["sair"] )) {
 							case 'info' :
 								InfoController::main($sessao->getNivelAcesso());
 								break;
-
-							case 'pessoal' :
-								PessoalController::main($sessao->getNivelAcesso());
-								break;
 							case 'identificador' :
 								IdentificadorClienteController::main($sessao->getNivelAcesso());
 								break;
 							case 'auditoria':
 								AuditoriaController::main($sessao->getNivelAcesso());
+								break;
+							case 'pessoal':
+								PessoalController::main($sessao->getNivelAcesso());
 								break;
 							default :
 								echo '404 NOT FOUND';

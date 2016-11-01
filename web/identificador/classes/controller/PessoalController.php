@@ -3,6 +3,14 @@ class PessoalController {
 	public static function main($nivelDeAcesso){
 	
 		switch ($nivelDeAcesso){
+			case Sessao::NIVEL_ADMIN:
+				$controller = new PessoalController();
+				$controller->consultarUsuario();
+				break;
+			case Sessao::NIVEL_SUPER:
+				$controller = new PessoalController();
+				$controller->consultarUsuario();
+				break;
 			default:	
 				$controller = new PessoalController();
 				$controller->telaPessoal();
@@ -10,7 +18,130 @@ class PessoalController {
 		}
 	}
 	private $dao;
+	private $view;
 	
+	public function consultarUsuario(){
+		$this->view = new PessoalView();
+		
+		echo '<div class = "simpleTabs">
+			        <ul class = "simpleTabsNavigation">
+						<li><a href="#">Identifica&ccedil;&atilde;o</a></li>
+			        </ul>
+		        <div class = "simpleTabsContent">';
+		
+		$this->view->formBuscaCartao();
+		
+		if(isset($_GET['numero_cartao'])){
+			if(strlen($_GET['numero_cartao']) > 3){
+		
+				$cartao = new Cartao();
+				$cartao->setNumero($_GET['numero_cartao']);
+				$numeroCartao = $cartao->getNumero();
+				$dataTimeAtual = date ( "Y-m-d G:i:s" );
+				$sqlVerificaNumero = "SELECT * FROM usuario
+				INNER JOIN vinculo
+				ON vinculo.usua_id = usuario.usua_id
+				LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
+				LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id
+				WHERE cartao.cart_numero = '$numeroCartao'
+				";
+				$result = $this->dao->getConexao()->query($sqlVerificaNumero);
+				$idCartao = 0;
+				$usuario = new Usuario();
+				$tipo = new Tipo();
+				$vinculoDao = new VinculoDAO($this->dao->getConexao());
+				$vinculo = new Vinculo();
+				foreach($result as $linha){
+					$idDoVinculo = $linha['vinc_id'];
+					$tipo->setNome($linha['tipo_nome']);
+					$usuario->setNome($linha['usua_nome']);
+					$usuario->setId($linha['usua_id']);
+					$usuario->setIdBaseExterna($linha['id_base_externa']);
+					$idCartao = $linha['cart_id'];
+					
+					$vinculo->setAvulso($linha['vinc_avulso']);
+					$avulso = $linha['vinc_avulso'];
+					if($avulso){
+						$usuario->setNome("Avulso");
+					}
+					break;
+				}
+					
+				if($idCartao){
+		
+					$vinculo->setId($idDoVinculo);
+					$cartao->setId($idCartao);
+					$vinculoDao->vinculoPorId($vinculo);
+					$imagem = null;
+		
+					if(file_exists('fotos/'.$usuario->getIdBaseExterna().'.png')){
+						$imagem = $usuario->getIdBaseExterna();
+					}else {
+						$imagem = "sem-imagem";
+					}
+		
+						
+		
+					if(!$vinculo->isActive()){
+						echo '<div id="pergunta">';
+						$this->view->formMensagem("-erro", "vinculo não está ativo.");
+						echo '	<a href="?pagina=cartao&numero_cartao='.$_GET['numero_cartao'].'&cartao_renovar=1" class="botao">Renovar</a>
+							</div>';
+						if(isset($_GET['cartao_renovar'])){
+							if(isset($_POST['certeza'])){
+								$usuarioDao = new UsuarioDAO($this->dao->getConexao());
+		
+								$usuarioDao->retornaPorIdBaseExterna($usuario);
+		
+								if($vinculoDao->usuarioJaTemVinculo($usuario))
+								{
+									$this->view->formMensagem("-ajuda", "Esse usuário já possui vínculo válido.");
+									echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+									return;
+								}
+								if($vinculo->isAvulso()){
+									$this->view->formMensagem("-ajuda", "Não existe renovação de vínculos avulsos!");
+									echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+									return;
+								}
+		
+								if(!$this->verificaSeAtivo($usuario)){
+									$this->view->formMensagem("-erro", "Esse usuário possui um problema quanto ao status!");
+									echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+									return;
+								}
+		
+								$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'G:00:01' );
+								$vinculo->setFinalValidade($daqui3Meses);
+		
+								if($vinculoDao->atualizaValidade($vinculo)){
+									$this->view->formMensagem("-sucesso", "Vínculo Atualizado com Sucesso!");
+								}else{
+									$this->view->formMensagem("-erro", "Erro ao tentar renovar vínculo.");
+								}
+								echo '<meta http-equiv="refresh" content="2; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+								return;
+							}
+		
+							$this->view->formConfirmacaoRenovarVinculo();
+						}
+					}
+				}else{
+					$this->view->formMensagem("-erro", "Cartão Não possui Vínculo Válido.");
+				}
+			}
+			$this->telaDeCreditos($usuario);
+			$this->telaDeTransacoes($usuario);
+		}
+		
+		
+		echo '	</div>
+		    </div>';
+	
+	}
+	public function PessoalController(){
+		$this->dao = new DAO();
+	}
 	public function telaPessoal(){
 		
 		echo '<div class="conteudo"> <div class = "simpleTabs">
@@ -23,9 +154,9 @@ class PessoalController {
 		        <div class = "simpleTabsContent">';
 				$usuario = new Usuario();
 				$sessao = new Sessao();
-				$this->dao = new UsuarioDAO();
+				$usuarioDao = new UsuarioDAO($this->dao->getConexao());
 				$usuario->setId($sessao->getIdUsuario());
-				$this->dao->preenchePorId($usuario);
+				$usuarioDao->preenchePorId($usuario);
 				$this->telaDeCreditos($usuario);
 		echo '	</div>	
 				<div class = "simpleTabsContent">';
@@ -42,7 +173,7 @@ class PessoalController {
 		$result = $this->dao->getConexao()->query("SELECT * FROM transacao 
 				INNER JOIN usuario ON usuario.usua_id = transacao.usua_id
 				WHERE usua_id1 = $idUsuario
-				ORDER BY tran_id DESC LIMIT 100");
+				ORDER BY tran_data DESC LIMIT 100");
 		echo '<p>&Uacute;ltimas 100 transa&ccedil;&otilde;es</p>';
 		echo '<table class="tabela borda-vertical zebrada texto-preto">';
 		echo '<thead>';
@@ -108,7 +239,10 @@ class PessoalController {
 			return;
 		}
 		echo '<div class="borda">';
+		echo '<p>Usuário: '.$vinculo->getResponsavel()->getNome().'</p>';
+		
 		echo '<p>Créditos: R$ '.number_format ( $vinculo->getCartao()->getCreditos(), 2, ',', '.' ).'</p>';
+		echo '<p>Número do Cartão:'.$vinculo->getCartao()->getNumero().'</p>';
 		$time = strtotime($vinculo->getInicioValidade());
 		echo '<p>Início da Validade: '.date('d/m/Y H:i:s', $time).'</p>';
 		
@@ -128,10 +262,10 @@ class PessoalController {
 					INNER JOIN catraca ON registro.catr_id = catraca.catr_id
 					INNER JOIN catraca_unidade ON catraca_unidade.catr_id = catraca.catr_id 
 					INNER JOIN unidade ON catraca_unidade.unid_id = unidade.unid_id 
-					WHERE vinc_id = $idTransacao ORDER BY regi_id DESC LIMIT 10";
+					WHERE vinc_id = $idTransacao ORDER BY regi_data DESC LIMIT 30";
 				$result = $this->dao->getConexao()->query($sql);
 				echo '<div class="borda">';
-				echo '<p>&Uacute;ltimas 10 Refeições do Vínculo: ';
+				echo '<p>&Uacute;ltimas 30 Refeições com o Cartão: ';
 				echo '<table  class="tabela borda-vertical zebrada texto-preto">';
 				foreach($result as $linha){
 					$time = strtotime($linha['regi_data']);
@@ -145,7 +279,13 @@ class PessoalController {
 			}
 				
 		}
-		echo '<p><a href="?pagina=pessoal&id_refeicoes='.$vinculo->getId().'">Refeicoes</a></p>';
+		if(isset($_GET['numero_cartao'])){
+			echo '<p><a href="?pagina=pessoal&id_refeicoes='.$vinculo->getId().'&numero_cartao='.$_GET['numero_cartao'].'">Refeicoes</a></p>';
+			
+		}else{
+			echo '<p><a href="?pagina=pessoal&id_refeicoes='.$vinculo->getId().'">Refeicoes</a></p>';
+			
+		}
 		
 		echo '</div>';
 	}

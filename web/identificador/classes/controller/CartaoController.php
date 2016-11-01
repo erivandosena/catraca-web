@@ -63,10 +63,7 @@ class CartaoController{
 		$this->view->formBuscaCartao();
 		
 		if(isset($_GET['numero_cartao'])){
-			
 			if(strlen($_GET['numero_cartao']) > 3){
-
-
 
 				$cartao = new Cartao();
 				$cartao->setNumero($_GET['numero_cartao']);
