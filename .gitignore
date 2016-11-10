@@ -24,3 +24,9 @@
 *.log
 /projeto/unicafeWin/.recommenders/index/http___download_eclipse_org_recommenders_models_luna_
 /web/gerador/teste.php
+*/.recommenders/*
+*.lock
+*.recommenders/*
+/java/catraca_virtual/.recommenders/index/http___download_eclipse_org_recommenders_models_mars_/*
+/java/catraca_virtual/.recommenders/caches/*.json
+/java/catraca_virtual/catraca_virtual/*.bd

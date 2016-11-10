@@ -1,4 +1,8 @@
-package br.teste;
+package br.edu.unilab.catraca.controller.recurso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
@@ -26,5 +30,22 @@ public class JerseyClientGet {
         System.out.println("Teste");
         String output = resp.getEntity(String.class);
         System.out.println("response: "+output);
+        
+        
+        JSONArray projectArray;
+		try {
+			projectArray = new JSONArray(output.substring(11));
+			
+			for (int i = 0; i < projectArray.length(); i++) {
+	            JSONObject proj = projectArray.getJSONObject(i);
+	            System.out.println("ID:"+proj.getString("cart_id")+", Numero:"+proj.getString("cart_numero"));
+	        }
+			System.out.println();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        
     }
 }

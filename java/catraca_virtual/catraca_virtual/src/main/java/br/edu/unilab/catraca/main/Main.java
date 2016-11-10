@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileLock;
 
+import br.edu.unilab.catraca.dao.CartaoDAO;
+
 
 
 /**
@@ -34,7 +36,8 @@ public class Main {
 		}
 		
 		if (lock != null) {
-			System.out.println("Teste");
+			CartaoDAO dao = new CartaoDAO();
+			dao.mostrar();
 			
 		} else {
 			System.out.println("Ja ha uma instancia rodando");

@@ -81,7 +81,7 @@ public class DAO {
 	public  static final String DRIVER_POSTGRES = "org.postgresql.Driver";
 	public  static final String JDBC_BANCO_POSTGRES = "jdbc:postgresql:";
 	public static final String DRIVER_SQLITE = "org.sqlite.JDBC";
-	public static final String JDBC_BANCO_SQLITE = "jdbc:sqlite:banco.db";
+	public static final String JDBC_BANCO_SQLITE = "jdbc:sqlite:banco.bd";
 
 	
 	public static final String USUARIO_MYSQL = "root";
