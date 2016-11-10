@@ -7,8 +7,11 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.nio.channels.FileLock;
+import java.util.ArrayList;
 
+import br.edu.unilab.catraca.controller.recurso.CartaoRecurso;
 import br.edu.unilab.catraca.dao.CartaoDAO;
+import br.edu.unilab.unicafe.model.Cartao;
 
 
 
@@ -36,8 +39,9 @@ public class Main {
 		}
 		
 		if (lock != null) {
-			CartaoDAO dao = new CartaoDAO();
-			dao.mostrar();
+			CartaoRecurso recurso = new CartaoRecurso();
+			ArrayList<Cartao> cartoes = recurso.obterLista();
+			System.out.println("Numero de cartoes: "+cartoes.size());
 			
 		} else {
 			System.out.println("Ja ha uma instancia rodando");
