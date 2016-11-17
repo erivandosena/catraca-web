@@ -14,7 +14,7 @@ public class Usuario {
 	private String senha;
 	private int nivelAcesso;
 	private String cpf;
-
+	private int idBaseExterna;
 
 	
 	public int getId() {
@@ -98,17 +98,20 @@ public class Usuario {
 	}
 
 	public Usuario() {
-		id = 0;
-		nome = "livre";
-		email = "";
-		login = "livre";
-		senha = "";
 	}
 
 	@Override
 	public String toString() {
 		// return "Usuario: id=" + id + "\n" + "nome=" + nome + "\n" + "email=" + email + "\n" + "login=" + login + "\n" + "senha=" + senha + "\n" + "nivelAcesso=" + nivelAcesso + "\n" + "cpf=" + cpf;
 		return login;
+	}
+
+	public int getIdBaseExterna() {
+		return idBaseExterna;
+	}
+
+	public void setIdBaseExterna(int idBaseExterna) {
+		this.idBaseExterna = idBaseExterna;
 	}
 
 }

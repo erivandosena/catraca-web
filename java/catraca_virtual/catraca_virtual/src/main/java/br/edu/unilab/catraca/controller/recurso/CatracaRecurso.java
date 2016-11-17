@@ -11,43 +11,30 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
 import br.edu.unilab.catraca.dao.CartaoDAO;
+import br.edu.unilab.catraca.dao.CatracaDAO;
 import br.edu.unilab.unicafe.model.Cartao;
+import br.edu.unilab.unicafe.model.Catraca;
 import sun.misc.BASE64Encoder;
 
-/**
- * 
- * @author Jefferson Uchoa Ponte
- *
- *
- *Objetivo desta classe é pegar os cartões do WebService e inserir na base local. 
- *
- */
-public class CartaoRecurso extends Recurso{
-	
-	public CartaoDAO dao;
+
+public class CatracaRecurso extends Recurso{
+
+	private CatracaDAO dao;
 	
 	public void sincronizar(){
-		this.dao = new CartaoDAO();
+		this.dao = new CatracaDAO();
+		
 		this.dao.limpar();
-		ArrayList<Cartao> cartoes = this.obterLista();
-		System.out.println("Numero de cartoes: "+cartoes.size());
-		System.out.println("Vamos inserir na base local");
-		
-		for (Cartao cartao : cartoes) {
-			
-			if(this.dao.inserir(cartao)){
-				System.out.println("Inseriu o cartao: "+cartao.getNumero());	
-			}
+		ArrayList<Catraca> catracas = this.obterLista();
+		for (Catraca catraca : catracas) {
+			dao.inserir(catraca);
 		}
-		System.out.println("Mostrat doos");			
-		this.dao.mostrar();
-		
 	}
 	
-	public ArrayList<Cartao> obterLista(){
-		ArrayList<Cartao> lista = new ArrayList<Cartao>();
+	public ArrayList<Catraca> obterLista(){
+		ArrayList<Catraca> lista = new ArrayList<Catraca>();
 		
-		String url = URL+"cartao/jcartao";
+		String url = URL+"turno/jturno";
         String authString = USUARIO + ":" + SENHA;
         
         @SuppressWarnings("restriction")
@@ -66,18 +53,18 @@ public class CartaoRecurso extends Recurso{
         String output = resp.getEntity(String.class);        
         JSONArray projectArray;
 		try {
-			projectArray = new JSONArray(output.substring(11));
+			
+			projectArray = new JSONArray(output.substring(13));
 			for (int i = 0; i < projectArray.length(); i++) {
 	            JSONObject proj = projectArray.getJSONObject(i);
-	            Cartao cartao = new Cartao();
-	            cartao.setId(proj.getInt("cart_id"));
-	            cartao.setNumero(proj.getString("cart_numero"));
-	            cartao.setCreditos(proj.getDouble("cart_creditos"));
-	            lista.add(cartao);
+	            Catraca catraca = new Catraca();
+	            catraca.setId(proj.getInt("catr_id"));
+	            catraca.setNome(proj.getString("catr_nome"));
+	            catraca.setFinanceiroAtivo(proj.getBoolean("catr_financeiro"));
+	            lista.add(catraca);
+	            
 	        }
-			
 			return lista;
-			
 			
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -85,6 +72,4 @@ public class CartaoRecurso extends Recurso{
 		}
 		
 	}
-	
-
 }

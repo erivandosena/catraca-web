@@ -8,6 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+import br.edu.unilab.unicafe.model.Turno;
 import br.edu.unilab.unicafe.model.Usuario;
 
 public class UsuarioDAO extends DAO {
@@ -24,7 +25,48 @@ public class UsuarioDAO extends DAO {
 	}
 	
 	
+	public boolean limpar(){
+		
+		PreparedStatement ps2;
+		try {
+			ps2 = this.getConexao().prepareStatement("DELETE FROM usuario");
+			ps2.executeUpdate();
+			return true;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return false;
+		
+		
+	}
 	
+
+	public boolean inserir(Usuario usuario){
+		try {
+			
+			PreparedStatement ps2 = this.getConexao().prepareStatement("INSERT INTO usuario(usua_id, usua_nome, usua_email, usua_login, usua_senha, usua_nivel, id_base_externa) VALUES(?, ?, ?, ?, ?, ?, ?)");
+			ps2.setInt(1, usuario.getId());
+			ps2.setString(2, usuario.getNome());
+			ps2.setString(3, usuario.getEmail());
+			ps2.setString(4, usuario.getLogin());
+			
+			ps2.setString(5, usuario.getSenha());
+			ps2.setInt(6, usuario.getNivelAcesso());
+			ps2.setInt(7, usuario.getIdBaseExterna());
+			
+			
+			ps2.executeUpdate();
+			return true;
+					
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return false;
+		}		
+		
+		
+	}
 
 	/**
 	 * 
@@ -199,18 +241,6 @@ public class UsuarioDAO extends DAO {
 		}
 		return lista;
 	}
-	
-	
-	/**
-	 * Esse método vai determinar como ser� a cota. 
-	 * Antes de criar regras mais din�micas iremos deixar
-	 * @param usuario
-	 * @return
-	 */
-	public int retornaCota(Usuario usuario){
-		return 216000;
-	}
-	
 	
 	public static String getMD5(String input) {
         byte[] source;

@@ -11,7 +11,11 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
 import br.edu.unilab.catraca.dao.CartaoDAO;
+import br.edu.unilab.catraca.dao.TurnoDAO;
+import br.edu.unilab.catraca.dao.UsuarioDAO;
 import br.edu.unilab.unicafe.model.Cartao;
+import br.edu.unilab.unicafe.model.Turno;
+import br.edu.unilab.unicafe.model.Usuario;
 import sun.misc.BASE64Encoder;
 
 /**
@@ -22,35 +26,23 @@ import sun.misc.BASE64Encoder;
  *Objetivo desta classe é pegar os cartões do WebService e inserir na base local. 
  *
  */
-public class CartaoRecurso extends Recurso{
+public class UsuarioRecurso extends Recurso{
 	
-	public CartaoDAO dao;
+	private UsuarioDAO dao;
 	
 	public void sincronizar(){
-		this.dao = new CartaoDAO();
+		this.dao = new UsuarioDAO();
 		this.dao.limpar();
-		ArrayList<Cartao> cartoes = this.obterLista();
-		System.out.println("Numero de cartoes: "+cartoes.size());
-		System.out.println("Vamos inserir na base local");
-		
-		for (Cartao cartao : cartoes) {
-			
-			if(this.dao.inserir(cartao)){
-				System.out.println("Inseriu o cartao: "+cartao.getNumero());	
-			}
+		ArrayList<Usuario> lista = this.obterLista();
+		for (Usuario usuario: lista) {
+			dao.inserir(usuario);
 		}
-		System.out.println("Mostrat doos");			
-		this.dao.mostrar();
-		
 	}
-	
-	public ArrayList<Cartao> obterLista(){
-		ArrayList<Cartao> lista = new ArrayList<Cartao>();
-		
-		String url = URL+"cartao/jcartao";
+	public ArrayList<Usuario> obterLista(){
+		ArrayList<Usuario> lista = new ArrayList<Usuario>();
+		System.out.println("Obter");
+		String url = URL+"usuario/jusuario";
         String authString = USUARIO + ":" + SENHA;
-        
-        @SuppressWarnings("restriction")
 		String authStringEnc = new BASE64Encoder().encode(authString.getBytes());
         Client restClient = Client.create();
         WebResource webResource = restClient.resource(url);
@@ -63,21 +55,26 @@ public class CartaoRecurso extends Recurso{
             return null;
         }
         
-        String output = resp.getEntity(String.class);        
+        String output = resp.getEntity(String.class);     
+        System.out.println(output.substring(12));
         JSONArray projectArray;
 		try {
-			projectArray = new JSONArray(output.substring(11));
+			
+			projectArray = new JSONArray(output.substring(12));
 			for (int i = 0; i < projectArray.length(); i++) {
 	            JSONObject proj = projectArray.getJSONObject(i);
-	            Cartao cartao = new Cartao();
-	            cartao.setId(proj.getInt("cart_id"));
-	            cartao.setNumero(proj.getString("cart_numero"));
-	            cartao.setCreditos(proj.getDouble("cart_creditos"));
-	            lista.add(cartao);
+	            Usuario usuario = new Usuario();
+	            usuario.setId(proj.getInt("usua_id"));
+	            usuario.setNome(proj.getString("usua_nome"));
+	            usuario.setEmail(proj.getString("usua_email"));
+	            usuario.setLogin(proj.getString("usua_login"));
+	            usuario.setSenha(proj.getString("usua_senha"));
+	            usuario.setNivelAcesso(proj.getInt("usua_nivel"));
+	            usuario.setIdBaseExterna(proj.getInt("id_base_externa"));
+	            lista.add(usuario);
+	            
 	        }
-			
 			return lista;
-			
 			
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -85,6 +82,9 @@ public class CartaoRecurso extends Recurso{
 		}
 		
 	}
+	
+	
+	
 	
 
 }

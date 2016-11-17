@@ -1,5 +1,7 @@
 package br.edu.unilab.catraca.controller.recurso;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -10,44 +12,31 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
-import br.edu.unilab.catraca.dao.CartaoDAO;
-import br.edu.unilab.unicafe.model.Cartao;
+import br.edu.unilab.catraca.dao.CatracaDAO;
+import br.edu.unilab.catraca.dao.CustoRefeicaoDAO;
+import br.edu.unilab.unicafe.model.Catraca;
+import br.edu.unilab.unicafe.model.CustoRefeicao;
+import br.edu.unilab.unicafe.model.Turno;
 import sun.misc.BASE64Encoder;
 
-/**
- * 
- * @author Jefferson Uchoa Ponte
- *
- *
- *Objetivo desta classe é pegar os cartões do WebService e inserir na base local. 
- *
- */
-public class CartaoRecurso extends Recurso{
+public class CustoRefeicaoRecurso extends Recurso{
 	
-	public CartaoDAO dao;
+	private CustoRefeicaoDAO dao;
 	
 	public void sincronizar(){
-		this.dao = new CartaoDAO();
+		this.dao = new CustoRefeicaoDAO();
+		
 		this.dao.limpar();
-		ArrayList<Cartao> cartoes = this.obterLista();
-		System.out.println("Numero de cartoes: "+cartoes.size());
-		System.out.println("Vamos inserir na base local");
-		
-		for (Cartao cartao : cartoes) {
-			
-			if(this.dao.inserir(cartao)){
-				System.out.println("Inseriu o cartao: "+cartao.getNumero());	
-			}
+		ArrayList<CustoRefeicao> lista = this.obterLista();
+		for (CustoRefeicao custoRefeicao : lista) {
+			dao.inserir(custoRefeicao);
 		}
-		System.out.println("Mostrat doos");			
-		this.dao.mostrar();
-		
 	}
 	
-	public ArrayList<Cartao> obterLista(){
-		ArrayList<Cartao> lista = new ArrayList<Cartao>();
+	public ArrayList<CustoRefeicao> obterLista(){
+		ArrayList<CustoRefeicao> lista = new ArrayList<CustoRefeicao>();
 		
-		String url = URL+"cartao/jcartao";
+		String url = URL+"custo_refeicao/jcusto_refeicao";
         String authString = USUARIO + ":" + SENHA;
         
         @SuppressWarnings("restriction")
@@ -64,20 +53,21 @@ public class CartaoRecurso extends Recurso{
         }
         
         String output = resp.getEntity(String.class);        
+        System.out.println(output.substring(18));
         JSONArray projectArray;
 		try {
-			projectArray = new JSONArray(output.substring(11));
+			
+			projectArray = new JSONArray(output.substring(18));
 			for (int i = 0; i < projectArray.length(); i++) {
 	            JSONObject proj = projectArray.getJSONObject(i);
-	            Cartao cartao = new Cartao();
-	            cartao.setId(proj.getInt("cart_id"));
-	            cartao.setNumero(proj.getString("cart_numero"));
-	            cartao.setCreditos(proj.getDouble("cart_creditos"));
-	            lista.add(cartao);
+	            CustoRefeicao custoRefeicao = new CustoRefeicao();
+	            custoRefeicao.setId(proj.getInt("cure_id"));
+	            custoRefeicao.setValor(proj.getDouble("cure_valor"));
+	            custoRefeicao.setData(proj.getString("cure_data"));
+	            lista.add(custoRefeicao);
+	            
 	        }
-			
 			return lista;
-			
 			
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -85,6 +75,5 @@ public class CartaoRecurso extends Recurso{
 		}
 		
 	}
-	
 
 }

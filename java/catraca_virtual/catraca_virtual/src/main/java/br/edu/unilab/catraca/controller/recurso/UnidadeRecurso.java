@@ -11,43 +11,35 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
 import br.edu.unilab.catraca.dao.CartaoDAO;
+import br.edu.unilab.catraca.dao.UnidadeDAO;
 import br.edu.unilab.unicafe.model.Cartao;
+import br.edu.unilab.unicafe.model.Unidade;
 import sun.misc.BASE64Encoder;
 
-/**
- * 
- * @author Jefferson Uchoa Ponte
- *
- *
- *Objetivo desta classe é pegar os cartões do WebService e inserir na base local. 
- *
- */
-public class CartaoRecurso extends Recurso{
+public class UnidadeRecurso extends Recurso{
 	
-	public CartaoDAO dao;
+	
+	private UnidadeDAO dao;
 	
 	public void sincronizar(){
-		this.dao = new CartaoDAO();
+		this.dao = new UnidadeDAO();
 		this.dao.limpar();
-		ArrayList<Cartao> cartoes = this.obterLista();
-		System.out.println("Numero de cartoes: "+cartoes.size());
-		System.out.println("Vamos inserir na base local");
+		ArrayList<Unidade> lista = this.obterLista();
 		
-		for (Cartao cartao : cartoes) {
+		for (Unidade unidade : lista) {
 			
-			if(this.dao.inserir(cartao)){
-				System.out.println("Inseriu o cartao: "+cartao.getNumero());	
+			if(this.dao.inserir(unidade)){
+				System.out.println("Inseriu o cartao: "+unidade.getNome());	
 			}
 		}
-		System.out.println("Mostrat doos");			
 		this.dao.mostrar();
 		
 	}
 	
-	public ArrayList<Cartao> obterLista(){
-		ArrayList<Cartao> lista = new ArrayList<Cartao>();
+	public ArrayList<Unidade> obterLista(){
+		ArrayList<Unidade> lista = new ArrayList<Unidade>();
 		
-		String url = URL+"cartao/jcartao";
+		String url = URL+"unidade/junidade";
         String authString = USUARIO + ":" + SENHA;
         
         @SuppressWarnings("restriction")
@@ -63,19 +55,19 @@ public class CartaoRecurso extends Recurso{
             return null;
         }
         
-        String output = resp.getEntity(String.class);        
+        String output = resp.getEntity(String.class);
+        System.out.println(output.substring(13));
         JSONArray projectArray;
 		try {
-			projectArray = new JSONArray(output.substring(11));
+			projectArray = new JSONArray(output.substring(13));
 			for (int i = 0; i < projectArray.length(); i++) {
+				
 	            JSONObject proj = projectArray.getJSONObject(i);
-	            Cartao cartao = new Cartao();
-	            cartao.setId(proj.getInt("cart_id"));
-	            cartao.setNumero(proj.getString("cart_numero"));
-	            cartao.setCreditos(proj.getDouble("cart_creditos"));
-	            lista.add(cartao);
-	        }
-			
+	            Unidade unidade = new Unidade();
+	            unidade.setId(proj.getInt("unid_id"));
+	            unidade.setNome(proj.getString("unid_nome"));
+	            lista.add(unidade);
+	        }			
 			return lista;
 			
 			
@@ -85,6 +77,5 @@ public class CartaoRecurso extends Recurso{
 		}
 		
 	}
-	
 
 }

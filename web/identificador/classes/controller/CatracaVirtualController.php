@@ -205,7 +205,7 @@ class CatracaVirtualController{
 				$vinculoDao = new VinculoDAO($this->dao->getConexao());
 				if(($i != 0) && !$vinculoDao->usuarioJaTemVinculo($usuario) && !$vinculo->isAvulso() && $vinculo->getResponsavel()->verificaSeAtivo()){
 					
-					$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'G:00:01' );
+					$daqui3Meses = date ( 'Y-m-d', strtotime ( "+90 days" ) ) . 'T' . date ( 'G:00:01' );
 					$vinculo->setFinalValidade($daqui3Meses);
 					
 					$vinculoDao->atualizaValidade($vinculo);

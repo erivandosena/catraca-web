@@ -9,6 +9,7 @@ import java.io.RandomAccessFile;
 import java.nio.channels.FileLock;
 import java.util.ArrayList;
 
+import br.edu.unilab.catraca.controller.CatracaVirtualController;
 import br.edu.unilab.catraca.controller.recurso.CartaoRecurso;
 import br.edu.unilab.catraca.dao.CartaoDAO;
 import br.edu.unilab.unicafe.model.Cartao;
@@ -39,9 +40,8 @@ public class Main {
 		}
 		
 		if (lock != null) {
-			CartaoRecurso recurso = new CartaoRecurso();
-			ArrayList<Cartao> cartoes = recurso.obterLista();
-			System.out.println("Numero de cartoes: "+cartoes.size());
+			CatracaVirtualController controller = new CatracaVirtualController();
+			controller.iniciar();
 			
 		} else {
 			System.out.println("Ja ha uma instancia rodando");
