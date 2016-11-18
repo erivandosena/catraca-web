@@ -55,7 +55,6 @@ public class VinculoRecurso extends Recurso{
         }
         
         String output = resp.getEntity(String.class);
-        System.out.println(output.substring(13));
         JSONArray projectArray;
 		try {
 			projectArray = new JSONArray(output.substring(13));

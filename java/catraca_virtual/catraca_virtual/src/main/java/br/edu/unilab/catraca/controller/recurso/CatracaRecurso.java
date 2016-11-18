@@ -27,14 +27,16 @@ public class CatracaRecurso extends Recurso{
 		this.dao.limpar();
 		ArrayList<Catraca> catracas = this.obterLista();
 		for (Catraca catraca : catracas) {
-			dao.inserir(catraca);
+			if(!dao.inserir(catraca)){
+				System.out.println("Erro ao tentar inserir catraca: "+catraca.getNome());
+			}
 		}
 	}
 	
 	public ArrayList<Catraca> obterLista(){
 		ArrayList<Catraca> lista = new ArrayList<Catraca>();
 		
-		String url = URL+"turno/jturno";
+		String url = URL+"catraca/jcatraca";
         String authString = USUARIO + ":" + SENHA;
         
         @SuppressWarnings("restriction")
@@ -50,7 +52,7 @@ public class CatracaRecurso extends Recurso{
             return null;
         }
         
-        String output = resp.getEntity(String.class);        
+        String output = resp.getEntity(String.class);   
         JSONArray projectArray;
 		try {
 			

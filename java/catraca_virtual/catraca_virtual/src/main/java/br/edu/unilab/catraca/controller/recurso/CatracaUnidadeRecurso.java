@@ -49,7 +49,6 @@ public class CatracaUnidadeRecurso extends Recurso{
         }
         
         String output = resp.getEntity(String.class);     
-        System.out.println(output.substring(20));
         JSONArray projectArray;
 		try {
 			

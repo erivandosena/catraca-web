@@ -46,7 +46,6 @@ public class TipoRecurso extends Recurso{
         }
         
         String output = resp.getEntity(String.class);     
-        System.out.println(output.substring(10));
         JSONArray projectArray;
 		try {
 			

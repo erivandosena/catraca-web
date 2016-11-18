@@ -28,8 +28,8 @@ public class UnidadeRecurso extends Recurso{
 		
 		for (Unidade unidade : lista) {
 			
-			if(this.dao.inserir(unidade)){
-				System.out.println("Inseriu o cartao: "+unidade.getNome());	
+			if(!this.dao.inserir(unidade)){
+				System.out.println("Erro ao tentar inserir Unidade: "+unidade.getNome());	
 			}
 		}
 		this.dao.mostrar();
@@ -56,7 +56,6 @@ public class UnidadeRecurso extends Recurso{
         }
         
         String output = resp.getEntity(String.class);
-        System.out.println(output.substring(13));
         JSONArray projectArray;
 		try {
 			projectArray = new JSONArray(output.substring(13));

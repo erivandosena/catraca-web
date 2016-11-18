@@ -30,17 +30,13 @@ public class CartaoRecurso extends Recurso{
 		this.dao = new CartaoDAO();
 		this.dao.limpar();
 		ArrayList<Cartao> cartoes = this.obterLista();
-		System.out.println("Numero de cartoes: "+cartoes.size());
-		System.out.println("Vamos inserir na base local");
 		
 		for (Cartao cartao : cartoes) {
 			
-			if(this.dao.inserir(cartao)){
-				System.out.println("Inseriu o cartao: "+cartao.getNumero());	
+			if(!this.dao.inserir(cartao)){
+				System.out.println("Erro ao tentar inserir: "+cartao.getNumero());	
 			}
 		}
-		System.out.println("Mostrat doos");			
-		this.dao.mostrar();
 		
 	}
 	

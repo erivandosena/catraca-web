@@ -53,7 +53,6 @@ public class CustoRefeicaoRecurso extends Recurso{
         }
         
         String output = resp.getEntity(String.class);        
-        System.out.println(output.substring(18));
         JSONArray projectArray;
 		try {
 			

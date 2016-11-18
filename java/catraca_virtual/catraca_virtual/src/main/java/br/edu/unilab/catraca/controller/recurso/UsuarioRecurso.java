@@ -40,7 +40,6 @@ public class UsuarioRecurso extends Recurso{
 	}
 	public ArrayList<Usuario> obterLista(){
 		ArrayList<Usuario> lista = new ArrayList<Usuario>();
-		System.out.println("Obter");
 		String url = URL+"usuario/jusuario";
         String authString = USUARIO + ":" + SENHA;
 		String authStringEnc = new BASE64Encoder().encode(authString.getBytes());
@@ -56,7 +55,6 @@ public class UsuarioRecurso extends Recurso{
         }
         
         String output = resp.getEntity(String.class);     
-        System.out.println(output.substring(12));
         JSONArray projectArray;
 		try {
 			

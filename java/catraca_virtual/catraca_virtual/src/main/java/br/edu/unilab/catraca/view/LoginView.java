@@ -28,7 +28,12 @@ public class LoginView extends JFrame {
 	private JTextField login;
 	private JPasswordField senha;
 	private JButton btnEntrar;
+	private JLabel labelMensagem;
 	
+	
+	public JLabel getLabelMensagem(){
+		return this.labelMensagem;
+	}
 	
 	public JTextField getLogin() {
 		return login;
@@ -57,24 +62,6 @@ public class LoginView extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					LoginView frame = new LoginView();
-					frame.setVisible(true);
-					frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
-	 * Create the frame.
-	 */
-	
 	
 	
 	public LoginView() {
@@ -99,12 +86,12 @@ public class LoginView extends JFrame {
 		contentPane.add(panel);
 		panel.setLayout(null);
 		
-		JLabel lblNewLabel_1 = new JLabel("Usuário ou Senha Inválido");
-		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
-		lblNewLabel_1.setIcon(new ImageIcon("C:\\Users\\dtiusr\\Desktop\\Catraca_java\\java\\catraca_virtual\\catraca_virtual\\src\\main\\resources\\images\\Botoes_Site_5750_Knob_Cancel.png"));
-		lblNewLabel_1.setBounds(10, 243, 360, 38);
-		lblNewLabel_1.setBorder(new LineBorder(new Color(192, 192, 192)));
-		panel.add(lblNewLabel_1);
+		labelMensagem = new JLabel("Usuário ou Senha Inválido");
+		labelMensagem.setHorizontalAlignment(SwingConstants.CENTER);
+		labelMensagem.setIcon(new ImageIcon("C:\\Users\\dtiusr\\Desktop\\Catraca_java\\java\\catraca_virtual\\catraca_virtual\\src\\main\\resources\\images\\Botoes_Site_5750_Knob_Cancel.png"));
+		labelMensagem.setBounds(10, 243, 360, 38);
+		labelMensagem.setBorder(new LineBorder(new Color(192, 192, 192)));
+		panel.add(labelMensagem);
 		
 		JLabel lblUsuario = new JLabel("Usuario");
 		lblUsuario.setFont(new Font("Tahoma", Font.PLAIN, 18));

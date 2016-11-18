@@ -49,7 +49,6 @@ public class CustoUnidadeRecurso extends Recurso{
         }
         
         String output = resp.getEntity(String.class);     
-        System.out.println(output.substring(17));
         JSONArray projectArray;
 		try {
 			
