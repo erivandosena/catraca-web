@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 import br.edu.unilab.unicafe.model.Cartao;
 import br.edu.unilab.unicafe.model.Catraca;
+import br.edu.unilab.unicafe.model.Turno;
+import br.edu.unilab.unicafe.model.Unidade;
 
 public class CatracaDAO extends DAO{
 	public CatracaDAO(){
@@ -91,6 +93,55 @@ public class CatracaDAO extends DAO{
 					
 				}
 				lista.add(catraca);
+				
+				
+			}
+			return lista;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
+	public Unidade unidadeDaCatraca(Catraca catraca){
+		try {
+			PreparedStatement ps = this.getConexao().prepareStatement("SELECT unidade.unid_id,unidade.unid_nome "
+					+ "FROM unidade "
+					+ "INNER JOIN catraca_unidade "
+					+ "ON unidade.unid_id = catraca_unidade.unid_id "
+					+ "INNER JOIN catraca ON catraca_unidade.catr_id = catraca.catr_id "
+					+ "WHERE catraca.catr_id = ?");
+			ps.setInt(1, catraca.getId());
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				Unidade unidade = new Unidade();
+				unidade.setId(rs.getInt("unid_id"));
+				unidade.setNome(rs.getString("unid_nome"));				
+				return unidade;
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
+	public ArrayList<Turno>turnosDaUnidade(Unidade unidade){
+		try {
+			
+			ArrayList<Turno> lista = new ArrayList<Turno>();
+			PreparedStatement ps = this.getConexao().prepareStatement("SELECT turno.turn_id, turno.turn_descricao, turno.turn_hora_inicio, turno.turn_hora_fim FROM turno INNER JOIN unidade_turno ON turno.turn_id = unidade_turno.turn_id INNER JOIN unidade ON unidade.unid_id = unidade_turno.unid_id WHERE unidade.unid_id = ?");
+			ps.setInt(1, unidade.getId());
+			
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				
+				Turno turno = new Turno();
+				turno.setId(rs.getInt("turn_id"));
+				turno.setDescricao(rs.getString("turn_descricao"));
+				turno.setHoraInicial(rs.getString("turn_hora_inicio"));
+				turno.setHoraFinal(rs.getString("turn_hora_fim"));
+				lista.add(turno);
 				
 				
 			}

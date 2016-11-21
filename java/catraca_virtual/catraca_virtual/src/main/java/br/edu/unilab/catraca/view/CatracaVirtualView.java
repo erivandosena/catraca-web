@@ -141,12 +141,12 @@ public class CatracaVirtualView extends JFrame {
 		panel.setLayout(null);
 		
 		JLabel labelLogoUnilab = new JLabel("");
-		labelLogoUnilab.setIcon(new ImageIcon("C:\\projetos\\merge_alan_20_10_16\\catracas\\java\\catraca_virtual\\catraca_virtual\\src\\main\\resources\\images\\logo-unilab-branco.png"));
+		labelLogoUnilab.setIcon(new ImageIcon(this.getClass().getResource("/images/logo-unilab-branco.png")));
 		labelLogoUnilab.setBounds(d.width-253, 11, 253, 105);
 		panel.add(labelLogoUnilab);
 		
 		JLabel labelLogoDti = new JLabel("");
-		labelLogoDti.setIcon(new ImageIcon("C:\\projetos\\merge_alan_20_10_16\\catracas\\java\\catraca_virtual\\catraca_virtual\\src\\main\\resources\\images\\logo_h-site.png"));
+		labelLogoDti.setIcon(new ImageIcon(this.getClass().getResource("/images/logo_h-site.png")));
 		labelLogoDti.setBounds(41, 30, 288, 62);
 		panel.add(labelLogoDti);
 		

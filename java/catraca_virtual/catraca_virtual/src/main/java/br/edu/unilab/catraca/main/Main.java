@@ -24,6 +24,7 @@ import br.edu.unilab.unicafe.model.Cartao;
 
 public class Main {
 
+	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		
 		File f = new File(".lock");

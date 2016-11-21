@@ -1,5 +1,6 @@
 package br.edu.unilab.catraca.controller.recurso;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -28,9 +29,11 @@ public class CartaoRecurso extends Recurso{
 	
 	public void sincronizar(){
 		this.dao = new CartaoDAO();
-		this.dao.limpar();
 		ArrayList<Cartao> cartoes = this.obterLista();
-		
+		if(cartoes == null){
+			return;
+		}
+		this.dao.limpar();
 		for (Cartao cartao : cartoes) {
 			
 			if(!this.dao.inserir(cartao)){
@@ -39,7 +42,21 @@ public class CartaoRecurso extends Recurso{
 		}
 		
 	}
-	
+	public void sincronizar(Connection conexao){
+		this.dao = new CartaoDAO(conexao);
+		ArrayList<Cartao> cartoes = this.obterLista();
+		if(cartoes == null){
+			return;
+		}
+		this.dao.limpar();
+		for (Cartao cartao : cartoes) {
+			
+			if(!this.dao.inserir(cartao)){
+				System.out.println("Erro ao tentar inserir: "+cartao.getNumero());	
+			}
+		}
+		
+	}
 	public ArrayList<Cartao> obterLista(){
 		ArrayList<Cartao> lista = new ArrayList<Cartao>();
 		

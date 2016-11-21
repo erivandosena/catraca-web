@@ -1,5 +1,6 @@
 package br.edu.unilab.catraca.controller.recurso;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -23,16 +24,30 @@ public class CatracaRecurso extends Recurso{
 	
 	public void sincronizar(){
 		this.dao = new CatracaDAO();
-		
-		this.dao.limpar();
 		ArrayList<Catraca> catracas = this.obterLista();
+		if(catracas == null){
+			return;
+		}
+		this.dao.limpar();
 		for (Catraca catraca : catracas) {
 			if(!dao.inserir(catraca)){
 				System.out.println("Erro ao tentar inserir catraca: "+catraca.getNome());
 			}
 		}
 	}
-	
+	public void sincronizar(Connection conexao){
+		this.dao = new CatracaDAO();
+		ArrayList<Catraca> catracas = this.obterLista();
+		if(catracas == null){
+			return;
+		}
+		this.dao.limpar();
+		for (Catraca catraca : catracas) {
+			if(!dao.inserir(catraca)){
+				System.out.println("Erro ao tentar inserir catraca: "+catraca.getNome());
+			}
+		}
+	}
 	public ArrayList<Catraca> obterLista(){
 		ArrayList<Catraca> lista = new ArrayList<Catraca>();
 		

@@ -1,5 +1,6 @@
 package br.edu.unilab.catraca.controller.recurso;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -19,7 +20,14 @@ import sun.misc.BASE64Encoder;
 public class TipoRecurso extends Recurso{
 	
 	private TipoDAO dao;
-	
+	public void sincronizar(Connection conexao){
+		this.dao = new TipoDAO(conexao);
+		this.dao.limpar();
+		ArrayList<Tipo> lista = this.obterLista();
+		for (Tipo elemento : lista) {
+			dao.inserir(elemento);
+		}
+	}
 	public void sincronizar(){
 		this.dao = new TipoDAO();
 		this.dao.limpar();

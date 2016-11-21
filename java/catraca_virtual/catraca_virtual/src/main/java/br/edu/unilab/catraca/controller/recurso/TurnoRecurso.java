@@ -1,5 +1,6 @@
 package br.edu.unilab.catraca.controller.recurso;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -18,10 +19,25 @@ import sun.misc.BASE64Encoder;
 public class TurnoRecurso extends Recurso{
 	private TurnoDAO dao;
 	
+	
 	public void sincronizar(){
 		this.dao = new TurnoDAO();
-		this.dao.limpar();
 		ArrayList<Turno> lista = this.obterLista();
+		if(lista == null){
+			return;
+		}
+		this.dao.limpar();
+		for (Turno turno : lista) {
+			dao.inserir(turno);
+		}
+	}
+	public void sincronizar(Connection conexao){
+		this.dao = new TurnoDAO();
+		ArrayList<Turno> lista = this.obterLista();
+		if(lista == null){
+			return;
+		}
+		this.dao.limpar();
 		for (Turno turno : lista) {
 			dao.inserir(turno);
 		}
@@ -44,7 +60,6 @@ public class TurnoRecurso extends Recurso{
         }
         
         String output = resp.getEntity(String.class);     
-        System.out.println(output.substring(11));
         JSONArray projectArray;
 		try {
 			

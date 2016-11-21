@@ -98,49 +98,16 @@ public class UsuarioDAO extends DAO {
 	}
 	
 	public  boolean autentica(Usuario usuario){
-		if(this.autenticaLocal(usuario))
-			return true;
-		//A gente fecha conexao local?
-		Connection conexaoLocal = this.getConexao();
-		this.setTipoDeConexao(DAO.TIPO_CONEXAO_AUTENTICACAO);
-		this.novaConexao();
-		if(this.autenticaRemoto(usuario))
-		{
-			try {
-				this.getConexao().close();
-			} catch (SQLException e) {
-				System.out.println("Erro ao tentar fechar conexao com O SIGAA.");
-				e.printStackTrace();
-			}
-			this.setConexao(conexaoLocal);
-			this.cadastra(usuario);
-			return true;
-		}
-		
-		return false;
-		
-		
-	}
-	
-	/**
-	 * 
-	 * @param usuario
-	 * @return
-	 */
-	public  boolean autenticaRemoto(Usuario usuario){
-		
-		
-		
 		try {
 			
-			PreparedStatement ps = this.getConexao().prepareStatement("SELECT * FROM usuarios_unicafe WHERE login = ? AND senha = ?");
+			PreparedStatement ps = this.getConexao().prepareStatement("SELECT * FROM usuario WHERE usua_login = ? AND usua_senha = ?");
 			ps.setString(1, usuario.getLogin());
 			ps.setString(2, usuario.getSenha());
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
-				usuario.setId(rs.getInt("id_usuario"));
-				usuario.setNome(rs.getString("nome"));
-				usuario.setEmail(rs.getString("email"));
+				usuario.setId(rs.getInt("usua_id"));
+				usuario.setNome(rs.getString("usua_nome"));
+				usuario.setEmail(rs.getString("usua_email"));
 				
 				return true;
 			}

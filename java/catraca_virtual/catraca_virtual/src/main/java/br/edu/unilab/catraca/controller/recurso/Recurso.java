@@ -1,5 +1,7 @@
 package br.edu.unilab.catraca.controller.recurso;
 
+import br.edu.unilab.catraca.dao.DAO;
+
 public class Recurso {
 	
 	

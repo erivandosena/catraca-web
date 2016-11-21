@@ -40,7 +40,7 @@ public class UnidadeDAO extends DAO{
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
 				System.out.println("ID: "+rs.getString("unid_id"));
-				System.out.println("NOme: "+rs.getDouble("unid_nome"));
+				System.out.println("NOme: "+rs.getString("unid_nome"));
 				
 			}
 		} catch (SQLException e) {
@@ -52,7 +52,7 @@ public class UnidadeDAO extends DAO{
 	public ArrayList<Unidade>retornaLista(){
 		try {
 			ArrayList<Unidade> lista = new ArrayList<Unidade>();
-			PreparedStatement ps = this.getConexao().prepareStatement("SELECT * FROM catraca");
+			PreparedStatement ps = this.getConexao().prepareStatement("SELECT * FROM unidade");
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
 				Unidade unidade = new Unidade();
@@ -66,6 +66,9 @@ public class UnidadeDAO extends DAO{
 		}
 		return null;
 	}
+	
+
+	
 	
 	public boolean inserir(Unidade unidade){
 		try {

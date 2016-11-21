@@ -88,7 +88,6 @@ public class LoginView extends JFrame {
 		
 		labelMensagem = new JLabel("Usuário ou Senha Inválido");
 		labelMensagem.setHorizontalAlignment(SwingConstants.CENTER);
-		labelMensagem.setIcon(new ImageIcon("C:\\Users\\dtiusr\\Desktop\\Catraca_java\\java\\catraca_virtual\\catraca_virtual\\src\\main\\resources\\images\\Botoes_Site_5750_Knob_Cancel.png"));
 		labelMensagem.setBounds(10, 243, 360, 38);
 		labelMensagem.setBorder(new LineBorder(new Color(192, 192, 192)));
 		panel.add(labelMensagem);
@@ -142,7 +141,8 @@ public class LoginView extends JFrame {
 		lblTitulo.setFont(new Font("Tahoma", Font.PLAIN, 22));		
 		
 		JLabel lblNewLabel_2 = new JLabel("");
-		lblNewLabel_2.setIcon(new ImageIcon("C:\\projetos\\merge_alan_20_10_16\\catracas\\java\\catraca_virtual\\catraca_virtual\\src\\main\\resources\\images\\logoUnilabVertical.png"));
+		
+		lblNewLabel_2.setIcon(new ImageIcon(this.getClass().getResource("/images/logoUnilabVertical.png")));
 		lblNewLabel_2.setBounds((d.width-306)/2, 22, 306, 284);
 		contentPane.add(lblNewLabel_2);
 		

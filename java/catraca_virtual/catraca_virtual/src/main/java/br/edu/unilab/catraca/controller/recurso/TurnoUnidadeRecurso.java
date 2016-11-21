@@ -1,5 +1,6 @@
 package br.edu.unilab.catraca.controller.recurso;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -10,6 +11,8 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
+import br.edu.unilab.catraca.dao.CatracaDAO;
+import br.edu.unilab.catraca.dao.CatracaUnidadeDAO;
 import br.edu.unilab.catraca.dao.TurnoUnidadeDAO;
 import br.edu.unilab.unicafe.model.TurnoUnidade;
 import sun.misc.BASE64Encoder;
@@ -19,8 +22,21 @@ public class TurnoUnidadeRecurso extends Recurso{
 
 	private TurnoUnidadeDAO dao;
 	
+	public void sincronizar(Connection conexao){
+		this.dao = new TurnoUnidadeDAO(conexao);
+
+		this.dao.limpar();
+		ArrayList<TurnoUnidade> lista = this.obterLista();
+		for (TurnoUnidade turnoUnidade : lista) {
+			dao.inserir(turnoUnidade);
+			
+		}
+	}
+	
+
 	public void sincronizar(){
 		this.dao = new TurnoUnidadeDAO();
+
 		
 		this.dao.limpar();
 		ArrayList<TurnoUnidade> lista = this.obterLista();
