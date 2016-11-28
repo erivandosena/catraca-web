@@ -168,7 +168,12 @@ if (isset ( $_GET ["sair"] )) {
 						
 						
 						echo '<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a></li>';
-						echo ' <li><a href="?pagina=guiche" class="item"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a></li>';
+						echo ' <li><a href="?pagina=guiche" class="item"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a>
+								<ul>
+										<li><a href="?pagina=resumo_compra" target="_blank">Tela de Atendimento</a></li>
+									</ul>
+		
+							</li>';
 						echo ' 	<li><a href="?pagina=relatorio" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a>
 									<ul>
 										<li><a href="?pagina=relatorio">Relatório RU</a></li>
@@ -208,7 +213,12 @@ if (isset ( $_GET ["sair"] )) {
 							
 							</li>';
 						echo '	<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a></li>';
-						echo ' 	<li><a href="?pagina=guiche" class="item"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a></li>';
+						echo ' 	<li><a href="?pagina=guiche" class="item"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a>
+								<ul>
+										<li><a href="?pagina=resumo_compra" target="_blank">Tela de Atendimento</a></li>
+									</ul>
+								
+								</li>';
 						
 						echo ' 	<li><a href="?pagina=definicoes" class="item"><span class="icone-cogs"></span> <span class="item-texto">Definições</span></a></li>';
 						
@@ -243,8 +253,18 @@ if (isset ( $_GET ["sair"] )) {
 						
 						echo '<li><a href="?pagina=cartao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a>
 							</li>';
-						echo '	<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a></li>';
-						echo ' 	<li><a href="?pagina=guiche" class="item"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a></li>';
+						echo '	<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a>
+									<ul>
+										<li><a href="?pagina=resumo_compra">Tela de Atendimento</a></li>
+									</ul>
+												
+									</li>';
+						echo ' 	<li><a href="?pagina=guiche" class="item"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a>
+								<ul>
+										<li><a href="?pagina=resumo_compra" target="_blank">Tela de Atendimento</a></li>
+									</ul>
+								
+								</li>';
 						
 						echo ' 	<li><a href="?pagina=relatorio" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a>
 									<ul>
@@ -277,7 +297,11 @@ if (isset ( $_GET ["sair"] )) {
 						 */
 						echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
 						echo '<li><a href="?pagina=cartao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a></li>';
-						echo ' <li><a href="?pagina=guiche" class="item"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a></li>';
+						echo ' <li><a href="?pagina=guiche" class="item"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a>
+								<ul>
+										<li><a href="?pagina=resumo_compra" target="_blank">Tela de Atendimento</a></li>
+									</ul>
+								</li>';
 
 						echo '</ol>
 								        <ol class="a-direita" start="4">
@@ -482,6 +506,10 @@ if (isset ( $_GET ["sair"] )) {
 							case 'pessoal':
 								PessoalController::main($sessao->getNivelAcesso());
 								break;
+							case 'resumo_compra' :
+								ResumoCompraController::main($sessao->getNivelAcesso());
+								break;
+								
 							default :
 								echo '404 NOT FOUND';
 								break;

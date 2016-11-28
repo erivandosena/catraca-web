@@ -39,10 +39,10 @@ public class UnidadeRecurso extends Recurso{
 	}
 	public void sincronizar(Connection conexao){
 		this.dao = new UnidadeDAO(conexao);
-		this.dao.limpar();
 		ArrayList<Unidade> lista = this.obterLista();
 		if(lista == null){
 			return;
+			
 		}
 		this.dao.limpar();
 		for (Unidade unidade : lista) {

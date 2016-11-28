@@ -55,11 +55,18 @@ public class CatracaVirtualController {
 		this.catracaVirtual = new Catraca();
 		this.dao = new CatracaDAO();
 		this.frameCatracaVirtual = new CatracaVirtualView();
+		this.frameCatracaVirtual.getNomeUsuario().setText("");
+		this.frameCatracaVirtual.getTipoUsuario().setText("");
+		this.frameCatracaVirtual.getRefeicoesRestantes().setText("");
+		this.frameCatracaVirtual.getValorCobrado().setText("");
+		
 		this.frameLogin = new LoginView();
 		this.frameLogin.getLabelMensagem().setText("Aguarde a Sincronização dos Dados");
 		this.frameLogin.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		try {
+			
 			this.catracaVirtual.maquinaLocal();
+			
 		} catch (UnknownHostException e) {
 			System.out.println("Impossivel determinar nome da maquina. ");
 			e.printStackTrace();
@@ -108,26 +115,44 @@ public class CatracaVirtualController {
 		this.getFrameLogin().getLogin().setText("");
 		this.getFrameLogin().getSenha().setText("");
 		
-		if(usuarioDao.autentica(this.operador)){
-			this.getFrameLogin().setVisible(false);
-			this.getFrameCatracaVirtual().setVisible(true);
-		}else{
+		if(usuarioDao.autentica(this.operador))
+		{
+			this.iniciarCatracaVirtual();
+		}
+		else
+		{
 			this.getFrameLogin().getLabelMensagem().setText("Errou login ou senha");
 		}
 		
 	}
+	public void iniciarCatracaVirtual(){
+		this.frameCatracaVirtual.alterarColuna(0, "Teste");
+		
+		this.frameCatracaVirtual.getTabela().updateUI();
+		this.getFrameLogin().setVisible(false);
+		this.getFrameCatracaVirtual().setVisible(true);
+		
+		
+	}
 	
 	public void sincronizacaoBasica(){
-		
 		
 		UnidadeRecurso unidadeRecurso = new UnidadeRecurso();
 		unidadeRecurso.sincronizar(this.dao.getConexao());
 		
 		CatracaRecurso catracaRecurso = new CatracaRecurso();
 		catracaRecurso.sincronizar(this.dao.getConexao());
-
+		TipoRecurso tipoRecurso = new TipoRecurso();
+		tipoRecurso.sincronizar(this.dao.getConexao());
+		
+		TurnoRecurso turnoRecurso = new TurnoRecurso();
+		turnoRecurso.sincronizar(this.dao.getConexao());
+		
+		/*
+		
 		CartaoRecurso cartaoRecurso = new CartaoRecurso();
 		cartaoRecurso.sincronizar(this.dao.getConexao());
+
 		
 		UsuarioRecurso usuarioRecurso = new UsuarioRecurso();
 		usuarioRecurso.sincronizar();
@@ -143,6 +168,7 @@ public class CatracaVirtualController {
 		
 		TurnoRecurso turnoRecurso = new TurnoRecurso();
 		turnoRecurso.sincronizar(this.dao.getConexao());
+		*/
 	}
 	public void verificarNomeDaCatraca(){
 		boolean passou = false;

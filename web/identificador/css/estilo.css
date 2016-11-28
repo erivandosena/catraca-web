@@ -313,16 +313,15 @@ hr.linha{
 	color: #fff;
 	text-decoration: none;
 }
-
+/**/
 #titulo{
-	margin-top: 20px;
+	
 	margin-bottom: 30px;
 }
 
 #titulo-caixa{
-	margin-right: 10px;
-	margin-top: 20px;
-	margin-bottom: 20px;
+	margin-top:-5px;
+	
 }
 
 #relatorio span{
@@ -351,8 +350,8 @@ hr.linha{
 }
 
 #caixa h2{
-	margin-bottom: 3px;
-	margin-top: 3px;
+	margin-bottom: 20px;
+	margin-top: 20px;
 	color: #0000FF;
 	font-weight: bold;
 }
@@ -424,15 +423,12 @@ div#corpo{
 }*/
 
 .dados-usuario span{
-	margin-top:30px;
 	display: block;
 	font-weight: bold;
 	
 }
 
-#informacao{
-	border:solid 1px #ccc;
-	height:9cm;
+#informacao{	
 	font-size:22px;	
 }
 
@@ -627,3 +623,22 @@ span#aproxime{
 }
  
 .fechar{display:block; text-align:right;}
+
+.resumo{
+	position: relative;	
+}
+
+.resumo span{
+	position: absolute;
+	left:20%;
+	top: 20%;	
+	font-size: 80px;
+}
+
+.resumo img{
+	position: relative;
+	left:35%;
+	opacity: 0.1;
+	height:300px;
+	
+}

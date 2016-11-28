@@ -35,7 +35,7 @@ public class Tela extends JFrame {
 	
 
 	public String dados[][] = new String[2][2];
-	
+	public String[] colunas = new String[2];
 	/**
 	 * Create the frame.
 	 */
@@ -47,7 +47,10 @@ public class Tela extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		String[] colunas = {"teste", "teste2"};
+		this.colunas[0] = "Teste";
+		this.colunas[1] = "Teste2";
+		
+				
 		this.dados[0][0] = "1";
 		this.dados[0][1] = "1";
 		this.dados[1][0] = "1";
@@ -60,11 +63,7 @@ public class Tela extends JFrame {
 				return false;
 			}
 		};
-		table.setPreferredScrollableViewportSize(new Dimension(450,63));
-		table.setFillsViewportHeight(true);
-		JScrollPane jsp = new JScrollPane(table);
-		jsp.setBounds(10, 27, 241, 56);
-		contentPane.add(jsp);
+		
 		Thread trede = new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -72,8 +71,19 @@ public class Tela extends JFrame {
 				while(true){
 					i++;
 					try {
+						table = new JTable(dados, colunas){
+							public boolean isCellEditable(int dados, int colunas){
+								return false;
+							}
+						};
+						table.setPreferredScrollableViewportSize(new Dimension(450,63));
+						table.setFillsViewportHeight(true);
+						JScrollPane jsp = new JScrollPane(table);
+						jsp.setBounds(10, 27, 241, 56);
+						contentPane.add(jsp);
 						Thread.sleep(1000);
 						dados[0][1] = ""+i;
+						colunas[1] = ""+i;
 						table.updateUI();
 						System.out.println("Teste");
 						

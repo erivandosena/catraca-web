@@ -33,7 +33,14 @@ import javax.swing.SwingConstants;
 
 public class CatracaVirtualView extends JFrame {
 
-	public String dados[][] = new String[1][7];
+	private String dados[][] = new String[1][7];
+	public String[][] getDados() {
+		return dados;
+	}
+	public void setDados(String[][] dados) {
+		this.dados = dados;
+	}
+
 	private JPanel contentPane;
 	private JTable tabela;
 	private JButton btnConfirmar;
@@ -45,8 +52,17 @@ public class CatracaVirtualView extends JFrame {
 	private JLabel financeiro;
 	private JLabel turnoAtivo;
 
-	
-	
+	private String[] colunas = {"Unidade", "Visitante","Terceirizado", "Servidor TAE","Servidor Docente", "Aluno", "Total"};
+	public void alterarColuna(int indice, String valor){
+		this.colunas[indice] = valor;
+		this.tabela.updateUI();
+	}
+	public String[] getColunas() {
+		return colunas;
+	}
+	public void setColunas(String[] colunas) {
+		this.colunas = colunas;
+	}
 	public JTable getTabela() {
 		return tabela;
 	}
@@ -101,25 +117,7 @@ public class CatracaVirtualView extends JFrame {
 	public void setTurnoAtivo(JLabel turnoAtivo) {
 		this.turnoAtivo = turnoAtivo;
 	}
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					CatracaVirtualView frame = new CatracaVirtualView();
-					frame.setVisible(true);
-					frame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}	
-	/**
-	 * Create the frame.
-	 */
+	
 	public CatracaVirtualView() {
 		setResizable(false);
 		Toolkit tk = Toolkit.getDefaultToolkit();
@@ -157,7 +155,7 @@ public class CatracaVirtualView extends JFrame {
 		labelTitulo.setBounds(d.width/2-488/2, 53, 488, 46);
 		panel.add(labelTitulo);
 		
-		String[] colunas = {"Unidade", "Visitante","Terceirizado", "Servidor TAE","Servidor Docente", "Aluno", "Total"};
+		
 		this.dados[0][0] = "Liberdade";
 		this.dados[0][1] = "2";
 		this.dados[0][2] = "3";
@@ -184,7 +182,7 @@ public class CatracaVirtualView extends JFrame {
 //		DefaultTableModel model = new DefaultTableModel(dados, colunas);		
 //		tabela.setModel(model);		
 		
-		tabela = new JTable(dados, colunas){
+		tabela = new JTable(this.dados, this.colunas){
 			public boolean isCellEditable(int dados, int colunas){
 				return false;
 			}

@@ -44,6 +44,16 @@ class GuicheController{
 		$sessao = new Sessao();
 		$idDoUsuario = $sessao->getIdUsuario();
 
+		$_SESSION['nome_usuario'] = null;
+		$_SESSION['tipo_usuario'] = null;
+		$_SESSION['valor_inserido'] = null;
+		$_SESSION['novo_saldo'] = null;
+		$_SESSION['transacao'] = null;
+		$_SESSION['cartao']= null;
+		$_SESSION['saldo_anterior'] = null;
+		$_SESSION['autorizado'] = false;
+		
+		
 		/*
 		 * Preenche a tabela 'Descrição da Operação'
 		 * apenas com dados das operações realizadas no dia
@@ -66,7 +76,7 @@ class GuicheController{
 
 		$listaDescricao = $dao->getConexao()->query($sqlTransacao);
 		$this->view->formDescricao($listaDescricao);
-
+		
 		/*
 		 * Soma os campos de valores.
 		 */
@@ -103,6 +113,7 @@ class GuicheController{
 				$cartao = new Cartao();
 				$cartao->setNumero($_GET['cartao']);
 				$numeroCartao = $cartao->getNumero();
+				@$_SESSION['cartao'] = $_GET['cartao'];
 				$sqlVerificaNumero = "SELECT * FROM usuario
 				INNER JOIN vinculo ON vinculo.usua_id = usuario.usua_id
 				LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
@@ -146,8 +157,15 @@ class GuicheController{
 					}else{
 							
 						$this->view->formConsulta($usuario, $tipo, $cartao);
-						$this->view->formInserirValor();
-							
+						$this->view->formInserirValor();						
+						
+						$_SESSION['nome_usuario'] = ucwords(strtolower(htmlentities($usuario->getNome())));
+						$_SESSION['tipo_usuario'] = $tipo->getNome(); 											
+						$_SESSION['saldo_anterior'] = $vinculo->getCartao()->getCreditos();
+						
+// 						$_SESSION['confirmado'] = "aguarde";
+// 						$_SESSION['refeicoes_restante'] = "";
+						
 						/*
 						 * Insere ou estorna os creditos do usuario pesquisado com vinculo ativo.
 						 */
@@ -161,7 +179,11 @@ class GuicheController{
 							$valorVendido = $cartao->getCreditos();
 							$novoValor = $valorAnt + $valorVendido;
 							$valor = number_format($valorVendido, 2,',','.');
-	
+							
+							
+							$_SESSION['valor_inserido'] = $valorVendido;
+							$_SESSION['novo_saldo'] = $novoValor;
+							
 							if ($valorVendido == 0){
 								$this->view->mensagem("erro", "Valor Inválido! Digite novamente.");
 								return ;
@@ -208,11 +230,21 @@ class GuicheController{
 								$this->view->mensagem("erro", "Deseja estornar R\$ $valor?");
 								echo '	</div>';
 							}else{
-								echo ' 	<form method="post" class="formulario">
-										<input type="submit" name="confirmar" value="Confirmar">
-									</form>';
-								if (isset($_POST['confirmar'])){
-									$autorizado = true;
+								echo ' 	
+										<form method="post" class="formulario">
+											<input type="number" name="confirmar" id="confirmar">										
+									    </form>';
+								
+								
+								if (isset($_POST['confirmar']) && $_POST['confirmar']!= ""){
+									
+									$cartaoConfirma = $_POST['confirmar'];									
+									if ($cartaoConfirma == $cartao->getNumero()){
+										$autorizado = true;
+									}else{										
+										$this->view->mensagem("erro","Número do cartão diferente.");										
+										echo '<meta http-equiv="refresh" content="3; url=.\?pagina=guiche">';
+									}									
 								}
 							}
 	
@@ -227,8 +259,9 @@ class GuicheController{
 									if ($idUsuario1 == $idUsuario2 || $usuario2->getNivelAcesso() >= 2){
 										$tipo = "ajuda";
 										$mensagem = "Valor estornado com sucesso!";
-										$tipoTransacao = 'Estorno de valores';
+										$tipoTransacao = 'Estorno de valores';										  
 										$autorizado = true;
+										
 									}else{
 										echo '<div id="msgconfirmado">';
 										$this->view->mensagem("erro", "Este cartão não pertence a este usuario!");
@@ -272,14 +305,17 @@ class GuicheController{
 								$dao->getConexao()->commit();
 								echo '<div id="msgconfirmado">';
 								$this->view->mensagem($tipo,$mensagem);
-								echo '</div>';
+								$_SESSION['autorizado'] = $autorizado;
+								echo '</div>';								
 								echo '<meta http-equiv="refresh" content="3; url=.\?pagina=guiche">';
 	
 							}
 						}
 					}
 				}else{
+					$_SESSION['cartao']= null;
 					$this->view->mensagem('erro','Cart&atildeo sem vinculo v&aacutelido.');
+					echo '<meta http-equiv="refresh" content="3; url=.\?pagina=guiche">';
 				}
 			}
 		}

@@ -70,6 +70,7 @@ public class CartaoRecurso extends Recurso{
         ClientResponse resp = webResource.accept("application/json")
                                          .header("Authorization", "Basic " + authStringEnc)
                                          .get(ClientResponse.class);
+
         if(resp.getStatus() != 200){
         	
             System.err.println("Unable to connect to the server");
@@ -78,6 +79,7 @@ public class CartaoRecurso extends Recurso{
         
         String output = resp.getEntity(String.class);        
         JSONArray projectArray;
+        System.out.println(""+output);
 		try {
 			projectArray = new JSONArray(output.substring(11));
 			for (int i = 0; i < projectArray.length(); i++) {
