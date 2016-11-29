@@ -33,7 +33,7 @@ import javax.swing.SwingConstants;
 
 public class CatracaVirtualView extends JFrame {
 
-	private String dados[][] = new String[1][7];
+	private String dados[][];
 	public String[][] getDados() {
 		return dados;
 	}
@@ -49,14 +49,34 @@ public class CatracaVirtualView extends JFrame {
 	private JLabel refeicoesRestantes;
 	private JLabel valorCobrado;
 	private JTextField numeroCartao;
-	private JLabel financeiro;
-	private JLabel turnoAtivo;
-
-	private String[] colunas = {"Unidade", "Visitante","Terceirizado", "Servidor TAE","Servidor Docente", "Aluno", "Total"};
-	public void alterarColuna(int indice, String valor){
-		this.colunas[indice] = valor;
-		this.tabela.updateUI();
+	private JLabel labelFinanceiro;
+	public void setFinanceiroAtivo(boolean financeiro){
+		if(financeiro){
+			this.labelFinanceiro.setText("Financeiro Habilitado");
+			this.labelFinanceiro.setBackground(new Color(43, 186, 40));
+		}else{
+			this.labelFinanceiro.setBackground(new Color(255, 0, 0));
+			this.labelFinanceiro.setText("Financeiro Desabilitado");
+		}
 	}
+	
+	public JLabel getLabelFinanceiro() {
+		return labelFinanceiro;
+	}
+	public void setLabelFinanceiro(JLabel labelFinanceiro) {
+		this.labelFinanceiro = labelFinanceiro;
+	}
+	public JLabel getLabelTurno() {
+		return labelTurno;
+	}
+	public void setLabelTurno(JLabel labelTurno) {
+		this.labelTurno = labelTurno;
+	}
+
+	private JLabel labelTurno;
+
+	private String[] colunas = {"Unidade", "Teste","Terceirizado", "Servidor TAE","Servidor Docente", "Aluno", "Total"};
+	
 	public String[] getColunas() {
 		return colunas;
 	}
@@ -106,19 +126,22 @@ public class CatracaVirtualView extends JFrame {
 		this.numeroCartao = numeroCartao;
 	}
 	public JLabel getFinanceiro() {
-		return financeiro;
+		return labelFinanceiro;
 	}
 	public void setFinanceiro(JLabel financeiro) {
-		this.financeiro = financeiro;
+		this.labelFinanceiro = financeiro;
 	}
 	public JLabel getTurnoAtivo() {
-		return turnoAtivo;
+		return labelTurno;
 	}
 	public void setTurnoAtivo(JLabel turnoAtivo) {
-		this.turnoAtivo = turnoAtivo;
+		this.labelTurno = turnoAtivo;
 	}
 	
-	public CatracaVirtualView() {
+	public CatracaVirtualView(String colunas[], String dados[][]) {
+		
+		this.dados = dados;
+		this.colunas = colunas;
 		setResizable(false);
 		Toolkit tk = Toolkit.getDefaultToolkit();
 	    Dimension d = tk.getScreenSize();
@@ -155,15 +178,6 @@ public class CatracaVirtualView extends JFrame {
 		labelTitulo.setBounds(d.width/2-488/2, 53, 488, 46);
 		panel.add(labelTitulo);
 		
-		
-		this.dados[0][0] = "Liberdade";
-		this.dados[0][1] = "2";
-		this.dados[0][2] = "3";
-		this.dados[0][3] = "4";
-		this.dados[0][4] = "5";
-		this.dados[0][5] = "6";
-		this.dados[0][6] = "7";		
-		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new EtchedBorder(EtchedBorder.LOWERED, Color.BLACK, Color.LIGHT_GRAY));
 		panel_1.setBackground(Color.WHITE);
@@ -199,30 +213,31 @@ public class CatracaVirtualView extends JFrame {
 		panel_1.add(panel_2);
 		panel_2.setLayout(null);
 		
-		financeiro = new JLabel("Modulo Financeiro Habilitado");
-		financeiro.setOpaque(true);
-		financeiro.setBackground(new Color(43, 186, 40));
-		financeiro.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		financeiro.setForeground(new Color(255, 255, 255));
-		financeiro.setHorizontalAlignment(SwingConstants.CENTER);
-		financeiro.setBounds((panel_2.getWidth()-246)/2, 22, 246, 32);
-		panel_2.add(financeiro);
+		labelFinanceiro = new JLabel("Modulo Financeiro Habilitado");
+		labelFinanceiro.setOpaque(true);
+		labelFinanceiro.setBackground(new Color(43, 186, 40));
+		labelFinanceiro.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		labelFinanceiro.setForeground(new Color(255, 255, 255));
+		labelFinanceiro.setHorizontalAlignment(SwingConstants.CENTER);
+		labelFinanceiro.setBounds((panel_2.getWidth()-246)/2, 22, 246, 32);
+		panel_2.add(labelFinanceiro);
 		
-		turnoAtivo = new JLabel("Turno Merenda Ativo");
-		turnoAtivo.setHorizontalAlignment(SwingConstants.CENTER);
-		turnoAtivo.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		turnoAtivo.setBounds(473, 22, 197, 32);
-		panel_2.add(turnoAtivo);
+		labelTurno = new JLabel("Turno Merenda Ativo");
+		labelTurno.setHorizontalAlignment(SwingConstants.CENTER);
+		labelTurno.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		labelTurno.setBounds(473, 22, 197, 32);
+		panel_2.add(labelTurno);
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		
-		JLabel label = new JLabel(sdf.format(new Date()));
-		label.setHorizontalAlignment(SwingConstants.CENTER);
-		label.setFont(new Font("Tahoma", Font.PLAIN, 16));
-		label.setBounds(10, 22, 197, 32);
-		panel_2.add(label);
+		JLabel labelDataHora = new JLabel(sdf.format(new Date()));
+		labelDataHora.setHorizontalAlignment(SwingConstants.CENTER);
+		labelDataHora.setFont(new Font("Tahoma", Font.PLAIN, 16));
+		labelDataHora.setBounds(10, 22, 197, 32);
+		panel_2.add(labelDataHora);
 		
 		numeroCartao = new JTextField();
+		
 		numeroCartao.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		numeroCartao.setBounds(220, 237, 175, 22);
 		numeroCartao.setBorder(new LineBorder(new Color(192, 192, 192)));

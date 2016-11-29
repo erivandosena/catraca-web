@@ -2,7 +2,9 @@ package br.edu.unilab.catraca.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import br.edu.unilab.unicafe.model.Tipo;
 import br.edu.unilab.unicafe.model.Turno;
@@ -53,6 +55,27 @@ public class TipoDAO extends DAO{
 			return false;
 		}		
 		
+		
+	}
+	public ArrayList<Tipo> lista(){
+		try {
+			
+			PreparedStatement ps = this.getConexao().prepareStatement("SELECT * FROM tipo");
+			ResultSet rs = ps.executeQuery();
+			ArrayList<Tipo> lista = new ArrayList<Tipo>();
+			while(rs.next()){
+				Tipo tipo = new Tipo();
+				tipo.setId(rs.getInt("tipo_id"));
+				tipo.setNome(rs.getString("tipo_nome"));
+				tipo.setValorCobrado(rs.getDouble("tipo_valor"));
+				lista.add(tipo);
+				
+			}
+			return lista;
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return null;
 		
 	}
 }

@@ -57,7 +57,7 @@ public class TipoRecurso extends Recurso{
         JSONArray projectArray;
 		try {
 			
-			projectArray = new JSONArray(output.substring(10));
+			projectArray = new JSONArray(output.substring(9));
 			for (int i = 0; i < projectArray.length(); i++) {
 	            JSONObject proj = projectArray.getJSONObject(i);
 	            Tipo elemento = new Tipo();

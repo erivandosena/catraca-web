@@ -23,11 +23,13 @@ import br.edu.unilab.catraca.controller.recurso.UnidadeRecurso;
 import br.edu.unilab.catraca.controller.recurso.UsuarioRecurso;
 import br.edu.unilab.catraca.dao.CatracaDAO;
 import br.edu.unilab.catraca.dao.CustoUnidadeDAO;
+import br.edu.unilab.catraca.dao.TipoDAO;
 import br.edu.unilab.catraca.dao.UsuarioDAO;
 import br.edu.unilab.catraca.view.CatracaVirtualView;
 import br.edu.unilab.catraca.view.FrameSplash;
 import br.edu.unilab.catraca.view.LoginView;
 import br.edu.unilab.unicafe.model.Catraca;
+import br.edu.unilab.unicafe.model.Tipo;
 import br.edu.unilab.unicafe.model.Turno;
 import br.edu.unilab.unicafe.model.TurnoUnidade;
 import br.edu.unilab.unicafe.model.Unidade;
@@ -40,6 +42,7 @@ public class CatracaVirtualController {
 	private Catraca catracaVirtual;
 	private CatracaDAO dao;
 	private ArrayList<Turno>turnos;
+	private Turno turnoAtual;
 	private Unidade unidade;
 	private FrameSplash splash;
 	private Usuario operador;
@@ -54,11 +57,7 @@ public class CatracaVirtualController {
 		
 		this.catracaVirtual = new Catraca();
 		this.dao = new CatracaDAO();
-		this.frameCatracaVirtual = new CatracaVirtualView();
-		this.frameCatracaVirtual.getNomeUsuario().setText("");
-		this.frameCatracaVirtual.getTipoUsuario().setText("");
-		this.frameCatracaVirtual.getRefeicoesRestantes().setText("");
-		this.frameCatracaVirtual.getValorCobrado().setText("");
+		
 		
 		this.frameLogin = new LoginView();
 		this.frameLogin.getLabelMensagem().setText("Aguarde a Sincronização dos Dados");
@@ -106,7 +105,6 @@ public class CatracaVirtualController {
 	
 	
 	public void tentarLogar(){
-		System.out.println("Para fazer o tentar logar");
 		String senha = UsuarioDAO.getMD5(getFrameLogin().getSenha().getText());
 		this.operador = new Usuario();
 		this.operador.setLogin(getFrameLogin().getLogin().getText().toLowerCase().trim());
@@ -126,9 +124,37 @@ public class CatracaVirtualController {
 		
 	}
 	public void iniciarCatracaVirtual(){
-		this.frameCatracaVirtual.alterarColuna(0, "Teste");
-		
+		TipoDAO tipoDao = new TipoDAO(this.dao.getConexao());
+		ArrayList<Tipo> listaTipos = tipoDao.lista();
+		int tamanho = listaTipos.size();
+		String colunas[] = new String[tamanho+3];
+		colunas[0] = "Catraca Virtual";
+		String dados[][] = new String[1][tamanho+3];
+		int i = 1;
+		for (Tipo tipo : listaTipos) {
+			colunas[i] = tipo.getNome();
+			dados[0][i] = "0";
+			i++;
+		}	
+		dados[0][i] = "0";
+		dados[0][i+1] = "0";
+		colunas[i] = "Isento";
+		colunas[i+1] = "Total";
+
+		this.frameCatracaVirtual = new CatracaVirtualView(colunas, dados);
+		this.frameCatracaVirtual.getNumeroCartao().setFocusable(true);
+		this.frameCatracaVirtual.setFinanceiroAtivo(false);
+		this.frameCatracaVirtual.getDados()[0][0] = this.catracaVirtual.getNome();
 		this.frameCatracaVirtual.getTabela().updateUI();
+		this.frameCatracaVirtual.setFinanceiroAtivo(this.catracaVirtual.isFinanceiroAtivo());
+		
+		this.frameCatracaVirtual.getNomeUsuario().setText("");
+		this.frameCatracaVirtual.getTipoUsuario().setText("");
+		this.frameCatracaVirtual.getRefeicoesRestantes().setText("");
+		this.frameCatracaVirtual.getValorCobrado().setText("");
+		this.frameCatracaVirtual.getTabela().updateUI();
+
+		
 		this.getFrameLogin().setVisible(false);
 		this.getFrameCatracaVirtual().setVisible(true);
 		
@@ -142,20 +168,31 @@ public class CatracaVirtualController {
 		
 		CatracaRecurso catracaRecurso = new CatracaRecurso();
 		catracaRecurso.sincronizar(this.dao.getConexao());
+		
+		
+		
+		/*
+		
+		
 		TipoRecurso tipoRecurso = new TipoRecurso();
 		tipoRecurso.sincronizar(this.dao.getConexao());
+		
 		
 		TurnoRecurso turnoRecurso = new TurnoRecurso();
 		turnoRecurso.sincronizar(this.dao.getConexao());
 		
-		/*
-		
+
 		CartaoRecurso cartaoRecurso = new CartaoRecurso();
 		cartaoRecurso.sincronizar(this.dao.getConexao());
-
+		
 		
 		UsuarioRecurso usuarioRecurso = new UsuarioRecurso();
 		usuarioRecurso.sincronizar();
+		
+		
+		
+		
+		
 		
 		CatracaUnidadeRecurso catracaUnidadeRecurso = new CatracaUnidadeRecurso();
 		catracaUnidadeRecurso.sincronizar(this.dao.getConexao());

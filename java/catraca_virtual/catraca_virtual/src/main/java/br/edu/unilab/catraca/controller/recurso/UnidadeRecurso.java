@@ -75,7 +75,7 @@ public class UnidadeRecurso extends Recurso{
         String output = resp.getEntity(String.class);
         JSONArray projectArray;
 		try {
-			projectArray = new JSONArray(output.substring(13));
+			projectArray = new JSONArray(output.substring(12));
 			for (int i = 0; i < projectArray.length(); i++) {
 				
 	            JSONObject proj = projectArray.getJSONObject(i);

@@ -61,9 +61,11 @@ public class TurnoRecurso extends Recurso{
         
         String output = resp.getEntity(String.class);     
         JSONArray projectArray;
+
+        
 		try {
 			
-			projectArray = new JSONArray(output.substring(11));
+			projectArray = new JSONArray(output.substring(10));
 			for (int i = 0; i < projectArray.length(); i++) {
 	            JSONObject proj = projectArray.getJSONObject(i);
 	            Turno turno = new Turno();

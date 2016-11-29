@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.gson.JsonArray;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
@@ -66,18 +67,28 @@ public class CatracaRecurso extends Recurso{
             System.err.println("Unable to connect to the server");
             return null;
         }
+       
+        String output = resp.getEntity(String.class); 
+        try {
+			JSONObject jo = new JSONObject(output);
+			output = jo.getString("catracas");
+
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
         
-        String output = resp.getEntity(String.class);   
         JSONArray projectArray;
 		try {
 			
-			projectArray = new JSONArray(output.substring(13));
+			projectArray = new JSONArray(output);
 			for (int i = 0; i < projectArray.length(); i++) {
 	            JSONObject proj = projectArray.getJSONObject(i);
 	            Catraca catraca = new Catraca();
 	            catraca.setId(proj.getInt("catr_id"));
 	            catraca.setNome(proj.getString("catr_nome"));
 	            catraca.setFinanceiroAtivo(proj.getBoolean("catr_financeiro"));
+	            System.out.println(catraca.getNome());
 	            lista.add(catraca);
 	            
 	        }
