@@ -10,9 +10,7 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
-import br.edu.unilab.catraca.dao.UnidadeDAO;
 import br.edu.unilab.catraca.dao.VinculoDAO;
-import br.edu.unilab.unicafe.model.Unidade;
 import br.edu.unilab.unicafe.model.Vinculo;
 import sun.misc.BASE64Encoder;
 
@@ -27,8 +25,8 @@ public class VinculoRecurso extends Recurso{
 		
 		for (Vinculo elemento : lista) {
 			
-			if(this.dao.inserir(elemento)){
-				System.out.println("Inseriu o elemento ");	
+			if(!this.dao.inserir(elemento)){
+				System.out.println("Erro ao tentar inserir vinculo. ");
 			}
 		}
 		
@@ -54,10 +52,19 @@ public class VinculoRecurso extends Recurso{
             return null;
         }
         
+        
         String output = resp.getEntity(String.class);
+        try {
+			JSONObject jo = new JSONObject(output);
+			output = jo.getString("vinculos");
+
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
         JSONArray projectArray;
 		try {
-			projectArray = new JSONArray(output.substring(13));
+			projectArray = new JSONArray(output);
 			for (int i = 0; i < projectArray.length(); i++) {
 				
 	            JSONObject proj = projectArray.getJSONObject(i);
@@ -73,8 +80,6 @@ public class VinculoRecurso extends Recurso{
 	            elemento.getCartao().getTipo().setId(proj.getInt("tipo_id"));
 	            
 	            
-//	            unidade.setId(proj.getInt("unid_id"));
-//	            unidade.setNome(proj.getString("unid_nome"));
 	            lista.add(elemento);
 	        }			
 			return lista;
@@ -86,9 +91,4 @@ public class VinculoRecurso extends Recurso{
 		}
 		
 	}
-	public static void main(String[] args) {
-		VinculoRecurso r = new VinculoRecurso();
-		r.sincronizar();
-	}
-
 }

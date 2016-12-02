@@ -34,10 +34,11 @@ public class TurnoRecurso extends Recurso{
 	public void sincronizar(Connection conexao){
 		this.dao = new TurnoDAO();
 		ArrayList<Turno> lista = this.obterLista();
+		this.dao.limpar();
 		if(lista == null){
 			return;
 		}
-		this.dao.limpar();
+
 		for (Turno turno : lista) {
 			dao.inserir(turno);
 		}

@@ -11,12 +11,11 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
-import br.edu.unilab.catraca.dao.CartaoDAO;
 import br.edu.unilab.catraca.dao.UnidadeDAO;
-import br.edu.unilab.unicafe.model.Cartao;
 import br.edu.unilab.unicafe.model.Unidade;
 import sun.misc.BASE64Encoder;
 
+@SuppressWarnings("restriction")
 public class UnidadeRecurso extends Recurso{
 	
 	
@@ -25,10 +24,11 @@ public class UnidadeRecurso extends Recurso{
 	public void sincronizar(){
 		this.dao = new UnidadeDAO();
 		ArrayList<Unidade> lista = this.obterLista();
+		this.dao.limpar();
 		if(lista == null){
 			return;
 		}
-		this.dao.limpar();
+		
 		for (Unidade unidade : lista) {
 			
 			if(!this.dao.inserir(unidade)){
@@ -59,8 +59,7 @@ public class UnidadeRecurso extends Recurso{
 		String url = URL+"unidade/junidade";
         String authString = USUARIO + ":" + SENHA;
         
-        @SuppressWarnings("restriction")
-		String authStringEnc = new BASE64Encoder().encode(authString.getBytes());
+        String authStringEnc = new BASE64Encoder().encode(authString.getBytes());
         Client restClient = Client.create();
         WebResource webResource = restClient.resource(url);
         ClientResponse resp = webResource.accept("application/json")

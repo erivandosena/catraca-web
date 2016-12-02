@@ -1,7 +1,5 @@
 package br.edu.unilab.catraca.controller.recurso;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -12,11 +10,8 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
-import br.edu.unilab.catraca.dao.CatracaDAO;
 import br.edu.unilab.catraca.dao.CustoRefeicaoDAO;
-import br.edu.unilab.unicafe.model.Catraca;
 import br.edu.unilab.unicafe.model.CustoRefeicao;
-import br.edu.unilab.unicafe.model.Turno;
 import sun.misc.BASE64Encoder;
 
 public class CustoRefeicaoRecurso extends Recurso{

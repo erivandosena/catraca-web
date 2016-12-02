@@ -26,10 +26,11 @@ public class CatracaRecurso extends Recurso{
 	public void sincronizar(){
 		this.dao = new CatracaDAO();
 		ArrayList<Catraca> catracas = this.obterLista();
+		this.dao.limpar();
 		if(catracas == null){
 			return;
 		}
-		this.dao.limpar();
+		
 		for (Catraca catraca : catracas) {
 			if(!dao.inserir(catraca)){
 				System.out.println("Erro ao tentar inserir catraca: "+catraca.getNome());

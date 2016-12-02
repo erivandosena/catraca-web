@@ -6,16 +6,10 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
-
-import br.edu.unilab.catraca.dao.CartaoDAO;
-import br.edu.unilab.catraca.dao.TurnoDAO;
 import br.edu.unilab.catraca.dao.UsuarioDAO;
-import br.edu.unilab.unicafe.model.Cartao;
-import br.edu.unilab.unicafe.model.Turno;
 import br.edu.unilab.unicafe.model.Usuario;
 import sun.misc.BASE64Encoder;
 
@@ -27,6 +21,7 @@ import sun.misc.BASE64Encoder;
  *Objetivo desta classe é pegar os cartões do WebService e inserir na base local. 
  *
  */
+@SuppressWarnings("restriction")
 public class UsuarioRecurso extends Recurso{
 	
 	private UsuarioDAO dao;
@@ -34,10 +29,11 @@ public class UsuarioRecurso extends Recurso{
 	public void sincronizar(){
 		this.dao = new UsuarioDAO();
 		ArrayList<Usuario> lista = this.obterLista();
+		this.dao.limpar();
 		if(lista == null){
 			return;
 		}
-		this.dao.limpar();
+		
 		for (Usuario usuario: lista) {
 			dao.inserir(usuario);
 		}

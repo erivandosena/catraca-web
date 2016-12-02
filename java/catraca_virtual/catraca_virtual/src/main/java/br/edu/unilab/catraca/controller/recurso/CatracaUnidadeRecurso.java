@@ -10,13 +10,10 @@ import org.json.JSONObject;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
-
-import br.edu.unilab.catraca.dao.CatracaDAO;
 import br.edu.unilab.catraca.dao.CatracaUnidadeDAO;
-import br.edu.unilab.catraca.dao.CustoUnidadeDAO;
 import br.edu.unilab.unicafe.model.CatracaUnidade;
-import br.edu.unilab.unicafe.model.CustoUnidade;
 import sun.misc.BASE64Encoder;
+
 
 public class CatracaUnidadeRecurso extends Recurso{
 	
@@ -27,10 +24,11 @@ public class CatracaUnidadeRecurso extends Recurso{
 	public void sincronizar(Connection conexao){
 		this.dao = new CatracaUnidadeDAO(conexao);	
 		ArrayList<CatracaUnidade> lista = this.obterLista();
+		this.dao.limpar();
 		if(lista == null){
 			return;
 		}
-		this.dao.limpar();
+
 		
 		for (CatracaUnidade elemento : lista) {
 			dao.inserir(elemento);
@@ -63,11 +61,17 @@ public class CatracaUnidadeRecurso extends Recurso{
             return null;
         }
         
-        String output = resp.getEntity(String.class);     
+        String output = resp.getEntity(String.class);
+        try {
+			JSONObject jo = new JSONObject(output);
+			output = jo.getString("catraca_unidades");
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
         JSONArray projectArray;
 		try {
-			
-			projectArray = new JSONArray(output.substring(20));
+			projectArray = new JSONArray(output);
 			for (int i = 0; i < projectArray.length(); i++) {
 	            JSONObject proj = projectArray.getJSONObject(i);
 	            

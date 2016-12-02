@@ -12,11 +12,10 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
 import br.edu.unilab.catraca.dao.TipoDAO;
-import br.edu.unilab.catraca.dao.TurnoDAO;
 import br.edu.unilab.unicafe.model.Tipo;
-import br.edu.unilab.unicafe.model.Turno;
 import sun.misc.BASE64Encoder;
 
+@SuppressWarnings("restriction")
 public class TipoRecurso extends Recurso{
 	
 	private TipoDAO dao;

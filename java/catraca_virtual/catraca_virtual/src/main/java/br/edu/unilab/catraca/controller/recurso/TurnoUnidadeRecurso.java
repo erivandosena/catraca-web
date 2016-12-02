@@ -25,10 +25,9 @@ public class TurnoUnidadeRecurso extends Recurso{
 	public void sincronizar(Connection conexao){
 		this.dao = new TurnoUnidadeDAO(conexao);
 		ArrayList<TurnoUnidade> lista = this.obterLista();
+		this.dao.limpar();
 		if(lista == null)
 			return;
-		this.dao.limpar();
-		
 		for (TurnoUnidade turnoUnidade : lista) {
 			dao.inserir(turnoUnidade);
 			

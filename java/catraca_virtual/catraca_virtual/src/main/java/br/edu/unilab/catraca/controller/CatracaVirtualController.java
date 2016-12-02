@@ -13,8 +13,6 @@ import javax.swing.JFrame;
 import br.edu.unilab.catraca.controller.recurso.CartaoRecurso;
 import br.edu.unilab.catraca.controller.recurso.CatracaRecurso;
 import br.edu.unilab.catraca.controller.recurso.CatracaUnidadeRecurso;
-import br.edu.unilab.catraca.controller.recurso.CustoRefeicaoRecurso;
-import br.edu.unilab.catraca.controller.recurso.CustoUnidadeRecurso;
 import br.edu.unilab.catraca.controller.recurso.RegistroRecurso;
 import br.edu.unilab.catraca.controller.recurso.TipoRecurso;
 import br.edu.unilab.catraca.controller.recurso.TurnoRecurso;
@@ -22,7 +20,6 @@ import br.edu.unilab.catraca.controller.recurso.TurnoUnidadeRecurso;
 import br.edu.unilab.catraca.controller.recurso.UnidadeRecurso;
 import br.edu.unilab.catraca.controller.recurso.UsuarioRecurso;
 import br.edu.unilab.catraca.dao.CatracaDAO;
-import br.edu.unilab.catraca.dao.CustoUnidadeDAO;
 import br.edu.unilab.catraca.dao.TipoDAO;
 import br.edu.unilab.catraca.dao.UsuarioDAO;
 import br.edu.unilab.catraca.view.CatracaVirtualView;
@@ -31,7 +28,6 @@ import br.edu.unilab.catraca.view.LoginView;
 import br.edu.unilab.unicafe.model.Catraca;
 import br.edu.unilab.unicafe.model.Tipo;
 import br.edu.unilab.unicafe.model.Turno;
-import br.edu.unilab.unicafe.model.TurnoUnidade;
 import br.edu.unilab.unicafe.model.Unidade;
 import br.edu.unilab.unicafe.model.Usuario;
 
@@ -105,6 +101,7 @@ public class CatracaVirtualController {
 	
 	
 	public void tentarLogar(){
+		@SuppressWarnings("deprecation")
 		String senha = UsuarioDAO.getMD5(getFrameLogin().getSenha().getText());
 		this.operador = new Usuario();
 		this.operador.setLogin(getFrameLogin().getLogin().getText().toLowerCase().trim());
@@ -113,6 +110,11 @@ public class CatracaVirtualController {
 		this.getFrameLogin().getLogin().setText("");
 		this.getFrameLogin().getSenha().setText("");
 		
+		
+		for(Turno turno : this.turnos){
+			System.out.println(turno.getHoraInicial());
+			
+		}
 		if(usuarioDao.autentica(this.operador))
 		{
 			this.iniciarCatracaVirtual();
@@ -169,30 +171,22 @@ public class CatracaVirtualController {
 		CatracaRecurso catracaRecurso = new CatracaRecurso();
 		catracaRecurso.sincronizar(this.dao.getConexao());
 		
-		
-		
-		/*
-		
-		
 		TipoRecurso tipoRecurso = new TipoRecurso();
 		tipoRecurso.sincronizar(this.dao.getConexao());
-		
-		
+				
 		TurnoRecurso turnoRecurso = new TurnoRecurso();
 		turnoRecurso.sincronizar(this.dao.getConexao());
 		
+		TurnoUnidadeRecurso turnoUnidade = new TurnoUnidadeRecurso();
+		turnoUnidade.sincronizar(this.dao.getConexao());
 
 		CartaoRecurso cartaoRecurso = new CartaoRecurso();
 		cartaoRecurso.sincronizar(this.dao.getConexao());
+
 		
 		
 		UsuarioRecurso usuarioRecurso = new UsuarioRecurso();
 		usuarioRecurso.sincronizar();
-		
-		
-		
-		
-		
 		
 		CatracaUnidadeRecurso catracaUnidadeRecurso = new CatracaUnidadeRecurso();
 		catracaUnidadeRecurso.sincronizar(this.dao.getConexao());
@@ -200,12 +194,6 @@ public class CatracaVirtualController {
 		RegistroRecurso registroRecurso = new RegistroRecurso();
 		registroRecurso.sincronizar(this.dao.getConexao());
 		
-		TipoRecurso tipoRecurso = new TipoRecurso();
-		tipoRecurso.sincronizar(this.dao.getConexao());
-		
-		TurnoRecurso turnoRecurso = new TurnoRecurso();
-		turnoRecurso.sincronizar(this.dao.getConexao());
-		*/
 	}
 	public void verificarNomeDaCatraca(){
 		boolean passou = false;

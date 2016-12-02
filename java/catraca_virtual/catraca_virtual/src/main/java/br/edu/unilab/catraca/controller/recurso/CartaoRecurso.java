@@ -23,6 +23,7 @@ import sun.misc.BASE64Encoder;
  *Objetivo desta classe é pegar os cartões do WebService e inserir na base local. 
  *
  */
+@SuppressWarnings("restriction")
 public class CartaoRecurso extends Recurso{
 	
 	public CartaoDAO dao;
@@ -30,10 +31,10 @@ public class CartaoRecurso extends Recurso{
 	public void sincronizar(){
 		this.dao = new CartaoDAO();
 		ArrayList<Cartao> cartoes = this.obterLista();
+		this.dao.limpar();
 		if(cartoes == null){
 			return;
 		}
-		this.dao.limpar();
 		for (Cartao cartao : cartoes) {
 			
 			if(!this.dao.inserir(cartao)){
@@ -63,8 +64,7 @@ public class CartaoRecurso extends Recurso{
 		String url = URL+"cartao/jcartao";
         String authString = USUARIO + ":" + SENHA;
         
-        @SuppressWarnings("restriction")
-		String authStringEnc = new BASE64Encoder().encode(authString.getBytes());
+        String authStringEnc = new BASE64Encoder().encode(authString.getBytes());
         Client restClient = Client.create();
         WebResource webResource = restClient.resource(url);
         ClientResponse resp = webResource.accept("application/json")
@@ -78,10 +78,18 @@ public class CartaoRecurso extends Recurso{
         }
         
         String output = resp.getEntity(String.class);        
+        try {
+			JSONObject jo = new JSONObject(output);
+			output = jo.getString("cartoes");
+
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
         JSONArray projectArray;
-        System.out.println(""+output);
+
 		try {
-			projectArray = new JSONArray(output.substring(11));
+			projectArray = new JSONArray(output);
 			for (int i = 0; i < projectArray.length(); i++) {
 	            JSONObject proj = projectArray.getJSONObject(i);
 	            Cartao cartao = new Cartao();

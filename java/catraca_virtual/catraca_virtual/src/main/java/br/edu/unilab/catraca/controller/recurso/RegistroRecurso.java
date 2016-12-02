@@ -11,9 +11,7 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
-import br.edu.unilab.catraca.dao.CatracaDAO;
 import br.edu.unilab.catraca.dao.RegistroDAO;
-import br.edu.unilab.unicafe.model.Catraca;
 import br.edu.unilab.unicafe.model.Registro;
 import sun.misc.BASE64Encoder;
 
@@ -32,10 +30,11 @@ public class RegistroRecurso extends Recurso{
 	public void sincronizar(Connection conexao){
 		this.dao = new RegistroDAO(conexao);
 		ArrayList<Registro> lista = this.obterLista();
+		this.dao.limpar();
 		if(lista == null){
 			return;
 		}
-		this.dao.limpar();
+
 		
 		for (Registro elemento : lista) {
 			dao.inserir(elemento);
