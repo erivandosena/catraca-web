@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import br.edu.unilab.unicafe.model.Cartao;
 import br.edu.unilab.unicafe.model.Registro;
 
 public class RegistroDAO extends DAO{

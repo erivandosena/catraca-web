@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import br.edu.unilab.unicafe.model.Cartao;
 import br.edu.unilab.unicafe.model.Catraca;
 import br.edu.unilab.unicafe.model.Turno;
 import br.edu.unilab.unicafe.model.Unidade;

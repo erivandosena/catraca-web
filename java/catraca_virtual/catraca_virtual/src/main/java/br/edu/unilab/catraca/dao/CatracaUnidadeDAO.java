@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import br.edu.unilab.unicafe.model.CatracaUnidade;
-import br.edu.unilab.unicafe.model.CustoUnidade;
 
 public class CatracaUnidadeDAO extends DAO{
 	

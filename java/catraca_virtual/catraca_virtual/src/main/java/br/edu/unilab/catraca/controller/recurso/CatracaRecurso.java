@@ -89,7 +89,7 @@ public class CatracaRecurso extends Recurso{
 	            catraca.setId(proj.getInt("catr_id"));
 	            catraca.setNome(proj.getString("catr_nome"));
 	            catraca.setFinanceiroAtivo(proj.getBoolean("catr_financeiro"));
-	            System.out.println(catraca.getNome());
+	            
 	            lista.add(catraca);
 	            
 	        }

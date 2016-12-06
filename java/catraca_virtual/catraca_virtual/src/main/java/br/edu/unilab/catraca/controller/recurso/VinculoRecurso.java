@@ -1,5 +1,6 @@
 package br.edu.unilab.catraca.controller.recurso;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -20,6 +21,19 @@ public class VinculoRecurso extends Recurso{
 	
 	public void sincronizar(){
 		this.dao = new VinculoDAO();
+		this.dao.limpar();
+		ArrayList<Vinculo> lista = this.obterLista();
+		
+		for (Vinculo elemento : lista) {
+			
+			if(!this.dao.inserir(elemento)){
+				System.out.println("Erro ao tentar inserir vinculo. ");
+			}
+		}
+		
+	}
+	public void sincronizar(Connection conexao){
+		this.dao = new VinculoDAO(conexao);
 		this.dao.limpar();
 		ArrayList<Vinculo> lista = this.obterLista();
 		

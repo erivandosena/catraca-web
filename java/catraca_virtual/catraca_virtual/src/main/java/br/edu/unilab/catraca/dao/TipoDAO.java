@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import br.edu.unilab.unicafe.model.Tipo;
-import br.edu.unilab.unicafe.model.Turno;
 
 public class TipoDAO extends DAO{
 	public TipoDAO(){

@@ -248,7 +248,7 @@ class CartaoController{
 					$listaDeTipos = $tipoDao->retornaLista();
 					foreach ($listaDeTipos as $chave => $tipo){
 						if(strtolower (trim( $tipo->getNome())) == 'aluno'){
-							if(strtolower (trim($usuario->getStatusDiscente())) == 'ativo' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - graduando'){
+							if(strtolower (trim($usuario->getStatusDiscente())) == 'ativo' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($usuario->getStatusDiscente())) == 'formando' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - graduando'){
 								continue;
 							}
 							unset($listaDeTipos[$chave]);
@@ -328,7 +328,7 @@ class CartaoController{
 							return;
 						}
 						
-						$this->view->formConfirmacaoEnvioVinculo($usuario, $_GET['numero_cartao2'], $tipo);
+						$this->view->formConfirmacaoEnvioVinculo($usuario, $_GET['numero_cartao2'], $esseTipo);
 					}else{
 						$this->view->mostraFormAdicionarVinculo($listaDeTipos, $idDoSelecionado);
 					}				
@@ -372,7 +372,7 @@ class CartaoController{
 		if(strtolower (trim($usuario->getStatusServidor())) == 'ativo'){			
 			return true;
 		}
-		if(strtolower (trim($usuario->getStatusDiscente())) == 'ativo' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - graduando'){
+		if(strtolower (trim($usuario->getStatusDiscente())) == 'ativo' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($usuario->getStatusDiscente())) == 'formando' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - graduando'){
 			return true;		
 		}		
 		if(strtolower (trim($usuario->getTipodeUsuario())) == 'terceirizado' || strtolower (trim($usuario->getTipodeUsuario())) == 'outros'){

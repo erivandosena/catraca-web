@@ -6,7 +6,11 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.net.UnknownHostException;
 import java.sql.Connection;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import javax.swing.JFrame;
 
@@ -111,10 +115,7 @@ public class CatracaVirtualController {
 		this.getFrameLogin().getSenha().setText("");
 		
 		
-		for(Turno turno : this.turnos){
-			System.out.println(turno.getHoraInicial());
-			
-		}
+		
 		if(usuarioDao.autentica(this.operador))
 		{
 			this.iniciarCatracaVirtual();
@@ -123,6 +124,87 @@ public class CatracaVirtualController {
 		{
 			this.getFrameLogin().getLabelMensagem().setText("Errou login ou senha");
 		}
+		
+	}
+	
+	public void verificandoTurnoAtual(){
+		Thread verificando = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				while(true){
+					Date horaAtual = new Date();
+					for(Turno turno : turnos){
+						String horaInicial = turno.getHoraInicial();
+						String horaFinal = turno.getHoraFinal();
+						
+						Date dateHoraInicial = null;
+						Date dateHoraFinal = null;
+						SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+						format.setLenient(false);
+						try {
+							dateHoraFinal = format.parse(horaFinal);
+							dateHoraInicial = format.parse(horaInicial);
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						Calendar calendarAtual = Calendar.getInstance();
+						
+						calendarAtual.setTime(horaAtual);
+						int hourAtual = calendarAtual.get(Calendar.HOUR_OF_DAY);
+						int minuteAtual = calendarAtual.get(Calendar.MINUTE);
+						
+						
+						Calendar calendarInicioTurno = Calendar.getInstance();
+						calendarInicioTurno.setTime(dateHoraInicial);
+						int hourInicioTurno = calendarInicioTurno.get(Calendar.HOUR_OF_DAY);
+						int minuteInicioTurno = calendarInicioTurno.get(Calendar.MINUTE);
+						
+						
+						Calendar calendarFimTurno = Calendar.getInstance();
+						calendarFimTurno.setTime(dateHoraFinal);
+						int hourFimTurno = calendarFimTurno.get(Calendar.HOUR_OF_DAY);
+						int minuteFimTurno = calendarFimTurno.get(Calendar.MINUTE);
+						
+						
+						if(hourAtual >= hourInicioTurno && hourAtual <= hourFimTurno){
+							if(hourAtual == hourInicioTurno && minuteAtual >= minuteInicioTurno){
+								getFrameCatracaVirtual().getLabelTurno().setText("Turno "+turno.getDescricao()+" iniciado");
+								turnoAtual = turno;
+								
+							}
+							else if(hourAtual > hourInicioTurno && hourAtual < hourFimTurno){
+								getFrameCatracaVirtual().getLabelTurno().setText("Turno "+turno.getDescricao()+" iniciado");
+								turnoAtual = turno;
+								
+							}else if(hourAtual >= hourInicioTurno && hourAtual == hourFimTurno && minuteAtual <= minuteFimTurno){
+								getFrameCatracaVirtual().getLabelTurno().setText("Turno "+turno.getDescricao()+" iniciado");
+								turnoAtual = turno;
+							}else{
+								System.out.println("NAO Estamos no "+turno.getDescricao());
+							}
+						}else{
+							System.out.println("NAO Estamos no "+turno.getDescricao());
+						}
+													
+						
+						
+						
+						
+					}
+					
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				
+			}
+		});
+		verificando.start();
 		
 	}
 	public void iniciarCatracaVirtual(){
@@ -143,23 +225,28 @@ public class CatracaVirtualController {
 		colunas[i] = "Isento";
 		colunas[i+1] = "Total";
 
+		
+		
 		this.frameCatracaVirtual = new CatracaVirtualView(colunas, dados);
 		this.frameCatracaVirtual.getNumeroCartao().setFocusable(true);
-		this.frameCatracaVirtual.setFinanceiroAtivo(false);
+		
+		this.frameCatracaVirtual.setFinanceiroAtivo(this.catracaVirtual.isFinanceiroAtivo());
+		
 		this.frameCatracaVirtual.getDados()[0][0] = this.catracaVirtual.getNome();
 		this.frameCatracaVirtual.getTabela().updateUI();
-		this.frameCatracaVirtual.setFinanceiroAtivo(this.catracaVirtual.isFinanceiroAtivo());
 		
 		this.frameCatracaVirtual.getNomeUsuario().setText("");
 		this.frameCatracaVirtual.getTipoUsuario().setText("");
 		this.frameCatracaVirtual.getRefeicoesRestantes().setText("");
 		this.frameCatracaVirtual.getValorCobrado().setText("");
+		
 		this.frameCatracaVirtual.getTabela().updateUI();
 
 		
 		this.getFrameLogin().setVisible(false);
-		this.getFrameCatracaVirtual().setVisible(true);
 		
+		this.getFrameCatracaVirtual().setVisible(true);
+		this.verificandoTurnoAtual();
 		
 	}
 	
@@ -182,8 +269,6 @@ public class CatracaVirtualController {
 
 		CartaoRecurso cartaoRecurso = new CartaoRecurso();
 		cartaoRecurso.sincronizar(this.dao.getConexao());
-
-		
 		
 		UsuarioRecurso usuarioRecurso = new UsuarioRecurso();
 		usuarioRecurso.sincronizar();

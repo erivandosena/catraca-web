@@ -6,7 +6,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import br.edu.unilab.unicafe.model.Catraca;
 import br.edu.unilab.unicafe.model.Unidade;
 
 public class UnidadeDAO extends DAO{

@@ -5,7 +5,6 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import br.edu.unilab.unicafe.model.CustoRefeicao;
-import br.edu.unilab.unicafe.model.Turno;
 
 public class CustoRefeicaoDAO extends DAO{
 	

@@ -8,7 +8,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import br.edu.unilab.unicafe.model.Turno;
 import br.edu.unilab.unicafe.model.Usuario;
 
 public class UsuarioDAO extends DAO {

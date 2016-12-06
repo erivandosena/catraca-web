@@ -320,7 +320,7 @@ class CartaoView {
 			if(strtolower (trim($usuario->getStatusDiscente())) == 'ativo'){
 				echo '<tr><th>Aluno </th><td>Ativo</td></tr>';
 			}else{
-				echo '<tr><th>Aluno </th><td>Inativo. </td></tr>';
+				echo '<tr><th>Aluno </th><td>'.$usuario->getStatusDiscente().'</td></tr>';
 				
 			}
 			echo '<tr><th>Nivel Discente:</th><td> ' . $usuario->getNivelDiscente().'</td></tr>';
@@ -412,7 +412,7 @@ class CartaoView {
 		echo '</tr>';
 	}
 	public function formConfirmacaoEnvioVinculo(Usuario $usuario, $numeroCartao, Tipo $tipo){
-		echo '<div class="borda">';
+		echo '<div class="borda doze colunas">';
 		echo '<p>Tem certeza que deseja adicionar o cartão '.$numeroCartao.' para o usuario '.$usuario->getNome().' com o tipo '.$tipo->getNome().'? </p>';
 		echo '<form action="" method="post">
 				<input type="submit" class="botao" value="certeza" name="enviar_vinculo"/>

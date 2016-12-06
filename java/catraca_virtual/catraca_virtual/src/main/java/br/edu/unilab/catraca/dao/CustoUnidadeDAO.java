@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import br.edu.unilab.unicafe.model.Catraca;
 import br.edu.unilab.unicafe.model.CustoUnidade;
 
 public class CustoUnidadeDAO extends DAO {

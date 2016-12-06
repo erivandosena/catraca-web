@@ -2,6 +2,7 @@ package br.edu.unilab.catraca.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import br.edu.unilab.unicafe.model.Vinculo;
@@ -37,6 +38,22 @@ public class VinculoDAO extends DAO{
 		
 		
 	}
+	public void mostrar(){
+		try {
+			
+			PreparedStatement ps = this.getConexao().prepareStatement("SELECT * FROM vinculo");
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				System.out.println("Teste");
+				
+				
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
 	public boolean inserir(Vinculo elemento){
 		try {
 			

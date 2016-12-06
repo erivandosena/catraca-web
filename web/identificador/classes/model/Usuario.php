@@ -245,7 +245,7 @@ class Usuario{
 				
 			return true;
 		}
-		if(strtolower (trim($this->getStatusDiscente())) == 'ativo' || strtolower (trim($this->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($this->getStatusDiscente())) == 'ativo - graduando'){
+		if(strtolower (trim($this->getStatusDiscente())) == 'ativo' || strtolower (trim($this->getStatusDiscente())) == 'formando' || strtolower (trim($this->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($this->getStatusDiscente())) == 'ativo - graduando'){
 			return true;
 		}
 	
