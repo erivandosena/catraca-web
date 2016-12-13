@@ -40,15 +40,37 @@ public class CatracaVirtualView extends JFrame {
 	public void setDados(String[][] dados) {
 		this.dados = dados;
 	}
-
+	private JPanel panel_3;
+	public JPanel getPanel_3() {
+		return panel_3;
+	}
+	public void setPanel_3(JPanel panel_3) {
+		this.panel_3 = panel_3;
+	}
+	private JLabel lblErro;
+	private JPanel panelErro; 
 	private JPanel contentPane;
 	private JTable tabela;
 	private JButton btnConfirmar;
 	private JLabel nomeUsuario;
+	public JLabel getLblErro() {
+		return lblErro;
+	}
+	public void setLblErro(JLabel lblErro) {
+		this.lblErro = lblErro;
+	}
 	private JLabel tipoUsuario;
 	private JLabel refeicoesRestantes;
 	private JLabel valorCobrado;
 	private JTextField numeroCartao;
+	private JLabel labelDataHora;
+	public JLabel getLabelDataHora() {
+		return labelDataHora;
+	}
+	public void setLabelDataHora(JLabel labelDataHora) {
+		this.labelDataHora = labelDataHora;
+	}
+
 	private JLabel labelFinanceiro;
 	public void setFinanceiroAtivo(boolean financeiro){
 		if(financeiro){
@@ -230,7 +252,7 @@ public class CatracaVirtualView extends JFrame {
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 		
-		JLabel labelDataHora = new JLabel(sdf.format(new Date()));
+		labelDataHora = new JLabel(sdf.format(new Date()));
 		labelDataHora.setHorizontalAlignment(SwingConstants.CENTER);
 		labelDataHora.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		labelDataHora.setBounds(10, 22, 197, 32);
@@ -250,7 +272,7 @@ public class CatracaVirtualView extends JFrame {
 		lblCarto.setBounds(158, 235, 113, 22);
 		panel_1.add(lblCarto);
 		
-		JPanel panel_3 = new JPanel();
+		panel_3 = new JPanel();
 		panel_3.setBorder(new EtchedBorder(EtchedBorder.LOWERED, Color.LIGHT_GRAY, new Color(0, 0, 0)));
 		panel_3.setBounds((panel_1.getWidth()-680)/2, 291, 680, 206);
 		panel_1.add(panel_3);
@@ -302,8 +324,24 @@ public class CatracaVirtualView extends JFrame {
 		valorCobrado.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		valorCobrado.setBounds(129, 129, 379, 14);
 		panel_3.add(valorCobrado);
+		
+		panelErro = new JPanel();
+		panelErro.setBounds(158, 277, 680, 58);
+		panel_1.add(panelErro);
+		panelErro.setLayout(null);
+		
+		lblErro = new JLabel("Erro");
+		lblErro.setBounds(121, 11, 451, 17);
+		panelErro.add(lblErro);
+		lblErro.setFont(new Font("Tahoma", Font.BOLD, 14));
 
 		
 		
+	}
+	public JPanel getPanelErro() {
+		return panelErro;
+	}
+	public void setPanelErro(JPanel panelErro) {
+		this.panelErro = panelErro;
 	}
 }

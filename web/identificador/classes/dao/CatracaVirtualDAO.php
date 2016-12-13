@@ -127,6 +127,7 @@ class CatracaVirtualDAO extends DAO{
 		INNER JOIN isencao ON cartao.cart_id = isencao.cart_id
 		WHERE (vinculo.vinc_id = $idVinculo) AND  ('$dataTimeAtual' < isencao.isen_fim);";
 		$result = $this->getConexao ()->query ($sql);
+// 		echo $sql;
 		foreach($result as $linha){
 			if(isset($linha['isen_id'])){
 				$vinculo->setIsencao(new Isencao());

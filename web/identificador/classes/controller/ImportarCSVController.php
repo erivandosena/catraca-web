@@ -5,6 +5,7 @@ class ImportarCSVController{
 	
 	
 	public function importar(){
+		echo '<h1>Importar</h1>';
 		$row = 1;
 		$cartoes = array();
 		if (($handle = fopen ( "almoco2.csv", "r" )) !== FALSE) {
@@ -47,7 +48,7 @@ class ImportarCSVController{
 			echo '</tr>';
 			
 			
-			$data = '2016-10-26 19:00:00';
+			$data = '2016-12-02 12:00:00';
 
 			$custo = 9.5;
 			$idCatraca = 3;
@@ -94,10 +95,10 @@ class ImportarCSVController{
 				
 				
 		}
-// 		$dao->getConexao()->commit();
+		$dao->getConexao()->commit();
 		echo '</table>';
 		
-		echo 'Sucesso!';
+// 		echo 'Sucesso!';
 		
 		
 		

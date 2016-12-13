@@ -290,7 +290,7 @@ class CartaoController{
 						$vinculo = new Vinculo();
 						$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'G:00:01' );
 						$vinculo->setFinalValidade($daqui3Meses);
-						$vinculo->getCartao()->getTipo()->setId($tipo->getId());
+						$vinculo->getCartao()->getTipo()->setId($esseTipo->getId());
 						$vinculo->getCartao()->setNumero($_GET['numero_cartao2']);
 						$vinculo->getResponsavel()->setIdBaseExterna(intval($usuario->getIdBaseExterna()));
 						$vinculo->setInicioValidade(date ( "Y-m-d G:i:s" ));

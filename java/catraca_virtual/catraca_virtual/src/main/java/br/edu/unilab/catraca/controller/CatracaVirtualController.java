@@ -1,5 +1,6 @@
 package br.edu.unilab.catraca.controller;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -23,9 +24,12 @@ import br.edu.unilab.catraca.controller.recurso.TurnoRecurso;
 import br.edu.unilab.catraca.controller.recurso.TurnoUnidadeRecurso;
 import br.edu.unilab.catraca.controller.recurso.UnidadeRecurso;
 import br.edu.unilab.catraca.controller.recurso.UsuarioRecurso;
+import br.edu.unilab.catraca.controller.recurso.VinculoRecurso;
 import br.edu.unilab.catraca.dao.CatracaDAO;
+import br.edu.unilab.catraca.dao.CatracaVirtualDAO;
 import br.edu.unilab.catraca.dao.TipoDAO;
 import br.edu.unilab.catraca.dao.UsuarioDAO;
+import br.edu.unilab.catraca.dao.VinculoDAO;
 import br.edu.unilab.catraca.view.CatracaVirtualView;
 import br.edu.unilab.catraca.view.FrameSplash;
 import br.edu.unilab.catraca.view.LoginView;
@@ -34,6 +38,7 @@ import br.edu.unilab.unicafe.model.Tipo;
 import br.edu.unilab.unicafe.model.Turno;
 import br.edu.unilab.unicafe.model.Unidade;
 import br.edu.unilab.unicafe.model.Usuario;
+import br.edu.unilab.unicafe.model.Vinculo;
 
 public class CatracaVirtualController {
 	
@@ -43,12 +48,14 @@ public class CatracaVirtualController {
 	private CatracaDAO dao;
 	private ArrayList<Turno>turnos;
 	private Turno turnoAtual;
+	private boolean turnoAtivo;
 	private Unidade unidade;
 	private FrameSplash splash;
 	private Usuario operador;
 	
 	
 	public CatracaVirtualController(){
+		turnoAtivo = false;
 	}
 	
 	public void iniciar(){
@@ -103,6 +110,83 @@ public class CatracaVirtualController {
 		
 	}
 	
+	public void adicionarEventosCartao(){
+		getFrameCatracaVirtual().getNumeroCartao().addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER){
+					String numero = getFrameCatracaVirtual().getNumeroCartao().getText();
+					getFrameCatracaVirtual().getNumeroCartao().setText("");
+					
+					if(turnoAtivo){
+						passarCartao(numero);
+					}else{
+						erroForaDoTurno();
+					}
+					
+				}
+			}
+		});
+				
+	}
+	
+	
+	
+	public void passarCartao(final String numero){
+		Thread passando = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				getFrameCatracaVirtual().getNumeroCartao().setEnabled(false);
+				System.out.println(numero);
+				CatracaVirtualDAO catracaVirtualDAO= new CatracaVirtualDAO();
+				Vinculo vinculo = new Vinculo();
+				vinculo.getCartao().setNumero(numero);
+				if(catracaVirtualDAO.verificaVinculo(vinculo)){
+
+					getFrameCatracaVirtual().getNomeUsuario().setText(vinculo.getResponsavel().getNome());
+					getFrameCatracaVirtual().getTipoUsuario().setText(vinculo.getCartao().getTipo().getNome());
+					getFrameCatracaVirtual().getValorCobrado().setText(""+vinculo.getCartao().getTipo().getValorCobrado());
+					getFrameCatracaVirtual().getPanel_3().setVisible(true);	
+				}else{
+					getFrameCatracaVirtual().getLblErro().setText("Sem Vinculo Valido");
+					getFrameCatracaVirtual().getPanelErro().setVisible(true);
+				}
+				
+				try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+				getFrameCatracaVirtual().getPanel_3().setVisible(false);
+				getFrameCatracaVirtual().getPanelErro().setVisible(false);
+				getFrameCatracaVirtual().getNumeroCartao().setEnabled(true);
+				getFrameCatracaVirtual().getNumeroCartao().grabFocus();
+				
+			}
+		});
+		passando.start();
+	}
+	public void erroForaDoTurno(){
+		Thread mostrar = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				getFrameCatracaVirtual().getLblErro().setText("Fora do horário de atendimento. ");
+				getFrameCatracaVirtual().getPanelErro().setVisible(true);
+				try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				getFrameCatracaVirtual().getPanelErro().setVisible(false);
+			}
+		});
+		mostrar.start();
+	}
 	
 	public void tentarLogar(){
 		@SuppressWarnings("deprecation")
@@ -133,7 +217,77 @@ public class CatracaVirtualController {
 			@Override
 			public void run() {
 				while(true){
+
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 					Date horaAtual = new Date();
+					SimpleDateFormat dataNoFrame = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+					getFrameCatracaVirtual().getLabelDataHora().setText(dataNoFrame.format(horaAtual));
+					
+					
+					if(turnoAtivo){
+						
+						Turno turno = turnoAtual;
+						String horaInicial = turno.getHoraInicial();
+						String horaFinal = turno.getHoraFinal();
+						
+						Date dateHoraInicial = null;
+						Date dateHoraFinal = null;
+						SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+						format.setLenient(false);
+						try {
+							dateHoraFinal = format.parse(horaFinal);
+							dateHoraInicial = format.parse(horaInicial);
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						Calendar calendarAtual = Calendar.getInstance();
+						
+						calendarAtual.setTime(horaAtual);
+						int hourAtual = calendarAtual.get(Calendar.HOUR_OF_DAY);
+						int minuteAtual = calendarAtual.get(Calendar.MINUTE);
+						
+						
+						Calendar calendarInicioTurno = Calendar.getInstance();
+						calendarInicioTurno.setTime(dateHoraInicial);
+						int hourInicioTurno = calendarInicioTurno.get(Calendar.HOUR_OF_DAY);
+						int minuteInicioTurno = calendarInicioTurno.get(Calendar.MINUTE);
+						
+						
+						Calendar calendarFimTurno = Calendar.getInstance();
+						calendarFimTurno.setTime(dateHoraFinal);
+						int hourFimTurno = calendarFimTurno.get(Calendar.HOUR_OF_DAY);
+						int minuteFimTurno = calendarFimTurno.get(Calendar.MINUTE);
+						
+						
+						if(hourAtual >= hourInicioTurno && hourAtual <= hourFimTurno){
+							if(hourAtual == hourInicioTurno && minuteAtual >= minuteInicioTurno){
+								continue;
+								
+							}
+							else if(hourAtual > hourInicioTurno && hourAtual < hourFimTurno){
+								continue;
+								
+							}else if(hourAtual >= hourInicioTurno && hourAtual == hourFimTurno && minuteAtual <= minuteFimTurno){
+								continue;
+							}else{
+								getFrameCatracaVirtual().getLabelTurno().setText("Turno "+turno.getDescricao()+"  finalizado. ");
+								turnoAtivo = false;
+							}
+						}else{
+							getFrameCatracaVirtual().getLabelTurno().setText("Turno "+turno.getDescricao()+"  finalizado. ");
+							turnoAtivo = false;
+							
+						}
+						
+						continue;
+					}
 					for(Turno turno : turnos){
 						String horaInicial = turno.getHoraInicial();
 						String horaFinal = turno.getHoraFinal();
@@ -172,20 +326,22 @@ public class CatracaVirtualController {
 							if(hourAtual == hourInicioTurno && minuteAtual >= minuteInicioTurno){
 								getFrameCatracaVirtual().getLabelTurno().setText("Turno "+turno.getDescricao()+" iniciado");
 								turnoAtual = turno;
+								turnoAtivo = true;
+								continue;
 								
 							}
 							else if(hourAtual > hourInicioTurno && hourAtual < hourFimTurno){
 								getFrameCatracaVirtual().getLabelTurno().setText("Turno "+turno.getDescricao()+" iniciado");
 								turnoAtual = turno;
+								turnoAtivo = true;
+								continue;
 								
 							}else if(hourAtual >= hourInicioTurno && hourAtual == hourFimTurno && minuteAtual <= minuteFimTurno){
 								getFrameCatracaVirtual().getLabelTurno().setText("Turno "+turno.getDescricao()+" iniciado");
 								turnoAtual = turno;
-							}else{
-								System.out.println("NAO Estamos no "+turno.getDescricao());
+								turnoAtivo = true;
+								continue;
 							}
-						}else{
-							System.out.println("NAO Estamos no "+turno.getDescricao());
 						}
 													
 						
@@ -194,12 +350,6 @@ public class CatracaVirtualController {
 						
 					}
 					
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
 				}
 				
 			}
@@ -246,38 +396,46 @@ public class CatracaVirtualController {
 		this.getFrameLogin().setVisible(false);
 		
 		this.getFrameCatracaVirtual().setVisible(true);
+		getFrameCatracaVirtual().getLabelTurno().setText(" Turno Inativo ");
+		getFrameCatracaVirtual().getNumeroCartao().grabFocus();
+		getFrameCatracaVirtual().getPanel_3().setVisible(false);
+		getFrameCatracaVirtual().getPanelErro().setVisible(false);
+		this.adicionarEventosCartao();
 		this.verificandoTurnoAtual();
 		
 	}
 	
 	public void sincronizacaoBasica(){
 		
-		UnidadeRecurso unidadeRecurso = new UnidadeRecurso();
-		unidadeRecurso.sincronizar(this.dao.getConexao());
-		
-		CatracaRecurso catracaRecurso = new CatracaRecurso();
-		catracaRecurso.sincronizar(this.dao.getConexao());
-		
-		TipoRecurso tipoRecurso = new TipoRecurso();
-		tipoRecurso.sincronizar(this.dao.getConexao());
-				
-		TurnoRecurso turnoRecurso = new TurnoRecurso();
-		turnoRecurso.sincronizar(this.dao.getConexao());
-		
-		TurnoUnidadeRecurso turnoUnidade = new TurnoUnidadeRecurso();
-		turnoUnidade.sincronizar(this.dao.getConexao());
-
-		CartaoRecurso cartaoRecurso = new CartaoRecurso();
-		cartaoRecurso.sincronizar(this.dao.getConexao());
-		
-		UsuarioRecurso usuarioRecurso = new UsuarioRecurso();
-		usuarioRecurso.sincronizar();
-		
-		CatracaUnidadeRecurso catracaUnidadeRecurso = new CatracaUnidadeRecurso();
-		catracaUnidadeRecurso.sincronizar(this.dao.getConexao());
-		
-		RegistroRecurso registroRecurso = new RegistroRecurso();
-		registroRecurso.sincronizar(this.dao.getConexao());
+//		UnidadeRecurso unidadeRecurso = new UnidadeRecurso();
+//		unidadeRecurso.sincronizar(this.dao.getConexao());
+//		
+//		CatracaRecurso catracaRecurso = new CatracaRecurso();
+//		catracaRecurso.sincronizar(this.dao.getConexao());
+//		
+//		TipoRecurso tipoRecurso = new TipoRecurso();
+//		tipoRecurso.sincronizar(this.dao.getConexao());
+//				
+//		TurnoRecurso turnoRecurso = new TurnoRecurso();
+//		turnoRecurso.sincronizar(this.dao.getConexao());
+//		
+//		TurnoUnidadeRecurso turnoUnidade = new TurnoUnidadeRecurso();
+//		turnoUnidade.sincronizar(this.dao.getConexao());
+//
+//		CartaoRecurso cartaoRecurso = new CartaoRecurso();
+//		cartaoRecurso.sincronizar(this.dao.getConexao());
+//		
+//		UsuarioRecurso usuarioRecurso = new UsuarioRecurso();
+//		usuarioRecurso.sincronizar();
+//		
+//		VinculoRecurso vinculoRecurso = new VinculoRecurso();
+//		vinculoRecurso.sincronizar(this.dao.getConexao());
+//		
+//		CatracaUnidadeRecurso catracaUnidadeRecurso = new CatracaUnidadeRecurso();
+//		catracaUnidadeRecurso.sincronizar(this.dao.getConexao());
+//		
+//		RegistroRecurso registroRecurso = new RegistroRecurso();
+//		registroRecurso.sincronizar(this.dao.getConexao());
 		
 	}
 	public void verificarNomeDaCatraca(){
