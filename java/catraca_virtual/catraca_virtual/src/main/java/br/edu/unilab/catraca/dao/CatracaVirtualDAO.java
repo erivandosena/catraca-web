@@ -46,6 +46,7 @@ public class CatracaVirtualDAO extends DAO{
 				vinculo.getCartao().getTipo().setNome(rs.getString("tipo_nome"));
 				vinculo.getCartao().getTipo().setValorCobrado(rs.getDouble("tipo_valor"));
 				vinculo.getCartao().getTipo().setId(rs.getInt("id_tipo"));
+				
 				return true;
 			}
 		} catch (SQLException e) {
