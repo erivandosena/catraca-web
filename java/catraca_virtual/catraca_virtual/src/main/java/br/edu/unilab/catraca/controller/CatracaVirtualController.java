@@ -169,6 +169,7 @@ public class CatracaVirtualController {
 				
 				
 				if(catracaVirtualDAO.verificaVinculo(vinculoConsultado)){
+					
 					catracaVirtualDAO.podeContinuarComendo(vinculoConsultado, turnoAtual);
 					vinculoSelecionado = true;
 					

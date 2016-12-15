@@ -107,6 +107,37 @@ public class CatracaVirtualDAO extends DAO{
 		return false;
 	}
 	
+	
+	public boolean vinculoEhIsento(Vinculo vinculo){
+
+		try {
+			String sql ="SELECT * FROM vinculo LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id"
+					+ " INNER JOIN isencao ON cartao.cart_id = isencao.cart_id"
+					+ " WHERE (vinculo.vinc_id = $idVinculo)"
+					+ " AND  ('$dataTimeAtual' < isencao.isen_fim);";
+			
+			PreparedStatement ps = this.getConexao().prepareStatement(sql);
+			java.sql.Date data = new java.sql.Date(new java.util.Date().getTime());
+			Calendar calendarAtual = Calendar.getInstance();
+			ps.setString(1, data.toString()+" "+calendarAtual.get(Calendar.HOUR_OF_DAY)+":"+calendarAtual.get(Calendar.MINUTE)+":00");
+			ps.setString(2, vinculo.getCartao().getNumero());
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				vinculo.getResponsavel().setNome(rs.getString("usua_nome"));
+				vinculo.getCartao().getTipo().setNome(rs.getString("tipo_nome"));
+				vinculo.getCartao().getTipo().setValorCobrado(rs.getDouble("tipo_valor"));
+				vinculo.getCartao().getTipo().setId(rs.getInt("id_tipo"));
+				vinculo.setQuantidadeDeAlimentosPorTurno(rs.getInt("vinc_refeicoes"));
+				
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
 
 	
 }
