@@ -58,7 +58,7 @@ public class CatracaVirtualController {
 	
 	public CatracaVirtualController(){
 		turnoAtivo = false;
-		flagVinculo = false;
+		vinculoSelecionado = false;
 		semaforo = new Semaphore(1);
 		
 	}
@@ -120,10 +120,11 @@ public class CatracaVirtualController {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if(flagVinculo){
-					flagVinculo = false;
-					System.out.println("Tentar inserir registro do vinculo do ."+vinculoSelecionado.getResponsavel().getNome());
-						
+				if(vinculoSelecionado){
+					vinculoSelecionado = false;
+					
+					System.out.println("Tentar inserir registro do vinculo do ."+vinculoConsultado.getResponsavel().getNome());
+					
 				}
 				
 			}
@@ -151,8 +152,8 @@ public class CatracaVirtualController {
 	}
 	
 	
-	public Vinculo vinculoSelecionado;
-	public boolean flagVinculo;
+	public Vinculo vinculoConsultado;
+	public boolean vinculoSelecionado;
 	
 	
 	public void passarCartao(final String numero){
@@ -163,14 +164,19 @@ public class CatracaVirtualController {
 				getFrameCatracaVirtual().getNumeroCartao().setEnabled(false);
 				System.out.println(numero);
 				CatracaVirtualDAO catracaVirtualDAO= new CatracaVirtualDAO();
-				vinculoSelecionado = new Vinculo();
-				vinculoSelecionado.getCartao().setNumero(numero);
-				if(catracaVirtualDAO.verificaVinculo(vinculoSelecionado)){
-					flagVinculo = true;
-					getFrameCatracaVirtual().getNomeUsuario().setText(vinculoSelecionado.getResponsavel().getNome());
-					getFrameCatracaVirtual().getTipoUsuario().setText(vinculoSelecionado.getCartao().getTipo().getNome());
-					getFrameCatracaVirtual().getValorCobrado().setText(""+vinculoSelecionado.getCartao().getTipo().getValorCobrado());
+				vinculoConsultado = new Vinculo();
+				vinculoConsultado.getCartao().setNumero(numero);
+				
+				
+				if(catracaVirtualDAO.verificaVinculo(vinculoConsultado)){
+					catracaVirtualDAO.podeContinuarComendo(vinculoConsultado, turnoAtual);
+					vinculoSelecionado = true;
+					
+					getFrameCatracaVirtual().getNomeUsuario().setText(vinculoConsultado.getResponsavel().getNome());
+					getFrameCatracaVirtual().getTipoUsuario().setText(vinculoConsultado.getCartao().getTipo().getNome());
+					getFrameCatracaVirtual().getValorCobrado().setText(""+vinculoConsultado.getCartao().getTipo().getValorCobrado());
 					getFrameCatracaVirtual().getPanel_3().setVisible(true);	
+					
 					
 				}else{
 					getFrameCatracaVirtual().getLblErro().setText("Sem Vinculo Valido");
@@ -182,7 +188,7 @@ public class CatracaVirtualController {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				flagVinculo = false;
+				vinculoSelecionado = false;
 				
 				getFrameCatracaVirtual().getPanel_3().setVisible(false);
 				getFrameCatracaVirtual().getPanelErro().setVisible(false);
@@ -211,7 +217,24 @@ public class CatracaVirtualController {
 		});
 		mostrar.start();
 	}
-	
+	public void erroJaPassou(){
+		Thread mostrar = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				getFrameCatracaVirtual().getLblErro().setText("Ja comemeu. ");
+				getFrameCatracaVirtual().getPanelErro().setVisible(true);
+				try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				getFrameCatracaVirtual().getPanelErro().setVisible(false);
+			}
+		});
+		mostrar.start();
+	}
 	public void tentarLogar(){
 		@SuppressWarnings("deprecation")
 		String senha = UsuarioDAO.getMD5(getFrameLogin().getSenha().getText());
@@ -367,13 +390,7 @@ public class CatracaVirtualController {
 								continue;
 							}
 						}
-													
-						
-						
-						
-						
 					}
-					
 				}
 				
 			}
@@ -435,45 +452,45 @@ public class CatracaVirtualController {
 	public void sincronizacaoBasica(){
 		
 
-		try {
-			semaforo.acquire();
-			
-			UnidadeRecurso unidadeRecurso = new UnidadeRecurso();
-			unidadeRecurso.sincronizar(dao.getConexao());
-
-			CatracaRecurso catracaRecurso = new CatracaRecurso();
-			catracaRecurso.sincronizar(dao.getConexao());
-			
-			TipoRecurso tipoRecurso = new TipoRecurso();
-			tipoRecurso.sincronizar(dao.getConexao());
-					
-			TurnoRecurso turnoRecurso = new TurnoRecurso();
-			turnoRecurso.sincronizar(dao.getConexao());
-			
-			TurnoUnidadeRecurso turnoUnidade = new TurnoUnidadeRecurso();
-			turnoUnidade.sincronizar(dao.getConexao());
-
-			CartaoRecurso cartaoRecurso = new CartaoRecurso();
-			cartaoRecurso.sincronizar(dao.getConexao());
-			
-			UsuarioRecurso usuarioRecurso = new UsuarioRecurso();
-			usuarioRecurso.sincronizar();
-			
-			VinculoRecurso vinculoRecurso = new VinculoRecurso();
-			vinculoRecurso.sincronizar(dao.getConexao());
-			
-			CatracaUnidadeRecurso catracaUnidadeRecurso = new CatracaUnidadeRecurso();
-			catracaUnidadeRecurso.sincronizar(dao.getConexao());
-			
-			RegistroRecurso registroRecurso = new RegistroRecurso();
-			registroRecurso.sincronizar(dao.getConexao());
-			
-			semaforo.release();
-			System.out.println("Sincronizacao Feita. ");
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+//		try {
+//			semaforo.acquire();
+//			
+//			UnidadeRecurso unidadeRecurso = new UnidadeRecurso();
+//			unidadeRecurso.sincronizar(dao.getConexao());
+//
+//			CatracaRecurso catracaRecurso = new CatracaRecurso();
+//			catracaRecurso.sincronizar(dao.getConexao());
+//			
+//			TipoRecurso tipoRecurso = new TipoRecurso();
+//			tipoRecurso.sincronizar(dao.getConexao());
+//					
+//			TurnoRecurso turnoRecurso = new TurnoRecurso();
+//			turnoRecurso.sincronizar(dao.getConexao());
+//			
+//			TurnoUnidadeRecurso turnoUnidade = new TurnoUnidadeRecurso();
+//			turnoUnidade.sincronizar(dao.getConexao());
+//
+//			CartaoRecurso cartaoRecurso = new CartaoRecurso();
+//			cartaoRecurso.sincronizar(dao.getConexao());
+//			
+//			UsuarioRecurso usuarioRecurso = new UsuarioRecurso();
+//			usuarioRecurso.sincronizar();
+//			
+//			VinculoRecurso vinculoRecurso = new VinculoRecurso();
+//			vinculoRecurso.sincronizar(dao.getConexao());
+//			
+//			CatracaUnidadeRecurso catracaUnidadeRecurso = new CatracaUnidadeRecurso();
+//			catracaUnidadeRecurso.sincronizar(dao.getConexao());
+//			
+//			RegistroRecurso registroRecurso = new RegistroRecurso();
+//			registroRecurso.sincronizar(dao.getConexao());
+//			
+//			semaforo.release();
+//			System.out.println("Sincronizacao Feita. ");
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 
 		
 		
