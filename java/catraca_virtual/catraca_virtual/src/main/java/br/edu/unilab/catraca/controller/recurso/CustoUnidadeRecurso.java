@@ -1,5 +1,6 @@
 package br.edu.unilab.catraca.controller.recurso;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -22,6 +23,17 @@ public class CustoUnidadeRecurso extends Recurso{
 	
 	public void sincronizar(){
 		this.dao = new CustoUnidadeDAO();
+		
+		this.dao.limpar();
+		ArrayList<CustoUnidade> lista = this.obterLista();
+		for (CustoUnidade elemento : lista) {
+			dao.inserir(elemento);
+			
+		}
+	}
+	
+	public void sincronizar(Connection conexao){
+		this.dao = new CustoUnidadeDAO(conexao);
 		
 		this.dao.limpar();
 		ArrayList<CustoUnidade> lista = this.obterLista();

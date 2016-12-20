@@ -144,27 +144,21 @@ class PessoalController {
 	}
 	public function telaPessoal(){
 		
-		echo '<div class="conteudo"> <div class = "simpleTabs">
-		        <ul class = "simpleTabsNavigation">
-		
-					<li><a href="#">Meus Créditos</a></li>
-					<li><a href="#">Minhas Transações</a></li>
-			
-		        </ul>
+		echo '<div class = "simpleTabs">
+			        <ul class = "simpleTabsNavigation">
+						<li><a href="#">Identifica&ccedil;&atilde;o</a></li>
+			        </ul>
 		        <div class = "simpleTabsContent">';
+
 				$usuario = new Usuario();
 				$sessao = new Sessao();
 				$usuarioDao = new UsuarioDAO($this->dao->getConexao());
 				$usuario->setId($sessao->getIdUsuario());
 				$usuarioDao->preenchePorId($usuario);
 				$this->telaDeCreditos($usuario);
-		echo '	</div>	
-				<div class = "simpleTabsContent">';
-		
-		$this->telaDeTransacoes($usuario);
-		
-		echo '	</div>
-		    </div></div>';
+				$this->telaDeTransacoes($usuario);
+
+		echo '	 </div></div>';
 		
 		
 	}
@@ -173,19 +167,22 @@ class PessoalController {
 		$result = $this->dao->getConexao()->query("SELECT * FROM transacao 
 				INNER JOIN usuario ON usuario.usua_id = transacao.usua_id
 				WHERE usua_id1 = $idUsuario
-				ORDER BY tran_data DESC LIMIT 100");
-		echo '<p>&Uacute;ltimas 100 transa&ccedil;&otilde;es</p>';
+				ORDER BY tran_data
+				 DESC LIMIT 200");
+		echo '<p>&Uacute;ltimas 200 transa&ccedil;&otilde;es</p>';
 		echo '<table class="tabela borda-vertical zebrada texto-preto">';
 		echo '<thead>';
 		echo '<tr><th>Data/Hora</th><th>Valor</th><th>Descrição</th><th>Operador</th></tr>';
 		echo '</thead>';
 		echo '<tbody>';
+		$totalCarregado = 0;
 		foreach($result as $linha){
 			$time = strtotime($linha['tran_data']);
-			
-			echo '<tr><td>'.date('d/m/Y H:i:s', $time).'</td><td>'.$linha['tran_valor'].'</td><td>'.$linha['tran_descricao'].'<td>'.$linha['usua_nome'].'</td></td></tr>';
-			
+				
+			echo '<tr><td>'.date('d/m/Y H:i:s', $time).'</td><td>R$'.number_format ($linha['tran_valor'], 2, ',', '.' ).'</td><td>'.$linha['tran_descricao'].'<td>'.$linha['usua_nome'].'</td></td></tr>';
+			$totalCarregado += $linha['tran_valor'];
 		}
+		echo '<tr><th>Total Recarregado: </th><th>R$'.number_format ( $totalCarregado, 2, ',', '.' ).'</th><th>-</th><th>-</th></tr>';
 		echo '</tbody>';
 		echo '</table>';
 		
@@ -222,9 +219,6 @@ class PessoalController {
 			$this->exibirVinculos($vinculos);
 				
 				
-		}else if(count($vinculos) > 1){
-			echo '<p>Vínculos Inativos</p>';
-			$this->exibirVinculos($vinculos);
 		}
 		
 	}
@@ -262,18 +256,24 @@ class PessoalController {
 					INNER JOIN catraca ON registro.catr_id = catraca.catr_id
 					INNER JOIN catraca_unidade ON catraca_unidade.catr_id = catraca.catr_id 
 					INNER JOIN unidade ON catraca_unidade.unid_id = unidade.unid_id 
-					WHERE vinc_id = $idTransacao ORDER BY regi_data DESC LIMIT 30";
+					WHERE vinc_id = $idTransacao 
+					AND regi_data > '2016-10-17 01:01:01' 
+					ORDER BY regi_data DESC LIMIT 200";
 				$result = $this->dao->getConexao()->query($sql);
 				echo '<div class="borda">';
-				echo '<p>&Uacute;ltimas 30 Refeições com o Cartão: ';
+				echo '<p>&Uacute;ltimas 200 Refeições com o Cartão: </p>
+				<p>OBS: mostraremos as refei&ccedil;&otilde;es a partir de 17 de outubro de 2016 porque foi quando come&ccedil;ou a funcionar o m&oacute;dulo financeiro.</p>
+				';
 				echo '<table  class="tabela borda-vertical zebrada texto-preto">';
+				$total = 0;
 				foreach($result as $linha){
 					$time = strtotime($linha['regi_data']);
 					
 					echo '<tr><td>'.date('d/m/Y H:i:s', $time).'</td><td>R$'.number_format ( $linha['regi_valor_pago'], 2, ',', '.' ).'</td><td>'.$linha['unid_nome'].'</td></tr>';
-					
+					$total += $linha['regi_valor_pago'];
 					
 				}
+				echo '<tr><th>TOTAL Consumido: </th><th>R$'.number_format ( $total, 2, ',', '.' ).'</th><th>-</th></tr>';
 				echo '</table>';
 				echo '</div>';
 			}

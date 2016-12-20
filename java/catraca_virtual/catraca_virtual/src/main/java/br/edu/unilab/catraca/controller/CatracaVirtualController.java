@@ -7,6 +7,7 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.net.UnknownHostException;
 import java.sql.Connection;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import javax.swing.JFrame;
 import br.edu.unilab.catraca.controller.recurso.CartaoRecurso;
 import br.edu.unilab.catraca.controller.recurso.CatracaRecurso;
 import br.edu.unilab.catraca.controller.recurso.CatracaUnidadeRecurso;
+import br.edu.unilab.catraca.controller.recurso.CustoUnidadeRecurso;
 import br.edu.unilab.catraca.controller.recurso.RegistroRecurso;
 import br.edu.unilab.catraca.controller.recurso.TipoRecurso;
 import br.edu.unilab.catraca.controller.recurso.TurnoRecurso;
@@ -35,6 +37,7 @@ import br.edu.unilab.catraca.view.CatracaVirtualView;
 import br.edu.unilab.catraca.view.FrameSplash;
 import br.edu.unilab.catraca.view.LoginView;
 import br.edu.unilab.unicafe.model.Catraca;
+import br.edu.unilab.unicafe.model.Registro;
 import br.edu.unilab.unicafe.model.Tipo;
 import br.edu.unilab.unicafe.model.Turno;
 import br.edu.unilab.unicafe.model.Unidade;
@@ -47,6 +50,7 @@ public class CatracaVirtualController {
 	private CatracaVirtualView frameCatracaVirtual;
 	private Catraca catracaVirtual;
 	private CatracaDAO dao;
+	private double custo;
 	private ArrayList<Turno>turnos;
 	private Turno turnoAtual;
 	private boolean turnoAtivo;
@@ -57,6 +61,7 @@ public class CatracaVirtualController {
 	
 	
 	public CatracaVirtualController(){
+		
 		turnoAtivo = false;
 		vinculoSelecionado = false;
 		semaforo = new Semaphore(1);
@@ -64,6 +69,7 @@ public class CatracaVirtualController {
 	}
 	
 	public void iniciar(){
+		
 		this.splash = new FrameSplash();
 		splash.setVisible(true);
 		
@@ -93,6 +99,12 @@ public class CatracaVirtualController {
 		this.verificarNomeDaCatraca();
 		this.verificarUnidadeDaCatraca();
 		this.verificarTurnosDaCatraca();
+		try {
+			this.dao.getConexao().close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.adicionarEventosDeLogin();
 		
 	}
@@ -123,8 +135,27 @@ public class CatracaVirtualController {
 				if(vinculoSelecionado){
 					vinculoSelecionado = false;
 					
-					System.out.println("Tentar inserir registro do vinculo do ."+vinculoConsultado.getResponsavel().getNome());
+					Registro registro = new Registro();
+					registro.setCatraca(catracaVirtual);
+					registro.setCartao(vinculoConsultado.getCartao());
+					registro.setValorCusto(custo);
+					registro.setVinculo(vinculoConsultado);
+					registro.setValorPago(vinculoConsultado.getCartao().getTipo().getValorCobrado());
+					CatracaVirtualDAO catracaVirtualDao = new CatracaVirtualDAO();
 					
+					if(catracaVirtualDao.inserirRegistro(registro)){
+						mensagemSucesso("Inserido com sucesso!");
+					}else{
+						
+						mensagemSucesso("Erro ao tentar inserir dados, tente novamente. ");
+						
+					}
+					try {
+						catracaVirtualDao.getConexao().close();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 				
 			}
@@ -163,14 +194,19 @@ public class CatracaVirtualController {
 			public void run() {
 				getFrameCatracaVirtual().getNumeroCartao().setEnabled(false);
 				System.out.println(numero);
-				CatracaVirtualDAO catracaVirtualDAO= new CatracaVirtualDAO();
+				CatracaVirtualDAO catracaVirtualDAO = new CatracaVirtualDAO();
 				vinculoConsultado = new Vinculo();
 				vinculoConsultado.getCartao().setNumero(numero);
-				
-				
+				System.out.println("Testeeee "+custo);
 				if(catracaVirtualDAO.verificaVinculo(vinculoConsultado)){
 					
 					catracaVirtualDAO.podeContinuarComendo(vinculoConsultado, turnoAtual);
+					try {
+						catracaVirtualDAO.getConexao().close();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					vinculoSelecionado = true;
 					
 					getFrameCatracaVirtual().getNomeUsuario().setText(vinculoConsultado.getResponsavel().getNome());
@@ -218,6 +254,27 @@ public class CatracaVirtualController {
 		});
 		mostrar.start();
 	}
+	
+	public void mensagemSucesso(final String mensagem){
+		Thread mostrar = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				getFrameCatracaVirtual().getPanel_3().setVisible(false);
+				getFrameCatracaVirtual().getLblErro().setText(mensagem);
+				getFrameCatracaVirtual().getPanelErro().setVisible(true);
+				try {
+					Thread.sleep(3000);
+				} catch (InterruptedException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				getFrameCatracaVirtual().getPanelErro().setVisible(false);
+			}
+		});
+		mostrar.start();
+	}
+	
 	public void erroJaPassou(){
 		Thread mostrar = new Thread(new Runnable() {
 			
@@ -242,7 +299,7 @@ public class CatracaVirtualController {
 		this.operador = new Usuario();
 		this.operador.setLogin(getFrameLogin().getLogin().getText().toLowerCase().trim());
 		this.operador.setSenha(senha);
-		UsuarioDAO usuarioDao = new UsuarioDAO(this.dao.getConexao());
+		UsuarioDAO usuarioDao = new UsuarioDAO();
 		this.getFrameLogin().getLogin().setText("");
 		this.getFrameLogin().getSenha().setText("");
 		
@@ -250,11 +307,23 @@ public class CatracaVirtualController {
 		
 		if(usuarioDao.autentica(this.operador))
 		{
+			try {
+				usuarioDao.getConexao().close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			this.iniciarCatracaVirtual();
 		}
 		else
 		{
 			this.getFrameLogin().getLabelMensagem().setText("Errou login ou senha");
+			try {
+				usuarioDao.getConexao().close();
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 	}
@@ -400,7 +469,11 @@ public class CatracaVirtualController {
 		
 	}
 	public void iniciarCatracaVirtual(){
-		TipoDAO tipoDao = new TipoDAO(this.dao.getConexao());
+		TipoDAO tipoDao = new TipoDAO();
+		
+		CatracaVirtualDAO catracaVirtualDAO = new CatracaVirtualDAO(tipoDao.getConexao());
+		custo = catracaVirtualDAO.custo(catracaVirtual);
+		
 		ArrayList<Tipo> listaTipos = tipoDao.lista();
 		int tamanho = listaTipos.size();
 		String colunas[] = new String[tamanho+3];
@@ -416,7 +489,12 @@ public class CatracaVirtualController {
 		dados[0][i+1] = "0";
 		colunas[i] = "Isento";
 		colunas[i+1] = "Total";
-
+		try {
+			tipoDao.getConexao().close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		
 		this.frameCatracaVirtual = new CatracaVirtualView(colunas, dados);
@@ -452,7 +530,7 @@ public class CatracaVirtualController {
 	
 	public void sincronizacaoBasica(){
 		
-
+//
 //		try {
 //			semaforo.acquire();
 //			
@@ -485,6 +563,9 @@ public class CatracaVirtualController {
 //			
 //			RegistroRecurso registroRecurso = new RegistroRecurso();
 //			registroRecurso.sincronizar(dao.getConexao());
+//			
+//			CustoUnidadeRecurso custoRecurso = new CustoUnidadeRecurso();
+//			custoRecurso.sincronizar(dao.getConexao());
 //			
 //			semaforo.release();
 //			System.out.println("Sincronizacao Feita. ");
