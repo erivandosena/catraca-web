@@ -134,7 +134,6 @@ public class CatracaVirtualController {
 			public void actionPerformed(ActionEvent e) {
 				if(vinculoSelecionado){
 					vinculoSelecionado = false;
-					
 					Registro registro = new Registro();
 					registro.setCatraca(catracaVirtual);
 					registro.setCartao(vinculoConsultado.getCartao());
@@ -142,14 +141,12 @@ public class CatracaVirtualController {
 					registro.setVinculo(vinculoConsultado);
 					registro.setValorPago(vinculoConsultado.getCartao().getTipo().getValorCobrado());
 					CatracaVirtualDAO catracaVirtualDao = new CatracaVirtualDAO();
-					
 					if(catracaVirtualDao.inserirRegistro(registro)){
 						mensagemSucesso("Inserido com sucesso!");
 					}else{
-						
 						mensagemSucesso("Erro ao tentar inserir dados, tente novamente. ");
-						
 					}
+					
 					try {
 						catracaVirtualDao.getConexao().close();
 					} catch (SQLException e1) {
@@ -157,7 +154,6 @@ public class CatracaVirtualController {
 						e1.printStackTrace();
 					}
 				}
-				
 			}
 		});
 	}
@@ -169,7 +165,6 @@ public class CatracaVirtualController {
 				if(e.getKeyCode() == KeyEvent.VK_ENTER){
 					String numero = getFrameCatracaVirtual().getNumeroCartao().getText();
 					getFrameCatracaVirtual().getNumeroCartao().setText("");
-					
 					if(turnoAtivo){
 						passarCartao(numero);
 					}else{
@@ -197,10 +192,13 @@ public class CatracaVirtualController {
 				CatracaVirtualDAO catracaVirtualDAO = new CatracaVirtualDAO();
 				vinculoConsultado = new Vinculo();
 				vinculoConsultado.getCartao().setNumero(numero);
-				System.out.println("Testeeee "+custo);
 				if(catracaVirtualDAO.verificaVinculo(vinculoConsultado)){
 					
-					catracaVirtualDAO.podeContinuarComendo(vinculoConsultado, turnoAtual);
+					if(!catracaVirtualDAO.podeContinuarComendo(vinculoConsultado, turnoAtual)){
+						mensagemSucesso("Usuário já passou neste turno!");
+						return;
+					}
+					System.out.println("Passou diret6o");
 					try {
 						catracaVirtualDAO.getConexao().close();
 					} catch (SQLException e) {
@@ -215,7 +213,8 @@ public class CatracaVirtualController {
 					getFrameCatracaVirtual().getPanel_3().setVisible(true);	
 					
 					
-				}else{
+				}
+				else{
 					getFrameCatracaVirtual().getLblErro().setText("Sem Vinculo Valido");
 					getFrameCatracaVirtual().getPanelErro().setVisible(true);
 				}
@@ -263,6 +262,8 @@ public class CatracaVirtualController {
 				getFrameCatracaVirtual().getPanel_3().setVisible(false);
 				getFrameCatracaVirtual().getLblErro().setText(mensagem);
 				getFrameCatracaVirtual().getPanelErro().setVisible(true);
+
+
 				try {
 					Thread.sleep(3000);
 				} catch (InterruptedException e1) {
@@ -270,6 +271,8 @@ public class CatracaVirtualController {
 					e1.printStackTrace();
 				}
 				getFrameCatracaVirtual().getPanelErro().setVisible(false);
+				getFrameCatracaVirtual().getNumeroCartao().setEnabled(true);
+				getFrameCatracaVirtual().getNumeroCartao().grabFocus();
 			}
 		});
 		mostrar.start();
@@ -530,7 +533,7 @@ public class CatracaVirtualController {
 	
 	public void sincronizacaoBasica(){
 		
-//
+
 //		try {
 //			semaforo.acquire();
 //			
@@ -560,7 +563,7 @@ public class CatracaVirtualController {
 //			
 //			CatracaUnidadeRecurso catracaUnidadeRecurso = new CatracaUnidadeRecurso();
 //			catracaUnidadeRecurso.sincronizar(dao.getConexao());
-//			
+			
 //			RegistroRecurso registroRecurso = new RegistroRecurso();
 //			registroRecurso.sincronizar(dao.getConexao());
 //			

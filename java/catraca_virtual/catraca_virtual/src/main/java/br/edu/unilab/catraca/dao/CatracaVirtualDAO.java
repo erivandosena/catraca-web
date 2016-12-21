@@ -53,7 +53,7 @@ public class CatracaVirtualDAO extends DAO{
 	
 
 		try {
-			String sql = "SELECT *, vinculo.vinc_id as id_vinculo,  tipo.tipo_id as id_tipo FROM cartao "
+			String sql = "SELECT *, cartao.cart_id as id_cartao, vinculo.vinc_id as id_vinculo,  tipo.tipo_id as id_tipo FROM cartao "
 					+ " INNER JOIN vinculo "
 					+ " ON cartao.cart_id = vinculo.cart_id "
 					+ " INNER JOIN vinculo_tipo ON vinculo_tipo.vinc_id = vinculo.vinc_id "
@@ -72,10 +72,10 @@ public class CatracaVirtualDAO extends DAO{
 				vinculo.setId(rs.getInt("id_vinculo"));
 				vinculo.getResponsavel().setNome(rs.getString("usua_nome"));
 				vinculo.getCartao().getTipo().setNome(rs.getString("tipo_nome"));
+				vinculo.getCartao().setId(rs.getInt("id_cartao"));
 				vinculo.getCartao().getTipo().setValorCobrado(rs.getDouble("tipo_valor"));
 				vinculo.getCartao().getTipo().setId(rs.getInt("id_tipo"));
 				vinculo.setQuantidadeDeAlimentosPorTurno(rs.getInt("vinc_refeicoes"));
-				
 				return true;
 			}
 		} catch (SQLException e) {
@@ -86,18 +86,12 @@ public class CatracaVirtualDAO extends DAO{
 	}
 	
 	public boolean podeContinuarComendo(Vinculo vinculo, Turno turno){
-		
-		
 		int i = 0;
 		
 		
 		try {
-			String sql = "SELECT * FROM registro"
-					+ " WHERE(registro.regi_data BETWEEN ? AND ?)"
-					+ "	AND (registro.cart_id = ?)"
-					+ " ORDER BY registro.regi_id DESC"
-					+ " LIMIT ?";
 			
+			String sql = "select * from registro WHERE registro.regi_data BETWEEN ? AND ? AND vinc_id = ? ORDER BY regi_id DESC LIMIT ?;";
 			PreparedStatement ps = this.getConexao().prepareStatement(sql);
 			java.sql.Date data = new java.sql.Date(new java.util.Date().getTime());
 			Date dateHoraInicial = null;
@@ -106,28 +100,26 @@ public class CatracaVirtualDAO extends DAO{
 			format.setLenient(false);
 			dateHoraFinal = format.parse(turno.getHoraFinal());
 			dateHoraInicial = format.parse(turno.getHoraInicial());
-			Calendar calendarAtual = Calendar.getInstance();
 			Calendar calendarInicio = Calendar.getInstance();
 			Calendar calendarFinal = Calendar.getInstance();
-			
 			calendarInicio.setTime(dateHoraInicial);
 			calendarFinal.setTime(dateHoraFinal);
-			
 			ps.setString(1, data.toString()+" "+calendarInicio.get(Calendar.HOUR_OF_DAY)+":"+calendarInicio.get(Calendar.MINUTE)+":00");
 			ps.setString(2, data.toString()+" "+calendarFinal.get(Calendar.HOUR_OF_DAY)+":"+calendarFinal.get(Calendar.MINUTE)+":00");
-			ps.setInt(3, vinculo.getCartao().getId());
+			ps.setInt(3, vinculo.getId());
 			ps.setInt(4, vinculo.getQuantidadeDeAlimentosPorTurno());
-			
 			ResultSet rs = ps.executeQuery();
 			
 			while(rs.next()){
 				i++;
 			}
+			if(i < vinculo.getQuantidadeDeAlimentosPorTurno()){
+				return true;
+			}
+			return false;
+			
 		} catch (SQLException | ParseException e) {
 			e.printStackTrace();
-		}
-		if(i < vinculo.getQuantidadeDeAlimentosPorTurno()){
-			return true;
 		}
 		return false;
 	}
@@ -163,7 +155,7 @@ public class CatracaVirtualDAO extends DAO{
 		return false;
 	}
 	public boolean inserirRegistro(Registro registro){
-		
+
 		try {
 			
 			PreparedStatement ps2 = this.getConexao().prepareStatement("INSERT "
@@ -181,7 +173,8 @@ public class CatracaVirtualDAO extends DAO{
 			ps2.setInt(6, registro.getVinculo().getId());
 			
 			ps2.executeUpdate();
-			System.out.println("Retnornou true essa bosta");
+
+			
 			return true;
 					
 			
