@@ -11,6 +11,7 @@ import java.util.Date;
 
 import br.edu.unilab.unicafe.model.Catraca;
 import br.edu.unilab.unicafe.model.Registro;
+import br.edu.unilab.unicafe.model.Tipo;
 import br.edu.unilab.unicafe.model.Turno;
 import br.edu.unilab.unicafe.model.Vinculo;
 
@@ -50,7 +51,6 @@ public class CatracaVirtualDAO extends DAO{
 	}
 	
 	public boolean verificaVinculo(Vinculo vinculo){
-	
 
 		try {
 			String sql = "SELECT *, cartao.cart_id as id_cartao, vinculo.vinc_id as id_vinculo,  tipo.tipo_id as id_tipo FROM cartao "
@@ -61,11 +61,10 @@ public class CatracaVirtualDAO extends DAO{
 					+ " INNER JOIN usuario on vinculo.usua_id = usuario.usua_id "
 					+ " WHERE (? BETWEEN vinculo.vinc_inicio AND vinculo.vinc_fim) "
 					+ " AND (cartao.cart_numero = ?)";
-			
 			PreparedStatement ps = this.getConexao().prepareStatement(sql);
 			java.sql.Date data = new java.sql.Date(new java.util.Date().getTime());
 			Calendar calendarAtual = Calendar.getInstance();
-			ps.setString(1, data.toString()+" "+calendarAtual.get(Calendar.HOUR_OF_DAY)+":"+calendarAtual.get(Calendar.MINUTE)+":00");
+			ps.setString(1, data.toString()+" "+String.format("%02d", Integer.parseInt(calendarAtual.get(Calendar.HOUR_OF_DAY)+""))+":"+String.format("%02d", Integer.parseInt(calendarAtual.get(Calendar.MINUTE)+""))+":00");
 			ps.setString(2, vinculo.getCartao().getNumero());
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
@@ -104,8 +103,9 @@ public class CatracaVirtualDAO extends DAO{
 			Calendar calendarFinal = Calendar.getInstance();
 			calendarInicio.setTime(dateHoraInicial);
 			calendarFinal.setTime(dateHoraFinal);
-			ps.setString(1, data.toString()+" "+calendarInicio.get(Calendar.HOUR_OF_DAY)+":"+calendarInicio.get(Calendar.MINUTE)+":00");
-			ps.setString(2, data.toString()+" "+calendarFinal.get(Calendar.HOUR_OF_DAY)+":"+calendarFinal.get(Calendar.MINUTE)+":00");
+			ps.setString(1, data.toString()+" "+String.format("%02d", Integer.parseInt(calendarInicio.get(Calendar.HOUR_OF_DAY)+""))+":"+String.format("%02d", Integer.parseInt(calendarInicio.get(Calendar.MINUTE)+""))+":00");
+			ps.setString(2, data.toString()+" "+String.format("%02d", Integer.parseInt(calendarFinal.get(Calendar.HOUR_OF_DAY)+""))+":"+String.format("%02d", Integer.parseInt(calendarFinal.get(Calendar.MINUTE)+""))+":00");
+			
 			ps.setInt(3, vinculo.getId());
 			ps.setInt(4, vinculo.getQuantidadeDeAlimentosPorTurno());
 			ResultSet rs = ps.executeQuery();
@@ -113,6 +113,8 @@ public class CatracaVirtualDAO extends DAO{
 			while(rs.next()){
 				i++;
 			}
+			vinculo.setRefeicoesRestantes(vinculo.getQuantidadeDeAlimentosPorTurno()-i);
+			
 			if(i < vinculo.getQuantidadeDeAlimentosPorTurno()){
 				return true;
 			}
@@ -163,8 +165,7 @@ public class CatracaVirtualDAO extends DAO{
 					+ " VALUES(?, ?, ?, ?, ?, ?)");
 			Calendar calendarAtual = Calendar.getInstance();
 			java.sql.Date data = new java.sql.Date(new java.util.Date().getTime());
-			registro.setData(data.toString()+" "+calendarAtual.get(Calendar.HOUR_OF_DAY)+":"+calendarAtual.get(Calendar.MINUTE)+":00");
-			
+			registro.setData(data.toString()+" "+String.format("%02d", Integer.parseInt(calendarAtual.get(Calendar.HOUR_OF_DAY)+""))+":"+String.format("%02d", Integer.parseInt(calendarAtual.get(Calendar.MINUTE)+""))+":00");
 			ps2.setString(1, registro.getData());
 			ps2.setDouble(2, registro.getValorPago());			
 			ps2.setDouble(3, registro.getValorCusto());
@@ -173,11 +174,8 @@ public class CatracaVirtualDAO extends DAO{
 			ps2.setInt(6, registro.getVinculo().getId());
 			
 			ps2.executeUpdate();
-
-			
 			return true;
-					
-			
+	
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -186,5 +184,68 @@ public class CatracaVirtualDAO extends DAO{
 		
 	}
 
+	public int totalGiroTurnoAtualNaoIsento(Catraca catraca, Tipo tipo, Turno turno){
+		int resultado = 0;
+
+		try {
+			String sql = "SELECT sum(1) as resultado FROM registro INNER JOIN catraca ON registro.catr_id = catraca.catr_id"
+					+ " INNER JOIN cartao ON cartao.cart_id = registro.cart_id "
+					+ " INNER JOIN vinculo ON registro.vinc_id = vinculo.vinc_id "
+					+ " INNER JOIN vinculo_tipo ON vinculo_tipo.vinc_id = vinculo.vinc_id"
+					+ " WHERE (catraca.catr_id = ?)"
+					+ " AND (registro.regi_data BETWEEN ? AND ?) AND (vinculo_tipo.tipo_id = ?) AND "
+					+ " (regi_valor_pago > 0) ;";
+			
+			PreparedStatement ps = this.getConexao().prepareStatement(sql);
+			ps.setInt(1, catraca.getId());
+			java.sql.Date data = new java.sql.Date(new java.util.Date().getTime());
+			
+			ps.setString(2, data.toString()+" "+turno.getHoraInicial());
+			ps.setString(3, data.toString()+" "+turno.getHoraFinal());
+			ps.setInt(4, tipo.getId());
+			
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				resultado = rs.getInt("resultado");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return resultado;
+	}
+	public int totalGiroTurnoAtualIsento(Catraca catraca, Turno turno){
+		int resultado = 0;
+
+		try {
+			String sql = "SELECT sum(1) as resultado FROM registro INNER JOIN catraca ON registro.catr_id = catraca.catr_id"
+					+ " INNER JOIN cartao ON cartao.cart_id = registro.cart_id "
+					+ " INNER JOIN vinculo ON registro.vinc_id = vinculo.vinc_id "
+					+ " INNER JOIN vinculo_tipo ON vinculo_tipo.vinc_id = vinculo.vinc_id"
+					+ " WHERE (catraca.catr_id = ?)"
+					+ " AND (registro.regi_data BETWEEN ? AND ?) AND "
+					+ " (regi_valor_pago = 0) ;";
+			
+			PreparedStatement ps = this.getConexao().prepareStatement(sql);
+			ps.setInt(1, catraca.getId());
+			java.sql.Date data = new java.sql.Date(new java.util.Date().getTime());
+			
+			ps.setString(2, data.toString()+" "+turno.getHoraInicial());
+			ps.setString(3, data.toString()+" "+turno.getHoraFinal());
+			
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				resultado = rs.getInt("resultado");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return resultado;
+	}
+	
+	public boolean vinculoEhIsento(){
+		return false;
+	}
 	
 }

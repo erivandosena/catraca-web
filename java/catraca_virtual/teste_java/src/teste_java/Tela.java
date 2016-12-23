@@ -21,16 +21,11 @@ public class Tela extends JFrame {
 	 * Launch the application.
 	 */
 	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Tela frame = new Tela();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
+//		int sb = 2;
+		int sb = 9;
+		String formatado = String.format("%02d", Integer.parseInt(sb+""));
+		System.out.println(formatado);
+		
 	}
 	
 

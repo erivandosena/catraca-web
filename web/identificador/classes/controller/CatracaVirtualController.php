@@ -249,9 +249,7 @@ class CatracaVirtualController{
 			if(isset($_GET['confirmado'])){				
 				
 				$idVinculo= $vinculo->getId();
-				
 				if($catraca->financeiroAtivo()){
-
 					$this->dao->getConexao()->beginTransaction();
 					$novoValor = floatval($vinculo->getCartao()->getCreditos()) - floatval($valorPago);
 					$sql0 = "UPDATE cartao set cart_creditos = $novoValor WHERE cart_id = $idCartao";
@@ -263,17 +261,12 @@ class CatracaVirtualController{
 						echo '<meta http-equiv="refresh" content="2; url=?pagina=gerador">';
 						return;
 					}
-					
-					
 					$sql = "INSERT into registro(regi_data, regi_valor_pago, regi_valor_custo, catr_id, cart_id, vinc_id)
 					VALUES('$data', $valorPago, $custo, $idCatraca, $idCartao, $idVinculo)";
 					//echo $sql;
-					
 					if(!$this->dao->getConexao()->exec($sql)){
 						$this->dao->getConexao()->rollBack();
-						
 						$this->mensagemErro();
-						
 						echo '<meta http-equiv="refresh" content="2; url=?pagina=gerador">';
 						return;
 					}else{

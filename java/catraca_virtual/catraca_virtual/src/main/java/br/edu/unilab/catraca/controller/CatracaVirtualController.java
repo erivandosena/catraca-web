@@ -58,7 +58,7 @@ public class CatracaVirtualController {
 	private FrameSplash splash;
 	private Usuario operador;
 	private Semaphore semaforo;
-	
+	ArrayList<Tipo> listaTipos;
 	
 	public CatracaVirtualController(){
 		
@@ -147,6 +147,25 @@ public class CatracaVirtualController {
 						mensagemSucesso("Erro ao tentar inserir dados, tente novamente. ");
 					}
 					
+					int tamanho = listaTipos.size();
+					String colunas[] = new String[tamanho+3];
+					colunas[0] = "Catraca Virtual";
+					String dados[][] = new String[1][tamanho+3];
+					int i = 1;
+					int somatorio = 0;
+					int valor = 0;
+					for (Tipo tipo : listaTipos) {
+						valor = catracaVirtualDao.totalGiroTurnoAtualNaoIsento(catracaVirtual, tipo, turnoAtual);
+						frameCatracaVirtual.getDados()[0][i] = ""+valor;
+						somatorio += valor;
+						i++;
+					}	
+					frameCatracaVirtual.getDados()[0][i] = ""+catracaVirtualDao.totalGiroTurnoAtualIsento(catracaVirtual, turnoAtual);
+					frameCatracaVirtual.getDados()[0][i+1] = ""+somatorio;
+					colunas[i] = "Isento";
+					colunas[i+1] = "Total";
+					frameCatracaVirtual.getTabela().updateUI();
+					
 					try {
 						catracaVirtualDao.getConexao().close();
 					} catch (SQLException e1) {
@@ -188,7 +207,6 @@ public class CatracaVirtualController {
 			@Override
 			public void run() {
 				getFrameCatracaVirtual().getNumeroCartao().setEnabled(false);
-				System.out.println(numero);
 				CatracaVirtualDAO catracaVirtualDAO = new CatracaVirtualDAO();
 				vinculoConsultado = new Vinculo();
 				vinculoConsultado.getCartao().setNumero(numero);
@@ -198,7 +216,7 @@ public class CatracaVirtualController {
 						mensagemSucesso("Usuário já passou neste turno!");
 						return;
 					}
-					System.out.println("Passou diret6o");
+					
 					try {
 						catracaVirtualDAO.getConexao().close();
 					} catch (SQLException e) {
@@ -210,6 +228,7 @@ public class CatracaVirtualController {
 					getFrameCatracaVirtual().getNomeUsuario().setText(vinculoConsultado.getResponsavel().getNome());
 					getFrameCatracaVirtual().getTipoUsuario().setText(vinculoConsultado.getCartao().getTipo().getNome());
 					getFrameCatracaVirtual().getValorCobrado().setText(""+vinculoConsultado.getCartao().getTipo().getValorCobrado());
+					getFrameCatracaVirtual().getRefeicoesRestantes().setText(""+vinculoConsultado.getRefeicoesRestantes());
 					getFrameCatracaVirtual().getPanel_3().setVisible(true);	
 					
 					
@@ -471,13 +490,18 @@ public class CatracaVirtualController {
 		verificando.start();
 		
 	}
+	public void atualizarTabela(){
+		
+		
+		
+	}
 	public void iniciarCatracaVirtual(){
 		TipoDAO tipoDao = new TipoDAO();
 		
 		CatracaVirtualDAO catracaVirtualDAO = new CatracaVirtualDAO(tipoDao.getConexao());
 		custo = catracaVirtualDAO.custo(catracaVirtual);
-		
-		ArrayList<Tipo> listaTipos = tipoDao.lista();
+		this.verificandoTurnoAtual();
+		listaTipos = tipoDao.lista();
 		int tamanho = listaTipos.size();
 		String colunas[] = new String[tamanho+3];
 		colunas[0] = "Catraca Virtual";
@@ -486,6 +510,7 @@ public class CatracaVirtualController {
 		for (Tipo tipo : listaTipos) {
 			colunas[i] = tipo.getNome();
 			dados[0][i] = "0";
+
 			i++;
 		}	
 		dados[0][i] = "0";
@@ -555,18 +580,12 @@ public class CatracaVirtualController {
 //			CartaoRecurso cartaoRecurso = new CartaoRecurso();
 //			cartaoRecurso.sincronizar(dao.getConexao());
 //			
-//			UsuarioRecurso usuarioRecurso = new UsuarioRecurso();
-//			usuarioRecurso.sincronizar();
-//			
 //			VinculoRecurso vinculoRecurso = new VinculoRecurso();
 //			vinculoRecurso.sincronizar(dao.getConexao());
 //			
 //			CatracaUnidadeRecurso catracaUnidadeRecurso = new CatracaUnidadeRecurso();
 //			catracaUnidadeRecurso.sincronizar(dao.getConexao());
-			
-//			RegistroRecurso registroRecurso = new RegistroRecurso();
-//			registroRecurso.sincronizar(dao.getConexao());
-//			
+//
 //			CustoUnidadeRecurso custoRecurso = new CustoUnidadeRecurso();
 //			custoRecurso.sincronizar(dao.getConexao());
 //			
