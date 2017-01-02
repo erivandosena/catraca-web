@@ -31,7 +31,7 @@ public class CustoRefeicaoRecurso extends Recurso{
 	public ArrayList<CustoRefeicao> obterLista(){
 		ArrayList<CustoRefeicao> lista = new ArrayList<CustoRefeicao>();
 		
-		String url = URL+"custo_refeicao/jcusto_refeicao";
+		String url = URL+"custo_refeicao/custos_refeicao";
         String authString = USUARIO + ":" + SENHA;
         
         @SuppressWarnings("restriction")

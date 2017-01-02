@@ -38,7 +38,7 @@ public class TipoRecurso extends Recurso{
 	public ArrayList<Tipo> obterLista(){
 		ArrayList<Tipo> lista = new ArrayList<Tipo>();
 		
-		String url = URL+"tipo/jtipo";
+		String url = URL+"tipo/tipos";
         String authString = USUARIO + ":" + SENHA;
 		String authStringEnc = new BASE64Encoder().encode(authString.getBytes());
         Client restClient = Client.create();

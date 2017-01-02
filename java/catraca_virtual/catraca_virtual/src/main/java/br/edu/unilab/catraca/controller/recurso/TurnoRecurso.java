@@ -46,7 +46,7 @@ public class TurnoRecurso extends Recurso{
 	public ArrayList<Turno> obterLista(){
 		ArrayList<Turno> lista = new ArrayList<Turno>();
 		
-		String url = URL+"turno/jturno";
+		String url = URL+"turno/turnos";
         String authString = USUARIO + ":" + SENHA;
 		String authStringEnc = new BASE64Encoder().encode(authString.getBytes());
         Client restClient = Client.create();

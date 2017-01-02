@@ -66,6 +66,7 @@ public class CatracaVirtualDAO extends DAO{
 			Calendar calendarAtual = Calendar.getInstance();
 			ps.setString(1, data.toString()+" "+String.format("%02d", Integer.parseInt(calendarAtual.get(Calendar.HOUR_OF_DAY)+""))+":"+String.format("%02d", Integer.parseInt(calendarAtual.get(Calendar.MINUTE)+""))+":00");
 			ps.setString(2, vinculo.getCartao().getNumero());
+
 			ResultSet rs = ps.executeQuery();
 			while(rs.next()){
 				vinculo.setId(rs.getInt("id_vinculo"));

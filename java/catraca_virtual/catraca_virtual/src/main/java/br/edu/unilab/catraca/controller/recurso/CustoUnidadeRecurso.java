@@ -46,7 +46,7 @@ public class CustoUnidadeRecurso extends Recurso{
 	public ArrayList<CustoUnidade> obterLista(){
 		ArrayList<CustoUnidade> lista = new ArrayList<CustoUnidade>();
 		
-		String url = URL+"custo_unidade/jcusto_unidade";
+		String url = URL+"custo_unidade/custos_unidade";
         String authString = USUARIO + ":" + SENHA;
         String authStringEnc = new BASE64Encoder().encode(authString.getBytes());
         Client restClient = Client.create();
@@ -60,11 +60,19 @@ public class CustoUnidadeRecurso extends Recurso{
             return null;
         }
         
-        String output = resp.getEntity(String.class);     
+        String output = resp.getEntity(String.class);        
+        try {
+			JSONObject jo = new JSONObject(output);
+			output = jo.getString("custos_unidade");
+
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
         JSONArray projectArray;
 		try {
 			
-			projectArray = new JSONArray(output.substring(17));
+			projectArray = new JSONArray(output);
 			for (int i = 0; i < projectArray.length(); i++) {
 	            JSONObject proj = projectArray.getJSONObject(i);
 	            

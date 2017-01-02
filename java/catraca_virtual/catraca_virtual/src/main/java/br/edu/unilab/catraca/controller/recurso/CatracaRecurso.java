@@ -53,7 +53,7 @@ public class CatracaRecurso extends Recurso{
 	public ArrayList<Catraca> obterLista(){
 		ArrayList<Catraca> lista = new ArrayList<Catraca>();
 		
-		String url = URL+"catraca/jcatraca";
+		String url = URL+"catraca/catracas";
         String authString = USUARIO + ":" + SENHA;
         
         @SuppressWarnings("restriction")

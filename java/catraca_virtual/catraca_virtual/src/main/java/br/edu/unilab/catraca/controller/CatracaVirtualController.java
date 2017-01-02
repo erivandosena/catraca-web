@@ -490,11 +490,7 @@ public class CatracaVirtualController {
 		verificando.start();
 		
 	}
-	public void atualizarTabela(){
-		
-		
-		
-	}
+
 	public void iniciarCatracaVirtual(){
 		TipoDAO tipoDao = new TipoDAO();
 		
@@ -559,42 +555,45 @@ public class CatracaVirtualController {
 	public void sincronizacaoBasica(){
 		
 
-//		try {
-//			semaforo.acquire();
-//			
-//			UnidadeRecurso unidadeRecurso = new UnidadeRecurso();
-//			unidadeRecurso.sincronizar(dao.getConexao());
-//
-//			CatracaRecurso catracaRecurso = new CatracaRecurso();
-//			catracaRecurso.sincronizar(dao.getConexao());
-//			
-//			TipoRecurso tipoRecurso = new TipoRecurso();
-//			tipoRecurso.sincronizar(dao.getConexao());
-//					
-//			TurnoRecurso turnoRecurso = new TurnoRecurso();
-//			turnoRecurso.sincronizar(dao.getConexao());
-//			
-//			TurnoUnidadeRecurso turnoUnidade = new TurnoUnidadeRecurso();
-//			turnoUnidade.sincronizar(dao.getConexao());
-//
-//			CartaoRecurso cartaoRecurso = new CartaoRecurso();
-//			cartaoRecurso.sincronizar(dao.getConexao());
-//			
-//			VinculoRecurso vinculoRecurso = new VinculoRecurso();
-//			vinculoRecurso.sincronizar(dao.getConexao());
-//			
-//			CatracaUnidadeRecurso catracaUnidadeRecurso = new CatracaUnidadeRecurso();
-//			catracaUnidadeRecurso.sincronizar(dao.getConexao());
-//
-//			CustoUnidadeRecurso custoRecurso = new CustoUnidadeRecurso();
-//			custoRecurso.sincronizar(dao.getConexao());
-//			
-//			semaforo.release();
-//			System.out.println("Sincronizacao Feita. ");
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+		try {
+			semaforo.acquire();
+			
+			UnidadeRecurso unidadeRecurso = new UnidadeRecurso();
+			unidadeRecurso.sincronizar(dao.getConexao());
+
+			CatracaRecurso catracaRecurso = new CatracaRecurso();
+			catracaRecurso.sincronizar(dao.getConexao());
+			
+			TipoRecurso tipoRecurso = new TipoRecurso();
+			tipoRecurso.sincronizar(dao.getConexao());
+					
+			TurnoRecurso turnoRecurso = new TurnoRecurso();
+			turnoRecurso.sincronizar(dao.getConexao());
+			
+			TurnoUnidadeRecurso turnoUnidade = new TurnoUnidadeRecurso();
+			turnoUnidade.sincronizar(dao.getConexao());
+
+			CartaoRecurso cartaoRecurso = new CartaoRecurso();
+			cartaoRecurso.sincronizar(dao.getConexao());
+			
+			UsuarioRecurso usuarioRecurso = new UsuarioRecurso();
+			usuarioRecurso.sincronizar();
+			
+			VinculoRecurso vinculoRecurso = new VinculoRecurso();
+			vinculoRecurso.sincronizar(dao.getConexao());
+			
+			CatracaUnidadeRecurso catracaUnidadeRecurso = new CatracaUnidadeRecurso();
+			catracaUnidadeRecurso.sincronizar(dao.getConexao());
+
+			CustoUnidadeRecurso custoRecurso = new CustoUnidadeRecurso();
+			custoRecurso.sincronizar(dao.getConexao());
+			
+			semaforo.release();
+			System.out.println("Sincronizacao Feita. ");
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		
 		

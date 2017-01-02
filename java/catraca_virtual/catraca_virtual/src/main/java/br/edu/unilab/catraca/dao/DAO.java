@@ -94,6 +94,10 @@ public class DAO {
 	
 	
 	public static final int TIPO_SQLITE = 0;
+	/**
+	 * Esta conexao serve para os dados que nao puderam ser sincronizados. 
+	 */
+	public static final int TIPO_SQLITE_SECUNDARIO = 3;
 	public static final int TIPO_MYSQL = 1;
 	public static final int TIPO_POSTGRESQL = 2;
 

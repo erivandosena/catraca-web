@@ -43,7 +43,7 @@ public class RegistroRecurso extends Recurso{
 	public ArrayList<Registro> obterLista(){
 		ArrayList<Registro> lista = new ArrayList<Registro>();
 		
-		String url = URL+"registro/jregistro/20161116%20110000/20161116%20130000";
+		String url = URL+"registro/20161116%20110000/20161116%20130000";
         String authString = USUARIO + ":" + SENHA;
         
         @SuppressWarnings("restriction")

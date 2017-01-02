@@ -61,8 +61,9 @@ public class CartaoRecurso extends Recurso{
 	public ArrayList<Cartao> obterLista(){
 		ArrayList<Cartao> lista = new ArrayList<Cartao>();
 		
-		String url = URL+"cartao/jcartao";
-        String authString = USUARIO + ":" + SENHA;
+		String url = URL+"cartao/cartoes";
+        System.out.println(url);
+		String authString = USUARIO + ":" + SENHA;
         
         String authStringEnc = new BASE64Encoder().encode(authString.getBytes());
         Client restClient = Client.create();

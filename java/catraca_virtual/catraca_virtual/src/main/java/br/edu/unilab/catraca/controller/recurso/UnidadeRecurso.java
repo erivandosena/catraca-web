@@ -56,7 +56,7 @@ public class UnidadeRecurso extends Recurso{
 	public ArrayList<Unidade> obterLista(){
 		ArrayList<Unidade> lista = new ArrayList<Unidade>();
 		
-		String url = URL+"unidade/junidade";
+		String url = URL+"unidade/unidades";
         String authString = USUARIO + ":" + SENHA;
         
         String authStringEnc = new BASE64Encoder().encode(authString.getBytes());

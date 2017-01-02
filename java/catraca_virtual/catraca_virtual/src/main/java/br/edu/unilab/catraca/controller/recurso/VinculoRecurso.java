@@ -50,7 +50,7 @@ public class VinculoRecurso extends Recurso{
 	public ArrayList<Vinculo> obterLista(){
 		ArrayList<Vinculo> lista = new ArrayList<Vinculo>();
 		
-		String url = URL+"/vinculo/jvinculotipo";
+		String url = URL+"/vinculo/vinculos/tipo";
         String authString = USUARIO + ":" + SENHA;
         
         @SuppressWarnings("restriction")

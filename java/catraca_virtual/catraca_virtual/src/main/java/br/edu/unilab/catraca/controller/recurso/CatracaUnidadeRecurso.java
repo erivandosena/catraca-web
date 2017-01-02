@@ -44,10 +44,11 @@ public class CatracaUnidadeRecurso extends Recurso{
 			
 		}
 	}
+	@SuppressWarnings("restriction")
 	public ArrayList<CatracaUnidade> obterLista(){
 		ArrayList<CatracaUnidade> lista = new ArrayList<CatracaUnidade>();
 		
-		String url = URL+"catraca_unidade/jcatraca_unidade";
+		String url = URL+"catraca_unidade/catracas_unidade";
         String authString = USUARIO + ":" + SENHA;
         String authStringEnc = new BASE64Encoder().encode(authString.getBytes());
         Client restClient = Client.create();
@@ -62,9 +63,10 @@ public class CatracaUnidadeRecurso extends Recurso{
         }
         
         String output = resp.getEntity(String.class);
+        System.out.println(output);
         try {
 			JSONObject jo = new JSONObject(output);
-			output = jo.getString("catraca_unidades");
+			output = jo.getString("catracas_unidade");
 		} catch (JSONException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();

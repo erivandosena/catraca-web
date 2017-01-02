@@ -52,7 +52,7 @@ public class UsuarioRecurso extends Recurso{
 	}
 	public ArrayList<Usuario> obterLista(){
 		ArrayList<Usuario> lista = new ArrayList<Usuario>();
-		String url = URL+"usuario/jusuario";
+		String url = URL+"usuario/usuarios";
         String authString = USUARIO + ":" + SENHA;
 		String authStringEnc = new BASE64Encoder().encode(authString.getBytes());
         Client restClient = Client.create();
