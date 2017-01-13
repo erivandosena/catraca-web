@@ -15,8 +15,23 @@ import br.edu.unilab.catraca.dao.RegistroDAO;
 import br.edu.unilab.unicafe.model.Registro;
 import sun.misc.BASE64Encoder;
 
+@SuppressWarnings("restriction")
 public class RegistroRecurso extends Recurso{
 	private RegistroDAO dao;
+	
+	public boolean enviar(Registro registro){
+		JSONObject jsonObject = new JSONObject();
+		try {
+			jsonObject.put("Teste", "Teste");
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println(jsonObject.toString());
+		return true;
+		
+	}
+	
 	
 	public void sincronizar(){
 		this.dao = new RegistroDAO();
@@ -46,8 +61,7 @@ public class RegistroRecurso extends Recurso{
 		String url = URL+"registro/20161116%20110000/20161116%20130000";
         String authString = USUARIO + ":" + SENHA;
         
-        @SuppressWarnings("restriction")
-		String authStringEnc = new BASE64Encoder().encode(authString.getBytes());
+        String authStringEnc = new BASE64Encoder().encode(authString.getBytes());
         Client restClient = Client.create();
         WebResource webResource = restClient.resource(url);
         ClientResponse resp = webResource.accept("application/json")

@@ -33,7 +33,6 @@ public class Main {
 			f.createNewFile();
 			lock = new RandomAccessFile(f, "rw").getChannel().tryLock();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

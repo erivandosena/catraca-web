@@ -209,6 +209,7 @@ if (isset ( $_GET ["sair"] )) {
 										<li><a href="?pagina=avulso">Avulso</a></li>
 										<li><a href="?pagina=isento">Isento</a></li>
 										<li><a href="?pagina=info">Informações</a></li>
+							
 									</ul>
 							
 							</li>';
