@@ -22,9 +22,21 @@ class UsuarioDAO extends DAO {
 		
 		$login = $usuario->getLogin ();
 		$senha = md5 ( $usuario->getSenha () );
-		$sql = "SELECT * FROM usuario WHERE usua_login ='$login' AND usua_senha = '$senha' LIMIT 1";
+		$sql = "SELECT * FROM usuario WHERE usua_login =:login AND usua_senha = :senha LIMIT 1";
 		
-		foreach ( $this->getConexao ()->query ( $sql ) as $linha ) {
+		try{
+			$stmt = $this->getConexao()->prepare($sql);
+			$stmt->bindParam(":login", $login, PDO::PARAM_STR);
+			$stmt->bindParam(":senha", $senha, PDO::PARAM_STR);
+			$stmt->execute();
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+				
+		}catch (PDOException $e){
+			echo '{"erro":{"text":'. $e->getMessage() .'}}';
+		}
+		
+		
+		foreach ($result as $linha ) {
 			$usuario->setLogin ( $linha ['usua_login'] );
 			$usuario->setId ( $linha ['usua_id'] );
 			$usuario->setNivelAcesso ( $linha ['usua_nivel'] );
@@ -32,7 +44,20 @@ class UsuarioDAO extends DAO {
 		}
 		//N�o deu. 
 		//Vou verificar na base do SIG. 
-		$result2 = 	$this->getConexao()->query("SELECT * FROM vw_usuarios_autenticacao_catraca WHERE login ='$login' AND senha = '$senha' LIMIT 1");
+		$sql = "SELECT * FROM vw_usuarios_autenticacao_catraca WHERE login =:login AND senha = :senha LIMIT 1";
+		try{
+			$stmt = $this->getConexao()->prepare($sql);
+			$stmt->bindParam(":login", $login, PDO::PARAM_STR);
+			$stmt->bindParam(":senha", $senha, PDO::PARAM_STR);
+			$stmt->execute();
+			$result2 = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+		}catch (PDOException $e){
+			echo '{"erro":{"text":'. $e->getMessage() .'}}';
+		}
+		
+		
+		$result2 = 	$this->getConexao()->query($sql);
 		foreach($result2 as $linha){
 			
 			//Se eu to procurando aqui � pq houve algo errado no banco local. 
@@ -41,7 +66,17 @@ class UsuarioDAO extends DAO {
 			//Existe esse login?
 			
 			//1 Minha senha est� desatualizada no local. -- Nesse caso fazemos update na senha e tentamos autenticar de novo com o Nivel que tenho.
-			$result3 = $this->getConexao()->query("SELECT * FROM usuario WHERE usua_login = '$login' LIMIT 1");
+			$sql = "SELECT * FROM usuario WHERE usua_login = :login LIMIT 1";
+			try{
+				$stmt = $this->getConexao()->prepare($sql);
+				$stmt->bindParam(":login", $login, PDO::PARAM_STR);
+				$stmt->execute();
+				$result3 = $stmt->fetchAll(PDO::FETCH_ASSOC);
+			
+			}catch (PDOException $e){
+				echo '{"erro":{"text":'. $e->getMessage() .'}}';
+			}
+			
 			foreach($result3 as $outraLinha){
 				//Vamos atualizar sua senha, meu filho. 
 				$this->getConexao()->query("UPDATE usuario set usua_senha = '$senha' WHERE usua_login = '$login'");
