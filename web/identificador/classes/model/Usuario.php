@@ -173,7 +173,11 @@ class Usuario{
 	public function getTipodeUsuario(){
 		return $this->tipoDeUsuario;
 	}
-	
+	/**
+	* Retorna o tipo de usuário como string. 
+	* return String
+	*
+	*/
 	public function strTipo(){
 		$usuario = $this;
 		$tipo = "";
