@@ -174,6 +174,9 @@ if (isset ( $_GET ["sair"] )) {
 									</ul>
 		
 							</li>';
+						
+						echo ' 	<li><a href="?pagina=definicoes" class="item"><span class="icone-cogs"></span> <span class="item-texto">Definições</span></a></li>';
+						
 						echo ' 	<li><a href="?pagina=relatorio" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a>
 									<ul>
 										<li><a href="?pagina=relatorio">Relatório RU</a></li>
