@@ -69,8 +69,9 @@ public class UsuarioRecurso extends Recurso{
         String output = resp.getEntity(String.class);     
         JSONArray projectArray;
 		try {
-			
-			projectArray = new JSONArray(output.substring(12));
+			JSONObject jo = new JSONObject(output);
+			output = jo.getString("usuarios");
+			projectArray = new JSONArray(output);
 			for (int i = 0; i < projectArray.length(); i++) {
 	            JSONObject proj = projectArray.getJSONObject(i);
 	            Usuario usuario = new Usuario();

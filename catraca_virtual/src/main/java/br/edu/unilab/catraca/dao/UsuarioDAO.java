@@ -190,21 +190,29 @@ public class UsuarioDAO extends DAO {
 		}		
 	}
 
-	public ArrayList<Usuario> retornaLista() throws SQLException{
+	public ArrayList<Usuario> retornaLista() {
 	
 		ArrayList<Usuario> lista = new ArrayList<Usuario>();
-		PreparedStatement ps = this.getConexao().prepareStatement("SELECT * FROM usuario");
-		ResultSet resultSet = ps.executeQuery();
-		while(resultSet.next()){
-			Usuario usuario = new Usuario();
+		PreparedStatement ps;
+		try {
+			ps = this.getConexao().prepareStatement("SELECT * FROM usuario");
+			ResultSet resultSet = ps.executeQuery();
+			while(resultSet.next()){
+				Usuario usuario = new Usuario();
 
-			usuario.setLogin(resultSet.getString("login"));
+				usuario.setLogin(resultSet.getString("usua_login"));
 
-			usuario.setId(resultSet.getInt("id_usuario"));
-			usuario.setSenha(resultSet.getString("senha"));
+				usuario.setId(resultSet.getInt("usua_id"));
+				usuario.setSenha(resultSet.getString("usua_senha"));
 
-			lista.add(usuario);
+				lista.add(usuario);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
 		}
+		
 		return lista;
 	}
 	
