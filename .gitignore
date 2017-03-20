@@ -15,9 +15,12 @@
 *.tii
 *.tis
 *.buildpath
+*.bd
 *.settings
 *recommenders/*
 *.exe
 *.log
 *.lock
 *.recommenders/*
+*.classpath
+*/target/*
