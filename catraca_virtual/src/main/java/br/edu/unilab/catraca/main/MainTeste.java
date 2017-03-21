@@ -25,6 +25,7 @@ public class MainTeste {
 				System.out.println("Limpei, vou inserir");
 				for (Usuario usuario : lista) {
 					dao.inserir(usuario);
+					System.out.println("Foi");
 				}
 				System.out.println("Terminei a insersao");	
 				
@@ -51,9 +52,30 @@ public class MainTeste {
 				
 			}
 		});
+		Thread listando2 = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+			
+				for(int i = 0; i < 60; i++){
+
+					ArrayList<Usuario> listaSelect;
+					listaSelect = dao.retornaLista();
+					System.out.println("Quantidade retornado: "+listaSelect.size());
+					try {
+						Thread.sleep(500);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				
+				
+			}
+		});
 		inserindo.start();
 		listando.start();
-
+		listando2.start();
 	}
 
 }
