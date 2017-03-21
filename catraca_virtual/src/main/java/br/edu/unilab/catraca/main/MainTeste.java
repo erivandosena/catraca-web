@@ -13,13 +13,12 @@ public class MainTeste {
 		
 		UsuarioRecurso recurso = new UsuarioRecurso();
 		final ArrayList<Usuario> lista = recurso.obterLista();
-		
+		final UsuarioDAO dao = new UsuarioDAO();
 		
 		Thread inserindo = new Thread(new Runnable() {
 			
 			@Override
 			public void run() {
-				UsuarioDAO dao = new UsuarioDAO();
 				dao.limpar();
 				System.out.println("Veio: "+lista.size());
 				
@@ -35,7 +34,7 @@ public class MainTeste {
 			
 			@Override
 			public void run() {
-				UsuarioDAO dao = new UsuarioDAO();
+			
 				for(int i = 0; i < 60; i++){
 
 					ArrayList<Usuario> listaSelect;
