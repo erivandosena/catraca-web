@@ -180,41 +180,44 @@ class SincronizadorController{
 	public function sincronizar(){
 
 		$tempoA = round(microtime(true) * 1000);
-		echo 'Vou carregar os dados.<br>';
+//		echo 'Vou carregar os dados.<br>';
 		
 		$this->carregarDados();
 		$tempoB = round(microtime(true) * 1000);
-		echo "Carreguei! Levei: <br>";
-		echo $tempoB-$tempoA;
-		echo " Mili segundos.<br>";
-		echo '<br>Agora vou deletar os dados da tabela local<br>';
+//		echo "Carreguei! Levei: <br>";
+//		echo $tempoB-$tempoA;
+//		echo " Mili segundos.<br>";
+//		echo '<br>Agora vou deletar os dados da tabela local<br>';
 		
 		$this->deletarDadosLocais();
-		echo '<br>Pronto! Levei: ';
+//		echo '<br>Pronto! Levei: ';
 		
 		$tempoC = round(microtime(true) * 1000);
-		echo $tempoC-$tempoB;
-		echo " Milisegundos<br>";
-		echo "Vou inserir os dados do SIGAA na base local";
+//		echo $tempoC-$tempoB;
+//		echo " Milisegundos<br>";
+//		echo "Vou inserir os dados do SIGAA na base local";
 		
 		if($this->inserirOsDoSigaa()){
-			echo '<h1>Deu tudo certo INSERINDO SIGAA</h1>';
-			$tempoD = round(microtime(true) * 1000);
-			echo 'Inseri tudo em: ';
-			echo $tempoD-$tempoC;
-			echo ' Milisegundos';
+			echo "";
+			//echo '<h1>Deu tudo certo INSERINDO SIGAA</h1>';
+			//$tempoD = round(microtime(true) * 1000);
+			//echo 'Inseri tudo em: ';
+			//echo $tempoD-$tempoC;
+			//echo ' Milisegundos';
 		}else{
-			echo 'Retornou Um falso';
+			echo "";
+			//echo 'Retornou Um falso';
 		}
 		if($this->inserirOsDoComum()){
-			echo '<h1>Deu tudo certo INSERINDO COMUM</h1>';
-			$tempoE = round(microtime(true) * 1000);
-			echo 'Inseri tudo em: ';
-			echo $tempoE-$tempoD;
-			echo ' Milisegundos';
+			echo "";
+			//echo '<h1>Deu tudo certo INSERINDO COMUM</h1>';
+			//$tempoE = round(microtime(true) * 1000);
+			//echo 'Inseri tudo em: ';
+			//echo $tempoE-$tempoD;
+			//echo ' Milisegundos';
 		}else{
-			
-			echo 'Retornou Um falso no COmum';
+			echo "";
+			//echo 'Retornou Um falso no COmum';
 		}
 	}
 	

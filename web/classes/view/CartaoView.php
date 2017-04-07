@@ -59,6 +59,16 @@ class CartaoView {
 				</div>';
 	}
 	public function formBuscaUsuarios() {
+
+//  ######### TESTE COMO root com autorizacao do Kleber
+echo '<script language="javascript">
+function altera() {
+  document.getElementById("botao").value="AGUARDE! Pesquisando...";
+  //document.getElementById("botao").disabled=true;
+
+}
+</script>';
+// ####################
 		echo '					<div class="borda">
 									<form method="get" action="" class="formulario em-linha" >
 		
@@ -67,7 +77,8 @@ class CartaoView {
 											<input class="texto-preto" type="text" name="nome" id="campo-texto" /><br>										
 										</label>
 										<input type="hidden" name="pagina" value="cartao" />
-										<input type="submit" value="Buscar"/>
+										
+										<input id="botao" onclick="altera();" type="submit" value="Buscar"/>
 									</form>
 								</div>';
 	}

@@ -513,7 +513,9 @@ if (isset ( $_GET ["sair"] )) {
 							case 'resumo_compra' :
 								ResumoCompraController::main($sessao->getNivelAcesso());
 								break;
-								
+							case 'importar_csv':
+								ImportarCSVController::main($sessao->getNivelAcesso());
+								break;
 							default :
 								echo '404 NOT FOUND';
 								break;

@@ -2,7 +2,19 @@
 
 
 class ImportarCSVController{
+	public static function main($nivelDeAcesso){
 	
+		switch ($nivelDeAcesso){
+			case Sessao::NIVEL_ADMIN:
+				$controller = new ImportarCSVController();
+				$controller->importar();
+				break;
+			
+			default:
+				UsuarioController::main ( $nivelDeAcesso );
+				break;
+		}
+	}
 	
 	public function importar(){
 		echo '<h1>Importar</h1>';

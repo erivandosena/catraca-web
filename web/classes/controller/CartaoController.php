@@ -249,7 +249,7 @@ class CartaoController{
 					$listaDeTipos = $tipoDao->retornaLista();
 					foreach ($listaDeTipos as $chave => $tipo){
 						if(strtolower (trim( $tipo->getNome())) == 'aluno'){
-							if(strtolower (trim($usuario->getStatusDiscente())) == 'ativo' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($usuario->getStatusDiscente())) == 'formando' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - graduando'){
+							if(trim($usuario->getStatusDiscente()) == 'CADASTRADO' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($usuario->getStatusDiscente())) == 'formando' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - graduando'){
 								continue;
 							}
 							unset($listaDeTipos[$chave]);
@@ -364,6 +364,14 @@ class CartaoController{
 		if (isset ( $_GET ['nome'] )) {
 			$usuarioDao = new UsuarioDAO();
 			$listaDeUsuarios = $usuarioDao->pesquisaNoSigaa( $_GET ['nome']);
+			if($listaDeUsuarios == null) {
+
+// ############################# TESTE como root POR  ORDEM DO kleber
+$controller  = new SincronizadorController();
+$controller->sincronizar();
+// ################################
+
+			}
 			$this->view->mostraResultadoBuscaDeUsuarios($listaDeUsuarios);
 			$usuarioDao->fechaConexao();
 		}		
@@ -373,7 +381,7 @@ class CartaoController{
 		if(strtolower (trim($usuario->getStatusServidor())) == 'ativo'){			
 			return true;
 		}
-		if(strtolower (trim($usuario->getStatusDiscente())) == 'ativo' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($usuario->getStatusDiscente())) == 'formando' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - graduando'){
+		if(trim($usuario->getStatusDiscente()) == 'CADASTRADO' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($usuario->getStatusDiscente())) == 'formando' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - graduando'){
 			return true;		
 		}		
 		if(strtolower (trim($usuario->getTipodeUsuario())) == 'terceirizado' || strtolower (trim($usuario->getTipodeUsuario())) == 'outros'){
