@@ -60,9 +60,9 @@ class ImportarCSVController{
 			echo '</tr>';
 			
 			
-			$data = '2016-12-02 12:00:00';
+			$data = '2017-04-06 11:30:00';
 
-			$custo = 9.5;
+			$custo = 10.25;
 			$idCatraca = 3;
 			$idCartao = $cartao->getId();
 			$idVinculo = $vinculo->getId();
@@ -107,8 +107,8 @@ class ImportarCSVController{
 				
 				
 		}
-		$dao->getConexao()->commit();
-		echo '</table>';
+// 		$dao->getConexao()->commit();
+// 		echo '</table>';
 		
 // 		echo 'Sucesso!';
 		
