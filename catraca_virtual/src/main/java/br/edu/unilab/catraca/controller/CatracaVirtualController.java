@@ -1,19 +1,74 @@
 package br.edu.unilab.catraca.controller;
 
-
+import br.edu.unilab.catraca.view.FrameSplash;
+/**
+ * 
+ * @author Jefferson Uchoa Ponte
+ *
+ */
 public class CatracaVirtualController {
-	public int estado;
+	private boolean estadoOnline;
+
+	
 	
 	public CatracaVirtualController(){
-		this.estado = ESTADO_ONLINE;
+		this.estadoOnline= true;
 	}
 	
+	/**
+	 * Este metodo criara um splash e deixará visível até que consiga criar as janelas e eventos. 
+	 * Ele dispara o metodo que ira fazendoSincronia(), 
+	 * Apos tudo feito, tornará o splash invisivel e tornará a janela de espera visivel. 
+	 */
 	public void iniciar(){
+		FrameSplash splash = new FrameSplash();
+		splash.setVisible(true);
+		
+		
+		
+	}
+	public void criarJanelas(){
+		
+	}
+	public void criarEventos(){
+		
+	}
+	/**
+	 * Inicializar e iniciar uma Thread que faz sincronização de dados locais com o servidor. 
+	 * A verificação para cada tabela poderá ser interrompida se o campo estado mudar para offline.  
+	 * O campo estado poderá ser modificado pelo usuário a partir de um evento. Isso desencadeará o início da Catraca Virtual Offline. 
+	 */
+	public void fazendoSincronia(){
+		Thread sincronizando = new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				while(true){
+					System.out.println("Quero sincronizar, vamos começar? ");
+					break;
+				}
+				
+			}
+		});
+		sincronizando.start();
 		
 	}
 	
-	public static final int ESTADO_OFFLINE = 0;
-	public static final int ESTADO_ONLINE = 1;
+	/**
+	 * Este método será desencadeado pela atualização do estado. 
+	 * 
+	 */
+	public void iniciarCatraca(){
+		
+	}
+	/**
+	 * 
+	 */
+	public void enviarDados(){
+		
+	}
+	
+	
 	
 	
 }
