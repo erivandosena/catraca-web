@@ -1,4 +1,4 @@
-package br.edu.unilab.catraca.controller.recurso;
+package br.edu.unilab.catraca.recurso;
 
 import java.sql.Connection;
 import java.util.ArrayList;
@@ -11,43 +11,54 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
-import br.edu.unilab.catraca.dao.CustoUnidadeDAO;
-import br.edu.unilab.unicafe.model.CustoUnidade;
+import br.edu.unilab.catraca.dao.UnidadeDAO;
+import br.edu.unilab.unicafe.model.Unidade;
 import sun.misc.BASE64Encoder;
 
 @SuppressWarnings("restriction")
-public class CustoUnidadeRecurso extends Recurso{
+public class UnidadeRecurso extends Recurso{
 	
 	
-	private CustoUnidadeDAO dao;
+	private UnidadeDAO dao;
 	
 	public void sincronizar(){
-		this.dao = new CustoUnidadeDAO();
-		
+		this.dao = new UnidadeDAO();
+		ArrayList<Unidade> lista = this.obterLista();
 		this.dao.limpar();
-		ArrayList<CustoUnidade> lista = this.obterLista();
-		for (CustoUnidade elemento : lista) {
-			dao.inserir(elemento);
-			
+		if(lista == null){
+			return;
 		}
+		
+		for (Unidade unidade : lista) {
+			
+			if(!this.dao.inserir(unidade)){
+				System.out.println("Erro ao tentar inserir Unidade: "+unidade.getNome());	
+			}
+		}
+		
 	}
-	
 	public void sincronizar(Connection conexao){
-		this.dao = new CustoUnidadeDAO(conexao);
-		
-		this.dao.limpar();
-		ArrayList<CustoUnidade> lista = this.obterLista();
-		for (CustoUnidade elemento : lista) {
-			dao.inserir(elemento);
+		this.dao = new UnidadeDAO(conexao);
+		ArrayList<Unidade> lista = this.obterLista();
+		if(lista == null){
+			return;
 			
 		}
-	}
-	
-	public ArrayList<CustoUnidade> obterLista(){
-		ArrayList<CustoUnidade> lista = new ArrayList<CustoUnidade>();
+		this.dao.limpar();
+		for (Unidade unidade : lista) {
+			
+			if(!this.dao.inserir(unidade)){
+				System.out.println("Erro ao tentar inserir Unidade: "+unidade.getNome());	
+			}
+		}
 		
-		String url = URL+"custo_unidade/custos_unidade";
+	}
+	public ArrayList<Unidade> obterLista(){
+		ArrayList<Unidade> lista = new ArrayList<Unidade>();
+		
+		String url = URL+"unidade/unidades";
         String authString = USUARIO + ":" + SENHA;
+        
         String authStringEnc = new BASE64Encoder().encode(authString.getBytes());
         Client restClient = Client.create();
         WebResource webResource = restClient.resource(url);
@@ -60,30 +71,20 @@ public class CustoUnidadeRecurso extends Recurso{
             return null;
         }
         
-        String output = resp.getEntity(String.class);        
-        try {
-			JSONObject jo = new JSONObject(output);
-			output = jo.getString("custos_unidade");
-
-		} catch (JSONException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+        String output = resp.getEntity(String.class);
         JSONArray projectArray;
 		try {
-			
-			projectArray = new JSONArray(output);
+			projectArray = new JSONArray(output.substring(12));
 			for (int i = 0; i < projectArray.length(); i++) {
+				
 	            JSONObject proj = projectArray.getJSONObject(i);
-	            
-	            CustoUnidade elemento = new CustoUnidade();
-	            elemento.setId(proj.getInt("cuun_id"));
-	            elemento.setIdUnidade(proj.getInt("unid_id"));
-	            elemento.setIdCusto(proj.getInt("cure_id"));
-	            lista.add(elemento);
-	            
-	        }
+	            Unidade unidade = new Unidade();
+	            unidade.setId(proj.getInt("unid_id"));
+	            unidade.setNome(proj.getString("unid_nome"));
+	            lista.add(unidade);
+	        }			
 			return lista;
+			
 			
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -91,6 +92,5 @@ public class CustoUnidadeRecurso extends Recurso{
 		}
 		
 	}
-	
 
 }

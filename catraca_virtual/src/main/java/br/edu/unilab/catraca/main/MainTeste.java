@@ -2,8 +2,8 @@ package br.edu.unilab.catraca.main;
 
 import java.util.ArrayList;
 
-import br.edu.unilab.catraca.controller.recurso.UsuarioRecurso;
 import br.edu.unilab.catraca.dao.UsuarioDAO;
+import br.edu.unilab.catraca.recurso.UsuarioRecurso;
 import br.edu.unilab.unicafe.model.Usuario;
 
 public class MainTeste {

@@ -4,7 +4,7 @@ $(function(){
 	 * Combo dinamico pagina mensagem
 	 */
 	$("#catraca").change(function(){		
-		$("#mensagens").load("combo.php?catraca="+$(this).val());
+		$("#mensagens").load("chamadas/combo.php?catraca="+$(this).val());
 		//$("#turno").load("combo.php?catraca_id="+$(this).val());
 	});
 	//========================================================//

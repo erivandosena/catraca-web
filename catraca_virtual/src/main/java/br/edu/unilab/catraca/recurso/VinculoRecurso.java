@@ -1,4 +1,4 @@
-package br.edu.unilab.catraca.controller.recurso;
+package br.edu.unilab.catraca.recurso;
 
 import java.sql.Connection;
 import java.util.ArrayList;

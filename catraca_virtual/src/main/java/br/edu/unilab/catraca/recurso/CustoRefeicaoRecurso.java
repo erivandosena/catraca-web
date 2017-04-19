@@ -1,6 +1,5 @@
-package br.edu.unilab.catraca.controller.recurso;
+package br.edu.unilab.catraca.recurso;
 
-import java.sql.Connection;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -11,35 +10,31 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 
-import br.edu.unilab.catraca.dao.TipoDAO;
-import br.edu.unilab.unicafe.model.Tipo;
+import br.edu.unilab.catraca.dao.CustoRefeicaoDAO;
+import br.edu.unilab.unicafe.model.CustoRefeicao;
 import sun.misc.BASE64Encoder;
 
-@SuppressWarnings("restriction")
-public class TipoRecurso extends Recurso{
+public class CustoRefeicaoRecurso extends Recurso{
 	
-	private TipoDAO dao;
-	public void sincronizar(Connection conexao){
-		this.dao = new TipoDAO(conexao);
-		this.dao.limpar();
-		ArrayList<Tipo> lista = this.obterLista();
-		for (Tipo elemento : lista) {
-			dao.inserir(elemento);
-		}
-	}
+	private CustoRefeicaoDAO dao;
+	
 	public void sincronizar(){
-		this.dao = new TipoDAO();
+		this.dao = new CustoRefeicaoDAO();
+		
 		this.dao.limpar();
-		ArrayList<Tipo> lista = this.obterLista();
-		for (Tipo elemento : lista) {
-			dao.inserir(elemento);
+		ArrayList<CustoRefeicao> lista = this.obterLista();
+		for (CustoRefeicao custoRefeicao : lista) {
+			dao.inserir(custoRefeicao);
 		}
 	}
-	public ArrayList<Tipo> obterLista(){
-		ArrayList<Tipo> lista = new ArrayList<Tipo>();
+	
+	public ArrayList<CustoRefeicao> obterLista(){
+		ArrayList<CustoRefeicao> lista = new ArrayList<CustoRefeicao>();
 		
-		String url = URL+"tipo/tipos";
+		String url = URL+"custo_refeicao/custos_refeicao";
         String authString = USUARIO + ":" + SENHA;
+        
+        @SuppressWarnings("restriction")
 		String authStringEnc = new BASE64Encoder().encode(authString.getBytes());
         Client restClient = Client.create();
         WebResource webResource = restClient.resource(url);
@@ -52,18 +47,18 @@ public class TipoRecurso extends Recurso{
             return null;
         }
         
-        String output = resp.getEntity(String.class);     
+        String output = resp.getEntity(String.class);        
         JSONArray projectArray;
 		try {
 			
-			projectArray = new JSONArray(output.substring(9));
+			projectArray = new JSONArray(output.substring(18));
 			for (int i = 0; i < projectArray.length(); i++) {
 	            JSONObject proj = projectArray.getJSONObject(i);
-	            Tipo elemento = new Tipo();
-	            elemento.setId(proj.getInt("tipo_id"));
-	            elemento.setNome(proj.getString("tipo_nome"));
-	            elemento.setValorCobrado(proj.getDouble("tipo_valor"));
-	            lista.add(elemento);
+	            CustoRefeicao custoRefeicao = new CustoRefeicao();
+	            custoRefeicao.setId(proj.getInt("cure_id"));
+	            custoRefeicao.setValor(proj.getDouble("cure_valor"));
+	            custoRefeicao.setData(proj.getString("cure_data"));
+	            lista.add(custoRefeicao);
 	            
 	        }
 			return lista;
@@ -74,7 +69,5 @@ public class TipoRecurso extends Recurso{
 		}
 		
 	}
-	
-	
 
 }

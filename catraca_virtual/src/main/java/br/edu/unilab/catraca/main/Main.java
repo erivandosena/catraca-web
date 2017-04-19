@@ -10,8 +10,8 @@ import java.nio.channels.FileLock;
 import java.util.ArrayList;
 
 import br.edu.unilab.catraca.controller.CatracaVirtualController;
-import br.edu.unilab.catraca.controller.recurso.CartaoRecurso;
 import br.edu.unilab.catraca.dao.CartaoDAO;
+import br.edu.unilab.catraca.recurso.CartaoRecurso;
 import br.edu.unilab.unicafe.model.Cartao;
 
 

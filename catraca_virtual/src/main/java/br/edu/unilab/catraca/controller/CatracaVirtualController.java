@@ -23,15 +23,25 @@ public class CatracaVirtualController {
 	public void iniciar(){
 		FrameSplash splash = new FrameSplash();
 		splash.setVisible(true);
+		this.criarJanelas();
+		this.criarEventos();
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		splash.setVisible(false);
+		splash.dispose();
 		
 		
 		
 	}
 	public void criarJanelas(){
-		
+		System.out.println("Criando janelas");
 	}
 	public void criarEventos(){
-		
+		System.out.println("Criando eventos");
 	}
 	/**
 	 * Inicializar e iniciar uma Thread que faz sincronização de dados locais com o servidor. 
