@@ -1,0 +1,184 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+/**
+ * @author Jefferson Uchoa Ponte
+ * @version 1.0
+ * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
+ * @package Controle
+ */
+class UsuarioController{
+	
+	public static function main($nivelDeAcesso){
+		switch ($nivelDeAcesso){
+
+			case Sessao::NIVEL_DESLOGADO:
+				$usuarioController = new UsuarioController();
+				$usuarioController-&gt;telaLogin();
+				break;
+			default:
+				$sessao = new Sessao();
+				
+				$usuario = new Usuario();
+				$usuario-&gt;setLogin($sessao-&gt;getLoginUsuario());
+				
+				$usuarioDao = new UsuarioDAO();
+				
+				$usuarioDao-&gt;preenchePorLogin($usuario);
+				$nome = $usuario-&gt;getNome();
+				$lista = explode(' ', $nome);
+				$nome = $lista[0];
+				echo '&lt;p&gt;Ol&aacute;, '.ucfirst  ( strtolower ($nome)).'!&lt;/p&gt;
+						&lt;p&gt;Visualize abaixo seus dados referentes ao Restaurante Universit&aacute;rio&lt;/p&gt;';
+				
+				PessoalController::main($nivelDeAcesso);		
+
+				break;
+		}
+
+		
+	}
+	
+	public static function gerenciaAdmin($nivelDeAcesso){
+		switch ($nivelDeAcesso)
+		{
+			case Sessao::NIVEL_SUPER:
+				$usuarioController = new UsuarioController();
+				$usuarioController-&gt;gerenciamentoDeAdministrador();
+				break;
+			default:
+				break;
+		}
+	}
+	public function telaLogin(){
+		$usuarioView = new UsuarioView();
+		$erro=FALSE;
+		if(isset($_POST['formlogin']))
+		
+		{
+			$usuarioDAO = new UsuarioDAO();
+			$usuario = new Usuario();
+			$usuario-&gt;setLogin($_POST['login']);
+			$usuario-&gt;setSenha($_POST['senha']);
+			if($usuarioDAO-&gt;autentica($usuario)){
+		
+				$sessao2 = new Sessao();
+				$sessao2-&gt;criaSessao($usuario-&gt;getId(), $usuario-&gt;getNivelAcesso(), $usuario-&gt;getLogin());
+				echo '&lt;meta http-equiv=&quot;refresh&quot; content=1;url=&quot;./index.php&quot;&gt;';
+			}else{
+				$msg_erro= &quot;Senha ou usu&aacute;rio Inv&aacute;lido&quot;;
+				$erro=true;
+				
+				$usuarioView-&gt;mostraFormularioLogin($erro, $msg_erro);
+				return;
+		
+			}
+		}
+		$usuarioView-&gt;mostraFormularioLogin();
+	}
+	/**
+	 * Atravez dessa aplicacao sera possivel definir um usuario para administrar um novo laboratorio. 
+	 */
+	public function gerenciamentoDeAdministrador(){
+		
+		if(isset($_GET['form_gerencia_adm'])){
+			if($_GET['usuario'] &amp;&amp; $_GET['laboratorio'])
+			{
+				$usuario = new Usuario();
+				$usuario-&gt;setLogin($_GET['usuario']);
+				$laboratorio = new Laboratorio();
+				$laboratorio-&gt;setNome($_GET['laboratorio']);
+				$usuarioDao = new UsuarioDAO();
+				if(!$usuarioDao-&gt;preenchePorLogin($usuario)){
+					echo &quot;Usuario Inexistente&quot;;
+					return;
+				}
+				
+				if(!$usuarioDao-&gt;preenchePorNome($laboratorio)){
+					echo &quot;Laboratorio Inexistente&quot;;
+					return;
+				}
+				
+				if($usuarioDao-&gt;ehAdministrador($usuario, $laboratorio)){
+					echo &quot;Ele ja era administrador&quot;;
+					return;
+				}
+				if(!$usuarioDao-&gt;adicionaAdministrador($usuario, $laboratorio)){
+					echo &quot;Erro na transacao principal&quot;;
+					return;
+						
+				}
+				echo &quot;Sucesso&quot;;
+				return;
+				
+				
+				
+				
+			}
+			
+		}
+		
+		echo '&lt;div class=&quot;resolucao&quot;&gt;
+            &lt;div class=&quot;doze colunas&quot;&gt;
+                &lt;div class=&quot;conteudo fundo-branco&quot;&gt;';
+		echo '&lt;form action=&quot;#&quot; method=&quot;get&quot; name=&quot;form_gerencia_adm&quot; id=&quot;pesquisa&quot; class=&quot;formulario-organizado&quot;&gt;
+                      &lt;label for=&quot;usuario&quot;&gt;
+                      &lt;object class=&quot;&quot;&gt;Login do Usuario: &lt;/object&gt;
+		
+                      &lt;input type=&quot;text&quot; name=&quot;usuario&quot; id=&quot;usuario&quot; /&gt;
+                      &lt;/label&gt;
+					&lt;label for=&quot;laboratorio&quot;&gt;
+                      &lt;object class=&quot;&quot;&gt;Laboratorio: &lt;/object&gt;
+		
+                      &lt;input type=&quot;text&quot; name=&quot;laboratorio&quot; id=&quot;laboratorio&quot; /&gt;
+                      &lt;/label&gt;
+						&lt;input type=&quot;hidden&quot; name=&quot;pagina&quot; value=&quot;gerenciamento_administrador&quot; /&gt;
+                        &lt;input type=&quot;submit&quot; value=&quot;enviar&quot; name=&quot;form_gerencia_adm&quot; /&gt;
+                    &lt;/form&gt;&lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;';
+	}
+}
+?&gt;</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all();
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>

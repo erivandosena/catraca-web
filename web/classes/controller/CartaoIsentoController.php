@@ -1,8 +1,9 @@
 <?php
 /**
- * 
  * @author Jefferson Uchoa Ponte
- *
+ * @version 1.0
+ * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
+ * @package Controle
  */
 
 class CartaoIsentoController{

@@ -1,7 +1,21 @@
 <?php
+/** 
+ * @author Alan Cleber Morais Gomes 
+ * @version 1.0
+ * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
+ * @package Controle
+ */
+
+/**
+ * Classe respons�vel pela realiza��o de venda e estorno de cr�ditos dos usu�rios.
+ */
 
 class GuicheController{
 	
+	/**
+	 * @var $view
+	 * Vari�vel utilizada para instaciar a classe View.
+	 */
 	private $view;
 	private $dao;
 	public static function main($nivel){
@@ -37,8 +51,7 @@ class GuicheController{
 	public function telaGuiche(){
 	
 		$controller = new GuicheController();
-		$this->view = new GuicheView();
-		$this->dao = new GuicheDAO();
+		$this->view = new GuicheView();		
 		$unidade = new Unidade();
 		$dao = new DAO();
 		$sessao = new Sessao();

@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * @author Jefferson Uchoa Ponte
+ * @version 1.0
+ * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
+ * @package View
+ */
 
 class TurnoView{
 	
@@ -15,8 +20,8 @@ class TurnoView{
 					<input name="turno_hora_final" type=time min=9:00 max=22:00>
 					<br>
 					<input type="submit" value="Enviar" />
-			</fieldset>
-	</form>';
+				</fieldset>
+			</form>';
 	}
 	public function mostraLista($lista){
 		foreach($lista as $elemento){

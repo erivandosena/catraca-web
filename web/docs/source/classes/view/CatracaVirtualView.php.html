@@ -1,0 +1,149 @@
+<html>
+    <head>
+        <script
+            type="text/javascript"
+            src="../../../js/jquery-1.4.2.min.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shCore.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushJScript.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushPhp.js">
+        </script>
+        <script
+            type="text/javascript"
+            src="../../../syntax_highlighter/scripts/shBrushXml.js">
+        </script>
+        <link
+            href="../../../syntax_highlighter/styles/shCore.css" rel="stylesheet"
+            type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shCoreEclipse.css"
+            rel="stylesheet" type="text/css"
+        />
+        <link
+            href="../../../syntax_highlighter/styles/shThemeWordpress.css"
+            rel="stylesheet" type="text/css"
+        />
+    </head>
+    <body>
+        <pre class="brush: php">&lt;?php
+/**
+ * @author Jefferson Uchoa Ponte
+ * @version 1.0
+ * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
+ * @package View
+ */
+
+class CatracaVirtualView{
+	
+	
+	public function formBuscaCartao(){
+		echo '
+				&lt;script&gt;
+						  $(document).bind(\'autofocus_ready\', function() {
+						    if (!(&quot;autofocus&quot; in document.createElement(&quot;input&quot;))) {
+						      $(&quot;#numero_cartao&quot;).focus();
+						    }
+						  });
+						&lt;/script&gt;
+	
+
+						&lt;form method=&quot;get&quot; action=&quot;&quot; class=&quot;formulario em-linha&quot; &gt;
+							&lt;input type=&quot;hidden&quot; name=&quot;pagina&quot; value=&quot;gerador&quot; /&gt;
+							&lt;label for=&quot;numero_cartao&quot;&gt;
+								&lt;object class=&quot;rotulo texto-preto&quot;&gt;Buscar por N&uacute;mero: &lt;/object&gt;&lt;br&gt;&lt;br&gt;
+			
+								&lt;input class=&quot;texto-preto&quot; type=&quot;number&quot; name=&quot;numero_cartao&quot; id=&quot;numero_cartao&quot; autofocus /&gt;&lt;br&gt;
+								 &lt;script&gt;$(document).trigger(\'autofocus_ready\');&lt;/script&gt;
+								&lt;input type=&quot;submit&quot; /&gt;
+							&lt;/label&gt;
+
+						&lt;/form&gt;';
+	}
+	
+	public function formSelecionarRu($listaDeCatracas){
+		
+
+
+		echo '&lt;div class=&quot;navegacao&quot;&gt;
+				&lt;div class = &quot;simpleTabs&quot;&gt;
+			        &lt;ul class = &quot;simpleTabsNavigation&quot;&gt;
+						&lt;li&gt;&lt;a href=&quot;#&quot;&gt;Cadastro&lt;/a&gt;&lt;/li&gt;
+			        &lt;/ul&gt;
+			        &lt;div class = &quot;simpleTabsContent&quot;&gt;
+						&lt;div class=&quot;doze colunas borda&quot;&gt;';
+		
+		echo '&lt;form action=&quot;&quot; method=&quot;post&quot;&gt;
+				&lt;label for=&quot;catraca_id&quot;&gt;Selecione o Restaurante:&lt;/label&gt;&lt;br&gt;
+			        &lt;select name=&quot;catraca_id&quot; id=&quot;catraca_id&quot;&gt;';
+		
+		foreach ($listaDeCatracas as $catraca){
+				
+			echo '&lt;option value=&quot;'.$catraca-&gt;getId().'&quot;&gt;'.$catraca-&gt;getNome().'&lt;/option&gt;';
+		
+		}
+		
+		
+		 
+		echo '       &lt;/select&gt;&lt;br&gt;
+					&lt;input name=&quot;catraca_virtual&quot; type=&quot;submit&quot; class=&quot;botao&quot; VALUE=&quot;Selecionar&quot; /&gt;
+				&lt;/form&gt;	';
+		
+		
+		echo '&lt;/div&gt;
+				&lt;/div&gt;
+				&lt;/div&gt;
+				&lt;/div&gt;';
+		
+	}
+	
+	public function exibirQuantidadesDeCadaTipo($listaDeTipos, $quantidades, Catraca $catraca){
+		echo '
+				
+							&lt;table class=&quot;tabela borda-vertical zebrada no-centro centralizado&quot;&gt;
+							    &lt;thead&gt;
+							        &lt;tr&gt;
+												&lt;th&gt;Unidade&lt;/th&gt;';
+		foreach($listaDeTipos as $tipo){
+			echo '&lt;th&gt;'.$tipo-&gt;getNome().'&lt;/th&gt;';
+		
+		
+		}
+		echo '&lt;th&gt;Total&lt;/th&gt;&lt;/tr&gt;&lt;/thead&gt;&lt;tbody&gt;';
+		echo '					        &lt;tr&gt;
+				&lt;th&gt;'.$catraca-&gt;getNome().'&lt;/th&gt;';
+		$somatorio = 0;
+		foreach ($quantidades as $quantidade){
+			$somatorio += $quantidade;
+			echo '&lt;td&gt;'.$quantidade.'&lt;/td&gt;';
+				
+		}
+		echo '&lt;td&gt;'.$somatorio.'&lt;/td&gt;';
+		
+		echo '&lt;/tr&gt;';
+		echo '&lt;/tbody&gt;&lt;/table&gt;';
+
+		
+		
+	}
+	
+}
+
+
+?&gt;</pre>
+        <script type="text/javascript">
+             SyntaxHighlighter.all();
+             jQuery('.gutter div').each(function(key, data){
+                jQuery(data).prepend('<a name="L'+jQuery(data).text()+'"/>');
+             });
+        </script>
+    </body>
+</html>

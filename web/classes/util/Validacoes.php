@@ -1,4 +1,10 @@
 <?php
+/**
+ * @author Jefferson Uchoa Ponte
+ * @version 1.0
+ * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
+ * @package Util
+ */
 
    /*
     * Legenda para tipos de Campos:
@@ -27,7 +33,7 @@ class Validacoes{
 
         if(!in_array($tipo_campo,$this->tipoCampo)){
 
-            echo "<pre style='color:#f00;'>Tipo de campo invÃ¡lido.</pre>";
+            echo "<pre style='color:#f00;'>Tipo de campo invÃƒÂ¡lido.</pre>";
 
         }else{
 
@@ -69,7 +75,7 @@ class Validacoes{
                     return $this->valida_login($valor);
                     break;
                 default:
-                    echo "NÃ£o foi possivel realizar a validaÃ§Ã£o do campo ".$tipo_campo;
+                    echo "NÃƒÂ£o foi possivel realizar a validaÃƒÂ§ÃƒÂ£o do campo ".$tipo_campo;
                     break;
             }
         }
@@ -107,11 +113,11 @@ class Validacoes{
     private function valida_text($strText){
         
         $erro=FALSE;
-        $conversao = array('Ã¡' => 'a','Ã ' => 'a','Ã£' => 'a','Ã¢' => 'a', 'Ã©' => 'e',
-         'Ãª' => 'e', 'Ã­' => 'i', 'Ã¯'=>'i', 'Ã³' => 'o', 'Ã´' => 'o', 'Ãµ' => 'o', "Ã¶"=>"o",
-         'Ãº' => 'u', 'Ã¼' => 'u', 'Ã§' => 'c', 'Ã±'=>'n', 'Ã�' => 'A', 'Ã€' => 'A', 'Ãƒ' => 'A',
-         'Ã‚' => 'A', 'Ã‰' => 'E', 'ÃŠ' => 'E', 'Ã�' => 'I', 'Ã�'=>'I', "Ã–"=>"O", 'Ã“' => 'O',
-         'Ã”' => 'O', 'Ã•' => 'O', 'Ãš' => 'U', 'Ãœ' => 'U', 'Ã‡' =>'C', 'Ã‘'=>'N');
+        $conversao = array('ÃƒÂ¡' => 'a','ÃƒÂ ' => 'a','ÃƒÂ£' => 'a','ÃƒÂ¢' => 'a', 'ÃƒÂ©' => 'e',
+         'ÃƒÂª' => 'e', 'ÃƒÂ­' => 'i', 'ÃƒÂ¯'=>'i', 'ÃƒÂ³' => 'o', 'ÃƒÂ´' => 'o', 'ÃƒÂµ' => 'o', "ÃƒÂ¶"=>"o",
+         'ÃƒÂº' => 'u', 'ÃƒÂ¼' => 'u', 'ÃƒÂ§' => 'c', 'ÃƒÂ±'=>'n', 'Ãƒï¿½' => 'A', 'Ãƒâ‚¬' => 'A', 'ÃƒÆ’' => 'A',
+         'Ãƒâ€š' => 'A', 'Ãƒâ€°' => 'E', 'ÃƒÅ ' => 'E', 'Ãƒï¿½' => 'I', 'Ãƒï¿½'=>'I', "Ãƒâ€“"=>"O", 'Ãƒâ€œ' => 'O',
+         'Ãƒâ€�' => 'O', 'Ãƒâ€¢' => 'O', 'ÃƒÅ¡' => 'U', 'ÃƒÅ“' => 'U', 'Ãƒâ€¡' =>'C', 'Ãƒâ€˜'=>'N');
         
         $text=(trim($strText));
         $text=str_replace(" ","",$text);
@@ -165,11 +171,11 @@ class Validacoes{
     private function valida_endereco($strText){
         
         
-        $conversao = array('Ã¡' => 'a','Ã ' => 'a','Ã£' => 'a','Ã¢' => 'a', 'Ã©' => 'e',
-         'Ãª' => 'e', 'Ã­' => 'i', 'Ã¯'=>'i', 'Ã³' => 'o', 'Ã´' => 'o', 'Ãµ' => 'o', "Ã¶"=>"o",
-         'Ãº' => 'u', 'Ã¼' => 'u', 'Ã§' => 'c', 'Ã±'=>'n', 'Ã�' => 'A', 'Ã€' => 'A', 'Ãƒ' => 'A',
-         'Ã‚' => 'A', 'Ã‰' => 'E', 'ÃŠ' => 'E', 'Ã�' => 'I', 'Ã�'=>'I', "Ã–"=>"O", 'Ã“' => 'O',
-         'Ã”' => 'O', 'Ã•' => 'O', 'Ãš' => 'U', 'Ãœ' => 'U', 'Ã‡' =>'C', 'Ã‘'=>'N');
+        $conversao = array('ÃƒÂ¡' => 'a','ÃƒÂ ' => 'a','ÃƒÂ£' => 'a','ÃƒÂ¢' => 'a', 'ÃƒÂ©' => 'e',
+         'ÃƒÂª' => 'e', 'ÃƒÂ­' => 'i', 'ÃƒÂ¯'=>'i', 'ÃƒÂ³' => 'o', 'ÃƒÂ´' => 'o', 'ÃƒÂµ' => 'o', "ÃƒÂ¶"=>"o",
+         'ÃƒÂº' => 'u', 'ÃƒÂ¼' => 'u', 'ÃƒÂ§' => 'c', 'ÃƒÂ±'=>'n', 'Ãƒï¿½' => 'A', 'Ãƒâ‚¬' => 'A', 'ÃƒÆ’' => 'A',
+         'Ãƒâ€š' => 'A', 'Ãƒâ€°' => 'E', 'ÃƒÅ ' => 'E', 'Ãƒï¿½' => 'I', 'Ãƒï¿½'=>'I', "Ãƒâ€“"=>"O", 'Ãƒâ€œ' => 'O',
+         'Ãƒâ€�' => 'O', 'Ãƒâ€¢' => 'O', 'ÃƒÅ¡' => 'U', 'ÃƒÅ“' => 'U', 'Ãƒâ€¡' =>'C', 'Ãƒâ€˜'=>'N');
         
         $text=(trim($strText));
         $text=str_replace(" ","",$text);
@@ -186,7 +192,7 @@ class Validacoes{
     
     private function valida_CPF($cpf = null) {
         
-        // Verifica se um nÃºmero foi informado
+        // Verifica se um nÃƒÂºmero foi informado
         if(empty($cpf)) {
             return false;
         }
@@ -197,11 +203,11 @@ class Validacoes{
         
 
         
-        // Verifica se o numero de digitos informados Ã© igual a 11 
+        // Verifica se o numero de digitos informados ÃƒÂ© igual a 11 
         if (strlen($cpf) != 11) {
             return false;
         }
-        // Verifica se nenhuma das sequÃªncias invalidas abaixo 
+        // Verifica se nenhuma das sequÃƒÂªncias invalidas abaixo 
         // foi digitada. Caso afirmativo, retorna falso
         else if ($cpf == '00000000000' || 
             $cpf == '11111111111' || 
@@ -215,7 +221,7 @@ class Validacoes{
             $cpf == '99999999999') {
             return false;
          // Calcula os digitos verificadores para verificar se o
-         // CPF Ã© vÃ¡lido
+         // CPF ÃƒÂ© vÃƒÂ¡lido
          } else {   
 
             for ($t = 9; $t < 11; $t++) {
@@ -239,14 +245,14 @@ class Validacoes{
             return FALSE;
         }else{
 
-            $data = explode("-",$date); // fatia a string $dat em pedados, usando / como referÃªncia
+            $data = explode("-",$date); // fatia a string $dat em pedados, usando / como referÃƒÂªncia
              $d = $data[0];
              $m = $data[1];
              $y = $data[2];
          
-            // verifica se a data Ã© vÃ¡lida!
-            // 1 = true (vÃ¡lida)
-            // 0 = false (invÃ¡lida)
+            // verifica se a data ÃƒÂ© vÃƒÂ¡lida!
+            // 1 = true (vÃƒÂ¡lida)
+            // 0 = false (invÃƒÂ¡lida)
             $res = checkdate($d,$m,$y);
 
             if($d > 31 || $m > 12 || $y < 1){
@@ -311,9 +317,9 @@ class Validacoes{
         }
                    
         return TRUE;
-	// verifica se a data Ã© vÃ¡lida!
-	// 1 = true (vÃ¡lida)
-	// 0 = false (invÃ¡lida)
+	// verifica se a data ÃƒÂ© vÃƒÂ¡lida!
+	// 1 = true (vÃƒÂ¡lida)
+	// 0 = false (invÃƒÂ¡lida)
 	
     }
     
@@ -342,7 +348,7 @@ class Validacoes{
     function  valida_login($login){
         $long = strlen ($login);
         for ($i = 0; $i < $long; $i++) {
-            if($login[$i]=='"' || $login[$i] =='@' || $login[$i]=='!' || $login[$i] =='#' || $login[$i]=='#' || $login[$i] =='$' || $login[$i]=='%' || $login[$i] =='Â¨' ||
+            if($login[$i]=='"' || $login[$i] =='@' || $login[$i]=='!' || $login[$i] =='#' || $login[$i]=='#' || $login[$i] =='$' || $login[$i]=='%' || $login[$i] =='Ã‚Â¨' ||
             $login[$i]=='&' || $login[$i] =='*' || $login[$i]=='(' || $login[$i] ==')' || $login[$i]=='+' || $login[$i] =='=' || $login[$i]=='/' || $login[$i] =='*' 
                     ){
                 

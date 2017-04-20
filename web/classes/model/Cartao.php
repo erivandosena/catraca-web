@@ -1,52 +1,138 @@
 <?php
-
-class Cartao{
+/**
+ * Classe utilizada para instanciar o Objeto Cartão.
+ * 
+ * @author Jefferson Uchoa Ponte
+ * @version 1.0
+ * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
+ * @package Modelo
+ */
+class Cartao {
+	
+	/**
+	 * Variável que recebe o Id do Cartão.
+	 *
+	 * @access private
+	 * @var int
+	 */
 	private $id;
+	
+	/**
+	 * Variável que recebe o Número do Cartão.
+	 *
+	 * @access private
+	 * @var string
+	 */
 	private $numero;
+	
+	/**
+	 * Variável que recebe os Créditos do Cartão.
+	 *
+	 * @access private
+	 * @var int
+	 */
 	private $creditos;
+	
+	/**
+	 * Variável que rece o Tipo do Cartão.
+	 *
+	 * @access private
+	 * @var Tipo
+	 */
 	private $tipo;
 	
-	
-	
-	public function Cartao(){
-		$this->tipo = new Tipo();
+	/**
+	 * Função construtora da Classe Cartão.
+	 * Para cada Cartão será instaciado um Tipo para ele.
+	 */
+	public function Cartao() {
+		$this->tipo = new Tipo ();
 		$this->creditos = 0;
 	}
 	
-	public function setId($id){
+	/**
+	 * Função utilizada para encapsular o valor da variável $id.
+	 *
+	 * @param int $id        	
+	 */
+	public function setId($id) {
 		$this->id = $id;
-		
 	}
-	public function getId(){
+	
+	/**
+	 * Retorna o valor da variável $id.
+	 * 
+	 * @return int
+	 */
+	public function getId() {
 		return $this->id;
 	}
-	public function setNumero($numero){
-		$this->numero = preg_replace ('/[^0-9]/', '', $numero);
+	
+	/**
+	 * Função utilizada para encapsular o valor da variável $numero.
+	 * 
+	 * @param string $numero        	
+	 */
+	public function setNumero($numero) {
+		$this->numero = preg_replace ( '/[^0-9]/', '', $numero );
 	}
-	public function getNumero(){
+	
+	/**
+	 * Retorna o número do cartão.
+	 * 
+	 * @return string
+	 */
+	public function getNumero() {
 		return $this->numero;
 	}
-	public function setCreditos($creditos){
+	
+	/**
+	 * Função utilizada para encapsular o valor da variável $creditos.
+	 * 
+	 * @param float $creditos        	
+	 */
+	public function setCreditos($creditos) {
 		$this->creditos = $creditos;
 	}
-	public function getCreditos(){
+	
+	/**
+	 * Retorna a quantidade de créditos.
+	 * 
+	 * @return float
+	 */
+	public function getCreditos() {
 		return $this->creditos;
 	}
-	public function setTipo(Tipo $tipo){
+	
+	/**
+	 * Função utilizada para encapsular do Objeto Tipo.
+	 * 
+	 * @param Tipo $tipo        	
+	 */
+	public function setTipo(Tipo $tipo) {
 		$this->tipo = $tipo;
 	}
-	public function getTipo(){
+	
+	/**
+	 * Retorna o tipo.
+	 * 
+	 * @return Tipo
+	 */
+	public function getTipo() {
 		return $this->tipo;
 	}
-	public function adicionaCreditos($creditos){
-		if(is_numeric($creditos)){
-			$this->setCreditos($this->getCreditos()+$creditos);
+	
+	/**
+	 *
+	 * @ignore
+	 *
+	 * @param float $creditos        	
+	 */
+	public function adicionaCreditos($creditos) {
+		if (is_numeric ( $creditos )) {
+			$this->setCreditos ( $this->getCreditos () + $creditos );
 		}
 	}
 }
-
-
-
-
 
 ?>

@@ -1,10 +1,16 @@
 <?php
-
-
-class UnidadeView{
+/**
+ * @author Jefferson Uchoa Ponte
+ * @version 1.0
+ * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
+ * @package View
+ */
+class UnidadeView {
 	
-	
-	public function mostraFormulario(){
+	/**
+	 * 
+	 */
+	public function mostraFormulario() {
 		echo '
 			<form action="" method="post">
 				<fieldset>
@@ -13,31 +19,49 @@ class UnidadeView{
 					<input id="unid_nome" type="text" name="unid_nome"/>
 					<br>
 					<input type="submit" value="Enviar" />
-			</fieldset>
-	</form>';
-	}
-	public function mostraLista($lista){
-		foreach($lista as $elemento){
-			echo 'ID: '.$elemento->getId().'<br>';
-			echo 'Nome: '.$elemento->getNome().'<br> ';
-			echo '<a href="?delete_unidade=1&unid_id='.$elemento->getId().'"> Deletar</a><br>';
-		}
-		
-	}
-	public function cadastroSucesso(){
-		echo "Inserido com sucesso";
-	}
-	public function deleteSucesso(){
-		echo "Deletado com sucesso";
-	}
-	public function deleteFracasso(){
-		echo "Erro ao tentar deletar";
-	}
-	public function cadastroFracasso(){
-		echo "Erro ao tentar inserir";
+					</fieldset>
+			</form>';
 	}
 	
+	/**
+	 * 
+	 * @param array $lista
+	 */
+	public function mostraLista($lista) {
+		foreach ( $lista as $elemento ) {
+			echo 'ID: ' . $elemento->getId () . '<br>';
+			echo 'Nome: ' . $elemento->getNome () . '<br> ';
+			echo '<a href="?delete_unidade=1&unid_id=' . $elemento->getId () . '"> Deletar</a><br>';
+		}
+	}
+	
+	/**
+	 * 
+	 */
+	public function cadastroSucesso() {
+		echo "Inserido com sucesso";
+	}
+	
+	/**
+	 * 
+	 */
+	public function deleteSucesso() {
+		echo "Deletado com sucesso";
+	}
+	
+	/**
+	 * 
+	 */
+	public function deleteFracasso() {
+		echo "Erro ao tentar deletar";
+	}
+	
+	/**
+	 * 
+	 */
+	public function cadastroFracasso() {
+		echo "Erro ao tentar inserir";
+	}
 }
-
 
 ?>

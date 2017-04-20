@@ -3,6 +3,9 @@
 
 date_default_timezone_set ( 'America/Araguaina' );
 
+/**
+ * @ignore
+ */
 
 function __autoload($classe) {
 	if (file_exists ( 'classes/dao/' . $classe . '.php' ))

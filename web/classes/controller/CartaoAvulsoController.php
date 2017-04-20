@@ -1,12 +1,31 @@
 <?php
 /**
- * 
  * @author Jefferson Uchoa Ponte
- *
+ * @version 1.0
+ * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
+ * @package Controle
  */
 
+
+/**
+ * Classe responsável por gerenciar intancias de outras classes como View, DAO, Model, etc,
+ * processando os dados e exibindo a informação para o usuario final.
+ */
 class CartaoAvulsoController{
+	
+	/**
+	 * Variavel iutilizada para instaciar as Classes do pacote View.
+	 * @access private
+	 * @var $view
+	 */
 	private $view;
+	
+	/**
+	 * Metodo principal utilizada para controlar o acesso a classe através do nível de acesso do usuario.
+	 * 
+	 * @param Sessao $nivelDeAcesso Recebe uma Sessão que contém o nível de acesso do usuario,
+	 * esta Sessão é iniciada na página principal, durante o login do usuario.
+	 */
 	public static function main($nivelDeAcesso){
 		
 		switch ($nivelDeAcesso){
@@ -24,36 +43,28 @@ class CartaoAvulsoController{
 		}
 	}
 	
-	
+	/**
+	 * Função resnponsável por exibir a tela inical d página Cartão Avulso, 
+	 * nela é instaciado uma função tala cadastro da propria Classe, 
+	 * a função telaCadastro.
+	 */
 	public function telaCartao(){
 		$this->view = new CartaoAvulsoView();
-		echo '<div class="conteudo"> <div class = "simpleTabs">
-		        <ul class = "simpleTabsNavigation">';
-				
-// 		echo '		<li><a href="#">Listar Avulsos</a></li>';
-		
-		echo '		<li><a href="#">Cadastro de Avulso</a></li>';
-		
-		echo '			
-		        </ul>';
-		
-// 		echo '    <div class = "simpleTabsContent">';
-		
-// 		$this->telaIdentificacao();
-// 		echo '	</div>';
-		
-		
-						
-						
-		echo '	<div class = "simpleTabsContent">';
-		$this->telaCadastro();
-		echo '	</div>		
-						
-		    </div></div>';
-		
-		
-		
+		echo '	<div class="conteudo"> 
+					<div class = "simpleTabs">
+		        		<ul class = "simpleTabsNavigation">		
+							<li><a href="#">Cadastro de Avulso</a></li>					
+		        		</ul>						
+						<div class = "simpleTabsContent">';
+						$this->telaCadastro();
+		echo '			</div>						
+		   		 	</div>
+				</div>';		
 	}
+	
+	/**
+	 * @ignore
+	 */
 	public function telaIdentificacao(){
 		
 		$this->view->formBuscaCartao();
@@ -174,8 +185,20 @@ class CartaoAvulsoController{
 		
 		
 	}
+	
+	/**
+	 * Função responsável pela consulta ao usuário, para um novo cadastro, 
+	 * renovar e cancelar o vinculo do cartão. 
+	 */
 	public function telaCadastro(){
-		$this->view->formBuscaUsuarios();
+		$this->view->formBuscaUsuarios();		
+			
+		if (isset ($_GET ['nome'])) {
+			$usuarioDao = new UsuarioDAO();
+			$listaDeUsuarios = $usuarioDao->pesquisaNoSigaa( $_GET ['nome']);
+			$this->view->mostraResultadoBuscaDeUsuarios($listaDeUsuarios);
+			$usuarioDao->fechaConexao();
+		}
 		
 		if (isset ( $_GET ['selecionado'] )) {
 			
@@ -184,13 +207,10 @@ class CartaoAvulsoController{
 			$usuario = new Usuario();
 			$usuario->setIdBaseExterna($idDoSelecionado);
 			
-			$usuarioDao->retornaPorIdBaseExterna($usuario);
-			
+			$usuarioDao->retornaPorIdBaseExterna($usuario);			
 			
 			$this->view->mostraSelecionado($usuario);
-			$vinculoDao = new VinculoDAO();
-				
-			
+			$vinculoDao = new VinculoDAO();			
 			
 			if(isset($_GET['vinculo_cancelar'])){
 				$vinculo = new Vinculo();
@@ -257,11 +277,7 @@ class CartaoAvulsoController{
 			
 				$this->view->formConfirmacaoRenovarVinculo();
 				return;
-			}
-			
-			
-			
-			
+			}			
 			
 			$vinculos = $vinculoDao->retornaVinculosValidosDeUsuario($usuario);
 			
@@ -365,29 +381,23 @@ class CartaoAvulsoController{
 			if(sizeof($vinculosALiberar)){
 				echo '<h2>Vinculos A Liberar</h2>';
 				$this->view->mostraVinculos($vinculosALiberar, false);					
-			}
-			
-		}
-		
-
-		if (isset ( $_GET ['nome'] )) {
-			$usuarioDao = new UsuarioDAO();
-			$listaDeUsuarios = $usuarioDao->pesquisaNoSigaa( $_GET ['nome']);
-			$this->view->mostraResultadoBuscaDeUsuarios($listaDeUsuarios);
-			$usuarioDao->fechaConexao();
-		}
-		
-		
+			}			
+		}		
 	}
+	
+	/**
+	 * Função utilizada para verificar o status do usuario.
+	 * 
+	 * @param Usuario $usuario Parametro contendo os dados do Usuario. 
+	 * @return boolean Retornarpa True caso o Usuario esteja Ativo, caso contrario retorná False
+	 */
 	public function verificaSeAtivo(Usuario $usuario){
-		if(strtolower (trim($usuario->getStatusServidor())) == 'ativo'){
-			
+		if(strtolower (trim($usuario->getStatusServidor())) == 'ativo'){			
 			return true;
 		}
 		if(strtolower (trim($usuario->getStatusDiscente())) == 'ativo' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - graduando'){
-			return true;	
-		}
-		
+			return true;		
+		}		
 		if(strtolower (trim($usuario->getTipodeUsuario())) == 'terceirizado' || strtolower (trim($usuario->getTipodeUsuario())) == 'outros'){
 			return true;
 		}
