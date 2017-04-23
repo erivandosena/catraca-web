@@ -134,14 +134,13 @@ class CartaoController{
 									echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
 									return;
 								}
-								/*
-								
+
 								if(!$this->verificaSeAtivo($usuario)){
 									$this->view->formMensagem("-erro", "Esse usuário possui um problema quanto ao status!");
 									echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
 									return;
 								}
-								*/
+
 								$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'G:00:01' );
 								$vinculo->setFinalValidade($daqui3Meses);
 				
@@ -171,12 +170,25 @@ class CartaoController{
 		if (isset ( $_GET ['selecionado'] )) {
 			
 			$idDoSelecionado = $_GET['selecionado'];
-			$usuarioDao = new UsuarioDAO();
+			
+			$conectouSigaa = true;
+			try{
+
+				$usuarioDao = new UsuarioDAO(null, DAO::TIPO_PG_SIGAAA);
+					
+			}catch (Exception $e){
+				$conectouSigaa = false;
+			}
+			if(!$conectouSigaa){
+				$usuarioDao = new UsuarioDAO();
+			}
+			
+			
 			$usuario = new Usuario();
 			$usuario->setIdBaseExterna($idDoSelecionado);
 			
 			$usuarioDao->retornaPorIdBaseExterna($usuario);			
-			
+
 			$this->view->mostraSelecionado($usuario);
 			$vinculoDao = new VinculoDAO();			
 			
@@ -217,13 +229,11 @@ class CartaoController{
 						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
 						return;
 					}
-					/*
 					if(!$this->verificaSeAtivo($usuario)){
 						$this->view->formMensagem("-erro", "Esse usuário possui um problema quanto ao status!");
 						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
 						return;						
 					}					
-					*/
 					if($vinculoDao->atualizaValidade($vinculo)){
 						$this->view->formMensagem("-sucesso", "Vínculo Atualizado com Sucesso!");						
 					}else{
@@ -364,14 +374,7 @@ class CartaoController{
 		if (isset ( $_GET ['nome'] )) {
 			$usuarioDao = new UsuarioDAO();
 			$listaDeUsuarios = $usuarioDao->pesquisaNoSigaa( $_GET ['nome']);
-			if($listaDeUsuarios == null) {
 
-// ############################# TESTE como root POR  ORDEM DO kleber
-$controller  = new SincronizadorController();
-$controller->sincronizar();
-// ################################
-
-			}
 			$this->view->mostraResultadoBuscaDeUsuarios($listaDeUsuarios);
 			$usuarioDao->fechaConexao();
 		}		
@@ -383,7 +386,7 @@ $controller->sincronizar();
 		}
 		if(trim($usuario->getStatusDiscente()) == 'CADASTRADO' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($usuario->getStatusDiscente())) == 'formando' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - graduando'){
 			return true;		
-		}		
+		}
 		if(strtolower (trim($usuario->getTipodeUsuario())) == 'terceirizado' || strtolower (trim($usuario->getTipodeUsuario())) == 'outros'){
 			return true;
 		}
