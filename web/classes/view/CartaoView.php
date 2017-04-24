@@ -152,8 +152,8 @@ function altera() {
 	 *
 	 * @param array $usuarios        	
 	 */
-	public function mostraResultadoBuscaDeUsuarios($usuarios) {
-		echo '<h2 class="titulo">Resultado da busca:</h2>';
+	public function mostraResultadoBuscaDeUsuarios($usuarios, $mensagem = "") {
+		echo '<h2 class="titulo">Resultado da busca:'.$mensagem.'</h2>';
 		echo '<div class="doze colunas">';		
 		echo '<div class="borda">
 				<table class="tabela borda-vertical zebrada texto-preto">

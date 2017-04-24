@@ -230,7 +230,8 @@ class CartaoController{
 						return;
 					}
 					if(!$this->verificaSeAtivo($usuario)){
-						$this->view->formMensagem("-erro", "Esse usuário possui um problema quanto ao status!");
+						
+						$this->view->formMensagem("-erro", 'Esse usuário possui um problema quanto ao status! ('.$usuario->getStatusDiscente().")");
 						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
 						return;						
 					}					
@@ -331,6 +332,7 @@ class CartaoController{
 							}
 							
 							if($vinculoDao->adicionaVinculo ($vinculo)){
+								
 								$this->view->formMensagem("-sucesso", "Vinculo Adicionado Com Sucesso.");								
 							}else{
 								$this->view->formMensagem("-erro", "Erro na tentativa de Adicionar Vínculo.");							
@@ -372,10 +374,22 @@ class CartaoController{
 		}		
 
 		if (isset ( $_GET ['nome'] )) {
-			$usuarioDao = new UsuarioDAO();
+			$mensagem = "";
+			$conectouSigaa = true;
+			try{
+				$mensagem = "(Base Original do SIGAA)";
+				$usuarioDao = new UsuarioDAO(null, DAO::TIPO_PG_SIGAAA);
+					
+			}catch (Exception $e){
+				$conectouSigaa = false;
+				$mensagem = "(SIGAA Falhou, esta é a Base Local)";
+			}
+			if(!$conectouSigaa){
+				$usuarioDao = new UsuarioDAO();
+			}
 			$listaDeUsuarios = $usuarioDao->pesquisaNoSigaa( $_GET ['nome']);
-
-			$this->view->mostraResultadoBuscaDeUsuarios($listaDeUsuarios);
+			
+			$this->view->mostraResultadoBuscaDeUsuarios($listaDeUsuarios, $mensagem);
 			$usuarioDao->fechaConexao();
 		}		
 	}
