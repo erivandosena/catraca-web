@@ -12,7 +12,15 @@ import java.util.ArrayList;
 import br.edu.unilab.catraca.controller.CatracaVirtualController;
 import br.edu.unilab.catraca.dao.CartaoDAO;
 import br.edu.unilab.catraca.recurso.CartaoRecurso;
+import br.edu.unilab.catraca.recurso.CatracaRecurso;
+import br.edu.unilab.catraca.recurso.CatracaUnidadeRecurso;
+import br.edu.unilab.catraca.recurso.TipoRecurso;
+import br.edu.unilab.catraca.recurso.UnidadeRecurso;
+import br.edu.unilab.catraca.recurso.UsuarioRecurso;
+import br.edu.unilab.catraca.recurso.VinculoRecurso;
 import br.edu.unilab.unicafe.model.Cartao;
+import br.edu.unilab.unicafe.model.Tipo;
+import br.edu.unilab.unicafe.model.Usuario;
 
 
 
@@ -40,8 +48,9 @@ public class Main {
 		}
 		
 		if (lock != null) {
-			CatracaVirtualController controller = new CatracaVirtualController();
-			controller.iniciar();
+
+			CatracaUnidadeRecurso recurso = new CatracaUnidadeRecurso();
+			recurso.sincronizar();
 			
 		} else {
 			System.out.println("Ja ha uma instancia rodando");

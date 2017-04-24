@@ -23,14 +23,18 @@ public class CatracaVirtualController {
 	public void iniciar(){
 		FrameSplash splash = new FrameSplash();
 		splash.setVisible(true);
-		this.criarJanelas();
-		this.criarEventos();
+		
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		this.criarJanelas();
+		this.criarEventos();
+		
+		fazendoSincronia();
 		splash.setVisible(false);
 		splash.dispose();
 		

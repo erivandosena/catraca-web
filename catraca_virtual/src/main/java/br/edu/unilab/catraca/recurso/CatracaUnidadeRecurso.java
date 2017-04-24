@@ -63,7 +63,7 @@ public class CatracaUnidadeRecurso extends Recurso{
         }
         
         String output = resp.getEntity(String.class);
-        System.out.println(output);
+       
         try {
 			JSONObject jo = new JSONObject(output);
 			output = jo.getString("catracas_unidade");

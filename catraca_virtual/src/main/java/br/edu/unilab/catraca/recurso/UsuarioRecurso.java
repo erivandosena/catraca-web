@@ -36,6 +36,7 @@ public class UsuarioRecurso extends Recurso{
 		
 		for (Usuario usuario: lista) {
 			dao.inserir(usuario);
+			System.out.println("Ok");
 		}
 	}
 	public void sincronizar(Connection conexao){
@@ -50,6 +51,7 @@ public class UsuarioRecurso extends Recurso{
 			dao.inserir(usuario);
 		}
 	}
+	
 	public ArrayList<Usuario> obterLista(){
 		ArrayList<Usuario> lista = new ArrayList<Usuario>();
 		String url = URL+"usuario/usuarios";

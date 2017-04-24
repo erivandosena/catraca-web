@@ -53,10 +53,11 @@ public class CartaoDAO extends DAO{
 	
 	public boolean inserir(Cartao cartao){
 		try {
-			PreparedStatement ps2 = this.getConexao().prepareStatement("INSERT INTO cartao(cart_id, cart_numero, cart_creditos) VALUES(?, ?, ?)");
+			PreparedStatement ps2 = this.getConexao().prepareStatement("INSERT INTO cartao(cart_id, cart_numero, cart_creditos, tipo_id) VALUES(?, ?, ?, ?)");
 			ps2.setInt(1, cartao.getId());
 			ps2.setString(2, cartao.getNumero());
-			ps2.setDouble(3, cartao.getCreditos());			
+			ps2.setDouble(3, cartao.getCreditos());		
+			ps2.setInt(4, cartao.getTipo().getId());		
 			ps2.executeUpdate();
 			return true;
 		} catch (SQLException e) {

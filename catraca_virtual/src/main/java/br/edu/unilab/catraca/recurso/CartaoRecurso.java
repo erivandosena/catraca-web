@@ -62,7 +62,6 @@ public class CartaoRecurso extends Recurso{
 		ArrayList<Cartao> lista = new ArrayList<Cartao>();
 		
 		String url = URL+"cartao/cartoes";
-        System.out.println(url);
 		String authString = USUARIO + ":" + SENHA;
         
         String authStringEnc = new BASE64Encoder().encode(authString.getBytes());
@@ -92,11 +91,13 @@ public class CartaoRecurso extends Recurso{
 		try {
 			projectArray = new JSONArray(output);
 			for (int i = 0; i < projectArray.length(); i++) {
+				
 	            JSONObject proj = projectArray.getJSONObject(i);
 	            Cartao cartao = new Cartao();
 	            cartao.setId(proj.getInt("cart_id"));
 	            cartao.setNumero(proj.getString("cart_numero"));
 	            cartao.setCreditos(proj.getDouble("cart_creditos"));
+	            cartao.getTipo().setId(proj.getInt("tipo_id"));
 	            lista.add(cartao);
 	        }
 			

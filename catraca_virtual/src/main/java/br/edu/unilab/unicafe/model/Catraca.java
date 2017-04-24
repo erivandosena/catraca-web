@@ -26,11 +26,17 @@ public class Catraca {
 		this.financeiroAtivo = financeiroAtivo;
 	}
 	
-	public void maquinaLocal() throws UnknownHostException{
+	public void maquinaLocal() {
 		InetAddress ia = null;
-		ia = InetAddress.getLocalHost();
+		try {
+			ia = InetAddress.getLocalHost();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		this.nome = ia.getHostName().toString();
 	}
 	
+
 
 }
