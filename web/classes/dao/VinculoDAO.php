@@ -416,7 +416,7 @@ class VinculoDAO extends DAO {
 		$numeroCartao = $vinculo->getCartao()->getNumero();
 		$dataDeValidade = $vinculo->getFinalValidade();
 		$tipoCartao = $vinculo->getCartao()->getTipo()->getId();
-		$this->verificarUsuario($vinculo->getResponsavel());
+		
 		if($vinculo->invalidoParaAdicionar()){	
 			return false;
 		}
@@ -521,7 +521,7 @@ class VinculoDAO extends DAO {
 	 * @param int $idBaseExterna
 	 * @return int
 	 */
-	public function verificarUsuario(Usuario $usuario){
+	public function verificarUsuario(Usuario $usuario, PDO $conexaoRemota){
 		
 		$idBaseExterna = $usuario->getIdBaseExterna();
 		
@@ -531,7 +531,7 @@ class VinculoDAO extends DAO {
 			
 			return $linha['usua_id'];
 		}
-		$result2 = 	$this->getConexao()->query("SELECT * FROM vw_usuarios_autenticacao_catraca WHERE id_usuario = $idBaseExterna");
+		$result2 = 	$conexaoRemota->query("SELECT * FROM vw_usuarios_autenticacao_catraca WHERE id_usuario = $idBaseExterna");
 		foreach($result2 as $linha){
 			
 			$nivel = Sessao::NIVEL_COMUM;

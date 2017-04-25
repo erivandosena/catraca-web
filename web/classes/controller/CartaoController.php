@@ -330,6 +330,7 @@ class CartaoController{
 								$this->view->formMensagem("-erro", "O numero do cartão digitado já possui vinculo, utilize outro cartão.");								
 								return;
 							}
+							$vinculoDao->verificarUsuario($vinculo->getResponsavel(), $usuarioDao->getConexao());
 							
 							if($vinculoDao->adicionaVinculo ($vinculo)){
 								
