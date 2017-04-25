@@ -531,7 +531,9 @@ class VinculoDAO extends DAO {
 			
 			return $linha['usua_id'];
 		}
-		$result2 = 	$conexaoRemota->query("SELECT * FROM vw_usuarios_autenticacao_catraca WHERE id_usuario = $idBaseExterna");
+		$sqlS = "SELECT * FROM vw_usuarios_autenticacao_catraca WHERE id_usuario = $idBaseExterna";
+// 		echo $sqlS;
+		$result2 = 	$conexaoRemota->query($sqlS);
 		foreach($result2 as $linha){
 			
 			$nivel = Sessao::NIVEL_COMUM;
