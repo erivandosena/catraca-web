@@ -113,7 +113,7 @@ class CartaoIsentoController{
 					//Aqui a gente da a opção de adicionar a isenção. 
 					$vinculoDao->isencaoValidaDoVinculo($vinculo);
 					if($vinculo->ehIsento()){
-						echo '<p>Usuário Isento</p>';
+						echo '<p>Usuário Isento até: '.date("d/m/Y", strtotime($vinculo->getIsencao()->getDataFinal())).'</p>';
 						//descomente esta linha para começar. 
 // 						echo '<br><a href="?pagina=isento&numero_cartao='.$_GET['numero_cartao'].'&cancelar_isencao=1" class="botao">Cancelar Isenção</a>';
 						if(isset($_GET['cancelar_isencao']) && isset($_GET['numero_cartao'])){
