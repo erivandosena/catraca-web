@@ -180,6 +180,11 @@ class SincronizadorController{
 	public function sincronizar(){
 		
 		if(!file_exists(self::ARQUIVO)){
+			mkdir("config");
+			$fp = fopen(self::ARQUIVO, "a");
+			
+			fwrite($fp, "ultima_atualizacao = 2017-04-25 11:35:00");
+			fclose($fp);
 			return;
 		}
 			
@@ -205,7 +210,8 @@ class SincronizadorController{
 			return;
 		}
 		
-		$escrever = fopen($arquivo, "w");
+		$escrever = fopen(self::ARQUIVO, "w");
+		
 		$hoje = date ( "Y-m-d G:i:s" );
 		if(!fwrite($escrever, "ultima_atualizacao = ".$hoje)){
 			return;
