@@ -178,48 +178,43 @@ class SincronizadorController{
 	}
 	
 	public function sincronizar(){
+		
+		if(!file_exists(self::ARQUIVO)){
+			return;
+		}
+			
+		$config = parse_ini_file ( self::ARQUIVO );
+		$dataDaUltimaAtualizacao = $config ['ultima_atualizacao'];
+		$dataDaUltimaAtualizacao = date ( "d/m/Y", strtotime ( $dataDaUltimaAtualizacao ) );
+		$hoje = date ( "d/m/Y" );
+		if ($dataDaUltimaAtualizacao == $hoje) {
+			return;
+		}
+		if (! is_writable ( self::ARQUIVO )) {
+			return;
+		}
 
-		$tempoA = round(microtime(true) * 1000);
-//		echo 'Vou carregar os dados.<br>';
+
+		$this->carregarDados ();
+		$this->deletarDadosLocais ();
 		
-		$this->carregarDados();
-		$tempoB = round(microtime(true) * 1000);
-//		echo "Carreguei! Levei: <br>";
-//		echo $tempoB-$tempoA;
-//		echo " Mili segundos.<br>";
-//		echo '<br>Agora vou deletar os dados da tabela local<br>';
-		
-		$this->deletarDadosLocais();
-//		echo '<br>Pronto! Levei: ';
-		
-		$tempoC = round(microtime(true) * 1000);
-//		echo $tempoC-$tempoB;
-//		echo " Milisegundos<br>";
-//		echo "Vou inserir os dados do SIGAA na base local";
-		
-		if($this->inserirOsDoSigaa()){
-			echo "";
-			//echo '<h1>Deu tudo certo INSERINDO SIGAA</h1>';
-			//$tempoD = round(microtime(true) * 1000);
-			//echo 'Inseri tudo em: ';
-			//echo $tempoD-$tempoC;
-			//echo ' Milisegundos';
-		}else{
-			echo "";
-			//echo 'Retornou Um falso';
+		if (! $this->inserirOsDoSigaa ()) {
+			return;
 		}
-		if($this->inserirOsDoComum()){
-			echo "";
-			//echo '<h1>Deu tudo certo INSERINDO COMUM</h1>';
-			//$tempoE = round(microtime(true) * 1000);
-			//echo 'Inseri tudo em: ';
-			//echo $tempoE-$tempoD;
-			//echo ' Milisegundos';
-		}else{
-			echo "";
-			//echo 'Retornou Um falso no COmum';
+		if (! $this->inserirOsDoComum ()) {
+			return;
 		}
+		
+		$escrever = fopen($arquivo, "w");
+		$hoje = date ( "Y-m-d G:i:s" );
+		if(!fwrite($escrever, "ultima_atualizacao = ".$hoje)){
+			return;
+		}
+		fclose($escrever);
+		
 	}
+	
+	const ARQUIVO = "config/copia_base_sigaa.ini";
 	
 	
 	
