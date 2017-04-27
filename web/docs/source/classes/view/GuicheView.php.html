@@ -36,16 +36,45 @@
     <body>
         <pre class="brush: php">&lt;?php
 /**
- * @author Jefferson Uchoa Ponte
+ * Nesta Classe est&atilde;o contidos os C&oacute;digos HTML, respons&aacute;veis pela gera&ccedil;&atilde;o das Telas.
+ * @author Alan Cleber Morais Gomes
  * @version 1.0
  * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
  * @package View
  */
-class GuicheView{
+/**
+ * 
+ * Nesta Classe est&atilde;o contidos os C&oacute;digos HTML
+ * respons&aacute;veis por gerar os elementos e as telas do Guich&ecirc;.
+ *
+ */
+class GuicheView {
 	
-	public function formDescricao($listaDescricao){
-		
-		@$_SESSION['transacao'] = &quot;&quot;;
+	/**
+	 * Esta Fun&ccedil;&atilde;o gera o formul&aacute;rio respons&aacute;vel pela consulta do usu&aacute;rio pelo n&uacute;mero do seu cart&atilde;o.
+	 */
+	public function formBuscarCartao() {
+		echo '		&lt;div class=&quot;cinco colunas&quot;&gt;
+						&lt;form method=&quot;&quot; class=&quot;formulario-organizado&quot; &gt;
+							&lt;input type=&quot;hidden&quot; name=&quot;pagina&quot; value=&quot;guiche&quot; /&gt;
+							&lt;label for=&quot;cartao&quot;&gt;
+								N&amp;uacutemero Cart&amp;atildeo: &lt;input type=&quot;number&quot; name=&quot;cartao&quot; id=&quot;cartao&quot; autofocus&gt;
+							&lt;/label&gt;
+							&lt;input type=&quot;submit&quot; value=&quot;Pesquisar&quot;&gt;
+						&lt;hr&gt;
+					&lt;/form&gt;';
+	}
+	
+	/**
+	 * Esta Fun&ccedil;&atilde;o gera a tabela contendo os dados dos Usu&aacute;rios que realizaram tranza&ccedil;&otilde;es no guich&ecirc;.
+	 * Ela recebe um array contendo os dados dos usu&aacute;rios.
+	 * Esta fun&ccedil;&atilde;o tambem trabalha com vari&aacute;veis de sess&atilde;o,
+	 * para determinar o c&oacute;digo das transa&ccedil;&otilde;es.
+	 *
+	 * @param array $listaDescricao        	
+	 */
+	public function formDescricao($listaDescricao) {
+		@$_SESSION ['transacao'] = &quot;&quot;;
 		
 		echo '	&lt;div id=&quot;caixa&quot;class=&quot;doze colunas borda&quot;&gt;
 					&lt;h2 id=&quot;titulo-caixa&quot; class=&quot;texto-branco fundo-azul2 centralizado&quot;&gt;Venda de Cr&amp;eacuteditos&lt;br&gt;&lt;/h2&gt;
@@ -67,46 +96,36 @@ class GuicheView{
 											&lt;/thead&gt;
 											&lt;tbody&gt;';
 		$i = 1;
-		foreach ($listaDescricao as $linha){				
-			echo'								&lt;tr&gt;
-											        &lt;td&gt;'.$linha['tran_id'].'&lt;/td&gt;
-											       	&lt;td&gt;R$ '.number_format($linha['tran_valor'], 2,',','.').'&lt;/td&gt;
-											        &lt;td&gt;'.$linha['tran_descricao'].'&lt;/td&gt;
-											        &lt;td&gt;'.date(&quot;d/m/Y&quot;,strtotime($linha['tran_data'])).'&lt;/td&gt;
-													&lt;td&gt;'.date('H:i:s',strtotime($linha['tran_data'])).'&lt;/td&gt;
-											        &lt;td&gt;'.ucwords(strtolower(htmlentities($linha['usua_nome']))).'&lt;/td&gt;
+		foreach ( $listaDescricao as $linha ) {
+			echo '								&lt;tr&gt;
+											        &lt;td&gt;' . $linha ['tran_id'] . '&lt;/td&gt;
+											       	&lt;td&gt;R$ ' . number_format ( $linha ['tran_valor'], 2, ',', '.' ) . '&lt;/td&gt;
+											        &lt;td&gt;' . $linha ['tran_descricao'] . '&lt;/td&gt;
+											        &lt;td&gt;' . date ( &quot;d/m/Y&quot;, strtotime ( $linha ['tran_data'] ) ) . '&lt;/td&gt;
+													&lt;td&gt;' . date ( 'H:i:s', strtotime ( $linha ['tran_data'] ) ) . '&lt;/td&gt;
+											        &lt;td&gt;' . ucwords ( strtolower ( htmlentities ( $linha ['usua_nome'] ) ) ) . '&lt;/td&gt;
 											    &lt;/tr&gt;';
-			$i++;
-			$tran[] = $linha['tran_id'];
+			$i ++;
+			$tran [] = $linha ['tran_id'];
 		}
 		
-		@$_SESSION['transacao'] = $tran[0] + 1;
-		if (@$_SESSION['transacao'] == 1){
-			@$_SESSION['transacao'] = null;
+		@$_SESSION ['transacao'] = $tran [0] + 1;
+		if (@$_SESSION ['transacao'] == 1) {
+			@$_SESSION ['transacao'] = null;
 		}
 		
-		echo'								&lt;/tbody&gt;
+		echo '								&lt;/tbody&gt;
 										&lt;/table&gt;
 									&lt;/div&gt;
 								&lt;/div&gt;';
 	}
 	
-	public function formBuscarCartao(){
-		
-		echo'		&lt;div class=&quot;cinco colunas&quot;&gt;
-						&lt;form method=&quot;&quot; class=&quot;formulario-organizado&quot; &gt;
-							&lt;input type=&quot;hidden&quot; name=&quot;pagina&quot; value=&quot;guiche&quot; /&gt;
-							&lt;label for=&quot;cartao&quot;&gt;
-								N&amp;uacutemero Cart&amp;atildeo: &lt;input type=&quot;number&quot; name=&quot;cartao&quot; id=&quot;cartao&quot; autofocus&gt;
-							&lt;/label&gt;							
-							&lt;input type=&quot;submit&quot; value=&quot;Pesquisar&quot;&gt;
-						&lt;hr&gt;
-					&lt;/form&gt;';		
-	}
-	
-	public function formInserirValor(){
-		
-		echo'	&lt;form method=&quot;&quot; class=&quot;formulario-organizado&quot; &gt;
+	/**
+	 * Esta fun&ccedil;&atilde;o exibi o formul&aacute;rio para a inser&ccedil;&atilde;o ou estorno dos cr&eacute;ditos,
+	 * al&eacute;m de informar o troco do cliente.
+	 */
+	public function formInserirValor() {
+		echo '	&lt;form method=&quot;&quot; class=&quot;formulario-organizado&quot; &gt;
 					&lt;input type=&quot;hidden&quot; name=&quot;pagina&quot; value=&quot;guiche&quot; /&gt;
 					&lt;label for=&quot;valor&quot;&gt;
 					Valor Comprado: &lt;input type=&quot;number&quot; name=&quot;valor&quot; id=&quot;valor&quot; step=&quot;0.01&quot;&gt;
@@ -116,30 +135,44 @@ class GuicheView{
 					&lt;/label&gt;
 					&lt;hr&gt;
 					&lt;h2&gt;Troco: &lt;output id=&quot;troco&quot;&gt;&lt;/output&gt;&lt;/h2&gt;
-					&lt;input type=&quot;hidden&quot; name=&quot;cartao&quot; value=&quot;'.$_GET['cartao'].'&quot; /&gt;					
+					&lt;input type=&quot;hidden&quot; name=&quot;cartao&quot; value=&quot;' . $_GET ['cartao'] . '&quot; /&gt;					
 					&lt;input type=&quot;submit&quot; value=&quot;Finalizar&quot; class=&quot;botao b-sucesso&quot; name=&quot;finalizar&quot; &gt;
 					&lt;a href=&quot;?pagina=guiche&quot; class=&quot;botao b-erro&quot;&gt;Cancelar&lt;/a&gt;
 				&lt;/form&gt;';
-		
 	}
 	
-	public function formConsulta(Usuario $usuario, Tipo $tipo, Cartao $cartao){
-		echo '	&lt;span&gt;Usuario: '.ucwords(strtolower(htmlentities($usuario-&gt;getNome()))).'&lt;/span&gt;
-				&lt;span&gt;Tipo Usuario: '.$tipo-&gt;getNome().'&lt;/span&gt;
-				&lt;span&gt;Saldo: '.number_format($cartao-&gt;getCreditos(), 2,',','.').'&lt;/span&gt;
-				&lt;span&gt;Valor Credito: '.number_format($tipo-&gt;getValorCobrado(), 2,',','.').'&lt;/span&gt;
+	/**
+	 * Esta fun&ccedil;&atilde;o retorna os dados do Usu&aacute;rio consultado pelo seu cart&atilde;o,
+	 * s&atilde;o informado: O Tipo de Usu&aacute;rio, Seu Nome e Saldo.
+	 *
+	 * @param Usuario $usuario        	
+	 * @param Tipo $tipo        	
+	 * @param Cartao $cartao        	
+	 */
+	public function formConsulta(Usuario $usuario, Tipo $tipo, Cartao $cartao) {
+		echo '	&lt;span&gt;Usuario: ' . ucwords ( strtolower ( htmlentities ( $usuario-&gt;getNome () ) ) ) . '&lt;/span&gt;
+				&lt;span&gt;Tipo Usuario: ' . $tipo-&gt;getNome () . '&lt;/span&gt;
+				&lt;span&gt;Saldo: ' . number_format ( $cartao-&gt;getCreditos (), 2, ',', '.' ) . '&lt;/span&gt;
+				&lt;span&gt;Valor Credito: ' . number_format ( $tipo-&gt;getValorCobrado (), 2, ',', '.' ) . '&lt;/span&gt;
 				&lt;hr&gt;';
 	}
 	
-	public function mensagem($tipo, $texto){
-		//Tipo = -sucesso, -erro, -ajuda
-		echo '	&lt;div class=&quot;alerta-'.$tipo.'&quot;&gt;
+	/**
+	 * Mostra um mesnsagem para o Usu&aacute;rio:
+	 *
+	 * @param string $tipo
+	 *        	Tipo de mensagem: &quot;-sucesso&quot;, &quot;-erro&quot;, &quot;-ajuda&quot;.
+	 * @param string $texto
+	 *        	Mensagem a ser exibida para o Usu&aacute;rio.
+	 */
+	public function mensagem($tipo, $texto) {
+		// Tipo = -sucesso, -erro, -ajuda
+		echo '	&lt;div class=&quot;alerta-' . $tipo . '&quot;&gt;
 				    	&lt;div class=&quot;icone icone-notification ix16&quot;&gt;&lt;/div&gt;
 				    	&lt;div class=&quot;titulo-alerta&quot;&gt;Aten&amp;ccedil&amp;atildeo&lt;/div&gt;
-				    	&lt;div class=&quot;subtitulo-alerta&quot;&gt;'.$texto.'&lt;/div&gt;
+				    	&lt;div class=&quot;subtitulo-alerta&quot;&gt;' . $texto . '&lt;/div&gt;
 				&lt;/div&gt;
 				';
-			
 	}
 }
 

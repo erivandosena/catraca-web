@@ -6,6 +6,12 @@
  * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
  * @package View
  */
+/**
+ * 
+ * Nesta Classe estão contidos os Códigos HTML
+ * responsáveis por gerar os elementos e as telas da página de Usuário.
+ *
+ */
 class UsuarioView {
 	
 	/**
@@ -16,7 +22,7 @@ class UsuarioView {
 	 * 
 	 * $msg_erro : Com a mensagem com informações de erro para o Usuário
 	 * 
-	 * @param boolean $erro        	
+	 * @param boolean $erro 
 	 * @param string $msg_erro        	
 	 */
 	public function mostraFormularioLogin($erro = false, $msg_erro = "") {

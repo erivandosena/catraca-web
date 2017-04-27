@@ -5,17 +5,17 @@
  * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
  * @package View
  */
-class CartaoIsentoView {
+class CartaoIsentoView{
 	
 	public function formBuscaCartao(){
 		echo '				
 				<script>
-  $(document).bind(\'autofocus_ready\', function() {
-    if (!("autofocus" in document.createElement("input"))) {
-      $("#numero_cartao").focus();
-    }
-  });
-</script>
+				  $(document).bind(\'autofocus_ready\', function() {
+				    if (!("autofocus" in document.createElement("input"))) {
+				      $("#numero_cartao").focus();
+				    }
+				  });
+				</script>
 				
 				<div class="borda">
 									<form method="get" action="" class="formulario em-linha" >
@@ -32,26 +32,26 @@ class CartaoIsentoView {
 				
 									</div>';
 	}
-	public function mostraResultadoBuscaDeCartoes($cartoes) {
-		echo '<div class="doze linhas">';
-		echo '<br><h2 class="texto-preto">Busca de CartÃµes:</h2>';
-		echo '</div>';
-		echo '<div class="borda">
-				<table class="tabela borda-vertical zebrada texto-preto">
-				<thead>
-					<tr>
-			            <th>Numero</th>
-			            <th>CrÃ©ditos</th>
-			            <th>Tipo de UsuÃ¡rio</th>
-			            <th>Selecionar</th>
-			        </tr>
-			    </thead>
-			<tbody>';
-		foreach ( $cartoes as $cartao) {
-			$this->mostraLinhaDaBuscaCartao ( $cartao);
-		}
-		echo '</tbody></table></div>';
-	}
+// 	public function mostraResultadoBuscaDeCartoes($cartoes) {
+// 		echo '<div class="doze linhas">';
+// 		echo '<br><h2 class="texto-preto">Busca de CartÃµes:</h2>';
+// 		echo '</div>';
+// 		echo '<div class="borda">
+// 				<table class="tabela borda-vertical zebrada texto-preto">
+// 				<thead>
+// 					<tr>
+// 			            <th>Numero</th>
+// 			            <th>CrÃ©ditos</th>
+// 			            <th>Tipo de UsuÃ¡rio</th>
+// 			            <th>Selecionar</th>
+// 			        </tr>
+// 			    </thead>
+// 			<tbody>';
+// 		foreach ( $cartoes as $cartao) {
+// 			$this->mostraLinhaDaBuscaCartao ( $cartao);
+// 		}
+// 		echo '</tbody></table></div>';
+// 	}
 	public function mostraLinhaDaBuscaCartao(Cartao $cartao) {
 		echo '<tr>';
 		echo '<td>' .  $cartao->getNumero() . '</a></td>';
@@ -60,123 +60,120 @@ class CartaoIsentoView {
 		echo '<td class="centralizado"><a href="?pagina=isento&cartaoselecionado=' . $cartao->getId() . '"><span class="icone-checkmark texto-verde2 botao" title="Selecionar"></span></a></td>';
 		echo '</tr>';
 	}
-	public function mostraCartaoSelecionado(Cartao $cartao){
-		echo '<div class="borda">
-				Nome: ' . $cartao->getNumero() . '
-				<br>Creditos: ' . $cartao->getCreditos() . '
-				<br>Nome do Tipo: ' . $cartao->getTipo()->getNome(). '
-				</div>';
-	}
-	public function formBuscaUsuarios() {
-		echo '					<div class="borda">
-									<form method="get" action="" class="formulario em-linha" >
+// 	public function mostraCartaoSelecionado(Cartao $cartao){
+// 		echo '<div class="borda">
+// 				Nome: ' . $cartao->getNumero() . '
+// 				<br>Creditos: ' . $cartao->getCreditos() . '
+// 				<br>Nome do Tipo: ' . $cartao->getTipo()->getNome(). '
+// 				</div>';
+// 	}
+// 	public function formBuscaUsuarios() {
+// 		echo '					<div class="borda">
+// 									<form method="get" action="" class="formulario em-linha" >
 		
-										<label for="opcoes-1">
-											<object class="rotulo texto-preto">Buscar por: </object>
-											<input type="hidden" name="pagina" value="cartao" />
-											<select name="opcoes-1" id="opcoes-1" class="texto-preto">
-												<option value="1">Nome</option>
+// 										<label for="opcoes-1">
+// 											<object class="rotulo texto-preto">Buscar por: </object>
+// 											<input type="hidden" name="pagina" value="cartao" />
+// 											<select name="opcoes-1" id="opcoes-1" class="texto-preto">
+// 												<option value="1">Nome</option>
 		
-											</select>
-											<input class="texto-preto" type="text" name="nome" id="campo-texto-2" /><br>
-											<input type="submit" />
-										</label>
+// 											</select>
+// 											<input class="texto-preto" type="text" name="nome" id="campo-texto-2" /><br>
+// 											<input type="submit" />
+// 										</label>
 		
-									</form>
-									</div>';
-	}
-	public function formBuscaVinculo() {
-		echo '					<div class="borda">
-									<form method="get" action="" class="formulario em-linha" >
+// 									</form>
+// 									</div>';
+// 	}
+// 	public function formBuscaVinculo() {
+// 		echo '					<div class="borda">
+// 									<form method="get" action="" class="formulario em-linha" >
 	
-										<label for="parametro">Buscar por:</label>
-											<select name="parametro" id="parametro" class="texto-preto">
-												<option value="1">Nome do UsuÃ¡rio</option>
-											</select>';
-		if(isset($_GET['filtro_data']))
-			echo '<input type="hidden" name="filtro_data" value="'.$_GET['filtro_data'].'"/>';
-		echo '		
-											<input class="texto-preto" type="text" name="busca_vinculos" id="busca_vinculos" /><br>
-											<input type="submit" />
+// 										<label for="parametro">Buscar por:</label>
+// 											<select name="parametro" id="parametro" class="texto-preto">
+// 												<option value="1">Nome do UsuÃ¡rio</option>
+// 											</select>';
+// 		if(isset($_GET['filtro_data']))
+// 			echo '<input type="hidden" name="filtro_data" value="'.$_GET['filtro_data'].'"/>';
+// 		echo '		
+// 											<input class="texto-preto" type="text" name="busca_vinculos" id="busca_vinculos" /><br>
+// 											<input type="submit" />
 										
 	
-									</form>
-									</div>';
-	}
-	public function formBuscaVinculoIsencao() {
-		echo '					<div class="borda">
-									<form method="get" action="" class="formulario em-linha" >
+// 									</form>
+// 									</div>';
+// 	}
+// 	public function formBuscaVinculoIsencao() {
+// 		echo '					<div class="borda">
+// 									<form method="get" action="" class="formulario em-linha" >
 	
-										<label for="parametro">Buscar por:</label>
-											<select name="parametro" id="parametro" class="texto-preto">
-												<option value="1">Nome do UsuÃ¡rio</option>
-											</select>';
-		if(isset($_GET['filtro_data_isen']))
-			echo '<input type="hidden" name="filtro_data_isen" value="'.$_GET['filtro_data_isen'].'"/>';
-		echo '
-											<input class="texto-preto" type="text" name="busca_vinculos_isen" id="busca_vinculos_isen" /><br>
-											<input type="submit" />
+// 										<label for="parametro">Buscar por:</label>
+// 											<select name="parametro" id="parametro" class="texto-preto">
+// 												<option value="1">Nome do UsuÃ¡rio</option>
+// 											</select>';
+// 		if(isset($_GET['filtro_data_isen']))
+// 			echo '<input type="hidden" name="filtro_data_isen" value="'.$_GET['filtro_data_isen'].'"/>';
+// 		echo '
+// 											<input class="texto-preto" type="text" name="busca_vinculos_isen" id="busca_vinculos_isen" /><br>
+// 											<input type="submit" />
 	
 	
-									</form>
-									</div>';
-	}
-	public function filtroData(){
+// 									</form>
+// 									</div>';
+// 	}
+// 	public function filtroData(){
 		
-		$dataHoje = date ('Y-m-d') . 'T' . date ( 'H:00:01' );
+// 		$dataHoje = date ('Y-m-d') . 'T' . date ( 'H:00:01' );
 		
-		echo '					<div class="borda">
-									<form method="get" action="" class="formulario em-linha" >
-										<label for="filtro_data">Filtro de Data:</label>
-											<input class="texto-preto" value="'.$dataHoje.'" type="datetime-local" name="filtro_data" id="filtro_data" /><br>';
-		if(isset($_GET['busca_vinculos']))
-			echo '<input type="hidden" name="busca_vinculos" value="'.$_GET['busca_vinculos'].'"/>';
-		echo '
-											<input type="submit" />
-									</form>
-									</div>';
-	}
-	public function filtroDataIsencao(){
+// 		echo '					<div class="borda">
+// 									<form method="get" action="" class="formulario em-linha" >
+// 										<label for="filtro_data">Filtro de Data:</label>
+// 											<input class="texto-preto" value="'.$dataHoje.'" type="datetime-local" name="filtro_data" id="filtro_data" /><br>';
+// 		if(isset($_GET['busca_vinculos']))
+// 			echo '<input type="hidden" name="busca_vinculos" value="'.$_GET['busca_vinculos'].'"/>';
+// 		echo '
+// 											<input type="submit" />
+// 									</form>
+// 									</div>';
+// 	}
+// 	public function filtroDataIsencao(){
 	
-		$dataHoje = date ('Y-m-d') . 'T' . date ( 'H:00:01' );
+// 		$dataHoje = date ('Y-m-d') . 'T' . date ( 'H:00:01' );
 	
-		echo '					<div class="borda">
-									<form method="get" action="" class="formulario em-linha" >
-										<label for="filtro_data_isen">Filtro de Data:</label>
-											<input class="texto-preto" value="'.$dataHoje.'" type="datetime-local" name="filtro_data_isen" id="filtro_data_isen" /><br>';
-		if(isset($_GET['busca_vinculos_isen']))
-			echo '<input type="hidden" name="busca_vinculos_isen" value="'.$_GET['busca_vinculos_isen'].'"/>';
-		echo '
-											<input type="submit" />
-									</form>
-									</div>';
-	}
-	/**
-	 *
-	 * @param array $usuarios        	
-	 */
-	public function mostraResultadoBuscaDeUsuarios($usuarios) {
-		echo '<div class="doze linhas">';
-		echo '<br><h2 class="texto-preto">Resultado da busca:</h2>';
-		echo '</div><div class="borda">
-				<table class="tabela borda-vertical zebrada texto-preto">
-				<thead>
-					<tr>
-											            <th>Nome</th>
-											            <th>CPF</th>
-											            <th>Passaporte</th>
-											            <th>Status Discente</th>
-														<th>Status Servidor</th>
-														<th>Tipo de Usuario</th>
-											            <th>Selecionar</th>
-											        </tr>
-											    </thead>
-												<tbody>';
-		foreach ( $usuarios as $usuario ) {
-			$this->mostraLinhaDaBusca ( $usuario );
-		}
-		echo '</tbody></table></div>';
-	}
+// 		echo '					<div class="borda">
+// 									<form method="get" action="" class="formulario em-linha" >
+// 										<label for="filtro_data_isen">Filtro de Data:</label>
+// 											<input class="texto-preto" value="'.$dataHoje.'" type="datetime-local" name="filtro_data_isen" id="filtro_data_isen" /><br>';
+// 		if(isset($_GET['busca_vinculos_isen']))
+// 			echo '<input type="hidden" name="busca_vinculos_isen" value="'.$_GET['busca_vinculos_isen'].'"/>';
+// 		echo '
+// 											<input type="submit" />
+// 									</form>
+// 									</div>';
+// 	}
+
+// 	public function mostraResultadoBuscaDeUsuarios($usuarios) {
+// 		echo '<div class="doze linhas">';
+// 		echo '<br><h2 class="texto-preto">Resultado da busca:</h2>';
+// 		echo '</div><div class="borda">
+// 				<table class="tabela borda-vertical zebrada texto-preto">
+// 				<thead>
+// 					<tr>
+// 											            <th>Nome</th>
+// 											            <th>CPF</th>
+// 											            <th>Passaporte</th>
+// 											            <th>Status Discente</th>
+// 														<th>Status Servidor</th>
+// 														<th>Tipo de Usuario</th>
+// 											            <th>Selecionar</th>
+// 											        </tr>
+// 											    </thead>
+// 												<tbody>';
+// 		foreach ( $usuarios as $usuario ) {
+// 			$this->mostraLinhaDaBusca ( $usuario );
+// 		}
+// 		echo '</tbody></table></div>';
+// 	}
 	
 	
 	
@@ -320,35 +317,35 @@ class CartaoIsentoView {
 	
 	
 	
-	public function mostraVinculos($lista, $podeRenovar = true){
-		if(!count($lista))
-		{
-			echo '<div class="borda"><p>Nenhum ítem na lista</p></div>';
-			return;
-		}
-		echo '<div class="borda">
-						<table class="tabela borda-vertical zebrada texto-preto">';
-		echo '<tr>
-								<th>Avulso</th>
-								<th>Responsável</th>
-								<th>Tipo</th>
-								<th>Cartão</th>
-								<th>Validade</th>
-								<th>Isento</th>
-				';
+// 	public function mostraVinculos($lista, $podeRenovar = true){
+// 		if(!count($lista))
+// 		{
+// 			echo '<div class="borda"><p>Nenhum ítem na lista</p></div>';
+// 			return;
+// 		}
+// 		echo '<div class="borda">
+// 						<table class="tabela borda-vertical zebrada texto-preto">';
+// 		echo '<tr>
+// 								<th>Avulso</th>
+// 								<th>Responsável</th>
+// 								<th>Tipo</th>
+// 								<th>Cartão</th>
+// 								<th>Validade</th>
+// 								<th>Isento</th>
+// 				';
 		
-		if($podeRenovar)
-			echo '<th>-</th>';
-		echo '
-							</tr>';
-		foreach ( $lista as $vinculo) {
-			$this->mostraLinhaVinculo($vinculo, $podeRenovar);
+// 		if($podeRenovar)
+// 			echo '<th>-</th>';
+// 		echo '
+// 							</tr>';
+// 		foreach ( $lista as $vinculo) {
+// 			$this->mostraLinhaVinculo($vinculo, $podeRenovar);
 			
-		}
-		echo '</table></div>';
+// 		}
+// 		echo '</table></div>';
 		
 	
-	}
+// 	}
 	
 	
 	public function mostraLinhaVinculo(Vinculo $vinculo, $podeRenovar = true){
@@ -374,41 +371,41 @@ class CartaoIsentoView {
 			if($podeRenovar)
 				echo '<td><a href="?pagina=isento&selecionado='.$vinculo->getResponsavel()->getIdBaseExterna().'&vinculo_renovar='.$vinculo->getId().'" class="botao">Renovar</a></td>';
 			
-			
 		}
 			
 		echo '</tr>';
 	}
-	public function formConfirmacaoEnvioVinculo(Usuario $usuario, $numeroCartao, Tipo $tipo){
-		echo '<div class="borda">';
-		echo '<p>Tem certeza que deseja adicionar o cartão '.$numeroCartao.' para o usuario '.$usuario->getNome().' com o tipo '.$tipo->getNome().'? </p>';
-		echo '<form action="" method="post">
-				<input type="submit" class="botao" value="certeza" name="enviar_vinculo"/>
+	
+// 	public function formConfirmacaoEnvioVinculo(Usuario $usuario, $numeroCartao, Tipo $tipo){
+// 		echo '<div class="borda">';
+// 		echo '<p>Tem certeza que deseja adicionar o cartão '.$numeroCartao.' para o usuario '.$usuario->getNome().' com o tipo '.$tipo->getNome().'? </p>';
+// 		echo '<form action="" method="post">
+// 				<input type="submit" class="botao" value="certeza" name="enviar_vinculo"/>
 				
-				</form>';
+// 				</form>';
 		
-		echo '</div>';
-	}
-	public function formConfirmacaoEliminarVinculo(Vinculo $vinculo){
-		echo '<div class="borda">';
-		echo '<p>Tem certeza que deseja eliminar esse vínculo? </p>';
-		echo '<form action="" method="post">
-				<input type="submit" class="botao" value="certeza" name="certeza" />
+// 		echo '</div>';
+// 	}
+// 	public function formConfirmacaoEliminarVinculo(Vinculo $vinculo){
+// 		echo '<div class="borda">';
+// 		echo '<p>Tem certeza que deseja eliminar esse vínculo? </p>';
+// 		echo '<form action="" method="post">
+// 				<input type="submit" class="botao" value="certeza" name="certeza" />
 	
-				</form>';
+// 				</form>';
 	
-		echo '</div>';
-	}
-	public function formConfirmacaoRenovarVinculo(){
-		echo '<div class="borda">';
-		echo '<p>Tem certeza que deseja renovar esse vínculo? </p>';
-		echo '<form action="" method="post">
-				<input type="submit" class="botao" value="certeza" name="certeza" />
+// 		echo '</div>';
+// 	}
+// 	public function formConfirmacaoRenovarVinculo(){
+// 		echo '<div class="borda">';
+// 		echo '<p>Tem certeza que deseja renovar esse vínculo? </p>';
+// 		echo '<form action="" method="post">
+// 				<input type="submit" class="botao" value="certeza" name="certeza" />
 	
-				</form>';
+// 				</form>';
 	
-		echo '</div>';
-	}
+// 		echo '</div>';
+// 	}
 	
 	
 	public function mostraFormAdicionarVinculo($listaDeTipos, $idSelecionado){
@@ -474,13 +471,8 @@ class CartaoIsentoView {
 			echo '<p>Vinculo inativo</p>';
 			echo '<p>InÃ­cio do VÃ­nculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getInicioValidade())).'</p>';
 			echo '<p>Fim do VÃ­nculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getFinalValidade())).'</p>';
-			echo '<a class="botao b-erro" href="?pagina=isento&vinculoselecionado='.$vinculo->getId().'&reativar=1">Reativar Vinculo</a>';
-			
-			
-		}
-		
-		
-		
+			echo '<a class="botao b-erro" href="?pagina=isento&vinculoselecionado='.$vinculo->getId().'&reativar=1">Reativar Vinculo</a>';			
+		}	
 		echo '</div>';
 		
 	}
@@ -519,46 +511,46 @@ class CartaoIsentoView {
 		echo '</div>';
 	}
 	
-	public function formAdicionarIsencao($idSelecionado){
+// 	public function formAdicionarIsencao($idSelecionado){
 		
-		$daqui3Meses = date ( 'Y-m-d', strtotime ( "+90 days" ) ) . 'T' . date ( 'H:00:01' );
-		$hoje = date ('Y-m-d') . 'T' . date ( 'H:00:01' );
+// 		$daqui3Meses = date ( 'Y-m-d', strtotime ( "+90 days" ) ) . 'T' . date ( 'H:00:01' );
+// 		$hoje = date ('Y-m-d') . 'T' . date ( 'H:00:01' );
 		
 		
 		
-		echo '<div class="borda">
-				<form method="post" action="" class="formulario sequencial texto-preto" >
+// 		echo '<div class="borda">
+// 				<form method="post" action="" class="formulario sequencial texto-preto" >
 					
-						    <label for="isen_inicio">Início:</label>
-						         <input id="isen_inicio" type="datetime-local" name="isen_inicio" value="' . $hoje . '" />
-				    	    <label for="isen_fim">Fim:</label>
-						         <input id="isen_fim" type="datetime-local" name="isen_fim" value="' . $daqui3Meses . '" />
-							<input type="hidden" name="id_card"  value="' . $idSelecionado . '"/>
-			   <br> <br>	<input  type="submit"  name="salve_isencao" value="Salvar"/>
-			</form>
-			</div>';
+// 						    <label for="isen_inicio">Início:</label>
+// 						         <input id="isen_inicio" type="datetime-local" name="isen_inicio" value="' . $hoje . '" />
+// 				    	    <label for="isen_fim">Fim:</label>
+// 						         <input id="isen_fim" type="datetime-local" name="isen_fim" value="' . $daqui3Meses . '" />
+// 							<input type="hidden" name="id_card"  value="' . $idSelecionado . '"/>
+// 			   <br> <br>	<input  type="submit"  name="salve_isencao" value="Salvar"/>
+// 			</form>
+// 			</div>';
 		
-	}
+// 	}
 	
-	public function formAdicionarCreditos($idSelecionado){
+// 	public function formAdicionarCreditos($idSelecionado){
 	
-		$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'H:00:01' );
-		$hoje = date ('Y-m-d') . 'T' . date ( 'H:00:01' );
+// 		$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'H:00:01' );
+// 		$hoje = date ('Y-m-d') . 'T' . date ( 'H:00:01' );
 	
 	
 	
-		echo '<div class="borda">
-				<form method="post" action="" class="formulario sequencial texto-preto" >
+// 		echo '<div class="borda">
+// 				<form method="post" action="" class="formulario sequencial texto-preto" >
 			
 						   
-				    	    <label for="valor_creditos">Valor A Adicionar:</label>
-						         <input id="valor_creditos" type="number"  max="100"  name="valor_creditos" step="0.01" value="1.6" />
-							<input type="hidden" name="id_card"  value="' . $idSelecionado . '"/>
-			   <br> <br>	<input  type="submit"  name="salve_creditos" value="Salvar"/>
-			</form>
-			</div>';
+// 				    	    <label for="valor_creditos">Valor A Adicionar:</label>
+// 						         <input id="valor_creditos" type="number"  max="100"  name="valor_creditos" step="0.01" value="1.6" />
+// 							<input type="hidden" name="id_card"  value="' . $idSelecionado . '"/>
+// 			   <br> <br>	<input  type="submit"  name="salve_creditos" value="Salvar"/>
+// 			</form>
+// 			</div>';
 	
-	}
+// 	}
 	
 }
 

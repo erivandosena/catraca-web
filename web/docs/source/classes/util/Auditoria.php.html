@@ -43,19 +43,16 @@
  */
 
 /**
- * 
- * 
- * 
  * Como usar
- * Para come&ccedil;ar a usar chame o metodo est&aacute;tico da seguinte forma: 
- * 
+ * Para come&ccedil;ar a usar chame o metodo est&aacute;tico da seguinte forma:
+ *
  * Auditoria::criarTabela(new PDO(&quot;pgsql:host=localhost dbname=nome_do_banco user=usuario_do_banco password=senhaDoBanco&quot;));
- * 
+ *
  * Ap&oacute;s a tabela criada
- * Inclua a classe auditoria no arquivo PHP da pagina que deseja auditar. 
- * 
+ * Inclua a classe auditoria no arquivo PHP da pagina que deseja auditar.
+ *
  * $auditoria1 = new Auditoria(new PDO(&quot;pgsql:host=localhost dbname=nome_do_banco user=usuario_do_banco password=senhaDoBanco&quot;));
- * 
+ *
  * $auditoria1-&gt;cadastrar(12);//Ou $auditoria1-&gt;cadastrar(12, &quot;Alterando tabela endereco&quot;);
  */
 class Auditoria {
@@ -85,26 +82,23 @@ class Auditoria {
 				usua_id integer,  audi_observacao character varying(200),  CONSTRAINT auditoria_pkey PRIMARY KEY (audi_id));&quot; );
 	}
 	public static function mostrar(PDO $conexao, $idUsuario = null, $dataInicial = null, $dataFinal = null) {
-		
 		$filtro = &quot;&quot;;
-		if($dataInicial != null &amp;&amp; $dataFinal != null &amp;&amp; $idUsuario != null){
-			$dataInicial = date(&quot;Y-m-d :h:i:s&quot;, strtotime($dataInicial));
-			$dataFinal= date(&quot;Y-m-d H:i:s&quot;, strtotime($dataFinal));
-			$idUsuario = intval($idUsuario);
+		if ($dataInicial != null &amp;&amp; $dataFinal != null &amp;&amp; $idUsuario != null) {
+			$dataInicial = date ( &quot;Y-m-d :h:i:s&quot;, strtotime ( $dataInicial ) );
+			$dataFinal = date ( &quot;Y-m-d H:i:s&quot;, strtotime ( $dataFinal ) );
+			$idUsuario = intval ( $idUsuario );
 			$filtro = &quot;Where auditoria.usua_id = $idUsuario AND audi_data Between '$dataInicial' AND '$dataFinal'&quot;;
-			
 		}
 		$sql = &quot;SELECT * FROM auditoria 
 				INNER JOIN usuario 
 				ON auditoria.usua_id = usuario.usua_id $filtro
 				ORDER BY audi_id DESC LIMIT 3000&quot;;
-
+		
 		$result = $conexao-&gt;query ( $sql );
 		echo '&lt;table border=&quot;1&quot;&gt;';
 		echo '&lt;tr&gt;&lt;th&gt;Nome&lt;/th&gt;&lt;th&gt;Pagina&lt;/th&gt;&lt;th&gt;Data e Hora&lt;/th&gt;&lt;th&gt;Nivel de Acesso&lt;/th&gt;&lt;/tr&gt;';
 		foreach ( $result as $linha ) {
-			echo '&lt;tr&gt;&lt;td&gt;'.$linha ['usua_nome'].'&lt;/td&gt;&lt;td&gt;'.$linha ['audi_pagina'] .'&lt;/td&gt;&lt;td&gt;'.date ( &quot;d/m/Y H:i:s&quot;, strtotime ( $linha ['audi_data'] ) ).'&lt;/td&gt;&lt;td&gt;'.$linha['usua_nivel'].'&lt;/td&gt;&lt;/tr&gt;';
-			
+			echo '&lt;tr&gt;&lt;td&gt;' . $linha ['usua_nome'] . '&lt;/td&gt;&lt;td&gt;' . $linha ['audi_pagina'] . '&lt;/td&gt;&lt;td&gt;' . date ( &quot;d/m/Y H:i:s&quot;, strtotime ( $linha ['audi_data'] ) ) . '&lt;/td&gt;&lt;td&gt;' . $linha ['usua_nivel'] . '&lt;/td&gt;&lt;/tr&gt;';
 		}
 		echo '&lt;/table&gt;';
 	}

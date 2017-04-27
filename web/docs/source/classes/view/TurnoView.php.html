@@ -36,16 +36,22 @@
     <body>
         <pre class="brush: php">&lt;?php
 /**
+ * Nesta Classe est&atilde;o contidos os C&oacute;digos HTML, respons&aacute;veis pela gera&ccedil;&atilde;o das Telas.
  * @author Jefferson Uchoa Ponte
  * @version 1.0
  * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
  * @package View
  */
-
-class TurnoView{
+/**
+ * Nesta Classe est&atilde;o contidos os C&oacute;digos HTML
+ * respons&aacute;veis por gerar os elementos e as telas da p&aacute;gina Turno.
+ */
+class TurnoView {
 	
-	
-	public function mostraFormulario(){
+	/**
+	 * Gera um formul&aacute;rio para inserir um novo Turno.
+	 */
+	public function mostraFormulario() {
 		echo '
 			&lt;form action=&quot;&quot; method=&quot;post&quot;&gt;
 				&lt;fieldset&gt;
@@ -56,32 +62,53 @@ class TurnoView{
 					&lt;input name=&quot;turno_hora_final&quot; type=time min=9:00 max=22:00&gt;
 					&lt;br&gt;
 					&lt;input type=&quot;submit&quot; value=&quot;Enviar&quot; /&gt;
-			&lt;/fieldset&gt;
-	&lt;/form&gt;';
-	}
-	public function mostraLista($lista){
-		foreach($lista as $elemento){
-			echo 'ID: '.$elemento-&gt;getId().'&lt;br&gt;';
-			echo 'descricao: '.$elemento-&gt;getDescricao().'&lt;br&gt; ';
-			echo '&lt;a href=&quot;?delete_unidade=1&amp;unid_id='.$elemento-&gt;getId().'&quot;&gt; Deletar&lt;/a&gt;&lt;br&gt;';
-		}
-		
-	}
-	public function cadastroSucesso(){
-		echo &quot;Inserido com sucesso&quot;;
-	}
-	public function deleteSucesso(){
-		echo &quot;Deletado com sucesso&quot;;
-	}
-	public function deleteFracasso(){
-		echo &quot;Erro ao tentar deletar&quot;;
-	}
-	public function cadastroFracasso(){
-		echo &quot;Erro ao tentar inserir&quot;;
+				&lt;/fieldset&gt;
+			&lt;/form&gt;';
 	}
 	
+	/**
+	 * Exibe os dados referentes aos Turnos Cadastrados,
+	 * &eacute; exibido tambem um bot&atilde;o para uma poss&iacute;vel exclus&atilde;o do Turno.
+	 *
+	 * @param array $lista
+	 *        	Array com os dados dos Turnos.
+	 */
+	public function mostraLista($lista) {
+		foreach ( $lista as $elemento ) {
+			echo 'ID: ' . $elemento-&gt;getId () . '&lt;br&gt;';
+			echo 'descricao: ' . $elemento-&gt;getDescricao () . '&lt;br&gt; ';
+			echo '&lt;a href=&quot;?delete_unidade=1&amp;unid_id=' . $elemento-&gt;getId () . '&quot;&gt; Deletar&lt;/a&gt;&lt;br&gt;';
+		}
+	}
+	
+	/**
+	 * Mostra mensagem de Cadastro com Sucesso.
+	 */
+	public function cadastroSucesso() {
+		echo &quot;Inserido com sucesso&quot;;
+	}
+	
+	/**
+	 * Mostra mensagem de Exclus&atilde;o com Sucesso.
+	 */
+	public function deleteSucesso() {
+		echo &quot;Deletado com sucesso&quot;;
+	}
+	
+	/**
+	 * Mostra mensagem de Erro ao Deletar.
+	 */
+	public function deleteFracasso() {
+		echo &quot;Erro ao tentar deletar&quot;;
+	}
+	
+	/**
+	 * Mostra mensagem de Erro ao Cadastrar.
+	 */
+	public function cadastroFracasso() {
+		echo &quot;Erro ao tentar inserir&quot;;
+	}
 }
-
 
 ?&gt;</pre>
         <script type="text/javascript">

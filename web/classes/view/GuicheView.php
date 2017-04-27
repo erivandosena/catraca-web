@@ -1,9 +1,16 @@
 <?php
 /**
+ * Nesta Classe estão contidos os Códigos HTML, responsáveis pela geração das Telas.
  * @author Alan Cleber Morais Gomes
  * @version 1.0
  * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
  * @package View
+ */
+/**
+ * 
+ * Nesta Classe estão contidos os Códigos HTML
+ * responsáveis por gerar os elementos e as telas do Guichê.
+ *
  */
 class GuicheView {
 	
