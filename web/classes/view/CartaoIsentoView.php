@@ -7,9 +7,11 @@
  */
 class CartaoIsentoView{
 	
+	/**
+	 * Função que gera o Formulário para busca pelo número do cartão na página de cartão isento.
+	 */
 	public function formBuscaCartao(){
-		echo '				
-				<script>
+		echo '	<script>
 				  $(document).bind(\'autofocus_ready\', function() {
 				    if (!("autofocus" in document.createElement("input"))) {
 				      $("#numero_cartao").focus();
@@ -32,26 +34,41 @@ class CartaoIsentoView{
 				
 									</div>';
 	}
-// 	public function mostraResultadoBuscaDeCartoes($cartoes) {
-// 		echo '<div class="doze linhas">';
-// 		echo '<br><h2 class="texto-preto">Busca de CartÃµes:</h2>';
-// 		echo '</div>';
-// 		echo '<div class="borda">
-// 				<table class="tabela borda-vertical zebrada texto-preto">
-// 				<thead>
-// 					<tr>
-// 			            <th>Numero</th>
-// 			            <th>CrÃ©ditos</th>
-// 			            <th>Tipo de UsuÃ¡rio</th>
-// 			            <th>Selecionar</th>
-// 			        </tr>
-// 			    </thead>
-// 			<tbody>';
-// 		foreach ( $cartoes as $cartao) {
-// 			$this->mostraLinhaDaBuscaCartao ( $cartao);
-// 		}
-// 		echo '</tbody></table></div>';
-// 	}
+	
+	/**
+	 * Função utilizada para mostar uma pesquisa realizada pelo número do cartão.
+	 * Chama a função mostraLinhaDaBuscaCartao dentro da mesma Classe,
+	 * contendo o restante da tabela com os dados dos usuário.
+	 *
+	 * @param array $cartoes
+	 */
+	public function mostraResultadoBuscaDeCartoes($cartoes) {
+		echo '<div class="doze linhas">';
+		echo '<br><h2 class="texto-preto">Busca de CartÃµes:</h2>';
+		echo '</div>';
+		echo '<div class="borda">
+				<table class="tabela borda-vertical zebrada texto-preto">
+				<thead>
+					<tr>
+			            <th>Numero</th>
+			            <th>Créditos</th>
+			            <th>Tipo de UsuÃ¡rio</th>
+			            <th>Selecionar</th>
+			        </tr>
+			    </thead>
+			<tbody>';
+		foreach ( $cartoes as $cartao) {
+			$this->mostraLinhaDaBuscaCartao ( $cartao);
+		}
+		echo '</tbody></table></div>';
+	}
+
+	/**
+	 * Função ulilizada para gerar uma tabela com a pesquisa
+	 * realizada com o número do cartão.
+	 *
+	 * @param Cartao $cartao
+	 */
 	public function mostraLinhaDaBuscaCartao(Cartao $cartao) {
 		echo '<tr>';
 		echo '<td>' .  $cartao->getNumero() . '</a></td>';
@@ -454,30 +471,33 @@ class CartaoIsentoView{
 		echo '<div class="borda">';
 		if($vinculo->isAvulso())
 			echo '<p>Avulso</p>';
-		echo '<p>ResponsÃ¡vel: '.ucwords(strtolower($vinculo->getResponsavel()->getNome())).'</p>';
-		echo '<p>CartÃ£o: '.$vinculo->getCartao()->getNumero().'</p>';
-		echo '<p>CrÃ©ditos no CartÃ£o: R$' . number_format($vinculo->getCartao()->getCreditos(), 2, ',', '.').'</p>';
-		echo '<p>Tipo de VÃ­nculo: '.$vinculo->getCartao()->getTipo()->getNome().'</p>';
+		echo '<p>Responsável: '.ucwords(strtolower($vinculo->getResponsavel()->getNome())).'</p>';
+		echo '<p>Cartõo: '.$vinculo->getCartao()->getNumero().'</p>';
+		echo '<p>Créditos no Cartão: R$' . number_format($vinculo->getCartao()->getCreditos(), 2, ',', '.').'</p>';
+		echo '<p>Tipo de Vínculo: '.$vinculo->getCartao()->getTipo()->getNome().'</p>';
 		echo '<p>RefeiÃ§Ãµes Por Turno: '.$vinculo->getQuantidadeDeAlimentosPorTurno().'</p>';
 		
 		if($vinculo->isActive()){
 			echo '<p>Vinculo ativo</p>';
-			echo '<p>InÃ­cio do VÃ­nculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getInicioValidade())).'</p>';
-			echo '<p>Fim do VÃ­nculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getFinalValidade())).'</p>';
+			echo '<p>Início do Vánculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getInicioValidade())).'</p>';
+			echo '<p>Fim do Vínculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getFinalValidade())).'</p>';
 			
 			echo '<a class="botao b-erro" href="?pagina=isento&vinculoselecionado='.$vinculo->getId().'&deletar=1">Eliminar Vinculo</a>';
 		}
 		else{
 			echo '<p>Vinculo inativo</p>';
-			echo '<p>InÃ­cio do VÃ­nculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getInicioValidade())).'</p>';
-			echo '<p>Fim do VÃ­nculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getFinalValidade())).'</p>';
+			echo '<p>Início do Vínculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getInicioValidade())).'</p>';
+			echo '<p>Fim do Vínculo: '.date('d/m/Y H:i:s', strtotime($vinculo->getFinalValidade())).'</p>';
 			echo '<a class="botao b-erro" href="?pagina=isento&vinculoselecionado='.$vinculo->getId().'&reativar=1">Reativar Vinculo</a>';			
 		}	
 		echo '</div>';
 		
 	}
 	
-	
+	/**
+	 * Formulário contendo os dados do Vínculo Isento a ser inserido.
+	 * @param int $idSelecionado
+	 */
 	public function mostraIsencaoDoVinculo(Vinculo $vinculo){
 		echo '<div class="doze linhas">';
 		echo '<br><h2 class="texto-preto">Vinculo Selecionado:</h2>';
@@ -489,20 +509,20 @@ class CartaoIsentoView{
 			$tempoB = strtotime($vinculo->getIsencao()->getDataFinal());
 			$tempoAgora = time();
 			if($tempoAgora > $tempoA && $tempoAgora < $tempoB){
-				echo '<p>IsenÃ§Ã£o ativa</p>';
-				echo '<p>InÃ­cio da IsenÃ§Ã£o: '.date('d/m/Y H:i:s', strtotime($vinculo->getIsencao()->getDataDeInicio())).'</p>';
-				echo '<p>Fim da IsenÃ§Ã£o: '.date('d/m/Y H:i:s', strtotime($vinculo->getIsencao()->getDataFinal())).'</p>';
-				echo '<a href="?pagina=isento&vinculoselecionado='.$vinculo->getId().'&delisencao=1">Eliminar IsenÃ§Ã£o</a>';
+				echo '<p>Isenção ativa</p>';
+				echo '<p>Início da Isenção: '.date('d/m/Y H:i:s', strtotime($vinculo->getIsencao()->getDataDeInicio())).'</p>';
+				echo '<p>Fim da Isenção: '.date('d/m/Y H:i:s', strtotime($vinculo->getIsencao()->getDataFinal())).'</p>';
+				echo '<a href="?pagina=isento&vinculoselecionado='.$vinculo->getId().'&delisencao=1">Eliminar Isenção</a>';
 				
 			}
 			else if($tempoAgora < $tempoB){
-				echo '<p>IsenÃ§Ã£o no Futuro</p>';
-				echo '<p>InÃ­cio da IsenÃ§Ã£o: '.date('d/m/Y H:i:s', strtotime($vinculo->getIsencao()->getDataDeInicio())).'</p>';
-				echo '<p>Fim da IsenÃ§Ã£o: '.date('d/m/Y H:i:s', strtotime($vinculo->getIsencao()->getDataFinal())).'</p>';
-				echo '<p><a href="?pagina=isento&vinculoselecionado='.$vinculo->getId().'&delisencao=1">Eliminar IsenÃ§Ã£o</a></p>';
+				echo '<p>Isenção no Futuro</p>';
+				echo '<p>InÃ­cio da Isenção: '.date('d/m/Y H:i:s', strtotime($vinculo->getIsencao()->getDataDeInicio())).'</p>';
+				echo '<p>Fim da Isenção: '.date('d/m/Y H:i:s', strtotime($vinculo->getIsencao()->getDataFinal())).'</p>';
+				echo '<p><a href="?pagina=isento&vinculoselecionado='.$vinculo->getId().'&delisencao=1">Eliminar Isenção</a></p>';
 			}else
 			{
-				echo '<p>IsenÃ§Ã£o inativa</p>';
+				echo '<p>Isenção inativa</p>';
 			}
 				
 			
@@ -511,26 +531,28 @@ class CartaoIsentoView{
 		echo '</div>';
 	}
 	
-// 	public function formAdicionarIsencao($idSelecionado){
+	/**
+	 * Formulário contendo os dados do Vínculo Isento a ser inserido.
+	 * @param int $idSelecionado
+	 */
+	public function formAdicionarIsencao($idSelecionado){
 		
-// 		$daqui3Meses = date ( 'Y-m-d', strtotime ( "+90 days" ) ) . 'T' . date ( 'H:00:01' );
-// 		$hoje = date ('Y-m-d') . 'T' . date ( 'H:00:01' );
+		$daqui3Meses = date ( 'Y-m-d', strtotime ( "+90 days" ) ) . 'T' . date ( 'H:00:01' );
+		$hoje = date ('Y-m-d') . 'T' . date ( 'H:00:01' );		
 		
-		
-		
-// 		echo '<div class="borda">
-// 				<form method="post" action="" class="formulario sequencial texto-preto" >
+		echo '<div class="borda">
+				<form method="post" action="" class="formulario sequencial texto-preto" >
 					
-// 						    <label for="isen_inicio">Início:</label>
-// 						         <input id="isen_inicio" type="datetime-local" name="isen_inicio" value="' . $hoje . '" />
-// 				    	    <label for="isen_fim">Fim:</label>
-// 						         <input id="isen_fim" type="datetime-local" name="isen_fim" value="' . $daqui3Meses . '" />
-// 							<input type="hidden" name="id_card"  value="' . $idSelecionado . '"/>
-// 			   <br> <br>	<input  type="submit"  name="salve_isencao" value="Salvar"/>
-// 			</form>
-// 			</div>';
+						    <label for="isen_inicio">Início:</label>
+						         <input id="isen_inicio" type="datetime-local" name="isen_inicio" value="' . $hoje . '" />
+				    	    <label for="isen_fim">Fim:</label>
+						         <input id="isen_fim" type="datetime-local" name="isen_fim" value="' . $daqui3Meses . '" />
+							<input type="hidden" name="id_card"  value="' . $idSelecionado . '"/>
+			   <br> <br>	<input  type="submit"  name="salve_isencao" value="Salvar"/>
+			</form>
+			</div>';
 		
-// 	}
+	}
 	
 // 	public function formAdicionarCreditos($idSelecionado){
 	

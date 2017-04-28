@@ -19,8 +19,8 @@ class UploadArquivoController{
 				break;
 		}
 	}
+	
 	public function receber(){
-
 		define('UPLOAD_DIR', 'fotos/');
 		$img = $_POST['img64'];
 		$img = str_replace('data:image/png;base64,', '', $img);

@@ -37,13 +37,14 @@ class CartaoView {
 	
 	/**
 	 * Função utilizada para mostar uma pesquisa realizada pelo número do cartão.
-	 * Recebe a função mostraLinhaDaBuscaCartao dentro da mesma Classe, contendo uma tabela com os dados dos usuário.
+	 * Chama a função mostraLinhaDaBuscaCartao dentro da mesma Classe,
+	 * contendo o restante da tabela com os dados dos usuário.
 	 *
 	 * @param array $cartoes        	
 	 */
 	public function mostraResultadoBuscaDeCartoes($cartoes) {
 		echo '	<div class="doze linhas">';
-		echo '		<br><h2 class="texto-preto">Busca de CartÃµes:</h2>';
+		echo '		<br><h2 class="texto-preto">Busca de Cartões:</h2>';
 		echo '	</div>';
 		echo '	<div class="borda">
 					<table class="tabela borda-vertical zebrada texto-preto">
@@ -67,7 +68,6 @@ class CartaoView {
 	/**
 	 * Função ulilizada para gerar uma tabela com a pesquisa
 	 * realizada com o número do cartão.
-	 * está tabela contem um botão para seleção do usuário.
 	 *
 	 * @param Cartao $cartao        	
 	 */
@@ -82,7 +82,7 @@ class CartaoView {
 	
 	/**
 	 * Exibi o cartão selecionado.
-	 * 
+	 *
 	 * @param Cartao $cartao        	
 	 */
 	public function mostraCartaoSelecionado(Cartao $cartao) {
@@ -118,7 +118,6 @@ class CartaoView {
 	}
 	
 	/**
-	 * 
 	 */
 	public function formBuscaVinculo() {
 		echo '	<div class="borda">
@@ -136,7 +135,6 @@ class CartaoView {
 	}
 	
 	/**
-	 * 
 	 */
 	public function formBuscaVinculoIsencao() {
 		echo '	<div class="borda">
@@ -154,10 +152,9 @@ class CartaoView {
 	}
 	
 	/**
-	 * 
 	 */
 	public function filtroData() {
-		$dataHoje = date ( 'Y-m-d' ) . 'T' . date ( 'H:00:01' );		
+		$dataHoje = date ( 'Y-m-d' ) . 'T' . date ( 'H:00:01' );
 		echo '	<div class="borda">
 					<form method="get" action="" class="formulario em-linha" >
 						<label for="filtro_data">Filtro de Data:</label>
@@ -170,10 +167,9 @@ class CartaoView {
 	}
 	
 	/**
-	 * 
 	 */
 	public function filtroDataIsencao() {
-		$dataHoje = date ( 'Y-m-d' ) . 'T' . date ( 'H:00:01' );		
+		$dataHoje = date ( 'Y-m-d' ) . 'T' . date ( 'H:00:01' );
 		echo '	<div class="borda">
 					<form method="get" action="" class="formulario em-linha" >
 						<label for="filtro_data_isen">Filtro de Data:</label>
@@ -186,8 +182,12 @@ class CartaoView {
 	}
 	
 	/**
+	 * Exibe as informações do Usuario consultado através do nome.
+	 * Chama a função mostraLinhaDaBusca() dentro da mesma Classe,
+	 * contendo o restante tabela com os dados dos usuário.
 	 *
-	 * @param array $usuarios        	
+	 * @param array $usuarios
+	 *        	Usuarios Consultados.
 	 */
 	public function mostraResultadoBuscaDeUsuarios($usuarios) {
 		echo '	<h2 class="titulo">Resultado da busca:</h2>';
@@ -215,8 +215,10 @@ class CartaoView {
 	}
 	
 	/**
-	 * 
-	 * @param Usuario $usuario
+	 * Função ulilizada para gerar uma tabela com a pesquisa
+	 * realizada com o nome do Usuario.
+	 *
+	 * @param Usuario $usuario        	
 	 */
 	public function mostraLinhaDaBusca(Usuario $usuario) {
 		echo '	<tr>';
@@ -230,6 +232,11 @@ class CartaoView {
 		echo '	</tr>';
 	}
 	
+	/**
+	 * Exibi os dados do usuário selecionado, depois da pesquisa pelo nome.
+	 *
+	 * @param Usuario $usuario        	
+	 */
 	public function mostraSelecionado(Usuario $usuario) {
 		echo '	<div class="doze colunas borda">';
 		
@@ -243,9 +250,9 @@ class CartaoView {
 							<div class="borda-foto">								
 								<div class="foto-salva">';
 			
-			if (file_exists ( 'fotos/' . $_GET ['selecionado'] . '.png' )) {				
+			if (file_exists ( 'fotos/' . $_GET ['selecionado'] . '.png' )) {
 				echo '			<img src="fotos/' . $_GET ['selecionado'] . '.png" />';
-			} else {				
+			} else {
 				echo '			<img src="img/camera.png" />';
 			}
 			
@@ -284,7 +291,7 @@ class CartaoView {
 					    	</div>
 					    </div>	
 					</div>
-					<hr class="um"/>';			
+					<hr class="um"/>';
 		}
 		
 		echo '<div class="doze colunas">				
@@ -334,6 +341,15 @@ class CartaoView {
 				</div>				
 				</div>';
 	}
+	
+	/**
+	 * Exibi uma tabela com os vinculos do usuário selecionado.
+	 * Chama a função mostraLinhaVinculo() dentro da mesma Classe,
+	 * contendo o retante da tabela com os dados referentes aos vincunlos do usuário selecionado.
+	 *
+	 * @param array $lista        	
+	 * @param string $podeRenovar        	
+	 */
 	public function mostraVinculos($lista, $podeRenovar = true) {
 		if (! count ( $lista )) {
 			echo '<div class="borda"><p>Nenhum ítem na lista</p></div>';
@@ -359,6 +375,15 @@ class CartaoView {
 		}
 		echo '</table></div>';
 	}
+	
+	/**
+	 * Gera uma tabela com infomações dos vinculos.
+	 *
+	 * @param Vinculo $vinculo
+	 *        	Vinculos do Usuário.
+	 * @param string $podeRenovar
+	 *        	Verifica se o vinculo é passivel de renovação.
+	 */
 	public function mostraLinhaVinculo(Vinculo $vinculo, $podeRenovar = true) {
 		echo '<tr>';
 		if ($vinculo->isAvulso ())
@@ -385,16 +410,31 @@ class CartaoView {
 		
 		echo '</tr>';
 	}
+	
+	/**
+	 * Formulário para confirmação de inclusão de vinculo do cartão ao usuário.
+	 *
+	 * @param Usuario $usuario        	
+	 * @param string $numeroCartao        	
+	 * @param Tipo $tipo        	
+	 */
 	public function formConfirmacaoEnvioVinculo(Usuario $usuario, $numeroCartao, Tipo $tipo) {
-		echo '<div class="borda doze colunas">';
-		echo '<p>Tem certeza que deseja adicionar o cartão ' . $numeroCartao . ' para o usuario ' . $usuario->getNome () . ' com o tipo ' . $tipo->getNome () . '? </p>';
-		echo '<form action="" method="post">
-				<input type="submit" class="botao" value="certeza" name="enviar_vinculo"/>
+		echo '	<div class="borda doze colunas">';
+		echo '		<p>Tem certeza que deseja adicionar o cartão ' . $numeroCartao . ' para o usuario ' . $usuario->getNome () . ' com o tipo ' . $tipo->getNome () . '? </p>';
+		echo '			<form action="" method="post">
+							<input type="submit" class="botao" value="certeza" name="enviar_vinculo"/>
 				
-				</form>';
+				<		/form>';
 		
 		echo '</div>';
 	}
+	
+	/**
+	 * Formulário para confirmação de cancelamento do vinculo do cartão ao usuário.
+	 * Após a confimação o vinculo não será excluído, será tornado inválido.
+	 *
+	 * @param Vinculo $vinculo        	
+	 */
 	public function formConfirmacaoEliminarVinculo(Vinculo $vinculo) {
 		echo '	<div class="borda doze colunas">';
 		$this->formMensagem ( "-ajuda", "Deseja eliminar esse vínculo?" );
@@ -403,12 +443,25 @@ class CartaoView {
 					</form>
 				</div>';
 	}
+	
+	/**
+	 * Formulário para confirmação de renovação de vínculo.
+	 */
 	public function formConfirmacaoRenovarVinculo() {
 		$this->formMensagem ( "-ajuda", "Tem certeza que deseja renovar esse vínculo?" );
 		echo '	<form id="form-confirma-cartao" action="" method="post">
 					<input type="submit" class="botao" value="certeza" name="certeza" />	
 				</form>';
 	}
+	
+	/**
+	 * Formulário contendo os dados do vínculo a ser inserido.
+	 *
+	 * @param array $listaDeTipos
+	 *        	Tipo de Vinculos possíveis.
+	 * @param int $idSelecionado
+	 *        	Id do usuário a receber o vinculo.
+	 */
 	public function mostraFormAdicionarVinculo($listaDeTipos, $idSelecionado) {
 		$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'H:00:01' );
 		$dataHoje = date ( 'Y-m-d' ) . 'T' . date ( 'H:00:01' );
@@ -423,8 +476,7 @@ class CartaoView {
 				    }
 				  });
 				</script>';
-		echo '<div class="doze colunas borda">
-				
+		echo '<div class="doze colunas borda">				
 				<form method="get" action="" class="formulario texto-preto" >
 						    <label for="numero_cartao2">Número do Cartão</label>
 								<input type="text" name="numero_cartao2" id="numero_cartao2" autofocus/>
@@ -444,9 +496,21 @@ class CartaoView {
 			</form>
 			</div>';
 	}
+	
+	/**
+	 * Exibe uma mensagem de sucesso na inclusão do vinculo.
+	 *
+	 * @param string $mensagem        	
+	 */
 	public function mostraSucesso($mensagem) {
 		echo '<div class="borda"><p>' . $mensagem . '</p></div>';
 	}
+	
+	/**
+	 * Exibe informações detalhada do Vínculo.
+	 *
+	 * @param Vinculo $vinculo        	
+	 */
 	public function mostrarVinculoDetalhe(Vinculo $vinculo) {
 		echo '<div class="doze linhas">';
 		echo '<br><h2 class="texto-preto">Vinculo Selecionado:</h2>';
@@ -475,6 +539,11 @@ class CartaoView {
 		
 		echo '</div>';
 	}
+	
+	/**
+	 *  Exibe informações detalhada do Vínculo Isento.
+	 * @param Vinculo $vinculo
+	 */
 	public function mostraIsencaoDoVinculo(Vinculo $vinculo) {
 		echo '<div class="doze linhas">';
 		echo '<br><h2 class="texto-preto">Vinculo Selecionado:</h2>';
@@ -490,8 +559,8 @@ class CartaoView {
 				echo '<p>Fim da Isençãoo: ' . date ( 'd/m/Y H:i:s', strtotime ( $vinculo->getIsencao ()->getDataFinal () ) ) . '</p>';
 				echo '<a href="?pagina=cartao&vinculoselecionado=' . $vinculo->getId () . '&delisencao=1">Eliminar Isenção</a>';
 			} else if ($tempoAgora < $tempoB) {
-				echo '<p>IsenÃ§Ã£o no Futuro</p>';
-				echo '<p>InÃ­cio da Isenção: ' . date ( 'd/m/Y H:i:s', strtotime ( $vinculo->getIsencao ()->getDataDeInicio () ) ) . '</p>';
+				echo '<p>Isenção no Futuro</p>';
+				echo '<p>Inicio da Isenção: ' . date ( 'd/m/Y H:i:s', strtotime ( $vinculo->getIsencao ()->getDataDeInicio () ) ) . '</p>';
 				echo '<p>Fim da Isenção: ' . date ( 'd/m/Y H:i:s', strtotime ( $vinculo->getIsencao ()->getDataFinal () ) ) . '</p>';
 				echo '<p><a href="?pagina=cartao&vinculoselecionado=' . $vinculo->getId () . '&delisencao=1">Eliminar Isenção</a></p>';
 			} else {
@@ -500,6 +569,11 @@ class CartaoView {
 		}
 		echo '</div>';
 	}
+	
+	/**
+	 * Formulário contendo os dados do Vínculo Isento a ser inserido.
+	 * @param int $idSelecionado
+	 */
 	public function formAdicionarIsencao($idSelecionado) {
 		$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'H:00:01' );
 		$hoje = date ( 'Y-m-d' ) . 'T' . date ( 'H:00:01' );
@@ -516,6 +590,11 @@ class CartaoView {
 			</form>
 			</div>';
 	}
+	
+	/**
+	 * @ignore
+	 * @param unknown $idSelecionado
+	 */
 	public function formAdicionarCreditos($idSelecionado) {
 		$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'H:00:01' );
 		$hoje = date ( 'Y-m-d' ) . 'T' . date ( 'H:00:01' );
@@ -531,6 +610,15 @@ class CartaoView {
 			</form>
 			</div>';
 	}
+	
+	/**
+	 * Exibe informações do Usuário.
+	 * 
+	 * @param Cartao $cartao
+	 * @param Usuario $usuario
+	 * @param Tipo $tipo
+	 * @param string $imagem
+	 */
 	public function formIdentificacao(Cartao $cartao, Usuario $usuario, Tipo $tipo, $imagem) {
 		echo '	<div class="borda doze colunas">
 								
