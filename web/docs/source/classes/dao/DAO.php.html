@@ -87,10 +87,10 @@
 		public function fazerConexao() {
 			switch ($this-&gt;tipoDeConexao) {
 				case self::TIPO_PG_DESENVOLVIMENTO :
-					$this-&gt;conexao = new PDO ( &quot;pgsql:host=localhost dbname=treinamento user=catraca password=CaTraCa@unilab2015&quot; );
+					$this-&gt;conexao = new PDO ( &quot;pgsql:host=localhost dbname=homologacao user=catraca password=CaTraCa@unilab2015&quot; );
 					break;
 				case self::TIPO_PG_PRODUCAO_LOCAL :
-					$this-&gt;conexao = new PDO ( &quot;pgsql:host=localhost dbname=producao user=catraca password=CaTraCa@unilab2015&quot; );
+					$this-&gt;conexao = new PDO ( &quot;pgsql:host=localhost dbname=homologacao user=catraca password=CaTraCa@unilab2015&quot; );
 					// $this-&gt;conexao = new PDO ( &quot;pgsql:host=localhost dbname=treinamento user=catraca password=CaTraCa@unilab2015&quot; );
 					break;
 				case self::TIPO_PG_PRODUCAO_BAHIA :

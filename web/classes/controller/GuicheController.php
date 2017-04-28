@@ -7,78 +7,105 @@
  */
 
 /**
- * Classe respons�vel pela realiza��o de venda e estorno de cr�ditos dos usu�rios.
+ * Classe responsável pela realização de venda e estorno de créditos dos usuários.
  */
-
-class GuicheController{
+class GuicheController {
 	
 	/**
-	 * @var $view
-	 * Vari�vel utilizada para instaciar a classe View.
+	 * Variável utilizada para instaciar a classe View.
+	 * 
+	 * @var GuicheView
 	 */
 	private $view;
+	
+	/**
+	 * Variável utilizada para instaciar a classe DAO.
+	 * 
+	 * @var DAO;
+	 */
 	private $dao;
-	public static function main($nivel){
-		
+	
+	/**
+	 * Metodo principal utilizada para controlar o acesso a classe através do nível de acesso do usuario.
+	 *
+	 * @param Sessao $nivel
+	 *        	Recebe uma Sessão que contém o nível de acesso do usuario,
+	 *        	esta Sessão é iniciada na página principal, durante o login do usuario.
+	 */
+	public static function main($nivel) {
 		switch ($nivel) {
 			case Sessao::NIVEL_SUPER :
-				$controller = new GuicheController();
-				$controller->telaGuiche();
+				$controller = new GuicheController ();
+				$controller->telaGuiche ();
 				break;
 			case Sessao::NIVEL_ADMIN :
-				$controller = new GuicheController();
-				$controller->telaGuiche();
+				$controller = new GuicheController ();
+				$controller->telaGuiche ();
 				break;
-
-			case Sessao::NIVEL_POLIVALENTE:
-				$controller = new GuicheController();
-				$controller->telaGuiche();
+			
+			case Sessao::NIVEL_POLIVALENTE :
+				$controller = new GuicheController ();
+				$controller->telaGuiche ();
 				break;
-			case Sessao::NIVEL_GUICHE:
-				$controller = new GuicheController();
-				$controller->telaGuiche();
+			case Sessao::NIVEL_GUICHE :
+				$controller = new GuicheController ();
+				$controller->telaGuiche ();
 				break;
-			case Sessao::NIVEL_CATRACA_VIRTUAL:
-				$controller = new GuicheController();
-				$controller->telaGuiche();
+			case Sessao::NIVEL_CATRACA_VIRTUAL :
+				$controller = new GuicheController ();
+				$controller->telaGuiche ();
 				break;
 			default :
 				UsuarioController::main ( $nivel );
 				break;
 		}
-			
 	}
-	public function telaGuiche(){
 	
-		$controller = new GuicheController();
-		$this->view = new GuicheView();		
-		$unidade = new Unidade();
-		$dao = new DAO();
-		$sessao = new Sessao();
-		$idDoUsuario = $sessao->getIdUsuario();
-
-		$_SESSION['nome_usuario'] = null;
-		$_SESSION['tipo_usuario'] = null;
-		$_SESSION['valor_inserido'] = null;
-		$_SESSION['novo_saldo'] = null;
-		$_SESSION['transacao'] = null;
-		$_SESSION['cartao']= null;
-		$_SESSION['saldo_anterior'] = null;
-		$_SESSION['autorizado'] = false;
+	/**
+	 * Nesta função é gera a tela Guichê,
+	 * nela é realizada a consulta através do número do cartão do usuário,
+	 * onde são consultados vínculo, tipo, créditos...
+	 * O valor do caixa está atrelado ao operador, ou seja, cada operador terá seu caixa,
+	 * não compartilhando valores.
+	 *
+	 * 1 - A inserção dos créditos se dá por um segunda validação com o cartão do usuário,
+	 * para evitar erros provenientes de cookies do navegador.
+	 *
+	 * 2 - O estorno só é possivel com a autenticação do usuário titular do cartão,
+	 * ou de um operador autorizado a realizar esta operação.
+	 *
+	 * Nesta classe é criada variáveis de Sessão utilizadas na Classe ResumoCompraController.
+	 */
+	public function telaGuiche() {
+		$controller = new GuicheController ();
+		$this->view = new GuicheView ();
+		$unidade = new Unidade ();
+		$dao = new DAO ();
+		$sessao = new Sessao ();
+		$idDoUsuario = $sessao->getIdUsuario ();
 		
+		// Variáveis de sessão utilizadas na Classe ResumoCompraController
+		$_SESSION ['nome_usuario'] = null;
+		$_SESSION ['tipo_usuario'] = null;
+		$_SESSION ['valor_inserido'] = null;
+		$_SESSION ['novo_saldo'] = null;
+		$_SESSION ['transacao'] = null;
+		$_SESSION ['cartao'] = null;
+		$_SESSION ['saldo_anterior'] = null;
+		$_SESSION ['autorizado'] = false;
 		
 		/*
 		 * Preenche a tabela 'Descrição da Operação'
 		 * apenas com dados das operações realizadas no dia
-		 * corrente do operador logado.		 *
+		 * corrente do operador logado. *
 		 */
-
-		$dataInicio = date('Y-m-d');
-		$dataFim = date('Y-m-d');
-
-		$data1 = $dataInicio.' 00:00:00';
-		$data2 = $dataFim.' 23:59:59';
-
+		
+		$dataInicio = date ( 'Y-m-d' );
+		$dataFim = date ( 'Y-m-d' );
+		
+		$data1 = $dataInicio . ' 00:00:00';
+		$data2 = $dataFim . ' 23:59:59';
+		
 		$sqlTransacao = "SELECT cliente.usua_nome cliente,* FROM transacao
 		INNER JOIN usuario
 		on transacao.usua_id = usuario.usua_id
@@ -86,146 +113,143 @@ class GuicheController{
 		ON cliente.usua_id = transacao.usua_id1
 		WHERE (tran_data BETWEEN '$data1' AND '$data2') 
 		AND usuario.usua_id = $idDoUsuario ORDER BY tran_id DESC ";
-
-		$listaDescricao = $dao->getConexao()->query($sqlTransacao);
-		$this->view->formDescricao($listaDescricao);
+		
+		$listaDescricao = $dao->getConexao ()->query ( $sqlTransacao );
+		$this->view->formDescricao ( $listaDescricao );
 		
 		/*
 		 * Soma os campos de valores.
 		 */
-
 		$valorTotal = 0;
-		$result = $dao->getConexao()->query($sqlTransacao);
-		foreach ($result as $linha){
+		$result = $dao->getConexao ()->query ( $sqlTransacao );
+		foreach ( $result as $linha ) {
 			
-			$valor = $linha['tran_valor'];
-			floatval ($valor);
-			if($linha){
+			$valor = $linha ['tran_valor'];
+			floatval ( $valor );
+			if ($linha) {
 				$valorTotal = $valorTotal + $valor;
 			}
 		}
-		echo'					<h2>Saldo em Caixa: R$ '.number_format($valorTotal, 2,',','.').' </h1>
+		echo '					<h2>Saldo em Caixa: R$ ' . number_format ( $valorTotal, 2, ',', '.' ) . ' </h1>
 							<div class="sete borda">';
-
+		
 		$sqlUsuario = "SELECT * FROM usuario WHERE usua_id = '$idDoUsuario'";
-		$result = $dao->getConexao()->query($sqlUsuario);
-		foreach ($result as $linha){
-			echo'	<span class="icone-user"> Operador: '.ucwords(strtolower(htmlentities($linha['usua_nome']))).'</span>';
+		$result = $dao->getConexao ()->query ( $sqlUsuario );
+		foreach ( $result as $linha ) {
+			echo '	<span class="icone-user"> Operador: ' . ucwords ( strtolower ( htmlentities ( $linha ['usua_nome'] ) ) ) . '</span>';
 		}
-		echo'	</div>
+		echo '	</div>
 		</div>';
-
-		$this->view->formBuscarCartao();
-
+		
+		$this->view->formBuscarCartao ();
+		
 		/*
 		 * Realiza a pesquisa pelo numero do cartão identificando se existe vinculo ativo.
 		 */
-
-		if(isset($_GET['cartao'])){
-			if(strlen($_GET['cartao']) > 3){
-				$cartao = new Cartao();
-				$cartao->setNumero($_GET['cartao']);
-				$numeroCartao = $cartao->getNumero();
-				@$_SESSION['cartao'] = $_GET['cartao'];
+		
+		if (isset ( $_GET ['cartao'] )) {
+			if (strlen ( $_GET ['cartao'] ) > 3) {
+				$cartao = new Cartao ();
+				$cartao->setNumero ( $_GET ['cartao'] );
+				$numeroCartao = $cartao->getNumero ();
+				@$_SESSION ['cartao'] = $_GET ['cartao'];
 				$sqlVerificaNumero = "SELECT * FROM usuario
 				INNER JOIN vinculo ON vinculo.usua_id = usuario.usua_id
 				LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
 				LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id
 				WHERE cartao.cart_numero = '$numeroCartao'";
-				$result = $dao->getConexao()->query($sqlVerificaNumero);
-				$usuario = new Usuario();
+				$result = $dao->getConexao ()->query ( $sqlVerificaNumero );
+				$usuario = new Usuario ();
 				$idCartao = 0;
-				$tipo = new Tipo();
-				$vinculoDao = new VinculoDAO($dao->getConexao());
-				$vinculo = new Vinculo();
-				foreach($result as $linha){
-					$idDoVinculo = $linha['vinc_id'];
-					$tipo->setNome($linha['tipo_nome']);
-					$tipo->setValorCobrado($linha['tipo_valor']);
-					$cartao->setId($linha['cart_id']);
-					$cartao->setCreditos($linha['cart_creditos']);
-					$usuario->setNome($linha['usua_nome']);
-					$usuario->setId($linha['usua_id']);
-					$usuario->setLogin($linha['usua_login']);
-					$usuario->setIdBaseExterna($linha['id_base_externa']);
-					$vinculo->setAvulso($linha['vinc_avulso']);
-					$idCartao = $linha['cart_id'];
-					$avulso = $linha['vinc_avulso'];
-					if($avulso){
-						$usuario->setNome('Avulso');
+				$tipo = new Tipo ();
+				$vinculoDao = new VinculoDAO ( $dao->getConexao () );
+				$vinculo = new Vinculo ();
+				foreach ( $result as $linha ) {
+					$idDoVinculo = $linha ['vinc_id'];
+					$tipo->setNome ( $linha ['tipo_nome'] );
+					$tipo->setValorCobrado ( $linha ['tipo_valor'] );
+					$cartao->setId ( $linha ['cart_id'] );
+					$cartao->setCreditos ( $linha ['cart_creditos'] );
+					$usuario->setNome ( $linha ['usua_nome'] );
+					$usuario->setId ( $linha ['usua_id'] );
+					$usuario->setLogin ( $linha ['usua_login'] );
+					$usuario->setIdBaseExterna ( $linha ['id_base_externa'] );
+					$vinculo->setAvulso ( $linha ['vinc_avulso'] );
+					$idCartao = $linha ['cart_id'];
+					$avulso = $linha ['vinc_avulso'];
+					if ($avulso) {
+						$usuario->setNome ( 'Avulso' );
 					}
 					break;
 				}
 				
-				if($idCartao && $_GET['cartao'] != ''){
-					$idBeneficiado = $usuario->getId();
-					$vinculo->setId($idDoVinculo);
-					$cartao->setId($idCartao);
-					$vinculoDao->vinculoPorId($vinculo);
+				if ($idCartao && $_GET ['cartao'] != '') {
+					$idBeneficiado = $usuario->getId ();
+					$vinculo->setId ( $idDoVinculo );
+					$cartao->setId ( $idCartao );
+					$vinculoDao->vinculoPorId ( $vinculo );
+					
+					if (! $vinculo->isActive ()) {
 						
-					if(!$vinculo->isActive()){
-	
-						$this->view->mensagem('erro','O vinculo n&atildeo est&aacute ativo.');
-	
-					}else{
-							
-						$this->view->formConsulta($usuario, $tipo, $cartao);
-						$this->view->formInserirValor();						
+						$this->view->mensagem ( 'erro', 'O vinculo n&atildeo est&aacute ativo.' );
+					} else {
 						
-						$_SESSION['nome_usuario'] = ucwords(strtolower(htmlentities($usuario->getNome())));
-						$_SESSION['tipo_usuario'] = $tipo->getNome(); 											
-						$_SESSION['saldo_anterior'] = $vinculo->getCartao()->getCreditos();
+						$this->view->formConsulta ( $usuario, $tipo, $cartao );
+						$this->view->formInserirValor ();
 						
-// 						$_SESSION['confirmado'] = "aguarde";
-// 						$_SESSION['refeicoes_restante'] = "";
+						$_SESSION ['nome_usuario'] = ucwords ( strtolower ( htmlentities ( $usuario->getNome () ) ) );
+						$_SESSION ['tipo_usuario'] = $tipo->getNome ();
+						$_SESSION ['saldo_anterior'] = $vinculo->getCartao ()->getCreditos ();
+						
+						// $_SESSION['confirmado'] = "aguarde";
+						// $_SESSION['refeicoes_restante'] = "";
 						
 						/*
 						 * Insere ou estorna os creditos do usuario pesquisado com vinculo ativo.
 						 */
+						
+						if (isset ( $_GET ['valor'] )) {
 							
-						if(isset($_GET['valor'])){
-	
-							$cartao->setCreditos($_GET['valor']);
-							$valorVendido = $cartao->getCreditos();
-							$login = $usuario->getLogin();
-							$valorAnt = $vinculo->getCartao()->getCreditos();
-							$valorVendido = $cartao->getCreditos();
+							$cartao->setCreditos ( $_GET ['valor'] );
+							$valorVendido = $cartao->getCreditos ();
+							$login = $usuario->getLogin ();
+							$valorAnt = $vinculo->getCartao ()->getCreditos ();
+							$valorVendido = $cartao->getCreditos ();
 							$novoValor = $valorAnt + $valorVendido;
-							$valor = number_format($valorVendido, 2,',','.');
+							$valor = number_format ( $valorVendido, 2, ',', '.' );
 							
+							$_SESSION ['valor_inserido'] = $valorVendido;
+							$_SESSION ['novo_saldo'] = $novoValor;
 							
-							$_SESSION['valor_inserido'] = $valorVendido;
-							$_SESSION['novo_saldo'] = $novoValor;
-							
-							if ($valorVendido == 0){
-								$this->view->mensagem("erro", "Valor Inválido! Digite novamente.");
-								return ;
+							if ($valorVendido == 0) {
+								$this->view->mensagem ( "erro", "Valor Inválido! Digite novamente." );
+								return;
 							}
-	
-							if($valorVendido < 0){
-								if ($valorAnt <= 0){
+							
+							if ($valorVendido < 0) {
+								if ($valorAnt <= 0) {
 									echo '<div id="msgconfirmado">';
-									$this->view->mensagem("erro", "Saldo Insuficiente para realizar estorno!");
+									$this->view->mensagem ( "erro", "Saldo Insuficiente para realizar estorno!" );
 									echo '</div>';
 									echo '<meta http-equiv="refresh" content="3; url=.\?pagina=guiche">';
 									return;
-								}else if ($novoValor < 0){
+								} else if ($novoValor < 0) {
 									echo '<div id="msgconfirmado">';
-									$this->view->mensagem("erro", "Saldo Insuficiente para realizar estorno!");
+									$this->view->mensagem ( "erro", "Saldo Insuficiente para realizar estorno!" );
 									echo '</div>';
 									echo '<meta http-equiv="refresh" content="3; url=.\?pagina=guiche">';
 									return;
 								}
 								$estorno = true;
-							}else{
-								$this->view->mensagem("ajuda", "Deseja inserir R\$ $valor?");
+							} else {
+								$this->view->mensagem ( "ajuda", "Deseja inserir R\$ $valor?" );
 								$tipoTransacao = 'Venda de Créditos';
 								$tipo = "sucesso";
 								$mensagem = "Valor inserido com sucesso.";
 								$estorno = false;
 							}
-	
-							if ($estorno){
+							
+							if ($estorno) {
 								echo '	<div id="mascara"></div>
 								<div class="window borda" id="janela1">
 									<a href="#" class="fechar">X Fechar</a>
@@ -233,108 +257,103 @@ class GuicheController{
 									<hr class="um">
 									<form class="formulario sequencial " method="post" id="formIndentificacao">
 										<label>
-											Login<input type="text"  name="login" value="'.$login.'" class="doze"/>
+											Login<input type="text"  name="login" value="' . $login . '" class="doze"/>
 										</label>
 										<label>
 											Senha<input type="password" placeholder="Senha Sig" name="senha" class="doze" autofocus />
 										</label>
 										<input type="submit" value="Confirmar" name="estornar" class="doze" />
 									</form>';
-								$this->view->mensagem("erro", "Deseja estornar R\$ $valor?");
+								$this->view->mensagem ( "erro", "Deseja estornar R\$ $valor?" );
 								echo '	</div>';
-							}else{
+							} else {
 								echo ' 	
 										<form method="post" class="formulario">
 											<input type="number" name="confirmar" id="confirmar">										
 									    </form>';
 								
-								
-								if (isset($_POST['confirmar']) && $_POST['confirmar']!= ""){
+								if (isset ( $_POST ['confirmar'] ) && $_POST ['confirmar'] != "") {
 									
-									$cartaoConfirma = $_POST['confirmar'];									
-									if ($cartaoConfirma == $cartao->getNumero()){
+									$cartaoConfirma = $_POST ['confirmar'];
+									if ($cartaoConfirma == $cartao->getNumero ()) {
 										$autorizado = true;
-									}else{										
-										$this->view->mensagem("erro","Número do cartão diferente.");										
+									} else {
+										$this->view->mensagem ( "erro", "Número do cartão diferente." );
 										echo '<meta http-equiv="refresh" content="3; url=.\?pagina=guiche">';
-									}									
+									}
 								}
 							}
-	
-							if (isset($_POST['estornar'])){
-								$usuarioDao = new UsuarioDAO();
-								$usuario2 = new Usuario();
-								$usuario2->setLogin($login = $_POST['login']);
-								$usuario2->setSenha($senha = $_POST['senha']);
-								if ($usuarioDao->autentica($usuario2)){
-									$idUsuario1 = $usuario->getId();
-									$idUsuario2 = $usuario2->getId();
-									if ($idUsuario1 == $idUsuario2 || $usuario2->getNivelAcesso() >= 2){
+							
+							if (isset ( $_POST ['estornar'] )) {
+								$usuarioDao = new UsuarioDAO ();
+								$usuario2 = new Usuario ();
+								$usuario2->setLogin ( $login = $_POST ['login'] );
+								$usuario2->setSenha ( $senha = $_POST ['senha'] );
+								if ($usuarioDao->autentica ( $usuario2 )) {
+									$idUsuario1 = $usuario->getId ();
+									$idUsuario2 = $usuario2->getId ();
+									if ($idUsuario1 == $idUsuario2 || $usuario2->getNivelAcesso () >= 2) {
 										$tipo = "ajuda";
 										$mensagem = "Valor estornado com sucesso!";
-										$tipoTransacao = 'Estorno de valores';										  
+										$tipoTransacao = 'Estorno de valores';
 										$autorizado = true;
-										
-									}else{
+									} else {
 										echo '<div id="msgconfirmado">';
-										$this->view->mensagem("erro", "Este cartão não pertence a este usuario!");
+										$this->view->mensagem ( "erro", "Este cartão não pertence a este usuario!" );
 										echo '</div>';
 										echo '<meta http-equiv="refresh" content="3; url=.\?pagina=guiche">';
 									}
-								}else{
+								} else {
 									echo '<div id="msgconfirmado">';
-									$this->view->mensagem("erro", "Usuario ou Senha Inválidos!");
+									$this->view->mensagem ( "erro", "Usuario ou Senha Inválidos!" );
 									echo '</div>';
 									echo '<meta http-equiv="refresh" content="3; url=.\?pagina=guiche">';
 									return;
 								}
 							}
-	
-							if(isset($autorizado)){
-									
-								$idCartao = $vinculo->getCartao()->getId();
-								$idUsuario = $usuario->getId();
+							
+							if (isset ( $autorizado )) {
+								
+								$idCartao = $vinculo->getCartao ()->getId ();
+								$idUsuario = $usuario->getId ();
 								$dataTimeAtual = date ( "Y-m-d G:i:s" );
-									
-								$dao->getConexao()->beginTransaction();
-	
+								
+								$dao->getConexao ()->beginTransaction ();
+								
 								$sql = "UPDATE cartao set cart_creditos = $novoValor WHERE cart_id = $idCartao";
-	
+								
 								$sql2 = "INSERT into transacao(tran_valor, tran_descricao, tran_data, usua_id,usua_id1)
 								VALUES($valorVendido, '$tipoTransacao' ,'$dataTimeAtual', $idDoUsuario, $idBeneficiado)";
-	
-								//echo $sql;
-								if(!$dao->getConexao()->exec($sql)){
-									$dao->getConexao()->rollBack();
-									$this->view->mensagem('erro','Erro ao inserir os creditos.');
+								
+								// echo $sql;
+								if (! $dao->getConexao ()->exec ( $sql )) {
+									$dao->getConexao ()->rollBack ();
+									$this->view->mensagem ( 'erro', 'Erro ao inserir os creditos.' );
 									return false;
 								}
-								if(!$dao->getConexao()->exec($sql2)){
-									$dao->getConexao()->rollBack();
-									$this->view->mensagem('erro','Erro ao inserir os creditos.');
+								if (! $dao->getConexao ()->exec ( $sql2 )) {
+									$dao->getConexao ()->rollBack ();
+									$this->view->mensagem ( 'erro', 'Erro ao inserir os creditos.' );
 									return false;
 								}
-	
-								$dao->getConexao()->commit();
+								
+								$dao->getConexao ()->commit ();
 								echo '<div id="msgconfirmado">';
-								$this->view->mensagem($tipo,$mensagem);
-								$_SESSION['autorizado'] = $autorizado;
-								echo '</div>';								
+								$this->view->mensagem ( $tipo, $mensagem );
+								$_SESSION ['autorizado'] = $autorizado;
+								echo '</div>';
 								echo '<meta http-equiv="refresh" content="3; url=.\?pagina=guiche">';
-	
 							}
 						}
 					}
-				}else{
-					$_SESSION['cartao']= null;
-					$this->view->mensagem('erro','Cart&atildeo sem vinculo v&aacutelido.');
+				} else {
+					$_SESSION ['cartao'] = null;
+					$this->view->mensagem ( 'erro', 'Cart&atildeo sem vinculo v&aacutelido.' );
 					echo '<meta http-equiv="refresh" content="3; url=.\?pagina=guiche">';
 				}
 			}
 		}
 	}
-
 }
-	
-	
-	?>
+
+?>

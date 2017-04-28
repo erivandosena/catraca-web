@@ -35,7 +35,7 @@ class CatracaVirtualView {
 	}
 	
 	/**
-	 * Gera o formulário paara a seleção do RU a ser utilizado.
+	 * Gera o formulário para a seleção do RU a ser utilizado.
 	 * 
 	 * @param array $listaDeCatracas        	
 	 */

@@ -5,50 +5,64 @@
  * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
  * @package Controle
  */
-
-class IdentificadorClienteController{
+class IdentificadorClienteController {
 	
-	public static function main($nivel){
-	
-		switch ($nivel){
-			case Sessao::NIVEL_SUPER:
-				$identificar = new IdentificadorClienteController();
-				$identificar->telaCliente();
+	/**
+	 * Metodo principal utilizada para controlar o acesso a classe através do nível de acesso do usuario.
+	 *
+	 * @param Sessao $nivel
+	 *        	Recebe uma Sessão que contém o nível de acesso do usuario,
+	 *        	esta Sessão é iniciada na página principal, durante o login do usuario.
+	 */
+	public static function main($nivel) {
+		switch ($nivel) {
+			case Sessao::NIVEL_SUPER :
+				$identificar = new IdentificadorClienteController ();
+				$identificar->telaCliente ();
 				break;
-			case Sessao::NIVEL_ADMIN:
-				$identificar = new IdentificadorClienteController();
-				$identificar->telaCliente();
+			case Sessao::NIVEL_ADMIN :
+				$identificar = new IdentificadorClienteController ();
+				$identificar->telaCliente ();
 				break;
-			case Sessao::NIVEL_POLIVALENTE:
-				$identificar = new IdentificadorClienteController();
-				$identificar->telaCliente();
+			case Sessao::NIVEL_POLIVALENTE :
+				$identificar = new IdentificadorClienteController ();
+				$identificar->telaCliente ();
 				break;
-			case Sessao::NIVEL_CATRACA_VIRTUAL:
-				$identificar = new IdentificadorClienteController();
-				$identificar->telaCliente();
+			case Sessao::NIVEL_CATRACA_VIRTUAL :
+				$identificar = new IdentificadorClienteController ();
+				$identificar->telaCliente ();
 				break;
-			default:
+			default :
 				UsuarioController::main ( $nivel );
 				break;
 		}
-	
-	
 	}
 	
-	public function telaCliente(){				
+	/**
+	 * Gera a tala de Identificação Cliente, esta classe contém variáveis de sessão
+	 * que devem ser geradas na classe que realizar a chamada desta função.
+	 * 
+	 * Pois ela foi cria para trabalhar em paralelo com a classe instaciadora,
+	 * sem a nessedidade de javascript.
+	 * 
+	 * Nesta Classe, além de conter informações do Usuário,
+	 * tambem é possível a visialização de uma imagem do Usuário.
+	 */
+	public function telaCliente() {
 		
-		$numeroCartao = @$_SESSION['numero_cartao'];
-		$nome = @$_SESSION['nome_usuario'];
-		$tipo = @$_SESSION['tipo_usuario'];
-		$confirma = @$_SESSION['confirmado'];
-		$imagem = @$_SESSION['id_base_externa'];
-		$refeicoes = @$_SESSION['refeicoes_restante'];	
-				
-		if (!file_exists('fotos/'.$imagem.'.png')){
+		//Variáveis de sessão criadas pela classe instanciadora.
+		$numeroCartao = @$_SESSION ['numero_cartao'];
+		$nome = @$_SESSION ['nome_usuario'];
+		$tipo = @$_SESSION ['tipo_usuario'];
+		$confirma = @$_SESSION ['confirmado'];
+		$imagem = @$_SESSION ['id_base_externa'];
+		$refeicoes = @$_SESSION ['refeicoes_restante'];
+		
+		if (! file_exists ( 'fotos/' . $imagem . '.png' )) {
 			$imagem = "sem-imagem";
-		}		
+		}
 		
-		echo'			<div id="usuario">				
+		echo '			<div id="usuario">				
 							<div class="doze colunas borda relatorio">				
 								<div class="doze colunas">									
 									<div class="fundo-cliente">
@@ -72,21 +86,21 @@ class IdentificadorClienteController{
 									<hr class="um">
 									<div>
 										<div id="imagem" class="quatro colunas zoom-cliente">
-											<img id="img" src="fotos/'.$imagem.'.png" alt="">
+											<img id="img" src="fotos/' . $imagem . '.png" alt="">
 										</div>					
 										<div class="oito colunas">											
 											<div id="informacao" class="fundo-cinza1" style="height:680px;width:1370px;">											
 												<br><br><br><br>
-												<div id="dados" class="dados" style="font-size:46px">';											
-		if ($numeroCartao == ""){			
-			echo '<span id="aproxime" style="padding:160px;">Por favor, aproxime o seu cartão.</span>';		
-		}else {
-			echo'									
-													<span >Cartão: '.$numeroCartao.'</span><br>
-													<span >Nome: '.$nome.'</span><br>
-													<span >Tipo: '.$tipo.'</span><br>';
+												<div id="dados" class="dados" style="font-size:46px">';
+		if ($numeroCartao == "") {
+			echo '<span id="aproxime" style="padding:160px;">Por favor, aproxime o seu cartão.</span>';
+		} else {
+			echo '									
+													<span >Cartão: ' . $numeroCartao . '</span><br>
+													<span >Nome: ' . $nome . '</span><br>
+													<span >Tipo: ' . $tipo . '</span><br>';
 		}
-		echo'									</div>
+		echo '									</div>
 											</div>
 										</div>
 									</div>
@@ -94,29 +108,28 @@ class IdentificadorClienteController{
 				
 								<div class="doze colunas">
 									<br>';
-			
-		if ($confirma == "confirmado"){				
-		echo'						<div class="alerta-sucesso dez no-centro">
+		
+		if ($confirma == "confirmado") {
+			echo '						<div class="alerta-sucesso dez no-centro">
 										<div class="icone icone-warning ix48"></div>
 										<div class="titulo-alerta">Ok!</div>
 										<div class="subtitulo-alerta" style="font-size:22px">Acesso Liberado!</div>
-									</div>';		
-		}elseif ($confirma == "aguarde"){
-		echo'						<div class="alerta-ajuda dez no-centro">
+									</div>';
+		} elseif ($confirma == "aguarde") {
+			echo '						<div class="alerta-ajuda dez no-centro">
 										<div class="icone icone-checkmark ix48"></div>
 										<div class="titulo-alerta">Aguarde!</div>
 										<div class="subtitulo-alerta" style="font-size:22px">Estamos liberando seu acesso!</div>
 									</div>';
 		}
-		echo'					</div>
+		echo '					</div>
 				
 							</div>
 							</div>		
 						</div>				
 					</div>
-				</div>';		
+				</div>';
 	}
-	
 }
 
 ?>

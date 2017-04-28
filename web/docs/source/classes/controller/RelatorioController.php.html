@@ -43,8 +43,26 @@
  */
 
 class RelatorioController {
+	
+	/**
+	 * 
+	 * @var RelatorioView
+	 */
 	private $view;
+	
+	/**
+	 * 
+	 * @var DAO
+	 */
 	private $dao;
+	
+	/**
+	 * Fun&ccedil;&atilde;o principal utilizada para controlar o acesso a classe atrav&eacute;s do n&iacute;vel de acesso do usuario.
+	 *
+	 * @param Sessao $nivelDeAcesso
+	 *        	Recebe uma Sess&atilde;o que cont&eacute;m o n&iacute;vel de acesso do usuario,
+	 *        	esta Sess&atilde;o &eacute; iniciada na p&aacute;gina principal, durante o login do usuario.
+	 */
 	public static function main($nivelDeAcesso) {
 		switch ($nivelDeAcesso) {
 			case Sessao::NIVEL_SUPER :
@@ -55,7 +73,6 @@ class RelatorioController {
 				$controller = new RelatorioController ();
 				$controller-&gt;relatorio ();
 				break;
-
 			case Sessao::NIVEL_POLIVALENTE:
 				$controller = new RelatorioController ();
 				$controller-&gt;relatorio ();
@@ -73,6 +90,10 @@ class RelatorioController {
 				break;
 		}
 	}
+	
+	/**
+	 * 
+	 */
 	public function relatorio() {
 		$this-&gt;dao = new UnidadeDAO ();
 		$listaDeUnidades = $this-&gt;dao-&gt;retornaLista ();
@@ -133,6 +154,13 @@ class RelatorioController {
 				
 		}
 	}
+	
+	/**
+	 * 
+	 * @param int $idUnidade
+	 * @param DateTime $dateStart
+	 * @param DateTime $dataEnd
+	 */
 	public function gerarPratosConsumidos($idUnidade = NULL, $dateStart = null, $dataEnd = null) {
 
 		if ($dateStart == null)
@@ -235,6 +263,13 @@ class RelatorioController {
 			$this-&gt;mostraListaDeDadosPratos($listaDeDados, $strUnidade.' - turno: ' . $turno-&gt;getDescricao () . ' - entre: ' . $turno-&gt;getHoraInicial () . ' e ' . $turno-&gt;getHoraFinal (), $tipos, $listaDeDatas );
 		}
 	}
+	
+	/**
+	 * 
+	 * @param int $idUnidade
+	 * @param DateTime $dateStart
+	 * @param DateTime $dataEnd
+	 */
 	public function geraValoresArrecadados($idUnidade = NULL, $dateStart = null, $dataEnd = null) {
 		if ($dateStart == null)
 			$dateStart = date ( 'Y-m-d' );
@@ -334,6 +369,11 @@ class RelatorioController {
 			$this-&gt;mostraListaDeDados ( $listaDeDados, $strUnidade.' - turno: ' . $turno-&gt;getDescricao () . ' - entre: ' . $turno-&gt;getHoraInicial () . ' e ' . $turno-&gt;getHoraFinal (), $tipos, $listaDeDatas );
 		}
 	}
+	
+	/**
+	 * 
+	 * @param int $idUnidade
+	 */
 	public function pegaUltimoCusto($idUnidade = null){
 		
 		if($idUnidade != null){
@@ -363,6 +403,13 @@ class RelatorioController {
 		}
 		return $ultimoCusto;
 	}
+	
+	/**
+	 * 
+	 * @param int $idUnidade
+	 * @param DateTime $data1
+	 * @param DateTime $data2
+	 */
 	public function geraRelacaoPratosValores($idUnidade = NULL, $data1 = null, $data2 = null) {
 		
 		if($idUnidade == NULL)
@@ -605,6 +652,14 @@ class RelatorioController {
 		echo '&lt;/div&gt;';
 		}
 	}
+	
+	/**
+	 * 
+	 * @param array $listaDeDados
+	 * @param string $titulo
+	 * @param Tipo[] $tipos
+	 * @param array $listaDeDatas
+	 */
 	public function mostraListaDeDados($listaDeDados, $titulo, $tipos, $listaDeDatas) {
 		$subTotal = array ();
 		foreach ( $tipos as $tipo ) {
@@ -660,7 +715,13 @@ class RelatorioController {
 			&lt;/div&gt;';
 	}
 	
-	
+	/**
+	 * 
+	 * @param array $listaDeDados
+	 * @param string $titulo
+	 * @param Tipo[] $tipos
+	 * @param array $listaDeDatas
+	 */
 	public function mostraListaDeDadosPratos($listaDeDados, $titulo, $tipos, $listaDeDatas) {
 		$subTotal = array ();
 		foreach ( $tipos as $tipo ) {
@@ -718,6 +779,10 @@ class RelatorioController {
 			&lt;/div&gt;';
 	}
 	
+	/**
+	 * 
+	 * @param array $matriz
+	 */
 	public function mostraMatriz($matriz){
 		echo '&lt;br&gt;&lt;br&gt;&lt;br&gt;&lt;table border=&quot;1&quot;&gt;';
 		foreach($matriz as $chave =&gt; $valor){

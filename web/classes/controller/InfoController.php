@@ -8,8 +8,19 @@
 
 class InfoController{
 	
-	
+	/**
+	 * 
+	 * @var unknown
+	 */
 	private $view;
+	
+	/**
+	 * Função principal utilizada para controlar o acesso a classe através do nível de acesso do usuario.
+	 *
+	 * @param Sessao $nivelDeAcesso
+	 *        	Recebe uma Sessão que contém o nível de acesso do usuario,
+	 *        	esta Sessão é iniciada na página principal, durante o login do usuario.
+	 */
 	public static function main($nivelDeAcesso){
 	
 		switch ($nivelDeAcesso){

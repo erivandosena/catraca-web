@@ -60,11 +60,23 @@
 
 class Validacoes{
     
-	
+	/**
+	 * 
+	 * @var unknown
+	 */
     private $expressao;
+    
+    /**
+     * 
+     * @var unknown
+     */
     private $tipoCampo =  array(1,2,3,4,5,6,7,8,9,10,11,12);
 
-
+	/**
+	 * 
+	 * @param int $tipo_campo
+	 * @param string $valor
+	 */
     public function validaCampos($tipo_campo, $valor){
 
         if(!in_array($tipo_campo,$this-&gt;tipoCampo)){
@@ -111,13 +123,17 @@ class Validacoes{
                     return $this-&gt;valida_login($valor);
                     break;
                 default:
-                    echo &quot;N&Atilde;&fnof;&Acirc;&pound;o foi possivel realizar a valida&Atilde;&fnof;&Acirc;&sect;&Atilde;&fnof;&Acirc;&pound;o do campo &quot;.$tipo_campo;
+                    echo &quot;N&atilde;o foi possivel realizar a valida&ccedil;&atilde;o do campo &quot;.$tipo_campo;
                     break;
             }
         }
     }
 
-
+	/**
+	 * 
+	 * @param string $matricula
+	 * @param int $tam_max
+	 */
     private function valida_matricula($matricula,$tam_max = 11){
        
         if(empty($matricula)){
@@ -132,7 +148,10 @@ class Validacoes{
 
     }
 
-
+	/**
+	 * 
+	 * @param string $email
+	 */
     private function valida_mail($email){
 
         if($email == &quot;&quot;){
@@ -146,6 +165,11 @@ class Validacoes{
         }
     }
     
+    /**
+     * 
+     * @param string $strText
+     * @return boolean
+     */
     private function valida_text($strText){
         
         $erro=FALSE;
@@ -191,6 +215,12 @@ class Validacoes{
         }
     }
     
+    /**
+     * 
+     * @param string $senha
+     * @param int $tam_min
+     * @return boolean
+     */
     private function valida_senha($senha,$tam_min = 6){
         
         if($senha == &quot;&quot;){
@@ -204,6 +234,11 @@ class Validacoes{
         }
     }
     
+    /**
+     * 
+     * @param string $strText
+     * @return boolean
+     */
     private function valida_endereco($strText){
         
         
@@ -226,6 +261,11 @@ class Validacoes{
          }
     }
     
+    /**
+     * 
+     * @param string $cpf
+     * @return boolean
+     */
     private function valida_CPF($cpf = null) {
         
         // Verifica se um n&Atilde;&fnof;&Acirc;&ordm;mero foi informado
@@ -275,20 +315,25 @@ class Validacoes{
         }
     }
     
+    /**
+     * 
+     * @param string $date
+     * @return boolean
+     */
     private function valida_data($date) {
 
         if(empty($date)){            
             return FALSE;
         }else{
 
-            $data = explode(&quot;-&quot;,$date); // fatia a string $dat em pedados, usando / como refer&Atilde;&fnof;&Acirc;&ordf;ncia
+            $data = explode(&quot;-&quot;,$date); // fatia a string $dat em pedados, usando / como referencia
              $d = $data[0];
              $m = $data[1];
              $y = $data[2];
          
-            // verifica se a data &Atilde;&fnof;&Acirc;&copy; v&Atilde;&fnof;&Acirc;&iexcl;lida!
-            // 1 = true (v&Atilde;&fnof;&Acirc;&iexcl;lida)
-            // 0 = false (inv&Atilde;&fnof;&Acirc;&iexcl;lida)
+            // verifica se a data n&atilde;o v&aacute;lida!
+            // 1 = true (v&aacute;lida)
+            // 0 = false (inv&aacute;lida)
             $res = checkdate($d,$m,$y);
 
             if($d &gt; 31 || $m &gt; 12 || $y &lt; 1){
@@ -301,7 +346,11 @@ class Validacoes{
         }
         
     }
-
+	
+    /**
+     * 
+     * @param string $ip
+     */
     private function  valida_ip($ip){
         //print &quot;d&quot;;
         if(filter_var($ip, FILTER_VALIDATE_IP) === FALSE) {
@@ -314,6 +363,11 @@ class Validacoes{
         
     }
 
+    /**
+     * 
+     * @param string $mac
+     * @return boolean
+     */
     private function valida_mac($mac) {
         if (strlen($mac) &gt; 17 or strlen($mac) &lt; 17 ){
             return FALSE;    

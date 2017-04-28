@@ -36,6 +36,7 @@
     <body>
         <pre class="brush: php">&lt;?php
 /**
+ * @ignore
  * @author Jefferson Uchoa Ponte
  * @version 1.0
  * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
@@ -44,13 +45,32 @@
 
 class CatracaVirtual{
 	
+	/**
+	 * 
+	 * @var DAO
+	 */
 	private $dao;
+	
+	/**
+	 * 
+	 * @var CatracaVirtualView
+	 */
 	private $view;
 	
+	/**
+	 * 
+	 */
 	public function CatracaVirtual(){
 		$this-&gt;view = new CatracaVirtualView();
 	}
 	
+	/**
+	 * Metodo principal utilizada para controlar o acesso a classe atrav&eacute;s do n&iacute;vel de acesso do usuario.
+	 *
+	 * @param Sessao $nivelDeAcesso
+	 *        	Recebe uma Sess&atilde;o que cont&eacute;m o n&iacute;vel de acesso do usuario,
+	 *        	esta Sess&atilde;o &eacute; iniciada na p&aacute;gina principal, durante o login do usuario.
+	 */
 	public static function main($nivel){
 		
 		if($nivel == Sessao::NIVEL_SUPER){
@@ -62,7 +82,11 @@ class CatracaVirtual{
 		
 	}
 	
-	public function verificarSelecaoRU(){
+	/**
+	 * Esta fun&ccedil;&atilde;o chama o formul&aacute;rio para sele&ccedil;&atilde;o de RU,
+	 * 
+	 */	
+	 public function verificarSelecaoRU(){
 		$this-&gt;dao = new DAO();
 		
 		if(isset($_SESSION['catraca_id'])){
@@ -78,6 +102,10 @@ class CatracaVirtual{
 			
 		
 	}
+	
+	/**
+	 * 
+	 */
 	public function selecionarRU(){
 		$unidadeDao = new UnidadeDAO($this-&gt;dao-&gt;getConexao());
 		$listaDeCatracas = $unidadeDao-&gt;retornaCatracasPorUnidade();
@@ -105,18 +133,17 @@ class CatracaVirtual{
 			            
 		echo '       &lt;/select&gt;&lt;br&gt;
 					&lt;input type=&quot;submit&quot; class=&quot;botao&quot; VALUE=&quot;Selecionar&quot; /&gt;
-				&lt;/form&gt;	';
-		
-
-		echo '&lt;/div&gt;
+				&lt;/form&gt;	
+				&lt;/div&gt;
 				&lt;/div&gt;
 				&lt;/div&gt;
 				&lt;/div&gt;';
 		
-		
 	}
 
-	
+	/**
+	 * 
+	 */
 	public function paginaRegistroManual(){
 		
 		$tipoDao = new TipoDAO($this-&gt;dao-&gt;getConexao());
@@ -127,43 +154,27 @@ class CatracaVirtual{
 		$catraca-&gt;setId($_SESSION['catraca_id']);
 		$unidadeDao-&gt;preencheCatracaPorId($catraca);
 		
-		
-		
-		
-		
-		
 		echo '&lt;div class=&quot;navegacao&quot;&gt; 
 				&lt;div class = &quot;simpleTabs&quot;&gt;
 			        &lt;ul class = &quot;simpleTabsNavigation&quot;&gt;					
 						&lt;li&gt;&lt;a href=&quot;#&quot;&gt;Cadastro&lt;/a&gt;&lt;/li&gt;	
 			        &lt;/ul&gt;
 				
-			        &lt;div class = &quot;simpleTabsContent&quot;&gt;
-				
-						
-				
-						&lt;div class=&quot;doze colunas borda&quot;&gt;';
-		
-		
-		
-		echo '
-							
+			        &lt;div class = &quot;simpleTabsContent&quot;&gt;				
+						&lt;div class=&quot;doze colunas borda&quot;&gt;
 							&lt;table class=&quot;tabela borda-vertical zebrada no-centro centralizado&quot;&gt;							    
 							    &lt;thead&gt;
 							        &lt;tr&gt;
 												&lt;th&gt;Unidade&lt;/th&gt;';
 		foreach($listaDeTipos as $tipo){
-				echo '&lt;th&gt;'.$tipo-&gt;getNome().'&lt;/th&gt;';
-				
-				
+				echo '&lt;th&gt;'.$tipo-&gt;getNome().'&lt;/th&gt;';				
 		}
-		echo '&lt;th&gt;Total&lt;/th&gt;';
-		echo '
-							        &lt;/tr&gt;
-							    &lt;/thead&gt;
-							    &lt;tbody&gt;';
 		
-		echo '					        &lt;tr&gt;
+		echo '&lt;th&gt;Total&lt;/th&gt;
+						        &lt;/tr&gt;
+							    &lt;/thead&gt;
+							    &lt;tbody&gt;		
+							        &lt;tr&gt;
 										&lt;th&gt;'.$catraca-&gt;getNome().'&lt;/th&gt;';
 		$somatorio = 0;
 		foreach ($listaDeTipos as $tipo){
@@ -172,13 +183,11 @@ class CatracaVirtual{
 			echo '&lt;td&gt;'.$j.'&lt;/td&gt;';	
 			
 		}
-		echo '&lt;td&gt;'.$somatorio.'&lt;/td&gt;';
+		echo '&lt;td&gt;'.$somatorio.'&lt;/td&gt;
 		
-		echo '
+		
 							        &lt;/tr&gt;
-									&lt;tr&gt;';
-
-		echo '
+									&lt;tr&gt;	
 									&lt;tr&gt;
 										&lt;th&gt;Selecionar&lt;/th&gt;';
 		$listaDeCores = array('aviso', 'primario', 'sucesso', 'secundario', 'erro', 'erro','primario', 'sucesso', 'secundario', 'aviso', 'erro');
@@ -381,8 +390,9 @@ class CatracaVirtual{
 		
 	}
 	
-	
-	
+	/**
+	 * 
+	 */
 	public function mensagemSucesso(){
 		echo '&lt;div class=&quot;doze colunas borda centralizado&quot;&gt;
 		
@@ -396,6 +406,10 @@ class CatracaVirtual{
 		
 	}
 	
+	/**
+	 * 
+	 * @param string $strMensagem
+	 */
 	public function mensagemErro($strMensagem = null){
 		if($strMensagem == null)
 			$strMensagem = &quot;Erro na tentativa de inserir os dados!&quot;;

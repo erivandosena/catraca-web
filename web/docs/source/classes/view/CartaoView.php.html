@@ -62,8 +62,8 @@ class CartaoView {
 				&lt;div class=&quot;doze colunas borda&quot;&gt;
 					&lt;form method=&quot;get&quot; action=&quot;&quot; class=&quot;formulario em-linha&quot; &gt;
 						&lt;input type=&quot;hidden&quot; name=&quot;pagina&quot; value=&quot;cartao&quot; /&gt;
-						&lt;label for=&quot;numero_cartao&quot;&gt;Buscar por N&uacute;mero:
-							&lt;input type=&quot;number&quot; name=&quot;numero_cartao&quot; id=&quot;numero_cartao&quot; autofocus /&gt;&lt;br&gt;
+						&lt;label for=&quot;numero_cartao&quot;&gt;												
+							Buscar por N&uacute;mero:&lt;input type=&quot;number&quot; name=&quot;numero_cartao&quot; id=&quot;numero_cartao&quot; autofocus /&gt;&lt;br&gt;
 							&lt;script&gt;$(document).trigger(\'autofocus_ready\');&lt;/script&gt;
 							&lt;input type=&quot;submit&quot; value=&quot;Buscar&quot; /&gt;
 						&lt;/label&gt;		
@@ -73,13 +73,14 @@ class CartaoView {
 	
 	/**
 	 * Fun&ccedil;&atilde;o utilizada para mostar uma pesquisa realizada pelo n&uacute;mero do cart&atilde;o.
-	 * Recebe a fun&ccedil;&atilde;o mostraLinhaDaBuscaCartao dentro da mesma Classe, contendo uma tabela com os dados dos usu&aacute;rio.
+	 * Chama a fun&ccedil;&atilde;o mostraLinhaDaBuscaCartao dentro da mesma Classe,
+	 * contendo o restante da tabela com os dados dos usu&aacute;rio.
 	 *
 	 * @param array $cartoes        	
 	 */
 	public function mostraResultadoBuscaDeCartoes($cartoes) {
 		echo '	&lt;div class=&quot;doze linhas&quot;&gt;';
-		echo '		&lt;br&gt;&lt;h2 class=&quot;texto-preto&quot;&gt;Busca de Cart&Atilde;&micro;es:&lt;/h2&gt;';
+		echo '		&lt;br&gt;&lt;h2 class=&quot;texto-preto&quot;&gt;Busca de Cart&otilde;es:&lt;/h2&gt;';
 		echo '	&lt;/div&gt;';
 		echo '	&lt;div class=&quot;borda&quot;&gt;
 					&lt;table class=&quot;tabela borda-vertical zebrada texto-preto&quot;&gt;
@@ -103,7 +104,6 @@ class CartaoView {
 	/**
 	 * Fun&ccedil;&atilde;o ulilizada para gerar uma tabela com a pesquisa
 	 * realizada com o n&uacute;mero do cart&atilde;o.
-	 * est&aacute; tabela contem um bot&atilde;o para sele&ccedil;&atilde;o do usu&aacute;rio.
 	 *
 	 * @param Cartao $cartao        	
 	 */
@@ -118,7 +118,7 @@ class CartaoView {
 	
 	/**
 	 * Exibi o cart&atilde;o selecionado.
-	 * 
+	 *
 	 * @param Cartao $cartao        	
 	 */
 	public function mostraCartaoSelecionado(Cartao $cartao) {
@@ -154,7 +154,6 @@ class CartaoView {
 	}
 	
 	/**
-	 * 
 	 */
 	public function formBuscaVinculo() {
 		echo '	&lt;div class=&quot;borda&quot;&gt;
@@ -172,7 +171,6 @@ class CartaoView {
 	}
 	
 	/**
-	 * 
 	 */
 	public function formBuscaVinculoIsencao() {
 		echo '	&lt;div class=&quot;borda&quot;&gt;
@@ -190,10 +188,9 @@ class CartaoView {
 	}
 	
 	/**
-	 * 
 	 */
 	public function filtroData() {
-		$dataHoje = date ( 'Y-m-d' ) . 'T' . date ( 'H:00:01' );		
+		$dataHoje = date ( 'Y-m-d' ) . 'T' . date ( 'H:00:01' );
 		echo '	&lt;div class=&quot;borda&quot;&gt;
 					&lt;form method=&quot;get&quot; action=&quot;&quot; class=&quot;formulario em-linha&quot; &gt;
 						&lt;label for=&quot;filtro_data&quot;&gt;Filtro de Data:&lt;/label&gt;
@@ -206,10 +203,9 @@ class CartaoView {
 	}
 	
 	/**
-	 * 
 	 */
 	public function filtroDataIsencao() {
-		$dataHoje = date ( 'Y-m-d' ) . 'T' . date ( 'H:00:01' );		
+		$dataHoje = date ( 'Y-m-d' ) . 'T' . date ( 'H:00:01' );
 		echo '	&lt;div class=&quot;borda&quot;&gt;
 					&lt;form method=&quot;get&quot; action=&quot;&quot; class=&quot;formulario em-linha&quot; &gt;
 						&lt;label for=&quot;filtro_data_isen&quot;&gt;Filtro de Data:&lt;/label&gt;
@@ -222,8 +218,12 @@ class CartaoView {
 	}
 	
 	/**
+	 * Exibe as informa&ccedil;&otilde;es do Usuario consultado atrav&eacute;s do nome.
+	 * Chama a fun&ccedil;&atilde;o mostraLinhaDaBusca() dentro da mesma Classe,
+	 * contendo o restante tabela com os dados dos usu&aacute;rio.
 	 *
-	 * @param array $usuarios        	
+	 * @param array $usuarios
+	 *        	Usuarios Consultados.
 	 */
 	public function mostraResultadoBuscaDeUsuarios($usuarios) {
 		echo '	&lt;h2 class=&quot;titulo&quot;&gt;Resultado da busca:&lt;/h2&gt;';
@@ -251,8 +251,10 @@ class CartaoView {
 	}
 	
 	/**
-	 * 
-	 * @param Usuario $usuario
+	 * Fun&ccedil;&atilde;o ulilizada para gerar uma tabela com a pesquisa
+	 * realizada com o nome do Usuario.
+	 *
+	 * @param Usuario $usuario        	
 	 */
 	public function mostraLinhaDaBusca(Usuario $usuario) {
 		echo '	&lt;tr&gt;';
@@ -266,6 +268,11 @@ class CartaoView {
 		echo '	&lt;/tr&gt;';
 	}
 	
+	/**
+	 * Exibi os dados do usu&aacute;rio selecionado, depois da pesquisa pelo nome.
+	 *
+	 * @param Usuario $usuario        	
+	 */
 	public function mostraSelecionado(Usuario $usuario) {
 		echo '	&lt;div class=&quot;doze colunas borda&quot;&gt;';
 		
@@ -279,9 +286,9 @@ class CartaoView {
 							&lt;div class=&quot;borda-foto&quot;&gt;								
 								&lt;div class=&quot;foto-salva&quot;&gt;';
 			
-			if (file_exists ( 'fotos/' . $_GET ['selecionado'] . '.png' )) {				
+			if (file_exists ( 'fotos/' . $_GET ['selecionado'] . '.png' )) {
 				echo '			&lt;img src=&quot;fotos/' . $_GET ['selecionado'] . '.png&quot; /&gt;';
-			} else {				
+			} else {
 				echo '			&lt;img src=&quot;img/camera.png&quot; /&gt;';
 			}
 			
@@ -320,22 +327,16 @@ class CartaoView {
 					    	&lt;/div&gt;
 					    &lt;/div&gt;	
 					&lt;/div&gt;
-					&lt;hr class=&quot;um&quot;/&gt;';			
+					&lt;hr class=&quot;um&quot;/&gt;';
 		}
 		
-		echo '		&lt;div class=&quot;doze colunas&quot;&gt;				
-						&lt;table  class=&quot;tabela borda-vertical zebrada&quot;&gt;
-							&lt;tr&gt;
-								&lt;th&gt;Nome:&lt;/th&gt;
-								&lt;td&gt; ' . $usuario-&gt;getNome () . '.&lt;/td&gt;		
-             				&lt;/tr&gt;
-							&lt;tr&gt;
-								&lt;th&gt;Login:&lt;/th&gt;
-								&lt;td&gt;' . $usuario-&gt;getLogin () . '.&lt;/td&gt;
-							&lt;/tr&gt;
-							&lt;tr&gt;
-								&lt;th&gt;Identidade: &lt;/th&gt;
-									&lt;td&gt;' . $usuario-&gt;getIdentidade () . '.&lt;/td&gt;&lt;/tr&gt;
+		echo '&lt;div class=&quot;doze colunas&quot;&gt;				
+				&lt;table  class=&quot;tabela borda-vertical zebrada&quot;&gt;
+					&lt;tr&gt;&lt;th&gt;Nome:&lt;/th&gt;&lt;td&gt; ' . $usuario-&gt;getNome () . '.&lt;/td&gt;';
+		echo '
+             		&lt;/tr&gt;
+					&lt;tr&gt;&lt;th&gt;Login:&lt;/th&gt;&lt;td&gt;' . $usuario-&gt;getLogin () . '.&lt;/td&gt;&lt;/tr&gt;
+					&lt;tr&gt;&lt;th&gt;Identidade: &lt;/th&gt;&lt;td&gt;' . $usuario-&gt;getIdentidade () . '.&lt;/td&gt;&lt;/tr&gt;
 					&lt;tr&gt;&lt;th&gt;CPF:&lt;/th&gt;&lt;td&gt;' . $usuario-&gt;getCpf () . '.&lt;/tr&gt;
 					&lt;tr&gt;&lt;/td&gt;&lt;th&gt;Passaporte:&lt;/th&gt;&lt;td&gt;' . $usuario-&gt;getPassaporte () . '&lt;/td&gt;&lt;/tr&gt;';
 		
@@ -373,14 +374,18 @@ class CartaoView {
 		}
 		
 		echo '&lt;/table&gt;
-				&lt;/div&gt;
-				
-				
-
-				
-				
+				&lt;/div&gt;				
 				&lt;/div&gt;';
 	}
+	
+	/**
+	 * Exibi uma tabela com os vinculos do usu&aacute;rio selecionado.
+	 * Chama a fun&ccedil;&atilde;o mostraLinhaVinculo() dentro da mesma Classe,
+	 * contendo o retante da tabela com os dados referentes aos vincunlos do usu&aacute;rio selecionado.
+	 *
+	 * @param array $lista        	
+	 * @param string $podeRenovar        	
+	 */
 	public function mostraVinculos($lista, $podeRenovar = true) {
 		if (! count ( $lista )) {
 			echo '&lt;div class=&quot;borda&quot;&gt;&lt;p&gt;Nenhum &iacute;tem na lista&lt;/p&gt;&lt;/div&gt;';
@@ -406,6 +411,15 @@ class CartaoView {
 		}
 		echo '&lt;/table&gt;&lt;/div&gt;';
 	}
+	
+	/**
+	 * Gera uma tabela com infoma&ccedil;&otilde;es dos vinculos.
+	 *
+	 * @param Vinculo $vinculo
+	 *        	Vinculos do Usu&aacute;rio.
+	 * @param string $podeRenovar
+	 *        	Verifica se o vinculo &eacute; passivel de renova&ccedil;&atilde;o.
+	 */
 	public function mostraLinhaVinculo(Vinculo $vinculo, $podeRenovar = true) {
 		echo '&lt;tr&gt;';
 		if ($vinculo-&gt;isAvulso ())
@@ -432,16 +446,31 @@ class CartaoView {
 		
 		echo '&lt;/tr&gt;';
 	}
+	
+	/**
+	 * Formul&aacute;rio para confirma&ccedil;&atilde;o de inclus&atilde;o de vinculo do cart&atilde;o ao usu&aacute;rio.
+	 *
+	 * @param Usuario $usuario        	
+	 * @param string $numeroCartao        	
+	 * @param Tipo $tipo        	
+	 */
 	public function formConfirmacaoEnvioVinculo(Usuario $usuario, $numeroCartao, Tipo $tipo) {
-		echo '&lt;div class=&quot;borda doze colunas&quot;&gt;';
-		echo '&lt;p&gt;Tem certeza que deseja adicionar o cart&atilde;o ' . $numeroCartao . ' para o usuario ' . $usuario-&gt;getNome () . ' com o tipo ' . $tipo-&gt;getNome () . '? &lt;/p&gt;';
-		echo '&lt;form action=&quot;&quot; method=&quot;post&quot;&gt;
-				&lt;input type=&quot;submit&quot; class=&quot;botao&quot; value=&quot;certeza&quot; name=&quot;enviar_vinculo&quot;/&gt;
+		echo '	&lt;div class=&quot;borda doze colunas&quot;&gt;';
+		echo '		&lt;p&gt;Tem certeza que deseja adicionar o cart&atilde;o ' . $numeroCartao . ' para o usuario ' . $usuario-&gt;getNome () . ' com o tipo ' . $tipo-&gt;getNome () . '? &lt;/p&gt;';
+		echo '			&lt;form action=&quot;&quot; method=&quot;post&quot;&gt;
+							&lt;input type=&quot;submit&quot; class=&quot;botao&quot; value=&quot;certeza&quot; name=&quot;enviar_vinculo&quot;/&gt;
 				
-				&lt;/form&gt;';
+				&lt;		/form&gt;';
 		
 		echo '&lt;/div&gt;';
 	}
+	
+	/**
+	 * Formul&aacute;rio para confirma&ccedil;&atilde;o de cancelamento do vinculo do cart&atilde;o ao usu&aacute;rio.
+	 * Ap&oacute;s a confima&ccedil;&atilde;o o vinculo n&atilde;o ser&aacute; exclu&iacute;do, ser&aacute; tornado inv&aacute;lido.
+	 *
+	 * @param Vinculo $vinculo        	
+	 */
 	public function formConfirmacaoEliminarVinculo(Vinculo $vinculo) {
 		echo '	&lt;div class=&quot;borda doze colunas&quot;&gt;';
 		$this-&gt;formMensagem ( &quot;-ajuda&quot;, &quot;Deseja eliminar esse v&iacute;nculo?&quot; );
@@ -450,12 +479,25 @@ class CartaoView {
 					&lt;/form&gt;
 				&lt;/div&gt;';
 	}
+	
+	/**
+	 * Formul&aacute;rio para confirma&ccedil;&atilde;o de renova&ccedil;&atilde;o de v&iacute;nculo.
+	 */
 	public function formConfirmacaoRenovarVinculo() {
 		$this-&gt;formMensagem ( &quot;-ajuda&quot;, &quot;Tem certeza que deseja renovar esse v&iacute;nculo?&quot; );
 		echo '	&lt;form id=&quot;form-confirma-cartao&quot; action=&quot;&quot; method=&quot;post&quot;&gt;
 					&lt;input type=&quot;submit&quot; class=&quot;botao&quot; value=&quot;certeza&quot; name=&quot;certeza&quot; /&gt;	
 				&lt;/form&gt;';
 	}
+	
+	/**
+	 * Formul&aacute;rio contendo os dados do v&iacute;nculo a ser inserido.
+	 *
+	 * @param array $listaDeTipos
+	 *        	Tipo de Vinculos poss&iacute;veis.
+	 * @param int $idSelecionado
+	 *        	Id do usu&aacute;rio a receber o vinculo.
+	 */
 	public function mostraFormAdicionarVinculo($listaDeTipos, $idSelecionado) {
 		$daqui3Meses = date ( 'Y-m-d', strtotime ( &quot;+60 days&quot; ) ) . 'T' . date ( 'H:00:01' );
 		$dataHoje = date ( 'Y-m-d' ) . 'T' . date ( 'H:00:01' );
@@ -470,8 +512,7 @@ class CartaoView {
 				    }
 				  });
 				&lt;/script&gt;';
-		echo '&lt;div class=&quot;doze colunas borda&quot;&gt;
-				
+		echo '&lt;div class=&quot;doze colunas borda&quot;&gt;				
 				&lt;form method=&quot;get&quot; action=&quot;&quot; class=&quot;formulario texto-preto&quot; &gt;
 						    &lt;label for=&quot;numero_cartao2&quot;&gt;N&uacute;mero do Cart&atilde;o&lt;/label&gt;
 								&lt;input type=&quot;text&quot; name=&quot;numero_cartao2&quot; id=&quot;numero_cartao2&quot; autofocus/&gt;
@@ -491,9 +532,21 @@ class CartaoView {
 			&lt;/form&gt;
 			&lt;/div&gt;';
 	}
+	
+	/**
+	 * Exibe uma mensagem de sucesso na inclus&atilde;o do vinculo.
+	 *
+	 * @param string $mensagem        	
+	 */
 	public function mostraSucesso($mensagem) {
 		echo '&lt;div class=&quot;borda&quot;&gt;&lt;p&gt;' . $mensagem . '&lt;/p&gt;&lt;/div&gt;';
 	}
+	
+	/**
+	 * Exibe informa&ccedil;&otilde;es detalhada do V&iacute;nculo.
+	 *
+	 * @param Vinculo $vinculo        	
+	 */
 	public function mostrarVinculoDetalhe(Vinculo $vinculo) {
 		echo '&lt;div class=&quot;doze linhas&quot;&gt;';
 		echo '&lt;br&gt;&lt;h2 class=&quot;texto-preto&quot;&gt;Vinculo Selecionado:&lt;/h2&gt;';
@@ -522,6 +575,11 @@ class CartaoView {
 		
 		echo '&lt;/div&gt;';
 	}
+	
+	/**
+	 *  Exibe informa&ccedil;&otilde;es detalhada do V&iacute;nculo Isento.
+	 * @param Vinculo $vinculo
+	 */
 	public function mostraIsencaoDoVinculo(Vinculo $vinculo) {
 		echo '&lt;div class=&quot;doze linhas&quot;&gt;';
 		echo '&lt;br&gt;&lt;h2 class=&quot;texto-preto&quot;&gt;Vinculo Selecionado:&lt;/h2&gt;';
@@ -537,8 +595,8 @@ class CartaoView {
 				echo '&lt;p&gt;Fim da Isen&ccedil;&atilde;oo: ' . date ( 'd/m/Y H:i:s', strtotime ( $vinculo-&gt;getIsencao ()-&gt;getDataFinal () ) ) . '&lt;/p&gt;';
 				echo '&lt;a href=&quot;?pagina=cartao&amp;vinculoselecionado=' . $vinculo-&gt;getId () . '&amp;delisencao=1&quot;&gt;Eliminar Isen&ccedil;&atilde;o&lt;/a&gt;';
 			} else if ($tempoAgora &lt; $tempoB) {
-				echo '&lt;p&gt;Isen&Atilde;&sect;&Atilde;&pound;o no Futuro&lt;/p&gt;';
-				echo '&lt;p&gt;In&Atilde;&shy;cio da Isen&ccedil;&atilde;o: ' . date ( 'd/m/Y H:i:s', strtotime ( $vinculo-&gt;getIsencao ()-&gt;getDataDeInicio () ) ) . '&lt;/p&gt;';
+				echo '&lt;p&gt;Isen&ccedil;&atilde;o no Futuro&lt;/p&gt;';
+				echo '&lt;p&gt;Inicio da Isen&ccedil;&atilde;o: ' . date ( 'd/m/Y H:i:s', strtotime ( $vinculo-&gt;getIsencao ()-&gt;getDataDeInicio () ) ) . '&lt;/p&gt;';
 				echo '&lt;p&gt;Fim da Isen&ccedil;&atilde;o: ' . date ( 'd/m/Y H:i:s', strtotime ( $vinculo-&gt;getIsencao ()-&gt;getDataFinal () ) ) . '&lt;/p&gt;';
 				echo '&lt;p&gt;&lt;a href=&quot;?pagina=cartao&amp;vinculoselecionado=' . $vinculo-&gt;getId () . '&amp;delisencao=1&quot;&gt;Eliminar Isen&ccedil;&atilde;o&lt;/a&gt;&lt;/p&gt;';
 			} else {
@@ -547,6 +605,11 @@ class CartaoView {
 		}
 		echo '&lt;/div&gt;';
 	}
+	
+	/**
+	 * Formul&aacute;rio contendo os dados do V&iacute;nculo Isento a ser inserido.
+	 * @param int $idSelecionado
+	 */
 	public function formAdicionarIsencao($idSelecionado) {
 		$daqui3Meses = date ( 'Y-m-d', strtotime ( &quot;+60 days&quot; ) ) . 'T' . date ( 'H:00:01' );
 		$hoje = date ( 'Y-m-d' ) . 'T' . date ( 'H:00:01' );
@@ -554,7 +617,7 @@ class CartaoView {
 		echo '&lt;div class=&quot;borda&quot;&gt;
 				&lt;form method=&quot;post&quot; action=&quot;&quot; class=&quot;formulario sequencial texto-preto&quot; &gt;
 					
-						    &lt;label for=&quot;isen_inicio&quot;&gt;In&Atilde;&shy;cio:&lt;/label&gt;
+						    &lt;label for=&quot;isen_inicio&quot;&gt;In&iacute;cio:&lt;/label&gt;
 						         &lt;input id=&quot;isen_inicio&quot; type=&quot;datetime-local&quot; name=&quot;isen_inicio&quot; value=&quot;' . $hoje . '&quot; /&gt;
 				    	    &lt;label for=&quot;isen_fim&quot;&gt;Fim:&lt;/label&gt;
 						         &lt;input id=&quot;isen_fim&quot; type=&quot;datetime-local&quot; name=&quot;isen_fim&quot; value=&quot;' . $daqui3Meses . '&quot; /&gt;
@@ -563,6 +626,11 @@ class CartaoView {
 			&lt;/form&gt;
 			&lt;/div&gt;';
 	}
+	
+	/**
+	 * @ignore
+	 * @param unknown $idSelecionado
+	 */
 	public function formAdicionarCreditos($idSelecionado) {
 		$daqui3Meses = date ( 'Y-m-d', strtotime ( &quot;+60 days&quot; ) ) . 'T' . date ( 'H:00:01' );
 		$hoje = date ( 'Y-m-d' ) . 'T' . date ( 'H:00:01' );
@@ -578,6 +646,15 @@ class CartaoView {
 			&lt;/form&gt;
 			&lt;/div&gt;';
 	}
+	
+	/**
+	 * Exibe informa&ccedil;&otilde;es do Usu&aacute;rio.
+	 * 
+	 * @param Cartao $cartao
+	 * @param Usuario $usuario
+	 * @param Tipo $tipo
+	 * @param string $imagem
+	 */
 	public function formIdentificacao(Cartao $cartao, Usuario $usuario, Tipo $tipo, $imagem) {
 		echo '	&lt;div class=&quot;borda doze colunas&quot;&gt;
 								

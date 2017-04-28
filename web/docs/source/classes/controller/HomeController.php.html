@@ -41,51 +41,51 @@
  * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
  * @package Controle
  */
-
-class HomeController{
+class HomeController {
 	
-	public static function main($nivelDeAcesso){
-		switch ($nivelDeAcesso){
-			case Sessao::NIVEL_SUPER:
-				//Acessa tudo. 
-				CartaoController::main($nivelDeAcesso);
+	/**
+	 * Metodo principal utilizada para controlar o acesso a classe atrav&eacute;s do n&iacute;vel de acesso do usuario.
+	 *
+	 * @param Sessao $nivelDeAcesso
+	 *        	Recebe uma Sess&atilde;o que cont&eacute;m o n&iacute;vel de acesso do usuario,
+	 *        	esta Sess&atilde;o &eacute; iniciada na p&aacute;gina principal, durante o login do usuario.
+	 */
+	public static function main($nivelDeAcesso) {
+		switch ($nivelDeAcesso) {
+			case Sessao::NIVEL_SUPER :
+				// Acessa tudo.
+				CartaoController::main ( $nivelDeAcesso );
 				break;
-			case Sessao::NIVEL_ADMIN:
-				//Acessa tudo que j&aacute; foi homologado. 
-				CartaoController::main($nivelDeAcesso);
+			case Sessao::NIVEL_ADMIN :
+				// Acessa tudo que j&aacute; foi homologado.
+				CartaoController::main ( $nivelDeAcesso );
 				break;
-
-			case Sessao::NIVEL_POLIVALENTE:
-				//Acessa tudo que j&aacute; foi homologado. 
-				CartaoController::main($nivelDeAcesso);
+			case Sessao::NIVEL_POLIVALENTE :
+				// Acessa tudo que j&aacute; foi homologado.
+				CartaoController::main ( $nivelDeAcesso );
 				break;
-			case Sessao::NIVEL_GUICHE:
-				//Acessa cadastro e venda de creditos. 
-				GuicheController::main($nivelDeAcesso);
+			case Sessao::NIVEL_GUICHE :
+				// Acessa cadastro e venda de creditos.
+				GuicheController::main ( $nivelDeAcesso );
 				break;
-			case Sessao::NIVEL_CATRACA_VIRTUAL:
-				//Acessa catraca virtual. 
-				CartaoController::main($nivelDeAcesso);
+			case Sessao::NIVEL_CATRACA_VIRTUAL :
+				// Acessa catraca virtual.
+				CartaoController::main ( $nivelDeAcesso );
 				break;
-			case Sessao::NIVEL_CADASTRO:
-				//So faz cadastro
-				CartaoController::main($nivelDeAcesso);
+			case Sessao::NIVEL_CADASTRO :
+				// So faz cadastro
+				CartaoController::main ( $nivelDeAcesso );
 				break;
-			case Sessao::NIVEL_RELATORIO:
-				//So faz cadastro
-				RelatorioController::main($nivelDeAcesso);
+			case Sessao::NIVEL_RELATORIO :
+				// So faz cadastro
+				RelatorioController::main ( $nivelDeAcesso );
 				break;
-				
-			default:
+			default :
 				UsuarioController::main ( $nivelDeAcesso );
 				break;
 		}
-		
 	}
-	
-	
 }
-
 
 ?&gt;</pre>
         <script type="text/javascript">

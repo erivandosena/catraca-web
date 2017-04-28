@@ -43,6 +43,13 @@
  */
 
 class RelatorioControllerGuiche {
+	
+	/**
+	 * Metodo principal utilizada para controlar o acesso a classe atrav&eacute;s do n&iacute;vel de acesso do usuario.
+	 *
+	 * @param Sessao $nivelDeAcesso Recebe uma Sess&atilde;o que cont&eacute;m o n&iacute;vel de acesso do usuario,
+	 * esta Sess&atilde;o &eacute; iniciada na p&aacute;gina principal, durante o login do usuario.
+	 */
 	public static function main($nivel) {
 		switch ($nivel) {
 			case Sessao::NIVEL_SUPER :
@@ -51,14 +58,21 @@ class RelatorioControllerGuiche {
 				break;
 			case Sessao::NIVEL_ADMIN :
 				$relatorio = new RelatorioControllerGuiche ();
-				$relatorio-&gt;relatorioGuiche ();
-				
+				$relatorio-&gt;relatorioGuiche ();				
 				break;
 			default :
 				UsuarioController::main ( $nivel );
 				break;
 		}
 	}
+	
+	/**
+	 * Gera um relat&oacute;rio contendo as informa&ccedil;&otilde;es das transa&ccedil;&otilde;es realizadas pelos operadores.
+	 * Realiza uma consulta na tabela transacao e soma todos os valores retornados.
+	 * 
+	 * Pode ser realizado um filtro por operador e data.
+	 * 
+	 */
 	public function relatorioGuiche() {
 		$dao = new DAO ();
 		$usuarioDao = new UsuarioDAO ();
@@ -73,8 +87,7 @@ class RelatorioControllerGuiche {
 		
 		$sql = &quot;SELECT * FROM usuario WHERE usua_nivel &gt; 1&quot;;
 		$result = $dao-&gt;getConexao ()-&gt;query ( $sql );
-		foreach ( $result as $linha ) {
-			
+		foreach ( $result as $linha ) {			
 			echo '
 						&lt;option value=&quot;' . $linha ['usua_id'] . '&quot;&gt;' . ucwords ( strtolower ( htmlentities ( $linha ['usua_nome'] ) ) ) . '&lt;/option&gt;';
 		}
@@ -88,10 +101,8 @@ class RelatorioControllerGuiche {
 						&lt;label for=&quot;data_fim&quot;&gt;
 							Data Fim: &lt;input type=&quot;datetime-local&quot; name=&quot;data_fim&quot;&gt;
 						&lt;/label&gt;&lt;br&gt;
-						&lt;input type=&quot;hidden&quot; value=&quot;relatorio_guiche&quot; name=&quot;pagina&quot;&gt;		
-				
-						&lt;input type=&quot;submit&quot; value=&quot;Gerar&quot; name=&quot;gerar&quot;&gt;		
-				
+						&lt;input type=&quot;hidden&quot; value=&quot;relatorio_guiche&quot; name=&quot;pagina&quot;&gt;				
+						&lt;input type=&quot;submit&quot; value=&quot;Gerar&quot; name=&quot;gerar&quot;&gt;				
 					&lt;/form&gt;
 				&lt;/div&gt;';
 		
@@ -132,6 +143,7 @@ class RelatorioControllerGuiche {
 			$fim = date(&quot;Y-m-d H:i:s&quot;, strtotime($dataFim));
 			
 			$valorTotal = 0;
+						
 			$sqlTran = &quot;SELECT * FROM transacao as trans 
 					LEFT JOIN usuario as usuario
 					on trans.usua_id = usuario.usua_id 
@@ -139,12 +151,12 @@ class RelatorioControllerGuiche {
 			$result = $dao-&gt;getConexao ()-&gt;query ( $sqlTran );
 			foreach ( $result as $dado ) {
 				echo '	&lt;tr&gt;
-						&lt;td&gt;' . date ( &quot;d/m/Y&quot;, strtotime ( $dado ['tran_data'] ) ) . '&lt;/td&gt;
-						&lt;td&gt;' . date ( 'H:i:s', strtotime ( $dado ['tran_data'] ) ) . '&lt;/td&gt;						
-						&lt;td&gt;' . $dado ['tran_descricao'] . '&lt;/td&gt;
-						&lt;td&gt;' . $dado ['usua_nome'] . '&lt;/td&gt;	
-						&lt;td&gt;R$ ' . $dado ['tran_valor'] .' - ID:'.$dado['usua_id1'].'&lt;/td&gt;
-					&lt;/tr&gt;';
+							&lt;td&gt;' . date ( &quot;d/m/Y&quot;, strtotime ( $dado ['tran_data'] ) ) . '&lt;/td&gt;
+							&lt;td&gt;' . date ( 'H:i:s', strtotime ( $dado ['tran_data'] ) ) . '&lt;/td&gt;						
+							&lt;td&gt;' . $dado ['tran_descricao'] . '&lt;/td&gt;
+							&lt;td&gt;' . $dado ['usua_nome'] . '&lt;/td&gt;	
+							&lt;td&gt;R$ ' . $dado ['tran_valor'] .' - ID:'.$dado['usua_id1'].'&lt;/td&gt;
+						&lt;/tr&gt;';
 			}
 			
 			$result = $dao-&gt;getConexao ()-&gt;query ( $sqlTran );
@@ -156,7 +168,7 @@ class RelatorioControllerGuiche {
 				}
 			}
 			
-			echo '	&lt;tr id=&quot;soma&quot;&gt;
+			echo '		&lt;tr id=&quot;soma&quot;&gt;
 							&lt;th&gt;Somat&oacute;rio&lt;/th&gt;							
 							&lt;td&gt; - &lt;/td&gt;
 							&lt;td&gt; - &lt;/td&gt;
@@ -166,18 +178,6 @@ class RelatorioControllerGuiche {
 					&lt;/tbody&gt;
 				&lt;/table&gt;
 			&lt;/div&gt;';
-		}
-	}
-	public function retornaUsuario() {
-		$dao = new DAO ();
-		$usuario = new Usuario ();
-		$sql = &quot;SELECT * FROM usuario WHERE usua_nivel &gt; 1&quot;;
-		$result = $dao-&gt;getConexao ()-&gt;query ( $sql );
-		
-		foreach ( $result as $linha ) {
-			$usuario-&gt;setId ( $linha ['usua_id'] );
-			$usuario-&gt;setNome ( $linha ['usua_nome'] );
-			return $usuario;
 		}
 	}
 }
