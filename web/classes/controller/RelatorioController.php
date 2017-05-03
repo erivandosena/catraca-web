@@ -1,21 +1,39 @@
 <?php
 /**
+ * Classe utilizada para centralizar as demais Classes(DAO, Model, View, Util).
+ * Esta classe será instaciada no index.php.
+ * 
  * @author Jefferson Uchoa Ponte
  * @version 1.0
  * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
  * @package Controle
  */
-
+/**
+ * Nesta classe será gerenciado o processamento de dados
+ * para a elaboração do relatório sobre as movimentações
+ * nos Restaurantes Universitários.
+ *
+ * O usuário autorizado, poderá gerar o relatorio com filtros de acordo
+ * com as suas necessidades.
+ *
+ * 1 - Relatório de Pratos Consumidos;
+ *
+ * 2 - Relatório de Valores Arrecadados;
+ *
+ * 3 - Relatório de Relação de Relação de Pratos e Valores.
+ */
 class RelatorioController {
 	
 	/**
-	 * 
+	 * Recebe o Objeto RelatorioView;
+	 *
 	 * @var RelatorioView
 	 */
 	private $view;
 	
 	/**
-	 * 
+	 * Recebe o Objeto DAO.
+	 *
 	 * @var DAO
 	 */
 	private $dao;
@@ -37,15 +55,15 @@ class RelatorioController {
 				$controller = new RelatorioController ();
 				$controller->relatorio ();
 				break;
-			case Sessao::NIVEL_POLIVALENTE:
+			case Sessao::NIVEL_POLIVALENTE :
 				$controller = new RelatorioController ();
 				$controller->relatorio ();
 				break;
-			case Sessao::NIVEL_CATRACA_VIRTUAL:
+			case Sessao::NIVEL_CATRACA_VIRTUAL :
 				$controller = new RelatorioController ();
 				$controller->relatorio ();
 				break;
-			case Sessao::NIVEL_RELATORIO:
+			case Sessao::NIVEL_RELATORIO :
 				$controller = new RelatorioController ();
 				$controller->relatorio ();
 				break;
@@ -56,7 +74,9 @@ class RelatorioController {
 	}
 	
 	/**
-	 * 
+	 * Gera o formulário com os filtros para elaboração do relatório,
+	 * nele será possível selecionar a unidade acadêmica, a data inicial
+	 * e final e o tipo de relatório de acordo com a necessidade.
 	 */
 	public function relatorio() {
 		$this->dao = new UnidadeDAO ();
@@ -71,7 +91,7 @@ class RelatorioController {
 		foreach ( $listaDeUnidades as $unidade ) {
 			echo '<option value="' . $unidade->getId () . '">' . $unidade->getNome () . '</option>';
 		}
-		//echo '<option value="">Todos as Unidades</option>';
+		// echo '<option value="">Todos as Unidades</option>';
 		echo '								            										            
 												    </select>
 												</label><br>
@@ -113,37 +133,39 @@ class RelatorioController {
 					$this->geraRelacaoPratosValores ( $_GET ['unidade'], $_GET ['data_inicial'], $_GET ['data_final'] );
 					break;
 			}
-		}else{
+		} else {
 			$this->geraRelacaoPratosValores ();
-				
 		}
 	}
 	
 	/**
-	 * 
-	 * @param int $idUnidade
-	 * @param DateTime $dateStart
-	 * @param DateTime $dataEnd
+	 * Neste relatório será exibido a relação de pratos consumidos.
+	 * Será mostrada a quantidade de pratos de acordo com tipo de usuário.
+	 * Caso uma data inicial e final não seja definida, por padrão a data corrente
+	 * será utilizada.
+	 * Ao final será informada o somatório total dos pratos consumidos no RU.
+	 *
+	 * @param int $idUnidade        	
+	 * @param DateTime $dateStart        	
+	 * @param DateTime $dataEnd        	
 	 */
 	public function gerarPratosConsumidos($idUnidade = NULL, $dateStart = null, $dataEnd = null) {
-
 		if ($dateStart == null)
 			$dateStart = date ( 'Y-m-d' );
 		if ($dataEnd == null)
 			$dataEnd = date ( 'Y-m-d' );
 		
-		
 		$strFiltroUnidade = "";
-		$strUnidade =  'Todos os restaurantes ';
-		if($idUnidade != NULL){
+		$strUnidade = 'Todos os restaurantes ';
+		if ($idUnidade != NULL) {
 			
-			$idUnidade = intval($idUnidade);
-			$strFiltroUnidade  = " AND catraca_unidade.unid_id = $idUnidade";
-			$unidadeDao = new UnidadeDAO($this->dao->getConexao());
-			$unidade = new Unidade();
-			$unidade->setId($idUnidade);
-			$unidadeDao->preenchePorId($unidade);
-			$strUnidade =  $unidade->getNome();
+			$idUnidade = intval ( $idUnidade );
+			$strFiltroUnidade = " AND catraca_unidade.unid_id = $idUnidade";
+			$unidadeDao = new UnidadeDAO ( $this->dao->getConexao () );
+			$unidade = new Unidade ();
+			$unidade->setId ( $idUnidade );
+			$unidadeDao->preenchePorId ( $unidade );
+			$strUnidade = $unidade->getNome ();
 		}
 		
 		$dao = new TipoDAO ();
@@ -188,8 +210,8 @@ class RelatorioController {
 			}
 			$listaDeDados [$data] ['total'] = $total;
 		}
-			
-		$this->mostraListaDeDadosPratos($listaDeDados, $strUnidade.' - Todos os Turnos', $tipos, $listaDeDatas );
+		
+		$this->mostraListaDeDadosPratos ( $listaDeDados, $strUnidade . ' - Todos os Turnos', $tipos, $listaDeDatas );
 		
 		$listaDeDados = array ();
 		$turnoDao = new TurnoDAO ( $this->dao->getConexao () );
@@ -224,15 +246,17 @@ class RelatorioController {
 				$listaDeDados [$data] ['total'] = $total;
 			}
 			
-			$this->mostraListaDeDadosPratos($listaDeDados, $strUnidade.' - turno: ' . $turno->getDescricao () . ' - entre: ' . $turno->getHoraInicial () . ' e ' . $turno->getHoraFinal (), $tipos, $listaDeDatas );
+			$this->mostraListaDeDadosPratos ( $listaDeDados, $strUnidade . ' - turno: ' . $turno->getDescricao () . ' - entre: ' . $turno->getHoraInicial () . ' e ' . $turno->getHoraFinal (), $tipos, $listaDeDatas );
 		}
 	}
 	
 	/**
-	 * 
-	 * @param int $idUnidade
-	 * @param DateTime $dateStart
-	 * @param DateTime $dataEnd
+	 * Gera um relatório onde serão exibidos os valores arrecados de acordo com o tipo.
+	 * Ao final será mostrado o somatório dos valores.
+	 *
+	 * @param int $idUnidade        	
+	 * @param DateTime $dateStart        	
+	 * @param DateTime $dataEnd        	
 	 */
 	public function geraValoresArrecadados($idUnidade = NULL, $dateStart = null, $dataEnd = null) {
 		if ($dateStart == null)
@@ -244,16 +268,16 @@ class RelatorioController {
 		$tipos = $dao->retornaLista ();
 		
 		$strFiltroUnidade = "";
-		$strUnidade =  'Todos os restaurantes ';
-		if($idUnidade != NULL){
-				
-			$idUnidade = intval($idUnidade);
-			$strFiltroUnidade  = " AND catraca_unidade.unid_id = $idUnidade";
-			$unidadeDao = new UnidadeDAO($this->dao->getConexao());
-			$unidade = new Unidade();
-			$unidade->setId($idUnidade);
-			$unidadeDao->preenchePorId($unidade);
-			$strUnidade =  $unidade->getNome();
+		$strUnidade = 'Todos os restaurantes ';
+		if ($idUnidade != NULL) {
+			
+			$idUnidade = intval ( $idUnidade );
+			$strFiltroUnidade = " AND catraca_unidade.unid_id = $idUnidade";
+			$unidadeDao = new UnidadeDAO ( $this->dao->getConexao () );
+			$unidade = new Unidade ();
+			$unidade->setId ( $idUnidade );
+			$unidadeDao->preenchePorId ( $unidade );
+			$strUnidade = $unidade->getNome ();
 		}
 		
 		$dateStart = new DateTime ( $dateStart );
@@ -296,7 +320,7 @@ class RelatorioController {
 			$listaDeDados [$data] ['total'] = $total;
 		}
 		
-		$this->mostraListaDeDados ( $listaDeDados, $strUnidade.' - Todos os Turnos', $tipos, $listaDeDatas );
+		$this->mostraListaDeDados ( $listaDeDados, $strUnidade . ' - Todos os Turnos', $tipos, $listaDeDatas );
 		
 		$listaDeDados = array ();
 		$turnoDao = new TurnoDAO ( $this->dao->getConexao () );
@@ -330,19 +354,19 @@ class RelatorioController {
 				}
 				$listaDeDados [$data] ['total'] = $total;
 			}
-			$this->mostraListaDeDados ( $listaDeDados, $strUnidade.' - turno: ' . $turno->getDescricao () . ' - entre: ' . $turno->getHoraInicial () . ' e ' . $turno->getHoraFinal (), $tipos, $listaDeDatas );
+			$this->mostraListaDeDados ( $listaDeDados, $strUnidade . ' - turno: ' . $turno->getDescricao () . ' - entre: ' . $turno->getHoraInicial () . ' e ' . $turno->getHoraFinal (), $tipos, $listaDeDatas );
 		}
 	}
 	
 	/**
-	 * 
-	 * @param int $idUnidade
+	 * Retorna o ultimo valor do custo da refeição cadastrado para a unidade.
+	 * Este valor servirá para calculo dos valores dos relatorios.
+	 *
+	 * @param int $idUnidade        	
 	 */
-	public function pegaUltimoCusto($idUnidade = null){
-		
-		if($idUnidade != null){
+	public function pegaUltimoCusto($idUnidade = null) {
+		if ($idUnidade != null) {
 			
-
 			$sql = "SELECT cure_valor FROM custo_refeicao
 			INNER JOIN custo_unidade
 			ON custo_unidade.cure_id = custo_refeicao.cure_id
@@ -354,11 +378,9 @@ class RelatorioController {
 			ORDER BY custo_unidade.cure_id DESC LIMIT 1
 			";
 			
-			foreach($this->dao->getConexao()->query($sql) as $linha){
-				return $linha['cure_valor'];
+			foreach ( $this->dao->getConexao ()->query ( $sql ) as $linha ) {
+				return $linha ['cure_valor'];
 			}
-			
-			
 		}
 		
 		$ultimoCusto = 0;
@@ -369,14 +391,20 @@ class RelatorioController {
 	}
 	
 	/**
+	 * Gera um relatório com a quantidade de pratos consumidos, e a sua porcentagem
+	 * referente a cada tipo de usuário.
+	 * Mostrarar tambem os valores em Reais da quantidade de pratos consumidos por cada tipo de usuário
+	 * e a sua porcentagem.
+	 * Será exibida o valor total de custo de acordo com o tipo.
+	 * A despesa por parte do RU será informada com base na diferença entre o valor consumido
+	 * e o arrecadado.
 	 * 
-	 * @param int $idUnidade
-	 * @param DateTime $data1
-	 * @param DateTime $data2
+	 * @param int $idUnidade        	
+	 * @param DateTime $data1        	
+	 * @param DateTime $data2        	
 	 */
 	public function geraRelacaoPratosValores($idUnidade = NULL, $data1 = null, $data2 = null) {
-		
-		if($idUnidade == NULL)
+		if ($idUnidade == NULL)
 			$idUnidade = 1;
 		if ($data1 == null)
 			$data1 = date ( 'Y-m-d' );
@@ -384,15 +412,14 @@ class RelatorioController {
 			$data2 = date ( 'Y-m-d' );
 		$strFiltroUnidade = "";
 		$strUnidade = "Todos os restaurantes";
-		if($idUnidade != NULL){
-			$idUnidade = intval($idUnidade);
-			$strFiltroUnidade  = " AND catraca_unidade.unid_id = $idUnidade";
-			$unidadeDao = new UnidadeDAO($this->dao->getConexao());
-			$unidade = new Unidade();
-			$unidade->setId($idUnidade);
-			$unidadeDao->preenchePorId($unidade);
-			$strUnidade =  $unidade->getNome();
-			
+		if ($idUnidade != NULL) {
+			$idUnidade = intval ( $idUnidade );
+			$strFiltroUnidade = " AND catraca_unidade.unid_id = $idUnidade";
+			$unidadeDao = new UnidadeDAO ( $this->dao->getConexao () );
+			$unidade = new Unidade ();
+			$unidade->setId ( $idUnidade );
+			$unidadeDao->preenchePorId ( $unidade );
+			$strUnidade = $unidade->getNome ();
 		}
 		$idUnidade = intval ( $idUnidade );
 		$dao = new TipoDAO ();
@@ -408,8 +435,7 @@ class RelatorioController {
 			$dateStart = $dateStart->modify ( '+1day' );
 		}
 		// Pegar ultimo custo.
-		$ultimoCusto = $this->pegaUltimoCusto();
-		
+		$ultimoCusto = $this->pegaUltimoCusto ();
 		
 		$listaDeDados = array ();
 		$totalValor = 0;
@@ -433,38 +459,32 @@ class RelatorioController {
 					WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') AND vinculo_tipo.tipo_id =  $tipoId
 				$strFiltroUnidade;";
 				foreach ( $dao->getConexao ()->query ( $sql ) as $linha ) {
-					//print_r($linha);
-					$ultimoCusto = $this->pegaUltimoCusto($idUnidade);
-					$pratos = floatval($linha ['pratos']);
-					$valor = floatval($linha ['valor']);
-
+					// print_r($linha);
+					$ultimoCusto = $this->pegaUltimoCusto ( $idUnidade );
+					$pratos = floatval ( $linha ['pratos'] );
+					$valor = floatval ( $linha ['valor'] );
+					
 					$listaDeDados [$tipo->getId ()] ['pratos'] += $pratos;
-					$listaDeDados [$tipo->getId ()] ['valor'] += floatval($valor);
+					$listaDeDados [$tipo->getId ()] ['valor'] += floatval ( $valor );
 					$listaDeDados [$tipo->getId ()] ['custo'] += $ultimoCusto * $pratos;
 					
-
 					$totalValor += floatval ( $valor );
 					
 					$totalPratos += intval ( $pratos );
-					$listaDeDados ['total'] ['pratos'] = floatval($totalPratos);
-					$listaDeDados ['total'] ['valor'] = floatval($totalValor);
-					$listaDeDados ['total'] ['custo'] = floatval($totalPratos * $ultimoCusto);
+					$listaDeDados ['total'] ['pratos'] = floatval ( $totalPratos );
+					$listaDeDados ['total'] ['valor'] = floatval ( $totalValor );
+					$listaDeDados ['total'] ['custo'] = floatval ( $totalPratos * $ultimoCusto );
 				}
-				
-				
 			}
 			
-			
-// 			$this->mostraMatriz($listaDeDados);
-			
+			// $this->mostraMatriz($listaDeDados);
 		}
-
 		
-		echo '<div class=" doze colunas borda relatorio">';		
+		echo '<div class=" doze colunas borda relatorio">';
 		echo '<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>
 				<hr class="um">
-				<h3>'.$strUnidade.'</h3>
-				<span>De '. date ( 'd/m/Y', strtotime ( $data1 ) ) . ' a ' . date ( 'd/m/Y', strtotime ( $data2 ) ) .'</span>
+				<h3>' . $strUnidade . '</h3>
+				<span>De ' . date ( 'd/m/Y', strtotime ( $data1 ) ) . ' a ' . date ( 'd/m/Y', strtotime ( $data2 ) ) . '</span>
 				<span>Todos os Turnos</span>
 				<hr class="dois">
 				
@@ -485,16 +505,16 @@ class RelatorioController {
 		foreach ( $tipos as $tipo ) {
 			
 			$percentual = 0;
-			if($listaDeDados ['total']['custo'] - $listaDeDados ['total']['valor'])
-				$percentual = ($listaDeDados [$tipo->getId ()] ['custo'] - $listaDeDados [$tipo->getId ()] ['valor'])/($listaDeDados ['total'] ['custo'] - $listaDeDados ['total']['valor'])*100;
+			if ($listaDeDados ['total'] ['custo'] - $listaDeDados ['total'] ['valor'])
+				$percentual = ($listaDeDados [$tipo->getId ()] ['custo'] - $listaDeDados [$tipo->getId ()] ['valor']) / ($listaDeDados ['total'] ['custo'] - $listaDeDados ['total'] ['valor']) * 100;
 			$percentualPratos = 0;
-			if($listaDeDados ['total']['pratos'])
-				$percentualPratos = ($listaDeDados [$tipo->getId ()] ['pratos'])/($listaDeDados ['total'] ['pratos'])*100;
+			if ($listaDeDados ['total'] ['pratos'])
+				$percentualPratos = ($listaDeDados [$tipo->getId ()] ['pratos']) / ($listaDeDados ['total'] ['pratos']) * 100;
 			
-			echo'	<tr >	
+			echo '	<tr >	
 						<th id="limpar">' . $tipo->getNome () . '</th>
 						<td>' . $listaDeDados [$tipo->getId ()] ['pratos'] . '</td>
-						<td>'.number_format ( $percentualPratos, 2, ',', '.' ).'</td>
+						<td>' . number_format ( $percentualPratos, 2, ',', '.' ) . '</td>
 						<td>R$ ' . number_format ( $listaDeDados [$tipo->getId ()] ['valor'], 2, ',', '.' ) . '</td>
 						<td>R$ ' . number_format ( $listaDeDados [$tipo->getId ()] ['custo'], 2, ',', '.' ) . '</td>
 						<td>R$ ' . number_format ( ($listaDeDados [$tipo->getId ()] ['custo'] - $listaDeDados [$tipo->getId ()] ['valor']), 2, ',', '.' ) . '</td>
@@ -502,26 +522,25 @@ class RelatorioController {
 						<td> ' . number_format ( ($percentual), 2, ',', '.' ) . '</td>
 														
 					</tr>';
-		}		
+		}
 		
-		echo'		<tr id="soma">
+		echo '		<tr id="soma">
 						<th id="limpar">Somatório</th><td>' . $listaDeDados ['total'] ['pratos'] . '</td><td>-</td>
 						<td>R$ ' . number_format ( $listaDeDados ['total'] ['valor'], 2, ',', '.' ) . '</td>
 						<td>R$ ' . number_format ( $listaDeDados ['total'] ['custo'], 2, ',', '.' ) . '</td>
-						<td>R$ ' . number_format ( ($listaDeDados ['total'] ['custo'] - $listaDeDados ['total']['valor']), 2, ',', '.' ) . '</td>
+						<td>R$ ' . number_format ( ($listaDeDados ['total'] ['custo'] - $listaDeDados ['total'] ['valor']), 2, ',', '.' ) . '</td>
 						<td>-</td>
 					</tr>';
 		
-		echo'			</tbody>
+		echo '			</tbody>
 					</table>';
-					
 		
-		echo'<div class="doze colunas relatorio-rodape">
+		echo '<div class="doze colunas relatorio-rodape">
 			<span>CATRACA | Copyright © 2015 - DTI</span>
-			<span>Relatório Emitido em:'.$date = date('d-m-Y H:i:s').'</span>';
-// 		echo '<a class="botao icone-printer"> Imprimir</a>';
+			<span>Relatório Emitido em:' . $date = date ( 'd-m-Y H:i:s' ) . '</span>';
+		// echo '<a class="botao icone-printer"> Imprimir</a>';
 		echo '	</div>	
-				</div>';		
+				</div>';
 		
 		$turnoDao = new TurnoDAO ( $this->dao->getConexao () );
 		$listaDeTurnos = $turnoDao->retornaLista ();
@@ -538,8 +557,8 @@ class RelatorioController {
 				$listaDeDados [$tipo->getId ()] ['custo'] = 0;
 				
 				foreach ( $listaDeDatas as $data ) {
-					$dataInicial = $data . ' '.$turno->getHoraInicial();
-					$dataFinal = $data . ' '.$turno->getHoraFinal();
+					$dataInicial = $data . ' ' . $turno->getHoraInicial ();
+					$dataFinal = $data . ' ' . $turno->getHoraFinal ();
 					$tipoId = $tipo->getId ();
 					$sql = "SELECT sum(1) pratos,sum(regi_valor_pago) valor  FROM registro
 				INNER JOIN vinculo ON vinculo.vinc_id = registro.vinc_id
@@ -549,30 +568,29 @@ class RelatorioController {
 				WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') AND vinculo_tipo.tipo_id =  $tipoId
 				$strFiltroUnidade;";
 					foreach ( $dao->getConexao ()->query ( $sql ) as $linha ) {
-						$ultimoCusto = $this->pegaUltimoCusto($idUnidade);
+						$ultimoCusto = $this->pegaUltimoCusto ( $idUnidade );
 						$pratos = $linha ['pratos'];
 						$valor = $linha ['valor'];
 						$listaDeDados [$tipo->getId ()] ['pratos'] += $pratos;
 						$listaDeDados [$tipo->getId ()] ['valor'] += $valor;
 						$listaDeDados [$tipo->getId ()] ['custo'] += $ultimoCusto * $pratos;
-
+						
 						$totalValor += floatval ( $valor );
 						$totalPratos += intval ( $pratos );
 						$listaDeDados ['total'] ['pratos'] = $totalPratos;
 						$listaDeDados ['total'] ['valor'] = $totalValor;
 						$listaDeDados ['total'] ['custo'] = $totalPratos * $ultimoCusto;
 					}
-					
 				}
 			}
 			
-		echo '<div class="doze colunas borda relatorio">
+			echo '<div class="doze colunas borda relatorio">
 				<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>
 				<hr class="um">
-				<h3>'.$strUnidade.'</h3>
-				<span>Data: '. date ( 'd/m/Y', strtotime ( $data1 ) ) . ' e ' . date ( 'd/m/Y', strtotime ( $data2 ) ) .'</span>
+				<h3>' . $strUnidade . '</h3>
+				<span>Data: ' . date ( 'd/m/Y', strtotime ( $data1 ) ) . ' e ' . date ( 'd/m/Y', strtotime ( $data2 ) ) . '</span>
 				<span>Unidade Acadêmica:</span>
-				<span>Turno: '.$turno->getDescricao().'</span>
+				<span>Turno: ' . $turno->getDescricao () . '</span>
 				<hr class="dois">
 						<table class="tabela-relatorio">
 							<thead>								
@@ -586,43 +604,44 @@ class RelatorioController {
 									<th>%Despesa</th>
 								
 								</tr>';
-		foreach ( $tipos as $tipo ) {
-			$percentual = 0;
-			if($listaDeDados ['total']['custo'] - $listaDeDados ['total']['valor'])
-				$percentual = ($listaDeDados [$tipo->getId ()] ['custo'] - $listaDeDados [$tipo->getId ()] ['valor'])/($listaDeDados ['total'] ['custo'] - $listaDeDados ['total']['valor'])*100;
-			$percentualPratos = 0;
-			if($listaDeDados ['total']['pratos'])
-				$percentualPratos = ($listaDeDados [$tipo->getId ()] ['pratos'])/($listaDeDados ['total'] ['pratos'])*100;
-			
-			
-			echo '<tr >
+			foreach ( $tipos as $tipo ) {
+				$percentual = 0;
+				if ($listaDeDados ['total'] ['custo'] - $listaDeDados ['total'] ['valor'])
+					$percentual = ($listaDeDados [$tipo->getId ()] ['custo'] - $listaDeDados [$tipo->getId ()] ['valor']) / ($listaDeDados ['total'] ['custo'] - $listaDeDados ['total'] ['valor']) * 100;
+				$percentualPratos = 0;
+				if ($listaDeDados ['total'] ['pratos'])
+					$percentualPratos = ($listaDeDados [$tipo->getId ()] ['pratos']) / ($listaDeDados ['total'] ['pratos']) * 100;
+				
+				echo '<tr >
 					<th id="limpar">' . $tipo->getNome () . '</th>
 					<td>' . $listaDeDados [$tipo->getId ()] ['pratos'] . '</td>
-					<td>'.number_format ( $percentualPratos, 2, ',', '.' ).'</td>
+					<td>' . number_format ( $percentualPratos, 2, ',', '.' ) . '</td>
 					<td>R$ ' . number_format ( $listaDeDados [$tipo->getId ()] ['valor'], 2, ',', '.' ) . '</td>
 					<td>R$ ' . number_format ( $listaDeDados [$tipo->getId ()] ['custo'], 2, ',', '.' ) . '</td>
 					<td>R$ ' . number_format ( ($listaDeDados [$tipo->getId ()] ['custo'] - $listaDeDados [$tipo->getId ()] ['valor']), 2, ',', '.' ) . '</td>
 					<td> ' . number_format ( ($percentual), 2, ',', '.' ) . '</td>
 				</tr>';
-		}
-		echo '<tr id="soma">
+			}
+			echo '<tr id="soma">
 			<th id="limpar">Somatário</th><td>' . $listaDeDados ['total'] ['pratos'] . '</td>';
-		echo '<td>-</td>';
-		echo '<td>R$ ' . number_format ( $listaDeDados ['total'] ['valor'], 2, ',', '.' ) . '</td>';
-		echo '<td>R$ ' . number_format ( $listaDeDados ['total'] ['custo'], 2, ',', '.' ) . '</td>';
-		echo '<td>R$ ' . number_format ( ($listaDeDados ['total'] ['custo'] - $listaDeDados ['total'] ['valor']), 2, ',', '.' ) . '</td><td>-</td>';
-		echo '</tr>';
-		echo '</table>';
-		echo '</div>';
+			echo '<td>-</td>';
+			echo '<td>R$ ' . number_format ( $listaDeDados ['total'] ['valor'], 2, ',', '.' ) . '</td>';
+			echo '<td>R$ ' . number_format ( $listaDeDados ['total'] ['custo'], 2, ',', '.' ) . '</td>';
+			echo '<td>R$ ' . number_format ( ($listaDeDados ['total'] ['custo'] - $listaDeDados ['total'] ['valor']), 2, ',', '.' ) . '</td><td>-</td>';
+			echo '</tr>';
+			echo '</table>';
+			echo '</div>';
 		}
 	}
 	
 	/**
-	 * 
-	 * @param array $listaDeDados
-	 * @param string $titulo
-	 * @param Tipo[] $tipos
-	 * @param array $listaDeDatas
+	 * Função utilizada para gerar uma tabela contendo as
+	 * as informações sobre os valores arrecadados.
+	 *
+	 * @param array $listaDeDados        	
+	 * @param string $titulo        	
+	 * @param Tipo[] $tipos        	
+	 * @param array $listaDeDatas        	
 	 */
 	public function mostraListaDeDados($listaDeDados, $titulo, $tipos, $listaDeDatas) {
 		$subTotal = array ();
@@ -630,12 +649,11 @@ class RelatorioController {
 			$subTotal [$tipo->getId ()] = 0;
 		}
 		$subTotal ['total'] = 0;
-	
 		
 		echo '<div class=" doze colunas borda relatorio">
 				<h2>UNILAB<small class="fim">Universidade da Integraçao Internacional da Lusofonia Afro-Brasileira</small></h2>	
 				<hr class="um">
-				<h3>'.$titulo.'</h3>
+				<h3>' . $titulo . '</h3>
 				<hr class="dois">';
 		
 		echo '<table class="tabela-relatorio">
@@ -644,8 +662,8 @@ class RelatorioController {
 						<th>Data</th>';
 		foreach ( $tipos as $tipo ) {
 			echo '<th>' . $tipo->getNome () . '</th>';
-		}		
-		echo'			<th>Total</th>
+		}
+		echo '			<th>Total</th>
 				</thead>';
 		
 		echo '<tbody>';
@@ -655,36 +673,38 @@ class RelatorioController {
 			echo '<td>' . date ( 'd/m/Y', strtotime ( $data ) ) . '</td>';
 			foreach ( $tipos as $tipo ) {
 				
-				echo '<td>'.number_format (floatval($listaDeDados [$data] [$tipo->getId ()]) , 2, ',', '.' )    . '</td>';
+				echo '<td>' . number_format ( floatval ( $listaDeDados [$data] [$tipo->getId ()] ), 2, ',', '.' ) . '</td>';
 				$subTotal [$tipo->getId ()] += $listaDeDados [$data] [$tipo->getId ()];
 			}
-			echo '<td>'.number_format ($listaDeDados [$data] ['total'] , 2, ',', '.' )   . '</td>';
+			echo '<td>' . number_format ( $listaDeDados [$data] ['total'], 2, ',', '.' ) . '</td>';
 			echo '</tr>';
 			$subTotal ['total'] += $listaDeDados [$data] ['total'];
 		}
 		echo '<tr id="soma">
 				<th>Somatório</th>';
 		foreach ( $tipos as $tipo ) {
-			echo '<td>'.number_format ( $subTotal [$tipo->getId ()] , 2, ',', '.' )  . '</td>';
+			echo '<td>' . number_format ( $subTotal [$tipo->getId ()], 2, ',', '.' ) . '</td>';
 		}
-		echo '<td>' . number_format ( $subTotal ['total']  , 2, ',', '.' )  . '</td>';
+		echo '<td>' . number_format ( $subTotal ['total'], 2, ',', '.' ) . '</td>';
 		echo '</tr>';
 		echo '</table>
 				<div class="doze colunas relatorio-rodape">
 					<span>CATRACA | Copyright © 2015 - DTI</span>
-					<span>Relatório Emitido em: '.$date = date('d/m/Y').'</span>';
-// 		echo '<a class="botao icone-printer"> Imprimir</a>';
-				
+					<span>Relatório Emitido em: ' . $date = date ( 'd/m/Y' ) . '</span>';
+		// echo '<a class="botao icone-printer"> Imprimir</a>';
+		
 		echo '		</div>		
 			</div>';
 	}
 	
 	/**
-	 * 
-	 * @param array $listaDeDados
-	 * @param string $titulo
-	 * @param Tipo[] $tipos
-	 * @param array $listaDeDatas
+	 * Função utilizada para gerar uma tabela contendo as
+	 * as informações sobre a quantidade pratos consumidos.
+	 *
+	 * @param array $listaDeDados        	
+	 * @param string $titulo        	
+	 * @param Tipo[] $tipos        	
+	 * @param array $listaDeDatas        	
 	 */
 	public function mostraListaDeDadosPratos($listaDeDados, $titulo, $tipos, $listaDeDatas) {
 		$subTotal = array ();
@@ -692,11 +712,11 @@ class RelatorioController {
 			$subTotal [$tipo->getId ()] = 0;
 		}
 		$subTotal ['total'] = 0;
-	
+		
 		echo '<div class=" doze colunas borda relatorio">
 				<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>	
 				<hr class="um">
-				<h3>'.$titulo.'</h3>							
+				<h3>' . $titulo . '</h3>							
 				<hr class="dois">';
 		
 		echo '<table class="tabela-relatorio">
@@ -705,8 +725,8 @@ class RelatorioController {
 						<th>Data</th>';
 		foreach ( $tipos as $tipo ) {
 			echo '<th>' . $tipo->getNome () . '</th>';
-		}		
-		echo'			<th>Total</th>
+		}
+		echo '			<th>Total</th>
 				</thead>';
 		
 		echo '<tbody>';
@@ -716,49 +736,47 @@ class RelatorioController {
 			echo '<td>' . date ( 'd/m/Y', strtotime ( $data ) ) . '</td>';
 			foreach ( $tipos as $tipo ) {
 				
-				echo '<td>'.$listaDeDados [$data] [$tipo->getId ()] . '</td>';
+				echo '<td>' . $listaDeDados [$data] [$tipo->getId ()] . '</td>';
 				$subTotal [$tipo->getId ()] += $listaDeDados [$data] [$tipo->getId ()];
 			}
-			echo '<td>'.$listaDeDados [$data] ['total'] . '</td>';
+			echo '<td>' . $listaDeDados [$data] ['total'] . '</td>';
 			echo '</tr>';
 			$subTotal ['total'] += $listaDeDados [$data] ['total'];
 		}
 		echo '<tr id="soma">
 				<th id="limpar">Somatório</th>';
 		foreach ( $tipos as $tipo ) {
-			echo '<td>'.$subTotal [$tipo->getId ()] . '</td>';
+			echo '<td>' . $subTotal [$tipo->getId ()] . '</td>';
 		}
 		echo '<td>' . $subTotal ['total'] . '</td>';
 		echo '</tr>';
 		
-		
-		
 		echo '</table>
 				<div class="doze colunas relatorio-rodape">
 					<span>CATRACA | Copyright © 2015 - DTI</span>
-					<span>Relatório Emitido em: '.$date = date('d-m-Y H:i:s').'</span>';
+					<span>Relatório Emitido em: ' . $date = date ( 'd-m-Y H:i:s' ) . '</span>';
 		
-// 		echo '<a class="botao icone-printer"> Imprimir</a>';
+		// echo '<a class="botao icone-printer"> Imprimir</a>';
 		echo '</div>		
 			</div>';
 	}
 	
 	/**
-	 * 
-	 * @param array $matriz
+	 *
+	 * @ignore
+	 *
+	 * @param array $matriz        	
 	 */
-	public function mostraMatriz($matriz){
+	public function mostraMatriz($matriz) {
 		echo '<br><br><br><table border="1">';
-		foreach($matriz as $chave => $valor){
-			echo '<tr><th>'.$chave.'</th>';
-			foreach($valor as $chave2 => $valor2){
-				echo '<td>'.$chave2.' - '.$valor2.'</td>';
+		foreach ( $matriz as $chave => $valor ) {
+			echo '<tr><th>' . $chave . '</th>';
+			foreach ( $valor as $chave2 => $valor2 ) {
+				echo '<td>' . $chave2 . ' - ' . $valor2 . '</td>';
 			}
 			echo '</tr>';
-				
 		}
 		echo '</table>';
-		
 	}
 }
 

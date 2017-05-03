@@ -36,6 +36,9 @@
     <body>
         <pre class="brush: php">&lt;?php
 /** 
+ * Classe utilizada para centralizar as demais Classes(DAO, Model, View, Util).
+ * Esta classe ser&aacute; instaciada no index.php.
+ * 
  * @author Jefferson Uchoa Ponte
  * @version 1.0
  * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
@@ -43,25 +46,25 @@
  */
 
 /**
- * Classe respos&aacute;vel por auditar todos os acessos ao sistema Catraca, 
+ * Classe respos&aacute;vel por auditar todos os acessos ao sistema Catraca,
  * &eacute; capturado a URL acessada e posteriormente inserida no Banco.
  */
-class AuditoriaController{
+class AuditoriaController {
 	
-	/** 
+	/**
 	 * Metodo principal utilizada para controlar o acesso a classe atrav&eacute;s do n&iacute;vel de acesso do usuario.
-	 * 
-	 * @param Sessao $nivelDeAcesso Recebe uma Sess&atilde;o que cont&eacute;m o n&iacute;vel de acesso do usuario, 
-	 * esta Sess&atilde;o &eacute; iniciada na p&aacute;gina principal, durante o login do usuario.
-	 */	
-	public static function main($nivelDeAcesso){
-					
-		switch ($nivelDeAcesso){
-			case Sessao::NIVEL_SUPER:
-				$controller = new AuditoriaController();
-				$controller-&gt;telaAuditoria();		
+	 *
+	 * @param Sessao $nivelDeAcesso
+	 *        	Recebe uma Sess&atilde;o que cont&eacute;m o n&iacute;vel de acesso do usuario,
+	 *        	esta Sess&atilde;o &eacute; iniciada na p&aacute;gina principal, durante o login do usuario.
+	 */
+	public static function main($nivelDeAcesso) {
+		switch ($nivelDeAcesso) {
+			case Sessao::NIVEL_SUPER :
+				$controller = new AuditoriaController ();
+				$controller-&gt;telaAuditoria ();
 				break;
-			default:
+			default :
 				UsuarioController::main ( $nivelDeAcesso );
 				break;
 		}
@@ -70,8 +73,7 @@ class AuditoriaController{
 	/**
 	 * Fun&ccedil;&atilde;o utilizada para gerar a tela respons&aacute;vel por exibir todos os acessos dos usu&aacute;rio no sistema.
 	 */
-	public function telaAuditoria(){
-		
+	public function telaAuditoria() {
 		echo '	&lt;div class=&quot;doze colunas borda&quot;&gt;
 					&lt;div class=&quot;resolucao config&quot;&gt;
 						&lt;form action=&quot;&quot;&gt;
@@ -80,22 +82,21 @@ class AuditoriaController{
 							&lt;input type=&quot;text&quot; name=&quot;id_usuario&quot; /&gt;
 							&lt;input type=&quot;hidden&quot; name=&quot;pagina&quot; value=&quot;auditoria&quot; /&gt;
 							&lt;input type=&quot;submit&quot; /&gt;
-						&lt;/form&gt;';		
+						&lt;/form&gt;';
 		
-		if(isset($_GET['data_inicial']) &amp;&amp; isset($_GET['data_final']) &amp;&amp; isset($_GET['id_usuario'])){
-			$dataInicial = $_GET['data_inicial'];
-			$dataFinal = $_GET['data_final'];
-			$nome = $_GET['id_usuario'];			
-			$dao = new DAO();
-			Auditoria::mostrar($dao-&gt;getConexao(), $nome, $dataInicial, $dataFinal);			
-		}else{
-			$dao = new DAO();
-			Auditoria::mostrar($dao-&gt;getConexao());
-		}		
-			echo '	&lt;/div&gt;
+		if (isset ( $_GET ['data_inicial'] ) &amp;&amp; isset ( $_GET ['data_final'] ) &amp;&amp; isset ( $_GET ['id_usuario'] )) {
+			$dataInicial = $_GET ['data_inicial'];
+			$dataFinal = $_GET ['data_final'];
+			$nome = $_GET ['id_usuario'];
+			$dao = new DAO ();
+			Auditoria::mostrar ( $dao-&gt;getConexao (), $nome, $dataInicial, $dataFinal );
+		} else {
+			$dao = new DAO ();
+			Auditoria::mostrar ( $dao-&gt;getConexao () );
+		}
+		echo '	&lt;/div&gt;
 				&lt;/div&gt;';
-	}	
-	
+	}
 }</pre>
         <script type="text/javascript">
              SyntaxHighlighter.all();

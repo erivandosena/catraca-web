@@ -541,7 +541,8 @@ class DefinicoesView {
 	
 	/**
 	 * Formulário utilizado para Adicionar uma nova catraca,
-	 * nela será inserido apenas o nome, com os valores padrões no retante dos campos,
+	 * nela será inserido apenas o nome.
+	 * Os valores padrões srão inseridos nos retantes dos campos,
 	 * e editado posteriomente a inclusão de novos parâmetros.
 	 */
 	public function formAdicionarCatracaVirtual() {
@@ -723,7 +724,7 @@ class DefinicoesView {
 	 * Gera uma tabela com as mensagens cadastradas para cada Catraca.
 	 * Nesta tabela será possivel realizar a Edição e Exclusão das mensagens.
 	 * 
-	 * @param unknown $listaMensagemCatraca   	
+	 * @param array $listaMensagemCatraca   	
 	 */
 	public function listarMensagensCatraca($listaMensagemCatraca) {
 		echo '		</div>

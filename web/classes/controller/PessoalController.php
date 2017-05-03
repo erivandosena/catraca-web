@@ -1,5 +1,8 @@
 <?php
 /**
+ * Classe utilizada para centralizar as demais Classes(DAO, Model, View, Util).
+ * Esta classe será instaciada no index.php.
+ * 
  * @author Jefferson Uchoa Ponte
  * @version 1.0
  * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
@@ -237,8 +240,8 @@ class PessoalController {
 	/**
 	 * Gera a tela com informações relativas ao consumo do Usuário.
 	 * é verificado seus vinculos e a informação de cada um.
-	 * 
-	 * @param Usuario $usuario
+	 *
+	 * @param Usuario $usuario        	
 	 */
 	public function telaDeCreditos(Usuario $usuario) {
 		$vinculoDao = new VinculoDAO ( $this->dao->getConexao () );
@@ -268,8 +271,8 @@ class PessoalController {
 	
 	/**
 	 * Exibi todos os vinvulos do Usuário.
-	 * 
-	 * @param Vinculo[] $vinculos
+	 *
+	 * @param Vinculo[] $vinculos        	
 	 */
 	public function exibirVinculos($vinculos) {
 		foreach ( $vinculos as $vinculo ) {
@@ -279,12 +282,10 @@ class PessoalController {
 	
 	/**
 	 * Exibe as informações do Vinculo.
-	 * 
-	 * nesta tela será exibida as informações do Usuário e seus refistro realizados no RU.
-	 * 
-	 * 
-	 * 
-	 * @param Vinculo $vinculo
+	 *
+	 * nesta tela será exibida as informações do Usuário e seus registro realizados no RU.
+	 *	 
+	 * @param Vinculo $vinculo        	
 	 */
 	public function exibirVinculo(Vinculo $vinculo) {
 		if ($vinculo->isAvulso () && ! $vinculo->isActive ()) {

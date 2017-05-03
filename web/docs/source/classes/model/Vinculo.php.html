@@ -42,6 +42,9 @@
  * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
  * @package Modelo
  */
+/**
+ * Classe utilizada para intaciar objetos do tipo V&iacute;nculo.
+ */
 class Vinculo {
 	
 	/**
@@ -54,7 +57,7 @@ class Vinculo {
 	
 	/**
 	 * Vari&aacute;vel utilizada para verificar se o V&iacute;nculo &eacute; avulso.
-	 * 
+	 *
 	 * @access private
 	 * @var boolean
 	 */
@@ -62,7 +65,7 @@ class Vinculo {
 	
 	/**
 	 * Recebe um Objeto Usuario.
-	 * 
+	 *
 	 * @access private
 	 * @var Usuario
 	 */
@@ -70,7 +73,7 @@ class Vinculo {
 	
 	/**
 	 * Vari&aacute;vel que recebe a Data de Inicio do V&iacute;nculo.
-	 * 
+	 *
 	 * @access private
 	 * @var DateTime
 	 */
@@ -78,14 +81,15 @@ class Vinculo {
 	
 	/**
 	 * Vari&aacute;vel que recebe a Data Final do Vinculo.
-	 * 
+	 *
 	 * @access private
 	 * @var DateTime
 	 */
 	private $finalValidade;
 	
 	/**
-	 *
+	 * Recebe a quantidade de Alimentos por Turno
+	 * 
 	 * @access private
 	 * @var int
 	 */
@@ -93,7 +97,7 @@ class Vinculo {
 	
 	/**
 	 * Vari&aacute;vel que recebe a Descri&ccedil;&atilde;o do Vinculo.
-	 * 
+	 *
 	 * @access private
 	 * @var string
 	 */
@@ -101,7 +105,7 @@ class Vinculo {
 	
 	/**
 	 * Recebe um Objeto Cart&atilde;o.
-	 * 
+	 *
 	 * @access private
 	 * @var Cartao
 	 */
@@ -109,7 +113,7 @@ class Vinculo {
 	
 	/**
 	 * Vari&aacute;vel que recebe as Refei&ccedil;&otilde;es Restantes para o V&iacute;nculo.
-	 * 
+	 *
 	 * @access private
 	 * @var int
 	 */
@@ -126,7 +130,7 @@ class Vinculo {
 	
 	/**
 	 * Recebe um Objeto Isencao.
-	 * 
+	 *
 	 * @access public
 	 * @var Isencao
 	 */
@@ -369,6 +373,8 @@ class Vinculo {
 	}
 	
 	/**
+	 * 
+	 * @return boolean
 	 */
 	public function invalidoParaAdicionar() {
 		$time = strtotime ( date ( &quot;Y-m-d 01:00:00&quot; ) );

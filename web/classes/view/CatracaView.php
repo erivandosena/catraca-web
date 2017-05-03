@@ -38,7 +38,7 @@ class CatracaView {
 	/**
 	 * Exibi todas a Unidade Acadêmicas com informações
 	 * referente a todas as catracas associadas a ela:
-	 * 
+	 *
 	 * quantidade de catracas;
 	 * somatório de giros das mesmas.
 	 *
@@ -51,7 +51,7 @@ class CatracaView {
 	
 	/**
 	 * Gera um elemento com informações das catracas da Unidade.
-	 * 
+	 *
 	 * @param Unidade $unidade        	
 	 * @param int $quantidadeDeCatracas        	
 	 * @param int $catracasFuncionando        	
@@ -119,16 +119,25 @@ class CatracaView {
 	
 	/**
 	 * Exibi todas as catracas associadas a Unidade selecionada;
-	 * 
+	 *
 	 * Cada elemento contém a quantidade de Giros no Turno em andamento
 	 * e a somatória de giros da catraca selecionada.
-	 * 
-	 * @param unknown $lista
+	 *
+	 * @param array $lista        	
 	 */
 	public function listaDeCatracas($lista) {
 		foreach ( $lista as $catraca )
 			$this->mostraCatraca ( $catraca );
 	}
+	
+	/**
+	 * Mostra a catraca a catraca a ser selecionada, mostrarar
+	 * a contagem total de giros e os giros por turno.
+	 *
+	 * @param Catraca $catraca        	
+	 * @param int $girosTurno        	
+	 * @param int $totalDeGiros        	
+	 */
 	public function mostraCatraca(Catraca $catraca, $girosTurno = 0, $totalDeGiros = 0) {
 		echo '<a href="?pagina=catraca&detalhe=' . $catraca->getId () . '">
 				<div class="tres colunas borda fundo-branco catraca-medio">
@@ -203,11 +212,11 @@ class CatracaView {
 	}
 	
 	/**
-	 * Exibi informações detalhada de uma catraca específica;
-	 * 
-	 * @param Catraca $catraca
-	 * @param int $valor
-	 * @param int $outroValor
+	 * Exibe informações detalhada de uma catraca específica;
+	 *
+	 * @param Catraca $catraca        	
+	 * @param int $valor        	
+	 * @param int $outroValor        	
 	 */
 	public function detalheCatraca(Catraca $catraca, $valor = 0, $outroValor = 0) {
 		echo '	<div id="titulo" class="doze colunas fundo-azul2 centralizado ">

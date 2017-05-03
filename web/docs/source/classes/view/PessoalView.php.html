@@ -50,6 +50,9 @@
  */
 class PessoalView{
 	
+	/**
+	 * Gera um formul&aacute;rio para busca ao usu&aacute;rio pelo n&uacute;mero do cart&atilde;o.
+	 */
 	public function formBuscaCartao() {
 		echo '
 				&lt;script&gt;
@@ -444,12 +447,16 @@ class PessoalView{
 // 					&lt;/form&gt;
 // 				&lt;/div&gt;';
 // 	}
-// 	public function formConfirmacaoRenovarVinculo() {
-// 		$this-&gt;formMensagem ( &quot;-ajuda&quot;, &quot;Tem certeza que deseja renovar esse v&iacute;nculo?&quot; );
-// 		echo '	&lt;form id=&quot;form-confirma-cartao&quot; action=&quot;&quot; method=&quot;post&quot;&gt;
-// 					&lt;input type=&quot;submit&quot; class=&quot;botao&quot; value=&quot;certeza&quot; name=&quot;certeza&quot; /&gt;
-// 				&lt;/form&gt;';
-// 	}
+
+	/**
+	 * Gera um formul&aacute;rio para confirma&ccedil;&atilde;o de renova&ccedil;&atilde;o de vinvulo.
+	 */
+	public function formConfirmacaoRenovarVinculo() {
+		$this-&gt;formMensagem ( &quot;-ajuda&quot;, &quot;Tem certeza que deseja renovar esse v&iacute;nculo?&quot; );
+		echo '	&lt;form id=&quot;form-confirma-cartao&quot; action=&quot;&quot; method=&quot;post&quot;&gt;
+					&lt;input type=&quot;submit&quot; class=&quot;botao&quot; value=&quot;certeza&quot; name=&quot;certeza&quot; /&gt;
+				&lt;/form&gt;';
+	}
 // 	public function mostraFormAdicionarVinculo($listaDeTipos, $idSelecionado) {
 // 		$daqui3Meses = date ( 'Y-m-d', strtotime ( &quot;+60 days&quot; ) ) . 'T' . date ( 'H:00:01' );
 // 		$dataHoje = date ( 'Y-m-d' ) . 'T' . date ( 'H:00:01' );
@@ -593,14 +600,23 @@ class PessoalView{
 // 						&lt;/div&gt;
 // 					&lt;/div&gt;';
 // 	}
-// 	public function formMensagem($tipo, $texto) {
-// 		// Tipo = -sucesso, -erro, -ajuda
-// 		echo '		&lt;div class=&quot;alerta' . $tipo . '&quot;&gt;
-// 				    	&lt;div class=&quot;icone icone-notification ix16&quot;&gt;&lt;/div&gt;
-// 				    	&lt;div class=&quot;titulo-alerta&quot;&gt;Aten&amp;ccedil&amp;atildeo&lt;/div&gt;
-// 				    	&lt;div class=&quot;subtitulo-alerta&quot;&gt;' . $texto . '&lt;/div&gt;
-// 					&lt;/div&gt;';
-// 	}
+
+	/**
+	 * Mostra um mesnsagem para o Usu&aacute;rio:
+	 *
+	 * @param string $tipo
+	 *        	Tipo de mensagem: &quot;-sucesso&quot;, &quot;-erro&quot;, &quot;-ajuda&quot;.
+	 * @param string $texto
+	 *        	Mensagem a ser exibida para o Usu&aacute;rio.
+	 */
+	public function formMensagem($tipo, $texto) {
+		// Tipo = -sucesso, -erro, -ajuda
+		echo '		&lt;div class=&quot;alerta' . $tipo . '&quot;&gt;
+				    	&lt;div class=&quot;icone icone-notification ix16&quot;&gt;&lt;/div&gt;
+				    	&lt;div class=&quot;titulo-alerta&quot;&gt;Aten&amp;ccedil&amp;atildeo&lt;/div&gt;
+				    	&lt;div class=&quot;subtitulo-alerta&quot;&gt;' . $texto . '&lt;/div&gt;
+					&lt;/div&gt;';
+	}
 }
 
 ?&gt;</pre>

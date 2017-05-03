@@ -14,6 +14,9 @@
  */
 class PessoalView{
 	
+	/**
+	 * Gera um formulário para busca ao usuário pelo número do cartão.
+	 */
 	public function formBuscaCartao() {
 		echo '
 				<script>
@@ -408,12 +411,16 @@ class PessoalView{
 // 					</form>
 // 				</div>';
 // 	}
-// 	public function formConfirmacaoRenovarVinculo() {
-// 		$this->formMensagem ( "-ajuda", "Tem certeza que deseja renovar esse vínculo?" );
-// 		echo '	<form id="form-confirma-cartao" action="" method="post">
-// 					<input type="submit" class="botao" value="certeza" name="certeza" />
-// 				</form>';
-// 	}
+
+	/**
+	 * Gera um formulário para confirmação de renovação de vinvulo.
+	 */
+	public function formConfirmacaoRenovarVinculo() {
+		$this->formMensagem ( "-ajuda", "Tem certeza que deseja renovar esse vínculo?" );
+		echo '	<form id="form-confirma-cartao" action="" method="post">
+					<input type="submit" class="botao" value="certeza" name="certeza" />
+				</form>';
+	}
 // 	public function mostraFormAdicionarVinculo($listaDeTipos, $idSelecionado) {
 // 		$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'H:00:01' );
 // 		$dataHoje = date ( 'Y-m-d' ) . 'T' . date ( 'H:00:01' );
@@ -557,14 +564,23 @@ class PessoalView{
 // 						</div>
 // 					</div>';
 // 	}
-// 	public function formMensagem($tipo, $texto) {
-// 		// Tipo = -sucesso, -erro, -ajuda
-// 		echo '		<div class="alerta' . $tipo . '">
-// 				    	<div class="icone icone-notification ix16"></div>
-// 				    	<div class="titulo-alerta">Aten&ccedil&atildeo</div>
-// 				    	<div class="subtitulo-alerta">' . $texto . '</div>
-// 					</div>';
-// 	}
+
+	/**
+	 * Mostra um mesnsagem para o Usuário:
+	 *
+	 * @param string $tipo
+	 *        	Tipo de mensagem: "-sucesso", "-erro", "-ajuda".
+	 * @param string $texto
+	 *        	Mensagem a ser exibida para o Usuário.
+	 */
+	public function formMensagem($tipo, $texto) {
+		// Tipo = -sucesso, -erro, -ajuda
+		echo '		<div class="alerta' . $tipo . '">
+				    	<div class="icone icone-notification ix16"></div>
+				    	<div class="titulo-alerta">Aten&ccedil&atildeo</div>
+				    	<div class="subtitulo-alerta">' . $texto . '</div>
+					</div>';
+	}
 }
 
 ?>

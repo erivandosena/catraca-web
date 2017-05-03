@@ -36,10 +36,21 @@
     <body>
         <pre class="brush: php">&lt;?php
 /**
+ * Classe utilizada para centralizar as demais Classes(DAO, Model, View, Util).
+ * Esta classe ser&aacute; instaciada no index.php.
+ * 
  * @author Jefferson Uchoa Ponte
  * @version 1.0
  * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
  * @package Controle
+ */
+/**
+ * 
+ * Classe utilizada para controle do acesso do usu&aacute;rio,
+ * nela cont&eacute;m a fun&ccedil;&atilde;o de login onde retornadr&aacute; o n&iacute;vel de acesso
+ * do usu&aacute;rio, como tambem redirecionar&aacute; o usu&aacute;rio para a tela que
+ * estela de acordo com o seu n&iacute;vel.
+ *
  */
 class UsuarioController {
 	
@@ -70,10 +81,8 @@ class UsuarioController {
 				$lista = explode ( ' ', $nome );
 				$nome = $lista [0];
 				echo '&lt;p&gt;Ol&aacute;, ' . ucfirst ( strtolower ( $nome ) ) . '!&lt;/p&gt;
-						&lt;p&gt;Visualize abaixo seus dados referentes ao Restaurante Universit&aacute;rio&lt;/p&gt;';
-				
-				PessoalController::main ( $nivelDeAcesso );
-				
+						&lt;p&gt;Visualize abaixo seus dados referentes ao Restaurante Universit&aacute;rio&lt;/p&gt;';				
+				PessoalController::main ( $nivelDeAcesso );				
 				break;
 		}
 	}
@@ -96,8 +105,7 @@ class UsuarioController {
 			$usuario = new Usuario ();
 			$usuario-&gt;setLogin ( $_POST ['login'] );
 			$usuario-&gt;setSenha ( $_POST ['senha'] );
-			if ($usuarioDAO-&gt;autentica ( $usuario )) {
-				
+			if ($usuarioDAO-&gt;autentica ( $usuario )) {				
 				$sessao2 = new Sessao ();
 				$sessao2-&gt;criaSessao ( $usuario-&gt;getId (), $usuario-&gt;getNivelAcesso (), $usuario-&gt;getLogin () );
 				echo '&lt;meta http-equiv=&quot;refresh&quot; content=1;url=&quot;./index.php&quot;&gt;';

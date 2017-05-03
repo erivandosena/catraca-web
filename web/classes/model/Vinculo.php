@@ -6,6 +6,9 @@
  * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
  * @package Modelo
  */
+/**
+ * Classe utilizada para intaciar objetos do tipo Vínculo.
+ */
 class Vinculo {
 	
 	/**
@@ -18,7 +21,7 @@ class Vinculo {
 	
 	/**
 	 * Variável utilizada para verificar se o Vínculo é avulso.
-	 * 
+	 *
 	 * @access private
 	 * @var boolean
 	 */
@@ -26,7 +29,7 @@ class Vinculo {
 	
 	/**
 	 * Recebe um Objeto Usuario.
-	 * 
+	 *
 	 * @access private
 	 * @var Usuario
 	 */
@@ -34,7 +37,7 @@ class Vinculo {
 	
 	/**
 	 * Variável que recebe a Data de Inicio do Vínculo.
-	 * 
+	 *
 	 * @access private
 	 * @var DateTime
 	 */
@@ -42,14 +45,15 @@ class Vinculo {
 	
 	/**
 	 * Variável que recebe a Data Final do Vinculo.
-	 * 
+	 *
 	 * @access private
 	 * @var DateTime
 	 */
 	private $finalValidade;
 	
 	/**
-	 *
+	 * Recebe a quantidade de Alimentos por Turno
+	 * 
 	 * @access private
 	 * @var int
 	 */
@@ -57,7 +61,7 @@ class Vinculo {
 	
 	/**
 	 * Variável que recebe a Descrição do Vinculo.
-	 * 
+	 *
 	 * @access private
 	 * @var string
 	 */
@@ -65,7 +69,7 @@ class Vinculo {
 	
 	/**
 	 * Recebe um Objeto Cartão.
-	 * 
+	 *
 	 * @access private
 	 * @var Cartao
 	 */
@@ -73,7 +77,7 @@ class Vinculo {
 	
 	/**
 	 * Variável que recebe as Refeições Restantes para o Vínculo.
-	 * 
+	 *
 	 * @access private
 	 * @var int
 	 */
@@ -90,7 +94,7 @@ class Vinculo {
 	
 	/**
 	 * Recebe um Objeto Isencao.
-	 * 
+	 *
 	 * @access public
 	 * @var Isencao
 	 */
@@ -333,6 +337,8 @@ class Vinculo {
 	}
 	
 	/**
+	 * 
+	 * @return boolean
 	 */
 	public function invalidoParaAdicionar() {
 		$time = strtotime ( date ( "Y-m-d 01:00:00" ) );

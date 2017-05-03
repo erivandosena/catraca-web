@@ -36,6 +36,9 @@
     <body>
         <pre class="brush: php">&lt;?php
 /**
+ * Classe utilizada para centralizar as demais Classes(DAO, Model, View, Util).
+ * Esta classe ser&aacute; instaciada no index.php.
+ * 
  * @author Jefferson Uchoa Ponte
  * @version 1.0
  * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
@@ -273,8 +276,8 @@ class PessoalController {
 	/**
 	 * Gera a tela com informa&ccedil;&otilde;es relativas ao consumo do Usu&aacute;rio.
 	 * &eacute; verificado seus vinculos e a informa&ccedil;&atilde;o de cada um.
-	 * 
-	 * @param Usuario $usuario
+	 *
+	 * @param Usuario $usuario        	
 	 */
 	public function telaDeCreditos(Usuario $usuario) {
 		$vinculoDao = new VinculoDAO ( $this-&gt;dao-&gt;getConexao () );
@@ -304,8 +307,8 @@ class PessoalController {
 	
 	/**
 	 * Exibi todos os vinvulos do Usu&aacute;rio.
-	 * 
-	 * @param Vinculo[] $vinculos
+	 *
+	 * @param Vinculo[] $vinculos        	
 	 */
 	public function exibirVinculos($vinculos) {
 		foreach ( $vinculos as $vinculo ) {
@@ -315,12 +318,10 @@ class PessoalController {
 	
 	/**
 	 * Exibe as informa&ccedil;&otilde;es do Vinculo.
-	 * 
-	 * nesta tela ser&aacute; exibida as informa&ccedil;&otilde;es do Usu&aacute;rio e seus refistro realizados no RU.
-	 * 
-	 * 
-	 * 
-	 * @param Vinculo $vinculo
+	 *
+	 * nesta tela ser&aacute; exibida as informa&ccedil;&otilde;es do Usu&aacute;rio e seus registro realizados no RU.
+	 *	 
+	 * @param Vinculo $vinculo        	
 	 */
 	public function exibirVinculo(Vinculo $vinculo) {
 		if ($vinculo-&gt;isAvulso () &amp;&amp; ! $vinculo-&gt;isActive ()) {

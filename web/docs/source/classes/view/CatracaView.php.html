@@ -74,7 +74,7 @@ class CatracaView {
 	/**
 	 * Exibi todas a Unidade Acad&ecirc;micas com informa&ccedil;&otilde;es
 	 * referente a todas as catracas associadas a ela:
-	 * 
+	 *
 	 * quantidade de catracas;
 	 * somat&oacute;rio de giros das mesmas.
 	 *
@@ -87,7 +87,7 @@ class CatracaView {
 	
 	/**
 	 * Gera um elemento com informa&ccedil;&otilde;es das catracas da Unidade.
-	 * 
+	 *
 	 * @param Unidade $unidade        	
 	 * @param int $quantidadeDeCatracas        	
 	 * @param int $catracasFuncionando        	
@@ -155,16 +155,25 @@ class CatracaView {
 	
 	/**
 	 * Exibi todas as catracas associadas a Unidade selecionada;
-	 * 
+	 *
 	 * Cada elemento cont&eacute;m a quantidade de Giros no Turno em andamento
 	 * e a somat&oacute;ria de giros da catraca selecionada.
-	 * 
-	 * @param unknown $lista
+	 *
+	 * @param array $lista        	
 	 */
 	public function listaDeCatracas($lista) {
 		foreach ( $lista as $catraca )
 			$this-&gt;mostraCatraca ( $catraca );
 	}
+	
+	/**
+	 * Mostra a catraca a catraca a ser selecionada, mostrarar
+	 * a contagem total de giros e os giros por turno.
+	 *
+	 * @param Catraca $catraca        	
+	 * @param int $girosTurno        	
+	 * @param int $totalDeGiros        	
+	 */
 	public function mostraCatraca(Catraca $catraca, $girosTurno = 0, $totalDeGiros = 0) {
 		echo '&lt;a href=&quot;?pagina=catraca&amp;detalhe=' . $catraca-&gt;getId () . '&quot;&gt;
 				&lt;div class=&quot;tres colunas borda fundo-branco catraca-medio&quot;&gt;
@@ -239,11 +248,11 @@ class CatracaView {
 	}
 	
 	/**
-	 * Exibi informa&ccedil;&otilde;es detalhada de uma catraca espec&iacute;fica;
-	 * 
-	 * @param Catraca $catraca
-	 * @param int $valor
-	 * @param int $outroValor
+	 * Exibe informa&ccedil;&otilde;es detalhada de uma catraca espec&iacute;fica;
+	 *
+	 * @param Catraca $catraca        	
+	 * @param int $valor        	
+	 * @param int $outroValor        	
 	 */
 	public function detalheCatraca(Catraca $catraca, $valor = 0, $outroValor = 0) {
 		echo '	&lt;div id=&quot;titulo&quot; class=&quot;doze colunas fundo-azul2 centralizado &quot;&gt;

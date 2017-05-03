@@ -1,5 +1,11 @@
 <?php
 
+/**
+ * Este arquivo é utilizado junto com o combo.js,
+ * arquivo javascript que controa o combobox na tela de messagens,
+ * gerando um efeito instatâneo sem mostrar o efeito de atualização
+ * da página para o usuário. 
+ */
 
 date_default_timezone_set ( 'America/Araguaina' );
 
@@ -23,7 +29,6 @@ function __autoload($classe) {
 /*
  * Combo dinamico do relatório.
  */
-
 if (isset($_GET['unidade'])){
 	$dao = new DAO();
 	$idUnidade = $_GET['unidade'];

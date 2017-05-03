@@ -1,5 +1,8 @@
 <?php
-/** 
+/**
+ * Classe utilizada para centralizar as demais Classes(DAO, Model, View, Util).
+ * Esta classe será instaciada no index.php.
+ * 
  * @author Alan Cleber Morais Gomes 
  * @version 1.0
  * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.

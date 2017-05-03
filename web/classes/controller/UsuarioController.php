@@ -1,9 +1,20 @@
 <?php
 /**
+ * Classe utilizada para centralizar as demais Classes(DAO, Model, View, Util).
+ * Esta classe será instaciada no index.php.
+ * 
  * @author Jefferson Uchoa Ponte
  * @version 1.0
  * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
  * @package Controle
+ */
+/**
+ * 
+ * Classe utilizada para controle do acesso do usuário,
+ * nela contém a função de login onde retornadrá o nível de acesso
+ * do usuário, como tambem redirecionará o usuário para a tela que
+ * estela de acordo com o seu nível.
+ *
  */
 class UsuarioController {
 	
@@ -34,10 +45,8 @@ class UsuarioController {
 				$lista = explode ( ' ', $nome );
 				$nome = $lista [0];
 				echo '<p>Olá, ' . ucfirst ( strtolower ( $nome ) ) . '!</p>
-						<p>Visualize abaixo seus dados referentes ao Restaurante Universitário</p>';
-				
-				PessoalController::main ( $nivelDeAcesso );
-				
+						<p>Visualize abaixo seus dados referentes ao Restaurante Universitário</p>';				
+				PessoalController::main ( $nivelDeAcesso );				
 				break;
 		}
 	}
@@ -60,8 +69,7 @@ class UsuarioController {
 			$usuario = new Usuario ();
 			$usuario->setLogin ( $_POST ['login'] );
 			$usuario->setSenha ( $_POST ['senha'] );
-			if ($usuarioDAO->autentica ( $usuario )) {
-				
+			if ($usuarioDAO->autentica ( $usuario )) {				
 				$sessao2 = new Sessao ();
 				$sessao2->criaSessao ( $usuario->getId (), $usuario->getNivelAcesso (), $usuario->getLogin () );
 				echo '<meta http-equiv="refresh" content=1;url="./index.php">';

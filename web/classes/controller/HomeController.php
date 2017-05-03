@@ -1,9 +1,17 @@
 <?php
 /**
+ * Classe utilizada para centralizar as demais Classes(DAO, Model, View, Util).
+ * Esta classe será instaciada no index.php.
+ * 
  * @author Jefferson Uchoa Ponte
  * @version 1.0
  * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
  * @package Controle
+ */
+/**
+ * 
+ * Esta Classe fará o direcionamento do usuário de acordo com o nível do usuário.
+ *
  */
 class HomeController {
 	

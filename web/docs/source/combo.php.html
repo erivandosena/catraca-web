@@ -36,6 +36,12 @@
     <body>
         <pre class="brush: php">&lt;?php
 
+/**
+ * Este arquivo &eacute; utilizado junto com o combo.js,
+ * arquivo javascript que controa o combobox na tela de messagens,
+ * gerando um efeito instat&acirc;neo sem mostrar o efeito de atualiza&ccedil;&atilde;o
+ * da p&aacute;gina para o usu&aacute;rio. 
+ */
 
 date_default_timezone_set ( 'America/Araguaina' );
 
@@ -59,7 +65,6 @@ function __autoload($classe) {
 /*
  * Combo dinamico do relat&oacute;rio.
  */
-
 if (isset($_GET['unidade'])){
 	$dao = new DAO();
 	$idUnidade = $_GET['unidade'];

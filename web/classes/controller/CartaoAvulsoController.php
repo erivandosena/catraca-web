@@ -1,12 +1,13 @@
 <?php
 /**
+ * Classe utilizada para centralizar as demais Classes(DAO, Model, View, Util).
+ * Esta classe será instaciada no index.php.
+ * 
  * @author Jefferson Uchoa Ponte
  * @version 1.0
  * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
  * @package Controle
  */
-
-
 /**
  * Classe responsável por gerenciar intancias de outras classes como View, DAO, Model, etc,
  * processando os dados e exibindo a informação para o usuario final.

@@ -81,15 +81,15 @@ class CartaoView {
 	}
 	
 	/**
-	 * Exibi o cartão selecionado.
+	 * Exibe o cartão selecionado.
 	 *
 	 * @param Cartao $cartao        	
 	 */
 	public function mostraCartaoSelecionado(Cartao $cartao) {
-		echo '<div class="borda">
-				Nome: ' . $cartao->getNumero () . '
-				<br>Creditos: ' . $cartao->getCreditos () . '
-				<br>Nome do Tipo: ' . $cartao->getTipo ()->getNome () . '
+		echo '	<div class="borda">
+					Nome: ' . $cartao->getNumero () . '<br>
+					Creditos: ' . $cartao->getCreditos () . '<br>
+					Nome do Tipo: ' . $cartao->getTipo ()->getNome () . '
 				</div>';
 	}
 	
@@ -233,7 +233,7 @@ class CartaoView {
 	}
 	
 	/**
-	 * Exibi os dados do usuário selecionado, depois da pesquisa pelo nome.
+	 * Exibe os dados do usuário selecionado, depois da pesquisa pelo nome.
 	 *
 	 * @param Usuario $usuario        	
 	 */
@@ -343,7 +343,7 @@ class CartaoView {
 	}
 	
 	/**
-	 * Exibi uma tabela com os vinculos do usuário selecionado.
+	 * Exibe uma tabela com os vinculos do usuário selecionado.
 	 * Chama a função mostraLinhaVinculo() dentro da mesma Classe,
 	 * contendo o retante da tabela com os dados referentes aos vincunlos do usuário selecionado.
 	 *
@@ -541,8 +541,9 @@ class CartaoView {
 	}
 	
 	/**
-	 *  Exibe informações detalhada do Vínculo Isento.
-	 * @param Vinculo $vinculo
+	 * Exibe informações detalhada do Vínculo Isento.
+	 *
+	 * @param Vinculo $vinculo        	
 	 */
 	public function mostraIsencaoDoVinculo(Vinculo $vinculo) {
 		echo '<div class="doze linhas">';
@@ -572,7 +573,8 @@ class CartaoView {
 	
 	/**
 	 * Formulário contendo os dados do Vínculo Isento a ser inserido.
-	 * @param int $idSelecionado
+	 *
+	 * @param int $idSelecionado        	
 	 */
 	public function formAdicionarIsencao($idSelecionado) {
 		$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'H:00:01' );
@@ -592,8 +594,10 @@ class CartaoView {
 	}
 	
 	/**
+	 *
 	 * @ignore
-	 * @param unknown $idSelecionado
+	 *
+	 * @param unknown $idSelecionado        	
 	 */
 	public function formAdicionarCreditos($idSelecionado) {
 		$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'H:00:01' );
@@ -613,11 +617,11 @@ class CartaoView {
 	
 	/**
 	 * Exibe informações do Usuário.
-	 * 
-	 * @param Cartao $cartao
-	 * @param Usuario $usuario
-	 * @param Tipo $tipo
-	 * @param string $imagem
+	 *
+	 * @param Cartao $cartao        	
+	 * @param Usuario $usuario        	
+	 * @param Tipo $tipo        	
+	 * @param string $imagem        	
 	 */
 	public function formIdentificacao(Cartao $cartao, Usuario $usuario, Tipo $tipo, $imagem) {
 		echo '	<div class="borda doze colunas">

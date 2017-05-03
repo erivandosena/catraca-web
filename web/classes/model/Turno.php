@@ -6,6 +6,11 @@
  * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
  * @package Modelo
  */
+/**
+ * 
+ * Classe utilizada para intaciar objetos do tipo Turno.
+ *
+ */
 class Turno {
 	
 	/**
