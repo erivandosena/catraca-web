@@ -278,7 +278,7 @@ class CartaoController{
 							continue;
 						}
 						if(strtolower (trim( $tipo->getNome())) == 'servidor docente'){
-							if(strtolower (trim($usuario->getStatusServidor())) == 'ativo' && strtolower (trim($usuario->getCategoria())) == 'docente'){
+							if( (strtolower (trim($usuario->getTipodeUsuario())) == 'docente externo') || ( strtolower (trim($usuario->getStatusServidor())) == 'ativo' && strtolower (trim($usuario->getCategoria())) == 'docente') ){
 								continue;								
 							}
 							unset($listaDeTipos[$chave]);
@@ -415,6 +415,9 @@ class CartaoController{
 			return true;		
 		}
 		if(strtolower (trim($usuario->getTipodeUsuario())) == 'terceirizado' || strtolower (trim($usuario->getTipodeUsuario())) == 'outros'){
+			return true;
+		}
+		if(strtolower (trim($usuario->getTipodeUsuario())) == 'docente externo'){
 			return true;
 		}
 		return false;
