@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * 
+ * @author Jefferson Uchoa Ponte
+ * Esse algoritmo faz inclusão dos registros e alteração de créditos dos usuários. 
+ *
+ */
 
 class ImportarCSVController{
 	public static function main($nivelDeAcesso){
@@ -60,9 +65,9 @@ class ImportarCSVController{
 			echo '</tr>';
 			
 			
-			$data = '2016-12-02 12:00:00';
+			$data = e;
 
-			$custo = 9.5;
+			$custo = 10.25;
 			$idCatraca = 3;
 			$idCartao = $cartao->getId();
 			$idVinculo = $vinculo->getId();

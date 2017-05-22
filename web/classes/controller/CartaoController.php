@@ -406,12 +406,13 @@ class CartaoController{
 			$usuarioDao->fechaConexao();
 		}		
 	}
-	
+
 	public function verificaSeAtivo(Usuario $usuario){
 		if(strtolower (trim($usuario->getStatusServidor())) == 'ativo'){			
 			return true;
 		}
-		if(trim($usuario->getStatusDiscente()) == 'CADASTRADO' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($usuario->getStatusDiscente())) == 'formando' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - graduando'){
+		if(trim($usuario->getStatusDiscente()) == 'CADASTRADO' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($usuario->getStatusDiscente())) == 'formando' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - graduando' || strtolower (trim($usuario->getStatusDiscente())) == 'formado'|| strtolower (trim($usuario->getIdStatusDiscente())) == self::ID_STATUS_DISCENTE_CONCLUIDO){
+			echo $usuario->getIdStatusDiscente();
 			return true;		
 		}
 		if(strtolower (trim($usuario->getTipodeUsuario())) == 'terceirizado' || strtolower (trim($usuario->getTipodeUsuario())) == 'outros'){
@@ -422,6 +423,12 @@ class CartaoController{
 		}
 		return false;
 	}
+	const ID_STATUS_DISCENTE_ATIVO = 1;
+	const ID_STATUS_DISCENTE_CADASTRADO = 3;
+	const ID_STATUS_DISCENTE_FORMADO = 9;
+	const ID_STATUS_DISCENTE_CONCLUIDO = 3;//
+
+
 	
 }
 

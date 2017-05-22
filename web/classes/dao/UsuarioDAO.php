@@ -168,6 +168,7 @@ class UsuarioDAO extends DAO {
 			$usuario->setTipoDeUsuario($linha['tipo_usuario']);
 			$usuario->setMatricula($linha['matricula_disc']);
 			$usuario->setStatusDiscente($linha['status_discente']);
+			$usuario->setIdStatusDiscente($linha['id_status_discente']);
 			$usuario->setNivelDiscente($linha['nivel_discente']);
 			$usuario->setCategoria($linha['categoria']);
 			$usuario->setIDCategoria($linha['id_categoria']);
