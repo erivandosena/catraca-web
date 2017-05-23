@@ -519,6 +519,9 @@ if($sessao->getNivelAcesso() != Sessao::NIVEL_DESLOGADO){
 							case 'importar_csv':
 								ImportarCSVController::main($sessao->getNivelAcesso());
 								break;
+							case 'relatorio_turno':
+								RelatorioTurnoController::main($sessao->getNivelAcesso());
+								break;
 							default :
 								echo '404 NOT FOUND';
 								break;
