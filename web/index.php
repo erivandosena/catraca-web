@@ -30,10 +30,7 @@ if (isset ( $_GET ["sair"] )) {
 	header ( "Location:./index.php" );
 }
 
-if($sessao->getNivelAcesso() != Sessao::NIVEL_DESLOGADO){
-	$controller  = new SincronizadorController();
-	$controller->sincronizar();	
-}
+
 
 
 ?>

@@ -65,10 +65,12 @@ class ImportarCSVController{
 			echo '</tr>';
 			
 			
-			$data = e;
+			
+			$data = '2017-05-22 19:00:00';
+			
 
-			$custo = 10.25;
-			$idCatraca = 3;
+			$custo = 13.55;
+			$idCatraca = 1;
 			$idCartao = $cartao->getId();
 			$idVinculo = $vinculo->getId();
 			
@@ -112,7 +114,7 @@ class ImportarCSVController{
 				
 				
 		}
-		$dao->getConexao()->commit();
+// 		$dao->getConexao()->commit();
 		echo '</table>';
 		
 // 		echo 'Sucesso!';
