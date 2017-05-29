@@ -2,7 +2,11 @@
 
 
 
-
+/**
+ * Esse augorítmo precisa ser melhorado. 
+ * @author Jefferson Ponte
+ *
+ */
 class SincronizadorController{
 	private $dadosSigaa;
 	private $dadosComum;
@@ -21,6 +25,8 @@ class SincronizadorController{
 			foreach($linha as $chave => $valor){
 				$linha[$chave] = str_replace("'", "''", $valor);
 			}
+			//So to colocando aspas simplesm em quem eh string. 
+			
 			$linha['nome'] = "'".$linha['nome']."'";
 			$linha['identidade'] = "'".$linha['identidade']."'";
 			$linha['passaporte'] = "'".$linha['passaporte']."'";
@@ -32,11 +38,14 @@ class SincronizadorController{
 			$linha['status_servidor'] = "'".$linha['status_servidor']."'";
 			$linha['tipo_usuario'] = "'".$linha['tipo_usuario']."'";
 			$linha['categoria'] = "'".$linha['categoria']."'";
+			$linha['turno'] = "'".$linha['turno']."'";
+			$linha['nome_curso'] = "'".$linha['nome_curso']."'";
 			foreach($linha as $chave => $valor){
 				if(!$valor || $valor == "''"){
 					$linha[$chave] = "null";
 				}
 			}
+			
 			$matriz[] = $linha;
 		}
 		$this->dadosSigaa = $matriz;
@@ -96,7 +105,11 @@ class SincronizadorController{
 			tipo_usuario,
 			id_categoria,
 			status_sistema,
-			categoria
+			categoria,
+			id_turno, 
+			turno,
+			id_curso, 
+			nome_curso
 			)
 			VALUES(
 			".$linha['id_usuario'].",
@@ -118,7 +131,11 @@ class SincronizadorController{
 			".$linha['tipo_usuario'].",
 			".$linha['id_categoria'].",
 			".$linha['status_sistema'].",
-			".$linha['categoria']."
+			".$linha['categoria'].", 
+			".$linha['id_turno'].",
+			".$linha['turno'].",
+			".$linha['id_curso'].",
+			".$linha['nome_curso']."
 			);";
 		
 			

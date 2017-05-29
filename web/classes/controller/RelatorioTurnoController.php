@@ -19,10 +19,11 @@ class RelatorioTurnoController{
 	}
 	public function RelatorioTurnoController(){
 		$this->view = new RelatorioTurnoView();
+		$this->dao = new UnidadeDAO ();
 		
 	}
 	public function relatorio() {
-		$this->dao = new UnidadeDAO ();
+		
 		$listaDeUnidades = $this->dao->retornaLista ();
 		//Esse codigo nao faz parte do sistema. 
 		foreach ($listaDeUnidades as $chave => $linha){
@@ -41,6 +42,7 @@ class RelatorioTurnoController{
 		}
 	}
 	
+	
 	public function gerarDados($idUnidade = NULL, $data1 = null, $data2 = null){
 		$dados = array();
 		if($idUnidade == NULL){
@@ -52,16 +54,14 @@ class RelatorioTurnoController{
 		if ($data2 == null){
 			$data2 = date ( 'Y-m-d' );
 		}
-		$dateStart = new DateTime ( $data1 );
-		$dateEnd = new DateTime ( $data2 );
-		$dateRange = array ();
-		$listaDeDatas = array();
-		while ( $dateStart <= $dateEnd ) {
-			$listaDeDatas [] = $dateStart->format ( 'Y-m-d' );
-			$dateStart = $dateStart->modify ( '+1day' );
-		}
 		
-			
+		
+		$listaDeDatas = $this->intervaloDeDatas($data1, $data2);
+		$turnoDao = new TurnoDAO ( $this->dao->getConexao () );
+		$listaDeTurnos = $turnoDao->retornaLista ();
+		
+		
+		
 		$strFiltroUnidade = "";
 		$strUnidade =  'Todos os restaurantes ';
 		if($idUnidade != NULL){
@@ -75,11 +75,19 @@ class RelatorioTurnoController{
 			$strUnidade =  $unidade->getNome();
 		}
 		
-		$tipo = $this->pegaTipoDiscente();
-		$turnoDao = new TurnoDAO ( $this->dao->getConexao () );
-		$listaDeTurnos = $turnoDao->retornaLista ();
-		
-		
+		$result = $this->dao->getConexao()->query("SELECT * FROM registro 
+				INNER JOIN vinculo ON vinculo.vinc_id = registro.vinc_id
+				INNER JOIN usuario ON vinculo.usua_id = usuario.usua_id
+				WHERE regi_data = '2017-05-19 12:50:43'");
+		foreach($result as $linha){
+			$id = $linha['id_base_externa'];
+			$sql2 = "SELECT * FROM vw_usuarios_catraca WHERE id_usuario = $id LIMIT 1";
+			$res = $this->dao->getConexao()->query($sql2);
+			foreach($res as $linha2){
+				print_r($linha2);
+				echo '<br><hr>';
+			}
+		}
 		
 		foreach($listaDeTurnos as $turno){
 			foreach($listaDeDatas as $data){
@@ -93,20 +101,25 @@ class RelatorioTurnoController{
 		return $dados;
 		
 	}
-	
-	public function pegaTipoDiscente(){
-		$dao = new TipoDAO ($this->dao->getConexao());
-		$tipos = $dao->retornaLista ();
-		$tipoDiscente = new Tipo();
-		
-		foreach ($tipos as $tipo){
-			if(strtolower (trim($tipo->getNome())) == "aluno" ){
-				$tipoDiscente = $tipo;
-				break;
-			}
+	/**
+	 * @param string $data1
+	 * @param string $data2
+	 * 
+	 * @return array $listaDeDatas
+	 */
+	public function intervaloDeDatas($data1, $data2){
+		$dateStart = new DateTime ( $data1 );
+		$dateEnd = new DateTime ( $data2 );
+		$dateRange = array ();
+		$listaDeDatas = array();
+		while ( $dateStart <= $dateEnd ) {
+			$listaDeDatas [] = $dateStart->format ( 'Y-m-d' );
+			$dateStart = $dateStart->modify ( '+1day' );
 		}
-		return $tipoDiscente;
+		return $listaDeDatas;
+	
 	}
+
 	
 	/*
 	
