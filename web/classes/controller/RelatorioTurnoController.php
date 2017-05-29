@@ -75,24 +75,24 @@ class RelatorioTurnoController{
 			$strUnidade =  $unidade->getNome();
 		}
 		
-		$result = $this->dao->getConexao()->query("SELECT * FROM registro 
-				INNER JOIN vinculo ON vinculo.vinc_id = registro.vinc_id
-				INNER JOIN usuario ON vinculo.usua_id = usuario.usua_id
-				WHERE regi_data = '2017-05-19 12:50:43'");
-		foreach($result as $linha){
-			$id = $linha['id_base_externa'];
-			$sql2 = "SELECT * FROM vw_usuarios_catraca WHERE id_usuario = $id LIMIT 1";
-			$res = $this->dao->getConexao()->query($sql2);
-			foreach($res as $linha2){
-				print_r($linha2);
-				echo '<br><hr>';
-			}
-		}
+
 		
 		foreach($listaDeTurnos as $turno){
+			echo $turno->getDescricao();
+			echo '<br><hr>';
 			foreach($listaDeDatas as $data){
 				
-			
+				$dataInicial = $data . ' '.$turno->getHoraInicial();
+				$dataFinal = $data . ' '.$turno->getHoraFinal();
+				$result = $this->dao->getConexao()->query("SELECT * FROM registro
+				INNER JOIN vinculo ON vinculo.vinc_id = registro.vinc_id
+				INNER JOIN usuario ON vinculo.usua_id = usuario.usua_id
+				WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal')");
+				foreach($result as $linha){
+						
+					$curso = $this->retornaCurso($linha['id_base_externa']);
+					echo $curso;
+				}
 			}	
 		}		
 		
@@ -100,6 +100,19 @@ class RelatorioTurnoController{
 		
 		return $dados;
 		
+	}
+
+	public function retornaCurso($id){
+		$sql2 = "SELECT * FROM vw_usuarios_catraca WHERE id_usuario = $id LIMIT 1";
+		$result = $this->dao->getConexao()->query($sql2);
+		foreach ($result as $linha){
+			if($linha['nome_curso'] != null){
+				return $linha['nome_curso'].' - '.$linha['turno'];
+			}
+			else{
+				return $linha['tipo_usuario'];
+			}
+		}
 	}
 	/**
 	 * @param string $data1
