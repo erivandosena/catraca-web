@@ -231,6 +231,7 @@ if (isset ( $_GET ["sair"] )) {
 										<li><a href="?pagina=relatorio">Relatório RU</a></li>
 										<li><a href="?pagina=relatorio_guiche">Relatório Guichê</a></li>
 										<li><a href="?pagina=pessoal">Histórico Pessoal</a></li>
+										<li><a href="?pagina=relatorio_turno">Por Turno</a></li>
 									</ul>
 								</li>';
 						echo ' <li><a href="?pagina=nivel_acesso" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Nivel de Acesso</span></a></li>';
