@@ -25,13 +25,7 @@ class RelatorioTurnoController{
 	public function relatorio() {
 		
 		$listaDeUnidades = $this->dao->retornaLista ();
-		//Esse codigo nao faz parte do sistema. 
-		foreach ($listaDeUnidades as $chave => $linha){
-			if($linha->getId() == 1){
-				unset($listaDeUnidades[$chave]);
-			}
-		}
-		//Fim do codigo que nao faz parte do sistema. 
+
 		
 		$this->view->mostrarFormulario($listaDeUnidades);
 				
@@ -94,11 +88,16 @@ class RelatorioTurnoController{
 				WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') $strFiltroUnidade");
 				foreach($result as $linha){
 						
-					$curso = $this->retornaCurso($linha['id_base_externa']);
-					if(!isset($matriz[$turno->getDescricao()][$curso])){
-						$matriz[$turno->getDescricao()][$curso] = 0;
+					$info = $this->retornaCurso($linha['id_base_externa']);
+					if(!isset($matriz[$turno->getDescricao()][$info['curso'].' - '.$info['turno']])){
+						$matriz[$turno->getDescricao()][$info['curso'].' - '.$info['turno']] = 0;
 					}
-					$matriz[$turno->getDescricao()][$curso]++;
+					$matriz[$turno->getDescricao()][$info['curso'].' - '.$info['turno']]++;
+					
+					if(!isset($matriz[$turno->getDescricao()]['Total - '.$info['turno']])){
+						$matriz[$turno->getDescricao()]['Total - '.$info['turno']] = 0;
+					}
+					$matriz[$turno->getDescricao()]['Total - '.$info['turno']]++;
 					//echo $linha['usua_nome'].' - '.$curso.'<br>';
 					
 				}
@@ -113,13 +112,25 @@ class RelatorioTurnoController{
 	public function retornaCurso($id){
 		$sql2 = "SELECT * FROM vw_usuarios_catraca WHERE id_usuario = $id LIMIT 1";
 		$result = $this->dao->getConexao()->query($sql2);
+		
 		foreach ($result as $linha){
+			$info['curso'] = "-";
+			$info['turno'] = " ";
 			if($linha['nome_curso'] != null){
-				return $linha['nome_curso'].' - '.$linha['turno'];
+				$info['curso'] = $linha['nome_curso'];
+				$info['turno'] = $linha['turno'];
+				
+				if(!$linha['turno']){
+					$info['turno'] = " Não Informado ";
+				}
+				
+				
 			}
 			else{
-				return $linha['tipo_usuario'];
+				$info['curso'] = $linha['tipo_usuario'];
+				$info['turno'] = " Não Informado ";
 			}
+			return $info;
 		}
 	}
 	/**
@@ -148,13 +159,14 @@ class RelatorioTurnoController{
 
 			echo '<div class=" doze colunas borda relatorio">';
 			echo '<h2>UNILAB<small class="fim">Universidade da Integração Internacional da Lusofonia Afro-Brasileira</small></h2>
+				
 				<hr class="um">
 				<h3>'.$this->strUnidade.'</h3>
 				<span>De '. date ( 'd/m/Y', strtotime ( $this->data1 ) ) . ' a ' . date ( 'd/m/Y', strtotime ( $this->data2) ) .'</span>
 				<span>'.$turno.'</span>
 				<hr class="dois">
 			
-					<table class="tabela-relatorio">
+					<table class="tabela">
 						<thead>
 							<tr>
 								<th>Curso - Turno</th>
@@ -163,9 +175,24 @@ class RelatorioTurnoController{
 						<thead>
 						<tbody>';
 			
+			$totalGeral = 0;
 			foreach($vetor as $chave => $valor){
-				echo '<tr><td>'.$chave.'</td><td>'.$valor.'</td></tr>';
+				if(!(substr($chave, 0, 5) == "Total")){
+					echo '<tr><td>'.$chave.'</td><td>'.$valor.'</td></tr>';
+					$totalGeral += $valor;
+				}
+				
 			}
+			foreach($vetor as $chave => $valor){
+				
+				if(substr($chave, 0, 5) == "Total"){
+					echo '<tr><td>'.$chave.'</td><td>'.$valor.'</td></tr>';
+				}
+			
+			}
+			
+			
+			echo '<tr><td>Total Geral</td><td>'.$totalGeral.'</td></tr>';
 			echo'			</tbody>
 					</table>';
 			
