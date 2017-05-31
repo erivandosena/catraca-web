@@ -198,7 +198,7 @@ class RelatorioTurnoController{
 			
 			echo'<div class="doze colunas relatorio-rodape">
 			<span>CATRACA | Copyright © 2015 - DTI</span>
-			<span>Relatório Emitido em: '. date ( 'd/m/Y H:i:s', strtotime ( $this->data1 ) ).'</span>';
+			<span>Relatório Emitido em: '. date ( 'd/m/Y H:i:s' ).'</span>';
 			// 		echo '<a class="botao icone-printer"> Imprimir</a>';
 			echo '	</div>
 				</div>';
