@@ -5,7 +5,9 @@
 
 
 date_default_timezone_set ( 'America/Araguaina' );
-
+ini_set('display_errors',1);
+ini_set('display_startup_erros',1);
+error_reporting(E_ALL);
 
 function __autoload($classe) {
 	if (file_exists ( 'classes/dao/' . $classe . '.php' ))
@@ -517,6 +519,9 @@ if (isset ( $_GET ["sair"] )) {
 								break;
 							case 'relatorio_turno':
 								RelatorioTurnoController::main($sessao->getNivelAcesso());
+								break;
+							case 'relatorio_registro':
+								RelatorioRegistroController::main($sessao->getNivelAcesso(), $sessao->getIdUsuario());
 								break;
 							default :
 								echo '404 NOT FOUND';
