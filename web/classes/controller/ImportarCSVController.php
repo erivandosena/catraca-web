@@ -66,11 +66,11 @@ class ImportarCSVController{
 			
 			
 			
-			$data = '2017-05-22 19:00:00';
+			$data = '2017-05-27 12:00:00';
 			
 
-			$custo = 13.55;
-			$idCatraca = 1;
+			$custo = 10.25;
+			$idCatraca = 2;
 			$idCartao = $cartao->getId();
 			$idVinculo = $vinculo->getId();
 			
