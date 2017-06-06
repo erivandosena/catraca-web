@@ -115,8 +115,8 @@ class RelatorioRegistroController{
 				
 		
 		if (isset ( $_GET ['gerar'] )) {
-			$dados = $this->gerarDados( $_GET ['unidade'], $_GET ['data_inicial'], $_GET ['data_final']);
-			$this->mostraRelatorio($dados);
+			$this->gerarDados( $_GET ['unidade'], $_GET ['data_inicial'], $_GET ['data_final']);
+			
 		}
 	}
 	
@@ -291,7 +291,7 @@ class RelatorioRegistroController{
 						<tbody>';
 				foreach($result as $linha){
 						
-					echo '<tr><td>'.$linha['regi_id'].'</td><td>'.$linha['regi_data'].'</td><td>'.$linha['usua_nome'].'</td><td>'.$linha['cart_numero'].'</td><td>'.$linha['regi_valor_pago'].'</td><td>'.$linha['regi_valor_custo'].'</td><td><a href="?pagina=relatorio_registro&id_registro='.$linha['regi_id'].'" class="botao">Selecionar</a></td><tr>';
+					echo '<tr><td>'.$linha['regi_id'].'</td><td>'.$linha['regi_data'].'</td><td>'.$linha['usua_nome'].'</td><td>'.$linha['cart_numero'].'</td><td>'.$linha['regi_valor_pago'].'</td><td>'.$linha['regi_valor_custo'].'</td><td><a href="?pagina=relatorio_registro&id_registro='.$linha['regi_id'].'" class="botao">Selecionar</a></td></tr>';
 				}
 				echo '</tbody>
 					</table>';
