@@ -1,12 +1,13 @@
 <?php
 /**
- * 
+ * @deprecated
  * @author Jefferson Uchoa Ponte
  * Esse algoritmo faz inclusão dos registros e alteração de créditos dos usuários. 
  *
  */
 
 class ImportarCSVController{
+	
 	public static function main($nivelDeAcesso){
 	
 		switch ($nivelDeAcesso){
@@ -81,43 +82,43 @@ class ImportarCSVController{
 			$novoValor = floatval($vinculo->getCartao()->getCreditos()) - floatval($valorPago);
 			$sqlUpdate = "UPDATE cartao set cart_creditos = $novoValor WHERE cart_id = $idCartao";
 			
-// 			echo '<tr>';
-// 			echo '<td colspan=3>';
+			echo '<tr>';
+			echo '<td colspan=3>';
 			
-// 			echo $sql;
-// 			echo '</td>';
-// 			if($dao->getConexao()->exec($sql)){
-// 				echo '<td>Foi</td>';
+			echo $sql;
+			echo '</td>';
+			if($dao->getConexao()->exec($sql)){
+				echo '<td>Foi</td>';
 					
-// 			}else{
-// 				echo '<td>Erro</td>';
-// 				$dao->getConexao()->rollBack();
-// 				return;
+			}else{
+				echo '<td>Erro</td>';
+				$dao->getConexao()->rollBack();
+				return;
 					
-// 			}
+			}
 			
-// 			echo '</tr>';
+			echo '</tr>';
 
-// 			echo '<tr>';
-// 			echo '<td colspan=3>';
-// 			echo $sqlUpdate;
-// 			echo '</td>';
-// 			if($dao->getConexao()->exec($sqlUpdate)){
-// 				echo '<td>Foi Update</td>';				
-// 			}else{
-// 				echo '<td>Erro UPDATE</td>';
-// 				$dao->getConexao()->rollBack();
-// 				return;
-// 			}
+			echo '<tr>';
+			echo '<td colspan=3>';
+			echo $sqlUpdate;
+			echo '</td>';
+			if($dao->getConexao()->exec($sqlUpdate)){
+				echo '<td>Foi Update</td>';				
+			}else{
+				echo '<td>Erro UPDATE</td>';
+				$dao->getConexao()->rollBack();
+				return;
+			}
 
-// 			echo '</tr>';
+			echo '</tr>';
 				
 				
 		}
-// 		$dao->getConexao()->commit();
+		$dao->getConexao()->commit();
 		echo '</table>';
 		
-// 		echo 'Sucesso!';
+		echo 'Sucesso!';
 		
 		
 		
