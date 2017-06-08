@@ -68,3 +68,9 @@ CREATE TABLE `turno` (
 	`turn_hora_fim`	TEXT,
 	`turn_descricao`	TEXT
 );
+
+CREATE TABLE `unidade_turno` (
+	`untu_id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`turn_id`	INTEGER,
+	`unid_id`	INTEGER
+);

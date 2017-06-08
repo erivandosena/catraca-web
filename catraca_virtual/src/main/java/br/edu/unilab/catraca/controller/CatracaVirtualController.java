@@ -6,8 +6,10 @@ import java.util.ArrayList;
 import javax.swing.JFrame;
 
 import br.edu.unilab.catraca.dao.CatracaDAO;
+import br.edu.unilab.catraca.dao.TurnoDAO;
 import br.edu.unilab.catraca.recurso.CatracaRecurso;
 import br.edu.unilab.catraca.recurso.CatracaUnidadeRecurso;
+import br.edu.unilab.catraca.recurso.TurnoRecurso;
 import br.edu.unilab.catraca.recurso.TurnoUnidadeRecurso;
 import br.edu.unilab.catraca.recurso.UnidadeRecurso;
 import br.edu.unilab.catraca.view.CatracaVirtualView;
@@ -57,30 +59,18 @@ public class CatracaVirtualController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		
 		this.frameLogin = new LoginView();
-		
 		this.frameLogin.getLabelMensagem().setText("Aguardando informação da catraca.");
 		this.frameLogin.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		
-		
-		
 		splash.setVisible(false);
 		this.frameLogin.setVisible(true);
 		splash.dispose();
-		
 		this.catracaVirtual.maquinaLocal();
 		this.verificarNomeDaCatraca();
-		
 		this.frameLogin.getLabelMensagem().setText("Aguardando informação da Unidade Acadêmica.");
-		
 		this.verificarUnidadeDaCatraca();
-		
 		this.frameLogin.getLabelMensagem().setText("Aguardando informação de Turnos.");
-		
 		this.verificarTurnosDaUnidade();
-		
 		this.frameLogin.getLabelMensagem().setText("Preparar eventos.");
 		
 		
@@ -136,6 +126,9 @@ public class CatracaVirtualController {
 				unidadeRecurso.sincronizar(this.dao.getConexao());
 				CatracaUnidadeRecurso recurso = new CatracaUnidadeRecurso();
 				recurso.sincronizar(this.dao.getConexao());
+				TurnoRecurso turnoRecurso = new TurnoRecurso();
+				turnoRecurso.sincronizar(this.dao.getConexao());
+				
 			}else{
 				this.frameLogin.getLabelMensagem().setText("Unidade: "+unidade.getNome());
 				passou = true;

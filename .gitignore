@@ -23,4 +23,6 @@
 *.lock
 *.recommenders/*
 *.classpath
+*.db
+*.bd
 */target/*
