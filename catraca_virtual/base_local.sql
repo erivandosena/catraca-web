@@ -60,3 +60,11 @@ CREATE TABLE `catraca_unidade` (
 	`catr_id`	INTEGER,
 	`unid_id`	INTEGER
 );
+
+
+CREATE TABLE `turno` (
+	`turn_id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`turn_hora_inicio`	TEXT,
+	`turn_hora_fim`	TEXT,
+	`turn_descricao`	TEXT
+);

@@ -53,7 +53,11 @@ public class CatracaDAO extends DAO{
 		}
 		
 	}
-	
+	/**
+	 * @deprecated
+	 * @param catraca
+	 * @return
+	 */
 	public Catraca retornaCatracaPorNome(Catraca catraca){
 		try {
 			PreparedStatement ps = this.getConexao().prepareStatement("SELECT * FROM catraca WHERE catr_nome = ?");
@@ -76,6 +80,27 @@ public class CatracaDAO extends DAO{
 		return null;
 	}
 	
+	public boolean preencheCatracaPorNome(Catraca catraca){
+		try {
+			PreparedStatement ps = this.getConexao().prepareStatement("SELECT * FROM catraca WHERE catr_nome = ?");
+			ps.setString(1, catraca.getNome().trim());
+			ResultSet rs = ps.executeQuery();
+			while(rs.next()){
+				catraca.setId(rs.getInt("catr_id"));
+				catraca.setNome(rs.getString("catr_nome"));
+				catraca.setFinanceiroAtivo(true);
+				if(rs.getInt("catr_financeiro") != 1){
+					catraca.setFinanceiroAtivo(false);
+					
+				}
+				return true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
 	public ArrayList<Catraca>retornaLista(){
 		try {
 			ArrayList<Catraca> lista = new ArrayList<Catraca>();

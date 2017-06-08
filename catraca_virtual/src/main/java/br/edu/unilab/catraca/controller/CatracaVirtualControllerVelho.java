@@ -70,42 +70,36 @@ public class CatracaVirtualControllerVelho {
 	
 	public void iniciar(){
 		
-//		this.splash = new FrameSplash();
-//		splash.setVisible(true);
-//		
-//		this.catracaVirtual = new Catraca();
-//		this.dao = new CatracaDAO();
-//		
-//		
-//		this.frameLogin = new LoginView();
-//		this.frameLogin.getLabelMensagem().setText("Aguarde a Sincronização dos Dados");
-//		this.frameLogin.setExtendedState(JFrame.MAXIMIZED_BOTH);
-//		try {
-//			
-//			this.catracaVirtual.maquinaLocal();
-//			
-//		} catch (UnknownHostException e) {
-//			System.out.println("Impossivel determinar nome da maquina. ");
-//			e.printStackTrace();
-//			return;
-//		}
-//		
-//		this.sincronizacaoBasica();
-//		
-//		splash.setVisible(false);
-//		this.frameLogin.setVisible(true);
-//		
-//		
-//		this.verificarNomeDaCatraca();
-//		this.verificarUnidadeDaCatraca();
-//		this.verificarTurnosDaCatraca();
-//		try {
-//			this.dao.getConexao().close();
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		this.adicionarEventosDeLogin();
+		this.splash = new FrameSplash();
+		splash.setVisible(true);
+		
+		this.catracaVirtual = new Catraca();
+		this.dao = new CatracaDAO();
+		
+		
+		this.frameLogin = new LoginView();
+		this.frameLogin.getLabelMensagem().setText("Aguarde a Sincronização dos Dados");
+		this.frameLogin.setExtendedState(JFrame.MAXIMIZED_BOTH);
+			
+		this.catracaVirtual.maquinaLocal();
+			
+		
+		this.sincronizacaoBasica();
+		
+		splash.setVisible(false);
+		this.frameLogin.setVisible(true);
+		
+		
+		this.verificarNomeDaCatraca();
+		this.verificarUnidadeDaCatraca();
+		this.verificarTurnosDaCatraca();
+		try {
+			this.dao.getConexao().close();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.adicionarEventosDeLogin();
 		
 	}
 	public void adicionarEventosDeLogin(){
