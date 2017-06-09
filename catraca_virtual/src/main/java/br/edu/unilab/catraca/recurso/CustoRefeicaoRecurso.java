@@ -1,5 +1,6 @@
 package br.edu.unilab.catraca.recurso;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -28,6 +29,15 @@ public class CustoRefeicaoRecurso extends Recurso{
 		}
 	}
 	
+	public void sincronizar(Connection connection){
+		this.dao = new CustoRefeicaoDAO(connection);
+		this.dao.limpar();
+		ArrayList<CustoRefeicao> lista = this.obterLista();
+		for (CustoRefeicao custoRefeicao : lista) {
+			dao.inserir(custoRefeicao);
+		}
+	}
+	
 	public ArrayList<CustoRefeicao> obterLista(){
 		ArrayList<CustoRefeicao> lista = new ArrayList<CustoRefeicao>();
 		
@@ -47,11 +57,20 @@ public class CustoRefeicaoRecurso extends Recurso{
             return null;
         }
         
-        String output = resp.getEntity(String.class);        
+        String output = resp.getEntity(String.class);   
+        try {
+			JSONObject jo = new JSONObject(output);
+			output = jo.getString("custos_refeicao");
+
+		} catch (JSONException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        
         JSONArray projectArray;
 		try {
 			
-			projectArray = new JSONArray(output.substring(18));
+			projectArray = new JSONArray(output);
 			for (int i = 0; i < projectArray.length(); i++) {
 	            JSONObject proj = projectArray.getJSONObject(i);
 	            CustoRefeicao custoRefeicao = new CustoRefeicao();

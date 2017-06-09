@@ -74,3 +74,26 @@ CREATE TABLE `unidade_turno` (
 	`turn_id`	INTEGER,
 	`unid_id`	INTEGER
 );
+
+
+CREATE TABLE `custo_refeicao` (
+	`cure_id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`cure_valor`	NUMERIC,
+	`cure_data`	TEXT
+);
+
+CREATE TABLE `custo_unidade` (
+	`cuun_id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`unid_id`	INTEGER,
+	`cure_id`	INTEGER
+);
+
+CREATE TABLE `registro` (
+	`regi_id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	`regi_data`	TEXT,
+	`regi_valor_pago`	NUMERIC,
+	`regi_valor_custo`	NUMERIC,
+	`catr_id`	INTEGER,
+	`catr_id`	INTEGER,
+	`vinc_id`	INTEGER
+);

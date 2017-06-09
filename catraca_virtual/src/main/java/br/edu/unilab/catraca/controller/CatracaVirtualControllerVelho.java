@@ -60,67 +60,8 @@ public class CatracaVirtualControllerVelho {
 	private Semaphore semaforo;
 	ArrayList<Tipo> listaTipos;
 	
-	public CatracaVirtualControllerVelho(){
-		
-		turnoAtivo = false;
-		vinculoSelecionado = false;
-		semaforo = new Semaphore(1);
-		
-	}
-	
-	public void iniciar(){
-		
-		this.splash = new FrameSplash();
-		splash.setVisible(true);
-		
-		this.catracaVirtual = new Catraca();
-		this.dao = new CatracaDAO();
-		
-		
-		this.frameLogin = new LoginView();
-		this.frameLogin.getLabelMensagem().setText("Aguarde a Sincronização dos Dados");
-		this.frameLogin.setExtendedState(JFrame.MAXIMIZED_BOTH);
-			
-		this.catracaVirtual.maquinaLocal();
-			
-		
-		this.sincronizacaoBasica();
-		
-		splash.setVisible(false);
-		this.frameLogin.setVisible(true);
-		
-		
-		this.verificarNomeDaCatraca();
-		this.verificarUnidadeDaCatraca();
-		this.verificarTurnosDaCatraca();
-		try {
-			this.dao.getConexao().close();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		this.adicionarEventosDeLogin();
-		
-	}
-	public void adicionarEventosDeLogin(){
-		getFrameLogin().getSenha().addKeyListener(new KeyAdapter() {
-			@Override
-			public void keyPressed(KeyEvent e) {
-				if(e.getKeyCode() == KeyEvent.VK_ENTER){
-					tentarLogar();
-				}
-			}
-		});
-		
-		getFrameLogin().getBtnEntrar().addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				tentarLogar();
-			}
-		});
-		
-		
-	}
+
+
 	public void adicionarEventoConfirmar(){
 		getFrameCatracaVirtual().getBtnConfirmar().addActionListener(new ActionListener() {
 			
@@ -486,27 +427,14 @@ public class CatracaVirtualControllerVelho {
 	}
 
 	public void iniciarCatracaVirtual(){
+		
 		TipoDAO tipoDao = new TipoDAO();
 		
 		CatracaVirtualDAO catracaVirtualDAO = new CatracaVirtualDAO(tipoDao.getConexao());
 		custo = catracaVirtualDAO.custo(catracaVirtual);
 		this.verificandoTurnoAtual();
 		listaTipos = tipoDao.lista();
-		int tamanho = listaTipos.size();
-		String colunas[] = new String[tamanho+3];
-		colunas[0] = "Catraca Virtual";
-		String dados[][] = new String[1][tamanho+3];
-		int i = 1;
-		for (Tipo tipo : listaTipos) {
-			colunas[i] = tipo.getNome();
-			dados[0][i] = "0";
-
-			i++;
-		}	
-		dados[0][i] = "0";
-		dados[0][i+1] = "0";
-		colunas[i] = "Isento";
-		colunas[i+1] = "Total";
+		
 		try {
 			tipoDao.getConexao().close();
 		} catch (SQLException e) {
@@ -515,148 +443,28 @@ public class CatracaVirtualControllerVelho {
 		}
 		
 		
-		this.frameCatracaVirtual = new CatracaVirtualView(colunas, dados);
-		this.frameCatracaVirtual.getNumeroCartao().setFocusable(true);
-		
-		this.frameCatracaVirtual.setFinanceiroAtivo(this.catracaVirtual.isFinanceiroAtivo());
-		
-		this.frameCatracaVirtual.getDados()[0][0] = this.catracaVirtual.getNome();
-		this.frameCatracaVirtual.getTabela().updateUI();
-		
-		this.frameCatracaVirtual.getNomeUsuario().setText("");
-		this.frameCatracaVirtual.getTipoUsuario().setText("");
-		this.frameCatracaVirtual.getRefeicoesRestantes().setText("");
-		this.frameCatracaVirtual.getValorCobrado().setText("");
-		
-		this.frameCatracaVirtual.getTabela().updateUI();
+	
 
 		
 		this.getFrameLogin().setVisible(false);
 		
 		this.getFrameCatracaVirtual().setVisible(true);
 		
-		getFrameCatracaVirtual().getLabelTurno().setText(" Turno Inativo ");
+
 		getFrameCatracaVirtual().getNumeroCartao().grabFocus();
 		getFrameCatracaVirtual().getPanel_3().setVisible(false);
 		getFrameCatracaVirtual().getPanelErro().setVisible(false);
-		this.adicionarEventosCartao();
+
 		this.verificandoTurnoAtual();
 		
+		this.adicionarEventosCartao();
 		adicionarEventoConfirmar();
 		
 	}
 	
 	public void sincronizacaoBasica(){
-//		
-//
-//		try {
-//			semaforo.acquire();
-//			
-//			UnidadeRecurso unidadeRecurso = new UnidadeRecurso();
-//			unidadeRecurso.sincronizar(dao.getConexao());
-//
-//			CatracaRecurso catracaRecurso = new CatracaRecurso();
-//			catracaRecurso.sincronizar(dao.getConexao());
-//			
-//			TipoRecurso tipoRecurso = new TipoRecurso();
-//			tipoRecurso.sincronizar(dao.getConexao());
-//					
-//			TurnoRecurso turnoRecurso = new TurnoRecurso();
-//			turnoRecurso.sincronizar(dao.getConexao());
-//			
-//			TurnoUnidadeRecurso turnoUnidade = new TurnoUnidadeRecurso();
-//			turnoUnidade.sincronizar(dao.getConexao());
-//
-//			CartaoRecurso cartaoRecurso = new CartaoRecurso();
-//			cartaoRecurso.sincronizar(dao.getConexao());
-//			
-//			UsuarioRecurso usuarioRecurso = new UsuarioRecurso();
-//			usuarioRecurso.sincronizar();
-//			
-//			VinculoRecurso vinculoRecurso = new VinculoRecurso();
-//			vinculoRecurso.sincronizar(dao.getConexao());
-//			
-//			CatracaUnidadeRecurso catracaUnidadeRecurso = new CatracaUnidadeRecurso();
-//			catracaUnidadeRecurso.sincronizar(dao.getConexao());
-//
-//			CustoUnidadeRecurso custoRecurso = new CustoUnidadeRecurso();
-//			custoRecurso.sincronizar(dao.getConexao());
-//			
-//			semaforo.release();
-//			System.out.println("Sincronizacao Feita. ");
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-
 		
 		
-		
-	}
-	public void verificarNomeDaCatraca(){
-		boolean passou = false;
-		do{
-			if(this.dao.retornaCatracaPorNome(this.catracaVirtual) == null){
-				this.frameLogin.getLabelMensagem().setText("Cadastre a catraca virtual");
-				try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				CatracaRecurso catracaRecurso = new CatracaRecurso();
-				catracaRecurso.sincronizar(this.dao.getConexao());
-			}else{
-				passou = true;
-				this.frameLogin.getLabelMensagem().setText("Catraca Virtual: "+catracaVirtual.getNome());
-				
-			}	
-		}while(!passou);
-	}
-	public void verificarUnidadeDaCatraca(){
-		boolean passou = false;
-		do{
-			this.unidade = this.dao.unidadeDaCatraca(this.catracaVirtual);
-			if(this.unidade == null){
-				this.frameLogin.getLabelMensagem().setText("Cadastre a catraca em alguma unidade academica");
-				try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				UnidadeRecurso unidadeRecurso = new UnidadeRecurso();
-				unidadeRecurso.sincronizar(this.dao.getConexao());
-				CatracaUnidadeRecurso recurso = new CatracaUnidadeRecurso();
-				recurso.sincronizar(this.dao.getConexao());
-			}else{
-				this.frameLogin.getLabelMensagem().setText("Unidade: "+unidade.getNome());
-				passou = true;
-			}
-		}while(!passou);
-	}
-	public void verificarTurnosDaCatraca(){
-		boolean passou = false;
-		do{
-			this.turnos = this.dao.turnosDaUnidade(this.unidade);
-			if(this.turnos == null || this.turnos.size() == 0){
-				this.frameLogin.getLabelMensagem().setText("Adicione turnos na Unidade Academica");
-				try {
-					Thread.sleep(2000);
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				TurnoUnidadeRecurso recurso = new TurnoUnidadeRecurso();
-				recurso.sincronizar(this.dao.getConexao());
-			}else{
-				this.frameLogin.getLabelMensagem().setText("");
-				passou = true;
-			}
-			
-		}while(!passou);
 	}
 	
 	
