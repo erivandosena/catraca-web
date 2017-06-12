@@ -699,6 +699,12 @@ public class CatracaVirtualController {
 					
 					if(!catracaVirtualDAO.podeContinuarComendo(vinculoConsultado, turnoAtual)){
 						mensagemSucesso("Usuário já passou neste turno!");
+						try {
+							catracaVirtualDAO.getConexao().close();
+						} catch (SQLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 						return;
 					}
 					
