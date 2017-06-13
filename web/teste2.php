@@ -18,22 +18,8 @@ function __autoload($classe) {
 		include_once 'classes/view/' . $classe . '.php';
 }
 
-$sessao = new Sessao ();
 
-if (isset ( $_GET ["sair"] )) {
+echo 'Teste';
 
-	$sessao->mataSessao ();
-	header ( "Location:./index.php" );
-}
-
-if(!($sessao->getNivelAcesso() == Sessao::NIVEL_SUPER || $sessao->getNivelAcesso() == Sessao::NIVEL_ADMIN)){
-	echo "Nivel de acesso Não permitido: ".$sessao->getNivelAcesso();
-	exit(0);
-}
-
-
-
-$s = new SincronizadorController();
-$s->carregarDados();
-$s->deletarDadosLocais();
-$s->inserirOsDoSigaa();
+$sincronizador = new SincronizadorController();
+$sincronizador->sincronizar();
