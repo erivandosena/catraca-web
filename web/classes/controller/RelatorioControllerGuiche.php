@@ -84,7 +84,9 @@ class RelatorioControllerGuiche {
 							</tr>
 						</thead>
 						<tbody>';
-			
+			$dataFim = substr($dataFim, 0, 10)." ".substr($dataFim, 13,18);
+			$dataInicio =  substr($dataInicio, 0, 10)." ".substr($dataInicio, 13,18);
+				
 			$inicio = date("Y-m-d H:i:s", strtotime($dataInicio));
 			$fim = date("Y-m-d H:i:s", strtotime($dataFim));
 			
