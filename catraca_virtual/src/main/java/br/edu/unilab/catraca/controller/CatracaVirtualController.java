@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -71,8 +72,7 @@ public class CatracaVirtualController {
 		this.turnoAtivo = false;
 		this.catracaVirtual = new Catraca();
 	}
-	
-	
+
 	/**
 	 * Este metodo criara um splash e deixará visível até que
 	 *  consiga criar as janelas e eventos. 
@@ -90,24 +90,33 @@ public class CatracaVirtualController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		splash.setVisible(false);
+		splash.dispose();
+		
+		try {
+			Runtime.getRuntime().exec("C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe");
+			Runtime.getRuntime().exec("C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe");
+		} catch (IOException e) {
+			System.out.println("Tentou abrir o chrome");
+		}
 		
 		this.frameLogin = new LoginView();
-		this.frameLogin.getLabelMensagem().setText("Aguardando informação da catraca.");
 		this.frameLogin.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		splash.setVisible(false);
-		this.frameLogin.setVisible(true);
-		splash.dispose();
-		this.catracaVirtual.maquinaLocal();
-		this.verificarNomeDaCatraca();
-		this.frameLogin.getLabelMensagem().setText("Aguardando informação da Unidade Acadêmica.");
-		this.verificarUnidadeDaCatraca();
-		this.frameLogin.getLabelMensagem().setText("Aguardando informação de Turnos.");
-		this.verificarTurnosDaUnidade();
-		this.frameLogin.getLabelMensagem().setText("Verificando Custo.");
-		this.verificarCusto();
-		this.frameLogin.getLabelMensagem().setText("Verificando tipos");
-		this.verificaTipos();
 		this.frameLogin.getLabelMensagem().setText("");
+		
+		
+		System.out.println("Aguardando informação da catraca.");
+		this.catracaVirtual.maquinaLocal();
+		this.verificarNomeDaCatraca();		
+		System.out.println("Aguardando informação da Unidade Acadêmica.");
+		this.verificarUnidadeDaCatraca();
+		System.out.println("Aguardando informação de Turnos.");
+		this.verificarTurnosDaUnidade();
+		System.out.println("Verificando Custo.");
+		this.verificarCusto();
+		System.out.println("Verificando tipos");
+		this.verificaTipos();
+
 		
 		int tamanho = listaTipos.size();
 		String colunas[] = new String[tamanho+3];
@@ -143,11 +152,7 @@ public class CatracaVirtualController {
 		this.frameCatracaVirtual.getValorCobrado().setText("");
 		
 		this.frameCatracaVirtual.getTabela().updateUI();
-		
-		
-		
 		this.fazendoSincronia();
-		
 		this.adicionarEventosDeLogin();
 		
 		

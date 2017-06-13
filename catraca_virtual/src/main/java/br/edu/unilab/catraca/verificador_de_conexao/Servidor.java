@@ -7,61 +7,66 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Servidor {
-	
+
 	private ServerSocket servidor;
-	public static final int PORT = 27289;
-	
-	public void iniciaServico(){
-		
-		Thread iniciando = new Thread(new Runnable() {
-			public void run() {
-				try {
-					servidor = new ServerSocket(Servidor.PORT, 8);
-					System.out.println("Servidor iniciou. Aguardando conexões.... ");
-					Socket cliente;
-					while(true){
-						cliente = servidor.accept();
-						System.out.println("Nova conexao");
-						processandoConexao(cliente);
-					}
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
+	public static final int PORT = 12345;
+
+	public void iniciaServico() {
+
+		try {
+			servidor = new ServerSocket(Servidor.PORT, 8);
+			System.out.println("Servidor iniciou. Aguardando conexões.... ");
+			Socket cliente;
+			while (true) {
+				cliente = servidor.accept();
+				System.out.println("Nova conexao");
+				processandoConexao(cliente);
 			}
-		});
-		iniciando.start();
-		
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
-	private void processandoConexao(final Socket conexao){
+
+	private void processandoConexao(final Socket conexao) {
 		Thread processando = new Thread(new Runnable() {
-			
+
 			@Override
 			public void run() {
 				try {
 					ObjectOutputStream saida = new ObjectOutputStream(conexao.getOutputStream());
 					ObjectInputStream entrada = new ObjectInputStream(conexao.getInputStream());
-					String mensagem = (String) entrada.readObject();
-					if(mensagem.equals("taVivo"))
-					{
-						saida.writeObject("sim");
+					Cliente cliente = new Cliente();
+
+					while(true){
+						String mensagem = (String) entrada.readObject();
+						processandoMensagem(mensagem, cliente);
 					}
-					conexao.close();
-					
 				} catch (IOException | ClassNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
+
+			}
+		});
+		processando.start();
+
+	}
+
+	public void processandoMensagem(final String mensagem, final Cliente cliente) {
+		Thread processando = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				if (mensagem.contains("setNome") && mensagem.length() >= "setNome".length() + 2) {
+					cliente.setNome(mensagem.substring("setNome(".length(), mensagem.length() - 1));
+					System.out.println("Novo nome �: " + cliente.getNome());
+				}
+				System.out.println(cliente.getNome() + ">>" + mensagem);		
 			}
 		});
 		processando.start();
 		
-		
-		
 	}
-	
-	
 
 }

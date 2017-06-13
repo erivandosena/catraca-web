@@ -106,6 +106,27 @@
                             <goal>single</goal>
                         </goals>
                     </execution>
+                    <execution>
+                        <id>build-catraca-server</id>
+                        <configuration>
+                            <appendAssemblyId>false</appendAssemblyId>
+                            <archive>
+                                <manifest>
+                                    <mainClass>br.edu.unilab.catraca.verificador_de_conexao.MainServidor</mainClass>
+                                    <addClasspath>true</addClasspath>
+                                </manifest>
+                                <addMavenDescriptor>false</addMavenDescriptor>
+                            </archive>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                            <finalName>CatracaServer</finalName>
+                        </configuration>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
                     
                 </executions>
             </plugin>
