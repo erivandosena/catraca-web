@@ -205,6 +205,15 @@ class SincronizadorController{
 			fclose($fp);
 			return;
 		}
+		$escrever = fopen(self::ARQUIVO, "w");
+		
+		$hoje = date ( "Y-m-d G:i:s" );
+		if(!fwrite($escrever, "ultima_atualizacao = ".$hoje)){
+				
+			return;
+		}
+		fclose($escrever);
+		
 			
 		$config = parse_ini_file ( self::ARQUIVO );
 		$dataDaUltimaAtualizacao = $config ['ultima_atualizacao'];
@@ -219,25 +228,11 @@ class SincronizadorController{
 
 
 		if(!$this->sincronizarSigaa()){
-// 			echo 'Errou no sigaa';
 			return;
 		}
 		if(!$this->sincronizarComum()){
-// 			echo "Errou no comum";
 			return;
-		}
-		
-		
-		$escrever = fopen(self::ARQUIVO, "w");
-		
-		$hoje = date ( "Y-m-d G:i:s" );
-		if(!fwrite($escrever, "ultima_atualizacao = ".$hoje)){
-			
-			return;
-		}
-		fclose($escrever);
-		
-		
+		}		
 	}
 	
 	const ARQUIVO = "config/copia_base_sigaa.ini";

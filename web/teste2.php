@@ -18,8 +18,8 @@ function __autoload($classe) {
 		include_once 'classes/view/' . $classe . '.php';
 }
 
+echo "Comecar";
+$s = new SincronizadorController();
+$s->sincronizar();
 
-echo 'Teste';
-
-$sincronizador = new SincronizadorController();
-$sincronizador->sincronizar();
+echo '<br>Foi';

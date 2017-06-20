@@ -31,6 +31,8 @@ if (isset ( $_GET ["sair"] )) {
 }
 
 
+$sincronizador = new SincronizadorController();
+$sincronizador->sincronizar();
 
 
 ?>
