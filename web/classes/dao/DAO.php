@@ -5,7 +5,6 @@
   */ 
  
  
- 
 class DAO {
 	protected $conexao;
 	private $tipoDeConexao;

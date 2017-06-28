@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 
 class CatracaVirtualDAO extends DAO{
 	
@@ -41,6 +41,7 @@ class CatracaVirtualDAO extends DAO{
 			$usuario = new Usuario();
 			$vinculo->setResponsavel($usuario);
 			$vinculo->getResponsavel()->setNome($linha['usua_nome']);
+			$vinculo->getResponsavel()->setId($linha['usua_id']);
 			$vinculo->setFinalValidade($linha['vinc_fim']);
 			$vinculo->getResponsavel()->setIdBaseExterna($linha['id_base_externa']);
 			$vinculo->getCartao()->setCreditos($linha['cart_creditos']);

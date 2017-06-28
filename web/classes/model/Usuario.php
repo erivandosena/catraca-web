@@ -11,14 +11,6 @@ class Usuario{
 	private $senha;
 	private $nivelAcesso;
 	private $idCategoria;
-	private $token;
-	
-	public function setToken($token){
-		$this->token = $token;
-	}
-	public function getToken(){
-		return $this->token;
-	}
 	
 	public function Usuario(){
 		$this->id = 0;

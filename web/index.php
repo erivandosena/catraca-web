@@ -34,17 +34,6 @@ if (isset ( $_GET ["sair"] )) {
 $sincronizador = new SincronizadorController();
 $sincronizador->sincronizar();
 
-
-include_once "classes/util/NotificacaoApp.php";
-use FireBase\NotificacaoApp;
-
-
-
-$n = new NotificacaoApp();
-$n->envia_notificacao("App Catraca UNILAB", 'Ola, Jeff', "cJMV66p0l14:APA91bHKhuw1iMdpdwHpp3_iRc4o5rogpMzmE-0bDnoXh-YdUgkiFctwneS1ZCAfaiCgg7g4Jv8AFHdVNch0n2Ck0N7iCHY_h8VT3Gm6401dY6nGdKtTKVSj0gMRcGfjFq9E0c5VQWpO");
-
-
-
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">

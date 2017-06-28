@@ -21,14 +21,14 @@
 	 *
 	 */
 	
-	namespace FireBase;
+// 	namespace FireBase;
 
 	
 	
-	/**
-	 * Classe de envio de mensagens para o aplicativo
-	 */
-	class NotificacaoApp {
+/**
+ * Classe de envio de mensagens para o aplicativo
+ */
+class NotificacaoApp {
 		
 		/**
 		 * Envia as notificacoes para o aplicativo do usuario
@@ -42,24 +42,24 @@
 			define( 'API_ACCESS_KEY', 'AIzaSyAGsra0IfOxKCAu6N9j7LFC4QqS9733Ysg');
 			
 			$msg = array(
-				'body' 	=> $mensagem,//'Atualize seu App ao receber notificaÃ§Ãµes.',
-				'title'	=> $titulo //'App Catraca Unilab',
-				);
+					'body'		=> $mensagem,
+					'title'		=> $titulo,
+					'sound'		=> 'default',
+					'icon'		=> 'ic_launcher_logo'
+			);
 			
 			$fields = array(
-						'to'			=> $token,//"eNgXbsTXOMs:APA91bFUDqyiTC3pUYv-OxCuJUmrfFvQfUVKGX9Y_NbJx8nBZ6Brx5RidKZTX8hR2KNKGOXlOuUad1TKFtVk1262nZTkBa-bRibZUcGw5E2camIXS_xnXgL5RcYvATHkn4DDeR-6ehCO",//$_REQUEST['token'],
-						'notification'	=> $msg
-					
+					'to'			=> $token,
+					'priority'		=> 'high',
+					'notification'	=> $msg
 			);
 			
 			$headers = array
 					(
 						'Authorization: key=' . API_ACCESS_KEY,
-						'Content-Type: application/json'
-							
+						'Content-Type: application/json'		
 			);
 			
-			//Envio de resposta ao servidor FireBase
 			$ch = curl_init();
 			curl_setopt( $ch,CURLOPT_URL, 'https://fcm.googleapis.com/fcm/send' );
 			curl_setopt( $ch,CURLOPT_POST, true );
@@ -68,7 +68,6 @@
 			curl_setopt( $ch,CURLOPT_SSL_VERIFYPEER, false );
 			curl_setopt( $ch,CURLOPT_POSTFIELDS, json_encode($fields));
 			$result = curl_exec($ch );
-			echo $result;
 			curl_close( $ch );
 		}
 	}

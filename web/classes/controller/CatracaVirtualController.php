@@ -58,6 +58,7 @@ class CatracaVirtualController{
 			
 		
 	}
+	
 	public function selecionarRU(){
 		$unidadeDao = new UnidadeDAO($this->dao->getConexao());
 		$listaDeCatracas = $unidadeDao->retornaCatracasPorUnidade();
@@ -285,6 +286,19 @@ class CatracaVirtualController{
 						unset($_SESSION['nome_usuario']);
 						unset($_SESSION['tipo_usuario']);
 						unset($_SESSION['refeicoes_restante']);
+						
+						/**
+						 * Chamada da funcao de envios de notificacoes pela via FireBase
+						 * Consumo de creditos do cartao
+						 */
+// 						$appDao = new AppDAO($this->dao->getConexao());
+// 						$app = $appDao->retornaAppPorUsuarioId($vinculo->getResponsavel()->getId());
+// 						$token = $app->getApp_token();
+// 						if($token != null){
+// 							$notificaApp = new NotificacaoApp();
+// 							$notificaApp->envia_notificacao('Uso de Crédito', 'Você consumiu R$'. number_format($valorPago, 2, ',', '.'), $token);
+// 						}
+						
 						echo '<meta http-equiv="refresh" content="2; url=?pagina=gerador">';						
 					}
 					

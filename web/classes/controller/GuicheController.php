@@ -306,13 +306,25 @@ class GuicheController{
 								echo '<div id="msgconfirmado">';
 								$this->view->mensagem($tipo,$mensagem);
 								$_SESSION['autorizado'] = $autorizado;
-								echo '</div>';
-
-								$n = new NotificacaoApp();
-								$token = "cJMV66p0l14:APA91bHKhuw1iMdpdwHpp3_iRc4o5rogpMzmE-0bDnoXh-YdUgkiFctwneS1ZCAfaiCgg7g4Jv8AFHdVNch0n2Ck0N7iCHY_h8VT3Gm6401dY6nGdKtTKVSj0gMRcGfjFq9E0c5VQWpO";
-								$n->envia_notificacao("Recarga de Cartão", 'Você acaba de recarregar R$ '.number_format ( $valorVendido, 2 ).', seu novo saldo é: R$ '.number_format ( $novoValor, 2 ), $token);
+								echo '</div>';	
 								
-								echo '<meta http-equiv="refresh" content="3; url=.\?pagina=guiche">';
+								/**
+								 * Chamada da funcao de envios de notificacoes pela Api FireBase
+								 * Recarga e Estrono de creditos do cartao
+								 */
+// 								$appDao = new AppDAO($dao->getConexao());
+// 								$app = $appDao->retornaAppPorUsuarioId($idUsuario);
+// 								$token = $app->getApp_token();
+// 								if($token != null){
+// 									$notificaApp = new NotificacaoApp();
+// 									//$notificaApp->envia_notificacao("Recarga de Cartão", 'Recarga R$ '. number_format($valorVendido, 2, ',', '.') .', novo saldo R$ '. number_format($novoValor, 2, ',', '.'), $token);
+// 									$notificaApp->envia_notificacao(
+// 											($valorVendido > 0) ? 'Recarga de Crédito' : 'Estorno de Crédito',
+// 											(($valorVendido > 0) ? 'Recarga R$' : 'Estorno R$') . number_format($valorVendido, 2, ',', '.') . ', saldo R$' . number_format($novoValor, 2, ',', '.'),
+// 											$token);
+// 								}
+								
+								echo '<meta http-equiv="refresh" content="2; url=.\?pagina=guiche">';
 	
 							}
 						}

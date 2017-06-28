@@ -303,7 +303,8 @@ class CartaoAvulsoController{
 							echo '<meta http-equiv="refresh" content="4; url=.\?pagina=avulso&selecionado=' . $vinculo->getResponsavel()->getIdBaseExterna() . '&cartao=add">';
 							return;
 						}
-						
+						$vinculoDao->verificarUsuario($vinculo->getResponsavel(), $vinculoDao->getConexao());
+
 						if(isset($_POST['enviar_vinculo'])){
 							if(strlen($_POST['obs']) > 16){
 								
