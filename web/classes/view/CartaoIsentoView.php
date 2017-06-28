@@ -512,14 +512,25 @@ class CartaoIsentoView {
 		}
 		echo '</div>';
 	}
+	public function formCancelarIsencao($numero){
+		
+		echo '<div class="borda">
+				<form method="post" action="" class="formulario sequencial texto-preto" >
+			
+						    <label for="confirmar">O fim da validade da isenção será adiantado para a data e hora atual:</label>
+							<input type="hidden" name="numero_cartao"  value="' . $numero . '"/>
+							 <br> <br>	<input  id="confirmar" type="submit"  name="confirmar" value="Cofirmar?"/>
+			</form>
+			</div>';
+		
+		
+		
+	}
 	
 	public function formAdicionarIsencao($idSelecionado){
 		
 		$daqui3Meses = date ( 'Y-m-d', strtotime ( "+90 days" ) ) . 'T' . date ( 'H:00:01' );
 		$hoje = date ('Y-m-d') . 'T' . date ( 'H:00:01' );
-		
-		
-		
 		echo '<div class="borda">
 				<form method="post" action="" class="formulario sequencial texto-preto" >
 					

@@ -114,13 +114,27 @@ class CartaoIsentoController{
 					$vinculoDao->isencaoValidaDoVinculo($vinculo);
 					if($vinculo->ehIsento()){
 						echo '<p>Usuário Isento até: '.date("d/m/Y", strtotime($vinculo->getIsencao()->getDataFinal())).'</p>';
-						//descomente esta linha para começar. 
-// 						echo '<br><a href="?pagina=isento&numero_cartao='.$_GET['numero_cartao'].'&cancelar_isencao=1" class="botao">Cancelar Isenção</a>';
-						if(isset($_GET['cancelar_isencao']) && isset($_GET['numero_cartao'])){
+						if(!(isset($_GET['cancelar_isencao']) && isset($_GET['numero_cartao']))){
 							
-							echo 'A funcionalidade de cancelar está em construção. ';
+							echo '<br><a href="?pagina=isento&numero_cartao='.$_GET['numero_cartao'].'&cancelar_isencao=1" class="botao">Cancelar Isenção</a>';
 							
 						}
+						else if(!(isset($_POST['confirmar']) && isset($_POST['numero_cartao']))){
+							
+							
+							$this->view->formCancelarIsencao($_GET['numero_cartao']);
+						}else{
+							if($vinculoDao->invalidarIsencaoVinculo($vinculo)){
+								$this->view->mostraSucesso("Isenção adicionada Com Sucesso");
+								
+							}else{
+								$this->view->mostraSucesso("Erro");
+							}
+	
+							echo '<meta http-equiv="refresh" content="4; url=.\?pagina=isento&numero_cartao='.$_GET['numero_cartao'].'">';
+							
+						}
+						
 					
 					}
 					else{
