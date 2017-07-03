@@ -73,6 +73,11 @@ public class CatracaVirtualController {
 		this.catracaVirtual = new Catraca();
 	}
 
+	public Catraca getCatraca(){
+		return this.catracaVirtual;
+	}
+	
+	
 	/**
 	 * Este metodo criara um splash e deixará visível até que
 	 *  consiga criar as janelas e eventos. 

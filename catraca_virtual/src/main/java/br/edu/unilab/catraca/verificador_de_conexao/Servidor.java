@@ -5,12 +5,19 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class Servidor {
 
 	private ServerSocket servidor;
 	public static final int PORT = 12345;
 
+	public ArrayList<Cliente> lista;
+	public Servidor(){
+		this.lista = new ArrayList<>();
+		
+	}
+	
 	public void iniciaServico() {
 
 		try {
@@ -34,20 +41,20 @@ public class Servidor {
 
 			@Override
 			public void run() {
+				Cliente cliente = new Cliente();
 				try {
 					ObjectOutputStream saida = new ObjectOutputStream(conexao.getOutputStream());
 					ObjectInputStream entrada = new ObjectInputStream(conexao.getInputStream());
-					Cliente cliente = new Cliente();
-
+					
+					lista.add(cliente);
 					while(true){
 						String mensagem = (String) entrada.readObject();
 						processandoMensagem(mensagem, cliente);
 					}
+					
 				} catch (IOException | ClassNotFoundException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-
 			}
 		});
 		processando.start();
@@ -58,9 +65,10 @@ public class Servidor {
 		Thread processando = new Thread(new Runnable() {
 			@Override
 			public void run() {
+				System.out.println("Entrei aqui");
 				if (mensagem.contains("setNome") && mensagem.length() >= "setNome".length() + 2) {
 					cliente.setNome(mensagem.substring("setNome(".length(), mensagem.length() - 1));
-					System.out.println("Novo nome �: " + cliente.getNome());
+					System.out.println("Novo nome: " + cliente.getNome());
 				}
 				System.out.println(cliente.getNome() + ">>" + mensagem);		
 			}

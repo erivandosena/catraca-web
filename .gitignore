@@ -26,3 +26,4 @@
 *.db
 *.bd
 */target/*
+*.db-journal

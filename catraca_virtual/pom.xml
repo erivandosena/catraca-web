@@ -86,7 +86,7 @@
                 <version>2.5.3</version>
                 <executions>
                     <execution>
-                        <id>build-catracavirtual</id>
+                        <id>build-catracaVirtual</id>
                         <configuration>
                             <appendAssemblyId>false</appendAssemblyId>
                             <archive>
@@ -99,7 +99,7 @@
                             <descriptorRefs>
                                 <descriptorRef>jar-with-dependencies</descriptorRef>
                             </descriptorRefs>
-                            <finalName>Catracavirtual</finalName>
+                            <finalName>CatracaVirtual</finalName>
                         </configuration>
                         <phase>package</phase>
                         <goals>

@@ -9,6 +9,8 @@ import java.util.concurrent.Semaphore;
 
 import javax.swing.JOptionPane;
 
+import java.util.Scanner;
+
 import br.edu.unilab.catraca.controller.CatracaVirtualController;
 
 public class Cliente {
@@ -50,7 +52,7 @@ public class Cliente {
 						e.printStackTrace();
 					}
 					if(ultimaInteracao < 1800){
-						ultimaInteracao++;
+						ultimaInteracao++; 
 					}
 					semaforo.release();
 				}
@@ -132,7 +134,7 @@ public class Cliente {
 					saida = new ObjectOutputStream(conexao.getOutputStream());
 					saida.flush();
 					
-					saida.writeObject("setNome(" + getNome() + ")");
+					saida.writeObject("setNome(" + catracaVirtual.getCatraca().getNome() + ")");
 					saida.flush();
 
 					entrada = new ObjectInputStream(conexao.getInputStream());
@@ -175,16 +177,21 @@ public class Cliente {
 	
 	private void processandoMensagem(String mensagem) {
 		System.out.println("MEnsagem do servidor: "+mensagem);
-		try {
-			semaforo.acquire();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		
+		if(mensagem.equals("atualizar")){
+			Process process;
+			try {
+				Runtime.getRuntime().exec(" java -jar \"C:\\Program Files (x86)\\Catraca\\catraca-update.jar\"");
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+
+			}
+			System.exit(0);
+			return;
+			
 		}
 		
-		ultimaInteracao = 0;
-		
-		semaforo.release();
 	}
 	
 
