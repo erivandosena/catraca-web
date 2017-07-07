@@ -14,7 +14,7 @@ import java.util.Scanner;
 import br.edu.unilab.catraca.controller.CatracaVirtualController;
 
 public class Cliente {
-	public static final String HOST = "localhost";
+	public static final String HOST = "catracahomologacao.unilab.edu.br";
 	public static final int PORT = 12345;
 
 	public int tentativa = 0;
