@@ -18,7 +18,7 @@ class SincronizadorController{
 	
 	
 	public function sincronizarSigaa(){
-		
+		echo "Sincronizacao 1";
 		$this->daoLocal = new DAO();
 		$this->daoSigaa = new DAO(null, DAO::TIPO_PG_SIGAAA);
 		
@@ -216,8 +216,19 @@ class SincronizadorController{
 		if (! is_writable ( self::ARQUIVO )) {
 			return;
 		}
+		$escrever = fopen(self::ARQUIVO, "w");
+		
+		$hoje = date ( "Y-m-d G:i:s" );
+		if(!fwrite($escrever, "ultima_atualizacao = ".$hoje)){
+				
+			return;
+		}
 
-
+		fclose($escrever);
+		
+		
+		echo "Vai começar a brincadeira";
+		
 		if(!$this->sincronizarSigaa()){
 			echo 'Errou no sigaa';
 			return;
@@ -226,18 +237,11 @@ class SincronizadorController{
 			echo "Errou no comum";
 			return;
 		}
+		echo "Passou pelos dois";
 		
 		
-		$escrever = fopen(self::ARQUIVO, "w");
-		
-		$hoje = date ( "Y-m-d G:i:s" );
-		if(!fwrite($escrever, "ultima_atualizacao = ".$hoje)){
-			
-			return;
-		}
+	
 		echo "Feito";
-		fclose($escrever);
-		
 		
 	}
 	

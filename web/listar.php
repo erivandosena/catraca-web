@@ -18,31 +18,17 @@ function __autoload($classe) {
 						include_once 'classes/view/' . $classe . '.php';
 }
 
+$sessao = new Sessao ();
 
+if (isset ( $_GET ["sair"] )) {
 
-// if (($handle = fopen ( "lista.csv", "r" )) !== FALSE) {
-// 	$row = 0;
-// 	while ( ($data = fgetcsv ( $handle, 1000, "," )) !== FALSE ) {
-// 		$num = count ( $data );
-// 		for($c = 0; $c < $num; $c ++) {
-// 			if($data[$c] == null){
-// 				echo "Pulou<br>";
-// 				continue;
-// 			}
-// 			$row++;
-// 			$cartao = new Cartao();
-// 			$cartao->setNumero($data[$c]);
-// 			$cartoes[] = $cartao;
-// 		}
-// 	}
-// 	fclose ( $handle );
-// }
+	$sessao->mataSessao ();
+	header ( "Location:./index.php" );
+}
 
-$dao = new CartaoDAO();
-foreach($dao->retornaListaTotal() as $cartao){
-// 	$cartoes[] = $cartao;
-	echo $cartao->getNumero();
-	echo '<br>';
+if(!($sessao->getNivelAcesso() == Sessao::NIVEL_SUPER || $sessao->getNivelAcesso() == Sessao::NIVEL_ADMIN)){
+	echo "Nivel de acesso Não permitido: ".$sessao->getNivelAcesso();
+	exit(0);
 }
 
 
