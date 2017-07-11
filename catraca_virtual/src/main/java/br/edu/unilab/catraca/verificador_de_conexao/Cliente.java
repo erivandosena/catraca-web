@@ -16,7 +16,7 @@ import br.edu.unilab.catraca.controller.CatracaVirtualController;
 public class Cliente {
 	public static final String HOST = "catracahomologacao.unilab.edu.br";
 	public static final int PORT = 12345;
-
+	private Socket conexao;
 	public int tentativa = 0;
 	public int ultimaInteracao = 0;
 	private boolean statusConexao;
@@ -51,9 +51,20 @@ public class Cliente {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					if(ultimaInteracao < 1800){
+					if(ultimaInteracao < 100){
 						ultimaInteracao++; 
+					}else{
+						//fechar conexao
+						try {
+							conexao.close();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						ultimaInteracao = 0;
 					}
+					
+					System.out.println("Ultima interacao: "+ultimaInteracao);
 					semaforo.release();
 				}
 			}
@@ -72,7 +83,7 @@ public class Cliente {
 
 					try {
 						
-						Socket conexao = new Socket(HOST, PORT);
+						conexao = new Socket(HOST, PORT);
 						if(tentativa > 10){
 							JOptionPane.showMessageDialog(null, "Conexão com servidor estabelecida!");
 						}
@@ -177,6 +188,15 @@ public class Cliente {
 	
 	private void processandoMensagem(String mensagem) {
 		System.out.println("MEnsagem do servidor: "+mensagem);
+		try {
+			semaforo.acquire();
+		} catch (InterruptedException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		ultimaInteracao = 0;
+		
+		semaforo.release();
 		
 		if(mensagem.equals("atualizar")){
 			Process process;
@@ -242,7 +262,7 @@ public class Cliente {
 	}
 	
 
-	private Socket conexao;
+
 	
 	private ObjectOutputStream saida;
 	private ObjectInputStream entrada;

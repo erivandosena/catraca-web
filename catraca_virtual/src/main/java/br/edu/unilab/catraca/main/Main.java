@@ -18,6 +18,7 @@ import br.edu.unilab.catraca.recurso.TipoRecurso;
 import br.edu.unilab.catraca.recurso.UnidadeRecurso;
 import br.edu.unilab.catraca.recurso.UsuarioRecurso;
 import br.edu.unilab.catraca.recurso.VinculoRecurso;
+import br.edu.unilab.catraca.verificador_de_conexao.Cliente;
 import br.edu.unilab.unicafe.model.Cartao;
 import br.edu.unilab.unicafe.model.Tipo;
 import br.edu.unilab.unicafe.model.Usuario;
@@ -48,10 +49,8 @@ public class Main {
 		}
 		
 		if (lock != null) {
-
-			CatracaUnidadeRecurso recurso = new CatracaUnidadeRecurso();
-			recurso.sincronizar();
-			
+			Cliente c = new Cliente();
+			c.iniciar();
 		} else {
 			System.out.println("Ja ha uma instancia rodando");
 		}
