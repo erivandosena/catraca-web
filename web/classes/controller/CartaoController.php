@@ -229,12 +229,13 @@ class CartaoController{
 						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
 						return;
 					}
-					if(!$this->verificaSeAtivo($usuario)){
-						
+					if(!$usuarioDao->vinculoRenovavel($vinculo)){
+					
 						$this->view->formMensagem("-erro", 'Esse usuário possui um problema quanto ao status! ('.$usuario->getStatusDiscente().")");
 						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
 						return;						
-					}					
+					}				
+					
 					if($vinculoDao->atualizaValidade($vinculo)){
 						$this->view->formMensagem("-sucesso", "Vínculo Atualizado com Sucesso!");						
 					}else{
