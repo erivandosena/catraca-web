@@ -200,9 +200,11 @@ class UsuarioDAO extends DAO {
 		foreach ($this->getConexao ()->query ( $sql ) as $linha){
 			if(strtolower($vinculo->getCartao()->getTipo()->getNome()) == 'aluno'){
 				if($linha['id_status_discente'] == self::ID_STATUS_DISCENTE_ATIVO){
+					$vinculo->getResponsavel()->setStatusDiscente("Ativo");
 					return true;
 				}
 				if($linha['id_status_discente'] == self::ID_STATUS_DISCENTE_FORMANDO){
+					$vinculo->getResponsavel()->setStatusDiscente("Formando");
 					return true;
 				}
 			}
