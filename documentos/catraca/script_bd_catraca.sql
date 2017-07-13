@@ -6,10 +6,6 @@
 -- Status       : Desenvolvimento
 ---------------------------------
 
--- Database: desenvolvimento
-COMMENT ON DATABASE desenvolvimento IS 'Bando de dados de desenvolvimento.';
-
--- Table: usuario
 CREATE TABLE usuario
 (
   usua_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
@@ -21,8 +17,7 @@ CREATE TABLE usuario
   id_base_externa integer, -- Campo da chave primaria (uid) no sistema SIG.
   CONSTRAINT pk_usua_id PRIMARY KEY (usua_id) -- Chave primaria da tabela usuario.
 );
-ALTER TABLE usuario OWNER TO catraca;
-COMMENT ON TABLE usuario IS 'Tabela que armazena as informacoes externas de usuarios do sistema provenientes do SIG.';
+
 COMMENT ON COLUMN usuario.usua_id IS 'Campo autoincremento para chave primaria da tabela.';
 COMMENT ON COLUMN usuario.usua_nome IS 'Nome completo do usuario no SIG.';
 COMMENT ON COLUMN usuario.usua_email IS 'Endereco de e-mail do usuario no SIG.';
@@ -32,7 +27,6 @@ COMMENT ON COLUMN usuario.usua_nivel IS 'Status atual do usuario no SIG.';
 COMMENT ON COLUMN usuario.id_base_externa IS 'Campo da chave primaria (uid) no sistema SIG.';
 COMMENT ON CONSTRAINT pk_usua_id ON usuario IS 'Chave primaria da tabela usuario.';
 
--- Table: transacao
 CREATE TABLE transacao
 (
   tran_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
@@ -53,7 +47,6 @@ COMMENT ON COLUMN transacao.usua_id IS 'Campo para chave estrangeira da tabela u
 COMMENT ON CONSTRAINT pk_tran_id ON transacao IS 'Chave primaria da tabela transacao.';
 COMMENT ON CONSTRAINT fk_usua_id ON transacao IS 'Chave estrangeira da tabela usuario.';
 
--- Table: tipo
 CREATE TABLE tipo
 (
   tipo_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
@@ -68,7 +61,6 @@ COMMENT ON COLUMN tipo.tipo_nome IS 'Nome do tipo de utilizador: Estudante, Prof
 COMMENT ON COLUMN tipo.tipo_valor IS 'Valor em R$ da refeição de acordo com o tipo de utilizador.';
 COMMENT ON CONSTRAINT pk_tipo_id ON tipo IS 'Chave primaria da tabela tipo.';
 
--- Table: cartao
 CREATE TABLE cartao
 (
   cart_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
@@ -89,7 +81,6 @@ COMMENT ON CONSTRAINT pk_cart_id ON cartao IS 'Chave primaria da tabela cartao.'
 COMMENT ON CONSTRAINT fk_tipo_id ON cartao IS 'Chave estrangeira da tabelatipo.';
 COMMENT ON CONSTRAINT uk_cart_numero ON cartao IS 'Restricao de duplicidades para o campo cart_numero.';
 
--- Table: vinculo
 CREATE TABLE vinculo
 (
   vinc_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
@@ -118,7 +109,7 @@ COMMENT ON CONSTRAINT fk_cart_id ON vinculo IS 'Chave estrangeira da tabela cart
 COMMENT ON CONSTRAINT fk_usua_id ON vinculo IS 'Chave estrangeira da tabela usuario.';
 COMMENT ON CONSTRAINT pk_vinc_id ON vinculo IS 'Chave primaria da tabela vinculo.';
 
--- Table: isencao
+
 CREATE TABLE isencao
 (
   isen_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
@@ -137,7 +128,7 @@ COMMENT ON COLUMN isencao.cart_id IS 'Campo para chave estrangeira da tabela car
 COMMENT ON CONSTRAINT pk_isen_id ON isencao IS 'Chave primaria da tabela isencao.';
 COMMENT ON CONSTRAINT fk_cart_id ON isencao IS 'Chave estrangeira da tabela cartao. ';
 
--- Table: unidade
+
 CREATE TABLE unidade
 (
   unid_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
@@ -150,7 +141,7 @@ COMMENT ON COLUMN unidade.unid_id IS 'Campo autoincremento para chave primaria d
 COMMENT ON COLUMN unidade.unid_nome IS 'Nome do local de funcionamento da catraca.';
 COMMENT ON CONSTRAINT pk_unid_id ON unidade IS 'Chave primaria da tabela unidade.';
 
--- Table: catraca
+
 CREATE TABLE catraca
 (
   catr_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
@@ -170,7 +161,6 @@ COMMENT ON COLUMN catraca.catr_nome IS 'Nome da catraca formado pelo nome do hos
 COMMENT ON CONSTRAINT pk_catr_id ON catraca IS 'Chave primaria da tabela catraca.';
 
 
--- Table: catraca_unidade
 CREATE TABLE catraca_unidade
 (
   caun_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
@@ -189,7 +179,7 @@ COMMENT ON CONSTRAINT pk_caun_id ON catraca_unidade IS 'Chave primaria da tabela
 COMMENT ON CONSTRAINT fk_catr_id ON catraca_unidade IS 'Chave estrangeira da tabela catraca.';
 COMMENT ON CONSTRAINT fk_unid_id ON catraca_unidade IS 'Chave estrangeira da tabela unidade.';
 
--- Table: giro
+
 CREATE TABLE giro
 (
   giro_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
@@ -210,7 +200,7 @@ COMMENT ON COLUMN giro.catr_id IS 'Campo para chave estrangeira da tabela catrac
 COMMENT ON CONSTRAINT pk_giro_id ON giro IS 'Chave primaria da tabela giro.';
 COMMENT ON CONSTRAINT pk_catr_id ON giro IS 'Chave estrangeira da tabela catraca.';
 
--- Table: mensagem
+
 CREATE TABLE mensagem
 (
   mens_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
@@ -257,7 +247,7 @@ COMMENT ON COLUMN mensagem.catr_id IS 'Campo para chave estrangeira da tabela ca
 COMMENT ON CONSTRAINT pk_mens_id ON mensagem IS 'Chave primaria da tabela mensagem.';
 COMMENT ON CONSTRAINT fk_catr_id ON mensagem IS 'Chave estrangeira da tabela catraca.';
 
--- Table: guiche
+
 CREATE TABLE guiche
 (
   guic_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
@@ -283,7 +273,6 @@ COMMENT ON CONSTRAINT fk_unid_id ON guiche IS 'Chave estrangeira da tabela unida
 COMMENT ON CONSTRAINT fk_usua_id ON guiche IS 'Chave estrangeira da tabela usuario.';
 
 
--- Table: fluxo
 CREATE TABLE fluxo
 (
   flux_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
@@ -304,7 +293,7 @@ COMMENT ON COLUMN fluxo.guic_id IS 'Campo para chave estrengeira da tabela guich
 COMMENT ON CONSTRAINT pk_flux_id ON fluxo IS 'Chave primaria da tabela fluxo.';
 COMMENT ON CONSTRAINT fk_guic_id ON fluxo IS 'Chave estrangeira da tabela guiche.';
 
--- Table: turno
+
 CREATE TABLE turno
 (
   turn_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
@@ -321,7 +310,7 @@ COMMENT ON COLUMN turno.turn_hora_fim IS 'Hora final do periodo para liberacao d
 COMMENT ON COLUMN turno.turn_descricao IS 'Descricao da refeicao disponibilizada durante o turno. Ex.: Cafe, Almoco, Janta.';
 COMMENT ON CONSTRAINT pk_turn_id ON turno IS 'Chave primaria da tabela turno.';
 
--- Table: registro
+
 CREATE TABLE registro
 (
   regi_id bigserial NOT NULL,
@@ -349,7 +338,7 @@ COMMENT ON CONSTRAINT fk_catr_id ON registro IS 'Chave estrangeira da tabela cat
 COMMENT ON CONSTRAINT fk_turn_id ON registro IS 'Chave estrangeira da tabela turno.';
 COMMENT ON CONSTRAINT pk_regi_id ON registro IS 'Chave primaria da tabela registro.';
 
--- Table: unidade_turno
+
 CREATE TABLE unidade_turno
 (
   untu_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
@@ -368,7 +357,7 @@ COMMENT ON CONSTRAINT pk_untu_id ON unidade_turno IS 'Chave primaria da tabela u
 COMMENT ON CONSTRAINT fk_turn_id ON unidade_turno IS 'Chave estrangeira da tabela turno.';
 COMMENT ON CONSTRAINT fk_unid_id ON unidade_turno IS 'Chave estrangeira da tabela unidade.';
 
--- Table: custo_cartao
+
 CREATE TABLE custo_cartao
 (
   cuca_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
@@ -383,7 +372,7 @@ COMMENT ON COLUMN custo_cartao.cuca_valor IS 'Valor em R$ do custo do cartao.';
 COMMENT ON COLUMN custo_cartao.cuca_data IS 'Data de cadastro do custo.';
 COMMENT ON CONSTRAINT pk_cuca_id ON custo_cartao IS 'Chave primaria da tabela custo_cartao.';
 
--- Table: custo_refeicao
+
 CREATE TABLE custo_refeicao
 (
   cure_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
