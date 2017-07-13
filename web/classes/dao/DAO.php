@@ -11,14 +11,14 @@
   *    Jefferson Uchôa Ponte - initial API and implementation and/or initial documentation
   *********/
 class DAO {
+	//Caso queira configurar homologacao faça novo arquivo ini. e modifique esta constante. 
+	
 	const ARQUIVO_CONFIGURACAO = "/dados/sites/adm/catraca/config/config_bd.ini";
-	const TIPO_PRODUCAO = 0;
-	const TIPO_HOMOLOGACAO = 1;
+	const TIPO_CATRACA = 0;
 	const TIPO_AUTENTICACAO = 2;
 	const TIPO_USUARIOS = 3;
 	
-	// Altere essa constante para acessar base de produção
-	const TIPO_DEFAULT = self::TIPO_PRODUCAO;
+	const TIPO_DEFAULT = self::TIPO_CATRACA;
 	protected $conexao;
 	private $tipoDeConexao;
 	public function DAO(PDO $conexao = null, $tipo = self::TIPO_DEFAULT) {
@@ -34,22 +34,15 @@ class DAO {
 		$config = parse_ini_file ( self::ARQUIVO_CONFIGURACAO );
 		
 		switch ($this->tipoDeConexao) {
-			case self::TIPO_PRODUCAO :
-				$bd ['sgdb'] = $config ['producao_sgbd'];
-				$bd ['nome'] = $config ['producao_bd_nome'];
-				$bd ['host'] = $config ['producao_host'];
-				$bd ['porta'] = $config ['producao_porta'];
-				$bd ['usuario'] = $config ['producao_usuario'];
-				$bd ['senha'] = $config ['producao_senha'];
+			case self::TIPO_CATRACA:
+				$bd ['sgdb'] = $config ['catraca_sgbd'];
+				$bd ['nome'] = $config ['catraca_bd_nome'];
+				$bd ['host'] = $config ['catraca_host'];
+				$bd ['porta'] = $config ['catraca_porta'];
+				$bd ['usuario'] = $config ['catraca_usuario'];
+				$bd ['senha'] = $config ['catraca_senha'];
 				break;
-			case self::TIPO_HOMOLOGACAO :
-				$bd ['sgdb'] = $config ['homologacao_sgdb'];
-				$bd ['nome'] = $config ['homologacao_bd_nome'];
-				$bd ['host'] = $config ['homologacao_host'];
-				$bd ['porta'] = $config ['homologacao_porta'];
-				$bd ['usuario'] = $config ['homologacao_usuario'];
-				$bd ['senha'] = $config ['homologacao_senha'];
-				break;
+			
 			case self::TIPO_USUARIOS :
 				$bd ['sgdb'] = $config ['usuarios_sgdb'];
 				$bd ['nome'] = $config ['usuarios_bd_nome'];
@@ -67,12 +60,12 @@ class DAO {
 				$bd ['senha'] = $config ['autenticacao_senha'];
 				break;
 			default :
-				$bd ['sgdb'] = $config ['homologacao_sgdb'];
-				$bd ['nome'] = $config ['homologacao_bd_nome'];
-				$bd ['host'] = $config ['homologacao_host'];
-				$bd ['porta'] = $config ['homologacao_porta'];
-				$bd ['usuario'] = $config ['homologacao_usuario'];
-				$bd ['senha'] = $config ['homologacao_senha'];
+				$bd ['sgdb'] = $config ['catraca_sgbd'];
+				$bd ['nome'] = $config ['catraca_bd_nome'];
+				$bd ['host'] = $config ['catraca_host'];
+				$bd ['porta'] = $config ['catraca_porta'];
+				$bd ['usuario'] = $config ['catraca_usuario'];
+				$bd ['senha'] = $config ['catraca_senha'];
 				break;
 		}
 		if ($bd ['sgdb'] == "postgres") {
