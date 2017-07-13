@@ -6,6 +6,24 @@
 -- Status       : Em Homologação
 ---------------------------------
 
+-- tabelas
+-- usuario ok
+-- transacao ok
+-- tipo ok
+-- cartao ok
+-- vinculo ok
+-- isencao ok
+-- unidade ok
+-- catraca ok
+--catraca_unidade ok
+--mensagem ok
+-- guiche removido
+-- fluxo removido
+-- registro ok
+-- unidade_turno ok
+
+
+
 CREATE TABLE usuario
 (
   usua_id serial NOT NULL, 
@@ -24,8 +42,14 @@ CREATE TABLE transacao
   tran_descricao character varying(150), 
   tran_data timestamp without time zone, 
   usua_id integer NOT NULL, 
+  usua_id1 integer NOT NULL, 
   CONSTRAINT pk_tran_id PRIMARY KEY (tran_id), 
-  CONSTRAINT fk_usua_id FOREIGN KEY (usua_id) REFERENCES usuario (usua_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION 
+  CONSTRAINT fk_usua_id FOREIGN KEY (usua_id) 
+  REFERENCES usuario (usua_id)
+  MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, 
+  CONSTRAINT fk_usua_id1 FOREIGN KEY (usua_id1) 
+  REFERENCES usuario (usua_id)
+  MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION   
 );
 CREATE TABLE tipo
 (
@@ -75,13 +99,18 @@ CREATE TABLE unidade
 );
 CREATE TABLE catraca
 (
-  catr_id serial NOT NULL, 
-  catr_ip character varying(12), 
-  catr_tempo_giro integer, 
-  catr_operacao integer, 
-  catr_nome character varying(25), 
-  CONSTRAINT pk_catr_id PRIMARY KEY (catr_id) 
+	catr_id serial NOT NULL, 
+	catr_ip character varying(12), 
+	catr_tempo_giro integer, 
+	catr_operacao integer, 
+	catr_nome character varying(25), 
+	catr_mac_lan character varying(23), 
+	catr_mac_wlan character varying(23), 
+	catr_interface_rede character varying(10), 
+	catr_financeiro boolean
+	CONSTRAINT pk_catr_id PRIMARY KEY (catr_id) 
 );
+
 CREATE TABLE catraca_unidade
 (
   caun_id serial NOT NULL, 
@@ -91,61 +120,19 @@ CREATE TABLE catraca_unidade
   CONSTRAINT fk_catr_id FOREIGN KEY (catr_id) REFERENCES catraca (catr_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, 
   CONSTRAINT fk_unid_id FOREIGN KEY (unid_id) REFERENCES unidade (unid_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION 
 );
-CREATE TABLE giro
-(
-  giro_id serial NOT NULL,
-  giro_giros_horario integer DEFAULT 0, 
-  giro_giros_antihorario integer DEFAULT 0, 
-  giro_data_giros timestamp without time zone NOT NULL DEFAULT now(), 
-  catr_id integer NOT NULL, 
-  CONSTRAINT pk_giro_id PRIMARY KEY (giro_id), 
-  CONSTRAINT pk_catr_id FOREIGN KEY (catr_id) REFERENCES catraca (catr_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION 
-);
+
 CREATE TABLE mensagem
 (
-  mens_id serial NOT NULL, 
-  mens_inicializacao character varying(35), 
-  mens_saldacao character varying(35), 
-  mens_aguardacartao character varying(35), 
-  mens_erroleitor character varying(35), 
-  mens_bloqueioacesso character varying(35), 
-  mens_liberaacesso character varying(35), 
-  mens_semcredito character varying(35), 
-  mens_semcadastro character varying(35), 
-  mens_cartaoinvalido character varying(35), 
-  mens_turnoinvalido character varying(35),
-  mens_datainvalida character varying(35), 
-  mens_cartaoutilizado character varying(35),
-  mens_institucional1 character varying(35), 
-  mens_institucional2 character varying(35), 
-  mens_institucional3 character varying(35), 
-  mens_institucional4 character varying(35),
-  catr_id integer NOT NULL, 
-  CONSTRAINT pk_mens_id PRIMARY KEY (mens_id), 
-  CONSTRAINT fk_catr_id FOREIGN KEY (catr_id) REFERENCES catraca (catr_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION 
+	mens_id serial NOT NULL, 
+	mens_institucional1 character varying(80), 
+	mens_institucional2 character varying(80), 
+	mens_institucional3 character varying(80), 
+	mens_institucional4 character varying(80),  
+	catr_id integer NOT NULL, 
+	CONSTRAINT pk_mens_id PRIMARY KEY (mens_id), 
+	CONSTRAINT fk_catr_id FOREIGN KEY (catr_id) REFERENCES catraca (catr_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION 
 );
-CREATE TABLE guiche
-(
-  guic_id serial NOT NULL, 
-  guic_abertura timestamp without time zone, 
-  guic_encerramento timestamp without time zone,
-  guic_ativo boolean, 
-  unid_id integer NOT NULL, 
-  usua_id integer NOT NULL, 
-  CONSTRAINT pk_guic_id PRIMARY KEY (guic_id), 
-  CONSTRAINT fk_unid_id FOREIGN KEY (unid_id) REFERENCES unidade (unid_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, 
-  CONSTRAINT fk_usua_id FOREIGN KEY (usua_id) REFERENCES usuario (usua_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION 
-);
-CREATE TABLE fluxo
-(
-  flux_id serial NOT NULL, 
-  flux_data timestamp without time zone, 
-  flux_valor numeric(8,2), 
-  flux_descricao character varying(200), 
-  guic_id integer NOT NULL, 
-  CONSTRAINT pk_flux_id PRIMARY KEY (flux_id), 
-  CONSTRAINT fk_guic_id FOREIGN KEY (guic_id) REFERENCES guiche (guic_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION 
-);
+
 CREATE TABLE turno
 (
   turn_id serial NOT NULL, 
@@ -154,6 +141,7 @@ CREATE TABLE turno
   turn_descricao character varying(25), 
   CONSTRAINT pk_turn_id PRIMARY KEY (turn_id) 
 );
+
 CREATE TABLE registro
 (
   regi_id bigserial NOT NULL,
@@ -161,13 +149,14 @@ CREATE TABLE registro
   regi_valor_pago numeric(8,2), 
   regi_valor_custo numeric(8,2),
   cart_id integer NOT NULL, 
-  turn_id integer NOT NULL, 
   catr_id integer NOT NULL, 
+  vinc_id integer NOT NULL, 
   CONSTRAINT pk_regi_id PRIMARY KEY (regi_id),
   CONSTRAINT fk_cart_id FOREIGN KEY (cart_id) REFERENCES cartao (cart_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, 
   CONSTRAINT fk_catr_id FOREIGN KEY (catr_id) REFERENCES catraca (catr_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION,
-  CONSTRAINT fk_turn_id FOREIGN KEY (turn_id) REFERENCES turno (turn_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION 
-);
+  CONSTRAINT fk_vinc_id FOREIGN KEY (vinc_id) REFERENCES vinculo(vinc_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION 
+)
+;
 CREATE TABLE unidade_turno
 (
   untu_id serial NOT NULL,
@@ -191,6 +180,23 @@ CREATE TABLE custo_refeicao
   cure_data timestamp without time zone, 
   CONSTRAINT pk_cure_id PRIMARY KEY (cure_id) 
 );
+CREATE TABLE auditoria
+( 
+	audi_id serial NOT NULL, 
+	audi_pagina character varying(200), 
+	audi_data timestamp without time zone, 
+	usua_id integer, 
+	audi_observacao character varying(200) 
+);
+
+CREATE TABLE app
+( 
+	app_id bigint, 
+	app_token character varying(200), 
+	usua_id bigint, 
+	id_base_externa bigint
+);
+
 
 COMMENT ON COLUMN usuario.usua_nivel IS 'Nivel de acesso.';
 COMMENT ON COLUMN usuario.id_base_externa IS 'Campo da chave primaria (uid) no sistema SIG.';
