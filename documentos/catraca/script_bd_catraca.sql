@@ -140,28 +140,28 @@ CREATE TABLE mensagem
 
 CREATE TABLE guiche
 (
-  guic_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
-  guic_abertura timestamp without time zone, -- Data e hora do inicio de funcionamento do guiche.
-  guic_encerramento timestamp without time zone, -- Data e hora do fim de funcionamento do guiche.
-  guic_ativo boolean, -- Status de atividade atual do guiche.
-  unid_id integer NOT NULL, -- Campo para chave estrangeira da tabela unidade.
-  usua_id integer NOT NULL, -- Campo para chave estrangeira da tabela usuario.
-  CONSTRAINT pk_guic_id PRIMARY KEY (guic_id), -- Chave primaria da tabela guiche.
-  CONSTRAINT fk_unid_id FOREIGN KEY (unid_id) REFERENCES unidade (unid_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, -- Chave estrangeira da tabela unidade.
-  CONSTRAINT fk_usua_id FOREIGN KEY (usua_id) REFERENCES usuario (usua_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION -- Chave estrangeira da tabela usuario.
+  guic_id serial NOT NULL, 
+  guic_abertura timestamp without time zone, 
+  guic_encerramento timestamp without time zone,
+  guic_ativo boolean, 
+  unid_id integer NOT NULL, 
+  usua_id integer NOT NULL, 
+  CONSTRAINT pk_guic_id PRIMARY KEY (guic_id), 
+  CONSTRAINT fk_unid_id FOREIGN KEY (unid_id) REFERENCES unidade (unid_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, 
+  CONSTRAINT fk_usua_id FOREIGN KEY (usua_id) REFERENCES usuario (usua_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION 
 );
 
 
 
 CREATE TABLE fluxo
 (
-  flux_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
-  flux_data timestamp without time zone, -- Registro de data e hora do cadastro.
-  flux_valor numeric(8,2), -- Valor em R$ da receita ou despesa.
-  flux_descricao character varying(200), -- Descricao para o historio do fluxo de caixa.
-  guic_id integer NOT NULL, -- Campo para chave estrengeira da tabela guiche.
-  CONSTRAINT pk_flux_id PRIMARY KEY (flux_id), -- Chave primaria da tabela fluxo.
-  CONSTRAINT fk_guic_id FOREIGN KEY (guic_id) REFERENCES guiche (guic_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION -- Chave estrangeira da tabela guiche.
+  flux_id serial NOT NULL, 
+  flux_data timestamp without time zone, 
+  flux_valor numeric(8,2), 
+  flux_descricao character varying(200), 
+  guic_id integer NOT NULL, 
+  CONSTRAINT pk_flux_id PRIMARY KEY (flux_id), 
+  CONSTRAINT fk_guic_id FOREIGN KEY (guic_id) REFERENCES guiche (guic_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION 
 );
 
 CREATE TABLE turno
@@ -176,44 +176,44 @@ CREATE TABLE turno
 CREATE TABLE registro
 (
   regi_id bigserial NOT NULL,
-  regi_data timestamp without time zone, -- Data e hora que efetivou o giro na catraca.
-  regi_valor_pago numeric(8,2), -- Valor em R$ da refeicao.
-  regi_valor_custo numeric(8,2), -- Valor em R$ do custo da refeicao.
-  cart_id integer NOT NULL, -- Campo para chave estrangeira da tabela cartao.
-  turn_id integer NOT NULL, -- Campo para chave estrangeira da tabela turno.
-  catr_id integer NOT NULL, -- Campo para chave estrangeira da tabela catraca.
+  regi_data timestamp without time zone,
+  regi_valor_pago numeric(8,2), 
+  regi_valor_custo numeric(8,2),
+  cart_id integer NOT NULL, 
+  turn_id integer NOT NULL, 
+  catr_id integer NOT NULL, 
   CONSTRAINT pk_regi_id PRIMARY KEY (regi_id),
-  CONSTRAINT fk_cart_id FOREIGN KEY (cart_id) REFERENCES cartao (cart_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, -- Chave estrangeira da tabela cartao.
-  CONSTRAINT fk_catr_id FOREIGN KEY (catr_id) REFERENCES catraca (catr_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, -- Chave estrangeira da tabela catraca.
-  CONSTRAINT fk_turn_id FOREIGN KEY (turn_id) REFERENCES turno (turn_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION -- Chave estrangeira da tabela turno.
+  CONSTRAINT fk_cart_id FOREIGN KEY (cart_id) REFERENCES cartao (cart_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, 
+  CONSTRAINT fk_catr_id FOREIGN KEY (catr_id) REFERENCES catraca (catr_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION,
+  CONSTRAINT fk_turn_id FOREIGN KEY (turn_id) REFERENCES turno (turn_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION 
 );
 
 
 CREATE TABLE unidade_turno
 (
-  untu_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
-  turn_id integer NOT NULL, -- Campo para chave estrangeira da tabela turno.
-  unid_id integer NOT NULL, -- Campo para chave estrangeira da tabela unidade.
-  CONSTRAINT pk_untu_id PRIMARY KEY (untu_id), -- Chave primaria da tabela unidade_turno.
-  CONSTRAINT fk_turn_id FOREIGN KEY (turn_id) REFERENCES turno (turn_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, -- Chave estrangeira da tabela turno.
-  CONSTRAINT fk_unid_id FOREIGN KEY (unid_id) REFERENCES unidade (unid_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION -- Chave estrangeira da tabela unidade.
+  untu_id serial NOT NULL,
+  turn_id integer NOT NULL, 
+  unid_id integer NOT NULL, 
+  CONSTRAINT pk_untu_id PRIMARY KEY (untu_id), 
+  CONSTRAINT fk_turn_id FOREIGN KEY (turn_id) REFERENCES turno (turn_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, 
+  CONSTRAINT fk_unid_id FOREIGN KEY (unid_id) REFERENCES unidade (unid_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION 
 );
 
 CREATE TABLE custo_cartao
 (
-  cuca_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
-  cuca_valor numeric(8,2), -- Valor em R$ do custo do cartao.
-  cuca_data timestamp without time zone, -- Data de cadastro do custo.
-  CONSTRAINT pk_cuca_id PRIMARY KEY (cuca_id) -- Chave primaria da tabela custo_cartao.
+  cuca_id serial NOT NULL, 
+  cuca_valor numeric(8,2), 
+  cuca_data timestamp without time zone,
+  CONSTRAINT pk_cuca_id PRIMARY KEY (cuca_id) 
 );
 
 
 CREATE TABLE custo_refeicao
 (
-  cure_id serial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
-  cure_valor numeric(8,2), -- Valor em R$ do custo da refeicao.
-  cure_data timestamp without time zone, -- Data e hora de cadastro do custo.
-  CONSTRAINT pk_cure_id PRIMARY KEY (cure_id) -- Chave primaria da tabela custo_refeicao.
+  cure_id serial NOT NULL, 
+  cure_valor numeric(8,2), 
+  cure_data timestamp without time zone, 
+  CONSTRAINT pk_cure_id PRIMARY KEY (cure_id) 
 );
 
 
