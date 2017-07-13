@@ -194,12 +194,7 @@ CREATE TABLE custo_refeicao
 
 COMMENT ON COLUMN usuario.usua_nivel IS 'Nivel de acesso.';
 COMMENT ON COLUMN usuario.id_base_externa IS 'Campo da chave primaria (uid) no sistema SIG.';
-COMMENT ON CONSTRAINT pk_usua_id ON usuario IS 'Chave primaria da tabela usuario.';
-COMMENT ON TABLE transacao IS 'Tabela que armazena a contabilidade do guiche durante o turno.';
-COMMENT ON COLUMN transacao.tran_id IS 'Campo autoincremento para chave primaria da tabela.';
-COMMENT ON COLUMN transacao.tran_valor IS 'Valor total em R$ contabil do turno.';
-COMMENT ON COLUMN transacao.tran_descricao IS 'Descricao referente a transacao contabilizada do turno.';
-COMMENT ON COLUMN transacao.tran_data IS 'Data e hora da execucao.';
+COMMENT ON COLUMN transacao.tran_valor IS 'Valor movimentado pelo Guichê';
 COMMENT ON COLUMN transacao.usua_id IS 'Campo para chave estrangeira da tabela usuario.(Usuario responsavel por realizar a operacao de transacao).';
 COMMENT ON CONSTRAINT pk_tran_id ON transacao IS 'Chave primaria da tabela transacao.';
 COMMENT ON CONSTRAINT fk_usua_id ON transacao IS 'Chave estrangeira da tabela usuario.';
