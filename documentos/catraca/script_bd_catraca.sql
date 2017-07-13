@@ -192,13 +192,7 @@ CREATE TABLE custo_refeicao
   CONSTRAINT pk_cure_id PRIMARY KEY (cure_id) 
 );
 
-COMMENT ON TABLE usuario IS 'Tabela que armazena as informacoes externas de usuarios do sistema provenientes do SIG.';
-COMMENT ON COLUMN usuario.usua_id IS 'Campo autoincremento para chave primaria da tabela.';
-COMMENT ON COLUMN usuario.usua_nome IS 'Nome completo do usuario no SIG.';
-COMMENT ON COLUMN usuario.usua_email IS 'Endereco de e-mail do usuario no SIG.';
-COMMENT ON COLUMN usuario.usua_login IS 'Nome de usuario no SIG.';
-COMMENT ON COLUMN usuario.usua_senha IS 'Senha cadastrada no SIG.';
-COMMENT ON COLUMN usuario.usua_nivel IS 'Status atual do usuario no SIG.';
+COMMENT ON COLUMN usuario.usua_nivel IS 'Nivel de acesso.';
 COMMENT ON COLUMN usuario.id_base_externa IS 'Campo da chave primaria (uid) no sistema SIG.';
 COMMENT ON CONSTRAINT pk_usua_id ON usuario IS 'Chave primaria da tabela usuario.';
 COMMENT ON TABLE transacao IS 'Tabela que armazena a contabilidade do guiche durante o turno.';
