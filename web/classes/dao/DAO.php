@@ -21,6 +21,10 @@ class DAO {
 	const TIPO_DEFAULT = self::TIPO_CATRACA;
 	protected $conexao;
 	private $tipoDeConexao;
+	private $sgbb;
+	public function getSgdb(){
+		return $this->sgdb;
+	}
 	public function DAO(PDO $conexao = null, $tipo = self::TIPO_DEFAULT) {
 		$this->tipoDeConexao = $tipo;
 		if ($conexao != null) {
@@ -35,6 +39,7 @@ class DAO {
 		
 		switch ($this->tipoDeConexao) {
 			case self::TIPO_CATRACA:
+
 				$bd ['sgdb'] = $config ['catraca_sgbd'];
 				$bd ['nome'] = $config ['catraca_bd_nome'];
 				$bd ['host'] = $config ['catraca_host'];
@@ -73,6 +78,12 @@ class DAO {
 		} else if ($bd ['sgdb'] == "mssql") {
 			$this->conexao = new PDO ( 'dblib:host=' . $bd ['host'] . ';dbname=' . $bd ['nome'], $bd ['usuario'], $bd ['senha'] );
 		}
+		else if($bd['sgdb']== "sqlite"){
+			
+			$this->conexao = new PDO('sqlite:'.$bd['nome']);
+		}
+		
+		$this->sgdb = $bd['sgdb'];
 	}
 	public function setConexao($conexao) {
 		$this->conexao = $conexao;

@@ -1,13 +1,15 @@
 <?php
 
-/**
- * 
- * @author jefponte
- * 
- * 
- *
- */
-
+/*********
+  * Copyright (c) 12/07/2017 {INITIAL COPYRIGHT UNILAB} {OTHER COPYRIGHT LABPATI/DISUP/DTI}.
+  * All rights reserved. This program and the accompanying materials
+  * are made available under the terms of the Eclipse Public License v1.0
+  * which accompanies this distribution, and is available at
+  * http://www.eclipse.org/legal/epl-v10.html
+  *
+  * Contributors:
+  *    Jefferson Uchôa Ponte - initial API and implementation and/or initial documentation
+  *********/
 class HomeController{
 	
 	public static function main($nivelDeAcesso){
