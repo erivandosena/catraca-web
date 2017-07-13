@@ -194,3 +194,51 @@ CONSTRAINT pk_viti_id PRIMARY KEY (viti_id),
 CONSTRAINT fk_vinc_id FOREIGN KEY (vinc_id) REFERENCES vinculo(vinc_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, 
 CONSTRAINT fk_tipo_id FOREIGN KEY (tipo_id) REFERENCES tipo(tipo_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION 	 
 ); 
+
+CREATE TABLE vw_usuarios_autenticacao_catraca
+( 
+	vw_usu_aut_id integer, 
+	id_usuario integer, 
+	nome character varying(300), 
+	cpf_cnpj character varying(300), 
+	passaporte character varying(300), 
+	email character varying(300), 
+	login character varying(300), 
+	senha character varying(300), 
+	siape integer, 
+	id_status_servidor integer, 
+	status_servidor character varying(30), 
+	id_tipo_usuario integer, 
+	tipo_usuario character varying(200), 
+	id_categoria integer, 
+	categoria character varying(200)
+);
+
+CREATE TABLE vw_usuarios_catraca
+	( 
+	vw_usu_cat_id integer, 
+	id_usuario integer, 
+	nome character varying(300), 
+	identidade character varying(300), 
+	cpf_cnpj character varying(300), 
+	passaporte character varying(300), 
+	email character varying(300), 
+	login character varying(300), 
+	senha character varying(300), 
+	matricula_disc integer, 
+	nivel_discente character varying(300), 
+	id_status_discente integer, 
+	status_discente character varying(300), 
+	siape integer, 
+	id_status_servidor integer, 
+	status_servidor character varying(300), 
+	id_tipo_usuario integer, 
+	tipo_usuario character varying(300), 
+	id_categoria integer, 
+	status_sistema integer, 
+	categoria character varying(300), 
+	id_turno integer, 
+	turno character varying(50), 
+	id_curso integer, 
+	nome_curso character varying(150)
+);
