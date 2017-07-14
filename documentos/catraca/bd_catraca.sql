@@ -79,8 +79,9 @@ unid_id serial NOT NULL,
 unid_nome character varying(50), 
 CONSTRAINT pk_unid_id PRIMARY KEY (unid_id) 
 );
+
 CREATE TABLE catraca
-(
+( 
 catr_id serial NOT NULL, 
 catr_ip character varying(12), 
 catr_tempo_giro integer, 
@@ -89,7 +90,7 @@ catr_nome character varying(25),
 catr_mac_lan character varying(23), 
 catr_mac_wlan character varying(23), 
 catr_interface_rede character varying(10), 
-catr_financeiro boolean
+catr_financeiro boolean,
 CONSTRAINT pk_catr_id PRIMARY KEY (catr_id) 
 );
 
@@ -101,6 +102,16 @@ unid_id integer NOT NULL,
 CONSTRAINT pk_caun_id PRIMARY KEY (caun_id), 
 CONSTRAINT fk_catr_id FOREIGN KEY (catr_id) REFERENCES catraca (catr_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, 
 CONSTRAINT fk_unid_id FOREIGN KEY (unid_id) REFERENCES unidade (unid_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION 
+);
+CREATE TABLE custo_unidade
+( 
+cuun_id serial NOT NULL, 
+unid_id integer, 
+cure_id integer, 
+CONSTRAINT pk_cuun_id PRIMARY KEY (cuun_id), 
+CONSTRAINT fk_unid_id FOREIGN KEY (unid_id) REFERENCES unidade (unid_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION, 
+CONSTRAINT fk_cure_id FOREIGN KEY (cure_id) REFERENCES custo_refeicao (cure_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION 
+
 );
 
 CREATE TABLE mensagem
