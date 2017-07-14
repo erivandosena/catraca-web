@@ -172,13 +172,15 @@ class CartaoController{
 			$idDoSelecionado = $_GET['selecionado'];
 			
 			$conectouSigaa = true;
-			try{
+// 			try{
 
-				$usuarioDao = new UsuarioDAO(null, DAO::TIPO_PG_SIGAAA);
+// 				$usuarioDao = new UsuarioDAO(null, DAO::TIPO_PG_SIGAAA);
 					
-			}catch (Exception $e){
-				$conectouSigaa = false;
-			}
+// 			}catch (Exception $e){
+// 				$conectouSigaa = false;
+// 			}
+			
+			$conectouSigaa = false;
 			if(!$conectouSigaa){
 				$usuarioDao = new UsuarioDAO();
 			}
@@ -389,14 +391,15 @@ class CartaoController{
 		if (isset ( $_GET ['nome'] )) {
 			$mensagem = "";
 			$conectouSigaa = true;
-			try{
-				$mensagem = "(Base Original do SIGAA)";
-				$usuarioDao = new UsuarioDAO(null, DAO::TIPO_PG_SIGAAA);
+// 			try{
+// 				$mensagem = "(Base Original do SIGAA)";
+// 				$usuarioDao = new UsuarioDAO(null, DAO::TIPO_USUARIOS);
 					
-			}catch (Exception $e){
-				$conectouSigaa = false;
-				$mensagem = "(SIGAA Falhou, esta é a Base Local)";
-			}
+// 			}catch (Exception $e){
+// 				$conectouSigaa = false;
+// 				$mensagem = "(SIGAA Falhou, esta é a Base Local)";
+// 			}
+			$conectouSigaa = false;
 			if(!$conectouSigaa){
 				$usuarioDao = new UsuarioDAO();
 			}

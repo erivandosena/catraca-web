@@ -79,6 +79,7 @@ class DAO {
 			$this->conexao = new PDO ( 'dblib:host=' . $bd ['host'] . ';dbname=' . $bd ['nome'], $bd ['usuario'], $bd ['senha'] );
 		}
 		else if($bd['sgdb']== "sqlite"){
+
 			
 			$this->conexao = new PDO('sqlite:'.$bd['nome']);
 		}

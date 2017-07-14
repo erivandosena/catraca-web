@@ -65,7 +65,14 @@ class UnidadeDAO extends DAO {
 					ORDER BY catraca.catr_id ASC
 					";
 		}
-		
+		try{
+			$stmt = $this->getConexao()->prepare($sql);
+			$stmt->execute();
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+				
+		}catch (PDOException $e){
+			echo '{"erro":{"text":'. $e->getMessage() .'}}';
+		}
 		foreach ( $this->getConexao ()->query ( $sql ) as $linha ) {
 			$catraca = new Catraca ();
 			$catraca->setNome ( $linha ['catr_nome'] );
