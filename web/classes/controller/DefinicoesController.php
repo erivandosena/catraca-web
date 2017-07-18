@@ -385,7 +385,7 @@
 	
 			$this->view->formAlterarCustoRefeicao ( $custoAtualRefeicao );
 	
-			$this->view->formAlterarCustoCartao ( $custoCartao );
+// 			$this->view->formAlterarCustoCartao ( $custoCartao );
 
 			$this->view->formCustoUnidade($listaUnidade, $listaCusto);
 	

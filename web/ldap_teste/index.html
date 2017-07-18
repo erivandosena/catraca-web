@@ -1,0 +1,20 @@
+<!DOCTYPE HTML>
+<html lang=en> <!-- default on the document element is translate=yes -->
+ <head>
+  <title>Login Teste LDAP</title> <!-- implied translate=yes inherited from ancestors -->
+ </head>
+ <body>
+	<!-- 
+	https://html.spec.whatwg.org/#toc-semantics
+	-->
+	<form method="post" enctype="application/x-www-form-urlencoded" action="autenticacao.php">
+	<fieldset>
+		<legend> Autenticação </legend>
+		<p><label> Usuário: <input id="usuario" name="usuario" size="30" type="text" />  </label></p>
+		<p><label> Senha: <input id="senha" name="senha" size="30" type="password" />  </label></p>
+		<input name="Submit" type="submit" value="    Entrar    " />
+	</fieldset>
+	</form>
+ </body>
+</html>
+

@@ -18,18 +18,14 @@ class SincronizadorController{
 	
 	
 	public function sincronizarSigaa(){
+		
 		echo "Sincronizacao 1";
 		$this->daoLocal = new DAO();
 		$this->daoSigaa = new DAO(null, DAO::TIPO_USUARIOS);
 		
 		$this->daoLocal->getConexao()->beginTransaction();
-		if(!$this->daoLocal->getConexao()->exec("DELETE FROM vw_usuarios_catraca")){
-			$this->daoLocal->getConexao()->rollBack();
-			$this->daoSigaa->fechaConexao();
-			$this->daoLocal->fechaConexao();
-			echo "Erro ao tentar apagar tudo";
+		$this->daoLocal->getConexao()->exec("DELETE FROM vw_usuarios_catraca");
 			
-		}
 		$sqlSigaa = "SELECT * FROM vw_usuarios_catraca";
 
 		$result = $this->daoSigaa->getConexao()->query($sqlSigaa);
@@ -115,11 +111,8 @@ class SincronizadorController{
 		$this->daoLocal = new DAO();
 		$this->daoLocal->getConexao()->beginTransaction();	
 		
-		if(!$this->daoLocal->getConexao()->exec("DELETE FROM vw_usuarios_autenticacao_catraca")){
-			$this->daoLocal->getConexao()->rollBack();
-			echo "Erro ao tentar deletar tudo";
-			return false;
-		}
+		$this->daoLocal->getConexao()->exec("DELETE FROM vw_usuarios_autenticacao_catraca");
+		
 		
 		$this->daoComum = new DAO(null, DAO::TIPO_AUTENTICACAO);
 		$sqlComum = "SELECT * FROM vw_usuarios_autenticacao_catraca";
@@ -203,13 +196,12 @@ class SincronizadorController{
 			
 			fwrite($fp, "ultima_atualizacao = 2017-04-25 11:35:00");
 			fclose($fp);
-			return;
 		}
 			
 		$config = parse_ini_file ( self::ARQUIVO );
 		$dataDaUltimaAtualizacao = $config ['ultima_atualizacao'];
-		$dataDaUltimaAtualizacao = date ( "d/m/Y", strtotime ( $dataDaUltimaAtualizacao ) );
-		$hoje = date ( "d/m/Y" );
+		
+		$hoje = date ( "Y-m-d G:i:s" );
 		if ($dataDaUltimaAtualizacao == $hoje) {
 			return;
 		}
@@ -245,7 +237,7 @@ class SincronizadorController{
 		
 	}
 	
-	const ARQUIVO = "config/copia_base_sigaa.ini";
+	const ARQUIVO = "/dados/sites/adm/catraca/config/ultima_sincronizacao.ini";
 	
 	
 	

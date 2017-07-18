@@ -22,6 +22,9 @@ class DAO {
 	protected $conexao;
 	private $tipoDeConexao;
 	private $sgbb;
+	private $entidadeAutenticacao;
+	private $entidadeUsuarios;
+	
 	public function getSgdb(){
 		return $this->sgdb;
 	}
@@ -34,13 +37,16 @@ class DAO {
 			$this->fazerConexao ();
 		}
 	}
+	public function getEntidadeUsuarios(){
+		return $this->entidadeUsuarios;
+	}
 	public function fazerConexao() {
 		$config = parse_ini_file ( self::ARQUIVO_CONFIGURACAO );
 		
 		switch ($this->tipoDeConexao) {
 			case self::TIPO_CATRACA:
 
-				$bd ['sgdb'] = $config ['catraca_sgbd'];
+				$bd ['sgdb'] = $config ['catraca_sgdb'];
 				$bd ['nome'] = $config ['catraca_bd_nome'];
 				$bd ['host'] = $config ['catraca_host'];
 				$bd ['porta'] = $config ['catraca_porta'];
@@ -65,7 +71,7 @@ class DAO {
 				$bd ['senha'] = $config ['autenticacao_senha'];
 				break;
 			default :
-				$bd ['sgdb'] = $config ['catraca_sgbd'];
+				$bd ['sgdb'] = $config ['catraca_sgdb'];
 				$bd ['nome'] = $config ['catraca_bd_nome'];
 				$bd ['host'] = $config ['catraca_host'];
 				$bd ['porta'] = $config ['catraca_porta'];
@@ -80,10 +86,10 @@ class DAO {
 		}
 		else if($bd['sgdb']== "sqlite"){
 
-			
 			$this->conexao = new PDO('sqlite:'.$bd['nome']);
 		}
-		
+		$this->entidadeAutenticacao = $config['autenticacao_entidade_nome'];
+		$this->entidadeUsuarios = $config['usuarios_entidade_nome'];
 		$this->sgdb = $bd['sgdb'];
 	}
 	public function setConexao($conexao) {

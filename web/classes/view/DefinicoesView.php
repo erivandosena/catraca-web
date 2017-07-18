@@ -271,7 +271,7 @@ class DefinicoesView{
 							<input type="submit" name="alterar" value="Alterar" class="botao"/>
 						</form>';		
 		
-		if (@$_REQUEST['custo_refeicao']){
+		if (isset($_GET['custo_refeicao'])){
 			$this->formMensagem("-ajuda", "Deseja Alterar o Custo Atual?");
 			echo '	<form id="custo-refeicao" method="post" class="formulario-organizado">
 							<input type="hidden" name="custo_refeicao" value="'.$_GET['custo_refeicao'].'">
@@ -288,7 +288,7 @@ class DefinicoesView{
 	
 	public function formAlterarCustoCartao($custoAtualCartao){
 		$custoAtualCartao= floatval($custoAtualCartao);
-		echo '	<h2 class="titulo">Custo do cartão: R$' . number_format($custoAtualCartao, 2, ',', '.').'</h2>
+		echo '	<h2 class="titulo">Custo do Cartão: R$' . number_format($custoAtualCartao, 2, ',', '.').'</h2>
 				<div class="borda">
 					<form id="form-custo-cartao" action="" class="formulario sequencial">
 						<label for="custo_cartao" class="">
