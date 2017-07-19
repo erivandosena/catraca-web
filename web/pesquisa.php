@@ -79,7 +79,8 @@ if(isset($_GET['nome'])){
 	$daoSIGAA = new DAO(null, DAO::TIPO_USUARIOS);
 	echo 'SIGAA - vw_usuarios_catraca<br>';
 	if($daoSIGAA->getSgdb() == "mssql"){
-		$result2 = $daoSIGAA->getConexao()->query("SELECT top 10 FROM academico.dbo.pessoas_catraca_ru_view_2 WHERE NOME like '%$pesquisa%'");
+		echo "Errei aqui?";
+		$result2 = $daoSIGAA->getConexao()->query("SELECT top 10 * FROM academico.dbo.pessoas_catraca_ru_view_2 WHERE NOME like '%$pesquisa%'");
 	}else{
 		$result2 = $daoSIGAA->getConexao()->query("SELECT * FROM vw_usuarios_catraca WHERE nome like '%$pesquisa%'");
 	}
