@@ -40,9 +40,8 @@ class Sincronizador{
 		
 		$sql = "SELECT * FROM ".$this->entidadeOrigem;
 		$result = $this->conexaoOrigem->query($sql);
-		
 		foreach($result as $linha){
-			
+
 			$sql = "INSERT INTO ".$this->entidadeDestino." (";
 			$i = 0;
 			foreach($this->campos as $chave => $valor){
@@ -50,45 +49,63 @@ class Sincronizador{
 				if($i != count($this->campos)){
 					$sql .= $valor.", ";
 				}
-				else{
-					$sql .= $valor.") VALUES(";
-				}
+				
 			}
+			$sql .= $valor.") VALUES(";
 			$i = 0;
 			foreach($this->campos as $chave => $valor){
 				$i++;
-				if(is_string($linha[$chave]))
-				{
-					$sql .= "'";
-					$sql .= $linha[$chave];
-					$sql .= "'";
-				}
-				else
-				{
-					if(!($linha[$chave]) || ($linha[$chave]) == "''"){
-						$sql .=  "null";
-					}else{
-						$sql .= $linha[$chave];
-					}
-					
-				}
-				if($i != count($this->campos))
-				{
-					$sql .= ", ";
-				}
-				else
-				{
-					$sql .= ");";
+				if($linha[$chave] == null || $linha[$chave] == ''){
+					$sql .= "null";
+				}else{
+					$sql .= ":".$valor;
 				}
 				
+				if($i != count($this->campos)){
+					$sql .= ", ";
+				}
+			}
+			$sql .= "); ";
+			
+			
+			try {
+				$stmt = $this->conexaoDestino->prepare($sql);
+				$h = 0;
+				foreach($this->campos as $chave => $valor){
+					$$valor = $linha[$chave];
+					$conteudo = $linha[$chave];
+					if(is_string($conteudo)){
+						
+						
+						
+						$$valor = preg_replace ('/[^a-zA-Z0-9\s]/', '', $$valor);
+						
+						$stmt->bindParam($valor, $$valor, PDO::PARAM_STR);						
+					}
+					else if(is_int($conteudo)){
+						$stmt->bindParam($valor, $$valor, PDO::PARAM_INT);
+					}
+
+
+				}
+				
+				if(!$stmt->execute()){
+					$this->conexaoDestino->rollBack();
+					echo "Errei aqui: ". $sql;
+					print_r($linha);
+					return;
+				}
+					
+				
+			
+			} catch(PDOException $e) {
+				echo '{"error":{"text":'. $e->getMessage() .'}}';
 			}
 			
-			
-			echo $sql;
-			return;
-
 
 		}
+		
+		$this->conexaoDestino->commit();
 
 		
 	}
@@ -104,7 +121,7 @@ class Sincronizador{
 		$conexaoDestino = $dao->getConexao();
 		$entidadeDestino = "vw_usuarios_catraca";
 		$sincronizador = new Sincronizador($conexaoOrigem, $conexaoDestino, $entidadeOrigem, $entidadeDestino);
-		$campos = ["id_usuario" => "status_discente", "NOME" => "nome", "identidade" => "identidade", "email" => "email", "login" => "login", "senha" => "senha", "cpf" => "cpf_cnpj", "categoria" => "categoria"];
+		$campos = ["NOME" => "nome", "categoria" => "categoria"];
 		$sincronizador->setCampos($campos);
 		$sincronizador->sincronizar();
 	}
