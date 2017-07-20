@@ -253,3 +253,13 @@ CREATE TABLE vw_usuarios_catraca
 	id_curso integer, 
 	nome_curso character varying(150)
 );
+
+CREATE TABLE validacao
+(
+	vali_id serial NOT NULL, 
+	vali_campo character varying(300),
+	vali_valor character varying(300), 
+	tipo_id integer, 
+	CONSTRAINT pk_vali_id PRIMARY KEY (vali_id),
+	CONSTRAINT fk_tipo_id FOREIGN KEY (tipo_id) REFERENCES tipo(tipo_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION 	 
+);
