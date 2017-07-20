@@ -74,7 +74,7 @@ class Sincronizador {
 				"tipo_usuario" => "tipo_usuario",
 				"cpf" => "cpf_cnpj",
 				"identidade" => "identidade",
-				"status_discente" => "status_discente", 
+				"status_discente" => "status_discente"
 				
 				
 		];
@@ -135,6 +135,9 @@ class Sincronizador {
 						$stmt->bindParam ( $valor, $$valor, PDO::PARAM_STR );
 					} else if (is_int ( $conteudo )) {
 						$stmt->bindParam ( $valor, $$valor, PDO::PARAM_INT );
+					}else if(is_bool($conteudo)){
+						$$valor = intval($$valor);
+						$stmt->bindParam ( $valor, $$valor, PDO::PARAM_INT );
 					}
 				}
 				
@@ -147,9 +150,11 @@ class Sincronizador {
 			} catch ( PDOException $e ) {
 				echo '{"error":{"text":' . $e->getMessage () . '}}';
 			}
+			
 		}
 		$this->conexaoDestino->commit ();
 		return;
+		
 	}
 	public static function jaTenteiAtualizar() {
 		if (! file_exists ( self::ARQUIVO )) {
