@@ -209,7 +209,7 @@ CONSTRAINT fk_tipo_id FOREIGN KEY (tipo_id) REFERENCES tipo(tipo_id) MATCH SIMPL
 CREATE TABLE vw_usuarios_autenticacao_catraca
 ( 
 	vw_usu_aut_id integer, 
-	id_usuario integer, 
+	id_usuario bigint, 
 	nome character varying(300), 
 	cpf_cnpj character varying(300), 
 	passaporte character varying(300), 
@@ -228,7 +228,7 @@ CREATE TABLE vw_usuarios_autenticacao_catraca
 CREATE TABLE vw_usuarios_catraca
 	( 
 	vw_usu_cat_id integer, 
-	id_usuario integer, 
+	id_usuario bigint, 
 	nome character varying(300), 
 	identidade character varying(300), 
 	cpf_cnpj character varying(300), 
