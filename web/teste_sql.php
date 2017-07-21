@@ -31,17 +31,27 @@ if(!($sessao->getNivelAcesso() == Sessao::NIVEL_SUPER || $sessao->getNivelAcesso
 }
 
 
-$dao = new DAO(null, DAO::TIPO_USUARIOS);
-
-$entidade = $dao->getEntidadeUsuarios();
-
-$result = $dao->getConexao()->query("SELECT  *  FROM ".$entidade);
-$i = 0;
-foreach($result as $linha){
-	$nome = $linha['NOME'];
-	$i++;
-	
-}
+$dao = new DAO();
 
 
-echo $nome;
+$dao->getConexao()->query("CREATE TABLE vw_usuarios_autenticacao_catraca
+( 
+	vw_usu_aut_id integer, 
+	id_usuario bigint, 
+	nome character varying(300), 
+	cpf_cnpj character varying(300), 
+	passaporte character varying(300), 
+	email character varying(300), 
+	login character varying(300), 
+	senha character varying(300), 
+	siape integer, 
+	id_status_servidor integer, 
+	status_servidor character varying(30), 
+	id_tipo_usuario integer, 
+	tipo_usuario character varying(200), 
+	id_categoria integer, 
+	categoria character varying(200)
+);");
+
+AdminPG::main();
+

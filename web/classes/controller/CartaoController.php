@@ -260,41 +260,7 @@ class CartaoController{
 				}else{
 					$tipoDao = new TipoDAO($vinculoDao->getConexao());
 					$listaDeTipos = $tipoDao->retornaLista();
-					foreach ($listaDeTipos as $chave => $tipo){
-						if(strtolower (trim( $tipo->getNome())) == 'aluno'){
-							if(trim($usuario->getStatusDiscente()) == 'CADASTRADO' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($usuario->getStatusDiscente())) == 'formando' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - graduando'){
-								continue;
-							}
-							unset($listaDeTipos[$chave]);
-							continue;
-						}
-						if(strtolower (trim( $tipo->getNome())) == 'servidor tae'){
-							
-							if(strtolower (trim($usuario->getStatusServidor())) == 'ativo' && strpos(strtolower (trim($usuario->getCategoria())), 'administrativo')){
-								continue;
-							}
-							if($usuario->getIDCategoria() == 3){								
-								continue;
-							}
-							unset($listaDeTipos[$chave]);
-							continue;
-						}
-						if(strtolower (trim( $tipo->getNome())) == 'servidor docente'){
-							if( (strtolower (trim($usuario->getTipodeUsuario())) == 'docente externo') || ( strtolower (trim($usuario->getStatusServidor())) == 'ativo' && strtolower (trim($usuario->getCategoria())) == 'docente') ){
-								continue;								
-							}
-							unset($listaDeTipos[$chave]);
-							continue;
-						}
-						if(strtolower (trim( $tipo->getNome())) == 'terceirizado'){
-							if(strtolower (trim($usuario->getTipodeUsuario())) == 'terceirizado' || strtolower (trim($usuario->getTipodeUsuario())) == 'outros'){
-								continue;
-							}
-							unset($listaDeTipos[$chave]);
-							continue;
-						}
-						unset($listaDeTipos[$chave]);							
-					}
+					
 					
 					if(isset($_GET['salvar'])){
 						foreach($listaDeTipos as $tipo){
@@ -335,7 +301,7 @@ class CartaoController{
 							$conectouSigaa = true;
 							try{
 							
-								$daoAutenticacao = new UsuarioDAO(null, DAO::TIPO_PG_SISTEMAS_COMUM);
+								$daoAutenticacao = new UsuarioDAO(null, DAO::TIPO_AUTENTICACAO);
 									
 							}catch (Exception $e){
 								$conectouSigaa = false;
@@ -411,20 +377,23 @@ class CartaoController{
 	}
 
 	public function verificaSeAtivo(Usuario $usuario){
-		if(strtolower (trim($usuario->getStatusServidor())) == 'ativo'){			
-			return true;
-		}
-		if(trim($usuario->getStatusDiscente()) == 'CADASTRADO' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($usuario->getStatusDiscente())) == 'formando' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - graduando' || strtolower (trim($usuario->getStatusDiscente())) == 'formado'|| strtolower (trim($usuario->getIdStatusDiscente())) == self::ID_STATUS_DISCENTE_CONCLUIDO){
-			echo $usuario->getIdStatusDiscente();
-			return true;		
-		}
-		if(strtolower (trim($usuario->getTipodeUsuario())) == 'terceirizado' || strtolower (trim($usuario->getTipodeUsuario())) == 'outros'){
-			return true;
-		}
-		if(strtolower (trim($usuario->getTipodeUsuario())) == 'docente externo'){
-			return true;
-		}
-		return false;
+		return true;
+		
+		
+// 		if(strtolower (trim($usuario->getStatusServidor())) == 'ativo'){			
+// 			return true;
+// 		}
+// 		if(trim($usuario->getStatusDiscente()) == 'CADASTRADO' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($usuario->getStatusDiscente())) == 'formando' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - graduando' || strtolower (trim($usuario->getStatusDiscente())) == 'formado'|| strtolower (trim($usuario->getIdStatusDiscente())) == self::ID_STATUS_DISCENTE_CONCLUIDO){
+// 			echo $usuario->getIdStatusDiscente();
+// 			return true;		
+// 		}
+// 		if(strtolower (trim($usuario->getTipodeUsuario())) == 'terceirizado' || strtolower (trim($usuario->getTipodeUsuario())) == 'outros'){
+// 			return true;
+// 		}
+// 		if(strtolower (trim($usuario->getTipodeUsuario())) == 'docente externo'){
+// 			return true;
+// 		}
+// 		return false;
 	}
 	const ID_STATUS_DISCENTE_ATIVO = 1;
 	const ID_STATUS_DISCENTE_CADASTRADO = 3;

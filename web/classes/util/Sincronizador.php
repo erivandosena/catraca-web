@@ -32,7 +32,7 @@ class Sincronizador {
 	}
 	/**
 	 * Adiciona um campo a ser replicado
-	 * 
+	 *
 	 * @param string $campoOrigem
 	 *        	campo da tabela ou view de origem que vai corresponder a um campo da tabela de destino.
 	 * @param string $campoDestino
@@ -45,7 +45,7 @@ class Sincronizador {
 	 * Atribui o vetor de campos que serão sincronizados.
 	 * O vetor será indexado com os campos da entidade
 	 * de origem e os valores serão os campos da entidade de destino.
-	 * 
+	 *
 	 * @param array $campos        	
 	 */
 	public function setCampos($campos) {
@@ -56,41 +56,52 @@ class Sincronizador {
 	 * Metodo que faz uso da classe.
 	 */
 	public static function main() {
-		if(self::jaTenteiAtualizar()){
+		if (self::jaTenteiAtualizar ()) {
 			return;
 		}
-		$dao = new DAO ( null, DAO::TIPO_USUARIOS );
-		$entidadeOrigem = $dao->getEntidadeUsuarios ();
-		$conexaoOrigem = $dao->getConexao ();
+		$daoUsuarios = new DAO ( null, DAO::TIPO_USUARIOS );
+		$entidadeOrigem = $daoUsuarios->getEntidadeUsuarios ();
+		$conexaoOrigem = $daoUsuarios->getConexao ();
 		$dao = new DAO ();
 		$conexaoDestino = $dao->getConexao ();
+		
 		$entidadeDestino = "vw_usuarios_catraca";
 		$sincronizador = new Sincronizador ( $conexaoOrigem, $conexaoDestino, $entidadeOrigem, $entidadeDestino );
 		
 		$campos = [ 
-				"id_usuario" => "id_usuario",
+				"cpf" => "id_usuario",
 				"NOME" => "nome",
 				"categoria" => "categoria",
 				"tipo_usuario" => "tipo_usuario",
-				"cpf" => "cpf_cnpj",
 				"identidade" => "identidade",
-				"status_discente" => "status_discente"
-				
-				
-		];
+				"status_discente" => "status_discente",
+				"id_status_discente" => "id_status_discente" 
+		]
+		;
+		$sincronizador->setCampos ( $campos );
+		$sincronizador->sincronizar ();
+		
+		echo "<br><hr>";
+		$campos = array ();
+		$campos = [ 
+				"cpf" => "id_usuario",
+				"NOME" => "nome",
+				"email" => "email" 
+		]
+		;
+		$entidadeDestino = "vw_usuarios_autenticacao_catraca";
+		$sincronizador = new Sincronizador ( $conexaoOrigem, $conexaoDestino, $entidadeOrigem, $entidadeDestino );
 		$sincronizador->setCampos ( $campos );
 		$sincronizador->sincronizar ();
 	}
 	/**
-	 * Executa sincronização. 
-	 * 
+	 * Executa sincronização.
 	 */
 	public function sincronizar() {
 		$this->conexaoDestino->beginTransaction ();
 		$sqlDelete = "DELETE FROM " . $this->entidadeDestino;
 		$b = $this->conexaoDestino->exec ( $sqlDelete );
 		echo "Excluido " . $b . " linhas da entidade de destino<br>";
-		
 		$sql = "SELECT * FROM " . $this->entidadeOrigem;
 		$result = $this->conexaoOrigem->query ( $sql );
 		foreach ( $result as $linha ) {
@@ -125,9 +136,9 @@ class Sincronizador {
 				foreach ( $this->campos as $chave => $valor ) {
 					$$valor = $linha [$chave];
 					$conteudo = $linha [$chave];
-					if ($valor == "id_usuario") {
-						$conteudo = intval ( $conteudo );
-						$$valor = intval ( $linha [$chave] );
+					
+					if ($valor == "id_usuario" || $valor == "id_status_discente") {
+						$$valor = intval ( $$valor );
 					}
 					if (is_string ( $conteudo )) {
 						
@@ -135,26 +146,22 @@ class Sincronizador {
 						$stmt->bindParam ( $valor, $$valor, PDO::PARAM_STR );
 					} else if (is_int ( $conteudo )) {
 						$stmt->bindParam ( $valor, $$valor, PDO::PARAM_INT );
-					}else if(is_bool($conteudo)){
-						$$valor = intval($$valor);
+					} else if (is_bool ( $conteudo )) {
+						$$valor = intval ( $$valor );
 						$stmt->bindParam ( $valor, $$valor, PDO::PARAM_INT );
 					}
 				}
 				
 				if (! $stmt->execute ()) {
 					$this->conexaoDestino->rollBack ();
-					echo "Errei aqui: " . $sql;
-					print_r ( $linha );
 					return;
 				}
 			} catch ( PDOException $e ) {
 				echo '{"error":{"text":' . $e->getMessage () . '}}';
 			}
-			
 		}
 		$this->conexaoDestino->commit ();
 		return;
-		
 	}
 	public static function jaTenteiAtualizar() {
 		if (! file_exists ( self::ARQUIVO )) {

@@ -32,3 +32,16 @@ if(!($sessao->getNivelAcesso() == Sessao::NIVEL_SUPER || $sessao->getNivelAcesso
 }
 
 
+
+
+//Criar uma tabela. 
+
+$sql = file_get_contents("tabelas.sql");
+// echo $sql;
+
+// $dao = new DAO();
+// $dao->getConexao()->exec($sql);
+
+
+
+// AdminPG::main();
