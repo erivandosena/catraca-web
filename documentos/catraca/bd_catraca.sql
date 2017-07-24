@@ -14,7 +14,7 @@ usua_email character varying(150),
 usua_login character varying(25), 
 usua_senha character varying(50), 
 usua_nivel integer, 
-id_base_externa integer, 
+id_base_externa bigint, 
 CONSTRAINT pk_usua_id PRIMARY KEY (usua_id)
 );
 CREATE TABLE transacao
