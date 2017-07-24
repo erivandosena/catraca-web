@@ -170,23 +170,9 @@ class CartaoController{
 		if (isset ( $_GET ['selecionado'] )) {
 			
 			$idDoSelecionado = $_GET['selecionado'];
-			
-			$conectouSigaa = true;
-// 			try{
-
-// 				$usuarioDao = new UsuarioDAO(null, DAO::TIPO_PG_SIGAAA);
-					
-// 			}catch (Exception $e){
-// 				$conectouSigaa = false;
-// 			}
-			
-			$conectouSigaa = false;
-			if(!$conectouSigaa){
-				$usuarioDao = new UsuarioDAO();
-			}
-			
-			
+			$usuarioDao = new UsuarioDAO();
 			$usuario = new Usuario();
+			
 			$usuario->setIdBaseExterna($idDoSelecionado);
 			
 			$usuarioDao->retornaPorIdBaseExterna($usuario);			
@@ -356,24 +342,11 @@ class CartaoController{
 
 		if (isset ( $_GET ['nome'] )) {
 			$mensagem = "";
-			$conectouSigaa = true;
-// 			try{
-// 				$mensagem = "(Base Original do SIGAA)";
-// 				$usuarioDao = new UsuarioDAO(null, DAO::TIPO_USUARIOS);
-					
-// 			}catch (Exception $e){
-// 				$conectouSigaa = false;
-// 				$mensagem = "(SIGAA Falhou, esta é a Base Local)";
-// 			}
-			$conectouSigaa = false;
-			if(!$conectouSigaa){
-				$usuarioDao = new UsuarioDAO();
-			}
+			$usuarioDao = new UsuarioDAO();
 			$listaDeUsuarios = $usuarioDao->pesquisaNoSigaa( $_GET ['nome']);
-			
 			$this->view->mostraResultadoBuscaDeUsuarios($listaDeUsuarios, $mensagem);
 			$usuarioDao->fechaConexao();
-		}		
+		}
 	}
 
 	public function verificaSeAtivo(Usuario $usuario){

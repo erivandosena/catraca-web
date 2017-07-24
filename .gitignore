@@ -25,3 +25,4 @@
 *.classpath
 */target/*
 *.ini
+/web/teste_sql.php
