@@ -44,42 +44,42 @@ if(isset($_GET['nome'])){
 	$pesquisa = strtoupper ( $pesquisa );
 	echo '<br>Pesquisa: '.$pesquisa.'<br><br>';
 
-	$daoSistemasComum = new DAO(null, DAO::TIPO_AUTENTICACAO);
-	echo 'Autenticação - vw_usuarios_autenticacao_catraca<br>';
-	$result2 = $daoSistemasComum->getConexao()->query("SELECT * FROM vw_usuarios_autenticacao_catraca WHERE nome like '%$pesquisa%'");
-	$i = 0;
-	echo '<table border = 1>';
-	foreach($result2 as $linha)
-	{
-		if($i == 0){
+// 	$daoSistemasComum = new DAO(null, DAO::TIPO_AUTENTICACAO);
+// 	echo 'Autenticação - vw_usuarios_autenticacao_catraca<br>';
+// 	$result2 = $daoSistemasComum->getConexao()->query("SELECT * FROM vw_usuarios_autenticacao_catraca WHERE nome like '%$pesquisa%'");
+// 	$i = 0;
+// 	echo '<table border = 1>';
+// 	foreach($result2 as $linha)
+// 	{
+// 		if($i == 0){
 
-			echo '<tr>';
-			foreach($linha as $chave => $valor){
-				if(!is_int($chave))
-					echo '<th>'.$chave.'</th>';
-			}
-			echo '</tr>';
-			$i++;
+// 			echo '<tr>';
+// 			foreach($linha as $chave => $valor){
+// 				if(!is_int($chave))
+// 					echo '<th>'.$chave.'</th>';
+// 			}
+// 			echo '</tr>';
+// 			$i++;
 
-		}
+// 		}
 		
-		echo '<tr>';
-		foreach ($linha as $chave => $valor){
-			if(!is_int($chave))
-				echo '<td>'.$valor.'</td>';
-		}
-		echo '</tr>';	
+// 		echo '<tr>';
+// 		foreach ($linha as $chave => $valor){
+// 			if(!is_int($chave))
+// 				echo '<td>'.$valor.'</td>';
+// 		}
+// 		echo '</tr>';	
 
 		
-		//print_r($linha);
-		echo '</tr>';
-	}
-	echo '</table>';
+// 		//print_r($linha);
+// 		echo '</tr>';
+// 	}
+// 	echo '</table>';
 	echo '<hr>';
 	$daoSIGAA = new DAO(null, DAO::TIPO_USUARIOS);
 	echo 'SIGAA - vw_usuarios_catraca<br>';
 	if($daoSIGAA->getSgdb() == "mssql"){
-		echo "Errei aqui?";
+		echo "Mssql<br>";
 		$result2 = $daoSIGAA->getConexao()->query("SELECT top 10 * FROM academico.dbo.pessoas_catraca_ru_view_2 WHERE NOME like '%$pesquisa%'");
 	}else{
 		$result2 = $daoSIGAA->getConexao()->query("SELECT * FROM vw_usuarios_catraca WHERE nome like '%$pesquisa%'");
@@ -118,37 +118,37 @@ if(isset($_GET['nome'])){
 
 
 
-	$dao = new DAO();
-	echo 'Base Local<br>';
-	$result2 = $dao->getConexao()->query("SELECT * FROM usuario WHERE usua_nome like '%$pesquisa%'");
-	$i = 0;
-	echo '<table border = 1>';
-	foreach($result2 as $linha)
-	{
-		if($i == 0){
+// 	$dao = new DAO();
+// 	echo 'Base Local<br>';
+// 	$result2 = $dao->getConexao()->query("SELECT * FROM usuario WHERE usua_nome like '%$pesquisa%'");
+// 	$i = 0;
+// 	echo '<table border = 1>';
+// 	foreach($result2 as $linha)
+// 	{
+// 		if($i == 0){
 
-			echo '<tr>';
-			foreach($linha as $chave => $valor){
-				if(!is_int($chave))
-					echo '<th>'.$chave.'</th>';
-			}
-			echo '</tr>';
-			$i++;
+// 			echo '<tr>';
+// 			foreach($linha as $chave => $valor){
+// 				if(!is_int($chave))
+// 					echo '<th>'.$chave.'</th>';
+// 			}
+// 			echo '</tr>';
+// 			$i++;
 
-		}
+// 		}
 		
-		echo '<tr>';
-		foreach ($linha as $chave => $valor){
-			if(!is_int($chave))
-				echo '<td>'.$valor.'</td>';
-		}
-		echo '</tr>';	
+// 		echo '<tr>';
+// 		foreach ($linha as $chave => $valor){
+// 			if(!is_int($chave))
+// 				echo '<td>'.$valor.'</td>';
+// 		}
+// 		echo '</tr>';	
 
 		
-		//print_r($linha);
-		echo '</tr>';
-	}
-	echo '</table>';
+// 		//print_r($linha);
+// 		echo '</tr>';
+// 	}
+// 	echo '</table>';
 
 
 }

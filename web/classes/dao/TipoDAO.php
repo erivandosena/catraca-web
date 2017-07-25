@@ -35,5 +35,37 @@ class TipoDAO extends DAO{
 		return $tipo;
 	}
 	
+	/**
+	 * Retorna a lista de tipos válidos para este usuário. 
+	 * O usuário deve ter em sua instancia o id da base externa.
+	 * @return array $listaDeTipos 
+	 * @param Usuario $usuario
+	 *
+	 */
+	public function retornaTiposValidosUsuario(Usuario $usuario){
+		$listaDeTipos = $this->retornaLista();
+		foreach ($listaDeTipos as $chave => $tipo){
+			if(!$this->tipoValido($usuario, $tipo)){
+				unset($listaDeTipos[$chave]);				
+			}
+		}
+		return $listaDeTipos;
+	}
 	
+	/**
+	 * Retorna verdadeiro se o tipo for valido para este usuario.
+	 * @return boolean
+	 * @param Usuario $usuario
+	 * @param Tipo $tipo
+	 */
+	public function tipoValido(Usuario $usuario, Tipo $tipo){
+		$idTipo = $tipo->getId();
+		$sql = "SELECT * FROM validacao INNER JOIN tipo ON validacao.tipo_id = tipo.tipo_id 
+				WHERE validacao.tipo_id = $idTipo";
+		$result = $this->getConexao()->query($sql);
+		foreach ($result as $linha){
+			return true;
+		}
+		return false;
+	}
 }

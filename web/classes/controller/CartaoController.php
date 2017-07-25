@@ -166,20 +166,14 @@ class CartaoController{
 	
 	public function telaCadastro(){
 		$this->view->formBuscaUsuarios();
-		
 		if (isset ( $_GET ['selecionado'] )) {
-			
 			$idDoSelecionado = $_GET['selecionado'];
 			$usuarioDao = new UsuarioDAO();
 			$usuario = new Usuario();
-			
 			$usuario->setIdBaseExterna($idDoSelecionado);
-			
 			$usuarioDao->retornaPorIdBaseExterna($usuario);			
-
 			$this->view->mostraSelecionado($usuario);
 			$vinculoDao = new VinculoDAO();			
-			
 			if(isset($_GET['vinculo_cancelar'])){
 				$vinculo = new Vinculo();
 				$vinculo->setId($_GET['vinculo_cancelar']);
@@ -196,15 +190,12 @@ class CartaoController{
 				$this->view->formConfirmacaoEliminarVinculo($vinculo);
 				return;
 			}
-			
 			if(isset($_GET['vinculo_renovar'])){
 				$vinculo = new Vinculo();
 				$vinculo->setId($_GET['vinculo_renovar']);
 				$vinculoDao->vinculoPorId($vinculo);
-				
 				$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'G:00:01' );
 				$vinculo->setFinalValidade($daqui3Meses);				
-				
 				if(isset($_POST['certeza'])){
 					if($vinculoDao->usuarioJaTemVinculo($usuario)){
 						$this->view->formMensagem("-erro", "Esse usuário já possui vínculo válido.");						
@@ -235,19 +226,14 @@ class CartaoController{
 				$this->view->formConfirmacaoRenovarVinculo();
 				return;
 			}			
-			
 			$vinculos = $vinculoDao->retornaVinculosValidosDeUsuario($usuario);			
-			
 			$podeComer = $this->verificaSeAtivo($usuario);
-			
 			if(!$vinculoDao->usuarioJaTemVinculo($usuario) && $podeComer){
 				if (!isset ( $_GET ['cartao'] )){
 					echo '<a class="botao" href="?pagina=cartao&selecionado=' . $idDoSelecionado . '&cartao=add">Adicionar</a>';
 				}else{
 					$tipoDao = new TipoDAO($vinculoDao->getConexao());
 					$listaDeTipos = $tipoDao->retornaLista();
-					
-					
 					if(isset($_GET['salvar'])){
 						foreach($listaDeTipos as $tipo){
 							if($tipo->getId() == $_GET['id_tipo'])
@@ -262,54 +248,43 @@ class CartaoController{
 						$vinculo->setInicioValidade(date ( "Y-m-d G:i:s" ));
 						if($vinculoDao->usuarioJaTemVinculo($vinculo->getResponsavel())){							
 							$this->view->formMensagem("-erro", "Esse usuário já possui cartão. Inative o cartão atual para adicionar um novo.");
-							//echo '<a href="?pagina=cartao&cartaoselecionado=' .$vinculo->getCartao()->getId().'">Clique aqui para ver</a>';
 							return;	
 						}
-						
 						if($vinculoDao->cartaoTemVinculo($vinculo->getCartao())){
 							$this->view->formMensagem("-erro", "O numero do cartão digitado já possui vinculo, utilize outro cartão.");
 							echo '<meta http-equiv="refresh" content="2; url=.\?pagina=cartao&selecionado=' . $vinculo->getResponsavel()->getIdBaseExterna() . '&cartao=add">';
 							return;
 						}
-						
 						if(isset($_POST['enviar_vinculo'])){
-							
 							if($vinculoDao->usuarioJaTemVinculo($vinculo->getResponsavel())){
 								$this->view->formMensagem("-erro", "Esse usuário já possui cartão. Invalide o cartão atual para adicionar um novo.");								
-								//echo '<a href="?pagina=cartao&cartaoselecionado=' .$vinculo->getCartao()->getId().'">Clique aqui para ver</a>';								
 								return;						
 							}
-							
 							if($vinculoDao->cartaoTemVinculo($vinculo->getCartao())){
 								$this->view->formMensagem("-erro", "O numero do cartão digitado já possui vinculo, utilize outro cartão.");								
 								return;
 							}
 							$conectouSigaa = true;
 							try{
-							
 								$daoAutenticacao = new UsuarioDAO(null, DAO::TIPO_AUTENTICACAO);
-									
 							}catch (Exception $e){
 								$conectouSigaa = false;
 							}
 							if(!$conectouSigaa){
 								$daoAutenticacao = $vinculoDao;
 							}
-							
 							$vinculoDao->verificarUsuario($vinculo->getResponsavel(), $daoAutenticacao->getConexao());
-							
 							if($vinculoDao->adicionaVinculo ($vinculo)){
-								
-								$this->view->formMensagem("-sucesso", "Vinculo Adicionado Com Sucesso.");								
+								$this->view->formMensagem("-sucesso", "Vinculo Adicionado Com Sucesso.");							
 							}else{
 								$this->view->formMensagem("-erro", "Erro na tentativa de Adicionar Vínculo.");							
 							}
 							echo '<meta http-equiv="refresh" content="10; url=.\?pagina=cartao&selecionado=' . $vinculo->getResponsavel()->getIdBaseExterna() . '">';
 							return;
 						}
-						
 						$this->view->formConfirmacaoEnvioVinculo($usuario, $_GET['numero_cartao2'], $esseTipo);
-					}else{
+					}
+					else{
 						$this->view->mostraFormAdicionarVinculo($listaDeTipos, $idDoSelecionado);
 					}				
 				}

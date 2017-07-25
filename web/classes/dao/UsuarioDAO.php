@@ -202,6 +202,11 @@ class UsuarioDAO extends DAO {
 	const ID_CATEGORIA_DOCENTE = 1;
 	const ID_CATEGORIA_TAE = 2;
 	const ID_STATUS_SERVIDOR_ATIVO = 1;
+	/**
+	 * @deprecated Use métodos de verificação existentes em TipoDAO
+	 * @param Vinculo $vinculo
+	 * @return boolean
+	 */
 	public function vinculoRenovavel(Vinculo $vinculo){
 		$id = $vinculo->getResponsavel()->getIdBaseExterna();
 		$sql = "SELECT id_status_discente, id_categoria, id_status_servidor,tipo_usuario
