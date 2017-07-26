@@ -134,13 +134,16 @@ class CartaoController{
 									echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
 									return;
 								}
-
-								if(!$this->verificaSeAtivo($usuario)){
+								
+								$tipoDao = new TipoDAO($dao->getConexao());
+								if(!$tipoDao->tipoValido($vinculo->getResponsavel(), $vinculo->getCartao()->getTipo())){
 									$this->view->formMensagem("-erro", "Esse usuário possui um problema quanto ao status!");
 									echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
 									return;
+										
 								}
-
+								
+								
 								$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'G:00:01' );
 								$vinculo->setFinalValidade($daqui3Meses);
 				
@@ -232,6 +235,7 @@ class CartaoController{
 			
 			$listaDeTipos = array();
 			$listaDeTipos = $tipoDao->retornaTiposValidosUsuario($usuario);
+			$podeComer = false;
 			if(sizeof($listaDeTipos) > 0){
 				$podeComer = true;
 			}
