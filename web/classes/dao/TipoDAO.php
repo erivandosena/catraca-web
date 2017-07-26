@@ -46,7 +46,7 @@ class TipoDAO extends DAO{
 		$listaDeTipos = $this->retornaLista();
 		foreach ($listaDeTipos as $chave => $tipo){
 			if(!$this->tipoValido($usuario, $tipo)){
-				unset($listaDeTipos[$chave]);				
+				unset($listaDeTipos[$chave]);
 			}
 		}
 		return $listaDeTipos;
@@ -63,9 +63,28 @@ class TipoDAO extends DAO{
 		$sql = "SELECT * FROM validacao INNER JOIN tipo ON validacao.tipo_id = tipo.tipo_id 
 				WHERE validacao.tipo_id = $idTipo";
 		$result = $this->getConexao()->query($sql);
+		//Vetor onde o index é o nome do campo e o valor é o valor desejado. 
+		$validacao = array();
+		
 		foreach ($result as $linha){
-			return true;
+			$validacao[$linha['vali_campo']] = $linha['vali_valor'];
 		}
-		return false;
+		$idUsuario = $usuario->getIdBaseExterna();
+		$sqlVerifica = "SELECT * FROM vw_usuarios_catraca WHERE id_usuario = $idUsuario LIMIT 15";
+		
+		$result = $this->getConexao()->query($sqlVerifica);
+		$i = 0;
+		foreach ($result as $linha){
+			$i++;
+			$valido = false;
+			foreach($validacao as $campo => $valor){
+				$valido = true;
+				if($linha[$campo] != $valor){
+					$valido = false;
+				}
+			}
+			if($valido){return $valido;}
+		}
+		return $valido;
 	}
 }
