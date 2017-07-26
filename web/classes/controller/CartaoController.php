@@ -169,6 +169,7 @@ class CartaoController{
 		if (isset ( $_GET ['selecionado'] )) {
 			$idDoSelecionado = $_GET['selecionado'];
 			$usuarioDao = new UsuarioDAO();
+			$tipoDao = new TipoDAO($usuarioDao->getConexao());
 			$usuario = new Usuario();
 			$usuario->setIdBaseExterna($idDoSelecionado);
 			$usuarioDao->retornaPorIdBaseExterna($usuario);			
@@ -208,7 +209,7 @@ class CartaoController{
 						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
 						return;
 					}
-					$tipoDao = new TipoDAO($usuarioDao->getConexao());
+					
 					if(!$tipoDao->tipoValido($vinculo->getResponsavel(), $vinculo->getCartao()->getTipo())){
 						$this->view->formMensagem("-erro", 'Esse usuário possui um problema quanto ao status! ('.$usuario->getStatusDiscente().")");
 						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
@@ -227,14 +228,19 @@ class CartaoController{
 				$this->view->formConfirmacaoRenovarVinculo();
 				return;
 			}			
-			$vinculos = $vinculoDao->retornaVinculosValidosDeUsuario($usuario);			
-			$podeComer = $this->verificaSeAtivo($usuario);
+			$vinculos = $vinculoDao->retornaVinculosValidosDeUsuario($usuario);
+			
+			$listaDeTipos = array();
+			$listaDeTipos = $tipoDao->retornaTiposValidosUsuario($usuario);
+			if(sizeof($listaDeTipos) > 0){
+				$podeComer = true;
+			}
 			if(!$vinculoDao->usuarioJaTemVinculo($usuario) && $podeComer){
 				if (!isset ( $_GET ['cartao'] )){
 					echo '<a class="botao" href="?pagina=cartao&selecionado=' . $idDoSelecionado . '&cartao=add">Adicionar</a>';
 				}else{
-					$tipoDao = new TipoDAO($vinculoDao->getConexao());
-					$listaDeTipos = $tipoDao->retornaLista();
+					
+					
 					if(isset($_GET['salvar'])){
 						foreach($listaDeTipos as $tipo){
 							if($tipo->getId() == $_GET['id_tipo'])
@@ -265,15 +271,7 @@ class CartaoController{
 								$this->view->formMensagem("-erro", "O numero do cartão digitado já possui vinculo, utilize outro cartão.");								
 								return;
 							}
-							$conectouSigaa = true;
-							try{
-								$daoAutenticacao = new UsuarioDAO(null, DAO::TIPO_AUTENTICACAO);
-							}catch (Exception $e){
-								$conectouSigaa = false;
-							}
-							if(!$conectouSigaa){
-								$daoAutenticacao = $vinculoDao;
-							}
+							$daoAutenticacao = $vinculoDao;
 							$vinculoDao->verificarUsuario($vinculo->getResponsavel(), $daoAutenticacao->getConexao());
 							if($vinculoDao->adicionaVinculo ($vinculo)){
 								$this->view->formMensagem("-sucesso", "Vinculo Adicionado Com Sucesso.");							
@@ -324,13 +322,6 @@ class CartaoController{
 			$usuarioDao->fechaConexao();
 		}
 	}
-
-	
-	public function verificaSeAtivo(Usuario $usuario){
-		return true;
-	}
-
-
 	
 }
 
