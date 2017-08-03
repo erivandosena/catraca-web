@@ -94,10 +94,17 @@ class DAO {
 				break;
 		}
 		if ($bd ['sgdb'] == "postgres") {
+			echo "PG<br>";
+			echo  'pgsql:host=' . $bd ['host'] . ' dbname=' . $bd ['nome'] . ' user=' . $bd ['usuario'] . ' password=' . $bd ['senha'] .'<br>';
 			$this->conexao = new PDO ( 'pgsql:host=' . $bd ['host'] . ' dbname=' . $bd ['nome'] . ' user=' . $bd ['usuario'] . ' password=' . $bd ['senha'] );
 		} else if ($bd ['sgdb'] == "mssql") {
+			echo 'SSQL<br>';
+			echo 'dblib:host=' . $bd ['host'] . ';dbname=' . $bd ['nome'].','.$bd ['usuario'].', '. $bd ['senha'].'<br>';
 			$this->conexao = new PDO ( 'dblib:host=' . $bd ['host'] . ';dbname=' . $bd ['nome'], $bd ['usuario'], $bd ['senha'] );
+			
+			
 		}
+		
 		else if($bd['sgdb']== "sqlite"){
 
 			$this->conexao = new PDO('sqlite:'.$bd['nome']);
