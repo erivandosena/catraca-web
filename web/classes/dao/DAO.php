@@ -17,6 +17,7 @@ class DAO {
 	const TIPO_CATRACA = 0;
 	const TIPO_AUTENTICACAO = 2;
 	const TIPO_USUARIOS = 3;
+	const TIPO_USUARIOS_2 = 4;
 	
 	const TIPO_DEFAULT = self::TIPO_CATRACA;
 	protected $conexao;
@@ -24,6 +25,11 @@ class DAO {
 	private $sgbb;
 	private $entidadeAutenticacao;
 	private $entidadeUsuarios;
+	private $entidadeUsuarios2;
+	
+	public function getEntidadeUsuarios2(){
+		return $this->entidadeUsuarios2;
+	}
 	
 	public function getSgdb(){
 		return $this->sgdb;
@@ -62,6 +68,14 @@ class DAO {
 				$bd ['usuario'] = $config ['usuarios_usuario'];
 				$bd ['senha'] = $config ['usuarios_senha'];
 				break;
+			case self::TIPO_USUARIOS_2 :
+				$bd ['sgdb'] = $config ['usuarios_2_sgdb'];
+				$bd ['nome'] = $config ['usuarios_2_bd_nome'];
+				$bd ['host'] = $config ['usuarios_2_host'];
+				$bd ['porta'] = $config ['usuarios_2_porta'];
+				$bd ['usuario'] = $config ['usuarios_2_usuario'];
+				$bd ['senha'] = $config ['usuarios_2_senha'];
+				break;
 			case self::TIPO_AUTENTICACAO :
 				$bd ['sgdb'] = $config ['autenticacao_sgdb'];
 				$bd ['nome'] = $config ['autenticacao_bd_nome'];
@@ -90,6 +104,7 @@ class DAO {
 		}
 		$this->entidadeAutenticacao = $config['autenticacao_entidade_nome'];
 		$this->entidadeUsuarios = $config['usuarios_entidade_nome'];
+		$this->entidadeUsuarios2 = $config['usuarios_2_entidade_nome'];
 		$this->sgdb = $bd['sgdb'];
 	}
 	public function setConexao($conexao) {
