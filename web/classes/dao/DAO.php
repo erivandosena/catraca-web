@@ -25,11 +25,9 @@ class DAO {
 	private $sgbb;
 	private $entidadeAutenticacao;
 	private $entidadeUsuarios;
-	private $entidadeUsuarios2;
+
 	
-	public function getEntidadeUsuarios2(){
-		return $this->entidadeUsuarios2;
-	}
+
 	
 	public function getSgdb(){
 		return $this->sgdb;
@@ -67,6 +65,7 @@ class DAO {
 				$bd ['porta'] = $config ['usuarios_porta'];
 				$bd ['usuario'] = $config ['usuarios_usuario'];
 				$bd ['senha'] = $config ['usuarios_senha'];
+				$this->entidadeUsuarios = $config['usuarios_entidade_nome'];
 				break;
 			case self::TIPO_USUARIOS_2 :
 				$bd ['sgdb'] = $config ['usuarios_2_sgdb'];
@@ -75,6 +74,7 @@ class DAO {
 				$bd ['porta'] = $config ['usuarios_2_porta'];
 				$bd ['usuario'] = $config ['usuarios_2_usuario'];
 				$bd ['senha'] = $config ['usuarios_2_senha'];
+				$this->entidadeUsuarios =  $config['usuarios_2_entidade_nome'];
 				break;
 			case self::TIPO_AUTENTICACAO :
 				$bd ['sgdb'] = $config ['autenticacao_sgdb'];
@@ -94,24 +94,16 @@ class DAO {
 				break;
 		}
 		if ($bd ['sgdb'] == "postgres") {
-			echo "PG<br>";
-			echo  'pgsql:host=' . $bd ['host'] . ' dbname=' . $bd ['nome'] . ' user=' . $bd ['usuario'] . ' password=' . $bd ['senha'] .'<br>';
 			$this->conexao = new PDO ( 'pgsql:host=' . $bd ['host'] . ' dbname=' . $bd ['nome'] . ' user=' . $bd ['usuario'] . ' password=' . $bd ['senha'] );
 		} else if ($bd ['sgdb'] == "mssql") {
-			echo 'SSQL<br>';
-			echo 'dblib:host=' . $bd ['host'] . ';dbname=' . $bd ['nome'].','.$bd ['usuario'].', '. $bd ['senha'].'<br>';
 			$this->conexao = new PDO ( 'dblib:host=' . $bd ['host'] . ';dbname=' . $bd ['nome'], $bd ['usuario'], $bd ['senha'] );
 			
-			
 		}
-		
 		else if($bd['sgdb']== "sqlite"){
 
 			$this->conexao = new PDO('sqlite:'.$bd['nome']);
 		}
 		$this->entidadeAutenticacao = $config['autenticacao_entidade_nome'];
-		$this->entidadeUsuarios = $config['usuarios_entidade_nome'];
-		$this->entidadeUsuarios2 = $config['usuarios_2_entidade_nome'];
 		$this->sgdb = $bd['sgdb'];
 	}
 	public function setConexao($conexao) {

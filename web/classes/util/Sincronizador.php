@@ -51,6 +51,76 @@ class Sincronizador {
 	public function setCampos($campos) {
 		$this->campos = $campos;
 	}
+	public static function sincronizaAlunos1() {
+		$daoUsuarios = new DAO ( null, DAO::TIPO_USUARIOS );
+		$dao = new DAO ();
+		$entidadeOrigem = $daoUsuarios->getEntidadeUsuarios ();
+		$conexaoOrigem = $daoUsuarios->getConexao ();
+		$conexaoDestino = $dao->getConexao ();
+		$entidadeDestino = "vw_usuarios_catraca";
+		
+		$sincronizador = new Sincronizador ( $conexaoOrigem, $conexaoDestino, $entidadeOrigem, $entidadeDestino );
+		
+		$campos = [
+				// Basico
+				"cpf" => "id_usuario",
+				"NOME" => "nome",
+				"email" => "email",
+				"login" => "login",
+				
+				// Documentos
+				"identidade" => "identidade",
+				
+				// Tipo de usuario
+				"id_tipo_usuario" => "id_tipo_usuario",
+				"tipo_usuario" => "tipo_usuario",
+				
+				// Informação de servidor se servidor.
+				"id_status_servidor" => "id_status_servidor",
+				"status_servidor" => "status_servidor",
+				"id_categoria" => "id_categoria",
+				"categoria" => "categoria",
+				
+				// Informação de discente
+				"id_status_discente" => "id_status_discente",
+				"status_discente" => "status_discente",
+				"matricula_disc" => "matricula_disc",
+				"id_nivel_discente" => "id_nivel_discente",
+				"nivel_discente" => "nivel_discente" 
+		];
+		$sincronizador->setCampos ( $campos );
+		
+		$sincronizador->limparDestino ();
+		$sincronizador->sincronizar ();
+	}
+	public static function sincronizaAlunos2() {
+		$daoUsuarios = new DAO ( null, DAO::TIPO_USUARIOS );
+		$dao = new DAO ();
+		$entidadeOrigem = $daoUsuarios->getEntidadeUsuarios ();
+		$conexaoOrigem = $daoUsuarios->getConexao ();
+		$conexaoDestino = $dao->getConexao ();
+		$entidadeDestino = "vw_usuarios_autenticacao_catraca";
+		
+		$sincronizador = new Sincronizador ( $conexaoOrigem, $conexaoDestino, $entidadeOrigem, $entidadeDestino );
+		
+		$campos = [
+				// Basico
+				"cpf" => "id_usuario",
+				"NOME" => "nome",
+				"email" => "email",
+				"login" => "login" 
+		];
+		$sincronizador->setCampos ( $campos );
+		
+		$sincronizador->limparDestino ();
+		$sincronizador->sincronizar ();
+	}
+	public static function sincronizaFuncionarios1() {
+		
+	}
+	public static function sincronizaFuncionarios2() {
+		
+	}
 	
 	/**
 	 * Metodo que faz uso da classe.
@@ -59,53 +129,31 @@ class Sincronizador {
 		if (self::jaTenteiAtualizar ()) {
 			return;
 		}
-		$daoUsuarios = new DAO ( null, DAO::TIPO_USUARIOS );
-		$entidadeOrigem = $daoUsuarios->getEntidadeUsuarios ();
-		$conexaoOrigem = $daoUsuarios->getConexao ();
-		$dao = new DAO ();
-		$conexaoDestino = $dao->getConexao ();
+		self::sincronizaAlunos1();
+		self::sincronizaAlunos2();
 		
-		$entidadeDestino = "vw_usuarios_catraca";
-		$sincronizador = new Sincronizador ( $conexaoOrigem, $conexaoDestino, $entidadeOrigem, $entidadeDestino );
-		
-		$campos = [ 
-				"cpf" => "id_usuario",
-				"NOME" => "nome",
-				"categoria" => "categoria",
-				"tipo_usuario" => "tipo_usuario",
-				"identidade" => "identidade",
-				"status_discente" => "status_discente",
-				"id_status_discente" => "id_status_discente" 
-		]
-		;
-		$sincronizador->setCampos ( $campos );
-		$sincronizador->sincronizar ();
-		
-		echo "<br><hr>";
-		$campos = array ();
-		$campos = [ 
-				"cpf" => "id_usuario",
-				"NOME" => "nome",
-				"email" => "email" 
-		]
-		;
-		$entidadeDestino = "vw_usuarios_autenticacao_catraca";
-		$sincronizador = new Sincronizador ( $conexaoOrigem, $conexaoDestino, $entidadeOrigem, $entidadeDestino );
-		$sincronizador->setCampos ( $campos );
-		$sincronizador->sincronizar ();
 	}
+	public function limparDestino() {
+		$sqlDelete = "DELETE FROM " . $this->entidadeDestino;
+		$b = $this->conexaoDestino->exec ( $sqlDelete );
+		echo "<br>Excluido " . $b . " linhas da entidade de destino<br>";
+		return $b;
+	}
+	
 	/**
 	 * Executa sincronização.
 	 */
 	public function sincronizar() {
-		$this->conexaoDestino->beginTransaction ();
-		$sqlDelete = "DELETE FROM " . $this->entidadeDestino;
-		$b = $this->conexaoDestino->exec ( $sqlDelete );
-		echo "Excluido " . $b . " linhas da entidade de destino<br>";
 		$sql = "SELECT * FROM " . $this->entidadeOrigem;
+		echo $sql;
 		$result = $this->conexaoOrigem->query ( $sql );
+		
+		$k = 0;
 		foreach ( $result as $linha ) {
-			
+			$k ++;
+			if ($k >= 4) {
+				return;
+			}
 			$sql = "INSERT INTO " . $this->entidadeDestino . " (";
 			$i = 0;
 			foreach ( $this->campos as $chave => $valor ) {
@@ -137,7 +185,7 @@ class Sincronizador {
 					$$valor = $linha [$chave];
 					$conteudo = $linha [$chave];
 					
-					if ($valor == "id_usuario" || $valor == "id_status_discente") {
+					if (substr ( $valor, 0, 3 ) == "id_") {
 						$$valor = intval ( $$valor );
 					}
 					if (is_string ( $conteudo )) {
@@ -153,15 +201,14 @@ class Sincronizador {
 				}
 				
 				if (! $stmt->execute ()) {
-					$this->conexaoDestino->rollBack ();
-					return;
+					return false;
 				}
 			} catch ( PDOException $e ) {
 				echo '{"error":{"text":' . $e->getMessage () . '}}';
 			}
 		}
-		$this->conexaoDestino->commit ();
-		return;
+		
+		return true;
 	}
 	public static function jaTenteiAtualizar() {
 		if (! file_exists ( self::ARQUIVO )) {
