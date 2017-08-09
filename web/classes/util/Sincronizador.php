@@ -76,10 +76,10 @@ class Sincronizador {
 				"tipo_usuario" => "tipo_usuario",
 				
 				// Informação de servidor se servidor.
-				"id_status_servidor" => "id_status_servidor",
-				"status_servidor" => "status_servidor",
-				"id_categoria" => "id_categoria",
-				"categoria" => "categoria",
+// 				"id_status_servidor" => "id_status_servidor",
+// 				"status_servidor" => "status_servidor",
+// 				"id_categoria" => "id_categoria",
+// 				"categoria" => "categoria",
 				
 				// Informação de discente
 				"id_status_discente" => "id_status_discente",
@@ -116,10 +116,66 @@ class Sincronizador {
 		$sincronizador->sincronizar ();
 	}
 	public static function sincronizaFuncionarios1() {
+		$daoUsuarios = new DAO ( null, DAO::TIPO_USUARIOS_2 );
+		$dao = new DAO ();
+		$entidadeOrigem = $daoUsuarios->getEntidadeUsuarios ();
+		$conexaoOrigem = $daoUsuarios->getConexao ();
+		$conexaoDestino = $dao->getConexao ();
+		$entidadeDestino = "vw_usuarios_catraca";
+		
+		$sincronizador = new Sincronizador ( $conexaoOrigem, $conexaoDestino, $entidadeOrigem, $entidadeDestino );
+		
+		$campos = [
+				// Basico
+				"id_usuario" => "id_usuario",
+				"nome" => "nome",
+				"email" => "email",
+				"login" => "login",
+				"cpf" => "cpf_cnpj",
+				// Documentos
+				"identidade" => "identidade",
+		
+// 				// Tipo de usuario
+				"id_tipo_usuario" => "id_tipo_usuario",
+				"tipo_usuario" => "tipo_usuario",
+		
+// 				// Informação de servidor se servidor.
+				"id_status_servidor" => "id_status_servidor",
+				"status_servidor" => "status_servidor",
+				"id_categoria" => "id_categoria",
+				"categoria" => "categoria",
+		
+// 				// Informação de discente
+				"id_status_discente" => "id_status_discente",
+				"status_discente" => "status_discente",
+				"matricula_disc" => "matricula_disc",
+				"id_nivel_discente" => "id_nivel_discente",
+				"nivel_discente" => "nivel_discente"
+		];
+		$sincronizador->setCampos ( $campos );
+		$sincronizador->sincronizar ();
 		
 	}
 	public static function sincronizaFuncionarios2() {
+		$daoUsuarios = new DAO ( null, DAO::TIPO_USUARIOS_2 );
+		$dao = new DAO ();
+		$entidadeOrigem = $daoUsuarios->getEntidadeUsuarios ();
+		$conexaoOrigem = $daoUsuarios->getConexao ();
+		$conexaoDestino = $dao->getConexao ();
+		$entidadeDestino = "vw_usuarios_autenticacao_catraca";
 		
+		$sincronizador = new Sincronizador ( $conexaoOrigem, $conexaoDestino, $entidadeOrigem, $entidadeDestino );
+		
+		$campos = [
+				// Basico
+				"cpf" => "id_usuario",
+				"nome" => "nome",
+				"email" => "email",
+				"login" => "login",
+		
+		];
+		$sincronizador->setCampos ( $campos );
+		$sincronizador->sincronizar ();
 	}
 	
 	/**
@@ -129,8 +185,12 @@ class Sincronizador {
 		if (self::jaTenteiAtualizar ()) {
 			return;
 		}
-		self::sincronizaAlunos1();
-		self::sincronizaAlunos2();
+		echo "Vamos ao primeiro";
+// 		self::sincronizaAlunos1();
+// 		self::sincronizaAlunos2();
+// 		self::sincronizaFuncionarios1();
+		self::sincronizaFuncionarios2();
+
 		
 	}
 	public function limparDestino() {
@@ -147,13 +207,10 @@ class Sincronizador {
 		$sql = "SELECT * FROM " . $this->entidadeOrigem;
 		echo $sql;
 		$result = $this->conexaoOrigem->query ( $sql );
-		
 		$k = 0;
+		$f = 0;
 		foreach ( $result as $linha ) {
-			$k ++;
-			if ($k >= 4) {
-				return;
-			}
+			$k++;
 			$sql = "INSERT INTO " . $this->entidadeDestino . " (";
 			$i = 0;
 			foreach ( $this->campos as $chave => $valor ) {
@@ -184,8 +241,10 @@ class Sincronizador {
 				foreach ( $this->campos as $chave => $valor ) {
 					$$valor = $linha [$chave];
 					$conteudo = $linha [$chave];
-					
-					if (substr ( $valor, 0, 3 ) == "id_") {
+					if($$valor == null){
+						continue;
+					}
+					if (substr ( $valor, 0, 3 ) == "id_" || substr ( $valor, 0, 3 ) == "mat" ) {
 						$$valor = intval ( $$valor );
 					}
 					if (is_string ( $conteudo )) {
@@ -201,13 +260,16 @@ class Sincronizador {
 				}
 				
 				if (! $stmt->execute ()) {
-					return false;
+					echo "Falhou";
+					$f++;
+					continue;
+					
 				}
 			} catch ( PDOException $e ) {
 				echo '{"error":{"text":' . $e->getMessage () . '}}';
 			}
 		}
-		
+		echo "Sucesso, inseri $k elementos $f falhas!!!!";
 		return true;
 	}
 	public static function jaTenteiAtualizar() {
