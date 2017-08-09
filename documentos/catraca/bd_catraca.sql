@@ -237,6 +237,7 @@ CREATE TABLE vw_usuarios_catraca
 	login character varying(300), 
 	senha character varying(300), 
 	matricula_disc integer, 
+	id_nivel_discente integer, 
 	nivel_discente character varying(300), 
 	id_status_discente integer, 
 	status_discente character varying(300), 
