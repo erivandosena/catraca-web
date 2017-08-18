@@ -306,8 +306,18 @@ class GuicheController{
 								echo '<div id="msgconfirmado">';
 								$this->view->mensagem($tipo,$mensagem);
 								$_SESSION['autorizado'] = $autorizado;
-								echo '</div>';								
-								echo '<meta http-equiv="refresh" content="3; url=.\?pagina=guiche">';
+								echo '</div>';	
+								
+								/**
+								 * #### EXPERIMENTAL ####
+								 * FUNCIONALIDADE DE ENVIO DE MENSAGENS PUSH PARA O APP ANDROID
+								 * 
+								 * Chamada da funcao de envios de notificacoes pela Api FireBase
+								 * Recarga e Estorno de creditos do cartao
+								 */
+								NotificacaoBackground::executaPidGuiche($idUsuario, 'guiche', $valorVendido, $novoValor);
+								
+								echo '<meta http-equiv="refresh" content="2; url=.\?pagina=guiche">';
 	
 							}
 						}

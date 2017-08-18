@@ -168,8 +168,8 @@ class PessoalController {
 				INNER JOIN usuario ON usuario.usua_id = transacao.usua_id
 				WHERE usua_id1 = $idUsuario
 				ORDER BY tran_data
-				 DESC LIMIT 200");
-		echo '<p>&Uacute;ltimas 200 transa&ccedil;&otilde;es</p>';
+				 DESC LIMIT 400");
+		echo '<p>&Uacute;ltimas 300 transa&ccedil;&otilde;es</p>';
 		echo '<table class="tabela borda-vertical zebrada texto-preto">';
 		echo '<thead>';
 		echo '<tr><th>Data/Hora</th><th>Valor</th><th>Descrição</th><th>Operador</th></tr>';
@@ -258,10 +258,10 @@ class PessoalController {
 					INNER JOIN unidade ON catraca_unidade.unid_id = unidade.unid_id 
 					WHERE vinc_id = $idTransacao 
 					AND regi_data > '2016-10-17 01:01:01' 
-					ORDER BY regi_data DESC LIMIT 200";
+					ORDER BY regi_data DESC LIMIT 400";
 				$result = $this->dao->getConexao()->query($sql);
 				echo '<div class="borda">';
-				echo '<p>&Uacute;ltimas 200 Refeições com o Cartão: </p>
+				echo '<p>&Uacute;ltimas 300 Refeições com o Cartão: </p>
 				<p>OBS: mostraremos as refei&ccedil;&otilde;es a partir de 17 de outubro de 2016 porque foi quando come&ccedil;ou a funcionar o m&oacute;dulo financeiro.</p>
 				';
 				echo '<table  class="tabela borda-vertical zebrada texto-preto">';

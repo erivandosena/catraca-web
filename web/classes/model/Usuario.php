@@ -95,6 +95,13 @@ class Usuario{
 	private $nivelDiscente;
 	private $statusDiscente;
 	
+	private $idStatusDiscente;
+	public function setIdStatusDiscente($idStatusDiscente){
+		$this->idStatusDiscente = $idStatusDiscente;
+	}
+	public function getIdStatusDiscente(){
+		return $this->idStatusDiscente;
+	}
 	
 	private $siape;
 	private $categoria;

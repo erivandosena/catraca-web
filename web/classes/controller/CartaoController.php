@@ -134,14 +134,13 @@ class CartaoController{
 									echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
 									return;
 								}
-								/*
-								
+
 								if(!$this->verificaSeAtivo($usuario)){
 									$this->view->formMensagem("-erro", "Esse usuário possui um problema quanto ao status!");
 									echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
 									return;
 								}
-								*/
+
 								$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'G:00:01' );
 								$vinculo->setFinalValidade($daqui3Meses);
 				
@@ -171,12 +170,25 @@ class CartaoController{
 		if (isset ( $_GET ['selecionado'] )) {
 			
 			$idDoSelecionado = $_GET['selecionado'];
-			$usuarioDao = new UsuarioDAO();
+			
+			$conectouSigaa = true;
+			try{
+
+				$usuarioDao = new UsuarioDAO(null, DAO::TIPO_PG_SIGAAA);
+					
+			}catch (Exception $e){
+				$conectouSigaa = false;
+			}
+			if(!$conectouSigaa){
+				$usuarioDao = new UsuarioDAO();
+			}
+			
+			
 			$usuario = new Usuario();
 			$usuario->setIdBaseExterna($idDoSelecionado);
 			
 			$usuarioDao->retornaPorIdBaseExterna($usuario);			
-			
+
 			$this->view->mostraSelecionado($usuario);
 			$vinculoDao = new VinculoDAO();			
 			
@@ -217,13 +229,12 @@ class CartaoController{
 						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
 						return;
 					}
-					/*
-					if(!$this->verificaSeAtivo($usuario)){
-						$this->view->formMensagem("-erro", "Esse usuário possui um problema quanto ao status!");
+					if(!$usuarioDao->vinculoRenovavel($vinculo)){
+						$this->view->formMensagem("-erro", 'Esse usuário possui um problema quanto ao status! ('.$usuario->getStatusDiscente().")");
 						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
 						return;						
-					}					
-					*/
+					}				
+					
 					if($vinculoDao->atualizaValidade($vinculo)){
 						$this->view->formMensagem("-sucesso", "Vínculo Atualizado com Sucesso!");						
 					}else{
@@ -267,7 +278,7 @@ class CartaoController{
 							continue;
 						}
 						if(strtolower (trim( $tipo->getNome())) == 'servidor docente'){
-							if(strtolower (trim($usuario->getStatusServidor())) == 'ativo' && strtolower (trim($usuario->getCategoria())) == 'docente'){
+							if( (strtolower (trim($usuario->getTipodeUsuario())) == 'docente externo') || ( strtolower (trim($usuario->getStatusServidor())) == 'ativo' && strtolower (trim($usuario->getCategoria())) == 'docente') ){
 								continue;								
 							}
 							unset($listaDeTipos[$chave]);
@@ -319,8 +330,22 @@ class CartaoController{
 								$this->view->formMensagem("-erro", "O numero do cartão digitado já possui vinculo, utilize outro cartão.");								
 								return;
 							}
+							$conectouSigaa = true;
+							try{
+							
+								$daoAutenticacao = new UsuarioDAO(null, DAO::TIPO_PG_SISTEMAS_COMUM);
+									
+							}catch (Exception $e){
+								$conectouSigaa = false;
+							}
+							if(!$conectouSigaa){
+								$daoAutenticacao = $vinculoDao;
+							}
+							
+							$vinculoDao->verificarUsuario($vinculo->getResponsavel(), $daoAutenticacao->getConexao());
 							
 							if($vinculoDao->adicionaVinculo ($vinculo)){
+								
 								$this->view->formMensagem("-sucesso", "Vinculo Adicionado Com Sucesso.");								
 							}else{
 								$this->view->formMensagem("-erro", "Erro na tentativa de Adicionar Vínculo.");							
@@ -362,33 +387,48 @@ class CartaoController{
 		}		
 
 		if (isset ( $_GET ['nome'] )) {
-			$usuarioDao = new UsuarioDAO();
-			$listaDeUsuarios = $usuarioDao->pesquisaNoSigaa( $_GET ['nome']);
-			if($listaDeUsuarios == null) {
-
-// ############################# TESTE como root POR  ORDEM DO kleber
-$controller  = new SincronizadorController();
-$controller->sincronizar();
-// ################################
-
+			$mensagem = "";
+			$conectouSigaa = true;
+			try{
+				$mensagem = "(Base Original do SIGAA)";
+				$usuarioDao = new UsuarioDAO(null, DAO::TIPO_PG_SIGAAA);
+					
+			}catch (Exception $e){
+				$conectouSigaa = false;
+				$mensagem = "(SIGAA Falhou, esta é a Base Local)";
 			}
-			$this->view->mostraResultadoBuscaDeUsuarios($listaDeUsuarios);
+			if(!$conectouSigaa){
+				$usuarioDao = new UsuarioDAO();
+			}
+			$listaDeUsuarios = $usuarioDao->pesquisaNoSigaa( $_GET ['nome']);
+			
+			$this->view->mostraResultadoBuscaDeUsuarios($listaDeUsuarios, $mensagem);
 			$usuarioDao->fechaConexao();
 		}		
 	}
-	
+
 	public function verificaSeAtivo(Usuario $usuario){
 		if(strtolower (trim($usuario->getStatusServidor())) == 'ativo'){			
 			return true;
 		}
-		if(trim($usuario->getStatusDiscente()) == 'CADASTRADO' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($usuario->getStatusDiscente())) == 'formando' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - graduando'){
+		if(trim($usuario->getStatusDiscente()) == 'CADASTRADO' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($usuario->getStatusDiscente())) == 'formando' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - graduando' || strtolower (trim($usuario->getStatusDiscente())) == 'formado'|| strtolower (trim($usuario->getIdStatusDiscente())) == self::ID_STATUS_DISCENTE_CONCLUIDO){
+			echo $usuario->getIdStatusDiscente();
 			return true;		
-		}		
+		}
 		if(strtolower (trim($usuario->getTipodeUsuario())) == 'terceirizado' || strtolower (trim($usuario->getTipodeUsuario())) == 'outros'){
+			return true;
+		}
+		if(strtolower (trim($usuario->getTipodeUsuario())) == 'docente externo'){
 			return true;
 		}
 		return false;
 	}
+	const ID_STATUS_DISCENTE_ATIVO = 1;
+	const ID_STATUS_DISCENTE_CADASTRADO = 3;
+	const ID_STATUS_DISCENTE_FORMADO = 9;
+	const ID_STATUS_DISCENTE_CONCLUIDO = 3;//
+
+
 	
 }
 

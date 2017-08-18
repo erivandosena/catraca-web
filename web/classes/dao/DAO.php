@@ -92,10 +92,10 @@ class DAO {
 // 	public function fazerConexao(){
 // 		switch ($this->tipoDeConexao) {
 // 			case self::TIPO_PG_DESENVOLVIMENTO:
-// 				$this->conexao = new PDO ( "pgsql:host=localhost dbname=desenvolvimento user=catraca password=CaTraCa@unilab2015" );
+// 				$this->conexao = new PDO ( "pgsql:host=localhost dbname=homologacao user=catraca password=CaTraCa@unilab2015" );
 // 				break;
 // 			case self::TIPO_PG_PRODUCAO:
-// 					$this->conexao = new PDO ( "pgsql:host=localhost dbname=producao user=catraca password=CaTraCa@unilab2015" );
+// 					$this->conexao = new PDO ( "pgsql:host=localhost dbname=homologacao user=catraca password=CaTraCa@unilab2015" );
 // 					break;
 // 			case self::TIPO_PG_SIGAAA ://Produï¿½ï¿½o do SIG. 
 // 				$this->conexao = new PDO ( "pgsql:host=200.129.19.74 dbname=sigaa user=catraca password=c4Tr@3a" );
@@ -104,7 +104,7 @@ class DAO {
 // 				$this->conexao = new PDO ( "pgsql:host=200.129.19.74 dbname=sistemas_comum user=catraca password=c4Tr@3a" );
 // 				break;
 // 			default :
-// 				$this->conexao = new PDO ( "pgsql:host=localhost dbname=desenvolvimento user=catraca password=CaTraCa@unilab2015" );
+// 				$this->conexao = new PDO ( "pgsql:host=localhost dbname=homologacao user=catraca password=CaTraCa@unilab2015" );
 // 				break;
 // 		}
 // 	}

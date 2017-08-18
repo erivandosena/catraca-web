@@ -58,6 +58,7 @@ class CatracaVirtualController{
 			
 		
 	}
+	
 	public function selecionarRU(){
 		$unidadeDao = new UnidadeDAO($this->dao->getConexao());
 		$listaDeCatracas = $unidadeDao->retornaCatracasPorUnidade();
@@ -285,7 +286,26 @@ class CatracaVirtualController{
 						unset($_SESSION['nome_usuario']);
 						unset($_SESSION['tipo_usuario']);
 						unset($_SESSION['refeicoes_restante']);
-						echo '<meta http-equiv="refresh" content="2; url=?pagina=gerador">';						
+						
+						/**
+						 * #### EXPERIMENTAL ####
+						 * FUNCIONALIDADE DE ENVIO DE MENSAGENS PUSH PARA O APP ANDROID
+						 *
+						 * Chamada da funcao de envios de notificacoes pela Api FireBase
+						 * Uso de creditos do cartao
+						 */
+						NotificacaoBackground::executaPidCatracaVirtual($vinculo->getResponsavel()->getId(), 'catraca_virtual', $valorPago);
+						
+						echo '<meta http-equiv="refresh" content="2; url=?pagina=gerador">';	
+						
+						/**
+						 * #### EXPERIMENTAL ####
+						 * FUNCIONALIDADE DE ENVIO DE MENSAGENS PUSH PARA O APP ANDROID
+						 *
+						 * Chamada da funcao de envios de notificacoes pela Api FireBase
+						 * Avisos de limite dos créditos
+						 */
+						NotificacaoBackground::executaPidCatracaVirtualUtilizacao($vinculo->getResponsavel()->getId(), 'catraca_virtual_utilizacao', $novoValor, $valorPago);
 					}
 					
 				}else{

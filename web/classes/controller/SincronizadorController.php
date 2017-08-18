@@ -2,21 +2,37 @@
 
 
 
-
+/**
+ * Esse augorítmo precisa ser melhorado. 
+ * @author Jefferson Ponte
+ *
+ */
 class SincronizadorController{
-	private $dadosSigaa;
-	private $dadosComum;
+
 	private $daoSigaa;
 	private $daoComum;
 	private $daoLocal;
 
 	
 
-	public function carregarDados(){
+	
+	
+	public function sincronizarSigaa(){
+		
+		$this->daoLocal = new DAO();
 		$this->daoSigaa = new DAO(null, DAO::TIPO_PG_SIGAAA);
+		
+		$this->daoLocal->getConexao()->beginTransaction();
+		if(!$this->daoLocal->getConexao()->exec("DELETE FROM vw_usuarios_catraca")){
+			$this->daoLocal->getConexao()->rollBack();
+			$this->daoSigaa->fechaConexao();
+			$this->daoLocal->fechaConexao();
+			echo "Erro ao tentar apagar tudo";
+			return false;
+		}
 		$sqlSigaa = "SELECT * FROM vw_usuarios_catraca";
+		
 		$result = $this->daoSigaa->getConexao()->query($sqlSigaa);
-		$matriz = array();
 		foreach ($result as $linha){
 			foreach($linha as $chave => $valor){
 				$linha[$chave] = str_replace("'", "''", $valor);
@@ -32,71 +48,24 @@ class SincronizadorController{
 			$linha['status_servidor'] = "'".$linha['status_servidor']."'";
 			$linha['tipo_usuario'] = "'".$linha['tipo_usuario']."'";
 			$linha['categoria'] = "'".$linha['categoria']."'";
+			$linha['turno'] = "'".$linha['turno']."'";
+			$linha['nome_curso'] = "'".$linha['nome_curso']."'";
 			foreach($linha as $chave => $valor){
 				if(!$valor || $valor == "''"){
 					$linha[$chave] = "null";
 				}
 			}
-			$matriz[] = $linha;
-		}
-		$this->dadosSigaa = $matriz;
-		$this->daoComum = new DAO(null, DAO::TIPO_PG_SISTEMAS_COMUM);
-		$sqlComum = "SELECT * FROM vw_usuarios_autenticacao_catraca";
-		$result = $this->daoComum->getConexao()->query($sqlComum);
-		$matriz = array();
-		foreach ($result as $linha){
-			foreach($linha as $chave => $valor){
-				$linha[$chave] = str_replace("'", "''", $valor);
-			}
-			$linha['nome'] = "'".$linha['nome']."'";
-			$linha['passaporte'] = "'".$linha['passaporte']."'";
-			$linha['email'] = "'".$linha['email']."'";
-			$linha['login'] = "'".$linha['login']."'";
-			$linha['senha'] = "'".$linha['senha']."'";
-			$linha['status_servidor'] = "'".$linha['status_servidor']."'";
-			$linha['tipo_usuario'] = "'".$linha['tipo_usuario']."'";
-			$linha['categoria'] = "'".$linha['categoria']."'";
-			foreach($linha as $chave => $valor){
-				if(!$valor || $valor == "''"){
-					$linha[$chave] = "null";
-				}
-			}
-			$matriz[$linha['id_usuario']] = $linha;
-		}
-		$this->dadosComum = $matriz;
-		
-	}
-	public function deletarDadosLocais(){
-		$this->daoLocal = new DAO();
-		$this->daoLocal->getConexao()->exec("DELETE FROM vw_usuarios_catraca");
-		$this->daoLocal->getConexao()->exec("DELETE FROM vw_usuarios_autenticacao_catraca");	
-		
-		
-	}
-	
-	public function inserirOsDoSigaa(){
-		foreach($this->dadosSigaa as $idUsuario => $linha){
+			
+			
 			$sqlInserir = "INSERT into vw_usuarios_catraca
 			(
-			id_usuario,
-			nome,identidade,
-			cpf_cnpj,
-			passaporte,
-			email,
-			login,
-			senha,
-			matricula_disc,
-			nivel_discente,
-			id_status_discente,
-			status_discente,
-			siape,
-			id_status_servidor,
-			status_servidor,
-			id_tipo_usuario,
-			tipo_usuario,
-			id_categoria,
+			id_usuario, nome,identidade, cpf_cnpj, passaporte,email,login,senha,matricula_disc,nivel_discente,id_status_discente,status_discente,siape,id_status_servidor,status_servidor,id_tipo_usuario,tipo_usuario,id_categoria,
 			status_sistema,
-			categoria
+			categoria,
+			id_turno,
+			turno,
+			id_curso,
+			nome_curso
 			)
 			VALUES(
 			".$linha['id_usuario'].",
@@ -118,22 +87,61 @@ class SincronizadorController{
 			".$linha['tipo_usuario'].",
 			".$linha['id_categoria'].",
 			".$linha['status_sistema'].",
-			".$linha['categoria']."
+			".$linha['categoria'].",
+			".$linha['id_turno'].",
+			".$linha['turno'].",
+			".$linha['id_curso'].",
+			".$linha['nome_curso']."
 			);";
-		
 			
 			if(!$this->daoLocal->getConexao()->exec($sqlInserir)){
 				echo "Errei aqui: ".$sqlInserir."<br>";
+				$this->daoLocal->getConexao()->rollBack();
+				$this->daoSigaa->fechaConexao();
+				$this->daoLocal->fechaConexao();
 				return false;
 			}
+			
+			
 		}
-		$this->dadosSigaa = null;
+		$this->daoLocal->getConexao()->commit();
+		$this->daoSigaa->fechaConexao();
+		$this->daoLocal->fechaConexao();
 		return true;
-		
 	}
-	public function inserirOsDoComum(){
+	
+	public function sincronizarComum(){
+	
+		$this->daoLocal = new DAO();
+		$this->daoLocal->getConexao()->beginTransaction();	
 		
-		foreach($this->dadosComum as $idUsuario => $linha){	
+		if(!$this->daoLocal->getConexao()->exec("DELETE FROM vw_usuarios_autenticacao_catraca")){
+			$this->daoLocal->getConexao()->rollBack();
+			echo "Erro ao tentar deletar tudo";
+			return false;
+		}
+		
+		$this->daoComum = new DAO(null, DAO::TIPO_PG_SISTEMAS_COMUM);
+		$sqlComum = "SELECT * FROM vw_usuarios_autenticacao_catraca";
+		$result = $this->daoComum->getConexao()->query($sqlComum);
+		$matriz = array();
+		foreach ($result as $linha){
+			foreach($linha as $chave => $valor){
+				$linha[$chave] = str_replace("'", "''", $valor);
+			}
+			$linha['nome'] = "'".$linha['nome']."'";
+			$linha['passaporte'] = "'".$linha['passaporte']."'";
+			$linha['email'] = "'".$linha['email']."'";
+			$linha['login'] = "'".$linha['login']."'";
+			$linha['senha'] = "'".$linha['senha']."'";
+			$linha['status_servidor'] = "'".$linha['status_servidor']."'";
+			$linha['tipo_usuario'] = "'".$linha['tipo_usuario']."'";
+			$linha['categoria'] = "'".$linha['categoria']."'";
+			foreach($linha as $chave => $valor){
+				if(!$valor || $valor == "''"){
+					$linha[$chave] = "null";
+				}
+			}
 			$sqlInserir = "INSERT into vw_usuarios_autenticacao_catraca
 			(
 			id_usuario,
@@ -164,62 +172,76 @@ class SincronizadorController{
 			".$linha['id_tipo_usuario'].",
 			".$linha['id_categoria'].",
 			".$linha['categoria']."
-			
 		
+			
 			);";
+				
 			
 			if(!$this->daoLocal->getConexao()->exec($sqlInserir)){
 				echo "Errei aqui no Comum: ".$sqlInserir;
+				$this->daoLocal->getConexao()->rollBack();
 				return false;
 			}
+			
+			
 		}
+		$this->daoLocal->getConexao()->commit();
+		$this->daoLocal->fechaConexao();
+		$this->daoComum->fechaConexao();
 		return true;
 		
 	}
+
+
 	
 	public function sincronizar(){
+		
+		
+		if(!file_exists(self::ARQUIVO)){
+			mkdir("config");
+			$fp = fopen(self::ARQUIVO, "a");
+			
+			fwrite($fp, "ultima_atualizacao = 2017-04-25 11:35:00");
+			fclose($fp);
+			return;
+		}
+			
+		$config = parse_ini_file ( self::ARQUIVO );
+		$dataDaUltimaAtualizacao = $config ['ultima_atualizacao'];
+		$dataDaUltimaAtualizacao = date ( "d/m/Y", strtotime ( $dataDaUltimaAtualizacao ) );
+		$hoje = date ( "d/m/Y" );
+		if ($dataDaUltimaAtualizacao == $hoje) {
+			return;
+		}
+		if (! is_writable ( self::ARQUIVO )) {
+			return;
+		}
 
-		$tempoA = round(microtime(true) * 1000);
-//		echo 'Vou carregar os dados.<br>';
-		
-		$this->carregarDados();
-		$tempoB = round(microtime(true) * 1000);
-//		echo "Carreguei! Levei: <br>";
-//		echo $tempoB-$tempoA;
-//		echo " Mili segundos.<br>";
-//		echo '<br>Agora vou deletar os dados da tabela local<br>';
-		
-		$this->deletarDadosLocais();
-//		echo '<br>Pronto! Levei: ';
-		
-		$tempoC = round(microtime(true) * 1000);
-//		echo $tempoC-$tempoB;
-//		echo " Milisegundos<br>";
-//		echo "Vou inserir os dados do SIGAA na base local";
-		
-		if($this->inserirOsDoSigaa()){
-			echo "";
-			//echo '<h1>Deu tudo certo INSERINDO SIGAA</h1>';
-			//$tempoD = round(microtime(true) * 1000);
-			//echo 'Inseri tudo em: ';
-			//echo $tempoD-$tempoC;
-			//echo ' Milisegundos';
-		}else{
-			echo "";
-			//echo 'Retornou Um falso';
+
+		if(!$this->sincronizarSigaa()){
+			echo 'Errou no sigaa';
+			return;
 		}
-		if($this->inserirOsDoComum()){
-			echo "";
-			//echo '<h1>Deu tudo certo INSERINDO COMUM</h1>';
-			//$tempoE = round(microtime(true) * 1000);
-			//echo 'Inseri tudo em: ';
-			//echo $tempoE-$tempoD;
-			//echo ' Milisegundos';
-		}else{
-			echo "";
-			//echo 'Retornou Um falso no COmum';
+		if(!$this->sincronizarComum()){
+			echo "Errou no comum";
+			return;
 		}
+		
+		
+		$escrever = fopen(self::ARQUIVO, "w");
+		
+		$hoje = date ( "Y-m-d G:i:s" );
+		if(!fwrite($escrever, "ultima_atualizacao = ".$hoje)){
+			
+			return;
+		}
+		echo "Feito";
+		fclose($escrever);
+		
+		
 	}
+	
+	const ARQUIVO = "config/copia_base_sigaa.ini";
 	
 	
 	
