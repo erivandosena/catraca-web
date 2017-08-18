@@ -7,10 +7,7 @@
 *
 */
 class AdminPG{
-	public static function main(){
-
-		$dao = new DAO();
-		$conexao = $dao->getConexao();
+	public static function main(PDO $conexao){
 
 		$sql = "SELECT schemaname AS esquema, tablename AS tabela, tableowner AS dono
 				FROM pg_catalog.pg_tables
@@ -35,7 +32,7 @@ class AdminPG{
 			a.attnum > 0
 			AND NOT a.attisdropped
 			";
-			$resultDasColunas = $dao->getConexao()->query($sqlColunas);
+			$resultDasColunas = $conexao->query($sqlColunas);
 			foreach ($resultDasColunas as $linhaDasColunas){
 				echo $linhaDasColunas['column'].' | '.$linhaDasColunas['datatype'].'<br>';
 			}
@@ -43,7 +40,7 @@ class AdminPG{
 
 			echo '<br>'.$n.' primeiros dados<br>';
 			$sqlPrimeirosDados = "SELECT * FROM $nomeDaTabela LIMIT $n";
-			$resultPrimeirosDados = $dao->getConexao()->query($sqlPrimeirosDados);
+			$resultPrimeirosDados = $conexao->query($sqlPrimeirosDados);
 			$i = 0;
 			echo '<table border=1>';
 			foreach ($resultPrimeirosDados as $linhaPrimeirosDados){
