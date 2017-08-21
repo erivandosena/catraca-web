@@ -101,10 +101,15 @@ if (isset ( $_GET ["sair"] )) {
 
 			<div id="topo" class="resolucao config">
 				<div class="tres colunas">
-					<a href="http://www.dti.unilab.edu.br"><img
-						class="imagem-responsiva"
-						src="img/logo_h-site.png"
-						alt=""></a>
+				
+				<a href="http://www.dti.unilab.edu.br"><img
+						class="imagem-responsiva" src="img/logos_cooperacao_left.png" alt=""></a>
+				
+				
+<!-- 					<a href="http://www.dti.unilab.edu.br"><img -->
+<!-- 						class="imagem-responsiva" -->
+<!-- 						src="img/logo_h-site.png" -->
+<!-- 						alt=""></a> -->
 				</div>
 				<div class="seis colunas centralizado">
 					<h1>
@@ -115,8 +120,12 @@ if (isset ( $_GET ["sair"] )) {
 				<div class="tres colunas alinhado-a-direita">
 					<a href="http://www.unilab.edu.br"><img
 						class="imagem-responsiva centralizada"
-						src="img/logo-unilab-branco.png"
-						alt=""></a>
+						src="img/logos_cooperacao_right.png" alt=""></a>
+				
+<!-- 					<a href="http://www.unilab.edu.br"><img -->
+<!-- 						class="imagem-responsiva centralizada" -->
+<!-- 						src="img/logo-unilab-branco.png" -->
+<!-- 						alt=""></a> -->
 				</div>
 			</div>
 		</div>
@@ -177,7 +186,7 @@ if (isset ( $_GET ["sair"] )) {
 						echo ' 	<li><a href="?pagina=definicoes" class="item"><span class="icone-cogs"></span> <span class="item-texto">Definições</span></a>
 									<ul>
 										<li><a href="?pagina=definicoes">Geral</a></li>
-										<li><a href="?pagina=validacoes">Validações</a></li>
+										<li><a href="?pagina=validacao">Validações</a></li>
 									</ul>
 								</li>';
 						echo ' 	<li><a href="?pagina=relatorio" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a>
@@ -230,7 +239,7 @@ if (isset ( $_GET ["sair"] )) {
 						echo ' 	<li><a href="?pagina=definicoes" class="item"><span class="icone-cogs"></span> <span class="item-texto">Definições</span></a>
 									<ul>
 										<li><a href="?pagina=definicoes">Geral</a></li>
-										<li><a href="?pagina=validacoes">Validações</a></li>
+										<li><a href="?pagina=validacao">Validações</a></li>
 									</ul>
 								</li>';
 						
@@ -531,9 +540,10 @@ if (isset ( $_GET ["sair"] )) {
 							case 'relatorio_registro':
 								RelatorioRegistroController::main($sessao->getNivelAcesso(), $sessao->getIdUsuario());
 								break;
-							case 'validacoes':
-								ValidacoesController::main($sessao->getNivelAcesso());
+							case 'validacao' :
+								ValidacaoController::main ( $sessao->getNivelAcesso () );
 								break;
+								
 							default :
 								echo '404 NOT FOUND';
 								break;

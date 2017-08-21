@@ -313,16 +313,15 @@ hr.linha{
 	color: #fff;
 	text-decoration: none;
 }
-
+/**/
 #titulo{
-	margin-top: 20px;
+	
 	margin-bottom: 30px;
 }
 
 #titulo-caixa{
-	margin-right: 10px;
-	margin-top: 20px;
-	margin-bottom: 20px;
+	margin-top:-5px;
+	
 }
 
 #relatorio span{
@@ -424,15 +423,12 @@ div#corpo{
 }*/
 
 .dados-usuario span{
-	margin-top:30px;
 	display: block;
 	font-weight: bold;
 	
 }
 
-#informacao{
-	border:solid 1px #ccc;
-	height:9cm;
+#informacao{	
 	font-size:22px;	
 }
 
@@ -460,7 +456,8 @@ span#aproxime{
 .imagem-fundo{	
 	width: 350px;
 	height: 308px;
-	opacity: 0.1;	
+	opacity: 0.1;
+	padding-left: 70%;	
 }
 
 .fundo-cliente{
@@ -470,6 +467,7 @@ span#aproxime{
 	top: 30%;
 }
 
+.imagem-fundo-cliente{
 	width: 600px;
 	height: 528px;
 	opacity: 0.1;
@@ -483,12 +481,13 @@ span#aproxime{
 	height:343px;
     overflow: hidden;
     margin-left: 6px;
+    border:solid 1px #ccc;
 }
 
 .zoom img {
-   	width: 100%; 
+   	width: 60%; 
 	border-radius: 2px;
-	border:solid 1px #000;
+	
 }
 
 .zoom img {
@@ -571,4 +570,75 @@ span#aproxime{
     padding-top: 51px;
     padding-left: 73px;
     transform: scale(1.3);
+}
+
+/*
+    Títulos
+*/
+.titulo,.titulo-com-borda {
+    color:#2E496B !important;
+    font-weight:bold !important;
+    font-size:1em !important;
+    line-height: 1.8em !important;
+    margin:0px !important;
+    page-break-before: always !important;
+    margin-bottom: 10px !important;
+    border-bottom: 1px solid #E5E5E5 !important;
+    display: block !important;
+}
+.titulo {
+    font-size:1.125em !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important; 
+}
+.titulo:before,.titulo:after{
+    content:"";
+    display:block;
+    clear:both;
+}
+
+/*Janela Modal*/
+
+.window{
+    display:none;
+    position:absolute;
+    left:0;
+    top:0;
+    background:#FFF;
+    z-index:9900;
+    padding:10px;
+    border-radius:10px;
+}
+ 
+#mascara{
+	padding-top: 20px;
+	padding-left:20px;
+    display:none;
+    position:absolute;
+    left:0;
+    top:0;
+    z-index:9000;
+    background-color:#000;
+}
+ 
+.fechar{display:block; text-align:right;}
+
+.resumo{
+	position: relative;	
+}
+
+.resumo span{
+	position: absolute;
+	left:20%;
+	top: 20%;	
+	font-size: 80px;
+}
+
+.resumo img{
+	position: relative;
+	left:35%;
+	opacity: 0.1;
+	height:300px;
+	
 }
