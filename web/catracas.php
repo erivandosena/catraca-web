@@ -1,7 +1,7 @@
 <?php
 
 
-date_default_timezone_set ( 'America/Araguaina' );
+date_default_timezone_set ( 'America/Fortaleza' );
 
 function __autoload($classe) {
 	if (file_exists ( 'classes/dao/' . $classe . '.php' ))

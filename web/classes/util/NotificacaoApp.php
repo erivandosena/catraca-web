@@ -34,30 +34,48 @@ class NotificacaoApp {
 		 * @param string $token O TOKEN obtido a apartir do aplicativo do usuario
 		 */
 		function envia_notificacao($titulo, $mensagem, $token) {
-			
+			$urlFirebase = 'https://fcm.googleapis.com/fcm/send';
 			define( 'API_ACCESS_KEY', 'AIzaSyAGsra0IfOxKCAu6N9j7LFC4QqS9733Ysg');
 			
-			$urlFirebase = 'https://fcm.googleapis.com/fcm/send';
-			
 			$msg = array(
-				'body'		=> $mensagem,
-				'title'		=> $titulo,
-				'sound'		=> 'default',
-				'icon'		=> 'ic_notification_round'
-				);
+					'body'		=> $mensagem,
+					'title'		=> $titulo,
+					'sound'		=> 'default',
+					'icon'		=> 'ic_notification_round'
+			);
 			
 			$dados = array(
-					'image'				=> 'https://www.catraca.unilab.edu.br/app/imagens/logo_catraca_fcm.png', //https://ibin.co/3REUGpEqddEa.png https://www.catraca.unilab.edu.br/app/imagens/logo_catraca_fcm.png
-					'message'			=> $mensagem,
-					'ExtratoActivity'	=> 'true'
+					'link'		=> 'http://www.facebook.com/groups/labpati/',
+					'image'		=> 'https://www.catraca.unilab.edu.br/app/imagens/logo_labpati_fcm.png',
+					'extrato'	=> 'CE'
 			);
 			
 			$fields = array(
-						'to'			=> $token,
-						'priority'		=> 'high',
-						'notification'	=> $msg,
-						'data'			=> $dados
+					'to'			=> $token,
+					'priority'		=> 'high',
+					'notification'	=> $msg,
+					'data'			=> $dados
 			);
+			
+// 			$msg = array(
+// 					'body'		=> $mensagem,
+// 					'title'		=> $titulo,
+// 					'sound'		=> 'default',
+// 					'icon'		=> 'ic_notification_round',
+// 					'tag'		=> 'CE'
+// 			);
+			
+// 			$dados = array(
+// 					'image'		=> 'https://www.catraca.unilab.edu.br/app/imagens/logo_catraca_fcm.png',
+// 					'extrato'	=> 'CE'
+// 			);
+			
+// 			$fields = array(
+// 					'to'			=> $token,
+// 					'priority'		=> 'high',
+// 					'notification'	=> $msg,
+// 					'data'			=> $dados
+// 			);
 			
 			$headers = array
 					(
@@ -91,10 +109,8 @@ class NotificacaoApp {
 			curl_close($ch);
 			
 			if ($curl_errno > 0) {
-				//return false;
 				return;
 			} else {
-				//return true;
 				return;
 			}
 		}

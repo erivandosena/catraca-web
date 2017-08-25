@@ -30,6 +30,9 @@ if (isset ( $_GET ["sair"] )) {
 	header ( "Location:./index.php" );
 }
 
+$s = new SincronizadorController();
+$s->sincronizar();
+
 
 ?>
 <!DOCTYPE html>
