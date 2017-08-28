@@ -57,26 +57,6 @@ class NotificacaoApp {
 					'data'			=> $dados
 			);
 			
-// 			$msg = array(
-// 					'body'		=> $mensagem,
-// 					'title'		=> $titulo,
-// 					'sound'		=> 'default',
-// 					'icon'		=> 'ic_notification_round',
-// 					'tag'		=> 'CE'
-// 			);
-			
-// 			$dados = array(
-// 					'image'		=> 'https://www.catraca.unilab.edu.br/app/imagens/logo_catraca_fcm.png',
-// 					'extrato'	=> 'CE'
-// 			);
-			
-// 			$fields = array(
-// 					'to'			=> $token,
-// 					'priority'		=> 'high',
-// 					'notification'	=> $msg,
-// 					'data'			=> $dados
-// 			);
-			
 			$headers = array
 					(
 						'Authorization: key='. API_ACCESS_KEY,
