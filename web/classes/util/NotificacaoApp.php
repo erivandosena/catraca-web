@@ -45,7 +45,6 @@ class NotificacaoApp {
 			);
 			
 			$dados = array(
-					'link'		=> 'http://www.facebook.com/groups/labpati/',
 					'image'		=> 'https://www.catraca.unilab.edu.br/app/imagens/logo_labpati_fcm.png',
 					'extrato'	=> 'CE'
 			);
