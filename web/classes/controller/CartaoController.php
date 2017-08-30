@@ -174,10 +174,11 @@ class CartaoController{
 			$conectouSigaa = true;
 			try{
 
-				$usuarioDao = new UsuarioDAO(null, DAO::TIPO_PG_SIGAAA);
+				$usuarioDao = new UsuarioDAO(null, DAO::TIPO_USUARIOS);
 					
 			}catch (Exception $e){
 				$conectouSigaa = false;
+				echo '{"erro":{"text":'. $e->getMessage() .'}}';
 			}
 			if(!$conectouSigaa){
 				$usuarioDao = new UsuarioDAO();
@@ -333,10 +334,11 @@ class CartaoController{
 							$conectouSigaa = true;
 							try{
 							
-								$daoAutenticacao = new UsuarioDAO(null, DAO::TIPO_PG_SISTEMAS_COMUM);
+								$daoAutenticacao = new UsuarioDAO(null, DAO::TIPO_AUTENTICACAO);
 									
 							}catch (Exception $e){
 								$conectouSigaa = false;
+								echo '{"erro":{"text":'. $e->getMessage() .'}}';
 							}
 							if(!$conectouSigaa){
 								$daoAutenticacao = $vinculoDao;
@@ -391,11 +393,12 @@ class CartaoController{
 			$conectouSigaa = true;
 			try{
 				$mensagem = "(Base Original do SIGAA)";
-				$usuarioDao = new UsuarioDAO(null, DAO::TIPO_PG_SIGAAA);
+				$usuarioDao = new UsuarioDAO(null, DAO::TIPO_USUARIOS);
 					
 			}catch (Exception $e){
 				$conectouSigaa = false;
 				$mensagem = "(SIGAA Falhou, esta é a Base Local)";
+				echo '{"erro":{"text":'. $e->getMessage() .'}}';
 			}
 			if(!$conectouSigaa){
 				$usuarioDao = new UsuarioDAO();
