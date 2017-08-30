@@ -51,6 +51,7 @@ class TurnoDAO extends DAO{
 			$turno->setHoraFinal($linha['turn_hora_fim']);
 			$turno->setDescricao($linha['turn_descricao']);
 		}
+		return $turno;
 	}
 	
 	public function atualizaTurno(Turno $turno){

@@ -524,6 +524,9 @@ $s->sincronizar();
 							case 'relatorio_registro':
 								RelatorioRegistroController::main($sessao->getNivelAcesso(), $sessao->getIdUsuario());
 								break;
+							case 'registro_orfao':
+								RegistroOrfaoController::main($sessao->getNivelAcesso());
+								break;
 							default :
 								echo '404 NOT FOUND';
 								break;
