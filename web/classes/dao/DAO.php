@@ -44,6 +44,8 @@ class DAO {
 	public function getEntidadeUsuarios(){
 		return $this->entidadeUsuarios;
 	}
+	
+	
 	public function fazerConexao() {
 		$config = parse_ini_file ( self::ARQUIVO_CONFIGURACAO );
 		
