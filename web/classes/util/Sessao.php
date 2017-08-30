@@ -104,7 +104,7 @@ class Sessao{
 	const NIVEL_GUICHE = 4;
 	/**
 	 * Acessa o catraca virtual e o cartão. 
-	 * @var unknown
+	 * @var integer
 	 */
 	const NIVEL_CATRACA_VIRTUAL = 6;
 	/**
@@ -119,27 +119,11 @@ class Sessao{
 	const NIVEL_RELATORIO = 8;
 	
 	
+	const NIVEL_CATRACA_VIRTUAL_ORFA = 9;
+	
 	const NIVEL_POLIVALENTE = 5;
 	const NIVEL_COMUM = 1;
 	
-	
 
-	
-	/**
-	 * 
-	 * @var 
-	 * 
-	 * Aqui � complicado. 
-	 * Nenhum terceirizado tem login no sistema, mas 
-	 * a biblioteca � tocada por terceirizados. 
-	 * 
-	 * S�o tercerizados que ir�o trabalhar com o sistema, gerenciando.
-	 * E a�, como resolve isso?
-	 * Iremos criar um artif�cio emergencial para que o sistema
-	 * n�o fique sem gerenciamento. 
-	 * Um usu�rio com senha fixa que ter� acesso �s m�quinas da biblioteca. 
-	 *  
-	 */
-	const NIVEL_USUARIO_ESPECIAL = 10;
 	
 }

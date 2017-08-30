@@ -41,7 +41,10 @@ class HomeController{
 				//So faz cadastro
 				RelatorioController::main($nivelDeAcesso);
 				break;
-				
+			case Sessao::NIVEL_CATRACA_VIRTUAL_ORFA:
+				//Catraca Virtual Orfã. 
+				RegistroOrfaoController::main($nivelDeAcesso);
+				break;
 			default:
 				UsuarioController::main ( $nivelDeAcesso );
 				break;

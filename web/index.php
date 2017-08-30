@@ -339,6 +339,27 @@ $s->sincronizar();
 							    </div>
 							</div>';
 						break;
+					case Sessao::NIVEL_CATRACA_VIRTUAL_ORFA:
+						auditar();
+						echo '
+						<div  class="doze colunas barra-menu">
+							    <div class="menu-horizontal config">
+							        <ol class="a-esquerda">';
+							
+						echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
+						
+						echo '<li><a href="?pagina=registro_orfao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual Órfã</span></a></li>';
+						echo ' <li><a href="?pagina=relatorio" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a></li>';
+							
+						echo '</ol>
+							        <ol class="a-direita" start="4">
+										<li><a href="" class="item"><span class="item-texto">Status: Catraca Órfã</span></a></li>
+							            <li><a href="?sair=sair" class="item"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
+							        </ol>
+							    </div>
+							</div>';
+						
+						break;
 					case Sessao::NIVEL_CADASTRO:
 							
 						auditar();

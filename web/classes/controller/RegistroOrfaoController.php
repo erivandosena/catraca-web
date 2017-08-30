@@ -6,7 +6,7 @@ class RegistroOrfaoController {
 	private $dao;
 	
 	public static function main($nivelAcesso){		
-		switch ($nivelDeAcesso) {
+		switch ($nivelAcesso) {
 			case Sessao::NIVEL_SUPER :
 				$telaRegistro = new RegistroOrfaoController();
 				$telaRegistro->verificarSelecaoRU();	
@@ -15,8 +15,12 @@ class RegistroOrfaoController {
 				$telaRegistro = new RegistroOrfaoController();
 				$telaRegistro->verificarSelecaoRU();
 				break;
+			case Sessao::NIVEL_CATRACA_VIRTUAL_ORFA:
+				$telaRegistro = new RegistroOrfaoController();
+				$telaRegistro->verificarSelecaoRU();
+				break;
 			default :
-				UsuarioController::main ( $nivelDeAcesso );
+				UsuarioController::main ( $nivelAcesso );
 				break;
 		}
 			
@@ -323,9 +327,9 @@ class RegistroOrfaoController {
 						VALUES('$data', $valorPago, $custo, $idCatraca, $idCartao, $idVinculo)";
 						//echo $sql;
 						if($this->dao->getConexao()->exec($sql)){
-							$this->mensagemSucesso();
+							$this->view->mensagem("sucesso", "Dados inseridos com sucesso.");
 						}else{
-							$this->mensagemErro();
+							$this->view->mensagem("erro", "Erro ao inserir os dados.");		
 						}
 						$_SESSION['confirmado'] = "confirmado";
 						unset($_SESSION['id_base_externa']);

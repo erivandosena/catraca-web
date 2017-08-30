@@ -25,6 +25,10 @@ class RelatorioController {
 				$controller = new RelatorioController ();
 				$controller->relatorio ();
 				break;
+			case Sessao::NIVEL_CATRACA_VIRTUAL_ORFA:
+				$controller = new RelatorioController ();
+				$controller->relatorio ();
+				break;
 			default :
 				UsuarioController::main ( $nivelDeAcesso );
 				break;
