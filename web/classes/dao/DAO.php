@@ -17,7 +17,7 @@ class DAO {
 	const TIPO_CATRACA = 0;
 	const TIPO_AUTENTICACAO = 2;
 	const TIPO_USUARIOS = 3;
-	const TIPO_USUARIOS_2 = 4;
+	const TIPO_USUARIOS_SECUNDARIO = 4;
 	
 	const TIPO_DEFAULT = self::TIPO_CATRACA;
 	protected $conexao;

@@ -61,7 +61,6 @@ $s->sincronizar();
 
 
 
-
 	<div class="pagina fundo-cinza1">
 	
 		<div class="acessibilidade">
@@ -176,7 +175,14 @@ $s->sincronizar();
 		
 							</li>';
 						
-						echo ' 	<li><a href="?pagina=definicoes" class="item"><span class="icone-cogs"></span> <span class="item-texto">Definições</span></a></li>';
+						echo ' 	<li><a href="?pagina=definicoes" class="item"><span class="icone-cogs"></span> <span class="item-texto">Definições</span></a>
+		
+									<ul>
+										<li><a href="?pagina=definicoes">Geral</a></li>
+										<li><a href="?pagina=validacao">Validações</a></li>
+									</ul>
+		
+						</li>';
 						
 						echo ' 	<li><a href="?pagina=relatorio" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a>
 									<ul>
@@ -225,7 +231,15 @@ $s->sincronizar();
 								
 								</li>';
 						
-						echo ' 	<li><a href="?pagina=definicoes" class="item"><span class="icone-cogs"></span> <span class="item-texto">Definições</span></a></li>';
+						echo ' 	<li><a href="?pagina=definicoes" class="item"><span class="icone-cogs"></span> <span class="item-texto">Definições</span></a>
+							
+										<ul>
+											<li><a href="?pagina=definicoes">Geral</a></li>
+											<li><a href="?pagina=validacao">Validações</a></li>
+										</ul>
+							
+							
+							</li>';
 						
 						echo ' 	<li><a href="?pagina=relatorio" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a>
 									<ul>
@@ -547,6 +561,9 @@ $s->sincronizar();
 								break;
 							case 'registro_orfao':
 								RegistroOrfaoController::main($sessao->getNivelAcesso());
+								break;
+							case 'validacao' :
+								ValidacaoController::main ( $sessao->getNivelAcesso () );
 								break;
 							default :
 								echo '404 NOT FOUND';

@@ -20,7 +20,7 @@ class SincronizadorController{
 	public function sincronizarSigaa(){
 		
 		$this->daoLocal = new DAO();
-		$this->daoSigaa = new DAO(null, DAO::TIPO_PG_SIGAAA);
+		$this->daoSigaa = new DAO(null, DAO::TIPO_USUARIOS);
 		
 		$this->daoLocal->getConexao()->beginTransaction();
 		if(!$this->daoLocal->getConexao()->exec("DELETE FROM vw_usuarios_catraca")){
@@ -121,7 +121,7 @@ class SincronizadorController{
 			return false;
 		}
 		
-		$this->daoComum = new DAO(null, DAO::TIPO_PG_SISTEMAS_COMUM);
+		$this->daoComum = new DAO(null, DAO::TIPO_AUTENTICACAO);
 		$sqlComum = "SELECT * FROM vw_usuarios_autenticacao_catraca";
 		$result = $this->daoComum->getConexao()->query($sqlComum);
 		$matriz = array();
