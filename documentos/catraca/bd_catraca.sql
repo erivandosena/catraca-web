@@ -71,7 +71,7 @@ isen_inicio timestamp without time zone,
 isen_fim timestamp without time zone, 
 cart_id integer NOT NULL, 
 CONSTRAINT pk_isen_id PRIMARY KEY (isen_id), 
-CONSTRAINT fk_cart_id FOREIGN KEY (cart_id) REFERENCES cartao (cart_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION -- Chave estrangeira da tabela cartao.
+CONSTRAINT fk_cart_id FOREIGN KEY (cart_id) REFERENCES cartao (cart_id) MATCH SIMPLE ON UPDATE NO ACTION ON DELETE NO ACTION 
 );
 CREATE TABLE unidade
 (
@@ -257,14 +257,14 @@ CREATE TABLE vw_usuarios_catraca
 -- Table: validacao
 CREATE TABLE validacao
 (
-  vali_id bigserial NOT NULL, -- Campo autoincremento para chave primaria da tabela.
-  vali_campo character varying(255), -- Campo com a string do nome do campo do status do usuario.
-  vali_valor character varying(255), -- Campo com a string do valor do campo do status do usuario.
-  tipo_id integer NOT NULL, -- Campo da chave primaria (tipo_id) da tabela tipo
-  CONSTRAINT pk_vali_id PRIMARY KEY (vali_id ), -- Chave primaria da tabela validacao.
+  vali_id bigserial NOT NULL, 
+  vali_campo character varying(255), 
+  vali_valor character varying(255), 
+  tipo_id integer NOT NULL, 
+  CONSTRAINT pk_vali_id PRIMARY KEY (vali_id ),
   CONSTRAINT fk_tipo_id FOREIGN KEY (tipo_id)
       REFERENCES tipo (tipo_id) MATCH SIMPLE
-      ON UPDATE NO ACTION ON DELETE NO ACTION -- Chave estrangeira da tabela tipo.
+      ON UPDATE NO ACTION ON DELETE NO ACTION 
 );
 
 
