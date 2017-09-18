@@ -41,7 +41,7 @@ class NotificacaoApp {
 					'body'		=> $mensagem,
 					'title'		=> $titulo,
 					'sound'		=> 'default',
-					'icon'		=> 'ic_notification_round'
+					'icon'		=> 'ic_launcher_round'
 			);
 			
 			$dados = array(

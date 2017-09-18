@@ -81,6 +81,9 @@ class ResumoCompraController{
 							<span class="no-centro texto-azul2 centralizado">Guichê de Atendimento</span>
 							<img class="imagem-responsiva" src="img/Simbolo_da_UNILAB.png" alt="">					
 						</div>
+						
+						<img class="qr_code" src="app/imagens/qrcode_app.jpg">
+
 					</div>
 								
 				';			

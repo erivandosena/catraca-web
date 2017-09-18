@@ -2,7 +2,6 @@
 class UsuarioDAO extends DAO {
 	
 	
-	
 	/**
 	 * Vamos verificar dois bancos. 
 	 * Primeiro no Banco Local. Se ele n�o existir olhamos no SIG. 
@@ -20,8 +19,8 @@ class UsuarioDAO extends DAO {
 		 */
 		
 		
-		$login = $usuario->getLogin ();
-		$senha = md5 ( $usuario->getSenha () );
+		$login = $usuario->getLogin();
+		$senha = md5 ( $usuario->getSenha() );
 		$sql = "SELECT * FROM usuario WHERE usua_login ='$login' AND usua_senha = '$senha' LIMIT 1";
 		
 		foreach ( $this->getConexao ()->query ( $sql ) as $linha ) {
@@ -32,7 +31,7 @@ class UsuarioDAO extends DAO {
 		}
 		//N�o deu. 
 		//Vou verificar na base do SIG. 
-		$result2 = 	$this->getConexao()->query("SELECT * FROM vw_usuarios_autenticacao_catraca WHERE login ='$login' AND senha = '$senha' LIMIT 1");
+		$result2 = 	$this->getConexao()->query("SELECT login, senha, id_usuario FROM vw_usuarios_autenticacao_catraca WHERE LOWER(login) = LOWER('$login') AND senha = '$senha' LIMIT 1");
 		foreach($result2 as $linha){
 			
 			//Se eu to procurando aqui � pq houve algo errado no banco local. 
@@ -40,11 +39,13 @@ class UsuarioDAO extends DAO {
 			//Vamos verificar isso agora. 
 			//Existe esse login?
 			
+			$idBaseExterna = $linha['id_usuario'];
 			//1 Minha senha est� desatualizada no local. -- Nesse caso fazemos update na senha e tentamos autenticar de novo com o Nivel que tenho.
-			$result3 = $this->getConexao()->query("SELECT * FROM usuario WHERE usua_login = '$login' LIMIT 1");
+			$result3 = $this->getConexao()->query("SELECT usua_id, usua_login, usua_senha, id_base_externa FROM usuario WHERE id_base_externa = $idBaseExterna LIMIT 1");
 			foreach($result3 as $outraLinha){
 				//Vamos atualizar sua senha, meu filho. 
-				$this->getConexao()->query("UPDATE usuario set usua_senha = '$senha' WHERE usua_login = '$login'");
+				
+				$this->getConexao()->query("UPDATE usuario set usua_senha = '$senha', set usua_login = '$login' WHERE id_base_externa = $idBaseExterna");
 				//Caso isso aconteceu, podemos logar de novo. Mesmo augoritimo de antes.  Fa�amos recursividade? N�o, � meio arriscado, Vamos repetir mesmo. 
 				foreach ( $this->getConexao ()->query ( $sql ) as $linha2 ) {
 					$usuario->setLogin ( $linha2 ['usua_login'] );
@@ -59,9 +60,9 @@ class UsuarioDAO extends DAO {
 			$nivel = Sessao::NIVEL_COMUM;
 			$nome = $linha['nome'];
 			$email = $linha['email'];
-			$idBaseExterna = $linha['id_usuario'];
+			
 			$this->getConexao()->query("INSERT into usuario(usua_login,usua_senha, usua_nome,usua_email, usua_nivel, id_base_externa) 
-										VALUES				('$login', '$senha', '$nome','$email', $nivel, $idBaseExterna)");
+										VALUES	('$login', '$senha', '$nome','$email', $nivel, $idBaseExterna)");
 			$usuario->setNivelAcesso ( $nivel);
 			return true;
 			

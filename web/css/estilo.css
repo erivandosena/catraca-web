@@ -473,7 +473,7 @@ span#aproxime{
 	opacity: 0.1;
 }
 
-/*Zoom na imagem do usuário*/
+/*Zoom na imagem do usuï¿½rio*/
 
 .zoom {
 	position: relative;
@@ -573,7 +573,7 @@ span#aproxime{
 }
 
 /*
-    Títulos
+    Tï¿½tulos
 */
 .titulo,.titulo-com-borda {
     color:#2E496B !important;
@@ -630,7 +630,7 @@ span#aproxime{
 
 .resumo span{
 	position: absolute;
-	left:20%;
+	left:10%;
 	top: 20%;	
 	font-size: 80px;
 }
@@ -639,6 +639,11 @@ span#aproxime{
 	position: relative;
 	left:35%;
 	opacity: 0.1;
-	height:300px;
+	height:210px;
 	
+}
+
+.qr_code{	
+	float:right;
+	position: relative;	
 }

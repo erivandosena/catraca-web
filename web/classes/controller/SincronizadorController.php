@@ -219,11 +219,9 @@ class SincronizadorController{
 
 
 		if(!$this->sincronizarSigaa()){
-			echo 'Errou no sigaa';
 			return;
 		}
 		if(!$this->sincronizarComum()){
-			echo "Errou no comum";
 			return;
 		}
 		
@@ -235,7 +233,6 @@ class SincronizadorController{
 			
 			return;
 		}
-		echo "Feito";
 		fclose($escrever);
 		
 		

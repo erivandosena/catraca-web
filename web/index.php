@@ -1,24 +1,21 @@
+
 <?php
-date_default_timezone_set ( 'America/Araguaina' );
-ini_set ( 'display_errors', 1 );
-ini_set ( 'display_startup_erros', 1 );
-error_reporting ( E_ALL );
+
+
+
+
+
 function __autoload($classe) {
-	if (file_exists ( 'classes/dao/' . $classe . '.php' )){
+	if (file_exists ( 'classes/dao/' . $classe . '.php' ))
 		include_once 'classes/dao/' . $classe . '.php';
-	}
-	if (file_exists ( 'classes/model/' . $classe . '.php' )){
+	if (file_exists ( 'classes/model/' . $classe . '.php' ))
 		include_once 'classes/model/' . $classe . '.php';
-	}
-	if (file_exists ( 'classes/controller/' . $classe . '.php' )){
+	if (file_exists ( 'classes/controller/' . $classe . '.php' ))
 		include_once 'classes/controller/' . $classe . '.php';
-	}
-	if (file_exists ( 'classes/util/' . $classe . '.php' )){
+	if (file_exists ( 'classes/util/' . $classe . '.php' ))
 		include_once 'classes/util/' . $classe . '.php';
-	}
-	if (file_exists ( 'classes/view/' . $classe . '.php' )){
+	if (file_exists ( 'classes/view/' . $classe . '.php' ))
 		include_once 'classes/view/' . $classe . '.php';
-	}
 }
 
 $sessao = new Sessao ();
@@ -29,8 +26,9 @@ if (isset ( $_GET ["sair"] )) {
 	header ( "Location:./index.php" );
 }
 
-$s = new SincronizadorController ();
-$s->sincronizar ();
+$s = new SincronizadorController();
+$s->sincronizar();
+
 
 ?>
 <!DOCTYPE html>
@@ -46,10 +44,8 @@ $s->sincronizar ();
 <script type="text/javascript" src="js/simpletabs_1.3.js"></script>
 <link rel="stylesheet" href="css/simpletabs.css" />
 <link rel="stylesheet" href="css_spa/spa.css" />
-<link rel="stylesheet" href="css/estilo.css" type="text/css"
-	media="screen">
-<link rel="stylesheet" href="css/estilo_responsivo.css" type="text/css"
-	media="screen">
+<link rel="stylesheet" href="css/estilo.css" type="text/css" media="screen">
+<link rel="stylesheet" href="css/estilo_responsivo.css" type="text/css" media="screen">
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/mostra_troco.js"></script>
 <script type="text/javascript" src="js/modal.js"></script>
@@ -62,22 +58,22 @@ $s->sincronizar ();
 
 
 	<div class="pagina fundo-cinza1">
-
+	
 		<div class="acessibilidade">
 			<div class="config">
 				<div class="a-esquerda">
-					<!-- 					<a href="#conteudo" tabindex="1" accesskey="1">Ir para o conteúdo <b>1</b></a> -->
-					<!-- 					<a href="#menu" tabindex="2" accesskey="2"><span>Ir para o</span> menu <b>2</b></a> -->
-					<!-- 					<a href="#busca" tabindex="3" accesskey="3"><span>Ir para a</span> busca <b>3</b></a> -->
-					<!-- 					<a href="#rodape" tabindex="4" accesskey="4"><span>Ir para o</span> rodapé <b>4</b></a> -->
-				</div>
-				<div class="a-direita">
-					<!-- 					<a href="#" id="alto-contraste">ALTO <b>CONTRASTE</b></a> -->
-					<!-- 					<a href="#" id="mapa-do-site"><b>MAPA DO SITE</b></a> -->
+<!-- 					<a href="#conteudo" tabindex="1" accesskey="1">Ir para o conteúdo <b>1</b></a> -->
+<!-- 					<a href="#menu" tabindex="2" accesskey="2"><span>Ir para o</span> menu <b>2</b></a> -->
+<!-- 					<a href="#busca" tabindex="3" accesskey="3"><span>Ir para a</span> busca <b>3</b></a> -->
+<!-- 					<a href="#rodape" tabindex="4" accesskey="4"><span>Ir para o</span> rodapé <b>4</b></a> -->
+					</div>
+					<div class="a-direita">
+<!-- 					<a href="#" id="alto-contraste">ALTO <b>CONTRASTE</b></a> -->
+<!-- 					<a href="#" id="mapa-do-site"><b>MAPA DO SITE</b></a> -->
 				</div>
 			</div>
 		</div>
-
+	
 		<div id="barra-governo">
 			<div class="resolucao config">
 				<div class="a-esquerda">
@@ -103,7 +99,9 @@ $s->sincronizar ();
 			<div id="topo" class="resolucao config">
 				<div class="tres colunas">
 					<a href="http://www.dti.unilab.edu.br"><img
-						class="imagem-responsiva" src="img/logo_h-site.png" alt=""></a>
+						class="imagem-responsiva"
+						src="img/logo_h-site.png"
+						alt=""></a>
 				</div>
 				<div class="seis colunas centralizado">
 					<h1>
@@ -114,7 +112,8 @@ $s->sincronizar ();
 				<div class="tres colunas alinhado-a-direita">
 					<a href="http://www.unilab.edu.br"><img
 						class="imagem-responsiva centralizada"
-						src="img/logo-unilab-branco.png" alt=""></a>
+						src="img/logo-unilab-branco.png"
+						alt=""></a>
 				</div>
 			</div>
 		</div>
@@ -122,29 +121,34 @@ $s->sincronizar ();
 		
 				
 				<?php
-				function auditar() {
-					$dao = new DAO ();
-					$sessao = new Sessao ();
-					$auditoria = new Auditoria ( $dao->getConexao () );
+				
+				
+				function auditar(){
+					$dao = new DAO();
+					$sessao = new Sessao();
+					$auditoria = new Auditoria($dao->getConexao());
 					
 					$obs = " - ";
-					if (isset ( $_POST ['catraca_virtual'] ) && isset ( $_POST ['catraca_id'] )) {
-						$obs = "Selecionou Catraca virtual: " . $_POST ['catraca_id'];
+					if(isset($_POST['catraca_virtual']) && isset($_POST['catraca_id'])){
+						$obs = "Selecionou Catraca virtual: ".$_POST['catraca_id'];
+							
 					}
 					
-					$auditoria->cadastrar ( $sessao->getIdUsuario (), $obs );
-					$dao->fechaConexao ();
+					$auditoria->cadastrar($sessao->getIdUsuario(), $obs);
+					$dao->fechaConexao();
+					
 				}
 				
-				switch ($sessao->getNivelAcesso ()) {
-					case Sessao::NIVEL_SUPER :
-						
-						auditar ();
+				
+				switch ($sessao->getNivelAcesso()){
+					case Sessao::NIVEL_SUPER:
+					
+						auditar();
 						echo '
 							<div  class="doze colunas barra-menu">
 								    <div class="menu-horizontal config">
 								        <ol class="a-esquerda">';
-						
+							
 						echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
 						echo ' <li><a href="?pagina=catraca" class="item"><span class="icone-loop2"></span> <span class="item-texto">Catraca</span></a></li>';
 						echo '<li><a href="?pagina=cartao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a>
@@ -157,6 +161,7 @@ $s->sincronizar ();
 			
 			
 						</li>';
+						
 						
 						echo '<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a></li>';
 						echo ' <li><a href="?pagina=guiche" class="item"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a>
@@ -182,7 +187,8 @@ $s->sincronizar ();
 									</ul>
 								</li>';
 						echo ' <li><a href="?pagina=nivel_acesso" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Nivel de Acesso</span></a></li>';
-						
+
+							
 						echo '</ol>
 								        <ol class="a-direita" start="4">
 											<li><a href="" class="item"><span class="item-texto">Status: Super</span></a></li>
@@ -192,15 +198,16 @@ $s->sincronizar ();
 								    </div>
 								</div>';
 						break;
-					case Sessao::NIVEL_ADMIN :
-						auditar ();
+					case Sessao::NIVEL_ADMIN:
+						auditar();
 						echo '
 							<div  class="doze colunas barra-menu">
 								    <div class="menu-horizontal config">
 								        <ol class="a-esquerda">';
-						
+						 
 						echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
 						echo ' 	<li><a href="?pagina=catraca" class="item"><span class="icone-loop2"></span> <span class="item-texto">Catraca</span></a></li>';
+						
 						
 						echo '<li><a href="?pagina=cartao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a>
 									<ul>
@@ -249,14 +256,15 @@ $s->sincronizar ();
 								    </div>
 								</div>';
 						break;
-					
-					case Sessao::NIVEL_POLIVALENTE :
-						auditar ();
+
+
+					case Sessao::NIVEL_POLIVALENTE:
+						auditar();
 						echo '
 							<div  class="doze colunas barra-menu">
 								    <div class="menu-horizontal config">
 								        <ol class="a-esquerda">';
-						
+						 
 						echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
 						
 						echo '<li><a href="?pagina=cartao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a>
@@ -289,16 +297,19 @@ $s->sincronizar ();
 								    </div>
 								</div>';
 						break;
+
 					
-					case Sessao::NIVEL_GUICHE :
-						auditar ();
+					case Sessao::NIVEL_GUICHE:
+						auditar();
 						echo '
 							<div  class="doze colunas barra-menu">
 								    <div class="menu-horizontal config">
 								        <ol class="a-esquerda">';
+						 
+						
 						
 						/*
-						 * Como deveria ser.
+						 * Como deveria ser. 
 						 */
 						echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
 						echo '<li><a href="?pagina=cartao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a></li>';
@@ -307,7 +318,7 @@ $s->sincronizar ();
 										<li><a href="?pagina=resumo_compra" target="_blank">Tela de Atendimento</a></li>
 									</ul>
 								</li>';
-						
+
 						echo '</ol>
 								        <ol class="a-direita" start="4">
 											<li><a href="" class="item"><span class="item-texto">Status: Guiche</span></a></li>
@@ -316,20 +327,20 @@ $s->sincronizar ();
 								    </div>
 								</div>';
 						break;
-					case Sessao::NIVEL_CATRACA_VIRTUAL :
-						
-						auditar ();
+					case Sessao::NIVEL_CATRACA_VIRTUAL:
+					
+						auditar();
 						echo '
 						<div  class="doze colunas barra-menu">
 							    <div class="menu-horizontal config">
 							        <ol class="a-esquerda">';
-						
+							
 						echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
 						echo '<li><a href="?pagina=cartao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a></li>';
 						
 						echo '<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a></li>';
 						echo ' <li><a href="?pagina=relatorio" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a></li>';
-						
+					
 						echo '</ol>
 							        <ol class="a-direita" start="4">
 										<li><a href="" class="item"><span class="item-texto">Status: Catraca Virtual</span></a></li>
@@ -338,18 +349,18 @@ $s->sincronizar ();
 							    </div>
 							</div>';
 						break;
-					case Sessao::NIVEL_CATRACA_VIRTUAL_ORFA :
-						auditar ();
+					case Sessao::NIVEL_CATRACA_VIRTUAL_ORFA:
+						auditar();
 						echo '
 						<div  class="doze colunas barra-menu">
 							    <div class="menu-horizontal config">
 							        <ol class="a-esquerda">';
-						
+							
 						echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
 						
 						echo '<li><a href="?pagina=registro_orfao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual Órfã</span></a></li>';
 						echo ' <li><a href="?pagina=relatorio" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a></li>';
-						
+							
 						echo '</ol>
 							        <ol class="a-direita" start="4">
 										<li><a href="" class="item"><span class="item-texto">Status: Catraca Órfã</span></a></li>
@@ -359,17 +370,18 @@ $s->sincronizar ();
 							</div>';
 						
 						break;
-					case Sessao::NIVEL_CADASTRO :
-						
-						auditar ();
+					case Sessao::NIVEL_CADASTRO:
+							
+						auditar();
 						echo '
 					<div  class="doze colunas barra-menu">
 						    <div class="menu-horizontal config">
 						        <ol class="a-esquerda">';
-						
+							
 						echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
 						echo '<li><a href="?pagina=cartao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a></li>';
-						
+
+							
 						echo '</ol>
 						        <ol class="a-direita" start="4">
 									<li><a href="" class="item"><span class="item-texto">Status: Cadastro</span></a></li>
@@ -378,55 +390,58 @@ $s->sincronizar ();
 						    </div>
 						</div>';
 						break;
-					
-					case Sessao::NIVEL_CATRACA_VIRTUAL :
 						
-						auditar ();
-						echo '
+						case Sessao::NIVEL_CATRACA_VIRTUAL:
+								
+							auditar();
+							echo '
 						<div  class="doze colunas barra-menu">
 							    <div class="menu-horizontal config">
 							        <ol class="a-esquerda">';
-						
-						echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
-						echo ' <li><a href="?pagina=catraca" class="item"><span class="icone-loop2"></span> <span class="item-texto">Catraca</span></a></li>';
-						echo '<li><a href="?pagina=cartao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a></li>';
-						echo '<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a></li>';
-						echo ' <li><a href="?pagina=relatorio" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a></li>';
-						
-						echo '</ol>
+								
+							echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
+							echo ' <li><a href="?pagina=catraca" class="item"><span class="icone-loop2"></span> <span class="item-texto">Catraca</span></a></li>';
+							echo '<li><a href="?pagina=cartao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a></li>';
+							echo '<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a></li>';
+							echo ' <li><a href="?pagina=relatorio" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a></li>';
+								
+							echo '</ol>
 							        <ol class="a-direita" start="4">
 										<li><a href="" class="item"><span class="item-texto">Status: Catraca Virtual</span></a></li>
 							            <li><a href="?sair=sair" class="item"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
 							        </ol>
 							    </div>
 							</div>';
-						break;
-					case Sessao::NIVEL_RELATORIO :
-						
-						auditar ();
-						echo '
+							break;
+						case Sessao::NIVEL_RELATORIO:
+								
+							auditar();
+							echo '
 								<div  class="doze colunas barra-menu">
 									    <div class="menu-horizontal config">
 									        <ol class="a-esquerda">';
-						
-						echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
-						echo ' <li><a href="?pagina=relatorio" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a></li>';
-						
-						echo '</ol>
+								
+							echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
+							echo ' <li><a href="?pagina=relatorio" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a></li>';
+							
+								
+							echo '</ol>
 						        <ol class="a-direita" start="4">
 									<li><a href="" class="item"><span class="item-texto">Status: Relatorio</span></a></li>
 						            <li><a href="?sair=sair" class="item"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
 						        </ol>
 						    </div>
 						</div>';
-						break;
-					
-					case Sessao::NIVEL_COMUM :
-						auditar ();
+							break;
+							
+					case Sessao::NIVEL_COMUM:
+						auditar();
 						echo '
 							<div  class="doze colunas barra-menu">
 								    <div class="menu-horizontal config">
 								        <ol class="a-esquerda">';
+							
+						
 						
 						/*
 						 * Como deveria ser.
@@ -442,11 +457,14 @@ $s->sincronizar ();
 								    </div>
 								</div>';
 						break;
-					default :
+					default:
 						break;
+						
 				}
-				
-				?>
+					
+					
+					
+					?>
 				
 			
 
@@ -454,6 +472,7 @@ $s->sincronizar ();
 			<div class="resolucao config">					
 						
 					<?php
+
 					
 					if (isset ( $_GET ['pagina'] )) {
 						switch ($_GET ['pagina']) {
@@ -463,9 +482,10 @@ $s->sincronizar ();
 							case 'catraca' :
 								
 								$filtroIdCatraca = "";
-								if (isset ( $_GET ['unidade'] )) {
-									$filtroIdCatraca = "unidade=" . $_GET ['unidade'];
-								} else if (isset ( $_GET ['completo'] )) {
+								if(isset($_GET['unidade'])){
+									$filtroIdCatraca = "unidade=".$_GET['unidade'];
+								}
+								else if(isset($_GET['completo'])){
 									$filtroIdCatraca = "completo=1";
 								}
 								echo '
@@ -474,7 +494,7 @@ $s->sincronizar ();
 											var auto_refresh = setInterval (
 												function () {
 													$.ajax({
-														url: \'catracas.php?' . $filtroIdCatraca . '\',
+														url: \'catracas.php?'.$filtroIdCatraca.'\',
 														success: function (response) {
 														$(\'#olinda\').html(response);
 													}
@@ -482,61 +502,61 @@ $s->sincronizar ();
 											}, 1000);
 										</script>
 								';
-								CatracaController::main ( $sessao->getNivelAcesso () );
+								CatracaController::main($sessao->getNivelAcesso());
 								break;
 							case 'cartao' :
 								CartaoController::main ( $sessao->getNivelAcesso () );
 								break;
 							case 'gerador' :
-								CatracaVirtualController::main ( $sessao->getNivelAcesso () );
+								CatracaVirtualController::main($sessao->getNivelAcesso());
 								break;
 							case 'relatorio' :
-								RelatorioController::main ( $sessao->getNivelAcesso () );
+								RelatorioController::main($sessao->getNivelAcesso());
 								break;
 							case 'guiche' :
-								GuicheController::main ( $sessao->getNivelAcesso () );
+								GuicheController::main($sessao->getNivelAcesso());
 								break;
 							case 'definicoes' :
-								DefinicoesController::main ( $sessao->getNivelAcesso () );
+								DefinicoesController::main($sessao->getNivelAcesso());
 								break;
 							case 'nivel_acesso' :
-								NivelAcessoController::main ( $sessao->getNivelAcesso () );
+								NivelAcessoController::main($sessao->getNivelAcesso());
 								break;
 							case 'avulso' :
-								CartaoAvulsoController::main ( $sessao->getNivelAcesso () );
+								CartaoAvulsoController::main($sessao->getNivelAcesso());
 								break;
 							case 'isento' :
-								CartaoIsentoController::main ( $sessao->getNivelAcesso () );
+								CartaoIsentoController::main($sessao->getNivelAcesso());
 								break;
 							case 'relatorio_guiche' :
-								RelatorioControllerGuiche::main ( $sessao->getNivelAcesso () );
+								RelatorioControllerGuiche::main($sessao->getNivelAcesso());
 								break;
 							case 'info' :
-								InfoController::main ( $sessao->getNivelAcesso () );
+								InfoController::main($sessao->getNivelAcesso());
 								break;
 							case 'identificador' :
-								IdentificadorClienteController::main ( $sessao->getNivelAcesso () );
+								IdentificadorClienteController::main($sessao->getNivelAcesso());
 								break;
-							case 'auditoria' :
-								AuditoriaController::main ( $sessao->getNivelAcesso () );
+							case 'auditoria':
+								AuditoriaController::main($sessao->getNivelAcesso());
 								break;
-							case 'pessoal' :
-								PessoalController::main ( $sessao->getNivelAcesso () );
+							case 'pessoal':
+								PessoalController::main($sessao->getNivelAcesso());
 								break;
 							case 'resumo_compra' :
-								ResumoCompraController::main ( $sessao->getNivelAcesso () );
+								ResumoCompraController::main($sessao->getNivelAcesso());
 								break;
-							case 'importar_csv' :
-								ImportarCSVController::main ( $sessao->getNivelAcesso () );
+							case 'importar_csv':
+								ImportarCSVController::main($sessao->getNivelAcesso());
 								break;
-							case 'relatorio_turno' :
-								RelatorioTurnoController::main ( $sessao->getNivelAcesso () );
+							case 'relatorio_turno':
+								RelatorioTurnoController::main($sessao->getNivelAcesso());
 								break;
-							case 'relatorio_registro' :
-								RelatorioRegistroController::main ( $sessao->getNivelAcesso (), $sessao->getIdUsuario () );
+							case 'relatorio_registro':
+								RelatorioRegistroController::main($sessao->getNivelAcesso(), $sessao->getIdUsuario());
 								break;
-							case 'registro_orfao' :
-								RegistroOrfaoController::main ( $sessao->getNivelAcesso () );
+							case 'registro_orfao':
+								RegistroOrfaoController::main($sessao->getNivelAcesso());
 								break;
 							case 'validacao' :
 								ValidacaoController::main ( $sessao->getNivelAcesso () );
@@ -553,7 +573,7 @@ $s->sincronizar ();
 					?>
 										
 			</div>
-			<script type="text/javascript">
+ 			<script type="text/javascript">
         	var img;
 
         	navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
@@ -607,7 +627,7 @@ $s->sincronizar ();
 	       
 
         </script>
-		</div>
+		</div>		
 	</div>
 </body>
 </html>
