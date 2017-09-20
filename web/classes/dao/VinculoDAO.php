@@ -42,7 +42,16 @@ class VinculoDAO extends DAO {
 				LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
 				LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id WHERE (usuario.id_base_externa = $idUsuario)
 				AND ('$dataTimeAtual' BETWEEN vinc_inicio AND vinc_fim)";
-		$result = $this->getConexao ()->query ($sql );
+
+		try{
+			$stmt = $this->getConexao()->prepare($sql);
+			$stmt->execute();
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+			
+		}catch (PDOException $e){
+			echo '{"erro":{"text":'. $e->getMessage() .'}}';
+		}
 		foreach($result as $linha){
 			$vinculo = new Vinculo();
 			$vinculo->setResponsavel($usuario);
@@ -75,8 +84,18 @@ class VinculoDAO extends DAO {
 		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
 		LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id WHERE (usuario.id_base_externa = $idUsuario)
 		AND ('$dataTimeAtual' > vinc_fim)";
-		$result = $this->getConexao ()->query ($sql );
-	
+		
+		try{
+			$stmt = $this->getConexao()->prepare($sql);
+			$stmt->execute();
+			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+		
+				
+		}catch (PDOException $e){
+			echo '{"erro":{"text":'. $e->getMessage() .'}}';
+		}
+		
+		
 		foreach($result as $linha){
 			$vinculo = new Vinculo();
 			$vinculo->setResponsavel($usuario);
@@ -226,6 +245,7 @@ class VinculoDAO extends DAO {
 			$vinculo->getResponsavel()->setIdBaseExterna($linha['id_base_externa']);
 			$vinculo->getCartao()->setId($linha['cart_id']);
 			$vinculo->getCartao()->getTipo()->setNome($linha ['tipo_nome']);
+			$vinculo->getCartao()->getTipo()->setId($linha ['tipo_id']);
 			$vinculo->getCartao()->setNumero($linha ['cart_numero']);
 			$vinculo->getCartao()->setCreditos($linha['cart_creditos']);
 			$vinculo->setInicioValidade($linha ['vinc_inicio']);
