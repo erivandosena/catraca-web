@@ -8,9 +8,10 @@ class Cartao{
 	
 	
 	
-	public function Cartao(){
+	public function __construct(){
 		$this->tipo = new Tipo();
 		$this->creditos = 0;
+		$this->id = 0;
 	}
 	
 	public function setId($id){

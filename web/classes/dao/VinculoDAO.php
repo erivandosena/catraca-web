@@ -623,7 +623,7 @@ class VinculoDAO extends DAO {
 		}
 		return $lista;
 	}
-	
+
 	public function buscaVinculos($dataReferencia = null, $nomeUsuario = null){
 		
 		$lista = array();
@@ -665,8 +665,39 @@ class VinculoDAO extends DAO {
 		return $lista;
 		
 	}
-	
-	
+	/**
+	 * Atribui um vinculo ao cartão através do número. 
+	 * 
+	 * @param Cartao $cartao
+	 */
+	public function vinculoDoCartao(Cartao $cartao){
+		$dataTimeAtual = date ( "Y-m-d G:i:s" );
+		$numeroCartao = $cartao->getNumero();
+		$sqlVerificaNumero = "SELECT * FROM usuario
+		INNER JOIN vinculo ON vinculo.usua_id = usuario.usua_id
+		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
+		LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id
+		WHERE cartao.cart_numero = '$numeroCartao'";
+		$result = $dao->getConexao()->query($sqlVerificaNumero);
+		$vinculo = new Vinculo();
+		foreach($result as $linha){
+			$vinculo->setId($linha['vinc_id']);
+			$vinculo->setCartao($cartao);
+			$vinculo->getCartao()->getTipo()->setNome($linha['tipo_nome']);
+			$vinculo->getResponsavel()->setNome($linha['usua_nome']);
+			$vinculo->getResponsavel()->setIdBaseExterna($linha['id_base_externa']);
+			$vinculo->getCartao()->setId($linha['cart_id']);
+			$vinculo->setAvulso($linha['vinc_avulso']);
+			if($linha['vinc_avulso'])
+			{
+				$usuario->setNome("Avulso");
+			}
+			break;
+		}
+		return $vinculo;
+		
+	}
+
 	
 }
 
