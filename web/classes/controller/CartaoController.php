@@ -171,19 +171,9 @@ class CartaoController{
 			
 			$idDoSelecionado = $_GET['selecionado'];
 			
-			$conectouSigaa = true;
-			try{
-
-				$usuarioDao = new UsuarioDAO(null, DAO::TIPO_USUARIOS);
-					
-			}catch (Exception $e){
-				$conectouSigaa = false;
-				echo '{"erro":{"text":'. $e->getMessage() .'}}';
-			}
-			if(!$conectouSigaa){
-				$usuarioDao = new UsuarioDAO();
-			}
 			
+			$usuarioDao = new UsuarioDAO();
+						
 			
 			$usuario = new Usuario();
 			$usuario->setIdBaseExterna($idDoSelecionado);
@@ -331,18 +321,8 @@ class CartaoController{
 								$this->view->formMensagem("-erro", "O numero do cartão digitado já possui vinculo, utilize outro cartão.");								
 								return;
 							}
-							$conectouSigaa = true;
-							try{
 							
-								$daoAutenticacao = new UsuarioDAO(null, DAO::TIPO_AUTENTICACAO);
-									
-							}catch (Exception $e){
-								$conectouSigaa = false;
-								echo '{"erro":{"text":'. $e->getMessage() .'}}';
-							}
-							if(!$conectouSigaa){
-								$daoAutenticacao = $vinculoDao;
-							}
+							$daoAutenticacao = new UsuarioDAO();
 							
 							$vinculoDao->verificarUsuario($vinculo->getResponsavel(), $daoAutenticacao->getConexao());
 							
@@ -390,19 +370,9 @@ class CartaoController{
 
 		if (isset ( $_GET ['nome'] )) {
 			$mensagem = "";
-			$conectouSigaa = true;
-			try{
-				$mensagem = "(Base Original do SIGAA)";
-				$usuarioDao = new UsuarioDAO(null, DAO::TIPO_USUARIOS);
-					
-			}catch (Exception $e){
-				$conectouSigaa = false;
-				$mensagem = "(SIGAA Falhou, esta é a Base Local)";
-				echo '{"erro":{"text":'. $e->getMessage() .'}}';
-			}
-			if(!$conectouSigaa){
-				$usuarioDao = new UsuarioDAO();
-			}
+			
+			$usuarioDao = new UsuarioDAO();
+			
 			$listaDeUsuarios = $usuarioDao->pesquisaNoSigaa( $_GET ['nome']);
 			
 			$this->view->mostraResultadoBuscaDeUsuarios($listaDeUsuarios, $mensagem);
@@ -426,11 +396,6 @@ class CartaoController{
 		}
 		return false;
 	}
-	const ID_STATUS_DISCENTE_ATIVO = 1;
-	const ID_STATUS_DISCENTE_CADASTRADO = 3;
-	const ID_STATUS_DISCENTE_FORMADO = 9;
-	const ID_STATUS_DISCENTE_CONCLUIDO = 3;//
-
 
 	
 }

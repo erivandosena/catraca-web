@@ -18,8 +18,8 @@ class DAO {
 	const TIPO_AUTENTICACAO = 2;
 	const TIPO_USUARIOS = 3;
 	const TIPO_USUARIOS_SECUNDARIO = 4;
-	
 	const TIPO_DEFAULT = self::TIPO_CATRACA;
+	
 	protected $conexao;
 	private $tipoDeConexao;
 	private $sgbb;
