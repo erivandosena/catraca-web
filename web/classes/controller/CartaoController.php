@@ -396,6 +396,11 @@ class CartaoController{
 		}
 		return false;
 	}
+	const ID_STATUS_DISCENTE_ATIVO = 1;
+	const ID_STATUS_DISCENTE_CADASTRADO = 3;
+	const ID_STATUS_DISCENTE_FORMADO = 9;
+	const ID_STATUS_DISCENTE_CONCLUIDO = 3;//
+
 
 	
 }
