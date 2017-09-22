@@ -194,39 +194,41 @@ class SincronizadorController{
 
 
 	
-	public function sincronizar(){
+	public function sincronizar($nomeArquivo = self::ARQUIVO){
 		
-		
-		if(!file_exists(self::ARQUIVO)){
-			mkdir("config");
-			$fp = fopen(self::ARQUIVO, "a");
-			
+		if(!file_exists($nomeArquivo)){
+			if(!file_exists("config")){
+				mkdir("config");				
+			}
+			$fp = fopen($nomeArquivo, "a");
 			fwrite($fp, "ultima_atualizacao = 2017-04-25 11:35:00");
 			fclose($fp);
 			return;
 		}
 			
-		$config = parse_ini_file ( self::ARQUIVO );
+		$config = parse_ini_file ( $nomeArquivo );
 		$dataDaUltimaAtualizacao = $config ['ultima_atualizacao'];
 		$dataDaUltimaAtualizacao = date ( "d/m/Y", strtotime ( $dataDaUltimaAtualizacao ) );
 		$hoje = date ( "d/m/Y" );
 		if ($dataDaUltimaAtualizacao == $hoje) {
 			return;
 		}
-		if (! is_writable ( self::ARQUIVO )) {
+		if (! is_writable ($nomeArquivo)) {
 			return;
 		}
 
 
 		if(!$this->sincronizarSigaa()){
+			echo "Erro em Sincronizacao!";
 			return;
 		}
 		if(!$this->sincronizarComum()){
+			echo "Erro em Sincronizacao 2!";
 			return;
 		}
 		
 		
-		$escrever = fopen(self::ARQUIVO, "w");
+		$escrever = fopen($nomeArquivo, "w");
 		
 		$hoje = date ( "Y-m-d G:i:s" );
 		if(!fwrite($escrever, "ultima_atualizacao = ".$hoje)){
