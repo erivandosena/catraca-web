@@ -217,13 +217,10 @@ class SincronizadorController{
 			return;
 		}
 
-
 		if(!$this->sincronizarSigaa()){
-			echo "Erro em Sincronizacao!";
 			return;
 		}
 		if(!$this->sincronizarComum()){
-			echo "Erro em Sincronizacao 2!";
 			return;
 		}
 		

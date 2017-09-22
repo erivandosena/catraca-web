@@ -68,6 +68,7 @@ class Sincronizador {
 				"email" => "email",
 				"login" => "login",
 				
+				
 				// Documentos
 				"identidade" => "identidade",
 				
@@ -181,16 +182,39 @@ class Sincronizador {
 	/**
 	 * Metodo que faz uso da classe.
 	 */
-	public static function main() {
-		if (self::jaTenteiAtualizar ()) {
+	public static function main($nomeArquivo = self::ARQUIVO) {
+		
+		if(!file_exists($nomeArquivo)){
+			if(!file_exists("config")){
+				mkdir("config");
+			}
+			$fp = fopen($nomeArquivo, "a");
+			fwrite($fp, "ultima_atualizacao = 2017-04-25 11:35:00");
+			fclose($fp);
+		}
+		$config = parse_ini_file ( $nomeArquivo );
+		$dataDaUltimaAtualizacao = $config ['ultima_atualizacao'];
+		$dataDaUltimaAtualizacao = date ( "d/m/Y", strtotime ( $dataDaUltimaAtualizacao ) );
+		$hoje = date ( "d/m/Y" );
+		if ($dataDaUltimaAtualizacao == $hoje) {
+			return;
+		}
+		if (! is_writable ($nomeArquivo)) {
 			return;
 		}
 		
 // 		self::sincronizaAlunos1();
 // 		self::sincronizaAlunos2();
 // 		self::sincronizaFuncionarios1();
-		self::sincronizaFuncionarios2();
+// 		self::sincronizaFuncionarios2();
 
+		$escrever = fopen($nomeArquivo, "w");
+		
+		$hoje = date ( "Y-m-d G:i:s" );
+		if(!fwrite($escrever, "ultima_atualizacao = ".$hoje)){
+			return;
+		}
+		fclose($escrever);
 		
 	}
 	public function limparDestino() {
@@ -272,15 +296,22 @@ class Sincronizador {
 		echo "Sucesso, inseri $k elementos $f falhas!!!!";
 		return true;
 	}
-	public static function jaTenteiAtualizar() {
-		if (! file_exists ( self::ARQUIVO )) {
-			$fp = fopen ( self::ARQUIVO, "a" );
-			fwrite ( $fp, "ultima_atualizacao = 2017-04-25 11:35:00" );
-			fclose ( $fp );
+	public static function jaTenteiAtualizar($nomeArquivo = self::ARQUIVO) {
+		$hoje = date ( "Y-m-d G:i:s" );
+		
+		if(!file_exists($nomeArquivo)){
+			if(!file_exists("config")){
+				mkdir("config");				
+			}
+			$fp = fopen($nomeArquivo, "a");
+			fwrite($fp,  "ultima_atualizacao = " . $hoje);
+			fclose($fp);
+			return false;
 		}
+		
 		$config = parse_ini_file ( self::ARQUIVO );
 		$dataDaUltimaAtualizacao = $config ['ultima_atualizacao'];
-		$hoje = date ( "Y-m-d G:i:s" );
+		
 		if ($dataDaUltimaAtualizacao == $hoje) {
 			return true;
 		}
@@ -296,7 +327,7 @@ class Sincronizador {
 		fclose ( $escrever );
 		return false;
 	}
-	const ARQUIVO = "/dados/sites/adm/catraca/config/ultima_sincronizacao.ini";
+	const ARQUIVO = "config/ultima_sincronizacao.ini";
 }
 
 ?>
