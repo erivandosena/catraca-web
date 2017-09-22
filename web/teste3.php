@@ -27,32 +27,11 @@ function __autoload($classe) {
 
 $dao = new DAO();
 
-$sql = "SELECT * FROM usuario WHERE usua_nivel <> 1";
+echo $dao->getConexao()->exec("UPDATE usuario set usua_nivel = 3 WHERE usua_login like 'jefponte'");
 
-foreach($dao->getConexao()->query($sql) as $linha){
-
-	echo $linha['usua_id'].$linha['usua_nome'].'<br>';
-
-}
-
-
-
-
-
-echo "<hr>";
-
-
-
-$sql = "SELECT auditoria.* FROM auditoria 
-INNER JOIN usuario 
-ON usuario.usua_id = auditoria.usua_id
-WHERE usuario.usua_id = 609
- LIMIT 100";
-
-foreach($dao->getConexao()->query($sql) as $linha){
-
+$result = $dao->getConexao()->query("SELECT * FROM usuario WHERE usua_login like 'jefponte'");
+foreach($result as $linha){
+	
 	print_r($linha);
-	echo "<br>";
-
+	
 }
-
