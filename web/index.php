@@ -12,16 +12,21 @@ define ( "VERSAO_SINCRONIZADOR", $config ['versao_sincronizador'] );
 
 
 function __autoload($classe) {
-	if (file_exists ( 'classes/dao/' . $classe . '.php' ))
+	if (file_exists ( 'classes/dao/' . $classe . '.php' )){
 		include_once 'classes/dao/' . $classe . '.php';
-	if (file_exists ( 'classes/model/' . $classe . '.php' ))
+	}
+	else if (file_exists ( 'classes/model/' . $classe . '.php' )){
 		include_once 'classes/model/' . $classe . '.php';
-	if (file_exists ( 'classes/controller/' . $classe . '.php' ))
+	}
+	else if (file_exists ( 'classes/controller/' . $classe . '.php' )){
 		include_once 'classes/controller/' . $classe . '.php';
-	if (file_exists ( 'classes/util/' . $classe . '.php' ))
+	}
+	else if (file_exists ( 'classes/util/' . $classe . '.php' )){
 		include_once 'classes/util/' . $classe . '.php';
-	if (file_exists ( 'classes/view/' . $classe . '.php' ))
+	}
+	else if (file_exists ( 'classes/view/' . $classe . '.php' )){
 		include_once 'classes/view/' . $classe . '.php';
+	}
 }
 
 $sessao = new Sessao ();
@@ -33,8 +38,9 @@ if (isset ( $_GET ["sair"] )) {
 if (VERSAO_SINCRONIZADOR == 1) {
 	$s = new SincronizadorController ();
 	$s->sincronizar ();
-} else {
-	// Aqui faremos sincronizacao se for o da UECE.
+} else if (VERSAO_SINCRONIZADOR == 2){
+	//VErsão 2 do sincronizador
+	Sincronizador::main();
 }
 
 ?>

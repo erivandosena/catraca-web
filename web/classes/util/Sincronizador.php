@@ -185,7 +185,7 @@ class Sincronizador {
 		if (self::jaTenteiAtualizar ()) {
 			return;
 		}
-		echo "Vamos ao primeiro";
+		
 // 		self::sincronizaAlunos1();
 // 		self::sincronizaAlunos2();
 // 		self::sincronizaFuncionarios1();
