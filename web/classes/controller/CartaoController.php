@@ -171,18 +171,8 @@ class CartaoController{
 			
 			$idDoSelecionado = $_GET['selecionado'];
 			
-			$conectouSigaa = true;
-			try{
-
-				$usuarioDao = new UsuarioDAO(null, DAO::TIPO_USUARIOS);
-					
-			}catch (Exception $e){
-				$conectouSigaa = false;
-				echo '{"erro":{"text":'. $e->getMessage() .'}}';
-			}
-			if(!$conectouSigaa){
-				$usuarioDao = new UsuarioDAO();
-			}
+			$usuarioDao = new UsuarioDAO();
+			
 			
 			
 			$usuario = new Usuario();
@@ -331,18 +321,7 @@ class CartaoController{
 								$this->view->formMensagem("-erro", "O numero do cartão digitado já possui vinculo, utilize outro cartão.");								
 								return;
 							}
-							$conectouSigaa = true;
-							try{
-							
-								$daoAutenticacao = new UsuarioDAO(null, DAO::TIPO_AUTENTICACAO);
-									
-							}catch (Exception $e){
-								$conectouSigaa = false;
-								echo '{"erro":{"text":'. $e->getMessage() .'}}';
-							}
-							if(!$conectouSigaa){
-								$daoAutenticacao = $vinculoDao;
-							}
+							$daoAutenticacao = new UsuarioDAO();
 							
 							$vinculoDao->verificarUsuario($vinculo->getResponsavel(), $daoAutenticacao->getConexao());
 							
@@ -390,19 +369,9 @@ class CartaoController{
 
 		if (isset ( $_GET ['nome'] )) {
 			$mensagem = "";
-			$conectouSigaa = true;
-			try{
-				$mensagem = "(Base Original do SIGAA)";
-				$usuarioDao = new UsuarioDAO(null, DAO::TIPO_USUARIOS);
-					
-			}catch (Exception $e){
-				$conectouSigaa = false;
-				$mensagem = "(SIGAA Falhou, esta é a Base Local)";
-				echo '{"erro":{"text":'. $e->getMessage() .'}}';
-			}
-			if(!$conectouSigaa){
-				$usuarioDao = new UsuarioDAO();
-			}
+			
+			$usuarioDao = new UsuarioDAO();
+			
 			$listaDeUsuarios = $usuarioDao->pesquisaNoSigaa( $_GET ['nome']);
 			
 			$this->view->mostraResultadoBuscaDeUsuarios($listaDeUsuarios, $mensagem);
