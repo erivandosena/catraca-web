@@ -3,9 +3,7 @@ class UsuarioView {
 	public function mostraFormularioLogin($erro = false, $msg_erro = "") {
 		echo '<div class="fundo-cinza1">
      <div class="duas colunas no-meio">
-            <div class="no-centro">
-                <h1>Catraca</h1>
-            </div>
+            
             <div class="linha fundo-branco com-bordas">
                 <div class="conteudo">';
 		

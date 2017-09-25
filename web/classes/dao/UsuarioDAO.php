@@ -2,6 +2,21 @@
 class UsuarioDAO extends DAO {
 	
 	
+	
+	
+	/**
+	 * Vamos autenticar usando LDAP. 
+	 * Caso usuário exista, nós pegamos seu CPF no LDAP e o buscamos na tabela usuário. Para posterior criação da sessão. 
+	 * Caso não exista na tabela usuario, significa que é o primeiro login, copiamos da tabela cash. Vw_usuarios_catraca com nivel de acesso padrao. 
+	 * Caso nem exista na tabela vw_usuarios_catraca, significa uma inconsistência e retornemos falso, login não poderá ser feito.  
+	 * 
+	 * @param Usuario $usuario
+	 * 
+	 */
+	public function autenticaLdap(Usuario $usuario){
+		
+	}
+	
 	/**
 	 * Vamos verificar dois bancos. 
 	 * Primeiro no Banco Local. Se ele n�o existir olhamos no SIG. 
