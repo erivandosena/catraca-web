@@ -40,7 +40,6 @@ if (VERSAO_SINCRONIZADOR == 1) {
 	$s->sincronizar ();
 } else if (VERSAO_SINCRONIZADOR == 2){
 	//VErsão 2 do sincronizador
-	echo "Eu deveria entrar aqui";
 	Sincronizador::main();
 }
 
