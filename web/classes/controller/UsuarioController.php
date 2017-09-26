@@ -6,12 +6,12 @@
 
 class UsuarioController{
 	
-	public static function main($nivelDeAcesso){
+	public static function main($nivelDeAcesso, $loginComLdap = false){
 		switch ($nivelDeAcesso){
 
 			case Sessao::NIVEL_DESLOGADO:
 				$usuarioController = new UsuarioController();
-				$usuarioController->telaLogin();
+				$usuarioController->telaLogin($loginComLdap);
 				break;
 			default:
 				$sessao = new Sessao();
@@ -58,7 +58,7 @@ class UsuarioController{
 			$usuario->setLogin($_POST['login']);
 			$usuario->setSenha($_POST['senha']);
 			if($loginComLdap){
-				if(autenticaLdap($usuario)){
+				if($usuarioDAO->autenticaLdap($usuario)){
 					$sessao2 = new Sessao();
 					$sessao2->criaSessao($usuario->getId(), $usuario->getNivelAcesso(), $usuario->getLogin());
 					echo '<meta http-equiv="refresh" content=1;url="./index.php">';

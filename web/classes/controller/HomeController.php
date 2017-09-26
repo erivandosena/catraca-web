@@ -10,7 +10,7 @@
 
 class HomeController{
 	
-	public static function main($nivelDeAcesso){
+	public static function main($nivelDeAcesso, $loginComLdap = false){
 		switch ($nivelDeAcesso){
 			case Sessao::NIVEL_SUPER:
 				//Acessa tudo. 
@@ -46,7 +46,7 @@ class HomeController{
 				RegistroOrfaoController::main($nivelDeAcesso);
 				break;
 			default:
-				UsuarioController::main ( $nivelDeAcesso );
+				UsuarioController::main ( $nivelDeAcesso, $loginComLdap );
 				break;
 		}
 		

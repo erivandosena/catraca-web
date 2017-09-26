@@ -57,9 +57,9 @@ class Usuario{
 	public function setSenha($senha){
 		$this->senha = $senha;
 	}
-        public function getSenha(){
+    public function getSenha(){
             return $this->senha;
-        }
+    }
 	public function setNivelAcesso($nivelAcesso){
 		$nivelAcesso = intval ( $nivelAcesso) ;
 		if(is_int($nivelAcesso))

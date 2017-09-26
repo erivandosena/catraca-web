@@ -3,6 +3,64 @@ class UsuarioDAO extends DAO {
 	
 	
 	
+	public function loginExisteLdap($login) {
+		
+		$ldap_server = "200.129.22.43:3268";
+		$auth_user = "consulta.base@testes.funece.br";
+		$auth_pass = "AlguemSabe@senha7";
+		
+		// Tenta se conectar com o servidor
+		if (! ($connect = @ldap_connect ( $ldap_server ))) {
+			return FALSE;
+		}
+		// Tenta autenticar no servidor
+		if (! ($bind = @ldap_bind ( $connect, $auth_user, $auth_pass ))) {
+			return FALSE;
+		} else {
+			$result = ldap_search($connect,"dc=testes,dc=funece,dc=br", "(sAMAccountName=$login)") or die ("Error in search query: ".ldap_error($connect));
+			$data = ldap_get_entries($connect, $result);
+			if(!isset($data[0]['employeenumber'])){
+				return false;
+			}
+			if($data[0]['employeenumber'][0]){
+				return true;
+			}
+			return false;
+		}
+		
+	}
+	public function logarLdap(Usuario $usuario){
+		$ldap_server = "200.129.22.43:3268";
+		$auth_user = $usuario->getLogin()."@testes.funece.br";
+		$auth_pass = $usuario->getSenha();
+		$login = $usuario->getLogin();
+		
+		
+		// Tenta se conectar com o servidor
+		if (! ($connect = @ldap_connect ( $ldap_server ))) {
+			return FALSE;
+		}
+		// Tenta autenticar no servidor
+		if (! ($bind = @ldap_bind ( $connect, $auth_user, $auth_pass ))) {
+			return FALSE;
+		} else {
+			$result = ldap_search($connect,"dc=testes,dc=funece,dc=br", "(sAMAccountName=$login)") or die ("Error in search query: ".ldap_error($connect));
+			$data = ldap_get_entries($connect, $result);
+			print_r($data);
+			/*
+			if($data[0]['employeenumber'][0]){
+				if(!isset($data[0]['employeenumber'])){
+					return false;
+				}
+				$usuario->setId($data[0]['employeenumber'][0]);
+				$usuario->setCpf($data[0]['employeenumber'][0]);
+				return true;
+			}
+			*/
+			return true;
+		}
+	}
+	
 	
 	/**
 	 * Vamos autenticar usando LDAP. 
@@ -14,7 +72,29 @@ class UsuarioDAO extends DAO {
 	 * 
 	 */
 	public function autenticaLdap(Usuario $usuario){
+		if(!$this->loginExisteLdap($usuario->getLogin())){
+			echo "Usuario não existe no LDAP<br>";
+			return false;
+		}
 		
+		if(!$this->logarLdap($usuario)){
+			echo "Senha falhou<br>";
+			return false;
+		}
+		echo "<br><h1>Por favor, Copie o texto acima e mande pro jef.</h1> <br>";
+// 		echo "Este é o seu CPF ".$usuario->getId();
+// 		echo "<br>";
+		if(!$this->preenchePorId($usuario)){
+			
+			echo "Usuario Inexistente na base local<br>";
+		}
+		else{
+			echo "USuario presente na base Local<br>";
+			
+		}
+		
+		
+		return false;
 	}
 	
 	/**
@@ -283,6 +363,7 @@ class UsuarioDAO extends DAO {
 		$sql = "SELECT * FROM usuario WHERE usua_id = $id";
 		foreach($this->getConexao()->query($sql) as $linha){
 			$usuario->setNome($linha['usua_nome']);
+			$usuario->setNivelAcesso($linha['usua_nivel']);
 			$usuario->setIdBaseExterna($linha['id_base_externa']);
 			return true;
 		}

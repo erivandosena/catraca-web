@@ -458,7 +458,7 @@ echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type
 					if (isset ( $_GET ['pagina'] )) {
 						switch ($_GET ['pagina']) {
 							case 'inicio' :
-								HomeController::main ( $sessao->getNivelAcesso () );
+								HomeController::main ( $sessao->getNivelAcesso () , LOGIN_LDAP);
 								break;
 							case 'catraca' :
 								
@@ -547,7 +547,13 @@ echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type
 						}
 					} else {
 						
-						HomeController::main ( $sessao->getNivelAcesso () );
+						if(LOGIN_LDAP == 's'){
+							$loginComLdap= true;
+						}else
+						{
+							$loginComLdap = false;
+						}
+						HomeController::main ( $sessao->getNivelAcesso (), $loginComLdap);
 					}
 					
 					?>
