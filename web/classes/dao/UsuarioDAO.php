@@ -46,18 +46,20 @@ class UsuarioDAO extends DAO {
 		} else {
 			$result = ldap_search($connect,"dc=testes,dc=funece,dc=br", "(sAMAccountName=$login)") or die ("Error in search query: ".ldap_error($connect));
 			$data = ldap_get_entries($connect, $result);
-			print_r($data);
-			/*
-			if($data[0]['employeenumber'][0]){
-				if(!isset($data[0]['employeenumber'])){
-					return false;
-				}
-				$usuario->setId($data[0]['employeenumber'][0]);
-				$usuario->setCpf($data[0]['employeenumber'][0]);
-				return true;
+						
+			if(!isset($data['employeenumber'])){
+				echo "Errou a indexacao do Vetor<br>";
+				return false;
 			}
-			*/
+			if(!isset($data['employeenumber'][0])){
+				echo "Errou a indexacao do Vetor<br>";
+				return false;
+			}
+			echo "Este é seu CPF: ".$data['employeenumber'][0];
+			$usuario->setId($data['employeenumber'][0]);
+			$usuario->setCpf($data['employeenumber'][0]);
 			return true;
+			
 		}
 	}
 	
@@ -81,17 +83,17 @@ class UsuarioDAO extends DAO {
 			echo "Senha falhou<br>";
 			return false;
 		}
-		echo "<br><h1>Por favor, Copie o texto acima e mande pro jef.</h1> <br>";
-// 		echo "Este é o seu CPF ".$usuario->getId();
-// 		echo "<br>";
-		if(!$this->preenchePorId($usuario)){
+
+		echo "<h1>Acima saiu seu CPF corretamente?  </h1>";
+
+// 		if(!$this->preenchePorId($usuario)){
 			
-			echo "Usuario Inexistente na base local<br>";
-		}
-		else{
-			echo "USuario presente na base Local<br>";
+// 			echo "Usuario Inexistente na base local<br>";
+// 		}
+// 		else{
+// 			echo "USuario presente na base Local<br>";
 			
-		}
+// 		}
 		
 		
 		return false;

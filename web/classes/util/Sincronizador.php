@@ -117,7 +117,7 @@ class Sincronizador {
 		$sincronizador->sincronizar ();
 	}
 	public static function sincronizaFuncionarios1() {
-		$daoUsuarios = new DAO ( null, DAO::TIPO_USUARIOS_2 );
+		$daoUsuarios = new DAO ( null, DAO::TIPO_USUARIOS_SECUNDARIO );
 		$dao = new DAO ();
 		$entidadeOrigem = $daoUsuarios->getEntidadeUsuarios ();
 		$conexaoOrigem = $daoUsuarios->getConexao ();
@@ -158,7 +158,7 @@ class Sincronizador {
 		
 	}
 	public static function sincronizaFuncionarios2() {
-		$daoUsuarios = new DAO ( null, DAO::TIPO_USUARIOS_2 );
+		$daoUsuarios = new DAO ( null, DAO::TIPO_USUARIOS_SECUNDARIO );
 		$dao = new DAO ();
 		$entidadeOrigem = $daoUsuarios->getEntidadeUsuarios ();
 		$conexaoOrigem = $daoUsuarios->getConexao ();
