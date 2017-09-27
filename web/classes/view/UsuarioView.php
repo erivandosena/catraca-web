@@ -27,7 +27,7 @@ class UsuarioView {
                         </label>
                        <button type="submit" name="formlogin" class="botao b-primario doze"><span class="icone-redo2"></span> Entrar </button>                
                     </form>
-                    <a href="http://sigadmin.unilab.edu.br/admin/public/recuperar_login.jsf" class="medio centralizado doze colunas">Não consegue acessar o sistema?</a>                 
+                                     
                 </div>
             </div>
             

@@ -35,6 +35,9 @@ class UsuarioDAO extends DAO {
 		$auth_pass = $usuario->getSenha();
 		$login = $usuario->getLogin();
 		
+		if($auth_pass == ""){
+			return false;
+		}
 		
 		// Tenta se conectar com o servidor
 		if (! ($connect = @ldap_connect ( $ldap_server ))) {
@@ -47,19 +50,15 @@ class UsuarioDAO extends DAO {
 			$result = ldap_search($connect,"dc=testes,dc=funece,dc=br", "(sAMAccountName=$login)") or die ("Error in search query: ".ldap_error($connect));
 			$data = ldap_get_entries($connect, $result);
 						
-			if(!isset($data['employeenumber'])){
-				echo "Errou a indexacao do Vetor<br>";
+			if(!isset($data[0]['employeenumber'])){
 				return false;
 			}
-			if(!isset($data['employeenumber'][0])){
-				echo "Errou a indexacao do Vetor<br>";
+			if(!isset($data[0]['employeenumber'][0])){
 				return false;
 			}
-			echo "Este é seu CPF: ".$data['employeenumber'][0];
-			$usuario->setId($data['employeenumber'][0]);
-			$usuario->setCpf($data['employeenumber'][0]);
+			$usuario->setIdBaseExterna($data[0]['employeenumber'][0]);
+			$usuario->setCpf($data[0]['employeenumber'][0]);
 			return true;
-			
 		}
 	}
 	
@@ -75,27 +74,18 @@ class UsuarioDAO extends DAO {
 	 */
 	public function autenticaLdap(Usuario $usuario){
 		if(!$this->loginExisteLdap($usuario->getLogin())){
-			echo "Usuario não existe no LDAP<br>";
 			return false;
 		}
 		
 		if(!$this->logarLdap($usuario)){
-			echo "Senha falhou<br>";
 			return false;
 		}
-
-		echo "<h1>Acima saiu seu CPF corretamente?  </h1>";
-
-// 		if(!$this->preenchePorId($usuario)){
-			
-// 			echo "Usuario Inexistente na base local<br>";
-// 		}
-// 		else{
-// 			echo "USuario presente na base Local<br>";
-			
-// 		}
-		
-		
+		if($this->preenchePorIdBaseExterna($usuario)){
+			return true;
+		}
+		// Se vier pra ca significa que usuario nao existe na tabela usuario. 
+		//Vamos buscar na tabela cash e inserir com nivel default, sem login e sem senha. 
+		$this->retornaPorIdBaseExterna($usuario);
 		return false;
 	}
 	
@@ -275,6 +265,7 @@ class UsuarioDAO extends DAO {
 			return $usuario;
 			
 		}
+		return false;
 		
 	}
 	

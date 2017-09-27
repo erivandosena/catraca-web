@@ -28,9 +28,7 @@ class Usuario{
 		return $this->idCategoria;
 	}
 	public function setId($id){
-		$idBaseExterna = intval ( $id) ;
-		if(is_int($id))
-			$this->id = $id;
+		$this->id  = intval ( $id) ;
 	}
 	
 	public function getId(){
@@ -116,9 +114,7 @@ class Usuario{
 	}
 	
 	public function setIdBaseExterna($idBaseExterna){
-		$idBaseExterna = intval ( $idBaseExterna ) ;
-		if(is_int($idBaseExterna))
-			$this->idBaseExterna = $idBaseExterna;
+		$this->idBaseExterna = intval ( $idBaseExterna ) ;
 	}
 	public function  getIdBaseExterna(){
 		return $this->idBaseExterna;
