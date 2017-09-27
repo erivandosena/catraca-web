@@ -6,9 +6,22 @@ class ValidacaoController{
 	private $dao;
 	
 	public static function main($nivelAcesso){
+
+		switch ($nivelAcesso){
+			case Sessao::NIVEL_SUPER:
+				$valida = new ValidacaoController();
+				$valida->telaValidacao();	
+				break;
+			case Sessao::NIVEL_ADMIN:
+				$valida = new ValidacaoController();
+				$valida->telaValidacao();	
+				break;
+			
+			default:
+				UsuarioController::main ( $nivel );
+				break;
+		}
 		
-		$valida = new ValidacaoController();
-		$valida->telaValidacao();	
 		
 	}
 	

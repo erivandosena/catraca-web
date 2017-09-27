@@ -485,7 +485,11 @@ echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type
 								CatracaController::main ( $sessao->getNivelAcesso () );
 								break;
 							case 'cartao' :
-								CartaoController::main ( $sessao->getNivelAcesso () );
+								$cadastroDeFotos = false;
+								if(CADASTRO_DE_FOTOS == 's'){
+									$cadastroDeFotos = true;
+								}
+								CartaoController::main ( $sessao->getNivelAcesso () , $cadastroDeFotos);
 								break;
 							case 'gerador' :
 								CatracaVirtualController::main ( $sessao->getNivelAcesso () );

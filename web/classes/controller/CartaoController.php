@@ -7,31 +7,31 @@
 
 class CartaoController{
 	private $view;
-	public static function main($nivelDeAcesso){
+	public static function main($nivelDeAcesso, $cadastroDeFotos = false){
 		
 		switch ($nivelDeAcesso){
 			case Sessao::NIVEL_SUPER:
-				$controller = new CartaoController();
+				$controller = new CartaoController($cadastroDeFotos);
 				$controller->telaCartao();
 				break;
 			case Sessao::NIVEL_ADMIN:
-				$controller = new CartaoController();
+				$controller = new CartaoController($cadastroDeFotos);
 				$controller->telaCartao();
 				break;
 			case Sessao::NIVEL_GUICHE:
-				$controller = new CartaoController();
+				$controller = new CartaoController($cadastroDeFotos);
 				$controller->telaCartao();
 				break;
 			case Sessao::NIVEL_POLIVALENTE:
-				$controller = new CartaoController();
+				$controller = new CartaoController($cadastroDeFotos);
 				$controller->telaCartao();
 				break;
 			case Sessao::NIVEL_CADASTRO:
-				$controller = new CartaoController();
+				$controller = new CartaoController($cadastroDeFotos);
 				$controller->telaCartao();
 				break;
 			case Sessao::NIVEL_CATRACA_VIRTUAL:
-				$controller = new CartaoController();
+				$controller = new CartaoController($cadastroDeFotos);
 				$controller->telaCartao();
 				break;
 			default:
@@ -39,7 +39,10 @@ class CartaoController{
 				break;
 		}
 	}	
-	
+	private $cadastroDeFotos;
+	public function __construct($cadastroDeFotos = false){
+		$this->cadastroDeFotos = $cadastroDeFotos;
+	}
 	public function telaCartao(){
 		$this->view = new CartaoView();
 		echo '<div class = "simpleTabs">
@@ -185,7 +188,7 @@ class CartaoController{
 		$usuario->setIdBaseExterna($idDoSelecionado);
 		$usuarioDao->retornaPorIdBaseExterna($usuario);
 		
-		$this->view->mostraSelecionado($usuario);
+		$this->view->mostraSelecionado($usuario, $this->cadastroDeFotos);
 		$vinculoDao = new VinculoDAO($usuarioDao->getConexao());
 		if(isset($_GET['vinculo_cancelar'])){
 			$vinculo = new Vinculo();

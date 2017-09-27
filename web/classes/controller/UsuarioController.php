@@ -50,42 +50,43 @@ class UsuarioController{
 	public function telaLogin($loginComLdap = false){
 		$usuarioView = new UsuarioView();
 		$erro=FALSE;
-		if(isset($_POST['formlogin']))
+		if(!isset($_POST['formlogin'])){
+			$usuarioView->mostraFormularioLogin();
+			return;
+		}
 		
-		{
-			$usuarioDAO = new UsuarioDAO();
-			$usuario = new Usuario();
-			$usuario->setLogin($_POST['login']);
-			$usuario->setSenha($_POST['senha']);
-			if($loginComLdap){
-				if($usuarioDAO->autenticaLdap($usuario)){
-					$sessao2 = new Sessao();
-					$sessao2->criaSessao($usuario->getId(), $usuario->getNivelAcesso(), $usuario->getLogin());
-					echo '<meta http-equiv="refresh" content=1;url="./index.php">';
-					return;
-				}
-				$msg_erro= "Senha ou usuário Inválido";
-				$erro=true;
-				$usuarioView->mostraFormularioLogin($erro, $msg_erro);
-				return;
-				
-			}
-			if($usuarioDAO->autentica($usuario)){
-		
+	
+		$usuarioDAO = new UsuarioDAO();
+		$usuario = new Usuario();
+		$usuario->setLogin($_POST['login']);
+		$usuario->setSenha($_POST['senha']);
+		if($loginComLdap){
+			if($usuarioDAO->autenticaLdap($usuario)){
 				$sessao2 = new Sessao();
 				$sessao2->criaSessao($usuario->getId(), $usuario->getNivelAcesso(), $usuario->getLogin());
 				echo '<meta http-equiv="refresh" content=1;url="./index.php">';
 				return;
-			}else{
-				$msg_erro= "Senha ou usuário Inválido";
-				$erro=true;
-				
-				$usuarioView->mostraFormularioLogin($erro, $msg_erro);
-				return;
-		
 			}
+			$msg_erro= "Senha ou usuário Inválido";
+			$erro=true;
+			$usuarioView->mostraFormularioLogin($erro, $msg_erro);
+			return;
 		}
-		$usuarioView->mostraFormularioLogin();
+		if($usuarioDAO->autentica($usuario)){
+	
+			$sessao2 = new Sessao();
+			$sessao2->criaSessao($usuario->getId(), $usuario->getNivelAcesso(), $usuario->getLogin());
+			echo '<meta http-equiv="refresh" content=1;url="./index.php">';
+			return;
+		}else{
+			$msg_erro= "Senha ou usuário Inválido";
+			$erro=true;
+			$usuarioView->mostraFormularioLogin($erro, $msg_erro);
+			return;
+	
+		}
+	
+		
 	}
 	/**
 	 * Atravez dessa aplicacao sera possivel definir um usuario para administrar um novo laboratorio. 
