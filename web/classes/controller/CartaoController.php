@@ -264,7 +264,7 @@ class CartaoController{
 								$esseTipo = $tipo;	
 						}
 						$vinculo = new Vinculo();
-						$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'G:00:01' );
+						$daqui3Meses = date ( 'Y-m-d', strtotime ( "+182 days" ) ) . 'T' . date ( 'G:00:01' );
 						$vinculo->setFinalValidade($daqui3Meses);
 						$vinculo->getCartao()->getTipo()->setId($esseTipo->getId());
 						$vinculo->getCartao()->setNumero($_GET['numero_cartao2']);
