@@ -167,82 +167,82 @@ class CartaoController{
 	public function telaCadastro(){
 		$this->view->formBuscaUsuarios();
 		
-		if (isset ( $_GET ['selecionado'] )) {
-			
-			$idDoSelecionado = $_GET['selecionado'];
-			
+		if (isset ( $_GET ['nome'] )) {
+			$mensagem = "";
 			$usuarioDao = new UsuarioDAO();
-			
-			
-			
-			$usuario = new Usuario();
-			$usuario->setIdBaseExterna($idDoSelecionado);
-			
-			$usuarioDao->retornaPorIdBaseExterna($usuario);			
-
-			$this->view->mostraSelecionado($usuario);
-			$vinculoDao = new VinculoDAO();			
-			
-			if(isset($_GET['vinculo_cancelar'])){
-				$vinculo = new Vinculo();
-				$vinculo->setId($_GET['vinculo_cancelar']);
-				
-				if(isset($_POST['certeza'])){
-					if($vinculoDao->invalidarVinculo($vinculo)){
-						$this->view->formMensagem("-sucesso", "Vínculo Invalidado.");						
-					}else{
-						$this->view->formMensagem("-erro", "Erro ao tentar invalidar vínculo.");						
-					}
-					echo '<meta http-equiv="refresh" content="2; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
-					return;
-				}				
+			$listaDeUsuarios = $usuarioDao->pesquisaNoSigaa( $_GET ['nome']);
+			$this->view->mostraResultadoBuscaDeUsuarios($listaDeUsuarios, $mensagem);
+			$usuarioDao->fechaConexao();
+			return;
+		}
+		
+		if(!isset ( $_GET ['selecionado'] )){
+			return;	
+		}
+		$idDoSelecionado = $_GET['selecionado'];
+		$usuarioDao = new UsuarioDAO();
+		$usuario = new Usuario();
+		$usuario->setIdBaseExterna($idDoSelecionado);
+		$usuarioDao->retornaPorIdBaseExterna($usuario);
+		
+		$this->view->mostraSelecionado($usuario);
+		$vinculoDao = new VinculoDAO($usuarioDao->getConexao());
+		if(isset($_GET['vinculo_cancelar'])){
+			$vinculo = new Vinculo();
+			$vinculo->setId($_GET['vinculo_cancelar']);
+			if(!isset($_POST['certeza'])){
 				$this->view->formConfirmacaoEliminarVinculo($vinculo);
 				return;
 			}
-			
-			if(isset($_GET['vinculo_renovar'])){
-				$vinculo = new Vinculo();
-				$vinculo->setId($_GET['vinculo_renovar']);
-				$vinculoDao->vinculoPorId($vinculo);
-				
-				$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'G:00:01' );
-				$vinculo->setFinalValidade($daqui3Meses);				
-				
-				if(isset($_POST['certeza'])){
-					if($vinculoDao->usuarioJaTemVinculo($usuario)){
-						$this->view->formMensagem("-erro", "Esse usuário já possui vínculo válido.");						
-						echo '<meta http-equiv="refresh" content="2; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
-						return;
-					}
-					
-					if($vinculo->isAvulso()){
-						$this->view->formMensagem("-erro", "Não existe renovação de vínculos avulsos!");
-						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
-						return;
-					}
-					if(!$usuarioDao->vinculoRenovavel($vinculo)){
-						$this->view->formMensagem("-erro", 'Esse usuário possui um problema quanto ao status! ('.$usuario->getStatusDiscente().")");
-						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
-						return;						
-					}				
-					
-					if($vinculoDao->atualizaValidade($vinculo)){
-						$this->view->formMensagem("-sucesso", "Vínculo Atualizado com Sucesso!");						
-					}else{
-						$this->view->formMensagem("-erro", "Erro ao tentar renovar vínculo.");
-					}
-					echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
-					return;
-				}			
-			
+			if($vinculoDao->invalidarVinculo($vinculo)){
+				$this->view->formMensagem("-sucesso", "Vínculo Invalidado.");
+			}else{
+				$this->view->formMensagem("-erro", "Erro ao tentar invalidar vínculo.");
+			}
+			echo '<meta http-equiv="refresh" content="2; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+			return;
+		}
+		
+		if(isset($_GET['vinculo_renovar'])){
+			$vinculo = new Vinculo();
+			$vinculo->setId($_GET['vinculo_renovar']);
+			$vinculoDao->vinculoPorId($vinculo);
+		
+			$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'G:00:01' );
+			$vinculo->setFinalValidade($daqui3Meses);
+			if(!isset($_POST['certeza'])){
 				$this->view->formConfirmacaoRenovarVinculo();
 				return;
-			}			
+			}
+			if($vinculoDao->usuarioJaTemVinculo($usuario)){
+				$this->view->formMensagem("-erro", "Esse usuário já possui vínculo válido.");
+				echo '<meta http-equiv="refresh" content="2; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+				return;
+			}
+			if($vinculo->isAvulso()){
+				$this->view->formMensagem("-erro", "Não existe renovação de vínculos avulsos!");
+				echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+				return;
+			}
+			if(!$usuarioDao->vinculoRenovavel($vinculo)){ //Esta funcao devera ser alterada. 
+				$this->view->formMensagem("-erro", 'Esse usuário possui um problema quanto ao status! ('.$usuario->getStatusDiscente().")");
+				echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+				return;
+			}
+			if($vinculoDao->atualizaValidade($vinculo)){
+				$this->view->formMensagem("-sucesso", "Vínculo Atualizado com Sucesso!");
+			}else{
+				$this->view->formMensagem("-erro", "Erro ao tentar renovar vínculo.");
+			}
+			echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+			return;
 			
-			$vinculos = $vinculoDao->retornaVinculosValidosDeUsuario($usuario);			
-			
-			$podeComer = $this->verificaSeAtivo($usuario);
-			
+		}
+					
+		
+		$vinculos = $vinculoDao->retornaVinculosValidosDeUsuario($usuario);			
+		$podeComer = $this->verificaSeAtivo($usuario);
+		
 			if(!$vinculoDao->usuarioJaTemVinculo($usuario) && $podeComer){
 				if (!isset ( $_GET ['cartao'] )){
 					echo '<a class="botao" href="?pagina=cartao&selecionado=' . $idDoSelecionado . '&cartao=add">Adicionar</a>';
@@ -363,20 +363,15 @@ class CartaoController{
 				echo '<h2 class="titulo">Vinculos A Liberar</h2>';
 				$this->view->mostraVinculos($vinculosALiberar, false);					
 			}			
-		}		
+		
 
-		if (isset ( $_GET ['nome'] )) {
-			$mensagem = "";
-			
-			$usuarioDao = new UsuarioDAO();
-			
-			$listaDeUsuarios = $usuarioDao->pesquisaNoSigaa( $_GET ['nome']);
-			
-			$this->view->mostraResultadoBuscaDeUsuarios($listaDeUsuarios, $mensagem);
-			$usuarioDao->fechaConexao();
-		}		
+		
 	}
 
+	/**
+	 * @deprecated
+	 * @param Usuario $usuario
+	 */
 	public function verificaSeAtivo(Usuario $usuario){
 		if(strtolower (trim($usuario->getStatusServidor())) == 'ativo'){			
 			return true;
