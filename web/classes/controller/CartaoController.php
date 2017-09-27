@@ -202,7 +202,7 @@ class CartaoController{
 			echo '<meta http-equiv="refresh" content="2; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
 			return;
 		}
-		
+		$tipoDao = new TipoDAO($vinculoDao->getConexao());
 		if(isset($_GET['vinculo_renovar'])){
 			$vinculo = new Vinculo();
 			$vinculo->setId($_GET['vinculo_renovar']);
@@ -224,7 +224,11 @@ class CartaoController{
 				echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
 				return;
 			}
-			if(!$usuarioDao->vinculoRenovavel($vinculo)){ //Esta funcao devera ser alterada. 
+			$vinculoRenovavel = true;
+			$tipo = $vinculo->getCartao()->getTipo();
+			
+			$vinculoRenovavel = $tipoDao->tipoValido($vinculo->getResponsavel(), $tipo);
+			if(!$vinculoRenovavel){
 				$this->view->formMensagem("-erro", 'Esse usuário possui um problema quanto ao status! ('.$usuario->getStatusDiscente().")");
 				echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
 				return;
@@ -241,49 +245,18 @@ class CartaoController{
 					
 		
 		$vinculos = $vinculoDao->retornaVinculosValidosDeUsuario($usuario);			
-		$podeComer = $this->verificaSeAtivo($usuario);
+
+		$listaDeTipos = array();
+		$listaDeTipos = $tipoDao->retornaTiposValidosUsuario($usuario);
+		$usuarioAtivo = false;
+		if(sizeof($listaDeTipos) > 0){
+			$usuarioAtivo = true;
+		}
 		
-			if(!$vinculoDao->usuarioJaTemVinculo($usuario) && $podeComer){
+		if(!$vinculoDao->usuarioJaTemVinculo($usuario) && $usuarioAtivo){
 				if (!isset ( $_GET ['cartao'] )){
 					echo '<a class="botao" href="?pagina=cartao&selecionado=' . $idDoSelecionado . '&cartao=add">Adicionar</a>';
 				}else{
-					$tipoDao = new TipoDAO($vinculoDao->getConexao());
-					$listaDeTipos = $tipoDao->retornaLista();
-					foreach ($listaDeTipos as $chave => $tipo){
-						if(strtolower (trim( $tipo->getNome())) == 'aluno'){
-							if(trim($usuario->getStatusDiscente()) == 'CADASTRADO' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($usuario->getStatusDiscente())) == 'formando' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - graduando'){
-								continue;
-							}
-							unset($listaDeTipos[$chave]);
-							continue;
-						}
-						if(strtolower (trim( $tipo->getNome())) == 'servidor tae'){
-							
-							if(strtolower (trim($usuario->getStatusServidor())) == 'ativo' && strpos(strtolower (trim($usuario->getCategoria())), 'administrativo')){
-								continue;
-							}
-							if($usuario->getIDCategoria() == 3){								
-								continue;
-							}
-							unset($listaDeTipos[$chave]);
-							continue;
-						}
-						if(strtolower (trim( $tipo->getNome())) == 'servidor docente'){
-							if( (strtolower (trim($usuario->getTipodeUsuario())) == 'docente externo') || ( strtolower (trim($usuario->getStatusServidor())) == 'ativo' && strtolower (trim($usuario->getCategoria())) == 'docente') ){
-								continue;								
-							}
-							unset($listaDeTipos[$chave]);
-							continue;
-						}
-						if(strtolower (trim( $tipo->getNome())) == 'terceirizado'){
-							if(strtolower (trim($usuario->getTipodeUsuario())) == 'terceirizado' || strtolower (trim($usuario->getTipodeUsuario())) == 'outros'){
-								continue;
-							}
-							unset($listaDeTipos[$chave]);
-							continue;
-						}
-						unset($listaDeTipos[$chave]);							
-					}
 					
 					if(isset($_GET['salvar'])){
 						foreach($listaDeTipos as $tipo){
@@ -362,7 +335,7 @@ class CartaoController{
 			if(sizeof($vinculosALiberar)){
 				echo '<h2 class="titulo">Vinculos A Liberar</h2>';
 				$this->view->mostraVinculos($vinculosALiberar, false);					
-			}			
+			}	
 		
 
 		

@@ -295,62 +295,9 @@ class UsuarioDAO extends DAO {
 	const ID_CATEGORIA_DOCENTE = 1;
 	const ID_CATEGORIA_TAE = 2;
 	const ID_STATUS_SERVIDOR_ATIVO = 1;
-	public function vinculoRenovavel(Vinculo $vinculo){
-		$id = $vinculo->getResponsavel()->getIdBaseExterna();
-		$sql = "SELECT id_status_discente, id_categoria, id_status_servidor,tipo_usuario
-		FROM vw_usuarios_catraca WHERE id_usuario = $id ORDER BY status_discente, status_servidor ASC LIMIT 10";
-		if($vinculo->isAvulso() || $vinculo->getCartao()->getTipo()->getNome() == 'Visitante'){
-			return false;
-		}
-		foreach ($this->getConexao ()->query ( $sql ) as $linha){
-			if(strtolower($vinculo->getCartao()->getTipo()->getNome()) == 'aluno'){
-				if($linha['id_status_discente'] == self::ID_STATUS_DISCENTE_ATIVO){
-					$vinculo->getResponsavel()->setStatusDiscente("Ativo");
-					return true;
-				}
-				if($linha['id_status_discente'] == self::ID_STATUS_DISCENTE_FORMANDO){
-					$vinculo->getResponsavel()->setStatusDiscente("Formando");
-					return true;
-				}
-			}
-			if((strtolower($vinculo->getCartao()->getTipo()->getNome()) == 'terceirizado') && $linha['id_tipo_usuario'] == self::ID_TIPO_USUARIO_TERCERIZADO){
-				return true;
-			}
-			if((strtolower($vinculo->getCartao()->getTipo()->getNome()) == 'terceirizado') && $linha['id_tipo_usuario'] == self::ID_TIPO_USUARIO_OUTROS){
-				return true;
-			}
-			if(strtolower($vinculo->getCartao()->getTipo()->getNome()) == 'servidor tae'){
-				if($linha['id_categoria'] == self::ID_CATEGORIA_TAE && $linha['id_status_servidor'] == self::ID_STATUS_SERVIDOR_ATIVO){
-					return true;
-				}
-			}
-			if(strtolower($vinculo->getCartao()->getTipo()->getNome()) == 'servidor docente'){
-				if($linha['id_categoria'] == self::ID_CATEGORIA_DOCENTE  && $linha['id_status_servidor'] == self::ID_STATUS_SERVIDOR_ATIVO){
-					return true;
-				}
-			}
-		}
-		return false;	
-	}
-	/**
-	 * Pesquisaremos primeiro o Login do usuario e depois o nome do laboratorio.
-	 * Apos isso pegaremos o Id de cada um e usaremos numa operacao de insert.
-	 * Mas essa operacao so pode funcionar se ela ainda nao existir com esse usuario e laboratorio.
-	 * Terminando tudo iremos atualizar o nivel do usuario
-	 * 
-	 * @param Usuario $usuario        	
-	 * @param Laboratorio $laboratorio        	
-	 */
-	public function tornarAdministrador(Usuario $usuario, Laboratorio $laboratorio) {
-		$login = $usuario->getLogin();
-		$nomeLaboratorio = $laboratorio->getNome();
-		
-		
-		$sqlLaboratorio = "SELECT * FROM laboratorio WHERE nome_laboratorio = $nomeLaboratorio";
-		
-		
-		
-	}
+	
+	
+
 	public function preenchePorLogin(Usuario $usuario){
 		
 		$login = $usuario->getLogin();

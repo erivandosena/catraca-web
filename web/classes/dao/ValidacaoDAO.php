@@ -1,5 +1,6 @@
 <?php 
 
+
 class ValidacaoDAO extends DAO{
 	
 	public function retornaCampos(){		
@@ -48,6 +49,7 @@ class ValidacaoDAO extends DAO{
 		return false;		
 		
 	}
+	
 }
 
 ?>

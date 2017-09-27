@@ -83,7 +83,7 @@ class TipoDAO extends DAO{
 					$valido = false;
 				}
 			}
-			if($valido){return $valido;}
+			return $valido;
 		}
 		return $valido;
 	}
