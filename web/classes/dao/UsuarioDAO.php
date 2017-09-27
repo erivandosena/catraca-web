@@ -85,7 +85,18 @@ class UsuarioDAO extends DAO {
 		}
 		// Se vier pra ca significa que usuario nao existe na tabela usuario. 
 		//Vamos buscar na tabela cash e inserir com nivel default, sem login e sem senha. 
+		
 		$this->retornaPorIdBaseExterna($usuario);
+		$usuario->setNivelAcesso(Sessao::NIVEL_COMUM);
+		$nome = $usuario->getNome();
+		$email = $usuario->getEmail();
+		$nivel = $usuario->getNivelAcesso();
+		$idBaseExterna = $usuario->getIdBaseExterna();
+		if($this->getConexao()->exec("INSERT into usuario(usua_nome,usua_email, usua_nivel, id_base_externa)
+				VALUES	('$nome','$email', $nivel, $idBaseExterna)")){
+			return true;
+		}
+		
 		return false;
 	}
 	
