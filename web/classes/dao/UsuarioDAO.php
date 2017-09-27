@@ -1,7 +1,7 @@
 <?php
 class UsuarioDAO extends DAO {
 	
-	
+
 	
 	public function loginExisteLdap($login) {
 		
