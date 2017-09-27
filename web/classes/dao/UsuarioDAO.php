@@ -80,6 +80,7 @@ class UsuarioDAO extends DAO {
 		if(!$this->logarLdap($usuario)){
 			return false;
 		}
+		$loginVelho = $usuario->getLogin();
 		if($this->preenchePorIdBaseExterna($usuario)){
 			return true;
 		}
@@ -91,9 +92,13 @@ class UsuarioDAO extends DAO {
 		$nome = $usuario->getNome();
 		$email = $usuario->getEmail();
 		$nivel = $usuario->getNivelAcesso();
+		$usuario->setLogin($loginVelho);
+		
 		$idBaseExterna = $usuario->getIdBaseExterna();
-		if($this->getConexao()->exec("INSERT into usuario(usua_nome,usua_email, usua_nivel, id_base_externa)
-				VALUES	('$nome','$email', $nivel, $idBaseExterna)")){
+		$sqlInsert = "INSERT into usuario(usua_nome, usua_login,usua_email, usua_nivel, id_base_externa)
+				VALUES	('$nome', '$loginVelho','$email', $nivel, $idBaseExterna)";
+		echo $sqlInsert;
+		if($this->getConexao()->exec($sqlInsert)){
 			return true;
 		}
 		
@@ -349,7 +354,6 @@ class UsuarioDAO extends DAO {
 	public function preenchePorLogin(Usuario $usuario){
 		
 		$login = $usuario->getLogin();
-		$login = preg_replace ('/[^a-zA-Z0-9\s]/', '', $login);
 		$sql = "SELECT * FROM usuario WHERE usua_login = '$login'";
 		foreach($this->getConexao()->query($sql) as $linha){
 			$usuario->setId($linha['usua_id']);
@@ -357,7 +361,6 @@ class UsuarioDAO extends DAO {
 			return true;
 		}
 		return false;
-		
 		
 	}
 	public function preenchePorId(Usuario $usuario){

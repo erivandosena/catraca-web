@@ -299,7 +299,6 @@ class CartaoController{
 						$vinculo->setInicioValidade(date ( "Y-m-d G:i:s" ));
 						if($vinculoDao->usuarioJaTemVinculo($vinculo->getResponsavel())){							
 							$this->view->formMensagem("-erro", "Esse usuário já possui cartão. Inative o cartão atual para adicionar um novo.");
-							//echo '<a href="?pagina=cartao&cartaoselecionado=' .$vinculo->getCartao()->getId().'">Clique aqui para ver</a>';
 							return;	
 						}
 						
@@ -313,7 +312,6 @@ class CartaoController{
 							
 							if($vinculoDao->usuarioJaTemVinculo($vinculo->getResponsavel())){
 								$this->view->formMensagem("-erro", "Esse usuário já possui cartão. Invalide o cartão atual para adicionar um novo.");								
-								//echo '<a href="?pagina=cartao&cartaoselecionado=' .$vinculo->getCartao()->getId().'">Clique aqui para ver</a>';								
 								return;						
 							}
 							
@@ -398,7 +396,7 @@ class CartaoController{
 	const ID_STATUS_DISCENTE_ATIVO = 1;
 	const ID_STATUS_DISCENTE_CADASTRADO = 3;
 	const ID_STATUS_DISCENTE_FORMADO = 9;
-	const ID_STATUS_DISCENTE_CONCLUIDO = 3;//
+	const ID_STATUS_DISCENTE_CONCLUIDO = 3;
 
 
 	

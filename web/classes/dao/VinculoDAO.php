@@ -419,7 +419,6 @@ class VinculoDAO extends DAO {
 		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
 		LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id WHERE (usuario.id_base_externa = $idBaseExterna)
 		AND ('$dataTimeAtual' BETWEEN vinc_inicio AND vinc_fim) AND vinc_avulso = FALSE";
-// 		echo $sql;
 		$result = $this->getConexao ()->query ($sql );
 		foreach($result as $linha){
 			
