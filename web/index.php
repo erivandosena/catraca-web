@@ -13,6 +13,9 @@ define("PARAMETROS_LDAP_BASE_LOCAL", $config['parametros_ldap_base_local']);
 
 
 
+ini_set('display_errors',1);
+ini_set('display_startup_erros',1);
+error_reporting(E_ALL);
 
 function __autoload($classe) {
 	if (file_exists ( 'classes/dao/' . $classe . '.php' )){
