@@ -42,7 +42,7 @@ if(isset($_GET['nome'])){
 	$pesquisa = strtoupper ( $pesquisa );
 	echo '<br>Pesquisa: '.$pesquisa.'<br><br>';
 
-	$daoSistemasComum = new DAO(null, DAO::TIPO_USUARIOS);
+	$daoSistemasComum = new DAO();
 	echo 'SISTEMAS COMUM - vw_usuarios_autenticacao_catraca<br>';
 	$result2 = $daoSistemasComum->getConexao()->query("SELECT * FROM vw_usuarios_catraca WHERE nome like '%$pesquisa%'");
 	$i = 0;
@@ -74,7 +74,7 @@ if(isset($_GET['nome'])){
 	}
 	echo '</table>';
 	echo '<hr>';
-	$daoSIGAA = new DAO(null, DAO::TIPO_AUTENTICACAO);
+	$daoSIGAA = new DAO();
 	echo 'SIGAA - vw_usuarios_catraca<br>';
 	$result2 = $daoSIGAA->getConexao()->query("SELECT * FROM vw_usuarios_autenticacao_catraca WHERE nome like '%$pesquisa%'");
 	$i = 0;
