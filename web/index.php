@@ -8,11 +8,11 @@ define ( "PAGINA_INSTITUICAO", $config ['pagina_instituicao'] );
 define ( "LOGIN_LDAP", $config ['login_ldap'] );
 define ( "FONT_DADOS_LDAP_ENTIDADE", $config ['font_dados_ldap_entidade'] );
 define ( "VERSAO_SINCRONIZADOR", $config ['versao_sincronizador'] );
+define("PARAMETROS_LDAP_BASE_LOCAL", $config['parametros_ldap_base_local']);
+define("PARAMETROS_LDAP_BASE_LOCAL", $config['parametros_ldap_base_local']);
 
 
-ini_set('display_errors',1);
-ini_set('display_startup_erros',1);
-error_reporting(E_ALL);
+
 
 function __autoload($classe) {
 	if (file_exists ( 'classes/dao/' . $classe . '.php' )){

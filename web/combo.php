@@ -9,24 +9,31 @@
  * @link https://www.catraca.unilab.edu.br/docs/index.html
  */
 
-date_default_timezone_set ( 'America/Araguaina' );
 
 /**
  * @ignore
  */
 
+
+
 function __autoload($classe) {
-	if (file_exists ( 'classes/dao/' . $classe . '.php' ))
+	if (file_exists ( 'classes/dao/' . $classe . '.php' )){
 		include_once 'classes/dao/' . $classe . '.php';
-		if (file_exists ( 'classes/model/' . $classe . '.php' ))
-			include_once 'classes/model/' . $classe . '.php';
-			if (file_exists ( 'classes/controller/' . $classe . '.php' ))
-				include_once 'classes/controller/' . $classe . '.php';
-				if (file_exists ( 'classes/util/' . $classe . '.php' ))
-					include_once 'classes/util/' . $classe . '.php';
-					if (file_exists ( 'classes/view/' . $classe . '.php' ))
-						include_once 'classes/view/' . $classe . '.php';
+	}
+	else if (file_exists ( 'classes/model/' . $classe . '.php' )){
+		include_once 'classes/model/' . $classe . '.php';
+	}
+	else if (file_exists ( 'classes/controller/' . $classe . '.php' )){
+		include_once 'classes/controller/' . $classe . '.php';
+	}
+	else if (file_exists ( 'classes/util/' . $classe . '.php' )){
+		include_once 'classes/util/' . $classe . '.php';
+	}
+	else if (file_exists ( 'classes/view/' . $classe . '.php' )){
+		include_once 'classes/view/' . $classe . '.php';
+	}
 }
+
 
 /*
  * Combo dinamico do relatório.

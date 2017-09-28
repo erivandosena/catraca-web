@@ -3,11 +3,12 @@ class UsuarioDAO extends DAO {
 	
 
 	
-	public function loginExisteLdap($login) {
+	public function loginExisteLdap($login, $config) {
 		
-		$ldap_server = "200.129.22.43:3268";
-		$auth_user = "consulta.base@testes.funece.br";
-		$auth_pass = "AlguemSabe@senha7";
+		
+		$ldap_server = $config['servidor'].":".$config['porta'];
+		$auth_user = $config['usuario_consulta'].'@'.$config['dominio'];
+		$auth_pass = $config['senha'];
 		
 		// Tenta se conectar com o servidor
 		if (! ($connect = @ldap_connect ( $ldap_server ))) {
@@ -29,11 +30,13 @@ class UsuarioDAO extends DAO {
 		}
 		
 	}
-	public function logarLdap(Usuario $usuario){
-		$ldap_server = "200.129.22.43:3268";
-		$auth_user = $usuario->getLogin()."@testes.funece.br";
+	public function logarLdap(Usuario $usuario, $config){
+		$ldap_server = $config['servidor'].":".$config['porta'];
+		$auth_user = $usuario->getLogin().'@'.$config['dominio'];
 		$auth_pass = $usuario->getSenha();
 		$login = $usuario->getLogin();
+		$base_dn =  $config['base_dn'];
+		$campo_filtro = $config['campo_filtro'];
 		
 		if($auth_pass == ""){
 			return false;
@@ -47,7 +50,7 @@ class UsuarioDAO extends DAO {
 		if (! ($bind = @ldap_bind ( $connect, $auth_user, $auth_pass ))) {
 			return FALSE;
 		} else {
-			$result = ldap_search($connect,"dc=testes,dc=funece,dc=br", "(sAMAccountName=$login)") or die ("Error in search query: ".ldap_error($connect));
+			$result = ldap_search($connect,$base_dn, "($campo_filtro=$login)") or die ("Error in search query: ".ldap_error($connect));
 			$data = ldap_get_entries($connect, $result);
 						
 			if(!isset($data[0]['employeenumber'])){
@@ -65,19 +68,29 @@ class UsuarioDAO extends DAO {
 	
 	/**
 	 * Vamos autenticar usando LDAP. 
-	 * Caso usuário exista, nós pegamos seu CPF no LDAP e o buscamos na tabela usuário. Para posterior criação da sessão. 
+	 * Caso usuáservidor = 200.129.22.43
+porta = 3268 
+dominio = testes.funece.br
+usuario_consulta = consulta.base
+senha = AlguemSabe@senha7
+campo_filtro = sAMAccountName
+base_dn = "dc=testes,dc=funece,dc=br"rio exista, nós pegamos seu CPF no LDAP e o buscamos na tabela usuário. Para posterior criação da sessão. 
 	 * Caso não exista na tabela usuario, significa que é o primeiro login, copiamos da tabela cash. Vw_usuarios_catraca com nivel de acesso padrao. 
 	 * Caso nem exista na tabela vw_usuarios_catraca, significa uma inconsistência e retornemos falso, login não poderá ser feito.  
 	 * 
 	 * @param Usuario $usuario
 	 * 
 	 */
+	const ARQUIVO_LDAP_CONFIG =  "/dados/sites/adm/catraca/config/catraca_ldap.ini";
+	
 	public function autenticaLdap(Usuario $usuario){
-		if(!$this->loginExisteLdap($usuario->getLogin())){
+		$config_ldap = parse_ini_file (self::ARQUIVO_LDAP_CONFIG);
+	
+		if(!$this->loginExisteLdap($usuario->getLogin(), $config_ldap)){
 			return false;
 		}
 		
-		if(!$this->logarLdap($usuario)){
+		if(!$this->logarLdap($usuario, $config_ldap)){
 			return false;
 		}
 		$loginVelho = $usuario->getLogin();
