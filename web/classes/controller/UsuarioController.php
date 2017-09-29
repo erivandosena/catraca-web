@@ -15,12 +15,9 @@ class UsuarioController{
 				break;
 			default:
 				$sessao = new Sessao();
-				
 				$usuario = new Usuario();
 				$usuario->setLogin($sessao->getLoginUsuario());
-				
 				$usuarioDao = new UsuarioDAO();
-				
 				$usuarioDao->preenchePorLogin($usuario);
 				$nome = $usuario->getNome();
 				$lista = explode(' ', $nome);
@@ -29,7 +26,6 @@ class UsuarioController{
 						<p>Visualize abaixo seus dados referentes ao Restaurante Universitário</p>';
 				
 				PessoalController::main($nivelDeAcesso);		
-
 				break;
 		}
 

@@ -1,4 +1,11 @@
 <?php
+
+/**
+ *
+ * @author Jefferson Uchôa Ponte
+ *
+ */
+
 class CatracaController {
 	private $view;
 	public static function main($nivelDeAcesso) {

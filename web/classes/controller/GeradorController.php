@@ -1,5 +1,10 @@
 <?php
 
+/**
+ *
+ * @author Jefferson Uchôa Ponte
+ *
+ */
 
 class GeradorController{
 	
