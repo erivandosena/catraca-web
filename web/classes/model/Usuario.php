@@ -105,7 +105,29 @@ class Usuario{
 	private $categoria;
 	private $tipoDeUsuario;
 	private $statusServidor;
+	private $idStatusServidor;
+	private $idTipoUsuario;
+	private $statusSistema;
 	
+	public function setStatusSistema($statusSistema){
+		$this->statusSistema = $statusSistema;
+	}
+	public function getStatusSistema(){
+		return $this->statusSistema;
+	}
+	public function setIdTipoUsuario($idTipoUsuario){
+		$this->idTipoUsuario = $idTipoUsuario;
+	}
+	public function getIdTipoUsuario(){
+		return $this->idTipoUsuario;
+	}
+	public function setIdStatusServidor($idStatusServidor){
+		$this->idStatusServidor = $idStatusServidor;
+		
+	}
+	public function getIdStatusServidor(){
+		return $this->idStatusServidor;
+	}
 	public function setStatusServidor($statusServidor){
 		$this->statusServidor = $statusServidor;
 	}

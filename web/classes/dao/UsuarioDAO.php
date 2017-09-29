@@ -302,6 +302,62 @@ base_dn = "dc=testes,dc=funece,dc=br"rio exista, nós pegamos seu CPF no LDAP e 
 		return false;
 		
 	}
+	/**
+	 * @param Usuario $usuario
+	 * @return array:Usuario
+	 */
+	public function retornaListaPorIdBaseExterna(Usuario $usuario){
+		$lista = array();
+		$id = $usuario->getIdBaseExterna();
+		$sql = "SELECT * FROM vw_usuarios_catraca WHERE id_usuario = $id ORDER BY status_discente, status_servidor ASC LIMIT 15";
+	
+		foreach ($this->getConexao ()->query ( $sql ) as $linha){
+			$usuarioLista = new Usuario();
+			
+			$usuarioLista->setNome($linha['nome']);
+			$usuarioLista->setEmail($linha['email']);
+			$usuarioLista->setLogin($linha['login']);
+			$usuarioLista->setCpf($linha['cpf_cnpj']);
+			$usuarioLista->setIdBaseExterna($linha['id_usuario']);
+			$usuarioLista->setIdentidade($linha['identidade']);
+			$usuarioLista->setPassaporte($linha['passaporte']);
+			$usuarioLista->setStatusSistema($linha['status_sistema']);
+			$usuarioLista->setIDTI($linha['id_tipo_usuario']);
+			$usuarioLista->setTipoDeUsuario($linha['tipo_usuario']);
+			$usuarioLista->setMatricula($linha['matricula_disc']);
+			$usuarioLista->setStatusDiscente($linha['status_discente']);
+			$usuarioLista->setIdStatusDiscente($linha['id_status_discente']);
+			$usuarioLista->setNivelDiscente($linha['nivel_discente']);
+			$usuarioLista->setCategoria($linha['categoria']);
+			$usuarioLista->setIDCategoria($linha['id_categoria']);
+			$usuarioLista->setSiape($linha['siape']);
+			$usuarioLista->setIdStatusServidor($linha['id_status_servidor']);
+			$usuarioLista->setStatusServidor($linha['status_servidor']);
+			
+			//Vamos deixar o usuário passado por parametro editado também. 
+			$usuario->setNome($linha['nome']);
+			$usuario->setEmail($linha['email']);
+			$usuario->setLogin($linha['login']);
+			$usuario->setCpf($linha['cpf_cnpj']);
+			$usuario->setIdBaseExterna($linha['id_usuario']);
+			$usuario->setIdentidade($linha['identidade']);
+			$usuario->setPassaporte($linha['passaporte']);
+			$usuario->setTipoDeUsuario($linha['tipo_usuario']);
+			$usuario->setMatricula($linha['matricula_disc']);
+			$usuario->setStatusDiscente($linha['status_discente']);
+			$usuario->setIdStatusDiscente($linha['id_status_discente']);
+			$usuario->setNivelDiscente($linha['nivel_discente']);
+			$usuario->setCategoria($linha['categoria']);
+			$usuario->setIDCategoria($linha['id_categoria']);
+			$usuario->setSiape($linha['siape']);
+			$usuario->setIdStatusServidor($linha['id_status_servidor']);
+			$usuario->setStatusServidor($linha['status_servidor']);
+			
+			$lista[] = $usuarioLista;
+		}
+		return $lista;
+	
+	}
 	
 	const ID_STATUS_DISCENTE_ATIVO = 1;
 	const ID_STATUS_DISCENTE_CADASTRADO = 3;

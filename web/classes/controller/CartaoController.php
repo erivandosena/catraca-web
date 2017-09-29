@@ -186,9 +186,9 @@ class CartaoController{
 		$usuarioDao = new UsuarioDAO();
 		$usuario = new Usuario();
 		$usuario->setIdBaseExterna($idDoSelecionado);
-		$usuarioDao->retornaPorIdBaseExterna($usuario);
+		$listaUsuariosBaseExterna = $usuarioDao->retornaListaPorIdBaseExterna($usuario);
 		
-		$this->view->mostraSelecionado($usuario, $this->cadastroDeFotos);
+		$this->view->mostraSelecionado($listaUsuariosBaseExterna, $this->cadastroDeFotos);
 		$vinculoDao = new VinculoDAO($usuarioDao->getConexao());
 		if(isset($_GET['vinculo_cancelar'])){
 			$vinculo = new Vinculo();

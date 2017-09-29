@@ -190,7 +190,14 @@ function altera() {
 	}
 	
 
-	public function mostraSelecionado(Usuario $usuario, $cadastroDeFotos = false) {
+	/**
+	 * 
+	 * @param array $listaUsuariosBaseExterna
+	 * @param string $cadastroDeFotos
+	 */
+	public function mostraSelecionado($listaUsuariosBaseExterna, $cadastroDeFotos = false) {
+		$usuario = $listaUsuariosBaseExterna[0];
+		
 		echo '<div class="doze colunas borda">';
 		
 		
@@ -257,99 +264,47 @@ function altera() {
 					<hr class="um"/>
 					';
 
-// 			echo '
-			
-// 								<table  class="tabela borda-vertical zebrada texto-preto">
-// 					<tr>
-// 						<td>';
-// 			if(file_exists('fotos/'.$_GET['selecionado'].'.png')){
-			
-// 				echo '<img width="300"  src="fotos/'.$_GET['selecionado'].'.png" />';
-			
-// 			}else{
-			
-// 				echo '<img width="300" src="img/camera.png" />';
-			
-// 			}
-			
-// 			echo '				</td>
-			
-			
-// 						<td>
-// 				<video  id="video" width="320" height="200" autoplay></video>
-// 		            <section>
-// 		                <button id="btnStart">Iniciar Video</button>
-// 		                <button id="btnStop">Parar</button>
-// 		                <button id="btnPhoto">Bater Foto</button>
-// 		            </section>
-// 						</td>
-// 						<td>
-// 				 <canvas id="canvas" width="320" height="240"></canvas>
-// 				 <form id="formulario" enctype="multipart/form-data" action="enviar.php" method="POST" id="youform" name="youform">
-// 	            <input type="hidden" name="MAX_FILE_SIZE" value="30000" />
-// 	            <input name="img64" id="img64" type="hidden" />
-// 	            <input name="id_usuario" id="id_usuario" value="'.$_GET['selecionado'].'" type="hidden" />
-	      
-// 	            <input type="submit" value="Enviar arquivo" onsubmit="document.getElementById(\'img64\').value = img" />
-// 	        </form>
-// 						</td>
-			
-// 					</tr>
-// 				</table>';
 		}
-		
+	
 		echo '<div class="doze colunas">				
 				<table  class="tabela borda-vertical zebrada">
+				 <th colspan="2">Informações Pessoais</th>
 					<tr><th>Nome:</th><td> ' . $usuario->getNome () . '.</td>';
 		echo '
              		</tr>
-					<tr><th>Login:</th><td>'. $usuario->getLogin () .'.</td></tr>
-					<tr><th>Identidade: </th><td>' . $usuario->getIdentidade () . '.</td></tr>
-					<tr><th>CPF:</th><td>' . $usuario->getCpf () . '.</tr>
+					<tr><th>Login:</th><td>'. $usuario->getLogin () .'</td></tr>
+					<tr><th>Identidade: </th><td>' . $usuario->getIdentidade () . '</td></tr>
+					<tr><th>CPF:</th><td>' . $usuario->getCpf () . '</tr>
 					<tr></td><th>Passaporte:</th><td>' . $usuario->getPassaporte() . '</td></tr>';
 				
-
-		if(strtolower (trim($usuario->getStatusServidor())) == 'ativo' && strtolower (trim($usuario->getCategoria())) == 'docente'){
-			echo '<tr><th>Servidor </th><td>Docente</td></tr>
-					<tr><th>SIAPE: </th><td>' . $usuario->getSiape().'</td></tr></table>';
-		}
-		else if(strtolower (trim($usuario->getCategoria())) == 'docente'){
-			echo "<tr><th>Servidor </th><td>Docente Inativo</td></tr>";
-			echo '<tr><th>SIAPE:</th> <td>' . $usuario->getSiape().'</td></tr>';
-		}
-		if(strtolower (trim($usuario->getStatusServidor())) == 'ativo' && strpos(strtolower (trim($usuario->getCategoria())), 'administrativo')){
-			echo "<tr><th>Servidor </th><td>TAE</td></tr>";
-			echo '<tr><th>SIAPE:</th><td>' . $usuario->getSiape().'</td></tr>';
-		}else if(strpos(strtolower (trim($usuario->getCategoria())), 'administrativo' )){
-			echo "<tr><th>Servidor </th><td>TAE Inativo</td></tr>";
-			echo '<tr><th>SIAPE:</th><td>' . $usuario->getSiape().'</td></tr>';
-			
-		}
-			
+		$usuarioBaseExterna = new Usuario();
 		
 		
-		if(strtolower (trim($usuario->getTipodeUsuario())) == 'aluno'){
-			if(strtolower (trim($usuario->getStatusDiscente())) == 'ativo'){
-				echo '<tr><th>Aluno </th><td>Ativo</td></tr>';
-			}else{
-				echo '<tr><th>Aluno </th><td>'.$usuario->getStatusDiscente().'</td></tr>';
 				
-			}
-			echo '<tr><th>Nivel Discente:</th><td> ' . $usuario->getNivelDiscente().'</td></tr>';
-			echo '<tr><th>Matricula:</th><td>'.$usuario->getMatricula().'</td></tr>';
-			
-		}else if(strtolower (trim($usuario->getStatusDiscente())) == 'ativo'){
-				echo '<tr><th>Aluno </th><td>Ativo</td></tr>';
-				echo '<tr><th>Nivel Discente:</th><td> ' . $usuario->getNivelDiscente().'</td></tr>';
-				echo '<tr><th>Matricula:</th><td>'.$usuario->getMatricula().'</td></tr>';
-
-		}
-
 
 		
-		if(strtolower (trim($usuario->getTipodeUsuario())) == 'terceirizado'){
-			echo '<tr><th colspan=2>Terceirizado Sem Informação de Status</th></tr>';
+		foreach($listaUsuariosBaseExterna as $usuarioBaseExterna){
+			
+			echo '<th colspan="2">Vinculo Institucional</th>';
+			echo '
+             		</tr>
+					<tr><th>ID Status Discente:</th><td>'. $usuarioBaseExterna->getIdStatusDiscente().'</td></tr>
+					<tr><th>Status Discente: </th><td>' . $usuarioBaseExterna->getStatusDiscente() . '</td></tr>
+					<tr><th>Matrícula Discente: </th><td>' . $usuarioBaseExterna->getMatricula(). '</td></tr>
+					<tr><th>Nivel Discente: </th><td>' .$usuarioBaseExterna->getNivelDiscente(). '</td></tr>		
+					<tr><th>ID Status Servidor: </th><td>' . $usuarioBaseExterna->getIdStatusServidor(). '</td></tr>		
+					<tr><th>Status Servidor: </th><td>' . $usuarioBaseExterna->getStatusServidor(). '</td></tr>		
+					<tr><th>ID Categoria Servidor: </th><td>' .$usuarioBaseExterna->getIDCategoria(). '</td></tr>		
+					<tr><th>Categoria Servidor: </th><td>' .$usuarioBaseExterna->getCategoria(). '</td></tr>		
+					<tr><th>Matrícula Servidor: </th><td>' .$usuarioBaseExterna->getSiape(). '</td></tr>		
+					<tr><th>ID Tipo Usuário: </th><td>' .$usuarioBaseExterna->getIdTipoUsuario(). '</td></tr>		
+					<tr><th>Tipo Usuário: </th><td>' .$usuarioBaseExterna->getTipodeUsuario(). '</td></tr>						
+					<tr><th>Status Sistema: </th><td>' .$usuarioBaseExterna->getStatusSistema(). '</td></tr>				
+							';
+					
+			
 		}
+		
 		
 		
 		echo '</table>
