@@ -86,3 +86,22 @@ th{
 .config h1{
 	color: #000;
 }
+
+.resumo{
+	position: relative;	
+}
+
+.resumo span{
+	position: absolute;
+	left:10%;
+	top: 20%;	
+	font-size: 80px;
+}
+
+.resumo img{
+	position: relative;
+	left:35%;
+	opacity: 0.1;
+
+	
+}

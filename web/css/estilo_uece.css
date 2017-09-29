@@ -502,24 +502,6 @@ span#aproxime{
 	text-align:right;
 }
 
-.resumo{
-	position: relative;	
-}
-
-.resumo span{
-	position: absolute;
-	margin: 0 auto;
-	left: 15%;
-	top: 20%;	
-	font-size: 70px;
-}
-
-.resumo img{
-	position: relative;
-	left:35%;
-	opacity: 0.1;
-	height:300px;	 
-}
 
 .qr_code{	
 	position: relative;	

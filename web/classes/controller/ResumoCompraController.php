@@ -48,7 +48,7 @@ class ResumoCompraController{
 				
 							<div class="duas colunas">
 								<a href="http://www.unilab.edu.br">
-									<img class="imagem-responsiva centralizada" src="img/logo_instituicao2_' . NOME_INSTITUICAO . '.png" style="height:2cm;">
+									<img class="imagem-responsiva centralizada" src="img/logo_instituicao2_' . NOME_INSTITUICAO . '.png" >
 								</a>
 							</div>
 	
@@ -56,7 +56,7 @@ class ResumoCompraController{
 								<h2 style="font-size:36px">Restaurante Universitário</h2>
 							</div>
 							<div class="duas colunas">
-								<img class="imagem-responsiva centralizada" src="img/logo_labpati_azul.png" style="height:2cm">
+								<img class="imagem-responsiva centralizada" src="img/logo_labpati_azul.png" >
 							</div>
 								<hr class="um"><br>
 							</div>							';		
