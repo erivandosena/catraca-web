@@ -46,20 +46,18 @@ class ResumoCompraController{
 							
 				
 				
-							<div class="duas colunas">
-								<a href="http://www.unilab.edu.br">
+							<div class="tres colunas">
 									<img class="imagem-responsiva centralizada" src="img/logo_instituicao2_' . NOME_INSTITUICAO . '.png" >
-								</a>
 							</div>
 	
-							<div class="oito colunas">
+							<div class="seis colunas">
 								<h2 style="font-size:36px">Restaurante Universitário</h2>
 							</div>
-							<div class="duas colunas">
+							<div class="tres colunas">
 								<img class="imagem-responsiva centralizada" src="img/logo_labpati_azul.png" >
 							</div>
-								<hr class="um"><br>
-							</div>							';		
+			 					
+						</div>		<hr class="um"><br>					';		
 		
 		
 		if ($cartao != ""){			

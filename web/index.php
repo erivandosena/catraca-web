@@ -164,7 +164,13 @@ echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type
 			
 			
 						</li>';
-						echo '<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a></li>';
+						echo '<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a>
+			
+			<ul>
+										<li><a href="?pagina=identificador" target="_blank">Tela de Atendimento</a></li>
+									</ul>
+			
+			</li>';
 						echo ' <li><a href="?pagina=guiche" class="item"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a>
 								<ul>
 										<li><a href="?pagina=resumo_compra" target="_blank">Tela de Atendimento</a></li>
@@ -215,7 +221,13 @@ echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type
 									</ul>
 							
 							</li>';
-						echo '	<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a></li>';
+						echo '	<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a>
+							
+							<ul>
+										<li><a href="?pagina=identificador" target="_blank">Tela de Atendimento</a></li>
+									</ul>
+							
+							</li>';
 						echo ' 	<li><a href="?pagina=guiche" class="item"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a>
 								<ul>
 										<li><a href="?pagina=resumo_compra" target="_blank">Tela de Atendimento</a></li>
@@ -266,7 +278,7 @@ echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type
 							</li>';
 						echo '	<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a>
 									<ul>
-										<li><a href="?pagina=resumo_compra">Tela de Atendimento</a></li>
+										<li><a href="?pagina=identificador" target="_blank">Tela de Atendimento</a></li>
 									</ul>
 												
 									</li>';
@@ -330,7 +342,13 @@ echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type
 						echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
 						echo '<li><a href="?pagina=cartao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a></li>';
 						
-						echo '<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a></li>';
+						echo '<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a>
+								
+								<ul>
+										<li><a href="?pagina=identificador" target="_blank">Tela de Atendimento</a></li>
+									</ul>
+								
+								</li>';
 						echo ' <li><a href="?pagina=relatorio" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a></li>';
 						
 						echo '</ol>

@@ -98,10 +98,16 @@ th{
 	font-size: 80px;
 }
 
-.resumo img{
+.resumo img {
 	position: relative;
 	left:35%;
 	opacity: 0.1;
-
-	
+	height:300px;	 
 }
+
+.qr_code{	
+	position: relative;	
+	float: right;
+}
+
+
