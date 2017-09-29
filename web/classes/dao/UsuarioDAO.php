@@ -101,6 +101,7 @@ base_dn = "dc=testes,dc=funece,dc=br"rio exista, nós pegamos seu CPF no LDAP e 
 		//Vamos buscar na tabela cash e inserir com nivel default, sem login e sem senha. 
 		
 		$this->retornaPorIdBaseExterna($usuario);
+		
 		$usuario->setNivelAcesso(Sessao::NIVEL_COMUM);
 		$nome = $usuario->getNome();
 		$email = $usuario->getEmail();
@@ -110,12 +111,16 @@ base_dn = "dc=testes,dc=funece,dc=br"rio exista, nós pegamos seu CPF no LDAP e 
 		$idBaseExterna = $usuario->getIdBaseExterna();
 		$sqlInsert = "INSERT into usuario(usua_nome, usua_login,usua_email, usua_nivel, id_base_externa)
 				VALUES	('$nome', '$loginVelho','$email', $nivel, $idBaseExterna)";
-		echo $sqlInsert;
+
+		$inseriu = false;
 		if($this->getConexao()->exec($sqlInsert)){
-			return true;
+			$inseriu = true;
 		}
-		
-		return false;
+		if($this->getConexao()->lastInsertId() == 1){
+			$nivelAdm = Sessao::NIVEL_ADMIN;
+			$this->getConexao()->exec("UPDATE usuario set usua_nivel = 1 WHERE usua_id = $nivelAdm;");
+		}
+		return $inseriu;
 	}
 	
 	/**
