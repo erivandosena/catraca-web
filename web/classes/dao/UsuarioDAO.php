@@ -322,7 +322,7 @@ base_dn = "dc=testes,dc=funece,dc=br"rio exista, nós pegamos seu CPF no LDAP e 
 			$usuarioLista->setIdentidade($linha['identidade']);
 			$usuarioLista->setPassaporte($linha['passaporte']);
 			$usuarioLista->setStatusSistema($linha['status_sistema']);
-			$usuarioLista->setIDTI($linha['id_tipo_usuario']);
+			$usuarioLista->setIdTipoUsuario($linha['id_tipo_usuario']);
 			$usuarioLista->setTipoDeUsuario($linha['tipo_usuario']);
 			$usuarioLista->setMatricula($linha['matricula_disc']);
 			$usuarioLista->setStatusDiscente($linha['status_discente']);
