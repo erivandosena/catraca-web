@@ -384,10 +384,12 @@ class CatracaVirtualController{
 						
 							</div>
 							<div class="tres colunas zoom">';
-				if(file_exists("fotos/'.$imagem.'.png")){
+				
+				if(file_exists('fotos/'.$imagem.'.png')){
 					echo '<img id="imagem" src="fotos/'.$imagem.'.png" alt="">';
 					
 				}
+				
 					
 				echo '			</div>
 						</div>

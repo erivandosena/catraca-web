@@ -48,7 +48,7 @@ class ResumoCompraController{
 				
 							<div class="duas colunas">
 								<a href="http://www.unilab.edu.br">
-									<img class="imagem-responsiva centralizada" src="img/logo_instituicao_' . NOME_INSTITUICAO . '.png" style="height:2cm;">
+									<img class="imagem-responsiva centralizada" src="img/logo_instituicao2_' . NOME_INSTITUICAO . '.png" style="height:2cm;">
 								</a>
 							</div>
 	
@@ -56,7 +56,7 @@ class ResumoCompraController{
 								<h2 style="font-size:36px">Restaurante Universitário</h2>
 							</div>
 							<div class="duas colunas">
-								<img class="imagem-responsiva centralizada" src="img/logo_labpati_branco.png" style="height:2cm">
+								<img class="imagem-responsiva centralizada" src="img/logo_labpati_azul.png" style="height:2cm">
 							</div>
 								<hr class="um"><br>
 							</div>							';		
@@ -80,18 +80,15 @@ class ResumoCompraController{
 						<div class="resumo">
 							<span class="no-centro texto-azul2 centralizado">Guichê de Atendimento</span>';
 			
-			if(NOME_INSTITUICAO == 'unilab'){
-				echo ' 			<img class="imagem-responsiva" src="img/Simbolo_da_UNILAB.png" alt="">';
-			}
+		
+				echo ' 			<img class="imagem-responsiva" src="img/logo_instituicao3_'.NOME_INSTITUICAO.'.png" alt="">';
+		
 			
 			echo '
 						</div>';
 			
 			if(NOME_INSTITUICAO == 'unilab'){
 				echo '			<img class="qr_code" src="app/imagens/qrcode_app.jpg">';
-			}else{
-				echo "<br><br><br>";
-				echo "<br><br><br>";
 			}
 			
 			echo '
