@@ -269,7 +269,7 @@ function altera() {
 		echo '<div class="doze colunas">				
 				<table  class="tabela borda-vertical zebrada">
 				 <th colspan="2">Informações Pessoais</th>
-					<tr><th>Nome:</th><td> ' . $usuario->getNome () . '.</td>';
+					<tr><th>Nome:</th><td> ' . $usuario->getNome () . '</td>';
 		echo '
              		</tr>
 					<tr><th>Login:</th><td>'. $usuario->getLogin () .'</td></tr>
