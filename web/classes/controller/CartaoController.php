@@ -339,13 +339,7 @@ class CartaoController{
 				echo '<h2 class="titulo">Vinculos A Liberar</h2>';
 				$this->view->mostraVinculos($vinculosALiberar, false);					
 			}	
-		
-
-		
 	}
-
-	
-	
 }
 
 
