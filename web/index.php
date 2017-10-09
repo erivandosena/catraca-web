@@ -9,8 +9,7 @@ define ( "LOGIN_LDAP", $config ['login_ldap'] );
 define ( "FONT_DADOS_LDAP_ENTIDADE", $config ['font_dados_ldap_entidade'] );
 define ( "VERSAO_SINCRONIZADOR", $config ['versao_sincronizador'] );
 define("PARAMETROS_LDAP_BASE_LOCAL", $config['parametros_ldap_base_local']);
-define("PARAMETROS_LDAP_BASE_LOCAL", $config['parametros_ldap_base_local']);
-
+define("BARRA_GOVERNO_FEDERAL", $config['barra_governo_federal']);
 
 
 ini_set('display_errors',1);
@@ -79,21 +78,9 @@ echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type
 </head>
 <body>
 	<div class="pagina fundo-cinza1">
-		<div class="acessibilidade">
-			<div class="config">
-				<div class="a-esquerda">
-					<!-- 					<a href="#conteudo" tabindex="1" accesskey="1">Ir para o conteúdo <b>1</b></a> -->
-					<!-- 					<a href="#menu" tabindex="2" accesskey="2"><span>Ir para o</span> menu <b>2</b></a> -->
-					<!-- 					<a href="#busca" tabindex="3" accesskey="3"><span>Ir para a</span> busca <b>3</b></a> -->
-					<!-- 					<a href="#rodape" tabindex="4" accesskey="4"><span>Ir para o</span> rodapé <b>4</b></a> -->
-				</div>
-				<div class="a-direita">
-					<!-- 					<a href="#" id="alto-contraste">ALTO <b>CONTRASTE</b></a> -->
-					<!-- 					<a href="#" id="mapa-do-site"><b>MAPA DO SITE</b></a> -->
-				</div>
-			</div>
-		</div>
-		<div id="barra-governo">
+	<?php 
+	if(!(BARRA_GOVERNO_FEDERAL == 'n')){
+		echo '<div id="barra-governo">
 			<div class="resolucao config">
 				<div class="a-esquerda">
 					<a href="http://brasil.gov.br/" target="_blank"><span id="bandeira"></span><span>BRASIL</span></a>
@@ -111,7 +98,11 @@ echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type
 						target="_blank">Canais</a></li>
 				</ul>
 			</div>
-		</div>
+		</div>';
+	}
+	
+	?>
+		
 		<div class="doze colunas gradiente">
 			<div id="topo" class="resolucao ">
 				<div class="tres colunas">

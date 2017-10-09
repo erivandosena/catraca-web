@@ -9,7 +9,8 @@ class UsuarioDAO extends DAO {
 		$ldap_server = $config['servidor'].":".$config['porta'];
 		$auth_user = $config['usuario_consulta'].'@'.$config['dominio'];
 		$auth_pass = $config['senha'];
-		
+		$base_dn = $config['base_dn'];
+		$campo_filtro = $conifg['campo_filtro'];
 		// Tenta se conectar com o servidor
 		if (! ($connect = @ldap_connect ( $ldap_server ))) {
 			return FALSE;
@@ -18,7 +19,7 @@ class UsuarioDAO extends DAO {
 		if (! ($bind = @ldap_bind ( $connect, $auth_user, $auth_pass ))) {
 			return FALSE;
 		} else {
-			$result = ldap_search($connect,"dc=testes,dc=funece,dc=br", "(sAMAccountName=$login)") or die ("Error in search query: ".ldap_error($connect));
+			$result = ldap_search($connect,$base_dn, "($campo_filtro=$login)") or die ("Error in search query: ".ldap_error($connect));
 			$data = ldap_get_entries($connect, $result);
 			if(!isset($data[0]['employeenumber'])){
 				return false;
