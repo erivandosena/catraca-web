@@ -86,14 +86,8 @@ class CatracaVirtualController{
 		$unidadeDao->preencheCatracaPorId($catraca);
 		
 		echo '<div class="navegacao"> 
-				<div class = "simpleTabs">
-			        <ul class = "simpleTabsNavigation">					
-						<li><a href="#">Catraca Virtual</a></li>	
-			        </ul>
-				
-			        <div class = "simpleTabsContent">
-				
-						<div id="catraca-virtual" class="doze colunas borda">';
+				<div id="catraca-virtual" class="doze colunas borda">';
+		
 		$turnoAtivo = false;
 		$data = date ( "Y-m-d G:i:s" );
 		$selectTurno = "Select * FROM turno WHERE '$data' BETWEEN turno.turn_hora_inicio AND turno.turn_hora_fim";
@@ -400,8 +394,7 @@ class CatracaVirtualController{
 					</div>';				
 			}
 		}
-		echo '</div>
-				</div>';
+
 		        
 		
 		
