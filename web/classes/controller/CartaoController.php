@@ -205,7 +205,7 @@ class CartaoController{
 			echo '<meta http-equiv="refresh" content="2; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
 			return;
 		}
-		$tipoDao = new TipoDAO($vinculoDao->getConexao());
+		$validacaoDao  = new ValidacaoDAO($vinculoDao->getConexao());
 		if(isset($_GET['vinculo_renovar'])){
 			$vinculo = new Vinculo();
 			$vinculo->setId($_GET['vinculo_renovar']);
@@ -230,7 +230,7 @@ class CartaoController{
 			$vinculoRenovavel = true;
 			$tipo = $vinculo->getCartao()->getTipo();
 			
-			$vinculoRenovavel = $tipoDao->tipoValido($vinculo->getResponsavel(), $tipo);
+			$vinculoRenovavel = $validacaoDao->tipoValido($vinculo->getResponsavel(), $tipo);
 			if(!$vinculoRenovavel){
 				$this->view->formMensagem("-erro", 'Esse usuário possui um problema quanto ao status! ('.$usuario->getStatusDiscente().")");
 				echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
@@ -250,7 +250,7 @@ class CartaoController{
 		$vinculos = $vinculoDao->retornaVinculosValidosDeUsuario($usuario);			
 
 		$listaDeTipos = array();
-		$listaDeTipos = $tipoDao->retornaTiposValidosUsuario($usuario);
+		$listaDeTipos = $validacaoDao->retornaTiposValidosUsuario($usuario);
 		$usuarioAtivo = false;
 		if(sizeof($listaDeTipos) > 0){
 			$usuarioAtivo = true;

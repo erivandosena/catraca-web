@@ -1,5 +1,11 @@
 <?php 
 
+/**
+ * 
+ * @author Alan Cleber Morais Gomes
+ * 
+ *
+ */
 class RegistroOrfaoController {
 	
 	private $view;

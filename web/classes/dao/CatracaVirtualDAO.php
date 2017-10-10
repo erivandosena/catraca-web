@@ -49,6 +49,8 @@ class CatracaVirtualDAO extends DAO{
 			$vinculo->getCartao()->setCreditos($linha['cart_creditos']);
 			$vinculo->getCartao()->setId($linha['cart_id']);
 			$vinculo->getCartao()->getTipo()->setNome($linha ['tipo_nome']);
+			$vinculo->getCartao()->getTipo()->setId($linha ['tipo_id']);
+				
 			$vinculo->getCartao()->getTipo()->setValorCobrado($linha['tipo_valor']);
 			$vinculo->getCartao()->setNumero($linha ['cart_numero']);
 			$vinculo->getCartao()->setId($linha['cart_id']);

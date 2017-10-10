@@ -10,7 +10,7 @@ class UsuarioDAO extends DAO {
 		$auth_user = $config['usuario_consulta'].'@'.$config['dominio'];
 		$auth_pass = $config['senha'];
 		$base_dn = $config['base_dn'];
-		$campo_filtro = $conifg['campo_filtro'];
+		$campo_filtro = $config['campo_filtro'];
 		// Tenta se conectar com o servidor
 		if (! ($connect = @ldap_connect ( $ldap_server ))) {
 			return FALSE;

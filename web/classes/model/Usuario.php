@@ -265,21 +265,7 @@ class Usuario{
 		
 		
 	}
-	public function verificaSeAtivo(){
-		if(strtolower (trim($this->getStatusServidor())) == 'ativo'){
-				
-			return true;
-		}
-		if(strtolower (trim($this->getStatusDiscente())) == 'ativo' || strtolower (trim($this->getStatusDiscente())) == 'formando' || strtolower (trim($this->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($this->getStatusDiscente())) == 'ativo - graduando'){
-			return true;
-		}
 	
-		if(strtolower (trim($this->getTipodeUsuario())) == 'terceirizado' || strtolower (trim($this->getTipodeUsuario())) == 'outros'){
-			return true;
-		}
-	
-		return false;
-	}
 	
 	
 }
