@@ -104,7 +104,7 @@ echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type
 	?>
 		
 		<div class="doze colunas gradiente">
-			<div id="topo" class="resolucao ">
+			<div id="topo" class="resolucao">
 				<div class="tres colunas">
 				<?php
 				echo '<a href="' . PAGINA_INSTITUICAO . '"><img
