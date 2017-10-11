@@ -27,29 +27,12 @@ class CartaoAvulsoController{
 	
 	public function telaCartao(){
 		$this->view = new CartaoAvulsoView();
-		echo '<div class="conteudo"> <div class = "simpleTabs">
-		        <ul class = "simpleTabsNavigation">';
-				
-// 		echo '		<li><a href="#">Listar Avulsos</a></li>';
-		
-		echo '		<li><a href="#">Cadastro de Avulso</a></li>';
-		
-		echo '			
-		        </ul>';
-		
-// 		echo '    <div class = "simpleTabsContent">';
-		
-// 		$this->telaIdentificacao();
-// 		echo '	</div>';
-		
-		
-						
-						
-		echo '	<div class = "simpleTabsContent">';
+		echo '<div class="conteudo"> 
+				<div class = "simpleTabs">';		
+
 		$this->telaCadastro();
 		echo '	</div>		
-						
-		    </div></div>';
+		    </div>';
 		
 		
 		

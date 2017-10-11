@@ -97,7 +97,7 @@ class NivelAcessoView {
 	public function formBuscaUsuarios() {
 		echo '					<div class="borda">
 									<form method="get" action="" class="formulario em-linha" >
-		
+												<h2 class="titulo">Nível de Acesso</h2>
 										<label for="opcoes-1">
 											<object class="rotulo texto-preto">Buscar por: </object>
 											<select name="opcoes-1" id="opcoes-1" class="texto-preto">

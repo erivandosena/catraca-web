@@ -65,7 +65,7 @@ class CartaoAvulsoView {
 	public function formBuscaUsuarios() {
 		echo '					<div class="borda">
 									<form method="get" action="" class="formulario em-linha" >
-		
+										<h2 class="titulo">Cartão Avulso</h2>
 										<label for="opcoes-1">
 											<object class="rotulo texto-preto">Buscar por: </object>
 											<input type="hidden" name="pagina" value="avulso" />

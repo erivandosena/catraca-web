@@ -26,14 +26,14 @@ class ValidacaoController{
 	}
 	
 	public function telaValidacao(){
-		
-		echo '	<div class = "simpleTabs">
-			        <ul class = "simpleTabsNavigation">
-			            <li><a href="#">Autenticação</a></li>
-			        </ul>
-					<div class = "simpleTabsContent">';
+		echo '<div class="navegacao">
+				<div class = "simpleTabs">
+			       
+						<div class="doze colunas borda">';
+
 		$this->Validacao();
 		echo '		</div>
+				</div>
 				</div>';
 		
 	}

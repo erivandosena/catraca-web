@@ -34,10 +34,7 @@ class CatracaVirtualView{
 
 		echo '<div class="navegacao">
 				<div class = "simpleTabs">
-			        <ul class = "simpleTabsNavigation">
-						<li><a href="#">Cadastro</a></li>
-			        </ul>
-			        <div class = "simpleTabsContent">
+			       
 						<div class="doze colunas borda">';
 		
 		echo '<form action="" method="post">
@@ -59,7 +56,7 @@ class CatracaVirtualView{
 		
 		echo '</div>
 				</div>
-				</div>
+				
 				</div>';
 		
 	}

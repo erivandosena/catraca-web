@@ -49,7 +49,6 @@ class ValidacaoDAO extends DAO{
 				INNER JOIN tipo ON validacao.tipo_id = tipo.tipo_id
 				WHERE tipo.tipo_id = $idTipo
 				";
-		echo $sql;
 		$result = $this->getConexao()->query($sql);
 		foreach ($result as $linha){
 			$validacao = new Validacao;

@@ -71,7 +71,7 @@ function altera() {
 // ####################
 		echo '					<div class="borda">
 									<form method="get" action="" class="formulario em-linha" >
-		
+												<h2 class="titulo">Cartão Próprio</h2>
 										<label for="opcoes-1">
 											<object class="rotulo texto-preto">Nome do Usuario: </object>
 											<input class="texto-preto" type="text" name="nome" id="campo-texto" /><br>										
