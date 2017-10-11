@@ -21,6 +21,7 @@ class UsuarioDAO extends DAO {
 		} else {
 			$result = ldap_search($connect,$base_dn, "($campo_filtro=$login)") or die ("Error in search query: ".ldap_error($connect));
 			$data = ldap_get_entries($connect, $result);
+			
 			if(!isset($data[0]['employeenumber'])){
 				return false;
 			}
