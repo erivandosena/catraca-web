@@ -82,7 +82,7 @@ base_dn = "dc=testes,dc=funece,dc=br"rio exista, nós pegamos seu CPF no LDAP e 
 	 * @param Usuario $usuario
 	 * 
 	 */
-	const ARQUIVO_LDAP_CONFIG =  "/dados/sites/adm/catraca/config/catraca_ldap.ini";
+	const ARQUIVO_LDAP_CONFIG =  "/dados/config/catraca_ldap.ini";
 	
 	public function autenticaLdap(Usuario $usuario){
 		$config_ldap = parse_ini_file (self::ARQUIVO_LDAP_CONFIG);

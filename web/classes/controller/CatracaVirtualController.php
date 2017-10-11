@@ -13,9 +13,7 @@ class CatracaVirtualController{
 	private $catracaSelecionada;
 	
 	public function CatracaVirtualController(){
-		
 		$this->view = new CatracaVirtualView();
-		
 	}
 	
 	public static function main($nivel){

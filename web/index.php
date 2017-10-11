@@ -1,6 +1,6 @@
 <?php
 
-define ( "CONFIG_CATRACA", "/dados/sites/adm/catraca/config/catraca.ini" );
+define ( "CONFIG_CATRACA", "/dados/config/catraca.ini" );
 $config = parse_ini_file ( CONFIG_CATRACA );
 define ( "CADASTRO_DE_FOTOS", $config ['cadastro_de_fotos'] );
 define ( "NOME_INSTITUICAO", $config ['nome_instituicao'] );
