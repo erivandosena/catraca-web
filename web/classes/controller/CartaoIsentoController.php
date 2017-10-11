@@ -27,13 +27,11 @@ class CartaoIsentoController{
 	
 	public function telaCartao(){
 		$this->view = new CartaoIsentoView();
-		echo '<div class="conteudo"> <div class = "simpleTabs">';
-
+		echo '<div class="conteudo">
+				<div class = "simpleTabs">';
 		$this->telaIdentificacao();
-
-		echo '</div></div>';
-		
-		
+		echo '</div>
+			</div>';
 		
 	}
 	public function telaIdentificacao(){
