@@ -8,6 +8,10 @@
  */
 class CatracaVirtualView{
 
+	/**
+	 * Este formulário é utilizado na catraca virtual para buscar o cartão do indivúduo que irá se alimentar no RU. 
+	 * 
+	 */
 	public function formBuscaCartao(){
 		echo '
 				<script>

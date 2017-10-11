@@ -77,15 +77,11 @@ class CatracaVirtualController{
 		$listaDeTipos = $tipoDao->retornaLista();
 		$tipoIsento = new Tipo();
 		
-		
 		$unidadeDao = new UnidadeDAO($this->dao->getConexao());
 		$catraca = new Catraca();
 		$catraca->setId($_SESSION['catraca_id']);
 		$unidadeDao->preencheCatracaPorId($catraca);
-		
-		echo '<div class="navegacao"> 
-				<div id="catraca-virtual" class="doze colunas borda">';
-		
+
 		$turnoAtivo = false;
 		$data = date ( "Y-m-d G:i:s" );
 		$selectTurno = "Select * FROM turno WHERE '$data' BETWEEN turno.turn_hora_inicio AND turno.turn_hora_fim";
@@ -96,6 +92,10 @@ class CatracaVirtualController{
 			$descricao = $linha['turn_descricao'];
 			break;
 		}
+
+		echo '<div class="navegacao">
+				<div id="catraca-virtual" class="doze colunas borda">';
+		
 		
 		echo '	<div class="doze colunas conteudo centralizado titulo-com-borda" >
 					<div class="quatro colunas">
@@ -103,11 +103,12 @@ class CatracaVirtualController{
 					</div>';
 		
 		if($catraca->financeiroAtivo()){
-		echo '		<div class="quatro colunas fundo-verde1 texto-branco negrito" >
+			echo '		<div class="quatro colunas fundo-verde1 texto-branco negrito" >
 				 	<p>Módulo Financeiro Habilitado</p>
 					</div>';
 		}
-		else{
+		else
+		{
 			echo '	<div class="quatro colunas fundo-vermelho1 texto-branco negrito" >
 				 	<p>Módulo Financeiro Desabilitado</p>
 					</div>';
