@@ -150,7 +150,7 @@ echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type
 									<ul>
 										<li><a href="?pagina=cartao">Próprio</a></li>
 										<li><a href="?pagina=avulso">Avulso</a></li>
-										<li><a href="?pagina=isento">Isento</a></li>
+										<li><a href="?pagina=isento">Isenção</a></li>
 									</ul>
 			
 			
@@ -206,8 +206,8 @@ echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type
 									<ul>
 										<li><a href="?pagina=cartao">Próprio</a></li>
 										<li><a href="?pagina=avulso">Avulso</a></li>
-										<li><a href="?pagina=isento">Isento</a></li>
-										<li><a href="?pagina=info">Informações</a></li>
+										<li><a href="?pagina=isento">Isenção</a></li>
+										
 							
 									</ul>
 							

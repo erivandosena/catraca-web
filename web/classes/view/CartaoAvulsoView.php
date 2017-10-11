@@ -66,16 +66,14 @@ class CartaoAvulsoView {
 		echo '					<div class="borda">
 									<form method="get" action="" class="formulario em-linha" >
 										<h2 class="titulo">Cartão Avulso</h2>
-										<label for="opcoes-1">
-											<object class="rotulo texto-preto">Buscar por: </object>
-											<input type="hidden" name="pagina" value="avulso" />
-											<select name="opcoes-1" id="opcoes-1" class="texto-preto">
-												<option value="1">Nome</option>
-		
-											</select>
-											<input class="texto-preto" type="text" name="nome" id="campo-texto-2" /><br>
-											<input type="submit" />
+										<label for="nome">
+											<object class="rotulo texto-preto">Nome do Usuario: </object>		
 										</label>
+											<input type="hidden" name="pagina" value="avulso" />	
+											
+											<input class="texto-preto" type="text" name="nome" id="nome" /><br>
+											<input type="submit" />
+										
 		
 									</form>
 									</div>';
