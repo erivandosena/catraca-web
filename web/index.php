@@ -50,6 +50,14 @@ if (VERSAO_SINCRONIZADOR == 1) {
 
 ?>
 <!DOCTYPE html>
+<!-- 
+	Sistema Catraca Web
+	Altoria: 
+		Jefferson Ucôa Ponte
+		Alan Cleber Morais Gomes
+		Versão 1.0.0 
+		
+-->
 <html lang="pt-BR">
 <head>
 
@@ -63,6 +71,7 @@ if (VERSAO_SINCRONIZADOR == 1) {
 <link rel="stylesheet" href="css/simpletabs.css" />
 <link rel="stylesheet" href="css_spa/spa.css" />
 <link rel="stylesheet" href="css/estilo_comum.css" type="text/css" media="screen">
+
 <?php
 echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type="text/css" media="screen">';
 
@@ -113,7 +122,8 @@ echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type
 				?>
 				</div>
 				<div class="seis colunas centralizado">
-					<h1>CATRACA<br> <small class="texto-branco">Controle Administrativo de Tr&aacute;fego Acadêmico Automatizado</small></h1>
+					<h1>CATRACA</h1><small class="texto-branco">  v. 1.0.0 </small><br><h1> <small class="texto-branco">Controle Administrativo de Tr&aacute;fego Acadêmico Automatizado</small></h1>
+					
 				</div>
 				<div class="tres colunas alinhado-a-direita">
 					<a href="http://www.unilab.edu.br"><img src="img/logo_labpati_branco.png" alt=""></a>

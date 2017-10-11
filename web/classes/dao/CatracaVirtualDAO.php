@@ -104,7 +104,6 @@ class CatracaVirtualDAO extends DAO{
 		
 		try{
 			$stmt = $this->getConexao()->prepare($sql);
-// 			$stmt->bindParam(":numero", $numero, PDO::PARAM_STR);
 			$stmt->execute();
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		}catch (PDOException $e){
@@ -132,7 +131,6 @@ class CatracaVirtualDAO extends DAO{
 		INNER JOIN isencao ON cartao.cart_id = isencao.cart_id
 		WHERE (vinculo.vinc_id = $idVinculo) AND  ('$dataTimeAtual' < isencao.isen_fim);";
 		$result = $this->getConexao ()->query ($sql);
-// 		echo $sql;
 		foreach($result as $linha){
 			if(isset($linha['isen_id'])){
 				$vinculo->setIsencao(new Isencao());
