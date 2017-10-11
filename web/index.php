@@ -527,9 +527,6 @@ echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type
 							case 'relatorio_guiche' :
 								RelatorioControllerGuiche::main ( $sessao->getNivelAcesso () );
 								break;
-							case 'info' :
-								InfoController::main ( $sessao->getNivelAcesso () );
-								break;
 							case 'identificador' :
 								IdentificadorClienteController::main ( $sessao->getNivelAcesso () );
 								break;
@@ -541,9 +538,6 @@ echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type
 								break;
 							case 'resumo_compra' :
 								ResumoCompraController::main ( $sessao->getNivelAcesso () );
-								break;
-							case 'importar_csv' :
-								ImportarCSVController::main ( $sessao->getNivelAcesso () );
 								break;
 							case 'relatorio_turno' :
 								RelatorioTurnoController::main ( $sessao->getNivelAcesso () );

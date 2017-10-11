@@ -1,6 +1,10 @@
 <?php
 
- 
+/**
+ * 
+ * @author Alan Cleber Moraies Gomes
+ *
+ */
 class IdentificadorClienteController{
 	
 	public static function main($nivel){
