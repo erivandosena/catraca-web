@@ -16,12 +16,12 @@ from catraca.dispositivos import display
 from catraca.dao.cartaodao import CartaoDAO
 
 __author__ = "Erivando, Sena, e Ramos"
-__copyright__ = "Copyright 2015, Unilab"
+__copyright__ = "Copyright 2015, ©"
 __credits__ = ["Erivando", "Sena", "Ramos"]
-__license__ = "GPL"
+__license__ = "Copyright"
 __version__ = "1.0.0"
 __maintainer__ = "Erivando"
-__email__ = "erivandoramos@unilab.edu.br"
+__email__ = "erivandoramos@bol.com.br"
 __status__ = "Protótipo"
 
 # green/data0 is pin 11

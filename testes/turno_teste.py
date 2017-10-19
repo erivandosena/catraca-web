@@ -9,10 +9,10 @@ from catraca.dao.turnodao import TurnoDAO
 from catraca.dao.finalidadedao import FinalidadeDAO
 
 
-__author__ = "Erivando Sena"
-__copyright__ = "Copyright 2015, Unilab"
-__email__ = "erivandoramos@unilab.edu.br"
-__status__ = "Prototype" # Prototype | Development | Production
+__author__ = "Erivando Sena" 
+__copyright__ = "Copyright 2015, © 09/02/2015" 
+__email__ = "erivandoramos@bol.com.br" 
+__status__ = "Prototype"
 
 
 locale.setlocale(locale.LC_ALL, 'pt_BR.UTF-8')

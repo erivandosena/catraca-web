@@ -4,7 +4,7 @@
 
 #parametros
 RPINAME="$(cat /etc/hostname | sed 's/^[\t]*//;s/[ \t]*$//')"
-MAILTO="erivandoramos@unilab.edu.br"
+MAILTO="erivandoramos@bol.com.br"
 
 # obtem interface
 if [ $# -eq 0 ]

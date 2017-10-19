@@ -7,10 +7,10 @@ import hashlib
 import decimal
 import datetime
 
-__author__ = "Erivando Sena"
-__copyright__ = "(C) Copyright 2015, Unilab"
-__email__ = "erivandoramos@unilab.edu.br"
-__status__ = "Prototype" # Prototype | Development | Production
+__author__ = "Erivando Sena" 
+__copyright__ = "Copyright 2015, © 09/02/2015" 
+__email__ = "erivandoramos@bol.com.br" 
+__status__ = "Prototype"
 
 
 class CustoRefeicao(object):

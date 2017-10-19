@@ -4,12 +4,10 @@
 from catraca.modelo.dao.cartao_dao import CartaoDAO
 from catraca.modelo.dao.registro_dao import RegistroDAO
 
-
-__author__ = "Erivando Sena"
-__copyright__ = "Copyright 2015, Unilab"
-__email__ = "erivandoramos@unilab.edu.br"
-__status__ = "Prototype" # Prototype | Development | Production
-
+__author__ = "Erivando Sena" 
+__copyright__ = "Copyright 2015, © 09/02/2015" 
+__email__ = "erivandoramos@bol.com.br" 
+__status__ = "Prototype"
 
 def main():
     print 'Iniciando os testes tabela cartao...'

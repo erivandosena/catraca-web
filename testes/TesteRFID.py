@@ -15,12 +15,12 @@ import time
 from catraca.controle.raspberrypi.pinos import PinoControle
 
 __author__ = "Erivando, Sena, e Ramos"
-__copyright__ = "Copyright 2015, Unilab"
+__copyright__ = "Copyright 2015, ©"
 __credits__ = ["Erivando", "Sena", "Ramos"]
 __license__ = "GPL"
 __version__ = "1.0.0"
 __maintainer__ = "Erivando"
-__email__ = "erivandoramos@unilab.edu.br"
+__email__ = "erivandoramos@bol.com.br"
 __status__ = "Protótipo"
 
 

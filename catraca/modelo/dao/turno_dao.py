@@ -9,10 +9,10 @@ from catraca.modelo.dao.catraca_dao import CatracaDAO
 from catraca.modelo.entidades.turno import Turno
 
 
-__author__ = "Erivando Sena"
-__copyright__ = "Copyright 2015, Unilab"
-__email__ = "erivandoramos@unilab.edu.br"
-__status__ = "Prototype" # Prototype | Development | Production
+__author__ = "Erivando Sena" 
+__copyright__ = "Copyright 2015, © 09/02/2015" 
+__email__ = "erivandoramos@bol.com.br" 
+__status__ = "Prototype"
 
 
 class TurnoDAO(DAOGenerico):

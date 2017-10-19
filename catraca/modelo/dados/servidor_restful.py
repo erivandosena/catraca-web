@@ -6,22 +6,18 @@ import requests
 
 
 __author__ = "Erivando Sena" 
-__copyright__ = "Copyright 2015, Unilab" 
-__email__ = "erivandoramos@unilab.edu.br" 
-__status__ = "Prototype" # Prototype | Development | Production 
+__copyright__ = "Copyright 2015, © 09/02/2015" 
+__email__ = "erivandoramos@bol.com.br" 
+__status__ = "Prototype"
 
 
 class ServidorRestful(object):
-    
-    #URL = 'http://10.5.0.123:27289/api/'
-    #URL = 'catraca.unilab.edu.br:27289/api/'
-    #URL = 'http://10.5.0.15:27289/api/'
-    
+
     def __init__(self):
         super(ServidorRestful, self).__init__()
         self.URL = 'http://10.5.0.123:27289/api/'
         self.__usuario = "catraca"
-        self.__senha = "CaTr@CaUniLab2015"
+        self.__senha = "catraca"
         self.instancia_sessao = None
         
     @property

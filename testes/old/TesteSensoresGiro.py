@@ -10,10 +10,14 @@ from catraca.dispositivos import sensor_optico
 from catraca.dispositivos.sensor_optico import SensorOptico
 
 
-__author__ = "Erivando Sena" 
-__copyright__ = "Copyright 2015, Unilab" 
-__email__ = "erivandoramos@unilab.edu.br" 
-__status__ = "Prototype" # Prototype | Development | Production 
+__author__ = "Erivando, Sena, e Ramos"
+__copyright__ = "Copyright 2015, ©"
+__credits__ = ["Erivando", "Sena", "Ramos"]
+__license__ = "Copyright"
+__version__ = "1.0.0"
+__maintainer__ = "Erivando"
+__email__ = "erivandoramos@bol.com.br"
+__status__ = "Protótipo"
 
 
 rpi = PinoControle()

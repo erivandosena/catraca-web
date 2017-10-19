@@ -1,2 +1,0 @@
-pg_dump --host localhost --port 5432 --username "catraca"  --encoding UTF8 --verbose --format=c --file "/home/erivando/desenvolvimento.backup" "desenvolvimento"
-pg_restore -i -h localhost -p 5432 -U catraca -d desenvolvimento -v "/home/erivando/desenvolvimento.backup"

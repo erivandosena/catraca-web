@@ -9,14 +9,14 @@ Descrição detalhada sobre o documento.
 # Imports
 import RPi.GPIO as GPIO
 
-__author__ = "erivando"
-__copyright__ = "Copyright 2015, Unilab"
-__credits__ = ["erivando", ""]
-__license__ = ""
+__author__ = "Erivando, Sena, e Ramos"
+__copyright__ = "Copyright 2015, ©"
+__credits__ = ["Erivando", "Sena", "Ramos"]
+__license__ = "Copyright"
 __version__ = "1.0.0"
-__maintainer__ = "erivando"
-__email__ = "erivandoramos@unilab.edu.br"
-__status__ = "Desenvolvimento"
+__maintainer__ = "Erivando"
+__email__ = "erivandoramos@bol.com.br"
+__status__ = "Protótipo"
 
 
 def main():
