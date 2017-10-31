@@ -540,9 +540,6 @@ echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type
 							case 'identificador' :
 								IdentificadorClienteController::main ( $sessao->getNivelAcesso () );
 								break;
-							case 'auditoria' :
-								AuditoriaController::main ( $sessao->getNivelAcesso () );
-								break;
 							case 'pessoal' :
 								PessoalController::main ( $sessao->getNivelAcesso () );
 								break;
