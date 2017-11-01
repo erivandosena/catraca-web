@@ -12,6 +12,11 @@
 
 class CartaoController{
 
+	/**
+	 * Retorna true para os níveis de acesso que podem acessar esta aplicação. 
+	 * Niveis de acesso definidos na classe Sessao. 
+	 * @param int $nivelDeAcesso
+	 */
 	public static function verificaPermissao($nivelDeAcesso){
 		if($nivelDeAcesso == Sessao::NIVEL_SUPER){
 			return true;
@@ -29,6 +34,12 @@ class CartaoController{
 		}
 		return false;
 	}
+	/**
+	 * Inicia a aplicação, fazendo antes a verificação de nível de aceso. 
+	 * 
+	 * @param int $nivelDeAcesso
+	 * @param bool $cadastroDeFotos
+	 */
 	public static function main($nivelDeAcesso, $cadastroDeFotos = false){
 		if(self::verificaPermissao($nivelDeAcesso)){
 			$controller = new CartaoController($cadastroDeFotos);
@@ -38,15 +49,29 @@ class CartaoController{
 		}
 	}	
 	
+	/**
+	 * Classe de Visão utilizada na aplicação Cartão
+	 * @var CartaoView
+	 */
 	private $view;
+	
+	/**
+	 * Variável de configiguração, se for true o cadastro de fotos será 
+	 * disponibilizado na tela de cadatro de cartão. 
+	 * @var bool
+	 */
 	private $cadastroDeFotos;
 	
+	/**
+	 * @param bool $cadastroDeFotos
+	 */
 	public function __construct($cadastroDeFotos = false){
+		$this->view = new CartaoView();
 		$this->cadastroDeFotos = $cadastroDeFotos;
 	}
 	
 	public function telaCartao(){
-		$this->view = new CartaoView();
+		
 		echo '<div class = "simpleTabs">
 			        <ul class = "simpleTabsNavigation">					
 						<li><a href="#">Identifica&ccedil;&atilde;o</a></li>
