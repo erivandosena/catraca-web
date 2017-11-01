@@ -10,7 +10,7 @@ define ( "FONT_DADOS_LDAP_ENTIDADE", $config ['font_dados_ldap_entidade'] );
 define ( "VERSAO_SINCRONIZADOR", $config ['versao_sincronizador'] );
 define("PARAMETROS_LDAP_BASE_LOCAL", $config['parametros_ldap_base_local']);
 define("BARRA_GOVERNO_FEDERAL", $config['barra_governo_federal']);
-
+define("VERSAO_CATRACA", "1.0");
 
 ini_set('display_errors',1);
 ini_set('display_startup_erros',1);
@@ -55,7 +55,7 @@ if (VERSAO_SINCRONIZADOR == 1) {
 	Altoria: 
 		Jefferson Ucôa Ponte
 		Alan Cleber Morais Gomes
-		Versão 1.0.0 
+		Versão <?php echo VERSAO_CATRACA; ?>
 		
 -->
 <html lang="pt-BR">
@@ -122,7 +122,7 @@ echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type
 				?>
 				</div>
 				<div class="seis colunas centralizado">
-					<h1>CATRACA</h1><small class="texto-branco">  v. 1.0.0 </small><br><h1> <small class="texto-branco">Controle Administrativo de Tr&aacute;fego Acadêmico Automatizado</small></h1>
+					<h1>CATRACA</h1><small class="texto-branco">  v. <?php echo VERSAO_CATRACA; ?> </small><br><h1> <small class="texto-branco">Controle Administrativo de Tr&aacute;fego Acadêmico Automatizado</small></h1>
 					
 				</div>
 				<div class="tres colunas alinhado-a-direita">
