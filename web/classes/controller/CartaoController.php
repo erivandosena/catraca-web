@@ -1,48 +1,50 @@
 <?php
+
 /**
+ * Esta classe é responsável por gerenciar telas, modelos e classes de acesso ao banco para 
+ * a exibir aplicação Cartao, que consulta cartões ou faz cadastro. 
  * 
- * @author Jefferson Uchoa Ponte
+ * @author Jefferson Uchoa Ponte <jefponte@unilab.edu.br>
+ * @version 1.0.0
+ * 
  *
  */
 
 class CartaoController{
-	private $view;
+
+	public static function verificaPermissao($nivelDeAcesso){
+		if($nivelDeAcesso == Sessao::NIVEL_SUPER){
+			return true;
+		}
+		else if($nivelDeAcesso == Sessao::NIVEL_ADMIN){
+			return true;
+		}else if($nivelDeAcesso == Sessao::NIVEL_GUICHE){
+			return true;
+		}else if($nivelDeAcesso == Sessao::NIVEL_POLIVALENTE){
+			return true;
+		}else if($nivelDeAcesso == Sessao::NIVEL_CADASTRO){
+			return true;
+		}else if($nivelDeAcesso == Sessao::NIVEL_CATRACA_VIRTUAL){
+			return true;
+		}
+		return false;
+	}
 	public static function main($nivelDeAcesso, $cadastroDeFotos = false){
-		
-		switch ($nivelDeAcesso){
-			case Sessao::NIVEL_SUPER:
-				$controller = new CartaoController($cadastroDeFotos);
-				$controller->telaCartao();
-				break;
-			case Sessao::NIVEL_ADMIN:
-				$controller = new CartaoController($cadastroDeFotos);
-				$controller->telaCartao();
-				break;
-			case Sessao::NIVEL_GUICHE:
-				$controller = new CartaoController($cadastroDeFotos);
-				$controller->telaCartao();
-				break;
-			case Sessao::NIVEL_POLIVALENTE:
-				$controller = new CartaoController($cadastroDeFotos);
-				$controller->telaCartao();
-				break;
-			case Sessao::NIVEL_CADASTRO:
-				$controller = new CartaoController($cadastroDeFotos);
-				$controller->telaCartao();
-				break;
-			case Sessao::NIVEL_CATRACA_VIRTUAL:
-				$controller = new CartaoController($cadastroDeFotos);
-				$controller->telaCartao();
-				break;
-			default:
-				UsuarioController::main ( $nivelDeAcesso );
-				break;
+		if(self::verificaPermissao($nivelDeAcesso)){
+			$controller = new CartaoController($cadastroDeFotos);
+			$controller->telaCartao();
+		}else{
+			UsuarioController::main ( $nivelDeAcesso );
 		}
 	}	
+	
+	private $view;
 	private $cadastroDeFotos;
+	
 	public function __construct($cadastroDeFotos = false){
 		$this->cadastroDeFotos = $cadastroDeFotos;
 	}
+	
 	public function telaCartao(){
 		$this->view = new CartaoView();
 		echo '<div class = "simpleTabs">
@@ -340,6 +342,7 @@ class CartaoController{
 				$this->view->mostraVinculos($vinculosALiberar, false);					
 			}	
 	}
+
 }
 
 
