@@ -44,7 +44,6 @@ if (VERSAO_SINCRONIZADOR == 1) {
 	$s = new SincronizadorController ();
 	$s->sincronizar ();
 } else if (VERSAO_SINCRONIZADOR == 2){
-	//VErsão 2 do sincronizador
 	Sincronizador::main();
 }
 
@@ -313,9 +312,6 @@ echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type
 								    <div class="menu-horizontal config">
 								        <ol class="a-esquerda">';
 						
-						/*
-						 * Como deveria ser.
-						 */
 						echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
 						echo '<li><a href="?pagina=cartao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a></li>';
 						echo ' <li><a href="?pagina=guiche" class="item"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a>

@@ -1,27 +1,33 @@
 <?php
+/**
+ * Classe de exibição de componentes para aplicação Cartão. 
+ * @author Jefferson Uchôa Ponte <jefponte@unilab.edu.br>
+ * 
+ *
+ */
 class CartaoView {
 	
 	public function formBuscaCartao(){
 		echo '				
 				<script>
-  $(document).bind(\'autofocus_ready\', function() {
-    if (!("autofocus" in document.createElement("input"))) {
-      $("#numero_cartao").focus();
-    }
-  });
-</script>
+				  $(document).bind(\'autofocus_ready\', function() {
+				    if (!("autofocus" in document.createElement("input"))) {
+				      $("#numero_cartao").focus();
+				    }
+				  });
+				</script>
 				
 				<div class="doze colunas borda">
-									<form method="get" action="" class="formulario em-linha" >
-										<input type="hidden" name="pagina" value="cartao" />
-										<label for="numero_cartao">												
-											Buscar por Número:<input type="number" name="numero_cartao" id="numero_cartao" autofocus /><br>
-											<script>$(document).trigger(\'autofocus_ready\');</script>
-											<input type="submit" value="Buscar" />
-										</label>		
-									</form>
+					<form method="get" action="" class="formulario em-linha" >
+						<input type="hidden" name="pagina" value="cartao" />
+						<label for="numero_cartao">												
+							Buscar por Número:<input type="number" name="numero_cartao" id="numero_cartao" autofocus /><br>
+							<script>$(document).trigger(\'autofocus_ready\');</script>
+							<input type="submit" value="Buscar" />
+						</label>		
+					</form>
 				
-									</div>';
+				</div>';
 	}
 	public function mostraResultadoBuscaDeCartoes($cartoes) {
 		echo '<div class="doze linhas">';
