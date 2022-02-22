@@ -47,8 +47,15 @@ class TipoView{
     public function mostrarLinhaTipo(Tipo $tipo){
         echo '<tr>
 				<td>'.$tipo->getId().'</td>
-				<td>'.$tipo->getNome().'</td>
-				<td>R$' . number_format($tipo->getValorCobrado(), 2, ',', '.').'</td>
+				<td>'.$tipo->getNome().'</td>';
+				if(!$tipo->isSubsidiado()){
+					echo '<td>Não Subsidiado</td>';
+				}else{
+					echo '
+					<td>R$' . number_format($tipo->getValorCobrado(), 2, ',', '.').'</td>';
+				}
+				
+				echo '
 				<td class="centralizado">
 				<a href="?pagina=definicoes_tipo&editar_tipo='.$tipo->getId().'"><span class="icone-pencil2 botao texto-amarelo2" title="Editar"></span></a>
 				
@@ -84,6 +91,8 @@ class TipoView{
 						<label for="valor_tipo">
 							Novo valor: <input type="number" max="100" step="0.01" name="valor_tipo" value="'.$tipo->getValorCobrado().'">
 						</label>
+						<input type="checkbox" name="subisidiado" value="1">
+  						<label for="subisidiado">Tipo Subisidiado</label><br>
 						<input type="submit" name="alterar" value="Alterar">
 					</form>
 				</div>';

@@ -14,6 +14,7 @@ class TipoDAO extends DAO{
 			$tipo->setId($linha['tipo_id']);
 			$tipo->setNome($linha['tipo_nome']);
 			$tipo->setValorCobrado($linha['tipo_valor']);
+			$tipo->setSubsidiado($linha['tipo_subisidiado']);
 			$lista[] = $tipo;
 
 		}
@@ -24,7 +25,10 @@ class TipoDAO extends DAO{
 	public function atualizar(Tipo $tipo){
 	    $idTipo = $tipo->getId();
 	    $novoValor = $tipo->getValorCobrado();
-	    $sql = "UPDATE tipo SET tipo_valor=$novoValor WHERE tipo_id= $idTipo";
+		$subsidiado = $tipo->isSubsidiado();
+	    $sql = "UPDATE tipo SET 
+		tipo_valor= $novoValor,
+		tipo_subsidiado=$subsidiado WHERE tipo_id= $idTipo";
 	    return $this->getConexao()->exec($sql);
 	}
 	public function retornaTipoPorId(Tipo $tipo){
@@ -37,6 +41,7 @@ class TipoDAO extends DAO{
 			$tipo->setId($linha['tipo_id']);
 			$tipo->setNome($linha['tipo_nome']);
 			$tipo->setValorCobrado($linha['tipo_valor']);
+			$tipo->setSubsidiado($linha['tipo_subisidiado']);
 		}
 		return $tipo;
 	}
