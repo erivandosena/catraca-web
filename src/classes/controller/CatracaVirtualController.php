@@ -156,7 +156,14 @@ class CatracaVirtualController{
 				echo '<meta http-equiv="refresh" content="2; url=?pagina=gerador">';
 				return;
 			}
-			
+			$custoDao = new CustoDAO($catracaVirtualDao->getConexao());
+			$custo = $custoDao->custoByTurnoAndUnityToday($turnoAtual, $catraca->getUnidade(), date('Y-m-d'));
+			if(!$custo){
+				$this->mensagemErro("Custo não definido para este turno!");
+				echo '<meta http-equiv="refresh" content="2; url=?pagina=gerador">';
+				return;
+			}
+
 			$usuarioDao = new UsuarioDAO();
 			
 			$cartao = new Cartao();
@@ -186,6 +193,9 @@ class CatracaVirtualController{
 					$idDoVinculo = $linha['vinc_id'];
 					$tipo->setNome($linha['tipo_nome']);
 					$tipo->setValorCobrado($linha['tipo_valor']);
+					$tipo->setSubsidiado($linha['tipo_subsidiado']);
+					
+					
 					$usuario->setNome($linha['usua_nome']);
 					$usuario->setIdBaseExterna($linha['id_base_externa']);
 					$usuario->setId($linha['usua_id']);
@@ -209,7 +219,7 @@ class CatracaVirtualController{
 					break;
 				
 				}				
-								
+						
 				
 				
 				if(($i != 0) && !$vinculoDao->usuarioJaTemVinculo($usuario) && !$vinculo->isAvulso() && $validacaoDao->verificaSeAtivo($usuario)){
@@ -247,7 +257,12 @@ class CatracaVirtualController{
 				$valorPago = 0;
 				
 			}else{
-				$valorPago = $vinculo->getCartao()->getTipo()->getValorCobrado();
+				$valorPago = $custo->getValor(); 
+				if($vinculo->getCartao()->getTipo()->isSubsidiado())
+				{
+					$valorPago = $vinculo->getCartao()->getTipo()->getValorCobrado();
+				}
+				
 				if(($vinculo->getCartao()->getCreditos() < $valorPago) && $catraca->financeiroAtivo()){
 					
 					$this->mensagemErro("Usuário créditos insuficiente. ");

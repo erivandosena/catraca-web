@@ -50,6 +50,7 @@ class CatracaVirtualDAO extends DAO{
 			$vinculo->getCartao()->setId($linha['cart_id']);
 			$vinculo->getCartao()->getTipo()->setNome($linha ['tipo_nome']);
 			$vinculo->getCartao()->getTipo()->setValorCobrado($linha['tipo_valor']);
+			$vinculo->getCartao()->getTipo()->setSubsidiado($linha['tipo_subisidiado']);
 			$vinculo->getCartao()->setNumero($linha ['cart_numero']);
 			$vinculo->getCartao()->setId($linha['cart_id']);
 			$vinculo->setQuantidadeDeAlimentosPorTurno($linha['vinc_refeicoes']);
@@ -69,6 +70,7 @@ class CatracaVirtualDAO extends DAO{
 		$result = $this->getConexao()->query($selectTurno);
 		foreach($result as $linha){
 			$turno = new Turno();
+			$turno->setId($linha['turn_id']);
 			$turno->setHoraFinal($linha['turn_hora_fim']);
 			$turno->setHoraInicial($linha['turn_hora_inicio']);
 			return $turno;
