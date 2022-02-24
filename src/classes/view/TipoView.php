@@ -85,15 +85,28 @@ class TipoView{
     }
     
     public function formEditarTipo(Tipo $tipo){
+		$checked = '';
+		if($tipo->isSubsidiado()){
+			$checked = 'checked';
+		}
         echo '	<h2 class="titulo">Editar Tipo : '.$tipo->getNome().'</h2>
 				<div class="borda">
-					<form method="post" class="formulario em-linha">
-						<label for="valor_tipo">
-							Novo valor: <input type="number" max="100" step="0.01" name="valor_tipo" value="'.$tipo->getValorCobrado().'">
-						</label>
-						<input type="checkbox" name="subisidiado" value="1">
-  						<label for="subisidiado">Tipo Subisidiado</label><br>
-						<input type="submit" name="alterar" value="Alterar">
+					<form method="post" class="">
+						
+						<div class="mb-3">
+							<div class="form-check form-switch">
+								<input class="form-check-input" type="checkbox" role="switch" id="subsidiado-input" name="subsidiado" '.$checked .'>
+								<label class="form-check-label" for="subsidiado-input"> Subsidiado</label>
+							</div>
+						</div>
+
+						<div class="input-group mb-3 collapse" id="input-valor-collapse">
+							<span class="input-group-text">Valor pago R$</span>
+							<input type="number" max="100" step="0.01" name="valor_tipo" value="'.$tipo->getValorCobrado().'" type="text" class="form-control" aria-label="Valor Pago">
+						</div>
+					  
+
+						<input type="submit" name="alterar" class="btn btn-primary" value="Alterar">
 					</form>
 				</div>';
     }

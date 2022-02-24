@@ -85,7 +85,7 @@ if (isset ( $_GET ['gerar'] ) && isset ( $_GET ['pagina'] )) {
 	content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no" />
 
 <title>Projeto Catraca</title>
-<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
 <script type="text/javascript" src="js/simpletabs_1.3.js"></script>
 <link rel="stylesheet" href="css/simpletabs.css" />
 <link rel="stylesheet" href="css_spa/spa.css" />
@@ -101,7 +101,7 @@ echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type
 <script type="text/javascript" src="js/mostra_troco.js"></script>
 <script type="text/javascript" src="js/modal.js"></script>
 <script type="text/javascript" src="js/identificador.js"></script>
-
+<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 	<div class="pagina fundo-cinza1">
