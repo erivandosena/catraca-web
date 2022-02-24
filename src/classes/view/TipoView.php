@@ -86,8 +86,10 @@ class TipoView{
     
     public function formEditarTipo(Tipo $tipo){
 		$checked = '';
+		$classShow = '';
 		if($tipo->isSubsidiado()){
 			$checked = 'checked';
+			$classShow = 'show';
 		}
         echo '	<h2 class="titulo">Editar Tipo : '.$tipo->getNome().'</h2>
 				<div class="borda">
@@ -95,13 +97,13 @@ class TipoView{
 						
 						<div class="mb-3">
 							<div class="form-check form-switch">
-								<input class="form-check-input" type="checkbox" role="switch" id="subsidiado-input" name="subsidiado" '.$checked .'>
+								<input class="form-check-input" onchange="new bootstrap.Collapse(document.getElementById(\'input-valor-collapse\')).show()" type="checkbox" role="switch" id="subsidiado-input" name="subsidiado" '.$checked .'>
 								<label class="form-check-label" for="subsidiado-input"> Subsidiado</label>
 							</div>
 						</div>
 
-						<div class="input-group mb-3 collapse" id="input-valor-collapse">
-							<span class="input-group-text">Valor pago R$</span>
+						<div class="input-group mb-3 collapse '.$classShow.'" id="input-valor-collapse">
+							<span class="input-group-text">Valor R$</span>
 							<input type="number" max="100" step="0.01" name="valor_tipo" value="'.$tipo->getValorCobrado().'" type="text" class="form-control" aria-label="Valor Pago">
 						</div>
 					  
