@@ -14,7 +14,7 @@ class DAO
 {
 
     // Caso queira configurar homologacao faça novo arquivo ini. e modifique esta constante.
-    const ARQUIVO_CONFIGURACAO = "/dados/sites/adm/catraca/config/config_bd.ini";
+    const ARQUIVO_CONFIGURACAO = "../config/config_bd.ini";
 
     const TIPO_CATRACA = 0;
 

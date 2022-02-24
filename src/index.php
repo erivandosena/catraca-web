@@ -1,6 +1,6 @@
 <?php
 
-define ( "CONFIG_CATRACA", "/dados/sites/adm/catraca/config/catraca.ini" );
+define ( "CONFIG_CATRACA", "../config/catraca.ini" );
 $config = parse_ini_file ( CONFIG_CATRACA );
 define ( "CADASTRO_DE_FOTOS", $config ['cadastro_de_fotos'] );
 define ( "NOME_INSTITUICAO", $config ['nome_instituicao'] );
@@ -85,7 +85,7 @@ if (isset ( $_GET ['gerar'] ) && isset ( $_GET ['pagina'] )) {
 	content="width=device-width, height=device-height, initial-scale=1, maximum-scale=1, user-scalable=no" />
 
 <title>Projeto Catraca</title>
-
+<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 <script type="text/javascript" src="js/simpletabs_1.3.js"></script>
 <link rel="stylesheet" href="css/simpletabs.css" />
 <link rel="stylesheet" href="css_spa/spa.css" />
@@ -154,7 +154,11 @@ echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type
 					<a href="http://www.unilab.edu.br"><img src="img/logo_labpati_branco.png" alt=""></a>
 				</div>
 			</div>
+			
 		</div>
+
+		
+
 				<?php
 				function auditar() {
 					$dao = new DAO ();
@@ -170,13 +174,14 @@ echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type
 					$dao->fechaConexao ();
 				}
 				
-				MenuController::main($sessao->getNivelAcesso());
 				
 				?>
 				
-			
-
 		<div class="doze colunas">
+<?php
+
+MenuController::main($sessao->getNivelAcesso());
+?>
 			<div class="resolucao config">					
 						
 					<?php
@@ -283,6 +288,7 @@ echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type
 					
 					?>
 			</div>
+			<!-- Este script serve para trabalhar com imagens de webcan. 
 			<script type="text/javascript">
         	var img;
 
@@ -334,7 +340,9 @@ echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type
 	                }
 	            });
         </script>
+			-->
 		</div>
 	</div>
 </body>
+<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 </html>

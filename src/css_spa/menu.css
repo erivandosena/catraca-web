@@ -71,7 +71,6 @@ hr.tracejada,.tracejada li{border-style: dashed !important;}
     text-decoration: none;
     color: #ffffff;
     display: block;
-    height: 1.3em;
     padding: 0.875em 0.625em 0.375em 0.625em;
 }
 /* Efeito ao passar o mouse no item*/
@@ -263,7 +262,6 @@ hr.tracejada,.tracejada li{border-style: dashed !important;}
     text-decoration: none;
     color: #ffffff;
     display: block;
-    min-height: 1.3em;
     height: auto;
     padding: 0.625em;
 }

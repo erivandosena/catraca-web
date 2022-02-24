@@ -15,13 +15,16 @@ class MenuController
 
             case Sessao::NIVEL_ADMIN:
                 echo '
+
+				
+
 							<div  class="doze colunas barra-menu">
 								    <div class="menu-horizontal config">
 								        <ol class="a-esquerda">';
 
                 echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
 
-                echo '<li><a href="?pagina=cartao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a>
+                echo '<li><a href="?pagina=cartao" class="item-element"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a>
 									<ul>
 										<li><a href="?pagina=identificacao">Identificação</a></li>
 										<li><a href="?pagina=cartao">Próprio</a></li>
@@ -32,15 +35,15 @@ class MenuController
 									</ul>
                     
 							</li>';
-                echo '	<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a></li>';
-                echo ' 	<li><a href="?pagina=guiche" class="item"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a>
+                echo '	<li><a href="?pagina=gerador" class="item-element"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a></li>';
+                echo ' 	<li><a href="?pagina=guiche" class="item-element"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a>
 								<ul>
 										<li><a href="?pagina=resumo_compra" target="_blank">Tela de Atendimento</a></li>
 									</ul>
                     
 								</li>';
 
-                echo ' 	<li><a href="?pagina=definicoes_unidade" class="item"><span class="icone-cogs"></span> <span class="item-texto">Definições</span></a>
+                echo ' 	<li><a href="?pagina=definicoes_unidade" class="item-element"><span class="icone-cogs"></span> <span class="item-texto">Definições</span></a>
                     
 										<ul>
 											<li><a href="?pagina=definicoes_unidade">Unidades Acadêmicas</a></li>
@@ -56,7 +59,7 @@ class MenuController
                     
 							</li>';
 
-                echo ' 	<li><a href="#" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatórios</span></a>
+                echo ' 	<li><a href="#" class="item-element"><span class="icone-file-text2"></span> <span class="item-texto">Relatórios</span></a>
 									<ul>
 										<li><a href="?pagina=relatorio_despesa">Relatório Despesa</a></li>
                                         <li><a href="?pagina=relatorio_arrecadacao">Relatório Arrecadação</a></li>
@@ -70,13 +73,13 @@ class MenuController
                                         <li><a href="?pagina=relatorio_isentos">Relatório de Isentos</a></li>
 									</ul>
 								</li>';
-                echo ' <li><a href="?pagina=nivel_acesso" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Nivel de Acesso</span></a></li>';
+                echo ' <li><a href="?pagina=nivel_acesso" class="item-element"><span class="icone-file-text2"></span> <span class="item-texto">Nivel de Acesso</span></a></li>';
 
                 echo '</ol>
 								        <ol class="a-direita" start="4">
                     
-											<li><a href="" class="item"><span class="item-texto">Status: Adm</span></a></li>
-											<li><a href="?sair=sair" class="item"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
+											<li><a href="" class="item-element"><span class="item-texto">Status: Adm</span></a></li>
+											<li><a href="?sair=sair" class="item-element"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
 								        </ol>
 								    </div>
 								</div>';
@@ -90,22 +93,22 @@ class MenuController
 
                 echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
 
-                echo '<li><a href="?pagina=cartao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a>
+                echo '<li><a href="?pagina=cartao" class="item-element"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a>
 							</li>';
-                echo '	<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a>
+                echo '	<li><a href="?pagina=gerador" class="item-element"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a>
 									<ul>
 										<li><a href="?pagina=resumo_compra">Tela de Atendimento</a></li>
 									</ul>
                     
 									</li>';
-                echo ' 	<li><a href="?pagina=guiche" class="item"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a>
+                echo ' 	<li><a href="?pagina=guiche" class="item-element"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a>
 								<ul>
 										<li><a href="?pagina=resumo_compra" target="_blank">Tela de Atendimento</a></li>
 									</ul>
                     
 								</li>';
 
-                echo ' 	<li><a href="?pagina=relatorio_despesa" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a>
+                echo ' 	<li><a href="?pagina=relatorio_despesa" class="item-element"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a>
 									<ul>
 										<li><a href="?pagina=relatorio_despesa">Relatório RU</a></li>
 									</ul>
@@ -114,8 +117,8 @@ class MenuController
                 echo '</ol>
 								        <ol class="a-direita" start="4">
                     
-											<li><a href="" class="item"><span class="item-texto">Status: Pol</span></a></li>
-											<li><a href="?sair=sair" class="item"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
+											<li><a href="" class="item-element"><span class="item-texto">Status: Pol</span></a></li>
+											<li><a href="?sair=sair" class="item-element"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
 								        </ol>
 								    </div>
 								</div>';
@@ -131,8 +134,8 @@ class MenuController
                  * Como deveria ser.
                  */
                 echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
-                echo '<li><a href="?pagina=cartao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a></li>';
-                echo ' <li><a href="?pagina=guiche" class="item"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a>
+                echo '<li><a href="?pagina=cartao" class="item-element"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a></li>';
+                echo ' <li><a href="?pagina=guiche" class="item-element"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a>
 								<ul>
 										<li><a href="?pagina=resumo_compra" target="_blank">Tela de Atendimento</a></li>
 									</ul>
@@ -140,8 +143,8 @@ class MenuController
 
                 echo '</ol>
 								        <ol class="a-direita" start="4">
-											<li><a href="" class="item"><span class="item-texto">Status: Guiche</span></a></li>
-								            <li><a href="?sair=sair" class="item"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
+											<li><a href="" class="item-element"><span class="item-texto">Status: Guiche</span></a></li>
+								            <li><a href="?sair=sair" class="item-element"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
 								        </ol>
 								    </div>
 								</div>';
@@ -154,15 +157,15 @@ class MenuController
 							        <ol class="a-esquerda">';
 
                 echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
-                echo '<li><a href="?pagina=cartao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a></li>';
+                echo '<li><a href="?pagina=cartao" class="item-element"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a></li>';
 
-                echo '<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a></li>';
-                echo ' <li><a href="?pagina=relatorio_despesa" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a></li>';
+                echo '<li><a href="?pagina=gerador" class="item-element"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a></li>';
+                echo ' <li><a href="?pagina=relatorio_despesa" class="item-element"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a></li>';
 
                 echo '</ol>
 							        <ol class="a-direita" start="4">
-										<li><a href="" class="item"><span class="item-texto">Status: Catraca Virtual</span></a></li>
-							            <li><a href="?sair=sair" class="item"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
+										<li><a href="" class="item-element"><span class="item-texto">Status: Catraca Virtual</span></a></li>
+							            <li><a href="?sair=sair" class="item-element"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
 							        </ol>
 							    </div>
 							</div>';
@@ -175,13 +178,13 @@ class MenuController
 
                 echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
 
-                echo '<li><a href="?pagina=registro_orfao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual Órfã</span></a></li>';
-                echo ' <li><a href="?pagina=relatorio_despesa" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a></li>';
+                echo '<li><a href="?pagina=registro_orfao" class="item-element"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual Órfã</span></a></li>';
+                echo ' <li><a href="?pagina=relatorio_despesa" class="item-element"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a></li>';
 
                 echo '</ol>
 							        <ol class="a-direita" start="4">
-										<li><a href="" class="item"><span class="item-texto">Status: Catraca Órfã</span></a></li>
-							            <li><a href="?sair=sair" class="item"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
+										<li><a href="" class="item-element"><span class="item-texto">Status: Catraca Órfã</span></a></li>
+							            <li><a href="?sair=sair" class="item-element"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
 							        </ol>
 							    </div>
 							</div>';
@@ -195,12 +198,12 @@ class MenuController
 						        <ol class="a-esquerda">';
 
                 echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
-                echo '<li><a href="?pagina=cartao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a></li>';
+                echo '<li><a href="?pagina=cartao" class="item-element"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a></li>';
 
                 echo '</ol>
 						        <ol class="a-direita" start="4">
-									<li><a href="" class="item"><span class="item-texto">Status: Cadastro</span></a></li>
-						            <li><a href="?sair=sair" class="item"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
+									<li><a href="" class="item-element"><span class="item-texto">Status: Cadastro</span></a></li>
+						            <li><a href="?sair=sair" class="item-element"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
 						        </ol>
 						    </div>
 						</div>';
@@ -214,15 +217,15 @@ class MenuController
 							        <ol class="a-esquerda">';
 
                 echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
-                echo ' <li><a href="?pagina=catraca" class="item"><span class="icone-loop2"></span> <span class="item-texto">Catraca</span></a></li>';
-                echo '<li><a href="?pagina=cartao" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a></li>';
-                echo '<li><a href="?pagina=gerador" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a></li>';
-                echo ' <li><a href="?pagina=relatorio_despesa" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a></li>';
+                echo ' <li><a href="?pagina=catraca" class="item-element"><span class="icone-loop2"></span> <span class="item-texto">Catraca</span></a></li>';
+                echo '<li><a href="?pagina=cartao" class="item-element"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a></li>';
+                echo '<li><a href="?pagina=gerador" class="item-element"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a></li>';
+                echo ' <li><a href="?pagina=relatorio_despesa" class="item-element"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a></li>';
 
                 echo '</ol>
 							        <ol class="a-direita" start="4">
-										<li><a href="" class="item"><span class="item-texto">Status: Catraca Virtual</span></a></li>
-							            <li><a href="?sair=sair" class="item"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
+										<li><a href="" class="item-element"><span class="item-texto">Status: Catraca Virtual</span></a></li>
+							            <li><a href="?sair=sair" class="item-element"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
 							        </ol>
 							    </div>
 							</div>';
@@ -235,12 +238,12 @@ class MenuController
 									        <ol class="a-esquerda">';
 
                 echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
-                echo ' <li><a href="?pagina=guiche" class="item"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a>
+                echo ' <li><a href="?pagina=guiche" class="item-element"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a>
 								<ul>
 										<li><a href="?pagina=resumo_compra" target="_blank">Tela de Atendimento</a></li>
 									</ul>
 								</li>';
-                echo ' 	<li><a href="#" class="item"><span class="icone-file-text2"></span> <span class="item-texto">Relatórios</span></a>
+                echo ' 	<li><a href="#" class="item-element"><span class="icone-file-text2"></span> <span class="item-texto">Relatórios</span></a>
 									<ul>
 										<li><a href="?pagina=relatorio_despesa">Relatório Despesa</a></li>
                                         <li><a href="?pagina=relatorio_arrecadacao">Relatório Arrecadação</a></li>
@@ -250,8 +253,8 @@ class MenuController
 								</li>';
                 echo '</ol>
 						        <ol class="a-direita" start="4">
-									<li><a href="" class="item"><span class="item-texto">Status: Usuario Externo</span></a></li>
-						            <li><a href="?sair=sair" class="item"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
+									<li><a href="" class="item-element"><span class="item-texto">Status: Usuario Externo</span></a></li>
+						            <li><a href="?sair=sair" class="item-element"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
 						        </ol>
 						    </div>
 						</div>';
@@ -266,12 +269,12 @@ class MenuController
                  * Como deveria ser.
                  */
                 echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
-                echo '<li><a href="?pagina=pessoal" class="item"><span class="icone-credit-card"></span> <span class="item-texto">Pessoal</span></a></li>';
+                echo '<li><a href="?pagina=pessoal" class="item-element"><span class="icone-credit-card"></span> <span class="item-texto">Pessoal</span></a></li>';
 
                 echo '</ol>
 								        <ol class="a-direita" start="4">
-											<li><a href="" class="item"><span class="item-texto">Status: Padrão</span></a></li>
-								            <li><a href="?sair=sair" class="item"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
+											<li><a href="" class="item-element"><span class="item-texto">Status: Padrão</span></a></li>
+								            <li><a href="?sair=sair" class="item-element"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
 								        </ol>
 								    </div>
 								</div>';
