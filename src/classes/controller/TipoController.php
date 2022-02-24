@@ -54,9 +54,14 @@ class TipoController{
         $tipo->setId($_GET['editar_tipo']);
         $this->dao->retornaTipoPorId($tipo);
         $this->view->formEditarTipo($tipo);
-        
         if (!isset($_POST['alterar'])){
             return;
+        }
+        $tipo->setSubsidiado(false);
+        if(isset($_POST['subsidiado'])){
+            if($_POST['subsidiado'] == 1){
+                $tipo->setSubsidiado(true);
+            }
         }
         $tipo->setValorCobrado($_POST['valor_tipo']);
         if ($this->dao->atualizar($tipo)){
@@ -65,8 +70,6 @@ class TipoController{
             $this->view->formMensagem("-erro", "Não foi possivel altera o valor!");
         }
         echo '<meta http-equiv="refresh" content="2; url=.\?pagina=definicoes_tipo">';
-        
-    
         
     }
     public function definicoesTipo(){

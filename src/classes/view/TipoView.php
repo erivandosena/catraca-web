@@ -97,7 +97,7 @@ class TipoView{
 						
 						<div class="mb-3">
 							<div class="form-check form-switch">
-								<input class="form-check-input" onchange="new bootstrap.Collapse(document.getElementById(\'input-valor-collapse\')).show()" type="checkbox" role="switch" id="subsidiado-input" name="subsidiado" '.$checked .'>
+								<input class="form-check-input" onchange="new bootstrap.Collapse(document.getElementById(\'input-valor-collapse\')).show()" type="checkbox" role="switch" id="subsidiado-input" name="subsidiado" '.$checked .' value="1">
 								<label class="form-check-label" for="subsidiado-input"> Subsidiado</label>
 							</div>
 						</div>
