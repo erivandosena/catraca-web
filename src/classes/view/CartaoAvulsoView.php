@@ -12,7 +12,7 @@ class CartaoAvulsoView {
   });
 </script>
 				
-				<div class="borda">
+				<div>
 									<form method="get" action="" class="formulario em-linha" >
 										<input type="hidden" name="pagina" value="avulso" />
 										<label for="numero_cartao">
@@ -31,7 +31,7 @@ class CartaoAvulsoView {
 		echo '<div class="doze linhas">';
 		echo '<br><h2 class="texto-preto">Busca de CartÃµes:</h2>';
 		echo '</div>';
-		echo '<div class="borda">
+		echo '<div>
 				<table class="tabela borda-vertical zebrada texto-preto">
 				<thead>
 					<tr>
@@ -56,14 +56,14 @@ class CartaoAvulsoView {
 		echo '</tr>';
 	}
 	public function mostraCartaoSelecionado(Cartao $cartao){
-		echo '<div class="borda">
+		echo '<div>
 				Nome: ' . $cartao->getNumero() . '
 				<br>Creditos: ' . $cartao->getCreditos() . '
 				<br>Nome do Tipo: ' . $cartao->getTipo()->getNome(). '
 				</div>';
 	}
 	public function formBuscaUsuarios() {
-		echo '					 <div class="doze colunas borda relatorio">
+		echo '					 <div class="doze colunas relatorio">
 									<form method="get" action="" class="formulario em-linha" >
 		
 										<label for="opcoes-1">
@@ -81,7 +81,7 @@ class CartaoAvulsoView {
 									</div>';
 	}
 	public function formBuscaVinculo() {
-		echo '					<div class="borda">
+		echo '					<div>
 									<form method="get" action="" class="formulario em-linha" >
 	
 										<label for="parametro">Buscar por:</label>
@@ -99,7 +99,7 @@ class CartaoAvulsoView {
 									</div>';
 	}
 	public function formBuscaVinculoIsencao() {
-		echo '					<div class="borda">
+		echo '					<div>
 									<form method="get" action="" class="formulario em-linha" >
 	
 										<label for="parametro">Buscar por:</label>
@@ -120,7 +120,7 @@ class CartaoAvulsoView {
 		
 		$dataHoje = date ('Y-m-d') . 'T' . date ( 'H:00:01' );
 		
-		echo '					<div class="borda">
+		echo '					<div>
 									<form method="get" action="" class="formulario em-linha" >
 										<label for="filtro_data">Filtro de Data:</label>
 											<input class="texto-preto" value="'.$dataHoje.'" type="datetime-local" name="filtro_data" id="filtro_data" /><br>';
@@ -135,7 +135,7 @@ class CartaoAvulsoView {
 	
 		$dataHoje = date ('Y-m-d') . 'T' . date ( 'H:00:01' );
 	
-		echo '					<div class="borda">
+		echo '					<div>
 									<form method="get" action="" class="formulario em-linha" >
 										<label for="filtro_data_isen">Filtro de Data:</label>
 											<input class="texto-preto" value="'.$dataHoje.'" type="datetime-local" name="filtro_data_isen" id="filtro_data_isen" /><br>';
@@ -153,7 +153,7 @@ class CartaoAvulsoView {
 	public function mostraResultadoBuscaDeUsuarios($usuarios) {
 		echo '<div class="doze linhas">';
 		echo '<br><h2 class="texto-preto">Resultado da busca:</h2>';
-		echo '</div><div class="borda">
+		echo '</div><div>
 				<table class="tabela borda-vertical zebrada texto-preto">
 				<thead>
 					<tr>
@@ -189,7 +189,7 @@ class CartaoAvulsoView {
 	
 
 	public function mostraSelecionado(Usuario $usuario) {
-		echo '<div class="borda">';
+		echo '<div class="">';
 		
 		
 				
