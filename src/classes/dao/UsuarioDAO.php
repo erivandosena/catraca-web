@@ -21,14 +21,29 @@ class UsuarioDAO extends DAO {
 		
 		$login = $usuario->getLogin();
 		$senha = md5 ( $usuario->getSenha() );
-		$sql = "SELECT * FROM usuario WHERE usua_login =:login AND usua_senha = :senha LIMIT 1";
+
+
+        $url = "https://api.unilab.edu.br/api/authenticate";
+        
+        $data = ['login' =>  $usuario->getLogin(), 'senha' => $usuario->getSenha()];
+        
+
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        $response = curl_exec($curl);
+        curl_close($curl);
+        $responseJ = json_decode($response);
+		$idUsuario = intval($responseJ->id);
+		if($idUsuario === 0) {
+			return false;
+		}
 		
-		
+		$sql = "SELECT * FROM usuario WHERE id_base_externa = $idUsuario LIMIT 1";
+
 		try {
-		    
 		    $stmt = $this->conexao->prepare($sql);
-		    $stmt->bindParam(":login", $login, PDO::PARAM_STR);
-		    $stmt->bindParam(":senha", $senha, PDO::PARAM_STR);
 		    $stmt->execute();
 		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		    foreach ( $result as $linha ) {
@@ -37,48 +52,19 @@ class UsuarioDAO extends DAO {
 		        $usuario->setNivelAcesso ( $linha ['usua_nivel'] );
 		        return true;
 		    }
-		    return false;
 		} catch(PDOException $e) {
 		    echo $e->getMessage();
 		    return false;
+		
 		}
-
-		$sql2 = "SELECT login, senha, id_usuario FROM vw_usuarios_autenticacao_catraca WHERE LOWER(login) = LOWER(:login) AND senha = :senha LIMIT 1";
-		
-		
-		try {
-		    
-		    $stmt2 = $this->conexao->prepare($sql2);
-		    $stmt2->bindParam(":login", $login, PDO::PARAM_STR);
-		    $stmt2->bindParam(":senha", $senha, PDO::PARAM_STR);
-		    $stmt2->execute();
-		    $result2 = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result2 as $linha ) {
-		        $idBaseExterna = $linha['id_usuario'];
-		        $sql3 = "SELECT usua_id, usua_login, usua_senha, id_base_externa FROM usuario WHERE id_base_externa = $idBaseExterna LIMIT 1";
-		        $result3 = $this->getConexao()->query($sql3);
-		        foreach($result3 as $outraLinha)
-		        {
-		            $sqlUpdate = "UPDATE usuario set usua_senha = '$senha', usua_login = '$login' WHERE id_base_externa = $idBaseExterna";
-		            $this->getConexao()->exec($sqlUpdate);
-		            foreach ( $this->getConexao ()->query ( $sql ) as $linha2 )
-		            {
-		                $usuario->setLogin ( $linha2 ['usua_login'] );
-		                $usuario->setId ( $linha2 ['usua_id'] );
-		                $usuario->setNivelAcesso ( $linha2 ['usua_nivel'] );
-		                return true;
-		            }
-		            
-		        }
-		        
-		        return true;
-		    }
-		    return false;
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
-		    return false;
+		$usuario->setIdBaseExterna($idUsuario);
+		$vinculoDao = new VinculoDAO($this->getConexao());
+		$idUsuario = $vinculoDao->verificarUsuario($usuario, $this->getConexao());
+		if($idUsuario === 0) {
+			return false;
+		} else {
+			return true;
 		}
-		
 	}
 
 	public function pesquisaNoSigaa($pesquisa){
