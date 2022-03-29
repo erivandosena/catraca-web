@@ -554,7 +554,7 @@ class VinculoDAO extends DAO {
 		foreach($result2 as $linha){
 			
 			$nivel = Sessao::NIVEL_COMUM;
-			$nome = $linha['nome'];
+			$nome = $usuario->getNome();
 			$nome = preg_replace ('/[^a-zA-Z0-9\s]/', '', $nome);
 			$nome = strtoupper ( $nome );
 			$email = str_replace("'","",$linha['email']);;

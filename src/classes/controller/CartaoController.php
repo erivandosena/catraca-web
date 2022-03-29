@@ -261,6 +261,7 @@ class CartaoController{
 						$vinculo->getCartao()->getTipo()->setId($esseTipo->getId());
 						$vinculo->getCartao()->setNumero($_GET['numero_cartao2']);
 						$vinculo->getResponsavel()->setIdBaseExterna(intval($usuario->getIdBaseExterna()));
+						$vinculo->getResponsavel()->setNome($usuario->getNome());
 						$vinculo->setInicioValidade(date ( "Y-m-d G:i:s" ));
 						if($vinculoDao->usuarioJaTemVinculo($vinculo->getResponsavel())){							
 							$this->view->formMensagem("-erro", "Esse usuário já possui cartão. Inative o cartão atual para adicionar um novo.");
