@@ -1,5 +1,16 @@
 
 
+$(document).ready(
+	function(){
+		$('.botao-anexo').click(trocarImagemModal);
+	}
+);
+
+function trocarImagemModal(){
+	var imagem = $(this).attr('src');
+	$('#imagem-modal-anexo').attr('src', imagem);
+}
+
 $(document).ready(function(e) {
 	$("#insert_form_vaccine_declaration").on('submit', function(e) {
 		e.preventDefault();
@@ -18,16 +29,16 @@ $(document).ready(function(e) {
             	if(data.split(":")[1] == 'sucesso'){
             		
             		$("#botao-modal-resposta").click(function(){
-            			window.location.href='?page=vaccine_declaration';
+            			window.location.href='?pagina=vaccine_declaration';
             		});
-            		$("#textoModalResposta").text("Vaccine Declaration enviado com sucesso! ");                	
+            		$("#textoModalResposta").text("Cartão de Vacina Enviada Com Sucesso! ");                	
             		$("#modalResposta").modal("show");
             		
             	}
             	else
             	{
             		console.log(data);
-                	$("#textoModalResposta").text("Falha ao inserir Vaccine Declaration, fale com o suporte. ");                	
+                	$("#textoModalResposta").text("Falha ao enviar cartão de vacina. ");                	
             		$("#modalResposta").modal("show");
             	}
 

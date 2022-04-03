@@ -2,7 +2,6 @@
             
 /**
  * Classe feita para manipulação do objeto VaccineDeclaration
- * feita automaticamente com programa gerador de software inventado por
  * @author Jefferson Uchôa Ponte
  */
      

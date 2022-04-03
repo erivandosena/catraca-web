@@ -1,5 +1,8 @@
 <?php
 
+use Vacinometro\dao\VaccineDeclarationDAO;
+use Vacinometro\model\VaccineDeclaration;
+
 /**
  *
  * @author Jefferson Uchoa Ponte
@@ -399,9 +402,30 @@ class CatracaVirtualController{
 					}else{
 						echo '<p>Valor Cobrado: <strong>R$'.number_format($valorPago, 2, ',', '.').'</strong></p>';
 					}				
-				echo '					</div>
-								
-						<a href="?pagina=gerador&numero_cartao='.$_GET['numero_cartao'].'&confirmado=1" class="botao b-sucesso no-centro">Confimar</a>
+				
+				
+					echo '					</div>';
+
+					$daoVaccine = new VaccineDeclarationDAO();
+					$vaccineDeclaration = new VaccineDeclaration();
+					$vaccineDeclaration->setIdUserSig($vinculo->getResponsavel()->getIdBaseExterna());
+
+					$list = $daoVaccine->fetchByIdUserSig($vaccineDeclaration);
+					foreach($list as $key => $element)  {
+						if($element->getStatus() === VaccineDeclaration::STATUS_DISAPPROVED) {
+							unset($list[$key]);
+						}
+					}
+
+
+					if(count($list) === 0) {
+						echo 'Usuário Não Enviou a Certidão de Vacinação.';
+					} else{
+						echo '<a href="?pagina=gerador&numero_cartao='.$_GET['numero_cartao'].'&confirmado=1" class="botao b-sucesso no-centro">Confimar</a>';
+					}
+					
+
+					echo '
 								</div>
 						
 								

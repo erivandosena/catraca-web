@@ -74,6 +74,7 @@ class MenuController
 									</ul>
 								</li>';
                 echo ' <li><a href="?pagina=nivel_acesso" class="item-element"><span class="icone-file-text2"></span> <span class="item-texto">Nivel de Acesso</span></a></li>';
+				echo ' <li><a href="?pagina=vaccine_declaration" class="item-element"><span class="icone-file-text2"></span> <span class="item-texto">Vacinação</span></a></li>';
 
                 echo '</ol>
 								        <ol class="a-direita" start="4">
@@ -112,9 +113,13 @@ class MenuController
 									<ul>
 										<li><a href="?pagina=relatorio_despesa">Relatório RU</a></li>
 									</ul>
-								</li>';
+								</li>
+								
+								
+								';
 
                 echo '</ol>
+				<li><a href="?pagina=vaccine_declaration" class="item-element"><span class="icone-file-text2"></span> <span class="item-texto">Vacinação</span></a></li>
 								        <ol class="a-direita" start="4">
                     
 											<li><a href="" class="item-element"><span class="item-texto">Status: Pol</span></a></li>
@@ -140,6 +145,7 @@ class MenuController
 										<li><a href="?pagina=resumo_compra" target="_blank">Tela de Atendimento</a></li>
 									</ul>
 								</li>';
+				echo ' <li><a href="?pagina=vaccine_declaration" class="item-element"><span class="icone-file-text2"></span> <span class="item-texto">Vacinação</span></a></li>';
 
                 echo '</ol>
 								        <ol class="a-direita" start="4">
@@ -199,7 +205,7 @@ class MenuController
 
                 echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
                 echo '<li><a href="?pagina=cartao" class="item-element"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a></li>';
-
+				echo ' <li><a href="?pagina=vaccine_declaration" class="item-element"><span class="icone-file-text2"></span> <span class="item-texto">Vacinação</span></a></li>';
                 echo '</ol>
 						        <ol class="a-direita" start="4">
 									<li><a href="" class="item-element"><span class="item-texto">Status: Cadastro</span></a></li>
@@ -250,7 +256,11 @@ class MenuController
                                         <li><a href="?pagina=relatorio_consumo">Relatório Consumo</a></li>
 										<li><a href="?pagina=relatorio_guiche">Relatório Guichê</a></li>
 									</ul>
-								</li>';
+								</li>
+								
+								';
+				
+				
                 echo '</ol>
 						        <ol class="a-direita" start="4">
 									<li><a href="" class="item-element"><span class="item-texto">Status: Usuario Externo</span></a></li>
@@ -270,6 +280,7 @@ class MenuController
                  */
                 echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
                 echo '<li><a href="?pagina=pessoal" class="item-element"><span class="icone-credit-card"></span> <span class="item-texto">Pessoal</span></a></li>';
+				echo ' <li><a href="?pagina=vaccine_declaration" class="item-element"><span class="icone-file-text2"></span> <span class="item-texto">Vacinação</span></a></li>';
 
                 echo '</ol>
 								        <ol class="a-direita" start="4">

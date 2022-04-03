@@ -48,8 +48,8 @@ class Sessao{
 	}
 	public function getIdUserSig()
 	{
-		if(isset($_SESSION['USUARIO_NIVEL'])) {
-			return $_SESSION['USUARIO_NIVEL'];
+		if(isset($_SESSION['ID_USER_SIG'])) {
+			return $_SESSION['ID_USER_SIG'];
 		}
 		else
 		{	

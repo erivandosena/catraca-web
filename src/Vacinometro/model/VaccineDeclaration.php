@@ -2,7 +2,6 @@
             
 /**
  * Classe feita para manipulação do objeto VaccineDeclaration
- * feita automaticamente com programa gerador de software inventado por
  * @author Jefferson Uchôa Ponte <j.pontee@gmail.com>
  */
 
@@ -63,7 +62,20 @@ class VaccineDeclaration {
 	public function __toString(){
 	    return $this->id.' - '.$this->idUserSig.' - '.$this->doseNumber.' - '.$this->cardFile.' - '.$this->status.' - '.$this->createdAt;
 	}
-	const STATUS_SUBMITTED = 'submitted';
+	public function getStrPTStatus() {
+		if($this->status === self::STATUS_SUBMITTED) {
+			return "Submetido";
+		}
+		if($this->status === self::STATUS_APPROVED) {
+			return "Deferido";
+		}
+		if($this->status === self::STATUS_DISAPPROVED) {
+			return "Indeferido";
+		}
+	}
 
+	const STATUS_SUBMITTED = 'submitted';
+	const STATUS_APPROVED = 'approved';
+	const STATUS_DISAPPROVED = 'disapproved';
 }
 ?>
