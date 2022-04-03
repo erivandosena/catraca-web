@@ -35,13 +35,16 @@ class UsuarioDAO extends DAO {
         $response = curl_exec($curl);
         curl_close($curl);
         $responseJ = json_decode($response);
-		$idUsuario = intval($responseJ->id);
+		$idUsuario  = 0;
+		if(isset($responseJ->id)) {
+			$idUsuario = intval($responseJ->id);
+		}
 		if($idUsuario === 0) {
 			return false;
 		}
 		
 		$sql = "SELECT * FROM usuario WHERE id_base_externa = $idUsuario LIMIT 1";
-
+		$usuario->setIdBaseExterna($idUsuario);
 		try {
 		    $stmt = $this->conexao->prepare($sql);
 		    $stmt->execute();
@@ -57,7 +60,6 @@ class UsuarioDAO extends DAO {
 		    return false;
 		
 		}
-		$usuario->setIdBaseExterna($idUsuario);
 		$vinculoDao = new VinculoDAO($this->getConexao());
 		$idUsuario = $vinculoDao->verificarUsuario($usuario, $this->getConexao());
 		if($idUsuario === 0) {

@@ -1,6 +1,9 @@
 <?php
 
+
+
 define ( "CONFIG_CATRACA", "../config/catraca.ini" );
+define("DB_INI", '../config/config_bd.ini');
 $config = parse_ini_file ( CONFIG_CATRACA );
 define ( "CADASTRO_DE_FOTOS", $config ['cadastro_de_fotos'] );
 define ( "NOME_INSTITUICAO", $config ['nome_instituicao'] );
@@ -10,7 +13,22 @@ define ( "FONT_DADOS_LDAP_ENTIDADE", $config ['font_dados_ldap_entidade'] );
 define ( "VERSAO_SINCRONIZADOR", $config ['versao_sincronizador'] );
 
 
+function autoload2($classe) {
 
+    $prefix = 'Vacinometro';
+    $base_dir = 'Vacinometro';
+    $len = strlen($prefix);
+    if (strncmp($prefix, $classe, $len) !== 0) {
+        return;
+    }
+    $relative_class = substr($classe, $len);
+    $file = $base_dir . str_replace('\\', '/', $relative_class) . '.php';
+    if (file_exists($file)) {
+        require $file;
+    }
+
+}
+spl_autoload_register('autoload2');
 
 function autoload($classe) {
     
@@ -27,9 +45,9 @@ function autoload($classe) {
     }
 }
 spl_autoload_register('autoload');
+use Vacinometro\controller\VaccineDeclarationController;
 
 $sessao = new Sessao ();
-
 if (isset ( $_GET ["sair"] )) {
 	$sessao->mataSessao ();
 	header ( "Location:./index.php" );
@@ -41,6 +59,19 @@ if (VERSAO_SINCRONIZADOR == 1) {
 	// Aqui faremos sincronizacao se for o da UECE.
 }
 
+if(isset($_GET['ajax'])){
+    switch ($_GET['ajax']){
+		case 'vaccine_declaration':
+            $controller = new VaccineDeclarationController();
+		    $controller->mainAjax();
+			break;
+        default:
+            echo '<p>Página solicitada não encontrada.</p>';
+            break;
+    }
+	exit(0);
+}
+                     
 if (isset ( $_GET ['gerar'] ) && isset ( $_GET ['pagina'] )) {
     if($_GET['gerar'] == 'Excel'){
         switch ($_GET ['pagina']) {
@@ -185,7 +216,24 @@ MenuController::main($sessao->getNivelAcesso());
 			<div class="resolucao config">					
 						
 					<?php
-					
+					if($sessao->getNivelAcesso() != Sessao::NIVEL_DESLOGADO) {
+						if(isset($_GET['page'])){
+						  switch ($_GET['page']){
+							  case 'vaccine_declaration':
+								  $controller = new VaccineDeclarationController();
+								  $controller->main();
+								break;
+							default:
+							  echo '<p>Página solicitada não encontrada.</p>';
+							  break;
+						  }
+						}else{
+							$controller = new VaccineDeclarationController();
+							$controller->main();
+						}
+						
+					  }
+
 					if (isset ( $_GET ['pagina'] )) {
 					    auditar();
 						switch ($_GET ['pagina']) {
@@ -345,4 +393,6 @@ MenuController::main($sessao->getNivelAcesso());
 	</div>
 </body>
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script src="Vacinometro/js/vaccine_declaration.js"></script>
 </html>

@@ -63,9 +63,8 @@ class UsuarioController{
 			$usuario->setLogin($_POST['login']);
 			$usuario->setSenha($_POST['senha']);
 			if($usuarioDAO->autentica($usuario)){
-		
 				$sessao2 = new Sessao();
-				$sessao2->criaSessao($usuario->getId(), $usuario->getNivelAcesso(), $usuario->getLogin());
+				$sessao2->criaSessao($usuario->getId(), $usuario->getNivelAcesso(), $usuario->getLogin(), $usuario->getIdBaseExterna());
 				echo '<meta http-equiv="refresh" content=1;url="./index.php">';
 			}else{
 				$msg_erro= "Senha ou usuário Inválido";

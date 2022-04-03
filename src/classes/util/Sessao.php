@@ -12,7 +12,7 @@ class Sessao{
 	public function __construct(){
 		if (!isset($_SESSION)) session_start();
 	}
-	public function criaSessao($id, $nivel, $login){
+	public function criaSessao($id, $nivel, $login, $idUserSig){
             
 		//setcookie(md5('USUARIO_NIVEL'), $nivel);
 		//setcookie(md5('USUARIO_ID'), $id);
@@ -20,7 +20,7 @@ class Sessao{
 		$_SESSION['USUARIO_NIVEL'] = $nivel;
 		$_SESSION['USUARIO_ID'] = $id;
 		$_SESSION['USUARIO_LOGIN'] = $login;
-		
+		$_SESSION['ID_USER_SIG'] = $idUserSig;
 	}
 	public function mataSessao(){
                 
@@ -45,6 +45,16 @@ class Sessao{
 			return self::NIVEL_DESLOGADO;
 		}
 			
+	}
+	public function getIdUserSig()
+	{
+		if(isset($_SESSION['USUARIO_NIVEL'])) {
+			return $_SESSION['USUARIO_NIVEL'];
+		}
+		else
+		{	
+			return self::NIVEL_DESLOGADO;
+		}	
 	}
 	
 	public function getIdUsuario(){
