@@ -8,7 +8,11 @@ class Tipo{
 	public $subsidiado;
 
 	public function setSubsidiado($subsidiado){
-		$this->subsidiado = $subsidiado;
+		if($subsidiado) {
+			$this->subsidiado = true;
+		}else {
+			$this->subsidiado = false;
+		}
 	}
 	public function isSubsidiado(){
 		return $this->subsidiado;

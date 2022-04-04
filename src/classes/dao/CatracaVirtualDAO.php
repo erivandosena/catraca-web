@@ -38,6 +38,7 @@ class CatracaVirtualDAO extends DAO{
 			echo '{"erro":{"text":'. $e->getMessage() .'}}';
 		}
 		foreach($result as $linha){
+			
 			$usuario = new Usuario();
 			$vinculo->setResponsavel($usuario);
 			$vinculo->getResponsavel()->setNome($linha['usua_nome']);
@@ -50,7 +51,7 @@ class CatracaVirtualDAO extends DAO{
 			$vinculo->getCartao()->setId($linha['cart_id']);
 			$vinculo->getCartao()->getTipo()->setNome($linha ['tipo_nome']);
 			$vinculo->getCartao()->getTipo()->setValorCobrado($linha['tipo_valor']);
-			$vinculo->getCartao()->getTipo()->setSubsidiado($linha['tipo_subisidiado']);
+			$vinculo->getCartao()->getTipo()->setSubsidiado($linha['tipo_subisidiado'] ? true : false);
 			$vinculo->getCartao()->setNumero($linha ['cart_numero']);
 			$vinculo->getCartao()->setId($linha['cart_id']);
 			$vinculo->setQuantidadeDeAlimentosPorTurno($linha['vinc_refeicoes']);
