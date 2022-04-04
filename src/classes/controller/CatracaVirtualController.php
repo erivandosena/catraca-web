@@ -256,25 +256,24 @@ class CatracaVirtualController{
 			}
 				
 			
+			$valorPago = $custo->getValor(); 
+			
+			if($vinculo->getCartao()->getTipo()->isSubsidiado())
+			{
+				$valorPago = $vinculo->getCartao()->getTipo()->getValorCobrado();
+			}
+			
+			if(($vinculo->getCartao()->getCreditos() < $valorPago) && $catraca->financeiroAtivo()){
+				
+				$this->mensagemErro("Usuário créditos insuficiente. ");
+				echo '<meta http-equiv="refresh" content="4; url=?pagina=gerador">';
+				return;
+			}
 			if($catracaVirtualDao->vinculoEhIsento($vinculo)){
 				$valorPago = 0;
 				
-			}else{
-				$valorPago = $custo->getValor(); 
-				if($vinculo->getCartao()->getTipo()->isSubsidiado())
-				{
-					$valorPago = $vinculo->getCartao()->getTipo()->getValorCobrado();
-				}
-				
-				if(($vinculo->getCartao()->getCreditos() < $valorPago) && $catraca->financeiroAtivo()){
-					
-					$this->mensagemErro("Usuário créditos insuficiente. ");
-					echo '<meta http-equiv="refresh" content="4; url=?pagina=gerador">';
-					return;
-					
-				}
 			}
-			
+			echo $valorPago;
 			$idCartao = $cartao->getId();
 			$usuarioDao->preenchePorIdBaseExterna($vinculo->getResponsavel());
 			$strNome = $vinculo->getResponsavel()->getNome();
@@ -286,6 +285,7 @@ class CatracaVirtualController{
 				if($catraca->financeiroAtivo()){
 
 					$this->dao->getConexao()->beginTransaction();
+					
 					$novoValor = floatval($vinculo->getCartao()->getCreditos()) - floatval($valorPago);
 					$sql0 = "UPDATE cartao set cart_creditos = $novoValor WHERE cart_id = $idCartao";
 					
@@ -419,7 +419,8 @@ class CatracaVirtualController{
 
 
 					if(count($list) === 0) {
-						echo 'Usuário Não Enviou a Certidão de Vacinação.';
+						echo 'Usuário Não Enviou a Certidão de Vacinação.<br>';
+						echo '<a href="?pagina=gerador&numero_cartao='.$_GET['numero_cartao'].'&confirmado=1" class="botao b-sucesso no-centro">Confimar</a>';
 					} else{
 						echo '<a href="?pagina=gerador&numero_cartao='.$_GET['numero_cartao'].'&confirmado=1" class="botao b-sucesso no-centro">Confimar</a>';
 					}

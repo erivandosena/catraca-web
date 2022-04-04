@@ -25,7 +25,7 @@ $(document).ready(function(e) {
             success: function( data )
             {
             
-                console.log(data.split(":"));
+                
             	if(data.split(":")[1] == 'sucesso'){
             		
             		$("#botao-modal-resposta").click(function(){

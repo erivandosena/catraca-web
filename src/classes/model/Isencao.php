@@ -9,7 +9,7 @@ class Isencao
 
     private $dataFinal;
 
-    public function Isencao()
+    public function __construct()
     {
         $this->id = 0;
     }

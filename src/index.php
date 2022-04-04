@@ -1,7 +1,6 @@
 <?php
 
 
-
 define ( "CONFIG_CATRACA", "../config/catraca.ini" );
 define("DB_INI", '../config/config_bd.ini');
 $config = parse_ini_file ( CONFIG_CATRACA );

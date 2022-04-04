@@ -18,7 +18,7 @@
  */
 class Auditoria {
 	private $conexao;
-	public function Auditoria(PDO $conexao = NULL) {
+	public function __construct(PDO $conexao = NULL) {
 		if ($conexao != null) {
 			$this->conexao = $conexao;
 		} else {

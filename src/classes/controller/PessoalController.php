@@ -152,7 +152,7 @@ class PessoalController {
 		    </div>';
 	
 	}
-	public function PessoalController(){
+	public function __construct(){
 		$this->dao = new DAO();
 	}
 	

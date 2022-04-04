@@ -39,7 +39,8 @@ class Vinculo{
 	}
 	
 	
-	public function Vinculo(){
+	public function __construct()
+	{
 		$this->setIsento(false);
 		$this->isencao  = new Isencao();
 		$this->setAvulso(false);
