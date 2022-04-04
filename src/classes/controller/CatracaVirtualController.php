@@ -263,17 +263,19 @@ class CatracaVirtualController{
 				$valorPago = $vinculo->getCartao()->getTipo()->getValorCobrado();
 			}
 			
+			if($catracaVirtualDao->vinculoEhIsento($vinculo)){
+				$valorPago = 0;
+				
+			}
 			if(($vinculo->getCartao()->getCreditos() < $valorPago) && $catraca->financeiroAtivo()){
 				
 				$this->mensagemErro("Usuário créditos insuficiente. ");
 				echo '<meta http-equiv="refresh" content="4; url=?pagina=gerador">';
 				return;
-			}
-			if($catracaVirtualDao->vinculoEhIsento($vinculo)){
-				$valorPago = 0;
 				
 			}
-			echo $valorPago;
+			
+			
 			$idCartao = $cartao->getId();
 			$usuarioDao->preenchePorIdBaseExterna($vinculo->getResponsavel());
 			$strNome = $vinculo->getResponsavel()->getNome();
