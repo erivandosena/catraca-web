@@ -421,8 +421,9 @@ class CatracaVirtualController{
 
 
 					if(count($list) === 0) {
-						echo 'Usuário Não Enviou a Certidão de Vacinação.<br>';
+						
 						echo '<a href="?pagina=gerador&numero_cartao='.$_GET['numero_cartao'].'&confirmado=1" class="botao b-sucesso no-centro">Confimar</a>';
+						echo '<br>Usuário Não Enviou a Certidão de Vacinação.';
 					} else{
 						echo '<a href="?pagina=gerador&numero_cartao='.$_GET['numero_cartao'].'&confirmado=1" class="botao b-sucesso no-centro">Confimar</a>';
 					}

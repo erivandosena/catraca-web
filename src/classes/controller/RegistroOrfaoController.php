@@ -157,7 +157,9 @@ class RegistroOrfaoController {
 			unset($_SESSION['data']);
 			echo '<meta http-equiv="refresh" content="0; url=?pagina=registro_orfao">';
 		}
-		
+		$custoDao = new CustoDAO($catracaVirtualDao->getConexao());
+		$custo = $custoDao->custoByTurnoAndUnityToday($turnoAtual, $catraca->getUnidade(), date('Y-m-d'));
+		print_r($custo);
 		if(isset($_GET['numero_cartao'])){
 			if($_GET['numero_cartao'] == NULL || $_GET['numero_cartao'] == "")
 				return;
@@ -248,6 +250,17 @@ class RegistroOrfaoController {
 // 					}
 				}
 					
+				if($vinculo->getCartao()->getTipo()->isSubsidiado())
+				{
+					$valorPago = $vinculo->getCartao()->getTipo()->getValorCobrado();
+				} else{
+					$valorPago = $custo->getValor();
+				}
+				
+				if($catracaVirtualDao->vinculoEhIsento($vinculo)){
+					$valorPago = 0;
+					
+				}
 				$idCartao = $cartao->getId();
 				$strNome = $vinculo->getResponsavel()->getNome();
 				$data = $_SESSION['data'].' '.$turno->getHoraInicial();
