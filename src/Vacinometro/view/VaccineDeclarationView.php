@@ -29,7 +29,7 @@ class VaccineDeclarationView {
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <p>Declaro, sob as penas da lei, que as informações prestadas neste habite-se são de minha inteira
+        <p>Declaro que as informações prestadas neste habite-se são de minha inteira
         responsabilidade, e que tenho ciência que a universidade poderá a qualquer tempo realizar o
         monitoramento/fiscalização do documento, procedendo à declaração de nulidadedo mesmo, caso seja
         constatado que foram prestadas declarações falsas ou enganosas, omitidas informações relevantes ou em
