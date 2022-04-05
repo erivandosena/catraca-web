@@ -159,7 +159,7 @@ class RegistroOrfaoController {
 		}
 		$custoDao = new CustoDAO($catracaVirtualDao->getConexao());
 		$custo = $custoDao->custoByTurnoAndUnityToday($turnoAtual, $catraca->getUnidade(), date('Y-m-d'));
-		print_r($custo);
+		
 		if(isset($_GET['numero_cartao'])){
 			if($_GET['numero_cartao'] == NULL || $_GET['numero_cartao'] == "")
 				return;
