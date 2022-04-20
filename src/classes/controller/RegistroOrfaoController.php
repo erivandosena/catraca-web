@@ -20,7 +20,7 @@ class RegistroOrfaoController {
 				$telaRegistro->verificarSelecaoRU();
 				break;
 			default :
-				UsuarioController::main ( $nivelAcesso );
+				echo '404 - Página solicitada não existe';
 				break;
 		}
 			

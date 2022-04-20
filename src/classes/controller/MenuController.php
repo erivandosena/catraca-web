@@ -114,12 +114,13 @@ class MenuController
 										<li><a href="?pagina=relatorio_despesa">Relatório RU</a></li>
 									</ul>
 								</li>
+								<li><a href="?pagina=vaccine_declaration" class="item-element"><span class="icone-file-text2"></span> <span class="item-texto">Vacinação</span></a></li>
 								
 								
 								';
 
                 echo '</ol>
-				<li><a href="?pagina=vaccine_declaration" class="item-element"><span class="icone-file-text2"></span> <span class="item-texto">Vacinação</span></a></li>
+				
 								        <ol class="a-direita" start="4">
                     
 											<li><a href="" class="item-element"><span class="item-texto">Status: Pol</span></a></li>
