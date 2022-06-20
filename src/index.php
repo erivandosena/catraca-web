@@ -135,20 +135,6 @@ echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type
 </head>
 <body>
 	<div class="pagina fundo-cinza1">
-		<div class="acessibilidade">
-			<div class="config">
-				<div class="a-esquerda">
-					<!-- 					<a href="#conteudo" tabindex="1" accesskey="1">Ir para o conteúdo <b>1</b></a> -->
-					<!-- 					<a href="#menu" tabindex="2" accesskey="2"><span>Ir para o</span> menu <b>2</b></a> -->
-					<!-- 					<a href="#busca" tabindex="3" accesskey="3"><span>Ir para a</span> busca <b>3</b></a> -->
-					<!-- 					<a href="#rodape" tabindex="4" accesskey="4"><span>Ir para o</span> rodapé <b>4</b></a> -->
-				</div>
-				<div class="a-direita">
-					<!-- 					<a href="#" id="alto-contraste">ALTO <b>CONTRASTE</b></a> -->
-					<!-- 					<a href="#" id="mapa-do-site"><b>MAPA DO SITE</b></a> -->
-				</div>
-			</div>
-		</div>
 		<div id="barra-governo">
 			<div class="resolucao config">
 				<div class="a-esquerda">
@@ -322,64 +308,11 @@ MenuController::main($sessao->getNivelAcesso());
 					
 					?>
 			</div>
-			<!-- Este script serve para trabalhar com imagens de webcan. 
-			<script type="text/javascript">
-        	var img;
-
-        	navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
-        	
-            var canvas = document.getElementById("canvas"),
-                context = canvas.getContext("2d"),
-                video = document.getElementById("video"),
-                btnStart = document.getElementById("btnStart"),
-                btnStop = document.getElementById("btnStop"),
-                btnPhoto = document.getElementById("btnPhoto"),
-                videoObj = {
-                    video: true,
-                    audio: false
-                };
-            
-	        
-				 //Compatibility
-	            
-	
-	            btnStart.addEventListener("click", function() {
-	                var localMediaStream;
-	
-	                if (navigator.getUserMedia) {
-	                    navigator.getUserMedia(videoObj, function(stream) {              
-	                        video.src = (navigator.webkitGetUserMedia) ? window.webkitURL.createObjectURL(stream) : stream;
-	                        localMediaStream = stream;
-	                        
-	                    }, function(error) {
-	                        console.error("Video capture error: ", error.code);
-
-	                    });
-	                	
-	                    btnStop.addEventListener("click", function() {
-	                        localMediaStream.stop();
-	                        
-	                    });
-	
-	                    btnPhoto.addEventListener("click", function() {
-	                        context.drawImage(video, 0, 0, 320, 240);
-
-	                        img = canvas.toDataURL("image/png");
-	                        formulario.img64.value = img;
-
-							
-	                    });
-
-	                    
-	                }
-	            });
-        </script>
-			-->
 		</div>
 	</div>
 </body>
 
 <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+<script src="js/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 <script src="Vacinometro/js/vaccine_declaration.js"></script>
 </html>

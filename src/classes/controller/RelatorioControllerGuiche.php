@@ -25,7 +25,7 @@ class RelatorioControllerGuiche {
 	public function relatorioGuiche() {
 		$dao = new DAO ();
 		
-		echo '	<div class="borda relatorio">
+		echo '	<div class="borda card">
 					<form action="" method="get" class="formulario-organizado">
 						<label for="operador">
 							<object data="" type="" class="rotulo">Operador:</object>
