@@ -63,7 +63,7 @@ class CartaoAvulsoView {
 				</div>';
 	}
 	public function formBuscaUsuarios() {
-		echo '					 <div class="doze colunas relatorio">
+		echo '					 <div class="borda card">
 									<form method="get" action="" class="formulario em-linha" >
 		
 										<label for="opcoes-1">
