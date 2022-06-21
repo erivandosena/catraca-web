@@ -78,6 +78,10 @@ if (isset ( $_GET ['gerar'] ) && isset ( $_GET ['pagina'] )) {
                 RelatorioDespesaController::main($sessao->getNivelAcesso());
                 exit(0);
                 break;
+			case 'relatorio_guiche' :
+				RelatorioControllerGuiche::main ( $sessao->getNivelAcesso () );
+				exit(0);
+				break;
             case 'relatorio_arrecadacao':
                 RelatorioArrecadacaoController::main($sessao->getNivelAcesso());
                 exit(0);
