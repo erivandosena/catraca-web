@@ -131,18 +131,6 @@ class RelatorioControllerGuiche {
 			</div>';
 		}
 	}
-	public function retornaUsuario() {
-		$dao = new DAO ();
-		$usuario = new Usuario ();
-		$sql = "SELECT * FROM usuario WHERE usua_nivel > 1";
-		$result = $dao->getConexao ()->query ( $sql );
-		
-		foreach ( $result as $linha ) {
-			$usuario->setId ( $linha ['usua_id'] );
-			$usuario->setNome ( $linha ['usua_nome'] );
-			return $usuario;
-		}
-	}
 }
 
 ?>
