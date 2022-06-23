@@ -31,7 +31,7 @@ class VaccineDeclarationView {
       <div class="modal-body">
         <p>Declaro que as informações prestadas neste habite-se são de minha inteira
         responsabilidade, e que tenho ciência que a universidade poderá a qualquer tempo realizar o
-        monitoramento/fiscalização do documento, procedendo à declaração de nulidadedo mesmo, caso seja
+        monitoramento/fiscalização do documento, procedendo à declaração de nulidadedo do mesmo, caso seja
         constatado que foram prestadas declarações falsas ou enganosas, omitidas informações relevantes ou em
         desacordo com a legislação vigente, além da aplicação das demais penalidades administrativas, cíveis e penais
         cabíveis.</p>
