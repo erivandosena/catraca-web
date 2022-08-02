@@ -249,7 +249,6 @@ class CartaoController{
 					
 					$validacaoDao = new ValidacaoDAO($vinculoDao->getConexao());
 					$listaDeTipos = $validacaoDao->listaDeTipos($usuario);
-					
 					if(isset($_GET['salvar'])){
 						foreach($listaDeTipos as $tipo){
 							if($tipo->getId() == $_GET['id_tipo'])
@@ -350,7 +349,7 @@ class CartaoController{
 		if(strtolower (trim($usuario->getStatusServidor())) == 'ativo'){			
 			return true;
 		}
-		if(trim($usuario->getStatusDiscente()) == 'CADASTRADO' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($usuario->getStatusDiscente())) == 'formando' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - graduando' || strtolower (trim($usuario->getIdStatusDiscente())) == self::ID_STATUS_DISCENTE_CONCLUIDO){
+		if(trim($usuario->getStatusDiscente()) == 'CADASTRADO' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($usuario->getStatusDiscente())) == 'formando'  || strtolower (trim($usuario->getStatusDiscente())) == 'formado' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - graduando' || strtolower (trim($usuario->getIdStatusDiscente())) == self::ID_STATUS_DISCENTE_CONCLUIDO){
 			
 			return true;		
 		}
