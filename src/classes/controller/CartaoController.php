@@ -240,15 +240,19 @@ class CartaoController{
 			
 			$vinculos = $vinculoDao->retornaVinculosValidosDeUsuario($usuario);			
 			
-			$podeComer = $this->verificaSeAtivo($usuario);
 			
+			$validacaoDao = new ValidacaoDAO($vinculoDao->getConexao());
+			$listaDeTipos = $validacaoDao->listaDeTipos($usuario);
+			$podeComer = false;
+			if(count($listaDeTipos) > 0) {
+				$podeComer = true;
+			}
 			if(!$vinculoDao->usuarioJaTemVinculo($usuario) && $podeComer){
 				if (!isset ( $_GET ['cartao'] )){
 					echo '<a class="botao" href="?pagina=cartao&selecionado=' . $idDoSelecionado . '&cartao=add">Adicionar</a>';
 				}else{
 					
-					$validacaoDao = new ValidacaoDAO($vinculoDao->getConexao());
-					$listaDeTipos = $validacaoDao->listaDeTipos($usuario);
+
 					if(isset($_GET['salvar'])){
 						foreach($listaDeTipos as $tipo){
 							if($tipo->getId() == $_GET['id_tipo'])
