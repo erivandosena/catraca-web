@@ -1,9 +1,17 @@
 <?php
+
 /**
- * UnidadeDAO alteraï¿½ï¿½es do banco de dados referentes ï¿½ entidade unidade. 
+ * Dao Referente a Entidade Unidade.
+ * 
+ * @author Jefferson Uchoa Ponte
+ * @version 1.0
+ * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
+ * @package DAO
+ */
+
+/**
+ * UnidadeDAO alterações do banco de dados referentes à entidade unidade. 
  * Gera pesistencia da classe unidade. 
- * ï¿½ a unidade academica. 
- * @author jefponte
  *
  */
 class UnidadeDAO extends DAO {
@@ -26,12 +34,22 @@ class UnidadeDAO extends DAO {
 		}
 		return $lista;
 	}
+	
+	/**
+	 * Função utilidada para Inserir uma Unidade.
+	 * @param Unidade $unidade
+	 */
 	public function inserirUnidade(Unidade $unidade) {
 		$nome = $unidade->getNome ();
 		if ($this->getConexao ()->query ( "INSERT INTO unidade (unid_nome) VALUES('$nome')" ))
 			return true;
 		return false;
 	}
+	
+	/**
+	 * Função utilizada para Deletar uma Unidade.
+	 * @param Unidade $unidade
+	 */
 	public function deletarUnidade(Unidade $unidade) {
 		$id = $unidade->getId ();
 		$sql = "DELETE FROM unidade WHERE unid_id = $id";
@@ -39,7 +57,11 @@ class UnidadeDAO extends DAO {
 			return true;
 		return false;
 	}
-
+	
+	/**
+	 * Função utilizada para realizar uma constulta,retornando uma array de catracas da unidade consultada. 
+	 * @param Unidade $unidade
+	 */
 	public function retornaCatracasPorUnidade(Unidade $unidade = null) {
 		$lista = array ();
 		if ($unidade != null) {
@@ -85,7 +107,12 @@ class UnidadeDAO extends DAO {
 		}
 		return $lista;
 	}
-
+	
+	/**
+	 * Retona a quantidade de giros efetuados pela catraca consultada.
+	 * @param Catraca $catraca
+	 * @return number|PDOStatement
+	 */
 	public function totalDeGirosDaCatraca(Catraca $catraca){
 		$idCatraca = $catraca->getId();
 		$filtro = "";
@@ -102,7 +129,12 @@ class UnidadeDAO extends DAO {
 		return $resultado;
 	}
 	
-	
+	/**
+	 * Retorna a total de giro da catraca por turno em andamento,
+	 * separando-os elo tipo de usuario que utilizou a catraca.
+	 * @param Catraca $catraca
+	 * @param Tipo $tipo
+	 */
 	public function totalDeGirosDaCatracaTurnoAtual(Catraca $catraca, Tipo $tipo = null){
 		$resultado = 0;
 		$idCatraca = $catraca->getId();
@@ -132,7 +164,12 @@ class UnidadeDAO extends DAO {
 		return $resultado;
 	}
 
-
+	/**
+	 * Retorna a total de giro da catraca por turno em andamento,
+	 * filtrando pelos registros de usuario pagantes.
+	 * @param Catraca $catraca
+	 * @param Tipo $tipo
+	 */
 	public function totalGiroTurnoAtualNaoIsento(Catraca $catraca, Tipo $tipo = null){
 		$resultado = 0;
 		$idCatraca = $catraca->getId();
@@ -165,6 +202,13 @@ class UnidadeDAO extends DAO {
 		}
 		return $resultado;
 	}
+	
+	/**
+	 * Retorna a total de giro da catraca por turno em andamento,
+	 * filtrando pelos registros de usuario isentos.
+	 * @param Catraca $catraca
+	 * @param Tipo $tipo
+	 */
 	public function totalGiroTurnoAtualIsento(Catraca $catraca, Tipo $tipo = null){
 		$resultado = 0;
 		$idCatraca = $catraca->getId();
@@ -186,6 +230,11 @@ class UnidadeDAO extends DAO {
 		}
 		return $resultado;
 	}
+	
+	/**
+	 * Retorna um array de turnos no periodo corrente.
+	 * @return NULL|Turno
+	 */
 	public function pegaTurnoAtualSeExistir(){
 		$dataTimeAtual = date ( "G:i:s" );
 		$sql = "Select * FROM turno WHERE '$dataTimeAtual' BETWEEN turno.turn_hora_inicio AND turno.turn_hora_fim";
@@ -199,6 +248,11 @@ class UnidadeDAO extends DAO {
 		}
 		return $turno;
 	}
+	
+	/**
+	 * Consulta a Catraca pelo seu Id
+	 * @param Catraca $catraca
+	 */
 	public function preencheCatracaPorId(Catraca $catraca){
 		$idCatraca = $catraca->getId();
 		$sql = "
@@ -225,7 +279,7 @@ class UnidadeDAO extends DAO {
 		
 	}
 	/**
-	 * 
+	 * Realiza o Update dos dados Catraca selecionada.
 	 * @param Catraca $catraca
 	 */
 	public function atualizarCatraca(Catraca $catraca){
@@ -240,9 +294,7 @@ class UnidadeDAO extends DAO {
 			$financeiro = 'TRUE';
 		}else{
 			$financeiro = 'FALSE';
-		}
-		
-		
+		}		
 		
 		$this->getConexao()->beginTransaction();
 		$sqlUpdate = "UPDATE catraca SET catr_tempo_giro = $giro,						
@@ -274,6 +326,9 @@ class UnidadeDAO extends DAO {
 		
 	}
 	
+	/**
+	 * ??????
+	 */
 	function inserirRegistro() {
 		$request = \Slim\Slim::getInstance()->request();
 		$body = $request->getBody();
@@ -298,7 +353,10 @@ class UnidadeDAO extends DAO {
 		}
 	}
 	
-	
+	/**
+	 * Consulta a Unidade pos Id.
+	 * @param Unidade $unidade
+	 */
 	public function preenchePorId(Unidade $unidade) {
 		$idUnidade = $unidade->getId ();
 		if (! is_int ( $idUnidade ) && $idUnidade <= 0)
@@ -308,6 +366,12 @@ class UnidadeDAO extends DAO {
 			$unidade->setNome ( $linha ['unid_nome'] );
 		return;
 	}
+	
+	/**
+	 * Retorna os turnos contidos na unidade.
+	 * @param Turno $turno
+	 * @param Unidade $unidade
+	 */
 	public function turnoNaUnidade(Turno $turno, Unidade $unidade) {
 		$idTurno = $turno->getId ();
 		$idUnidade = $unidade->getId ();
@@ -324,9 +388,14 @@ class UnidadeDAO extends DAO {
 			return true;
 		return false;
 		
-		// Caso contrÃ¡rio a gente insere.
+		// Caso contrário a gente insere.
 	}
 	
+	/**
+	 * Exclui um turno da unidade.
+	 * @param Turno $turno
+	 * @param Unidade $unidade
+	 */
 	public function excluirTurnoDaUnidade(Turno $turno, Unidade $unidade) {
 		$idTurno = $turno->getId ();
 		$idUnidade = $unidade->getId ();
@@ -340,6 +409,10 @@ class UnidadeDAO extends DAO {
 		// Caso contrÃ¡rio a gente insere.
 	}
 	
+	/**
+	 * Retorna os turnos da unidade.
+	 * @param Unidade $unidade
+	 */
 	public function turnosDaUnidade(Unidade $unidade) {
 		$idUnidade = $unidade->getId ();
 		$sql = "SELECT * FROM unidade 
@@ -358,9 +431,10 @@ class UnidadeDAO extends DAO {
 			$unidade->adicionaTurno ( $turno );
 		}
 	}
-
 	
-
+	/**
+	 * retorna um array contendo os custos das Unidades.
+	 */
 	public function custosDaUnidade(){
 	
 		$lista = array ();

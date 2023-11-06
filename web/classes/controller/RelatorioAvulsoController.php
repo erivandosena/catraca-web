@@ -1,19 +1,45 @@
 <?php
-
-
+/**
+ * Classe utilizada para centralizar as demais Classes(DAO, Model, View, Util).
+ * Esta classe será instaciada no index.php.
+ * 
+ * @author Jefferson Uchoa Ponte
+ * @version 1.0
+ * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
+ * @package Controle
+ */
+/**
+ * 
+ * 
+ *
+ */
 class RelatorioAvulsoProprio{
+	
+	/**
+	 * Recebe um Objeto DAO.
+	 * 
+	 * @var DAO
+	 */
 	private $dao;
+	
+	/**
+	 * 
+	 */
 	public function start(){
 		echo '
 		Fiscaliza&ccedil;&atilde;o
-		<form action="" method="get">
-			
+		<form action="" method="get">			
 			<input type="date" name="data" />
 			<input type="submit"/>
 		</form>';
 		if(isset($_GET['data']))
 			$this->mostrarFiscal($_GET['data']);
 	}
+	
+	/**
+	 * 
+	 * @param DateTime $data
+	 */
 	public function mostrarFiscal($data){
 		$time = strtotime($data);
 		echo 'Dados do dia '.date("d/m/Y", $time);
@@ -36,11 +62,7 @@ class RelatorioAvulsoProprio{
 		$transacaoJantar = $this->geraNumeroDeTransacoes($hora1, $hora2);
 		$dinheiroJantar = $this->geraValoresEmCaixa($hora1, $hora2);
 		$avulsosJantar = $this->geraNumeroDeRegistrosAvulsos($hora1, $hora2);
-
-
 		
-
-
 		echo '<table border="1">
 			<tr><th>Almoco</th></tr>
 				<tr><td>Catraca Virtual: '.$registroAlmoco.'</td></tr>		
@@ -60,10 +82,13 @@ class RelatorioAvulsoProprio{
 				<tr><td>Transacoes Guiche: '.$transacaoJantar .'</td></tr>		
 				<tr><td>Transacoes Guiche: '.$dinheiroJantar .'</td></tr>
 			</table>';
-
-
 	}
 	
+	/**
+	 * 
+	 * @param DateTime $data1
+	 * @param DateTime $data2
+	 */
 	public function geraNumeroDeRegistros($data1, $data2){
 		$result = $this->dao->getConexao()->query("SELECT * From registro
 		WHERE regi_data BETWEEN '$data1' AND '$data2';
@@ -74,6 +99,12 @@ class RelatorioAvulsoProprio{
 		}
 		return $i;
 	}
+	
+	/**
+	 * 
+	 * @param DateTime $data1
+	 * @param DateTime $data2
+	 */
 	public function geraNumeroDeRegistrosAvulsos($data1, $data2){
 		$result = $this->dao->getConexao()->query("SELECT * From registro
 		INNER JOIN vinculo ON vinculo.vinc_id = registro.vinc_id
@@ -87,6 +118,11 @@ class RelatorioAvulsoProprio{
 		return $i;
 	}
 
+	/**
+	 * 
+	 * @param DateTime $data1
+	 * @param DateTime $data2
+	 */
 	public function geraNumeroDeTransacoes($data1, $data2){
 		$result = $this->dao->getConexao()->query("SELECT * From transacao
 		WHERE tran_data BETWEEN '$data1' AND '$data2';
@@ -97,6 +133,12 @@ class RelatorioAvulsoProprio{
 		}
 		return $i;	
 	}
+	
+	/**
+	 * 
+	 * @param DateTime $data1
+	 * @param DateTime $data2
+	 */
 	public function geraValoresEmCaixa($data1, $data2){
 		$result = $this->dao->getConexao()->query("SELECT * From transacao
 		WHERE tran_data BETWEEN '$data1' AND '$data2';

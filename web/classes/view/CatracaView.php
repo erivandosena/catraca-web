@@ -1,36 +1,66 @@
 <?php
-
-
-class CatracaView{
-	public function abreContainer($mensagem = "Selecione uma Catraca"){
-		echo '
-		
-				<div class="doze colunas"  id="olinda">
+/**
+ * Nesta Classe estão contidos os Códigos HTML, responsáveis pela geração das Telas.
+ * @author Jefferson Uchoa Ponte
+ * @version 1.0
+ * @copyright UNILAB - Universidade da Integracao Internacional da Lusofonia Afro-Brasileira.
+ * @package View
+ */
+/**
+ * Nesta Classe estão contidos os Códigos HTML
+ * responsáveis por gerar os elementos e as telas da página Catraca.
+ */
+class CatracaView {
+	
+	/**
+	 * Gera a berra de título da página.
+	 *
+	 * @param string $mensagem        	
+	 */
+	public function abreContainer($mensagem = "Selecione uma Catraca") {
+		echo '	<div class="doze colunas"  id="olinda">
 					<div id="titulo" class="doze colunas fundo-azul2 centralizado ">
-						<h1 class="texto-branco">'.$mensagem.'</h1>
-					</div>
-		
-					<div class="doze colunas catraca">';
-		
-		
+						<h1 class="texto-branco">' . $mensagem . '</h1>
+					</div>		
+				<div class="doze colunas catraca">';
 	}
-	public function fechaContainer(){
-		echo '</div>
+	
+	/**
+	 *
+	 * @ignore
+	 *
+	 */
+	public function fechaContainer() {
+		echo '		</div>
 				</div>';
 	}
 	
-	public function listaDeUnidadesAcademicas($unidades){
-		foreach ($unidades as $unidade)
-			$this->mostrarUnidade($unidade);
-		
+	/**
+	 * Exibi todas a Unidade Acadêmicas com informações
+	 * referente a todas as catracas associadas a ela:
+	 *
+	 * quantidade de catracas;
+	 * somatório de giros das mesmas.
+	 *
+	 * @param array $unidades        	
+	 */
+	public function listaDeUnidadesAcademicas($unidades) {
+		foreach ( $unidades as $unidade )
+			$this->mostrarUnidade ( $unidade );
 	}
 	
-	public function mostrarUnidade(Unidade $unidade, $quantidadeDeCatracas = 0, $catracasFuncionando = 0){
-		
-		echo '<a href="?pagina=catraca&unidade='.$unidade->getId().'">
+	/**
+	 * Gera um elemento com informações das catracas da Unidade.
+	 *
+	 * @param Unidade $unidade        	
+	 * @param int $quantidadeDeCatracas        	
+	 * @param int $catracasFuncionando        	
+	 */
+	public function mostrarUnidade(Unidade $unidade, $quantidadeDeCatracas = 0, $catracasFuncionando = 0) {
+		echo '<a href="?pagina=catraca&unidade=' . $unidade->getId () . '">
 				<div class="tres colunas borda catraca-pequeno">
 										<div class="doze colunas">
-											<h3 class="centralizado negrito">'.$unidade->getNome().'</h3>
+											<h3 class="centralizado negrito">' . $unidade->getNome () . '</h3>
 											<hr class="solida" />
 											<div class="catraca-icone fill-verde">
 												<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
@@ -80,34 +110,39 @@ class CatracaView{
 												</svg>
 											</div>
 											<div class="catraca-info medio">
-												<span class="icone-loop2"> Qnt. Catracas: '.$quantidadeDeCatracas.'</span>
-												<span class="icone-loop2"> Registros: '.$catracasFuncionando.'</span>
+												<span class="icone-loop2"> Qnt. Catracas: ' . $quantidadeDeCatracas . '</span>
+												<span class="icone-loop2"> Registros: ' . $catracasFuncionando . '</span>
 											</div>
 										</div>
 									</div>	';
 	}
 	
-	
-	
-	
-	public function listaDeCatracas($lista){
-		
-		
-		foreach ($lista as $catraca)
-			$this->mostraCatraca($catraca);
-			
-			
-		
-		
-		
-		
+	/**
+	 * Exibi todas as catracas associadas a Unidade selecionada;
+	 *
+	 * Cada elemento contém a quantidade de Giros no Turno em andamento
+	 * e a somatória de giros da catraca selecionada.
+	 *
+	 * @param array $lista        	
+	 */
+	public function listaDeCatracas($lista) {
+		foreach ( $lista as $catraca )
+			$this->mostraCatraca ( $catraca );
 	}
-	public function mostraCatraca(Catraca $catraca, $girosTurno = 0, $totalDeGiros = 0){
-		
-		echo '<a href="?pagina=catraca&detalhe='.$catraca->getId().'">
+	
+	/**
+	 * Mostra a catraca a catraca a ser selecionada, mostrarar
+	 * a contagem total de giros e os giros por turno.
+	 *
+	 * @param Catraca $catraca        	
+	 * @param int $girosTurno        	
+	 * @param int $totalDeGiros        	
+	 */
+	public function mostraCatraca(Catraca $catraca, $girosTurno = 0, $totalDeGiros = 0) {
+		echo '<a href="?pagina=catraca&detalhe=' . $catraca->getId () . '">
 				<div class="tres colunas borda fundo-branco catraca-medio">
 									<div class="doze colunas">
-										<h3 class="centralizado negrito">'.$catraca->getNome().'</h2>
+										<h3 class="centralizado negrito">' . $catraca->getNome () . '</h2>
 										<hr class="solida" />
 										<div class="catraca-icone fill-cinza">
 											<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
@@ -169,25 +204,27 @@ class CatracaView{
 											</svg>
 										</div>									
 								    	<div class="catraca-info medio">
-									    	<span>Giros Por Turno: '.$girosTurno.'</span>
-									    	<span>Total de Giros: '.$totalDeGiros.'</span>
+									    	<span>Giros Por Turno: ' . $girosTurno . '</span>
+									    	<span>Total de Giros: ' . $totalDeGiros . '</span>
 								    	</div>
 							    	</div>															
 								</div></a>';
-		
 	}
 	
-	
-	
-	public function detalheCatraca(Catraca $catraca, $valor = 0, $outroValor= 0){
+	/**
+	 * Exibe informações detalhada de uma catraca específica;
+	 *
+	 * @param Catraca $catraca        	
+	 * @param int $valor        	
+	 * @param int $outroValor        	
+	 */
+	public function detalheCatraca(Catraca $catraca, $valor = 0, $outroValor = 0) {
 		echo '	<div id="titulo" class="doze colunas fundo-azul2 centralizado ">
 					<h1 class="texto-branco">Visualização de Catracas</h1>
-				</div>';
-				
-		echo'
+				</div>		
 				<div class="doze colunas">													
 							<div class="seis coluna no-meio borda catraca">
-								<h3 class="centralizado negrito">'.$catraca->getNome().'</h3>
+								<h3 class="centralizado negrito">' . $catraca->getNome () . '</h3>
 								<hr class="solida" />
 								<div class="catraca-icone fill-verde">									
 									<svg version="1.0" xmlns="http://www.w3.org/2000/svg"
@@ -249,28 +286,18 @@ class CatracaView{
 									</svg>
 								</div>
 								<div class="catraca-info">
-									<span>IP: '.$catraca->getIp().'</span><br>
-									<span>Operação: '.$catraca->getStrOperacao().'</span><br>
-									<span>Tempo de Giro: '.$catraca->getTempodeGiro().'</span><br>
-									<span>Giros Por Turno: '.$valor.'</span><br>
-									<span>Total de Giros: '.$outroValor.'</span><br>
+									<span>IP: ' . $catraca->getIp () . '</span><br>
+									<span>Operação: ' . $catraca->getStrOperacao () . '</span><br>
+									<span>Tempo de Giro: ' . $catraca->getTempodeGiro () . '</span><br>
+									<span>Giros Por Turno: ' . $valor . '</span><br>
+									<span>Total de Giros: ' . $outroValor . '</span><br>
 									<hr class="solida" />
-									<span>Unidade Acadêmica: '.$catraca->getUnidade()->getNome().'</span><br>
-									<span>IP: '.$catraca->getIp().'</span>						
+									<span>Unidade Acadêmica: ' . $catraca->getUnidade ()->getNome () . '</span><br>
+									<span>IP: ' . $catraca->getIp () . '</span>						
 								</div>																					
 							</div>
-						</div>
-				';												
-									
-								
-																					
+						</div>';
 	}
-	
-	
-	
-	
 }
-
-
 
 ?>
