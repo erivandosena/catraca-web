@@ -1,9 +1,5 @@
 <?php
 
-
-
-
-
 class UsuarioController{
 	
 	public static function main($nivelDeAcesso, $loginComLdap = false){
@@ -117,10 +113,7 @@ class UsuarioController{
 						
 				}
 				echo "Sucesso";
-				return;
-				
-				
-				
+				return;				
 				
 			}
 			
