@@ -4,6 +4,13 @@
 
 import json
 import requests
+
+from requests.exceptions import Timeout
+from requests.exceptions import HTTPError
+from requests.exceptions import TooManyRedirects
+from requests.exceptions import RequestException
+from requests.exceptions import ConnectionError
+
 from catraca.logs import Logs
 from catraca.modelo.dados.servidor_restful import ServidorRestful
 from catraca.modelo.dao.catraca_unidade_dao import CatracaUnidadeDAO
@@ -11,9 +18,9 @@ from catraca.modelo.entidades.catraca_unidade import CatracaUnidade
 
 
 __author__ = "Erivando Sena" 
-__copyright__ = "(C) Copyright 2015, Unilab" 
-__email__ = "erivandoramos@unilab.edu.br" 
-__status__ = "Prototype" # Prototype | Development | Production 
+__copyright__ = "Copyright 2015, © 09/02/2015" 
+__email__ = "erivandoramos@bol.com.br" 
+__status__ = "Prototype"
 
 
 class CatracaUnidadeJson(ServidorRestful):
@@ -21,42 +28,80 @@ class CatracaUnidadeJson(ServidorRestful):
     log = Logs()
     catraca_unidade_dao = CatracaUnidadeDAO()
     
-    def __init__(self, ):
+    def __init__(self):
         super(CatracaUnidadeJson, self).__init__()
         ServidorRestful.__init__(self)
-        
-    def catraca_unidade_get(self):
+
+    def catraca_unidade_get(self, limpa_tabela=False):
         servidor = self.obter_servidor()
         try:
             if servidor:
-                url = str(servidor) + "catraca_unidade/jcatraca_unidade"
-                header = {'Content-type': 'application/json'}
-                r = requests.get(url, auth=(self.usuario, self.senha), headers=header)
-                print "status HTTP: " + str(r.status_code)
-                dados  = json.loads(r.text)
-                
-                if dados["catraca_unidades"] is not []:
-                    for item in dados["catraca_unidades"]:
-                        obj = self.dict_obj(item)
-                        if obj.id:
-                            lista = self.catraca_unidade_dao.busca(obj.id)
-                            if lista is None:
-                                print "nao existe - insert " + str(obj.catraca)
-                                self.catraca_unidade_dao.insere(obj)
-                                print self.catraca_unidade_dao.aviso
-                            else:
-                                print "existe - update " + str(obj.catraca)
-                                self.catraca_unidade_dao.atualiza_exclui(obj, False)
-                                print self.catraca_unidade_dao.aviso
-                if dados["catraca_unidades"] == []:
-                    self.catraca_unidade_dao.atualiza_exclui(None,True)
-                    print self.catraca_unidade_dao.aviso
-                    
-        except Exception as excecao:
-            print excecao
-            self.log.logger.error('Erro obtendo json catraca_unidade.', exc_info=True)
-        finally:
-            pass
+                url = str(self.URL) + "catraca_unidade/jcatraca_unidade"
+                print url
+                r = servidor.get(url)
+                if r.text != '':
+                    dados  = json.loads(r.text)
+                    LISTA_JSON = dados["catraca_unidades"]
+                    if LISTA_JSON != []:
+                        if limpa_tabela:
+                            return self.mantem_tabela_local(None, True)
+                        lista = []
+                        for item in LISTA_JSON:
+                            obj = self.dict_obj(item)
+                            if obj:
+                                lista.append(obj)
+                                self.mantem_tabela_local(obj)  
+                        return lista
+                else:
+                    return None
+        except Timeout:
+            self.log.logger.error("Timeout", exc_info=True)
+        except HTTPError:
+            self.log.logger.error("HTTPError", exc_info=True)
+        except TooManyRedirects:
+            self.log.logger.error("TooManyRedirects", exc_info=True)
+        except RequestException:
+            self.log.logger.error("RequestException", exc_info=True)
+        except ConnectionError:
+            self.log.logger.error("ConnectionError", exc_info=True)
+        except Exception:
+            self.log.logger.error("Exception", exc_info=True)
+        
+    def mantem_tabela_local(self, obj, mantem_tabela=False):
+        if obj:
+            objeto = self.catraca_unidade_dao.busca(obj.id)
+            if not mantem_tabela:
+                if objeto:
+                    if not objeto.__eq__(obj):
+                        return self.atualiza_exclui(obj, mantem_tabela)
+                    else:
+                        #print "[CATRACA UNIDADE]Acao de atualizacao nao necessaria!"
+                        return None
+                else:
+                    return self.insere(obj)
+            else:
+                if objeto:
+                    return self.atualiza_exclui(obj, mantem_tabela)
+        else:
+            if mantem_tabela:
+                return self.atualiza_exclui(obj, mantem_tabela)
+            else:
+                print "Nemhuma acao realizada!"
+                return None
+
+            
+    def atualiza_exclui(self, obj, boleano):
+        if self.catraca_unidade_dao.atualiza_exclui(obj, boleano):
+            print self.catraca_unidade_dao.aviso
+            if not boleano:
+                return obj
+            else:
+                return None
+            
+    def insere(self, obj):
+        if self.catraca_unidade_dao.insere(obj):
+            print self.catraca_unidade_dao.aviso
+            return obj
         
     def dict_obj(self, formato_json):
         catraca_unidade = CatracaUnidade()

@@ -2,181 +2,137 @@
 # -*- coding: latin-1 -*-
 
 
-from contextlib import closing
+from catraca.logs import Logs
 from catraca.util import Util
-from catraca.modelo.dados.conexao import ConexaoFactory
-from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
-from catraca.modelo.entidades.turno import Turno
+from catraca.modelo.dao.dao_generico import DAOGenerico
 from catraca.modelo.dao.catraca_dao import CatracaDAO
-from catraca.controle.recursos.catraca_json import CatracaJson
-
-__author__ = "Erivando Sena"
-__copyright__ = "Copyright 2015, Unilab"
-__email__ = "erivandoramos@unilab.edu.br"
-__status__ = "Prototype" # Prototype | Development | Production
+from catraca.modelo.entidades.turno import Turno
 
 
-class TurnoDAO(ConexaoGenerica):
+__author__ = "Erivando Sena" 
+__copyright__ = "Copyright 2015, © 09/02/2015" 
+__email__ = "erivandoramos@bol.com.br" 
+__status__ = "Prototype"
+
+
+class TurnoDAO(DAOGenerico):
     
+    log = Logs()
     util = Util()
-
+    
     def __init__(self):
         super(TurnoDAO, self).__init__()
-        ConexaoGenerica.__init__(self)
+        DAOGenerico.__init__(self)
         
     def busca(self, *arg):
-        obj = Turno()
-        id = None
-        for i in arg:
-            id = i
-        if id:
-            sql = "SELECT turn_id, "\
-                   "turn_hora_inicio, "\
-                   "turn_hora_fim, "\
-                   "turn_descricao "\
-                   "FROM turno WHERE "\
-                   "turn_id = " + str(id)
-        elif id is None:
-            sql = "SELECT turn_id, "\
-                   "turn_hora_inicio, "\
-                   "turn_hora_fim, "\
-                   "turn_descricao "\
-                   "FROM turno ORDER BY turn_id"
+        arg = [a for a in arg][0] if arg else None
         try:
-            with closing(self.abre_conexao().cursor()) as cursor:
-                cursor.execute(sql)
-                if id:
-                    dados = cursor.fetchone()
-                    if dados is not None:
-                        obj.id = dados[0]
-                        obj.inicio = dados[1]
-                        obj.fim = dados[2]
-                        obj.descricao = dados[3]
-                        return obj
-                    else:
-                        return None
-                elif id is None:
-                    list = cursor.fetchall()
-                    if list != []:
-                        return list
-                    else:
-                        return None
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela turno.', exc_info=True)
+            if arg:
+                sql = "SELECT "\
+                    "turn_descricao as descricao, "\
+                    "turn_hora_fim as fim, "\
+                    "turn_id as id, "\
+                    "turn_hora_inicio as inicio "\
+                    "FROM turno WHERE "\
+                    "turn_id = %s"
+                return self.seleciona(Turno, sql, arg)
+            else:
+                sql = "SELECT "\
+                    "turn_descricao as descricao, "\
+                    "turn_hora_fim as fim, "\
+                    "turn_id as id, "\
+                    "turn_hora_inicio as inicio "\
+                    "FROM turno ORDER BY turn_id"
+                return self.seleciona(Turno, sql)
         finally:
             pass
-        
+    
     def busca_por_catraca(self, obj, hora_atual):
-        if obj:
-            print "passou >>> if obj:"
-            sql = "SELECT turno.turn_id, turno.turn_hora_inicio, turno.turn_hora_fim, turno.turn_descricao FROM turno "\
-                    "INNER JOIN unidade_turno ON turno.turn_id = unidade_turno.turn_id "\
-                    "INNER JOIN catraca_unidade ON unidade_turno.unid_id = catraca_unidade.unid_id "\
-                    "INNER JOIN catraca ON catraca_unidade.catr_id = catraca.catr_id "\
-                    "WHERE catraca.catr_ip = '"+str(obj.ip)+"' "\
-                    "AND turno.turn_hora_inicio <= '" + str(hora_atual) +"' "\
-                    "AND turno.turn_hora_fim >= '" + str(hora_atual) + "'"
-        else:
-            print "passou >>> else: ip = self.util.obtem_ip()"
-            ip = self.util.obtem_ip()
-            sql = "SELECT turno.turn_id, turno.turn_hora_inicio, turno.turn_hora_fim, turno.turn_descricao FROM turno "\
-                    "INNER JOIN unidade_turno ON turno.turn_id = unidade_turno.turn_id "\
-                    "INNER JOIN catraca_unidade ON unidade_turno.unid_id = catraca_unidade.unid_id "\
-                    "INNER JOIN catraca ON catraca_unidade.catr_id = catraca.catr_id "\
-                    "WHERE catraca.catr_ip = '"+str(ip)+"' "\
-                    "AND turno.turn_hora_inicio <= '" + str(hora_atual) +"' "\
-                    "AND turno.turn_hora_fim >= '" + str(hora_atual) + "'"
- 
+        nome = obj.nome if obj else self.util.obtem_nome_rpi().upper()
+        sql = "SELECT DISTINCT "\
+            "turno.turn_descricao as descricao, "\
+            "turno.turn_hora_fim as fim, "\
+            "turno.turn_id as id , "\
+            "turno.turn_hora_inicio as inicio "\
+            "FROM turno "\
+            "INNER JOIN unidade_turno ON turno.turn_id = unidade_turno.turn_id "\
+            "INNER JOIN catraca_unidade ON unidade_turno.unid_id = catraca_unidade.unid_id "\
+            "INNER JOIN catraca ON catraca_unidade.catr_id = catraca.catr_id "\
+            "WHERE "\
+            "catraca.catr_nome = %s AND "\
+            "turno.turn_hora_inicio <= %s "\
+            "AND turno.turn_hora_fim >= %s"
         try:
-            with closing(self.abre_conexao().cursor()) as cursor:
-                cursor.execute(sql)
-                list = cursor.fetchone()
-                if list != []:
-                    return list
-                else:
-                    return None
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela turno.', exc_info=True)
+            lista = self.seleciona(Turno, sql, nome, str(hora_atual), str(hora_atual))
+            if lista:
+                turno = Turno()
+                for item in lista:
+                    turno.descricao = item[0]
+                    turno.fim = item[1]
+                    turno.id = item[2]
+                    turno.inicio = item[3]
+                return turno
+            else:
+                return None
         finally:
             pass
-        
-    def obtem_catraca(self):
-#         catraca = CatracaDAO().busca_por_ip(self.util.obtem_ip())
-#         if catraca:
-#             print " PASSOU ==>>>> catraca"
-#             return catraca
-#         else:
-#             print " PASSOU ==>>>> else: CatracaJson().catraca_get()"
-#             CatracaJson().catraca_get()
-#             catraca = CatracaDAO().busca_por_ip(self.util.obtem_ip())
-        return CatracaDAO().busca_por_ip(self.util.obtem_ip())
-        
-        
-    def obtem_turno(self):
-        turno = self.busca_por_catraca(self.obtem_catraca(), self.util.obtem_hora())
-        print "select no BD!"
-        if turno:      
+    
+    def obtem_turno(self, catraca=None, hora=None):
+        turno = None
+        try:
+            if (catraca is None) or (hora is None):
+                turno = self.busca_por_catraca( CatracaDAO().busca_por_ip(self.util.obtem_ip_por_interface()), self.util.obtem_hora() )
+            else:
+                turno = self.busca_por_catraca(catraca, hora)
             return turno
-        else:
-            return None
-   
+        finally:
+            pass
+    
     def insere(self, obj):
+        sql = "INSERT INTO turno "\
+            "("\
+            "turn_descricao, "\
+            "turn_hora_fim, "\
+            "turn_id, "\
+            "turn_hora_inicio "\
+            ") VALUES ("\
+            "%s, %s, %s, %s)"
         try:
-            if obj:
-                sql = "INSERT INTO turno("\
-                        "turn_id, "\
-                        "turn_hora_inicio, "\
-                        "turn_hora_fim, "\
-                        "turn_descricao) VALUES (" +\
-                        str(obj.id) + ", '" +\
-                        str(obj.inicio) + "', '" +\
-                        str(obj.fim) + "', '" +\
-                        str(obj.descricao) + "')"
-                self.aviso = "Inserido com sucesso!"
-                with closing(self.abre_conexao().cursor()) as cursor:
-                    cursor.execute(sql)
-                    self.commit()
-                    return True
-            else:
-                self.aviso = "Objeto inexistente!"
-                return False
-        except Exception, e:
-            self.__aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT na tabela turno.', exc_info=True)
-            return False
+            return self.inclui(Turno, sql, obj)
         finally:
             pass
-        
-    def atualiza_exclui(self, obj, delete):
+    
+    def atualiza(self, obj):
+        sql = "UPDATE turno SET "\
+            "turn_descricao = %s, "\
+            "turn_hora_fim = %s, "\
+            "turn_hora_inicio = %s "\
+            "WHERE turn_id = %s"
         try:
-            if obj:
-                if delete:
-                    if obj.id:
-                        sql = "DELETE FROM turno WHERE turn_id = " + str(obj.id)
+            return self.altera(sql, obj)
+        finally:
+            pass
+    
+    def exclui(self, *arg):
+        obj = [a for a in arg][0] if arg else None
+        sql = "DELETE FROM turno"
+        if obj:
+            sql = str(sql) + " WHERE turn_id = %s"
+        try:
+            return self.deleta(sql, obj)
+        finally:
+            pass
+    
+    def atualiza_exclui(self, obj, boleano):
+        if obj or boleano:
+            try:
+                if boleano:
+                    if obj is None:
+                        return self.exclui()
                     else:
-                        sql = "DELETE FROM turno"
-                    self.aviso = "Excluido com sucesso!"
+                        self.exclui(obj)
                 else:
-                    sql = "UPDATE turno SET " +\
-                          "turn_hora_inicio = '" + str(obj.inicio) + "', " +\
-                          "turn_hora_fim = '" + str(obj.fim) + "', " +\
-                          "turn_descricao = '" + str(obj.descricao) +\
-                          "' WHERE "\
-                          "turn_id = " + str(obj.id)
-                    self.aviso = "Alterado com sucesso!"
-                with closing(self.abre_conexao().cursor()) as cursor:
-                    cursor.execute(sql)
-                    self.commit()
-                    return True
-            else:
-                self.aviso = "Objeto inexistente!"
-                return False
-        except Exception, e:
-            self.__aviso = str(e)
-            self.log.logger.error('Erro realizando DELETE/UPDATE na tabela turno.', exc_info=True)
-            return False
-        finally:
-            pass
-        
+                    return self.atualiza(obj)
+            finally:
+                pass
+                

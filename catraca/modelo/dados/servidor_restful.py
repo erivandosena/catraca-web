@@ -6,21 +6,19 @@ import requests
 
 
 __author__ = "Erivando Sena" 
-__copyright__ = "Copyright 2015, Unilab" 
-__email__ = "erivandoramos@unilab.edu.br" 
-__status__ = "Prototype" # Prototype | Development | Production 
+__copyright__ = "Copyright 2015, © 09/02/2015" 
+__email__ = "erivandoramos@bol.com.br" 
+__status__ = "Prototype"
 
 
 class ServidorRestful(object):
-    
-    URL = 'http://200.129.19.65:27289/api/'
-    #URL = 'http://10.5.0.15:27289/api/'
-    timeout_conexao = 0.2 #0.0009
 
     def __init__(self):
         super(ServidorRestful, self).__init__()
+        self.URL = 'http://10.5.0.123:27289/api/'
         self.__usuario = "catraca"
-        self.__senha = "CaTr@CaUniLab2015"
+        self.__senha = "catraca"
+        self.instancia_sessao = None
         
     @property
     def usuario(self):
@@ -38,18 +36,20 @@ class ServidorRestful(object):
     def senha(self, valor):
         self.__senha = valor
         
-    def obter_servidor(self):
-        try:
-            response = requests.get(url=self.URL, timeout=(self.timeout_conexao, 10.0))
-        except requests.exceptions.ConnectTimeout as excecao:
-            print "rede off"
-            return None
-        except Exception as excecao:
-            print "rede off"
-            return None
-        else:
-            print "rede ok"
-            return self.URL
+    def obter_conexao(self):
+        sessao = requests.Session() 
+        try:   
+            #with requests.Session() as sessao:
+            sessao.timeout = 10
+            sessao.auth = (self.usuario, self.senha)
+            sessao.headers = {'Content-type': 'application/json'}
+            return sessao
         finally:
-            pass
-        
+            sessao.close()
+
+    def obter_servidor(self):
+        return self.obter_conexao()
+#         #Singleton
+#         if self.instancia_sessao is None:
+#             self.instancia_sessao = self.obter_conexao()
+#         return self.instancia_sessao

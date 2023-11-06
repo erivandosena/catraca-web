@@ -6,9 +6,9 @@ from catraca.controle.raspberrypi.pinos import PinoControle
 
 
 __author__ = "Erivando Sena" 
-__copyright__ = "(C) Copyright 2015, Unilab" 
-__email__ = "erivandoramos@unilab.edu.br" 
-__status__ = "Prototype" # Prototype | Development | Production 
+__copyright__ = "Copyright 2015, © 09/02/2015" 
+__email__ = "erivandoramos@bol.com.br" 
+__status__ = "Prototype"
 
 
 class Pictograma(object):
@@ -38,4 +38,12 @@ class Pictograma(object):
             return self.rpi.atualiza(self.x, comando)
         else:
             return self.rpi.atualiza(self.x, comando)
+        
+    def obtem_estado_pictograma(self, nome):
+        if nome == "direita":
+            return self.rpi.estado(self.sd)
+        elif nome == "esquerda":
+            return self.rpi.estado(self.se)
+        elif nome == "x":
+            return self.rpi.estado(self.x)
         

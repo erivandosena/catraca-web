@@ -2,10 +2,14 @@
 # -*- coding: utf-8 -*-
 
 
-__author__ = "Erivando Sena"
-__copyright__ = "(C) Copyright 2015, Unilab"
-__email__ = "erivandoramos@unilab.edu.br"
-__status__ = "Prototype" # Prototype | Development | Production
+import simplejson as json
+import hashlib
+
+
+__author__ = "Erivando Sena" 
+__copyright__ = "Copyright 2015, © 09/02/2015" 
+__email__ = "erivandoramos@bol.com.br" 
+__status__ = "Prototype"
 
 
 class Usuario(object):
@@ -17,6 +21,16 @@ class Usuario(object):
         self.__usua_login = None
         self.__usua_senha = None
         self.__usua_nivel = None
+        self.__id_base_externa = None
+        
+    def __eq__(self, outro):
+        return self.hash_dict(self) == self.hash_dict(outro)
+    
+    def __ne__(self, outro):
+        return not self.__eq__(outro)
+    
+    def hash_dict(self, obj):
+        return hashlib.sha1(json.dumps(obj.__dict__, use_decimal=False, ensure_ascii=True, sort_keys=False, encoding='utf-8')).hexdigest()
     
     @property
     def id(self):
@@ -66,4 +80,11 @@ class Usuario(object):
     def nivel(self, valor):
         self.__usua_nivel = valor
         
+    @property
+    def idexterno(self):
+        return self.id_base_externa
+    
+    @idexterno.setter
+    def idexterno(self, valor):
+        self.id_base_externa = valor
         

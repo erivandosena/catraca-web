@@ -2,104 +2,60 @@
 # -*- coding: utf-8 -*-
 
 
-import sqlite3
-import urlparse
 import psycopg2
-#import mysql.connector
-from contextlib import closing
+import sqlite3
+from psycopg2 import extras
+from psycopg2 import extensions
+from psycopg2 import DataError
+from psycopg2 import ProgrammingError
+from psycopg2 import OperationalError
 from catraca.logs import Logs
-from catraca.util import Util
 
 
-__author__ = "Erivando Sena"
-__copyright__ = "(C) Copyright 2015, Unilab"
-__email__ = "erivandoramos@unilab.edu.br"
-__status__ = "Prototype" # Prototype | Development | Production
+__author__ = "Erivando Sena" 
+__copyright__ = "Copyright 2015, © 09/02/2015" 
+__email__ = "erivandoramos@bol.com.br" 
+__status__ = "Prototype"
 
 
 class ConexaoFactory(object):
     
     log = Logs()
-    util = Util()
     
     def __init__(self):
         super(ConexaoFactory, self).__init__()
         self.__POSTGRESQL = 1
-        self.__MYSQL = 2
-        self.__SQLITE = 3
-        self.__erroCon = None
-        self.__factory = None
-        
+        self.__SQLITE = 2
+        self.__extras = extras
+        self.__extensoes = extensions
+        self.data_error = DataError
+        self.programming_error = ProgrammingError
+        self.operational_error = OperationalError
+
     @property
-    def erro_conexao(self):
-        return self.__erroCon
+    def extras(self):
+        return self.__extras
     
     @property
-    def factory(self):
-        return self.__factory
+    def extensoes(self):
+        return self.__extensoes
     
     def conexao(self, tipo_banco):
         con = None
-        self.__factory = tipo_banco
+        #self.__factory = tipo_banco
         try:
-            str_conexao = self.obtem_dns("desenvolvimento","postgres","localhost","postgres", tipo_banco)
+            str_conexao = "dbname='%s' user='%s' host='%s' password='%s'" % ("desenvolvimento", "postgres", "localhost", "postgres")
             # PostgreSQL
             if (tipo_banco == self.__POSTGRESQL):
-                try:
-                    con = psycopg2.connect(str_conexao)
-                except Exception as excecao:
-                    self.__erroCon = str(excecao)
-                    self.log.logger.critical('Erro na conexao com PostgreSQL.', exc_info=True)
-                finally:
-                    pass
-            # MySQL
-            if (tipo_banco == self.__MYSQL):
-                #str_conexao = "user='%s', password='%s', host='%s', database='%s'" % (usuario, senha, localhost, banco)
-                try:
-                    #con = mysql.connector.connect(str_conexao)
-                    pass
-                except Exception as excecao:
-                    self.__erroCon = str(excecao)
-                    self.log.logger.critical('Erro na conexao com MySQL.', exc_info=True)
-                finally:
-                    pass
+                con = psycopg2.connect(str_conexao)
             # SQLite
             if (tipo_banco == self.__SQLITE):
-                #str_conexao = "'%s'" % (os.path.join(os.path.dirname(os.path.abspath(__file__)),"banco.db"))
-                try:
-                    con = sqlite3.connect(str_conexao)
-                except Exception, e:
-                    self.__erroCon = str(e)
-                    self.log.logger.critical('Erro na conexao com SQLite.', exc_info=True)
-                finally:
-                    pass
+                str_conexao = "'%s'" % (os.path.join(os.path.dirname(os.path.abspath(__file__)),"banco.db"))
+                con = sqlite3.connect(str_conexao)
+            #print "BD-CONEXAO ABERTA!"
             return con
-#         except Exception as excecao:
-#             self.__erroCon = str(excecao)
-#             self.log.logger.critical('Erro na string de conexao com banco de dados.', exc_info=True)
-#         
-        finally:
-            pass
         
-    def obtem_dns(self, bd = None, usuario = None, host = None, senha = None, tipo_banco = 1):
-        try:
-            if bd == None:
-                bd = self.util.obtem_nome_rpi()
-            if usuario == None:
-                usuario = self.util.obtem_nome_root_rpi()
-            if host == None:
-                host = self.util.obtem_ip()
-            if senha == None:
-                senha = 'postgres'
-            if tipo_banco == 1:
-                dns = "dbname='%s' user='%s' host='%s' password='%s'" % (bd, usuario, host, senha)
-            elif tipo_banco == 2:
-                dns = "user='%s' password='%s' host='%s' database='%s'" % (usuario, senha, host, bd)
-            elif tipo_banco == 3:
-                dns = self.util.obtem_path(str(bd)+".db")
         except Exception as excecao:
-            self.aviso = str(excecao)
-            self.log.logger.error('Erro ao obter string de conexao.', exc_info=True)
-        finally:
-            return dns
-        
+            print excecao
+            self.log.logger.critical('Erro na conexao com banco de dados.', exc_info=True)
+            

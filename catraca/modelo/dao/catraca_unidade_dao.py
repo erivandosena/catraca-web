@@ -2,117 +2,89 @@
 # -*- coding: utf-8 -*-
 
 
-from contextlib import closing
-from catraca.modelo.dados.conexao import ConexaoFactory
-from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
+from catraca.logs import Logs
+from catraca.modelo.dao.dao_generico import DAOGenerico
 from catraca.modelo.entidades.catraca_unidade import CatracaUnidade
-from catraca.modelo.dao.catraca_dao import CatracaDAO
-from catraca.modelo.dao.unidade_dao import UnidadeDAO
 
 
-__author__ = "Erivando Sena"
-__copyright__ = "Copyright 2015, Unilab"
-__email__ = "erivandoramos@unilab.edu.br"
-__status__ = "Prototype" # Prototype | Development | Production
+__author__ = "Erivando Sena" 
+__copyright__ = "Copyright 2015, © 09/02/2015" 
+__email__ = "erivandoramos@bol.com.br" 
+__status__ = "Prototype"
 
 
-class CatracaUnidadeDAO(ConexaoGenerica):
+class CatracaUnidadeDAO(DAOGenerico):
+    
+    log = Logs()
     
     def __init__(self):
         super(CatracaUnidadeDAO, self).__init__()
-        ConexaoGenerica.__init__(self)
+        DAOGenerico.__init__(self)
         
     def busca(self, *arg):
-        obj = CatracaUnidade()
-        id = None
-        for i in arg:
-            id = i
-        if id:
-            sql = "SELECT caun_id, catr_id, unid_id FROM catraca_unidade WHERE caun_id = " + str(id)
-        elif id is None:
-            sql = "SELECT caun_id, catr_id, unid_id FROM catraca_unidade ORDER BY caun_id"
+        arg = [a for a in arg][0] if arg else None
         try:
-            with closing(self.abre_conexao().cursor()) as cursor:
-                cursor.execute(sql)
-                if id:
-                    dados = cursor.fetchone()
-                    if dados is not None:
-                        obj.id = dados[0]
-                        obj.catraca = self.busca_por_catraca(obj)
-                        obj.unidade = self.busca_por_unidade(obj)
-                        return obj
-                    else:
-                        return None
-                elif id is None:
-                    list = cursor.fetchall()
-                    if list != []:
-                        return list
-                    else:
-                        return None
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela catraca_unidade.', exc_info=True)
+            if arg:
+                sql = "SELECT "\
+                    "catr_id as catraca, "\
+                    "unid_id as unidade, "\
+                    "caun_id as id "\
+                    "FROM catraca_unidade WHERE "\
+                    "caun_id = %s"
+                return self.seleciona(CatracaUnidade, sql, arg)
+            else:
+                sql = "SELECT "\
+                    "catr_id as catraca, "\
+                    "unid_id as unidade, "\
+                    "caun_id as id "\
+                    "FROM catraca_unidade ORDER BY caun_id"
+                return self.seleciona(CatracaUnidade, sql)
         finally:
             pass
-        
-    def busca_por_catraca(self, obj):
-        return CatracaDAO().busca(obj.id)
-        
-    def busca_por_unidade(self, obj):
-        return UnidadeDAO().busca(obj.id)
-        
+    
     def insere(self, obj):
+        sql = "INSERT INTO catraca_unidade "\
+            "("\
+            "catr_id, "\
+            "caun_id, "\
+            "unid_id "\
+            ") VALUES ("\
+            "%s, %s, %s)"
         try:
-            if obj:
-                sql = "INSERT INTO catraca_unidade("\
-                    "caun_id, "\
-                    "catr_id, "\
-                    "unid_id) VALUES (" +\
-                    str(obj.id) + ", " +\
-                    str(obj.catraca) + ", " +\
-                    str(obj.unidade) + ")"
-                self.aviso = "Inserido com sucesso!"
-                with closing(self.abre_conexao().cursor()) as cursor:
-                    cursor.execute(sql)
-                    self.commit()
-                    return False
-            else:
-                self.aviso = "Objeto inexistente!"
-                return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT na tabela catraca_unidade.', exc_info=True)
-            return False
-        finally:
-            pass   
-        
-    def atualiza_exclui(self, obj, delete):
-        try:
-            if obj:
-                if delete:
-                    if obj.id:
-                        sql = "DELETE FROM catraca_unidade WHERE caun_id = " + str(obj.id)
-                    else:
-                        sql = "DELETE FROM catraca_unidade"
-                    self.aviso = "Excluido com sucesso!"
-                else:
-                    sql = "UPDATE catraca_unidade SET " +\
-                        "catr_id = " + str(obj.catraca) + ", " +\
-                        "unid_id = " + str(obj.unidade) +\
-                        " WHERE "\
-                        "caun_id = " + str(obj.id)
-                    self.aviso = "Alterado com sucesso!"
-                with closing(self.abre_conexao().cursor()) as cursor:
-                    cursor.execute(sql)
-                    self.commit()
-                    return False
-            else:
-                self.aviso = "Objeto inexistente!"
-                return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando DELETE/UPDATE na tabela catraca_unidade.', exc_info=True)
-            return False
+            return self.inclui(CatracaUnidade, sql, obj)
         finally:
             pass
-        
+    
+    def atualiza(self, obj):
+        sql = "UPDATE catraca_unidade SET "\
+            "catr_id = %s, "\
+            "unid_id = %s "\
+            "WHERE caun_id = %s"
+        try:
+            return self.altera(sql, obj)
+        finally:
+            pass
+    
+    def exclui(self, *arg):
+        obj = [a for a in arg][0] if arg else None
+        sql = "DELETE FROM catraca_unidade"
+        if obj:
+            sql = str(sql) + " WHERE caun_id = %s"
+        try:
+            return self.deleta(sql, obj)
+        finally:
+            pass
+    
+    def atualiza_exclui(self, obj, boleano):
+        if obj or boleano:
+            try:
+                if boleano:
+                    if obj is None:
+                        return self.exclui()
+                    else:
+                        self.exclui(obj)
+                else:
+                    return self.atualiza(obj)
+            finally:
+                pass
+                

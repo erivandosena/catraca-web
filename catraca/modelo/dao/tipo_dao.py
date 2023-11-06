@@ -2,111 +2,89 @@
 # -*- coding: utf-8 -*-
 
 
-from contextlib import closing
-from catraca.modelo.dados.conexao import ConexaoFactory
-from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
+from catraca.logs import Logs
+from catraca.modelo.dao.dao_generico import DAOGenerico
 from catraca.modelo.entidades.tipo import Tipo
 
 
-__author__ = "Erivando Sena"
-__copyright__ = "Copyright 2015, Unilab"
-__email__ = "erivandoramos@unilab.edu.br"
-__status__ = "Prototype" # Prototype | Development | Production
+__author__ = "Erivando Sena" 
+__copyright__ = "Copyright 2015, © 09/02/2015" 
+__email__ = "erivandoramos@bol.com.br" 
+__status__ = "Prototype"
 
 
-class TipoDAO(ConexaoGenerica):
+class TipoDAO(DAOGenerico):
+    
+    log = Logs()
 
     def __init__(self):
         super(TipoDAO, self).__init__()
-        ConexaoGenerica.__init__(self)
-    
+        DAOGenerico.__init__(self)
+        
     def busca(self, *arg):
-        obj = Tipo()
-        id = None
-        for i in arg:
-            id = i
-        if id:
-            sql = "SELECT tipo_id, tipo_nome, tipo_valor FROM tipo WHERE tipo_id = " + str(id)
-        elif id is None:
-            sql = "SELECT tipo_id, tipo_nome, tipo_valor FROM tipo ORDER BY tipo_id"
+        arg = [a for a in arg][0] if arg else None
         try:
-            with closing(self.abre_conexao().cursor()) as cursor:
-                cursor.execute(sql)
-                if id:
-                    dados = cursor.fetchone()
-                    if dados:
-                        obj.id = dados[0]
-                        obj.nome = dados[1]
-                        obj.valor = dados[2]
-                        return obj
-                    else:
-                        return None
-                elif id is None:
-                    list = cursor.fetchall()
-                    if list != []:
-                        return list
-                    else:
-                        return None
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela tipo.', exc_info=True)
+            if arg:
+                sql = "SELECT "\
+                    "tipo_nome as nome, "\
+                    "tipo_valor as valor, "\
+                    "tipo_id as id "\
+                    "FROM tipo WHERE "\
+                    "tipo_id = %s"
+                return self.seleciona(Tipo, sql, arg)
+            else:
+                sql = "SELECT "\
+                    "tipo_nome as nome, "\
+                    "tipo_valor as valor, "\
+                    "tipo_id as id "\
+                    "FROM tipo ORDER BY tipo_id"
+                return self.seleciona(Tipo, sql)
         finally:
             pass
-        
+    
     def insere(self, obj):
+        sql = "INSERT INTO tipo "\
+            "("\
+            "tipo_id, "\
+            "tipo_nome, "\
+            "tipo_valor "\
+            ") VALUES ("\
+            "%s, %s, %s)"
         try:
-            if obj:
-                sql = "INSERT INTO tipo("\
-                        "tipo_id, "\
-                        "tipo_nome, "\
-                        "tipo_valor) VALUES (" +\
-                        str(obj.id) + ", '" +\
-                        str(obj.nome) + "', '" +\
-                        str(obj.valor) + "')"
-                self.aviso = "Inserido com sucesso!"
-                with closing(self.abre_conexao().cursor()) as cursor:
-                    cursor.execute(sql)
-                    self.commit()
-                    return True
-            else:
-                self.aviso = "Objeto inexistente!"
-                return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT na tabela tipo.', exc_info=True)
-            return False
+            return self.inclui(Tipo, sql, obj)
         finally:
             pass
-        
-    def atualiza_exclui(self, obj, delete):
+    
+    def atualiza(self, obj):
+        sql = "UPDATE tipo SET "\
+            "tipo_nome = %s, "\
+            "tipo_valor = %s "\
+            "WHERE tipo_id = %s"
         try:
-            if obj:
-                if delete:
-                    if obj.id:
-                        sql = "DELETE FROM tipo WHERE tipo_id = " + str(obj.id)
+            return self.altera(sql, obj)
+        finally:
+            pass
+    
+    def exclui(self, *arg):
+        obj = [a for a in arg][0] if arg else None
+        sql = "DELETE FROM tipo"
+        if obj:
+            sql = str(sql) + " WHERE tipo_id = %s"
+        try:
+            return self.deleta(sql, obj)
+        finally:
+            pass
+    
+    def atualiza_exclui(self, obj, boleano):
+        if obj or boleano:
+            try:
+                if boleano:
+                    if obj is None:
+                        return self.exclui()
                     else:
-                        sql = "DELETE FROM tipo"
-                    self.aviso = "Excluido com sucesso!"
+                        self.exclui(obj)
                 else:
-                    sql = "UPDATE tipo SET " +\
-                          "tipo_nome = '" + str(obj.nome) + "', " +\
-                          "tipo_valor = '" + str(obj.valor) +\
-                          "' WHERE "\
-                          "tipo_id = " + str(obj.id)
-                    self.aviso = "Alterado com sucesso!"
-                with closing(self.abre_conexao().cursor()) as cursor:
-                    cursor.execute(sql)
-                    self.commit()
-                    return True
-            else:
-                self.aviso = "Objeto inexistente!"
-                return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando DELETE/UPDATE na tabela tipo.', exc_info=True)
-            return False
-        finally:
-            pass
-        
-        
-        
+                    return self.atualiza(obj)
+            finally:
+                pass
+                

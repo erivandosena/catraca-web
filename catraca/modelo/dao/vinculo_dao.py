@@ -2,159 +2,129 @@
 # -*- coding: latin-1 -*-
 
 
-from contextlib import closing
-from catraca.modelo.dados.conexao import ConexaoFactory
-from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
+from catraca.logs import Logs
+from catraca.modelo.dao.dao_generico import DAOGenerico
 from catraca.modelo.entidades.vinculo import Vinculo
-from catraca.modelo.dao.cartao_dao import CartaoDAO
-from catraca.modelo.dao.usuario_dao import UsuarioDAO
 
 
-__author__ = "Erivando Sena"
-__copyright__ = "Copyright 2015, Unilab"
-__email__ = "erivandoramos@unilab.edu.br"
-__status__ = "Prototype" # Prototype | Development | Production
+__author__ = "Erivando Sena" 
+__copyright__ = "Copyright 2015, © 09/02/2015" 
+__email__ = "erivandoramos@bol.com.br" 
+__status__ = "Prototype"
 
 
-class VinculoDAO(ConexaoGenerica):
+class VinculoDAO(DAOGenerico):
+    
+    log = Logs()
 
     def __init__(self):
         super(VinculoDAO, self).__init__()
-        ConexaoGenerica.__init__(self)
+        DAOGenerico.__init__(self)
         
     def busca(self, *arg):
-        obj = Vinculo()
-        id = None
-        for i in arg:
-            id = i
-        if id:
-            sql = "SELECT vinc_id, vinc_avulso, vinc_inicio, vinc_fim, vinc_descricao, "\
-            "vinc_refeicoes, cart_id, usua_id FROM vinculo WHERE vinc_id = " + str(id)
-        elif id is None:
-            sql = "SELECT vinc_id, vinc_avulso, vinc_inicio, vinc_fim, vinc_descricao, "\
-            "vinc_refeicoes, cart_id, usua_id FROM vinculo ORDER BY vinc_id"
+        arg = [a for a in arg][0] if arg else None
         try:
-            with closing(self.abre_conexao().cursor()) as cursor:
-                cursor.execute(sql)
-                if id:
-                    dados = cursor.fetchone()
-                    if dados is not None:
-                        obj.id = dados[0]
-                        obj.avulso = dados[1]
-                        obj.inicio = dados[2]
-                        obj.fim = dados[3]
-                        obj.descricao = dados[4]
-                        obj.refeicoes = dados[5]
-                        obj.cartao = self.busca_por_cartao(obj)
-                        obj.usuario = self.busca_por_usuario(obj)
-                        return obj
-                    else:
-                        return None
-                elif id is None:
-                    list = cursor.fetchall()
-                    if list != []:
-                        return list
-                    else:
-                        return None
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela vinculo.', exc_info=True)
+            if arg:
+                sql = "SELECT "\
+                    "vinc_id as id, "\
+                    "vinc_avulso as avulso, "\
+                    "vinc_inicio as inicio, "\
+                    "vinc_fim as fim, "\
+                    "vinc_descricao as descricao, "\
+                    "vinc_refeicoes as refeicoes, "\
+                    "cart_id as cartao, "\
+                    "usua_id as usuario "\
+                    "FROM vinculo WHERE "\
+                    "vinc_id = %s"
+                return self.seleciona(Vinculo, sql, arg)
+            else:
+                sql = "SELECT "\
+                    "vinc_id as id, "\
+                    "vinc_avulso as avulso, "\
+                    "vinc_inicio as inicio, "\
+                    "vinc_fim as fim, "\
+                    "vinc_descricao as descricao, "\
+                    "vinc_refeicoes as refeicoes, "\
+                    "cart_id as cartao, "\
+                    "usua_id as usuario "\
+                    "FROM vinculo ORDER BY vinc_id"
+                return self.seleciona(Vinculo, sql)
         finally:
             pass
-  
-    def busca_por_cartao(self, obj):
-        return CartaoDAO().busca(obj.id)
-        
-    def busca_por_usuario(self, obj):
-        return UsuarioDAO().busca(obj.id)
     
-    def busca_por_periodo(self, data_ini, data_fim, cartao):
-        sql = "SELECT vinc_id, vinc_avulso, vinc_inicio, vinc_fim, vinc_descricao, "\
-                "vinc_refeicoes, cart_id, usua_id FROM vinculo WHERE "\
-                "regi_data BETWEEN " + str(data_ini) +\
-                " AND " + str(data_fim) + " AND cart_id = "  + str(cartao.id) +\
-                " ORDER BY vinc_inicio DESC"
+    def busca_por_periodo(self, obj, data_ini, data_fim):
+        sql = "SELECT "\
+            "vinc_id as id, "\
+            "vinc_avulso as avulso, "\
+            "vinc_inicio as inicio, "\
+            "vinc_fim as fim, "\
+            "vinc_descricao as descricao, "\
+            "vinc_refeicoes as refeicoes, "\
+            "cart_id as cartao, "\
+            "usua_id as usuario "\
+            "FROM vinculo "\
+            "WHERE "\
+            "regi_data BETWEEN %s "\
+            " AND %s AND cart_id = %s  "\
+            " ORDER BY vinc_inicio DESC"
         try:
-            with closing(self.abre_conexao().cursor()) as cursor:
-                cursor.execute(sql)
-                list = cursor.fetchall()
-                if list != []:
-                    return list
-                else:
-                    return None
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela vinculo.', exc_info=True)
+            return self.seleciona(Vinculo, sql, obj, str(data_ini), str(data_ini, data_fim))
         finally:
             pass
-        
+            
     def insere(self, obj):
+        sql = "INSERT INTO vinculo "\
+            "("\
+            "vinc_avulso, "\
+            "cart_id, "\
+            "vinc_descricao, "\
+            "vinc_fim, "\
+            "vinc_id, "\
+            "vinc_inicio, "\
+            "vinc_refeicoes, "\
+            "usua_id "\
+            ") VALUES ("\
+            "%s, %s, %s, %s, %s, %s, %s, %s)"
         try:
-            if obj:
-                sql = "INSERT INTO vinculo("\
-                      "vinc_id, "\
-                      "vinc_avulso, "\
-                      "vinc_inicio, "\
-                      "vinc_fim, "\
-                      "vinc_descricao, "\
-                      "vinc_refeicoes, "\
-                      "cart_id, "\
-                      "usua_id) VALUES (" +\
-                      str(obj.id) + ", " +\
-                      str(obj.avulso) + ", '" +\
-                      str(obj.inicio) + "', '" +\
-                      str(obj.fim) + "', '" +\
-                      str(obj.descricao) + "', " +\
-                      str(obj.refeicoes) + ", " +\
-                      str(obj.cartao) + ", " +\
-                      str(obj.usuario) + ")"
-                self.aviso = "Inserido com sucesso!"
-                with closing(self.abre_conexao().cursor()) as cursor:
-                    cursor.execute(sql)
-                    self.commit()
-                    return True
-            else:
-                self.aviso = "Objeto inexistente!"
-                return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT na tabela vinculo.', exc_info=True)
-            return False
+            return self.inclui(Vinculo, sql, obj)
         finally:
             pass
-        
-    def atualiza_exclui(self, obj, delete):
+    
+    def atualiza(self, obj):
+        sql = "UPDATE vinculo SET "\
+            "vinc_avulso = %s, "\
+            "cart_id = %s, "\
+            "vinc_descricao = %s, "\
+            "vinc_fim = %s, "\
+            "vinc_inicio = %s, "\
+            "vinc_refeicoes = %s, "\
+            "usua_id = %s "\
+            "WHERE vinc_id = %s"
         try:
-            if obj:
-                if delete:
-                    if obj.id:
-                        sql = "DELETE FROM vinculo WHERE vinc_id = " + str(obj.id)
+            return self.altera(sql, obj)
+        finally:
+            pass
+    
+    def exclui(self, *arg):
+        obj = [a for a in arg][0] if arg else None
+        sql = "DELETE FROM vinculo"
+        if obj:
+            sql = str(sql) + " WHERE vinc_id = %s"
+        try:
+            return self.deleta(sql, obj)
+        finally:
+            pass
+    
+    def atualiza_exclui(self, obj, boleano):
+        if obj or boleano:
+            try:
+                if boleano:
+                    if obj is None:
+                        return self.exclui()
                     else:
-                        sql = "DELETE FROM vinculo"
-                    self.aviso = "Excluido com sucesso!"
+                        self.exclui(obj)
                 else:
-                    sql = "UPDATE vinculo SET " +\
-                          "vinc_avulso = " + str(obj.avulso) + ", " +\
-                          "vinc_inicio = '" + str(obj.inicio) + "', " +\
-                          "vinc_fim = '" + str(obj.fim) + "', " +\
-                          "vinc_descricao = '" + str(obj.descricao) + "', " +\
-                          "vinc_refeicoes = " + str(obj.refeicoes) + ", " +\
-                          "cart_id = " + str(obj.cartao) + ", " +\
-                          "usua_id = " + str(obj.usuario) +\
-                          " WHERE "\
-                          "vinc_id = " + str(obj.id)
-                    self.aviso = "Alterado com sucesso!"
-                with closing(self.abre_conexao().cursor()) as cursor:
-                    cursor.execute(sql)
-                    self.commit()
-                    return True
-            else:
-                self.aviso = "Objeto inexistente!"
-                return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando DELETE/UPDATE na tabela vinculo.', exc_info=True)
-            return False
-        finally:
-            pass
-        
+                    return self.atualiza(obj)
+            finally:
+                pass
+                

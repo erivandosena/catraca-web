@@ -2,156 +2,160 @@
 # -*- coding: latin-1 -*-
 
 
-from contextlib import closing
-from catraca.modelo.dados.conexao import ConexaoFactory
-from catraca.modelo.dados.conexaogenerica import ConexaoGenerica
+from catraca.logs import Logs
+from catraca.modelo.dao.dao_generico import DAOGenerico
 from catraca.modelo.entidades.catraca import Catraca
 
 
-__author__ = "Erivando Sena"
-__copyright__ = "Copyright 2015, Unilab"
-__email__ = "erivandoramos@unilab.edu.br"
-__status__ = "Prototype" # Prototype | Development | Production
+__author__ = "Erivando Sena" 
+__copyright__ = "Copyright 2015, © 09/02/2015" 
+__email__ = "erivandoramos@bol.com.br" 
+__status__ = "Prototype"
 
 
-class CatracaDAO(ConexaoGenerica):
-
+class CatracaDAO(DAOGenerico):
+    
+    log = Logs()
+    
     def __init__(self):
         super(CatracaDAO, self).__init__()
-        ConexaoGenerica.__init__(self)
- 
+        DAOGenerico.__init__(self)
+        
     def busca(self, *arg):
-        obj = Catraca()
-        id = None
-        for i in arg:
-            id = i
-        if id:
-            sql = "SELECT catr_id, "\
-                  "catr_ip, "\
-                  "catr_tempo_giro, "\
-                  "catr_operacao, "\
-                  "catr_nome "\
-                  "FROM catraca WHERE "\
-                  "catr_id = " + str(id)
-        elif id is None:
-            sql = "SELECT catr_id, "\
-                  "catr_ip, "\
-                  "catr_tempo_giro, "\
-                  "catr_operacao, "\
-                  "catr_nome "\
-                  "FROM catraca ORDER BY catr_id"
+        arg = [a for a in arg][0] if arg else None
         try:
-            with closing(self.abre_conexao().cursor()) as cursor:
-                cursor.execute(sql)
-                if id:
-                    dados = cursor.fetchone()
-                    if dados is not None:
-                        obj.id = dados[0]
-                        obj.ip = dados[1]
-                        obj.tempo = dados[2]
-                        obj.operacao = dados[3]
-                        obj.nome = dados[4]
-                        return obj
-                    else:
-                        return None
-                elif id is None:
-                    list = cursor.fetchall()
-                    if list != []:
-                        return list
-                    else:
-                        return None
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela catraca.', exc_info=True)
+            if arg:
+                sql = "SELECT "\
+                    "catr_financeiro as financeiro, "\
+                    "catr_id as id, "\
+                    "catr_interface_rede as interface, "\
+                    "catr_ip as ip, "\
+                    "catr_mac_lan as maclan, "\
+                    "catr_mac_wlan as macwlan, "\
+                    "catr_nome as nome, "\
+                    "catr_operacao as operacao, "\
+                    "catr_tempo_giro as tempo "\
+                    "FROM catraca WHERE "\
+                    "catr_id = %s"
+                return self.seleciona(Catraca, sql, arg)
+            else:
+                sql = "SELECT "\
+                    "catr_financeiro as financeiro, "\
+                    "catr_id as id, "\
+                    "catr_interface_rede as interface, "\
+                    "catr_ip as ip, "\
+                    "catr_mac_lan as maclan, "\
+                    "catr_mac_wlan as macwlan, "\
+                    "catr_nome as nome, "\
+                    "catr_operacao as operacao, "\
+                    "catr_tempo_giro as tempo "\
+                    "FROM catraca ORDER BY catr_id"
+                return self.seleciona(Catraca, sql)
         finally:
             pass
-        
+    
     def busca_por_ip(self, ip):
-        obj = Catraca()
-        sql = "SELECT catr_id, "\
-              "catr_ip, "\
-              "catr_tempo_giro, "\
-              "catr_operacao, "\
-              "catr_nome "\
-              "FROM catraca WHERE "\
-              "catr_ip = '" + str(ip) + "'"
+        sql = "SELECT "\
+            "catr_financeiro as financeiro, "\
+            "catr_id as id, "\
+            "catr_interface_rede as interface, "\
+            "catr_ip as ip, "\
+            "catr_mac_lan as maclan, "\
+            "catr_mac_wlan as macwlan, "\
+            "catr_nome as nome, "\
+            "catr_operacao as operacao, "\
+            "catr_tempo_giro as tempo "\
+            "FROM catraca WHERE "\
+            "catr_ip = %s"
         try:
-            with closing(self.abre_conexao().cursor()) as cursor:
-                cursor.execute(sql)
-                dados = cursor.fetchone()
-                if dados is not None:
-                    obj.id = dados[0]
-                    obj.ip = dados[1]
-                    obj.tempo = dados[2]
-                    obj.operacao = dados[3]
-                    obj.nome = dados[4]
-                    return obj
-                else:
-                    return None
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro ao realizar SELECT na tabela catraca.', exc_info=True)
+            return self.seleciona(Catraca, sql, ip)
         finally:
             pass
-        
+    
+    def busca_por_nome(self, nome):
+        sql = "SELECT "\
+            "catr_financeiro as financeiro, "\
+            "catr_id as id, "\
+            "catr_interface_rede as interface, "\
+            "catr_ip as ip, "\
+            "catr_mac_lan as maclan, "\
+            "catr_mac_wlan as macwlan, "\
+            "catr_nome as nome, "\
+            "catr_operacao as operacao, "\
+            "catr_tempo_giro as tempo "\
+            "FROM catraca WHERE "\
+            "catr_nome = %s"
+        try:
+            return self.seleciona(Catraca, sql, nome.upper())
+        finally:
+            pass
+    
+    def obtem_interface_rede(self, hostname):
+        sql = "SELECT "\
+            "catr_interface_rede as interface "\
+            "FROM catraca WHERE "\
+            "catr_nome = %s LIMIT 1"
+        try:
+            return self.seleciona(Catraca, sql, hostname.upper())
+        finally:
+            #self.fecha_conexao()
+            pass
+    
     def insere(self, obj):
+        sql = "INSERT INTO catraca "\
+            "("\
+            "catr_financeiro, "\
+            "catr_id, "\
+            "catr_interface_rede, "\
+            "catr_ip, "\
+            "catr_mac_lan, "\
+            "catr_mac_wlan, "\
+            "catr_nome, "\
+            "catr_operacao, "\
+            "catr_tempo_giro "\
+            ") VALUES ("\
+            "%s, %s, %s, %s, %s, %s, %s, %s, %s)"
         try:
-            if obj:
-                sql = "INSERT INTO catraca("\
-                    "catr_id, "\
-                    "catr_ip, "\
-                    "catr_tempo_giro, "\
-                    "catr_operacao, "\
-                    "catr_nome) VALUES (" +\
-                    str(obj.id) + ", '" +\
-                    str(obj.ip) + "', " +\
-                    str(obj.tempo) + ", " +\
-                    str(obj.operacao) + ", '" +\
-                    str(obj.nome) + "')"
-                self.aviso = "Inserido com sucesso!"
-                with closing(self.abre_conexao().cursor()) as cursor:
-                    cursor.execute(sql)
-                    self.commit()
-                    return False
-            else:
-                self.aviso = "Objeto inexistente!"
-                return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela catraca.', exc_info=True)
-            return False
-        finally:
-            pass   
-        
-    def atualiza_exclui(self, obj, delete):
-        try:
-            if obj:
-                if delete:
-                    if obj.id:
-                        sql = "DELETE FROM catraca WHERE catr_id = " + str(obj.id)
-                    else:
-                        sql = "DELETE FROM catraca"
-                    self.aviso = "Excluido com sucesso!"
-                else:
-                    sql = "UPDATE catraca SET " +\
-                        "catr_ip = '" + str(obj.ip) + "', " +\
-                        "catr_tempo_giro = " + str(obj.tempo) + ", " +\
-                        "catr_operacao = " + str(obj.operacao) + ", " +\
-                        "catr_nome = '" + str(obj.nome) +\
-                        "' WHERE "\
-                        "catr_id = " + str(obj.id)
-                    self.aviso = "Alterado com sucesso!"
-                with closing(self.abre_conexao().cursor()) as cursor:
-                    cursor.execute(sql)
-                    self.commit()
-                    return False
-            else:
-                self.aviso = "Objeto inexistente!"
-                return False
-        except Exception, e:
-            self.aviso = str(e)
-            self.log.logger.error('Erro realizando INSERT/UPDATE/DELETE na tabela catraca.', exc_info=True)
-            return False
+            return self.inclui(Catraca, sql, obj)
         finally:
             pass
-        
+    
+    def atualiza(self, obj):
+        sql = "UPDATE catraca SET "\
+            "catr_financeiro = %s, "\
+            "catr_interface_rede = %s, "\
+            "catr_ip = %s, "\
+            "catr_mac_lan = %s, "\
+            "catr_mac_wlan = %s, "\
+            "catr_nome = %s, "\
+            "catr_operacao = %s, "\
+            "catr_tempo_giro = %s "\
+            "WHERE catr_id = %s"
+        try:
+            return self.altera(sql, obj)
+        finally:
+            self.fecha_conexao()
+    
+    def exclui(self, *arg):
+        obj = [a for a in arg][0] if arg else None
+        sql = "DELETE FROM catraca"
+        if obj:
+            sql = str(sql) + " WHERE catr_id = %s"
+        try:
+            return self.deleta(sql, obj)
+        finally:
+            pass
+    
+    def atualiza_exclui(self, obj, boleano):
+        if obj or boleano:
+            try:
+                if boleano:
+                    if obj is None:
+                        return self.exclui()
+                    else:
+                        self.exclui(obj)
+                else:
+                    return self.atualiza(obj)
+            finally:
+                pass
+                

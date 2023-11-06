@@ -7,9 +7,9 @@ import logging.handlers
 
 
 __author__ = "Erivando Sena" 
-__copyright__ = "Copyright 2015, Unilab" 
-__email__ = "erivandoramos@unilab.edu.br" 
-__status__ = "Prototype"  # Prototype | Development | Production 
+__copyright__ = "Copyright 2015, © 09/02/2015" 
+__email__ = "erivandoramos@bol.com.br" 
+__status__ = "Prototype"
 
 
 #logger.debug('debug message')
@@ -36,7 +36,7 @@ class Logs(object):
                             filename= LOG_FILENAME, 
                             #filemode='w',
                             handler = logging.handlers.RotatingFileHandler(LOG_FILENAME, maxBytes=20, backupCount=5),
-                            format='%(asctime)-15s %(name)-5s %(levelname)-8s %(message)s')
+                            format='\n%(asctime)-15s %(name)-5s %(levelname)-8s %(message)s')
     
     if __name__ == '__main__':
         main()
