@@ -12,7 +12,6 @@ class CartaoIsentoView {
 </script>
 				
 				<div class="borda">
-				<h2 class="titulo">Isenção</h2>
 									<form method="get" action="" class="formulario em-linha" >
 										<input type="hidden" name="pagina" value="isento" />
 										<label for="numero_cartao">

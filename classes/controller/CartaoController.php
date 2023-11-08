@@ -1,77 +1,47 @@
 <?php
-
 /**
- * Esta classe é responsável por gerenciar telas, modelos e classes de acesso ao banco para 
- * a exibir aplicação Cartao, que consulta cartões ou faz cadastro. 
  * 
- * @author Jefferson Uchoa Ponte <jefponte@unilab.edu.br>
- * @version 1.0.0
- * 
+ * @author Jefferson Uchoa Ponte
  *
  */
 
 class CartaoController{
-
-	/**
-	 * Retorna true para os níveis de acesso que podem acessar esta aplicação. 
-	 * Niveis de acesso definidos na classe Sessao. 
-	 * @param int $nivelDeAcesso
-	 */
-	public static function verificaPermissao($nivelDeAcesso){
-		if($nivelDeAcesso == Sessao::NIVEL_SUPER){
-			return true;
-		}
-		else if($nivelDeAcesso == Sessao::NIVEL_ADMIN){
-			return true;
-		}else if($nivelDeAcesso == Sessao::NIVEL_GUICHE){
-			return true;
-		}else if($nivelDeAcesso == Sessao::NIVEL_POLIVALENTE){
-			return true;
-		}else if($nivelDeAcesso == Sessao::NIVEL_CADASTRO){
-			return true;
-		}else if($nivelDeAcesso == Sessao::NIVEL_CATRACA_VIRTUAL){
-			return true;
-		}
-		return false;
-	}
-	/**
-	 * Inicia a aplicação, fazendo antes a verificação de nível de aceso. 
-	 * 
-	 * @param int $nivelDeAcesso
-	 * @param bool $cadastroDeFotos
-	 */
-	public static function main($nivelDeAcesso, $cadastroDeFotos = false){
-		if(self::verificaPermissao($nivelDeAcesso)){
-			$controller = new CartaoController($cadastroDeFotos);
-			$controller->telaCartao();
-		}else{
-			UsuarioController::main ( $nivelDeAcesso );
+	private $view;
+	public static function main($nivelDeAcesso){
+		
+		switch ($nivelDeAcesso){
+			case Sessao::NIVEL_SUPER:
+				$controller = new CartaoController();
+				$controller->telaCartao();
+				break;
+			case Sessao::NIVEL_ADMIN:
+				$controller = new CartaoController();
+				$controller->telaCartao();
+				break;
+			case Sessao::NIVEL_GUICHE:
+				$controller = new CartaoController();
+				$controller->telaCartao();
+				break;
+			case Sessao::NIVEL_POLIVALENTE:
+				$controller = new CartaoController();
+				$controller->telaCartao();
+				break;
+			case Sessao::NIVEL_CADASTRO:
+				$controller = new CartaoController();
+				$controller->telaCartao();
+				break;
+			case Sessao::NIVEL_CATRACA_VIRTUAL:
+				$controller = new CartaoController();
+				$controller->telaCartao();
+				break;
+			default:
+				UsuarioController::main ( $nivelDeAcesso );
+				break;
 		}
 	}	
 	
-	/**
-	 * Classe de Visão utilizada na aplicação Cartão
-	 * @var CartaoView
-	 */
-	private $view;
-	
-	/**
-	 * Variável de configiguração, se for true o cadastro de fotos será 
-	 * disponibilizado na tela de cadatro de cartão. 
-	 * @var bool
-	 */
-	private $cadastroDeFotos;
-	
-	/**
-	 * @param bool $cadastroDeFotos
-	 */
-	public function __construct($cadastroDeFotos = false){
-		$this->view = new CartaoView();
-		$this->cadastroDeFotos = $cadastroDeFotos;
-	}
-	
 	public function telaCartao(){
-		
+		$this->view = new CartaoView();
 		echo '<div class = "simpleTabs">
 			        <ul class = "simpleTabsNavigation">					
 						<li><a href="#">Identifica&ccedil;&atilde;o</a></li>
@@ -98,7 +68,6 @@ class CartaoController{
 				$cartao = new Cartao();
 				$cartao->setNumero($_GET['numero_cartao']);
 				$numeroCartao = $cartao->getNumero();
-				$dataTimeAtual = date ( "Y-m-d G:i:s" );
 				$sqlVerificaNumero = "SELECT * FROM usuario
 				INNER JOIN vinculo
 				ON vinculo.usua_id = usuario.usua_id
@@ -132,12 +101,10 @@ class CartaoController{
 					$vinculo->setId($idDoVinculo);
 					$cartao->setId($idCartao);
 					$vinculoDao->vinculoPorId($vinculo);
-					$imagem = null;
+					$imagem = "sem-imagem";
 				
 					if(file_exists('fotos/'.$usuario->getIdBaseExterna().'.png')){
 						$imagem = $usuario->getIdBaseExterna();
-					}else {
-						$imagem = "sem-imagem";
 					}
 				
 					
@@ -165,7 +132,8 @@ class CartaoController{
 									return;
 								}
 
-								if(!$this->verificaSeAtivo($usuario)){
+								$validacaoDao = new ValidacaoDAO($usuarioDao->getConexao());
+								if(!$validacaoDao->verificaSeAtivo($usuario)){
 									$this->view->formMensagem("-erro", "Esse usuário possui um problema quanto ao status!");
 									echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
 									return;
@@ -197,111 +165,110 @@ class CartaoController{
 	public function telaCadastro(){
 		$this->view->formBuscaUsuarios();
 		
-		if (isset ( $_GET ['nome'] )) {
-			$mensagem = "";
+		if (isset ( $_GET ['selecionado'] )) {
+			
+			$idDoSelecionado = $_GET['selecionado'];
+			
 			$usuarioDao = new UsuarioDAO();
-			$listaDeUsuarios = $usuarioDao->pesquisaNoSigaa( $_GET ['nome']);
-			$this->view->mostraResultadoBuscaDeUsuarios($listaDeUsuarios, $mensagem);
-			$usuarioDao->fechaConexao();
-			return;
-		}
-		
-		if(!isset ( $_GET ['selecionado'] )){
-			return;	
-		}
-		$idDoSelecionado = $_GET['selecionado'];
-		$usuarioDao = new UsuarioDAO();
-		$usuario = new Usuario();
-		$usuario->setIdBaseExterna($idDoSelecionado);
-		$listaUsuariosBaseExterna = $usuarioDao->retornaListaPorIdBaseExterna($usuario);
-		
-		$this->view->mostraSelecionado($listaUsuariosBaseExterna, $this->cadastroDeFotos);
-		$vinculoDao = new VinculoDAO($usuarioDao->getConexao());
-		if(isset($_GET['vinculo_cancelar'])){
-			$vinculo = new Vinculo();
-			$vinculo->setId($_GET['vinculo_cancelar']);
-			if(!isset($_POST['certeza'])){
+			
+			
+			
+			$usuario = new Usuario();
+			$usuario->setIdBaseExterna($idDoSelecionado);
+			
+			$usuarioDao->retornaPorIdBaseExterna($usuario);			
+
+			$this->view->mostraSelecionado($usuario);
+			$vinculoDao = new VinculoDAO();			
+			
+			if(isset($_GET['vinculo_cancelar'])){
+				$vinculo = new Vinculo();
+				$vinculo->setId($_GET['vinculo_cancelar']);
+				
+				if(isset($_POST['certeza'])){
+					if($vinculoDao->invalidarVinculo($vinculo)){
+						$this->view->formMensagem("-sucesso", "Vínculo Invalidado.");						
+					}else{
+						$this->view->formMensagem("-erro", "Erro ao tentar invalidar vínculo.");						
+					}
+					echo '<meta http-equiv="refresh" content="2; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+					return;
+				}				
 				$this->view->formConfirmacaoEliminarVinculo($vinculo);
 				return;
 			}
-			if($vinculoDao->invalidarVinculo($vinculo)){
-				$this->view->formMensagem("-sucesso", "Vínculo Invalidado.");
-			}else{
-				$this->view->formMensagem("-erro", "Erro ao tentar invalidar vínculo.");
-			}
-			echo '<meta http-equiv="refresh" content="2; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
-			return;
-		}
-		$validacaoDao  = new ValidacaoDAO($vinculoDao->getConexao());
-		if(isset($_GET['vinculo_renovar'])){
-			$vinculo = new Vinculo();
-			$vinculo->setId($_GET['vinculo_renovar']);
-			$vinculoDao->vinculoPorId($vinculo);
-		
-			$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'G:00:01' );
-			$vinculo->setFinalValidade($daqui3Meses);
-			if(!isset($_POST['certeza'])){
+			
+			if(isset($_GET['vinculo_renovar'])){
+				$vinculo = new Vinculo();
+				$vinculo->setId($_GET['vinculo_renovar']);
+				$vinculoDao->vinculoPorId($vinculo);
+				
+				$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'G:00:01' );
+				$vinculo->setFinalValidade($daqui3Meses);				
+				
+				if(isset($_POST['certeza'])){
+					if($vinculoDao->usuarioJaTemVinculo($usuario)){
+						$this->view->formMensagem("-erro", "Esse usuário já possui vínculo válido.");						
+						echo '<meta http-equiv="refresh" content="2; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+						return;
+					}
+					
+					if($vinculo->isAvulso()){
+						$this->view->formMensagem("-erro", "Não existe renovação de vínculos avulsos!");
+						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+						return;
+					}
+// 					$validacaoDao = new ValidacaoDAO($usuarioDao->getConexao());
+// 					if(!$validacaoDao->verificaSeAtivo($vinculo->getResponsavel())){
+// 						$this->view->formMensagem("-erro", 'Esse cartão não pode ser renovado!');
+// 						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+// 						return;						
+// 					}				
+					
+					if($vinculoDao->atualizaValidade($vinculo)){
+						$this->view->formMensagem("-sucesso", "Vínculo Atualizado com Sucesso!");						
+					}else{
+						$this->view->formMensagem("-erro", "Erro ao tentar renovar vínculo.");
+					}
+					echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+					return;
+				}			
+			
 				$this->view->formConfirmacaoRenovarVinculo();
 				return;
-			}
-			if($vinculoDao->usuarioJaTemVinculo($usuario)){
-				$this->view->formMensagem("-erro", "Esse usuário já possui vínculo válido.");
-				echo '<meta http-equiv="refresh" content="2; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
-				return;
-			}
-			if($vinculo->isAvulso()){
-				$this->view->formMensagem("-erro", "Não existe renovação de vínculos avulsos!");
-				echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
-				return;
-			}
-			$vinculoRenovavel = true;
-			$tipo = $vinculo->getCartao()->getTipo();
+			}			
 			
-			$vinculoRenovavel = $validacaoDao->tipoValido($vinculo->getResponsavel(), $tipo);
-			if(!$vinculoRenovavel){
-				$this->view->formMensagem("-erro", 'Esse usuário possui um problema quanto ao status! ('.$usuario->getStatusDiscente().")");
-				echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
-				return;
-			}
-			if($vinculoDao->atualizaValidade($vinculo)){
-				$this->view->formMensagem("-sucesso", "Vínculo Atualizado com Sucesso!");
-			}else{
-				$this->view->formMensagem("-erro", "Erro ao tentar renovar vínculo.");
-			}
-			echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
-			return;
+			$vinculos = $vinculoDao->retornaVinculosValidosDeUsuario($usuario);			
 			
-		}
-					
-		
-		$vinculos = $vinculoDao->retornaVinculosValidosDeUsuario($usuario);			
-
-		$listaDeTipos = array();
-		$listaDeTipos = $validacaoDao->retornaTiposValidosUsuario($usuario);
-		$usuarioAtivo = false;
-		if(sizeof($listaDeTipos) > 0){
-			$usuarioAtivo = true;
-		}
-		
-		if(!$vinculoDao->usuarioJaTemVinculo($usuario) && $usuarioAtivo){
+			
+			$validacaoDao = new ValidacaoDAO($vinculoDao->getConexao());
+			$listaDeTipos = $validacaoDao->listaDeTipos($usuario);
+			$podeComer = false;
+			if(count($listaDeTipos) > 0) {
+				$podeComer = true;
+			}
+			if(!$vinculoDao->usuarioJaTemVinculo($usuario) && $podeComer){
 				if (!isset ( $_GET ['cartao'] )){
 					echo '<a class="botao" href="?pagina=cartao&selecionado=' . $idDoSelecionado . '&cartao=add">Adicionar</a>';
 				}else{
 					
+
 					if(isset($_GET['salvar'])){
 						foreach($listaDeTipos as $tipo){
 							if($tipo->getId() == $_GET['id_tipo'])
 								$esseTipo = $tipo;	
 						}
 						$vinculo = new Vinculo();
-						$daqui3Meses = date ( 'Y-m-d', strtotime ( "+182 days" ) ) . 'T' . date ( 'G:00:01' );
+						$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'G:00:01' );
 						$vinculo->setFinalValidade($daqui3Meses);
 						$vinculo->getCartao()->getTipo()->setId($esseTipo->getId());
 						$vinculo->getCartao()->setNumero($_GET['numero_cartao2']);
 						$vinculo->getResponsavel()->setIdBaseExterna(intval($usuario->getIdBaseExterna()));
+						$vinculo->getResponsavel()->setNome($usuario->getNome());
 						$vinculo->setInicioValidade(date ( "Y-m-d G:i:s" ));
 						if($vinculoDao->usuarioJaTemVinculo($vinculo->getResponsavel())){							
 							$this->view->formMensagem("-erro", "Esse usuário já possui cartão. Inative o cartão atual para adicionar um novo.");
+							//echo '<a href="?pagina=cartao&cartaoselecionado=' .$vinculo->getCartao()->getId().'">Clique aqui para ver</a>';
 							return;	
 						}
 						
@@ -315,6 +282,7 @@ class CartaoController{
 							
 							if($vinculoDao->usuarioJaTemVinculo($vinculo->getResponsavel())){
 								$this->view->formMensagem("-erro", "Esse usuário já possui cartão. Invalide o cartão atual para adicionar um novo.");								
+								//echo '<a href="?pagina=cartao&cartaoselecionado=' .$vinculo->getCartao()->getId().'">Clique aqui para ver</a>';								
 								return;						
 							}
 							
@@ -332,7 +300,7 @@ class CartaoController{
 							}else{
 								$this->view->formMensagem("-erro", "Erro na tentativa de Adicionar Vínculo.");							
 							}
-							echo '<meta http-equiv="refresh" content="10; url=.\?pagina=cartao&selecionado=' . $vinculo->getResponsavel()->getIdBaseExterna() . '">';
+							echo '<meta http-equiv="refresh" content="3; url=.\?pagina=cartao&selecionado=' . $vinculo->getResponsavel()->getIdBaseExterna() . '">';
 							return;
 						}
 						
@@ -343,8 +311,9 @@ class CartaoController{
 				}
 			}
 			
-			foreach($vinculos as $vinculoComIsencao)
+			foreach($vinculos as $vinculoComIsencao){
 				$vinculoDao->isencaoValidaDoVinculo($vinculoComIsencao);
+			}
 			$podeRenovar = true;
 			if(sizeof($vinculos)){
 				$podeRenovar = false;
@@ -365,9 +334,44 @@ class CartaoController{
 			if(sizeof($vinculosALiberar)){
 				echo '<h2 class="titulo">Vinculos A Liberar</h2>';
 				$this->view->mostraVinculos($vinculosALiberar, false);					
-			}	
+			}			
+		}		
+
+		if (isset ( $_GET ['nome'] )) {
+			$mensagem = "";
+			
+			$usuarioDao = new UsuarioDAO();
+			
+			$listaDeUsuarios = $usuarioDao->pesquisaNoSigaa( $_GET ['nome']);
+			
+			$this->view->mostraResultadoBuscaDeUsuarios($listaDeUsuarios, $mensagem);
+			$usuarioDao->fechaConexao();
+		}		
 	}
 
+	public function verificaSeAtivo(Usuario $usuario){
+		if(strtolower (trim($usuario->getStatusServidor())) == 'ativo'){			
+			return true;
+		}
+		if(trim($usuario->getStatusDiscente()) == 'CADASTRADO' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($usuario->getStatusDiscente())) == 'formando'  || strtolower (trim($usuario->getStatusDiscente())) == 'formado' || strtolower (trim($usuario->getStatusDiscente())) == 'ativo - graduando' || strtolower (trim($usuario->getIdStatusDiscente())) == self::ID_STATUS_DISCENTE_CONCLUIDO){
+			
+			return true;		
+		}
+		if(strtolower (trim($usuario->getTipodeUsuario())) == 'terceirizado' || strtolower (trim($usuario->getTipodeUsuario())) == 'outros'){
+			return true;
+		}
+		if(strtolower (trim($usuario->getTipodeUsuario())) == 'docente externo'){
+			return true;
+		}
+		return false;
+	}
+	const ID_STATUS_DISCENTE_ATIVO = 1;
+	const ID_STATUS_DISCENTE_CADASTRADO = 3;
+	const ID_STATUS_DISCENTE_FORMADO = 9;
+	const ID_STATUS_DISCENTE_CONCLUIDO = 3;//
+
+
+	
 }
 
 

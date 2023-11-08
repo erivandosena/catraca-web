@@ -48,7 +48,6 @@ $(function(){
 		$("#barra-governo").css("display","none");
 		$(".acessibilidade").css("display","none");		
 		$(".barra-menu").css("display","none");
-		$("#resumo").css("padding-top","200px");
 	}
 	
 });

@@ -29,8 +29,6 @@ class RelatorioRegistroController{
 		$usuarioDao->preenchePorId($this->usuario);
 		
 		
-		
-		
 	}
 	public function relatorio() {
 		
@@ -94,9 +92,16 @@ class RelatorioRegistroController{
 					<tr><th>Data e Hora </th><td>'.$linha['regi_data'].'</td></tr>
 					<tr><th>Cartão:</th><td>'.$linha['cart_id'].'</td></tr>
 					<tr><th>Valor Pago:</th><td>'.$linha['regi_valor_pago'].'</td></tr>
-					<tr><th>Custo:</th><td>'.$linha['regi_valor_custo'].'</td></tr>
-					<tr><th colspan="2"><a class="botao" href="?pagina=relatorio_registro&id_registro='.$idRegistro.'&anular=1">Anular Registro</a></th></tr>
-				</table>
+                    
+					<form>
+                        <label for="motivo">Digite o motivo da anulação: </label><br>
+                        <input type="text" id="motivo" name="motivo" />
+                        <input type="hidden" name="pagina" value="relatorio_registro"/>
+                        <input type="hidden" name="anular" value="1" />
+                        <input type="hidden" name="id_registro" value="'.$idRegistro.'" /><br/>
+                        <input type="submit" class="botao" value="Anular Registro" />
+                    </form>
+				
 				
 			';
 				
@@ -145,7 +150,7 @@ class RelatorioRegistroController{
 		$sqlRegistro = "SELECT * FROM registro 
 		INNER JOIN vinculo ON vinculo.vinc_id = registro.vinc_id
 		INNER JOIN cartao ON cartao.cart_id = vinculo.cart_id
-		WHERE regi_id = $idRegistro LIMIT 1";
+		WHERE regi_id = $idRegistro ORDER BY regi_data LIMIT 1";
 		$result = $this->dao->getConexao()->query($sqlRegistro);
 		foreach($result as $linha){
 			
@@ -219,7 +224,6 @@ class RelatorioRegistroController{
 	
 	
 	public function gerarDados($idUnidade = NULL, $data1 = null, $data2 = null){
-		$dados = array();
 		if($idUnidade == NULL){
 			$idUnidade = 1;
 		}
@@ -251,7 +255,7 @@ class RelatorioRegistroController{
 			$this->strUnidade =  $unidade->getNome();
 		}
 		
-
+        $matriz = array();
 		
 		foreach($listaDeTurnos as $turno){
 			$matriz[$turno->getDescricao()] = array();
@@ -264,7 +268,7 @@ class RelatorioRegistroController{
 				INNER JOIN cartao ON cartao.cart_id = vinculo.cart_id
 				INNER JOIN usuario ON vinculo.usua_id = usuario.usua_id
 				INNER JOIN catraca_unidade ON registro.catr_id = catraca_unidade.catr_id
-				WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') $strFiltroUnidade");
+				WHERE (regi_data BETWEEN '$dataInicial' AND '$dataFinal') $strFiltroUnidade ORDER BY regi_data");
 				
 				
 				echo '<div class=" doze colunas borda relatorio">';
@@ -284,14 +288,13 @@ class RelatorioRegistroController{
 								<th>Nome</th>
 								<th>Cartão</th>
 								<th>Valor Pago</th>
-								<th>Custo</th>
 								<th>Selecionar</th>
 							</tr>
 						<thead>
 						<tbody>';
 				foreach($result as $linha){
 						
-					echo '<tr><td>'.$linha['regi_id'].'</td><td>'.$linha['regi_data'].'</td><td>'.$linha['usua_nome'].'</td><td>'.$linha['cart_numero'].'</td><td>'.$linha['regi_valor_pago'].'</td><td>'.$linha['regi_valor_custo'].'</td><td><a href="?pagina=relatorio_registro&id_registro='.$linha['regi_id'].'" class="botao">Selecionar</a></td></tr>';
+					echo '<tr><td>'.$linha['regi_id'].'</td><td>'.$linha['regi_data'].'</td><td>'.$linha['usua_nome'].'</td><td>'.$linha['cart_numero'].'</td><td>'.$linha['regi_valor_pago'].'</td><td><a href="?pagina=relatorio_registro&id_registro='.$linha['regi_id'].'" class="botao">Selecionar</a></td></tr>';
 				}
 				echo '</tbody>
 					</table>';
@@ -299,7 +302,6 @@ class RelatorioRegistroController{
 				echo'<div class="doze colunas relatorio-rodape">
 			<span>CATRACA | Copyright © 2015 - DTI</span>
 			<span>Relatório Emitido em: '. date ( 'd/m/Y H:i:s' ).'</span>';
-				// 		echo '<a class="botao icone-printer"> Imprimir</a>';
 				echo '	</div>
 				</div>';
 				
@@ -314,7 +316,7 @@ class RelatorioRegistroController{
 	public function retornaCurso($id){
 		$sql2 = "SELECT * FROM vw_usuarios_catraca WHERE id_usuario = $id LIMIT 1";
 		$result = $this->dao->getConexao()->query($sql2);
-		
+		$info = array();
 		foreach ($result as $linha){
 			$info['curso'] = "-";
 			$info['turno'] = " ";
@@ -344,7 +346,6 @@ class RelatorioRegistroController{
 	public function intervaloDeDatas($data1, $data2){
 		$dateStart = new DateTime ( $data1 );
 		$dateEnd = new DateTime ( $data2 );
-		$dateRange = array ();
 		$listaDeDatas = array();
 		while ( $dateStart <= $dateEnd ) {
 			$listaDeDatas [] = $dateStart->format ( 'Y-m-d' );
@@ -353,9 +354,6 @@ class RelatorioRegistroController{
 		return $listaDeDatas;
 	
 	}
-
-	
-
 
 		
 		

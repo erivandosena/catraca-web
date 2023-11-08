@@ -1,33 +1,27 @@
 <?php
-/**
- * Classe de exibição de componentes para aplicação Cartão. 
- * @author Jefferson Uchôa Ponte <jefponte@unilab.edu.br>
- * 
- *
- */
 class CartaoView {
 	
 	public function formBuscaCartao(){
 		echo '				
 				<script>
-				  $(document).bind(\'autofocus_ready\', function() {
-				    if (!("autofocus" in document.createElement("input"))) {
-				      $("#numero_cartao").focus();
-				    }
-				  });
-				</script>
+  $(document).bind(\'autofocus_ready\', function() {
+    if (!("autofocus" in document.createElement("input"))) {
+      $("#numero_cartao").focus();
+    }
+  });
+</script>
 				
 				<div class="doze colunas borda">
-					<form method="get" action="" class="formulario em-linha" >
-						<input type="hidden" name="pagina" value="cartao" />
-						<label for="numero_cartao">												
-							Buscar por Número:<input type="number" name="numero_cartao" id="numero_cartao" autofocus /><br>
-							<script>$(document).trigger(\'autofocus_ready\');</script>
-							<input type="submit" value="Buscar" />
-						</label>		
-					</form>
+									<form method="get" action="" class="formulario em-linha" >
+										<input type="hidden" name="pagina" value="cartao" />
+										<label for="numero_cartao">												
+											Buscar por Número:<input type="number" name="numero_cartao" id="numero_cartao" autofocus /><br>
+											<script>$(document).trigger(\'autofocus_ready\');</script>
+											<input type="submit" value="Buscar" />
+										</label>		
+									</form>
 				
-				</div>';
+									</div>';
 	}
 	public function mostraResultadoBuscaDeCartoes($cartoes) {
 		echo '<div class="doze linhas">';
@@ -77,11 +71,11 @@ function altera() {
 // ####################
 		echo '					<div class="borda">
 									<form method="get" action="" class="formulario em-linha" >
-												<h2 class="titulo">Cartão Próprio</h2>
-										<label for="nome">
-											<object class="rotulo texto-preto">Nome do Usuario: </object>											
+		
+										<label for="opcoes-1">
+											<object class="rotulo texto-preto">Nome do Usuario: </object>
+											<input class="texto-preto" type="text" name="nome" id="campo-texto" /><br>										
 										</label>
-										<input class="texto-preto" type="text" name="nome" id="nome" /><br>
 										<input type="hidden" name="pagina" value="cartao" />
 										
 										<input id="botao" onclick="altera();" type="submit" value="Buscar"/>
@@ -196,22 +190,14 @@ function altera() {
 	}
 	
 
-	/**
-	 * 
-	 * @param array $listaUsuariosBaseExterna
-	 * @param string $cadastroDeFotos
-	 */
-	public function mostraSelecionado($listaUsuariosBaseExterna, $cadastroDeFotos = false) {
-		$usuario = $listaUsuariosBaseExterna[0];
-		
+	public function mostraSelecionado(Usuario $usuario) {
 		echo '<div class="doze colunas borda">';
 		
 		
+				
+		//Descomente esta linha para ativar o botão para cadastrar foto.	
+// 		echo '<a href="?pagina=cartao&selecionado='.$_GET['selecionado'].'&foto=1" class="botao">Adicionar Foto</a>';
 		
-		if($cadastroDeFotos){
-			echo '<a href="?pagina=cartao&selecionado='.$_GET['selecionado'].'&foto=1" class="botao">Adicionar Foto</a>';
-			
-		}
 		
 		if(isset($_GET['foto'])){
 		
@@ -270,47 +256,61 @@ function altera() {
 					<hr class="um"/>
 					';
 
+
 		}
-	
+		
 		echo '<div class="doze colunas">				
 				<table  class="tabela borda-vertical zebrada">
-				 <th colspan="2">Informações Pessoais</th>
-					<tr><th>Nome:</th><td> ' . $usuario->getNome () . '</td>';
+					<tr><th>Nome:</th><td> ' . $usuario->getNome () . '.</td>';
 		echo '
              		</tr>
-					<tr><th>Login:</th><td>'. $usuario->getLogin () .'</td></tr>
-					<tr><th>Identidade: </th><td>' . $usuario->getIdentidade () . '</td></tr>
-					<tr><th>CPF:</th><td>' . $usuario->getCpf () . '</tr>
+					<tr><th>Login:</th><td>'. $usuario->getLogin () .'.</td></tr>
+					<tr><th>Identidade: </th><td>' . $usuario->getIdentidade () . '.</td></tr>
+					<tr><th>CPF:</th><td>' . $usuario->getCpf () . '.</tr>
 					<tr></td><th>Passaporte:</th><td>' . $usuario->getPassaporte() . '</td></tr>';
 				
-		$usuarioBaseExterna = new Usuario();
-		
-		
-				
 
-		
-		foreach($listaUsuariosBaseExterna as $usuarioBaseExterna){
-			
-			echo '<th colspan="2">Vinculo Institucional</th>';
-			echo '
-             		</tr>
-					<tr><th>ID Status Discente:</th><td>'. $usuarioBaseExterna->getIdStatusDiscente().'</td></tr>
-					<tr><th>Status Discente: </th><td>' . $usuarioBaseExterna->getStatusDiscente() . '</td></tr>
-					<tr><th>Matrícula Discente: </th><td>' . $usuarioBaseExterna->getMatricula(). '</td></tr>
-					<tr><th>Nivel Discente: </th><td>' .$usuarioBaseExterna->getNivelDiscente(). '</td></tr>		
-					<tr><th>ID Status Servidor: </th><td>' . $usuarioBaseExterna->getIdStatusServidor(). '</td></tr>		
-					<tr><th>Status Servidor: </th><td>' . $usuarioBaseExterna->getStatusServidor(). '</td></tr>		
-					<tr><th>ID Categoria Servidor: </th><td>' .$usuarioBaseExterna->getIDCategoria(). '</td></tr>		
-					<tr><th>Categoria Servidor: </th><td>' .$usuarioBaseExterna->getCategoria(). '</td></tr>		
-					<tr><th>Matrícula Servidor: </th><td>' .$usuarioBaseExterna->getSiape(). '</td></tr>		
-					<tr><th>ID Tipo Usuário: </th><td>' .$usuarioBaseExterna->getIdTipoUsuario(). '</td></tr>		
-					<tr><th>Tipo Usuário: </th><td>' .$usuarioBaseExterna->getTipodeUsuario(). '</td></tr>						
-					<tr><th>Status Sistema: </th><td>' .$usuarioBaseExterna->getStatusSistema(). '</td></tr>				
-							';
-					
+		if(strtolower (trim($usuario->getStatusServidor())) == 'ativo' && strtolower (trim($usuario->getCategoria())) == 'docente'){
+			echo '<tr><th>Servidor </th><td>Docente</td></tr>
+					<tr><th>SIAPE: </th><td>' . $usuario->getSiape().'</td></tr></table>';
+		}
+		else if(strtolower (trim($usuario->getCategoria())) == 'docente'){
+			echo "<tr><th>Servidor </th><td>Docente Inativo</td></tr>";
+			echo '<tr><th>SIAPE:</th> <td>' . $usuario->getSiape().'</td></tr>';
+		}
+		if(strtolower (trim($usuario->getStatusServidor())) == 'ativo' && strpos(strtolower (trim($usuario->getCategoria())), 'administrativo')){
+			echo "<tr><th>Servidor </th><td>TAE</td></tr>";
+			echo '<tr><th>SIAPE:</th><td>' . $usuario->getSiape().'</td></tr>';
+		}else if(strpos(strtolower (trim($usuario->getCategoria())), 'administrativo' )){
+			echo "<tr><th>Servidor </th><td>TAE Inativo</td></tr>";
+			echo '<tr><th>SIAPE:</th><td>' . $usuario->getSiape().'</td></tr>';
 			
 		}
+			
 		
+		
+		if(strtolower (trim($usuario->getTipodeUsuario())) == 'aluno'){
+			if(strtolower (trim($usuario->getStatusDiscente())) == 'ativo'){
+				echo '<tr><th>Aluno </th><td>Ativo</td></tr>';
+			}else{
+				echo '<tr><th>Aluno </th><td>'.$usuario->getStatusDiscente().'</td></tr>';
+				
+			}
+			echo '<tr><th>Nivel Discente:</th><td> ' . $usuario->getNivelDiscente().'</td></tr>';
+			echo '<tr><th>Matricula:</th><td>'.$usuario->getMatricula().'</td></tr>';
+			
+		}else if(strtolower (trim($usuario->getStatusDiscente())) == 'ativo'){
+				echo '<tr><th>Aluno </th><td>Ativo</td></tr>';
+				echo '<tr><th>Nivel Discente:</th><td> ' . $usuario->getNivelDiscente().'</td></tr>';
+				echo '<tr><th>Matricula:</th><td>'.$usuario->getMatricula().'</td></tr>';
+
+		}
+
+
+		
+		if(strtolower (trim($usuario->getTipodeUsuario())) == 'terceirizado'){
+			echo '<tr><th colspan=2>Terceirizado Sem Informação de Status</th></tr>';
+		}
 		
 		
 		echo '</table>
@@ -540,10 +540,6 @@ function altera() {
 	}
 	
 	public function formAdicionarCreditos($idSelecionado){
-	
-		$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'H:00:01' );
-		$hoje = date ('Y-m-d') . 'T' . date ( 'H:00:01' );
-	
 	
 	
 		echo '<div class="borda">

@@ -419,6 +419,7 @@ class VinculoDAO extends DAO {
 		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
 		LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id WHERE (usuario.id_base_externa = $idBaseExterna)
 		AND ('$dataTimeAtual' BETWEEN vinc_inicio AND vinc_fim) AND vinc_avulso = FALSE";
+// 		echo $sql;
 		$result = $this->getConexao ()->query ($sql );
 		foreach($result as $linha){
 			
@@ -436,11 +437,10 @@ class VinculoDAO extends DAO {
 		$dataDeValidade = $vinculo->getFinalValidade();
 		$tipoCartao = $vinculo->getCartao()->getTipo()->getId();
 		
-		if($vinculo->invalidoParaAdicionar()){	
-			return false;
-		}
+		
 		if(!$vinculo->getResponsavel()->getId()){
-			return false;
+			echo "NAo tem ID";
+		    return false;
 		}
 		
 		$idBaseLocal = $vinculo->getResponsavel()->getId();
@@ -460,12 +460,12 @@ class VinculoDAO extends DAO {
 		
 		if(!$this->getConexao()->exec($sqlInsertVinculo)){
 			$this->getConexao()->rollBack();
-			return 0;
+			return false;
 		}
 		$idVinculo = $this->getConexao()->lastInsertId('vinculo_vinc_id_seq');
 		if(!$this->getConexao()->exec("INSERT INTO vinculo_tipo(vinc_id, tipo_id) VALUES($idVinculo, $tipoCartao)")){
 			$this->getConexao()->rollBack();
-			return 0;
+			return false;
 		}
 		$this->getConexao()->commit();
 		return true;
@@ -481,8 +481,6 @@ class VinculoDAO extends DAO {
 	 */
 	public function cartaoTemVinculo(Cartao $cartao){
 		$numero = $cartao->getNumero();
-		
-		$dataTimeAtual = date ( "Y-m-d G:i:s" );
 		$sql =  "SELECT * FROM vinculo
 		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
 		WHERE (cartao.cart_numero = '$numero') LIMIT 1";
@@ -556,10 +554,10 @@ class VinculoDAO extends DAO {
 		foreach($result2 as $linha){
 			
 			$nivel = Sessao::NIVEL_COMUM;
-			$nome = $linha['nome'];
+			$nome = $usuario->getNome();
 			$nome = preg_replace ('/[^a-zA-Z0-9\s]/', '', $nome);
 			$nome = strtoupper ( $nome );
-			$email = $linha['email'];
+			$email = str_replace("'","",$linha['email']);;
 			$login = $linha['login'];
 			$senha = $linha['senha'];
 			$idBaseExterna = $linha['id_usuario'];
@@ -572,7 +570,8 @@ class VinculoDAO extends DAO {
 				
 				foreach($this->getConexao()->query("SELECT * FROM usuario WHERE id_base_externa = $idBaseExterna") as $linha3){
 					$usuario->setId($linha3['usua_id']);
-					
+					$usuario->setLogin($linha['usua_login']);
+					$usuario->setNivelAcesso($linha['usua_nivel']);
 					return $linha3['usua_id'];
 				}
 			}
@@ -670,14 +669,14 @@ class VinculoDAO extends DAO {
 	 * @param Cartao $cartao
 	 */
 	public function vinculoDoCartao(Cartao $cartao){
-		$dataTimeAtual = date ( "Y-m-d G:i:s" );
+
 		$numeroCartao = $cartao->getNumero();
 		$sqlVerificaNumero = "SELECT * FROM usuario
 		INNER JOIN vinculo ON vinculo.usua_id = usuario.usua_id
 		LEFT JOIN cartao ON cartao.cart_id = vinculo.cart_id
 		LEFT JOIN tipo ON cartao.tipo_id = tipo.tipo_id
 		WHERE cartao.cart_numero = '$numeroCartao'";
-		$result = $dao->getConexao()->query($sqlVerificaNumero);
+		$result = $this->getConexao()->query($sqlVerificaNumero);
 		$vinculo = new Vinculo();
 		foreach($result as $linha){
 			$vinculo->setId($linha['vinc_id']);
@@ -689,12 +688,11 @@ class VinculoDAO extends DAO {
 			$vinculo->setAvulso($linha['vinc_avulso']);
 			if($linha['vinc_avulso'])
 			{
-				$usuario->setNome("Avulso");
+				$vinculo->getResponsavel()->setNome("Avulso");
 			}
-			break;
+			return $vinculo;
 		}
-		return $vinculo;
-		
+		return false;
 	}
 
 	

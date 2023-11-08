@@ -1,10 +1,6 @@
 <?php
 
-/**
- * 
- * @author Jefferson Uchôa Ponte
- * 
- */
+
 class UploadArquivoController{
 	
 	public static function main($nivelDeAcesso) {

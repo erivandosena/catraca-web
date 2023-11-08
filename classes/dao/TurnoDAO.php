@@ -9,11 +9,11 @@
 class TurnoDAO extends DAO{
 
 	/**
-	 * Retorna Um vetor de unidades. 
-	 * @return multitype:Turno
+	 * 
+	 * @return array Turno
 	 */
 	public function retornaLista(){
-		$lista = array();
+		
 		$result = $this->getConexao()->query("SELECT * FROM turno");
 
 		foreach ($result as $linha){
@@ -29,16 +29,15 @@ class TurnoDAO extends DAO{
 	}
 
 	public function inserir(Turno $turno){
-		$descricao = $turno->getDescricao();
-		$horaInicial = $turno->getHoraInicial();
-		$horaFinal = $turno->getHoraFinal();
-		
-
-		if($this->getConexao()->query("INSERT INTO turno (turn_hora_inicio, turn_hora_fim, turn_descricao) VALUES('$horaInicial', '$horaFinal','$descricao')"))
-			return true;
-		return false;
-		
-		
+	    $descricao = $turno->getDescricao();
+	    $horaInicial = $turno->getHoraInicial();
+	    $horaFinal = $turno->getHoraFinal();
+	    $stmt = $this->getConexao()->prepare("INSERT INTO turno(turn_hora_inicio,turn_hora_fim,turn_descricao) VALUES(?, ?, ?);");
+	    $stmt->bindParam(1, $horaInicial);
+	    $stmt->bindParam(2, $horaFinal);
+	    $stmt->bindParam(3, $descricao);
+	    return $stmt->execute();
+	    
 	}
 	public function retornaTurnoPorId(Turno $turno){
 	

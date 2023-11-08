@@ -62,6 +62,10 @@ class GuicheController {
 				$controller = new GuicheController ();
 				$controller->telaGuiche ();
 				break;
+			case Sessao::NIVEL_USUARIO_EXTERNO:
+			    $controller = new GuicheController ();
+			    $controller->telaGuiche ();
+			    break;
 			default :
 				UsuarioController::main ( $nivel );
 				break;
@@ -196,28 +200,7 @@ class GuicheController {
 					$usuarioDao->retornaPorIdBaseExterna ( $vinculo->getResponsavel () );
 					break;
 					
-					/*$i++;
-					$idDoVinculo = $linha ['vinc_id'];
-					$tipo->setNome ( $linha ['tipo_nome'] );
-					$tipo->setValorCobrado ( $linha ['tipo_valor'] );
-					$cartao->setId ( $linha ['cart_id'] );
-					$cartao->setCreditos ( $linha ['cart_creditos'] );
-					$cartao->setTipo ( $tipo );
-					$usuario->setNome ( $linha ['usua_nome'] );
-					$usuario->setId ( $linha ['usua_id'] );
-					$usuario->setLogin ( $linha ['usua_login'] );
-					$usuario->setIdBaseExterna ( $linha ['id_base_externa'] );					
-					$vinculo->setCartao ( $cartao );
-					$vinculo->setAvulso ( $linha ['vinc_avulso'] );
-					$vinculo->setResponsavel ( $usuario );
-					$idCartao = $linha ['cart_id'];
-					$avulso = $linha ['vinc_avulso'];
-					if ($avulso) {
-						$usuario->setNome ( 'Avulso' );
-					}					
-					$usuarioDao = new UsuarioDAO ();
-					$usuarioDao->retornaPorIdBaseExterna ( $vinculo->getResponsavel () );
-					break;*/
+					
 				}				
 				
 				if ($idCartao && $_GET ['cartao'] != '') {
@@ -227,13 +210,21 @@ class GuicheController {
 					$vinculoDao->vinculoPorId ( $vinculo );					
 					$catracaVirtualDao = new CatracaVirtualDAO();
 					$dao = new DAO();
-					
+					$validacaoDao = new ValidacaoDAO($dao->getConexao());
 					if (!$catracaVirtualDao->verificaVinculo ( $vinculo )) {					
-						if (($i != 0) && ! $vinculoDao->usuarioJaTemVinculo ( $usuario ) && ! $vinculo->isAvulso () && $vinculo->getResponsavel ()->verificaSeAtivo ()) {
-							$daqui3Meses = date ( 'Y-m-d', strtotime ( "+90 days" ) ) . 'T' . date ( 'G:00:01' );
+						if (($i != 0) && ! $vinculoDao->usuarioJaTemVinculo ( $usuario ) && ! $vinculo->isAvulso () && $validacaoDao->verificaSeAtivo($vinculo->getResponsavel())) {
+							$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'G:00:01' );
 							$vinculo->setFinalValidade ( $daqui3Meses );
 							$vinculoDao->atualizaValidade ( $vinculo );
+						}else{
+						    $this->view->mensagem('erro', 'Esse cartão não pode ser renovado.');
 						}
+					}
+					
+					if( $vinculo->isActive () && !$validacaoDao->verificaSeAtivo($vinculo->getResponsavel())){
+					    $this->view->mensagem('erro', 'Vínculo Desativado.');
+					    $vinculo->setFinalValidade(date ( 'Y-m-d'));
+					    $vinculoDao->atualizaValidade($vinculo);
 					}
 					
 					if (! $vinculo->isActive () ) {												
@@ -245,7 +236,7 @@ class GuicheController {
 							$this->view->mensagem('erro', 'Cartão sem vínculo ativo e sem saldo para estornar.');
 							return ;
 						}
-						
+						$usuarioDao->retornaPorIdBaseExterna ( $usuario );
 						$this->view->formConsulta($usuario, $tipo, $cartao);
 						echo '	<form class="formulario em-linha" method="post">
 									<label>Valor a ser estornado:
@@ -303,7 +294,7 @@ class GuicheController {
 						
 						
 					} else {
-						
+					    $usuarioDao->retornaPorIdBaseExterna ( $usuario );
 						$this->view->formConsulta ( $usuario, $tipo, $cartao );
 						$this->view->formInserirValor ();
 						

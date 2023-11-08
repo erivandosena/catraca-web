@@ -1,10 +1,5 @@
 <?php
 
-/**
- * 
- * @author Alan Cleber Moraies Gomes
- *
- */
 class IdentificadorClienteController{
 	
 	public static function main($nivel){
@@ -51,18 +46,18 @@ class IdentificadorClienteController{
 							<div class="doze colunas borda relatorio">				
 								<div class="doze colunas">									
 									<div class="fundo-cliente">
-										<img class="imagem-fundo-cliente" src="img/logo_instituicao3_'.NOME_INSTITUICAO.'.png" alt="">
+										<img class="imagem-fundo-cliente" src="img/Simbolo_da_UNILAB.png" alt="">
 									</div>									
 									<div class="duas colunas">
 										<a href="http://www.unilab.edu.br">
-											<img class="imagem-responsiva centralizada" src="img/logo_instituicao2_'.NOME_INSTITUICAO.'.png" style="height:2cm;">
+											<img class="imagem-responsiva centralizada" src="img/logo-unilab2.png" style="width:12cm;height:2cm;">
 										</a>
 									</div>
 									<div class="oito colunas">
 										<h2 style="font-size:48px">Restaurante Universitário</h2>
 									</div>
 									<div class="duas colunas">
-										<img class="imagem-responsiva centralizada" src="img/logo_labpati_azul.png" style="height:2cm">
+										<img class="imagem-responsiva centralizada" src="img/logo-dti-preto.png" style="width:6cm;height:2cm">
 									</div>
 									<hr class="um"><br>
 								</div>				

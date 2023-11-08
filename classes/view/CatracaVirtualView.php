@@ -1,17 +1,9 @@
 <?php
 
 
-/**
- * 
- * @author Jefferson Uchôa Ponte
- *
- */
 class CatracaVirtualView{
-
-	/**
-	 * Este formulário é utilizado na catraca virtual para buscar o cartão do indivúduo que irá se alimentar no RU. 
-	 * 
-	 */
+	
+	
 	public function formBuscaCartao(){
 		echo '
 				<script>
@@ -22,31 +14,30 @@ class CatracaVirtualView{
 						  });
 						</script>
 	
-	
+
 						<form method="get" action="" class="formulario em-linha" >
 							<input type="hidden" name="pagina" value="gerador" />
 							<label for="numero_cartao">
 								<object class="rotulo texto-preto">Buscar por Número: </object><br><br>
-		
+			
 								<input class="texto-preto" type="number" name="numero_cartao" id="numero_cartao" autofocus /><br>
 								 <script>$(document).trigger(\'autofocus_ready\');</script>
-								<input type="submit" />
+								<input type="submit" value="Buscar"/>
 							</label>
-	
+
 						</form>';
 	}
 	
-	
-	/**
-	 * Formulário para seleção de uma catraca virtual para abrir. 
-	 * Entre com um vetor de catracas.  
-	 * @param unknown $listaDeCatracas
-	 */
 	public function formSelecionarRu($listaDeCatracas){
+		
+
 
 		echo '<div class="navegacao">
 				<div class = "simpleTabs">
-			       
+			        <ul class = "simpleTabsNavigation">
+						<li><a href="#">Cadastro</a></li>
+			        </ul>
+			        <div class = "simpleTabsContent">
 						<div class="doze colunas borda">';
 		
 		echo '<form action="" method="post">
@@ -54,18 +45,21 @@ class CatracaVirtualView{
 			        <select name="catraca_id" id="catraca_id">';
 		
 		foreach ($listaDeCatracas as $catraca){
+				
 			echo '<option value="'.$catraca->getId().'">'.$catraca->getNome().'</option>';
+		
 		}
+		
+		
 		 
-		echo '
-				</select><br>
+		echo '       </select><br>
 					<input name="catraca_virtual" type="submit" class="botao" VALUE="Selecionar" />
 				</form>	';
 		
 		
 		echo '</div>
 				</div>
-				
+				</div>
 				</div>';
 		
 	}
@@ -83,16 +77,21 @@ class CatracaVirtualView{
 		
 		}
 		echo '<th>Total</th></tr></thead><tbody>';
-		echo '	<tr>
+		echo '					        <tr>
 				<th>'.$catraca->getNome().'</th>';
 		$somatorio = 0;
 		foreach ($quantidades as $quantidade){
 			$somatorio += $quantidade;
 			echo '<td>'.$quantidade.'</td>';
+				
 		}
 		echo '<td>'.$somatorio.'</td>';
+		
 		echo '</tr>';
 		echo '</tbody></table>';
+
+		
+		
 	}
 	
 }

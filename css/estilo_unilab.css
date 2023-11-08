@@ -1,39 +1,23 @@
 @CHARSET "UTF-8";
-<<<<<<<< HEAD:web/css/estilo_unilab.css
-========
-
-*{
-	margin: 0;
-	padding: 0;
-}
->>>>>>>> origin/home:web/css/estilo.css
 
 body{
+	font-family: sans-serif;
 }
 
-<<<<<<<< HEAD:web/css/estilo_unilab.css
-========
-h1{
-	font-family:inherit;
-	font-weight:500;
-	line-height:1.1;
-	color:inherit;
-	font-size:30px;
-	  
-}
->>>>>>>> origin/home:web/css/estilo.css
 
 
 .gradiente{	
-	background-color: #020031;
-    border-bottom: 3px solid #008045;
+	background-color: #3fa2db;
+    border-bottom: 3px solid #359dd6;
 	color: #fff;	
 	text-shadow: 0 1px 3px rgba(0,0,0,.4), 0 0 30px rgba(0,0,0,.075);
 	background: #020031; /* Old browsers */
-	background: -moz-linear-gradient(45deg,  #299658 0%, #fff 100%); /* FF3.6+ */
+	background: -moz-linear-gradient(45deg,  #020031 0%, #3fa2db 100%); /* FF3.6+ */
 	background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,#020031), color-stop(100%, #3fa2db)); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(50deg,  #08A75C 100%, #fff 100%); /* Chrome10+,Safari5.1+ */
-	
+	background: -webkit-linear-gradient(45deg,  #020031 0%,#3fa2db 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(45deg,  #020031 0%,#3fa2db 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(45deg,  #020031 0%,#3fa2db 100%); /* IE10+ */
+	background: linear-gradient(45deg,  #020031 0%,#3fa2db 100%); /* W3C */
 	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#020031', endColorstr='#3fa2db',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 	-webkit-box-shadow: inset 0 3px 7px rgba(0,0,0,.2), inset 0 -3px 7px rgba(0,0,0,.2);
 	-moz-box-shadow: inset 0 3px 7px rgba(0,0,0,.2), inset 0 -3px 7px rgba(0,0,0,.2);
@@ -126,7 +110,8 @@ h1{
 
 .relatorio h2, h3{
 	font-weight: bold;
-	text-align: center;	
+	text-align: center;
+	margin: 10px;
 }
 
 .relatorio span{
@@ -166,7 +151,38 @@ h1{
 	font-weight: bold;
 }
 
-.relatorio-rodape span{
+.dados-relatorio span{
+	font-weight: normal;
+	display: inline;
+	background-color: none;
+}
+
+.cab-relatorio2 {
+	background-color: #CCC;
+	margin-top: 5px;
+	margin-bottom: 10px;
+	text-align:;	
+}
+
+.cab-relatorio2 span, .dados-relatorio span{
+	position: relative; 
+	display: inline !important;
+	font-size: 16px;
+	margin-right: 20px;
+	margin-top: 10px;
+}
+
+.cab-relatorio{
+	background-color: #CCC;
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+.cab-relatorio span{
+	font-size: 20px;
+}
+
+.relatorio-pratos span, .relatorio-valores span, .relatorio-rodape span{
 	font-weight: normal;
 	text-align: center;
 }
@@ -221,7 +237,7 @@ hr.linha{
 	color: #fff;
 	text-decoration: none;
 }
-
+/**/
 #titulo{
 	
 	margin-bottom: 30px;
@@ -323,9 +339,17 @@ div#corpo{
 	margin-bottom: 8px;
 }
 
+/*.dados-usuario img{
+	width: 277px;	
+	height: 9cm;
+    margin-left: 5px;
+	border:solid 1px #000;
+}*/
+
 .dados-usuario span{
 	display: block;
-	font-weight: bold;	
+	font-weight: bold;
+	
 }
 
 #informacao{	
@@ -373,11 +397,8 @@ span#aproxime{
 	opacity: 0.1;
 }
 
-<<<<<<<< HEAD:web/css/estilo_unilab.css
 /*Zoom na imagem do usuï¿½rio*/
 
-========
->>>>>>>> origin/home:web/css/estilo.css
 .zoom {
 	position: relative;
     width: 283px;
@@ -475,13 +496,9 @@ span#aproxime{
     transform: scale(1.3);
 }
 
-<<<<<<<< HEAD:web/css/estilo_unilab.css
 /*
     Tï¿½tulos
 */
-========
-
->>>>>>>> origin/home:web/css/estilo.css
 .titulo,.titulo-com-borda {
     color:#2E496B !important;
     font-weight:bold !important;
@@ -505,6 +522,8 @@ span#aproxime{
     clear:both;
 }
 
+/*Janela Modal*/
+
 .window{
     display:none;
     position:absolute;
@@ -525,58 +544,31 @@ span#aproxime{
     top:0;
     z-index:9000;
     background-color:#000;
-    
 }
  
-.fechar{
-	display:block; 
-	text-align:right;
+.fechar{display:block; text-align:right;}
+
+.resumo{
+	position: relative;	
 }
 
-
-<<<<<<<< HEAD:web/css/estilo_unilab.css
-========
 .resumo span{
 	position: absolute;
-	margin: 0 auto;
-	left: 15%;
+	left:10%;
 	top: 20%;	
-	font-size: 70px;
+	font-size: 80px;
 }
 
 .resumo img{
 	position: relative;
 	left:35%;
 	opacity: 0.1;
-	height:300px;	 
+	height:210px;
+	
 }
 
-.qr_code{	
+.qr_code{
+	width: 250px;;
+	float:right;
 	position: relative;	
-	left: 40%;	
 }
-
-.texto_app {	
-	position: absolute;	
-	top: 40%;
-	left: 33%;	
-}
-
-.rodape{	
-	text-align: center;	
-	width: 100%;		
-}
-
-.espaco{
-	position:absolute;
-	bottom: 0;	
-	background: #000;
-}
-
-.rodape_catraca{
-	bottom: 0;
-	color: #fff;
-	margin-top: 20px;
-	text-align: center;
-}
->>>>>>>> origin/home:web/css/estilo.css

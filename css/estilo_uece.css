@@ -201,7 +201,7 @@ hr.linha{
 	color: #fff;
 	text-decoration: none;
 }
-/**/
+
 #titulo{
 	
 	margin-bottom: 30px;
@@ -450,13 +450,7 @@ span#aproxime{
     transform: scale(1.3);
 }
 
-<<<<<<<< HEAD:web/css/estilo_uece.css
 
-========
-/*
-    Títulos
-*/
->>>>>>>> origin/home:web/css/estilo_unilab.css
 .titulo,.titulo-com-borda {
     color:#2E496B !important;
     font-weight:bold !important;
@@ -480,11 +474,6 @@ span#aproxime{
     clear:both;
 }
 
-<<<<<<<< HEAD:web/css/estilo_uece.css
-========
-/*Janela Modal*/
-
->>>>>>>> origin/home:web/css/estilo_unilab.css
 .window{
     display:none;
     position:absolute;
@@ -505,7 +494,6 @@ span#aproxime{
     top:0;
     z-index:9000;
     background-color:#000;
-<<<<<<<< HEAD:web/css/estilo_uece.css
     
 }
  
@@ -514,7 +502,29 @@ span#aproxime{
 	text-align:right;
 }
 
+.resumo{
+	position: relative;	
+}
 
+.resumo span{
+	position: absolute;
+	margin: 0 auto;
+	left: 15%;
+	top: 20%;	
+	font-size: 70px;
+}
+
+.resumo img{
+	position: relative;
+	left:35%;
+	opacity: 0.1;
+	height:300px;	 
+}
+
+.qr_code{	
+	position: relative;	
+	left: 40%;	
+}
 
 .texto_app {	
 	position: absolute;	
@@ -541,27 +551,3 @@ span#aproxime{
 }
 
 
-========
-}
- 
-.fechar{display:block; text-align:right;}
-
-.resumo{
-	position: relative;	
-}
-
-.resumo span{
-	position: absolute;
-	left:20%;
-	top: 20%;	
-	font-size: 80px;
-}
-
-.resumo img{
-	position: relative;
-	left:35%;
-	opacity: 0.1;
-	height:300px;
-	
-}
->>>>>>>> origin/home:web/css/estilo_unilab.css

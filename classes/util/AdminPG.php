@@ -43,10 +43,10 @@ class AdminPG{
 
 			}
 			echo ')';
-			$n = 10;
+			$n = 100;
 
 			echo '<br>'.$n.' primeiros dados<br>';
-			$sqlPrimeirosDados = "SELECT * FROM $nomeDaTabela LIMIT $n";
+			$sqlPrimeirosDados = "SELECT * FROM $nomeDaTabela ORDER BY 1 DESC LIMIT $n";
 			$resultPrimeirosDados = $dao->getConexao()->query($sqlPrimeirosDados);
 			$i = 0;
 			echo '<table border=1>';

@@ -38,6 +38,7 @@ class CatracaVirtualDAO extends DAO{
 			echo '{"erro":{"text":'. $e->getMessage() .'}}';
 		}
 		foreach($result as $linha){
+			
 			$usuario = new Usuario();
 			$vinculo->setResponsavel($usuario);
 			$vinculo->getResponsavel()->setNome($linha['usua_nome']);
@@ -49,9 +50,8 @@ class CatracaVirtualDAO extends DAO{
 			$vinculo->getCartao()->setCreditos($linha['cart_creditos']);
 			$vinculo->getCartao()->setId($linha['cart_id']);
 			$vinculo->getCartao()->getTipo()->setNome($linha ['tipo_nome']);
-			$vinculo->getCartao()->getTipo()->setId($linha ['tipo_id']);
-				
 			$vinculo->getCartao()->getTipo()->setValorCobrado($linha['tipo_valor']);
+			$vinculo->getCartao()->getTipo()->setSubsidiado($linha['tipo_subisidiado'] ? true : false);
 			$vinculo->getCartao()->setNumero($linha ['cart_numero']);
 			$vinculo->getCartao()->setId($linha['cart_id']);
 			$vinculo->setQuantidadeDeAlimentosPorTurno($linha['vinc_refeicoes']);
@@ -71,6 +71,7 @@ class CatracaVirtualDAO extends DAO{
 		$result = $this->getConexao()->query($selectTurno);
 		foreach($result as $linha){
 			$turno = new Turno();
+			$turno->setId($linha['turn_id']);
 			$turno->setHoraFinal($linha['turn_hora_fim']);
 			$turno->setHoraInicial($linha['turn_hora_inicio']);
 			return $turno;
@@ -104,6 +105,7 @@ class CatracaVirtualDAO extends DAO{
 		
 		try{
 			$stmt = $this->getConexao()->prepare($sql);
+// 			$stmt->bindParam(":numero", $numero, PDO::PARAM_STR);
 			$stmt->execute();
 			$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
 		}catch (PDOException $e){
@@ -131,6 +133,7 @@ class CatracaVirtualDAO extends DAO{
 		INNER JOIN isencao ON cartao.cart_id = isencao.cart_id
 		WHERE (vinculo.vinc_id = $idVinculo) AND  ('$dataTimeAtual' < isencao.isen_fim);";
 		$result = $this->getConexao ()->query ($sql);
+
 		foreach($result as $linha){
 			if(isset($linha['isen_id'])){
 				$vinculo->setIsencao(new Isencao());
@@ -144,34 +147,7 @@ class CatracaVirtualDAO extends DAO{
 		return false;
 	}
 	
-	
-	public function custoDaRefeicao(Catraca $catraca){
-		$custo = 0;
-		$idCatraca = $catraca->getId();
-		$sql = "SELECT cure_valor FROM custo_refeicao
-		INNER JOIN custo_unidade
-		ON custo_unidade.cure_id = custo_refeicao.cure_id
-		INNER JOIN unidade
-		ON unidade.unid_id = custo_unidade.unid_id
-		INNER JOIN catraca_unidade
-		ON catraca_unidade.unid_id = unidade.unid_id
-		WHERE catraca_unidade.catr_id = $idCatraca
-		ORDER BY custo_unidade.cure_id DESC LIMIT 1";
-		
-		foreach($this->getConexao()->query($sql) as $linha){
-			$custo = $linha['cure_valor'];
-		}
-		return $custo;
-		
-	}
-	
-	
 
-	
-	public function renovaVinculoDoCartao(){
-		
-		
-	}
 
 	
 }

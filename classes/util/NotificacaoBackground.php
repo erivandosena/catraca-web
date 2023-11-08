@@ -29,11 +29,11 @@ class NotificacaoBackground {
 	
 	/**
 	 * 
-	 * @param unknown $idUsuario
-	 * @param unknown $tela_sistema
-	 * @param unknown $valorVendido
-	 * @param unknown $novoValor
-	 * @return unknown
+	 * @param integer $idUsuario
+	 * @param string $tela_sistema
+	 * @param float $valorVendido
+	 * @param float $novoValor
+	 * @return string
 	 */
 	public static function executaPidGuiche($idUsuario, $tela_sistema, $valorVendido, $novoValor) {
 		$path = NotificacaoBackground::getCaminhoAbsoluto();
@@ -43,10 +43,10 @@ class NotificacaoBackground {
 	
 	/**
 	 * 
-	 * @param unknown $idUsuario
-	 * @param unknown $tela_sistema
-	 * @param unknown $valorPago
-	 * @return unknown
+	 * @param integer $idUsuario
+	 * @param string $tela_sistema
+	 * @param float $valorPago
+	 * @return string
 	 */
 	public static function executaPidCatracaVirtual($idUsuario, $tela_sistema, $valorPago) {
 		$path = NotificacaoBackground::getCaminhoAbsoluto();
@@ -56,11 +56,11 @@ class NotificacaoBackground {
 	
 	/**
 	 * 
-	 * @param unknown $idUsuario
-	 * @param unknown $tela_sistema
-	 * @param unknown $valorAtual
-	 * @param unknown $valorPago
-	 * @return unknown
+	 * @param integer $idUsuario
+	 * @param string $tela_sistema
+	 * @param float $valorAtual
+	 * @param float $valorPago
+	 * @return string
 	 */
 	public static function executaPidCatracaVirtualUtilizacao($idUsuario, $tela_sistema, $valorAtual, $valorPago) {
 		$path = NotificacaoBackground::getCaminhoAbsoluto();
