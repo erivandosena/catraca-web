@@ -1,0 +1,8 @@
+.settings
+
+.buildpath
+.project
+/.metadata/
+*.log
+*.lock
+/uploads_card_vaccine/*
