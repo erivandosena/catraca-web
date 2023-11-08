@@ -71,8 +71,10 @@ hr.tracejada,.tracejada li{border-style: dashed !important;}
     text-decoration: none;
     color: #ffffff;
     display: block;
-    height: 1.3em;
     padding: 0.875em 0.625em 0.375em 0.625em;
+}
+.menu-horizontal a:hover{
+    color: #ffffff;
 }
 /* Efeito ao passar o mouse no item*/
 .menu-horizontal li:hover > a{
@@ -133,7 +135,7 @@ hr.tracejada,.tracejada li{border-style: dashed !important;}
     border-bottom-color: transparent; 	
 }
 /*  Itens */
-.item{
+.item-element{
     background: #3696D0;
     border-bottom: 0.188em solid #003966;
     height: 2.50em;
@@ -213,7 +215,6 @@ hr.tracejada,.tracejada li{border-style: dashed !important;}
     }
     .menu-horizontal a {
         padding: 0.875em 0.5em 0.375em 0.5em;
-        height: 21px !important;
     }
     .menu-horizontal ul li:first-child > a:after{
         display: none;
@@ -263,7 +264,6 @@ hr.tracejada,.tracejada li{border-style: dashed !important;}
     text-decoration: none;
     color: #ffffff;
     display: block;
-    min-height: 1.3em;
     height: auto;
     padding: 0.625em;
 }

@@ -50,7 +50,7 @@ class AppDAO extends DAO{
 	
 	/**
 	 * Retorna token em duplicidade.
-	 * @param unknown $token
+	 * @param string $token
 	 * @return number
 	 */
 	public function verificaTokenUnico($token) {

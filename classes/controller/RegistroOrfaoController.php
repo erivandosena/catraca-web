@@ -1,11 +1,5 @@
 <?php 
 
-/**
- * 
- * @author Alan Cleber Morais Gomes
- * 
- *
- */
 class RegistroOrfaoController {
 	
 	private $view;
@@ -26,7 +20,7 @@ class RegistroOrfaoController {
 				$telaRegistro->verificarSelecaoRU();
 				break;
 			default :
-				UsuarioController::main ( $nivelAcesso );
+				echo '404 - Página solicitada não existe';
 				break;
 		}
 			
@@ -79,15 +73,15 @@ class RegistroOrfaoController {
 		$tipoDao = new TipoDAO($this->dao->getConexao());
 		$catracaVirtualDao = new CatracaVirtualDAO($this->dao->getConexao());
 		$listaDeTipos = $tipoDao->retornaLista();
-		$tipoIsento = new Tipo();		
 		
-		$unidadeDao = new UnidadeDAO($this->dao->getConexao());
 		$catraca = new Catraca();
 		
 		$catraca->setId($_SESSION['id_catraca']);
 		$turnoId = $_SESSION['turno_id'];
 		
-		$unidadeDao->preencheCatracaPorId($catraca);
+		$catracaDao = new CatracaDAO($this->dao->getConexao());
+		
+		$catracaDao->preencheCatracaPorId($catraca);
 		
 		echo '<div class="navegacao">
 				<div class = "simpleTabs">
@@ -99,17 +93,7 @@ class RegistroOrfaoController {
 		
 						<div id="catraca-virtual" class="doze colunas borda">';
 		
-// 		$turnoAtivo = false;
-// 		$data = date ( "Y-m-d G:i:s" );
-// 		$selectTurno = "Select * FROM turno WHERE '$data' BETWEEN turno.turn_hora_inicio AND turno.turn_hora_fim";
-// 		$result = $this->dao->getConexao()->query($selectTurno);
-// 		$descricao = "Não";
-		
-// 		foreach($result as $linha){
-// 			$turnoAtivo = true;
-// 			$descricao = $linha['turn_descricao'];
-// 			break;
-// 		}
+
 		
 		$turno = new Turno();
 		$turno->setId($turnoId);
@@ -138,7 +122,7 @@ class RegistroOrfaoController {
 				</div>';
 		
 		$somatorio = 0;
-		
+		$quantidades = array();
 		foreach ($listaDeTipos as $tipo){
 			$quantidades[] = $this->totalGiroTurnoAtualNaoIsento($catraca, $tipo, $turnoAtual);
 		}
@@ -152,8 +136,7 @@ class RegistroOrfaoController {
 				
 		$this->view->formBuscaCartao();
 		$idCatraca = $_SESSION['id_catraca'];
-		$custo = 0;
-		$custo = $catracaVirtualDao->custoDaRefeicao($catraca);
+		
 		
 		echo '			</div>';
 		
@@ -174,6 +157,8 @@ class RegistroOrfaoController {
 			unset($_SESSION['data']);
 			echo '<meta http-equiv="refresh" content="0; url=?pagina=registro_orfao">';
 		}
+		$custoDao = new CustoDAO($catracaVirtualDao->getConexao());
+		$custo = $custoDao->custoByTurnoAndUnityToday($turnoAtual, $catraca->getUnidade(), date('Y-m-d'));
 		
 		if(isset($_GET['numero_cartao'])){
 			if($_GET['numero_cartao'] == NULL || $_GET['numero_cartao'] == "")
@@ -265,6 +250,17 @@ class RegistroOrfaoController {
 // 					}
 				}
 					
+				if($vinculo->getCartao()->getTipo()->isSubsidiado())
+				{
+					$valorPago = $vinculo->getCartao()->getTipo()->getValorCobrado();
+				} else{
+					$valorPago = $custo->getValor();
+				}
+				
+				if($catracaVirtualDao->vinculoEhIsento($vinculo)){
+					$valorPago = 0;
+					
+				}
 				$idCartao = $cartao->getId();
 				$strNome = $vinculo->getResponsavel()->getNome();
 				$data = $_SESSION['data'].' '.$turno->getHoraInicial();
@@ -286,8 +282,8 @@ class RegistroOrfaoController {
 							return;
 						}							
 							
-						$sql = "INSERT into registro(regi_data, regi_valor_pago, regi_valor_custo, catr_id, cart_id, vinc_id)
-						VALUES('$data', $valorPago, $custo, $idCatraca, $idCartao, $idVinculo)";
+						$sql = "INSERT into registro(regi_data, regi_valor_pago, catr_id, cart_id, vinc_id)
+						VALUES('$data', $valorPago, $idCatraca, $idCartao, $idVinculo)";
 						//echo $sql;
 							
 						if(!$this->dao->getConexao()->exec($sql)){
@@ -329,8 +325,8 @@ class RegistroOrfaoController {
 					}else{
 							
 		
-						$sql = "INSERT into registro(regi_data, regi_valor_pago, regi_valor_custo, catr_id, cart_id, vinc_id)
-						VALUES('$data', $valorPago, $custo, $idCatraca, $idCartao, $idVinculo)";
+						$sql = "INSERT into registro(regi_data, regi_valor_pago, catr_id, cart_id, vinc_id)
+						VALUES('$data', $valorPago, $idCatraca, $idCartao, $idVinculo)";
 						//echo $sql;
 						if($this->dao->getConexao()->exec($sql)){
 							$this->view->mensagem("sucesso", "Dados inseridos com sucesso.");
@@ -441,7 +437,7 @@ class RegistroOrfaoController {
 	public function totalGiroTurnoAtualNaoIsento(Catraca $catraca, Tipo $tipo = null, $turnoAtual){
 		$resultado = 0;
 		$idCatraca = $catraca->getId();
-		$turno = $this->pegaTurnoAtualSeExistir($turnoAtual);
+		$turno = $turnoAtual;
 		if($turno){
 			$horaInicial = $_SESSION['data'].' '.$turno->getHoraInicial();
 			$horaFinal = $_SESSION['data'].' '.$turno->getHoraFinal();
@@ -474,7 +470,7 @@ class RegistroOrfaoController {
 	public function totalGiroTurnoAtualIsento(Catraca $catraca, Tipo $tipo = null, $turnoAtual){
 		$resultado = 0;
 		$idCatraca = $catraca->getId();
-		$turno = $this->pegaTurnoAtualSeExistir($turnoAtual);
+		$turno = $turnoAtual;
 		if($turno){
 			$horaInicial = $_SESSION['data'].' '.$turno->getHoraInicial();
 			$horaFinal = $_SESSION['data'].' '.$turno->getHoraFinal();

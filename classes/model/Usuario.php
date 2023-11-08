@@ -1,14 +1,5 @@
 <?php
-/*********
-  * Copyright (c) 12/07/2017 {INITIAL COPYRIGHT UNILAB} {OTHER COPYRIGHT LABPATI/DISUP/DTI}.
-  * All rights reserved. This program and the accompanying materials
-  * are made available under the terms of the Eclipse Public License v1.0
-  * which accompanies this distribution, and is available at
-  * http://www.eclipse.org/legal/epl-v10.html
-  *
-  * Contributors:
-  *    Jefferson Uchôa Ponte - initial API and implementation and/or initial documentation
-  *********/
+
 
 class Usuario{
 	private $id;
@@ -21,13 +12,38 @@ class Usuario{
 	private $nivelAcesso;
 	private $idCategoria;
 	
-	public function Usuario(){
+	private $siape;
+	private $categoria;
+	private $tipoDeUsuario;
+	private $statusServidor;
+	
+	//Documentos
+	private $idBaseExterna;
+	private $cpf;
+	private $identidade;
+	private $passaporte;
+	
+	
+	private $matricula;
+	private $nivelDiscente;
+	private $statusDiscente;
+	
+	private $idStatusDiscente;
+	
+	private $statusSistema;
+	public function setStatusSistema($statusSistema){
+	    $this->statusSistema = $statusSistema;
+	}
+	public function getStatusSistema(){
+	    return $this->statusSistema;
+	}
+	
+	public function __construct(){
 		$this->id = 0;
 	}
 	
 	
 	public function setIDCategoria($idCategoria){	
-		$idBaseExterna = intval ( $idCategoria ) ;
 		if(is_int($idCategoria))
 			$this->idCategoria = $idCategoria;
 	}
@@ -37,7 +53,8 @@ class Usuario{
 		return $this->idCategoria;
 	}
 	public function setId($id){
-		$this->id  = intval ( $id) ;
+		if(is_int($id))
+			$this->id = $id;
 	}
 	
 	public function getId(){
@@ -64,9 +81,9 @@ class Usuario{
 	public function setSenha($senha){
 		$this->senha = $senha;
 	}
-    public function getSenha(){
+        public function getSenha(){
             return $this->senha;
-    }
+        }
 	public function setNivelAcesso($nivelAcesso){
 		$nivelAcesso = intval ( $nivelAcesso) ;
 		if(is_int($nivelAcesso))
@@ -91,18 +108,7 @@ class Usuario{
 	}
 	
 	
-	//Documentos
-	private $idBaseExterna;
-	private $cpf;
-	private $identidade;
-	private $passaporte;
-	
-	
-	private $matricula;
-	private $nivelDiscente;
-	private $statusDiscente;
-	
-	private $idStatusDiscente;
+
 	public function setIdStatusDiscente($idStatusDiscente){
 		$this->idStatusDiscente = $idStatusDiscente;
 	}
@@ -110,33 +116,8 @@ class Usuario{
 		return $this->idStatusDiscente;
 	}
 	
-	private $siape;
-	private $categoria;
-	private $tipoDeUsuario;
-	private $statusServidor;
-	private $idStatusServidor;
-	private $idTipoUsuario;
-	private $statusSistema;
+
 	
-	public function setStatusSistema($statusSistema){
-		$this->statusSistema = $statusSistema;
-	}
-	public function getStatusSistema(){
-		return $this->statusSistema;
-	}
-	public function setIdTipoUsuario($idTipoUsuario){
-		$this->idTipoUsuario = $idTipoUsuario;
-	}
-	public function getIdTipoUsuario(){
-		return $this->idTipoUsuario;
-	}
-	public function setIdStatusServidor($idStatusServidor){
-		$this->idStatusServidor = $idStatusServidor;
-		
-	}
-	public function getIdStatusServidor(){
-		return $this->idStatusServidor;
-	}
 	public function setStatusServidor($statusServidor){
 		$this->statusServidor = $statusServidor;
 	}
@@ -145,7 +126,9 @@ class Usuario{
 	}
 	
 	public function setIdBaseExterna($idBaseExterna){
-		$this->idBaseExterna = intval ( $idBaseExterna ) ;
+		$idBaseExterna = intval ( $idBaseExterna ) ;
+		if(is_int($idBaseExterna))
+			$this->idBaseExterna = $idBaseExterna;
 	}
 	public function  getIdBaseExterna(){
 		return $this->idBaseExterna;
@@ -274,7 +257,21 @@ class Usuario{
 		
 		
 	}
+	public function verificaSeAtivo(){
+		if(strtolower (trim($this->getStatusServidor())) == 'ativo'){
+				
+			return true;
+		}
+		if(strtolower (trim($this->getStatusDiscente())) == 'ativo' || strtolower (trim($this->getStatusDiscente())) == 'formando' || strtolower (trim($this->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($this->getStatusDiscente())) == 'ativo - graduando'){
+			return true;
+		}
 	
+		if(strtolower (trim($this->getTipodeUsuario())) == 'terceirizado' || strtolower (trim($this->getTipodeUsuario())) == 'outros'){
+			return true;
+		}
+	
+		return false;
+	}
 	
 	
 }

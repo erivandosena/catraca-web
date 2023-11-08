@@ -41,7 +41,7 @@ class RelatorioTurnoController{
 	private $data2;
 	
 	public function gerarDados($idUnidade = NULL, $data1 = null, $data2 = null){
-		$dados = array();
+
 		if($idUnidade == NULL){
 			$idUnidade = 1;
 		}
@@ -74,7 +74,7 @@ class RelatorioTurnoController{
 		}
 		
 
-		
+		$matriz = array();
 		foreach($listaDeTurnos as $turno){
 			$matriz[$turno->getDescricao()] = array();
 			foreach($listaDeDatas as $data){
@@ -98,7 +98,6 @@ class RelatorioTurnoController{
 						$matriz[$turno->getDescricao()]['Total - '.$info['turno']] = 0;
 					}
 					$matriz[$turno->getDescricao()]['Total - '.$info['turno']]++;
-					//echo $linha['usua_nome'].' - '.$curso.'<br>';
 					
 				}
 				
@@ -110,6 +109,7 @@ class RelatorioTurnoController{
 	}
 	public $contante = 0;
 	public function retornaCurso($id){
+	    $info = array();
 		$sql2 = "SELECT * FROM vw_usuarios_catraca WHERE id_usuario = $id LIMIT 1";
 		$result = $this->dao->getConexao()->query($sql2);
 		
@@ -142,7 +142,6 @@ class RelatorioTurnoController{
 	public function intervaloDeDatas($data1, $data2){
 		$dateStart = new DateTime ( $data1 );
 		$dateEnd = new DateTime ( $data2 );
-		$dateRange = array ();
 		$listaDeDatas = array();
 		while ( $dateStart <= $dateEnd ) {
 			$listaDeDatas [] = $dateStart->format ( 'Y-m-d' );
@@ -199,7 +198,6 @@ class RelatorioTurnoController{
 			echo'<div class="doze colunas relatorio-rodape">
 			<span>CATRACA | Copyright © 2015 - DTI</span>
 			<span>Relatório Emitido em: '. date ( 'd/m/Y H:i:s' ).'</span>';
-			// 		echo '<a class="botao icone-printer"> Imprimir</a>';
 			echo '	</div>
 				</div>';
 			

@@ -1,13 +1,21 @@
 <?php 
 
+/**
+ * 
+ * @author Jefferson Uchôa Ponte
+ *
+ */
 class Validacao {
 	
 	private $id;
 	private $campo;
 	private $valor;
-	private $tipoId;
-	private $tipoNome;
+	private $tipo;
 	
+	public function __construct(){
+	    $this->tipo = new Tipo();
+	}
+		
 	public function getId(){
 		return $this->id;
 	}
@@ -32,20 +40,17 @@ class Validacao {
 		$this->valor = $valor;
 	}
 	
-	public function getTipoId(){
-		return $this->tipoId;
+	/**
+	 * @return Tipo
+	 */
+	public function getTipo(){
+	    return $this->tipo;
 	}
-	
-	public function setTipoId($tipoId){
-		$this->tipoId = $tipoId;
-	}
-	
-	public function setTipoNome($tipoNome){
-		$this->tipoNome = $tipoNome;
-	}
-	
-	public function getTipoNome(){
-		return $this->tipoNome;
+	/**
+	 * @param Tipo $tipo
+	 */
+	public function setTipo(Tipo $tipo){
+	    $this->tipo = $tipo;
 	}
 	
 	

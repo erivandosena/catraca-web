@@ -2,7 +2,7 @@
 
 /**
  * 
- * @author Jefferson Uchôa Ponte
+ * @author jefponte
  * 
  * 
  *
@@ -10,7 +10,7 @@
 
 class HomeController{
 	
-	public static function main($nivelDeAcesso, $loginComLdap = false){
+	public static function main($nivelDeAcesso){
 		switch ($nivelDeAcesso){
 			case Sessao::NIVEL_SUPER:
 				//Acessa tudo. 
@@ -37,16 +37,16 @@ class HomeController{
 				//So faz cadastro
 				CartaoController::main($nivelDeAcesso);
 				break;
-			case Sessao::NIVEL_RELATORIO:
+			case Sessao::NIVEL_USUARIO_EXTERNO:
 				//So faz cadastro
-				RelatorioController::main($nivelDeAcesso);
+				GuicheController::main($nivelDeAcesso);
 				break;
 			case Sessao::NIVEL_CATRACA_VIRTUAL_ORFA:
 				//Catraca Virtual Orfã. 
 				RegistroOrfaoController::main($nivelDeAcesso);
 				break;
 			default:
-				UsuarioController::main ( $nivelDeAcesso, $loginComLdap );
+				UsuarioController::main ( $nivelDeAcesso );
 				break;
 		}
 		

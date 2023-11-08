@@ -21,6 +21,10 @@ class ResumoCompraController{
 				$resumo = new ResumoCompraController();
 				$resumo->telaResumo();
 				break;
+			case Sessao::NIVEL_USUARIO_EXTERNO:
+			    $resumo = new ResumoCompraController();
+			    $resumo->telaResumo();
+			    break;
 			default:
 				UsuarioController::main ( $nivel );
 				break;
@@ -46,18 +50,20 @@ class ResumoCompraController{
 							
 				
 				
-							<div class="tres colunas">
-									<img class="imagem-responsiva centralizada" src="img/logo_instituicao2_' . NOME_INSTITUICAO . '.png" >
+							<div class="duas colunas">
+								<a href="http://www.unilab.edu.br">
+									<img class="imagem-responsiva centralizada" src="img/logo-dti-preto.png" style="width:12cm;height:2cm;">
+								</a>
 							</div>
 	
-							<div class="seis colunas">
+							<div class="oito colunas">
 								<h2 style="font-size:36px">Restaurante Universitário</h2>
 							</div>
-							<div class="tres colunas">
-								<img class="imagem-responsiva centralizada" src="img/logo_labpati_azul.png" >
+							<div class="duas colunas">
+								<img class="imagem-responsiva centralizada" src="img/logo-unilab2.png" style="width:6cm;height:2cm">
 							</div>
-			 					
-						</div>		<hr class="um"><br>					';		
+								<hr class="um"><br>
+							</div>							';		
 		
 		
 		if ($cartao != ""){			
@@ -76,20 +82,11 @@ class ResumoCompraController{
 			echo'				
 					<div class="doze colunas">						
 						<div class="resumo">
-							<span class="no-centro texto-azul2 centralizado">Guichê de Atendimento</span>';
-			
-		
-				echo ' 			<img class="imagem-responsiva" src="img/logo_instituicao3_'.NOME_INSTITUICAO.'.png" alt="">';
-		
-			
-			echo '
-						</div>';
-			
-			if(NOME_INSTITUICAO == 'unilab'){
-				echo '			<img class="qr_code" src="app/imagens/qrcode_app.jpg">';
-			}
-			
-			echo '
+							<span class="no-centro texto-azul2 centralizado">Guichê de Atendimento</span>
+							<img class="imagem-responsiva" src="img/Simbolo_da_UNILAB.png" alt="">					
+						</div>
+						
+						<img class="qr_code" src="app/imagens/qrcode_app.jpg">
 
 					</div>
 								

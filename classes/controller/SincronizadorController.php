@@ -23,13 +23,8 @@ class SincronizadorController{
 		$this->daoSigaa = new DAO(null, DAO::TIPO_USUARIOS);
 		
 		$this->daoLocal->getConexao()->beginTransaction();
-		if(!$this->daoLocal->getConexao()->exec("DELETE FROM vw_usuarios_catraca")){
-			$this->daoLocal->getConexao()->rollBack();
-			$this->daoSigaa->fechaConexao();
-			$this->daoLocal->fechaConexao();
-			echo "Erro ao tentar apagar tudo";
-			return false;
-		}
+		$this->daoLocal->getConexao()->exec("DELETE FROM vw_usuarios_catraca");
+		
 		$sqlSigaa = "SELECT * FROM vw_usuarios_catraca";
 		
 		$result = $this->daoSigaa->getConexao()->query($sqlSigaa);
@@ -124,7 +119,7 @@ class SincronizadorController{
 		$this->daoComum = new DAO(null, DAO::TIPO_AUTENTICACAO);
 		$sqlComum = "SELECT * FROM vw_usuarios_autenticacao_catraca";
 		$result = $this->daoComum->getConexao()->query($sqlComum);
-		$matriz = array();
+		
 		foreach ($result as $linha){
 			foreach($linha as $chave => $valor){
 				$linha[$chave] = str_replace("'", "''", $valor);
@@ -217,10 +212,13 @@ class SincronizadorController{
 			return;
 		}
 
+
 		if(!$this->sincronizarSigaa()){
+			echo "Erro em Sincronizacao!";
 			return;
 		}
 		if(!$this->sincronizarComum()){
+			echo "Erro em Sincronizacao 2!";
 			return;
 		}
 		

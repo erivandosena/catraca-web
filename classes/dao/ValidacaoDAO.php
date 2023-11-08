@@ -1,139 +1,188 @@
-<?php 
+<?php
 
+/**
+ * 
+ * @author Jefferson Uchoa Ponte
+ *
+ */
+class ValidacaoDAO extends DAO
+{
 
-class ValidacaoDAO extends DAO{
-	
-	public function retornaCampos(){		
-		$sql = "SELECT
+    public function listaValidacao()
+    {
+        $lista = array();
+        $sql = "SELECT * FROM validacao
+				INNER JOIN tipo ON validacao.tipo_id = tipo.tipo_id ";
+        $result = $this->getConexao()->query($sql);
+        foreach ($result as $linha) {
+            $validacao = new Validacao();
+            $validacao->setId($linha['vali_id']);
+            $validacao->setCampo($linha['vali_campo']);
+            $validacao->setValor($linha['vali_valor']);
+            $validacao->getTipo()->setId($linha['tipo_id']);
+            $validacao->getTipo()->setNome($linha['tipo_nome']);
+            $lista[] = $validacao;
+        }
+        return $lista;
+    }
+
+    public function inserirValidacao(Validacao $validacao)
+    {
+        $campo = $validacao->getCampo();
+        $valor = $validacao->getValor();
+        $idTipo = $validacao->getTipo()->getId();
+
+        $sql = "INSERT INTO
+                validacao(vali_campo, vali_valor, tipo_id)
+                VALUES('$campo', '$valor', $idTipo);";
+        if ($this->getConexao()->exec($sql)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     *
+     * @return array:string
+     */
+    public function listaDeCampos()
+    {
+        $listaCampos = array();
+        $sql = "SELECT
 		c.relname, a.attname as column
 		FROM pg_catalog.pg_attribute a
 		INNER JOIN pg_stat_user_tables c on a.attrelid = c.relid
 		WHERE c.relname = 'vw_usuarios_catraca' AND a.attnum > 0 AND NOT a.attisdropped	";
-		$listaCampos = $this->getConexao()->query($sql);		
-		return $listaCampos;		
-	}
-	
-	public function inserirValidacao($campo, $valor, $tipo){
-		
-		if ($campo == null || $valor == null || $tipo == null){
-			return false;
-		}
-		
-		$sql = "INSERT INTO validacao(vali_campo, vali_valor, tipo_id) VALUES('$campo', '$valor', $tipo);";
-		if ($this->getConexao()->exec($sql))			
-			return true;		
-		return false;
-	}
-	
-	public function listaValidacao(){
-		$lista = array();
-		$sql = "SELECT * FROM validacao 
-				INNER JOIN tipo ON validacao.tipo_id = tipo.tipo_id ";
-		$result = $this->getConexao()->query($sql);
-		foreach ($result as $linha){
-			$validacao = new Validacao;
-			$validacao->setId($linha['vali_id']);
-			$validacao->setCampo($linha['vali_campo']);
-			$validacao->setValor($linha['vali_valor']);
-			$validacao->setTipoId($linha['tipo_id']);
-			$validacao->setTipoNome($linha['tipo_nome']);
-			$lista[] = $validacao;
-		}
-		return $lista;
-	}
-	
-	public function validacaoDoTipo(Tipo $tipo){
-		$lista = array();
-		$idTipo = $tipo->getId();
-		$sql = "SELECT * FROM validacao
-				INNER JOIN tipo ON validacao.tipo_id = tipo.tipo_id
-				WHERE tipo.tipo_id = $idTipo
-				";
-		$result = $this->getConexao()->query($sql);
-		foreach ($result as $linha){
-			$validacao = new Validacao;
-			$validacao->setId($linha['vali_id']);
-			$validacao->setCampo($linha['vali_campo']);
-			$validacao->setValor($linha['vali_valor']);
-			$validacao->setTipoId($linha['tipo_id']);
-			$validacao->setTipoNome($linha['tipo_nome']);
-			$lista[] = $validacao;
-		}
-		return $lista;
-	}
-	
-	
-	public function excluirValidacao($id){
-		$sql = "DELETE FROM validacao WHERE vali_id = $id";
-		if ($this->getConexao()->exec($sql))
-			return true;
-		return false;		
-		
-	}
-	
-	/**
-	 * Retorna a lista de tipos válidos para este usuário.
-	 * O usuário deve ter em sua instancia o id da base externa.
-	 * @return array $listaDeTipos
-	 * @param Usuario $usuario
-	 *
-	 */
-	public function retornaTiposValidosUsuario(Usuario $usuario){
-		$tipoDao = new TipoDAO($this->getConexao());
-		$listaDeTipos = $tipoDao->retornaLista();
-		foreach ($listaDeTipos as $chave => $tipo){
-			if(!$this->tipoValido($usuario, $tipo)){
-				unset($listaDeTipos[$chave]);
-			}
-		}
-		return $listaDeTipos;
-	}
-	
-	
-	/**
-	 * Esse método verifica se o tipo é válido para determinado usuário. 
-	 * Deve ser usado sempre que for adicionar ou renovar um vínculo próprio para um usuário. 
-	 *  
-	 * @param Usuario $usuario
-	 * @param Tipo $tipo
-	 */
-	public function tipoValido(Usuario $usuario, Tipo $tipo){
-		$validacoes = $this->validacaoDoTipo($tipo);
-		if(!count($validacoes)){
-			return false;
-		}
-		$idUsuario = $usuario->getIdBaseExterna();
-		$sqlUsuarios = "SELECT * FROM vw_usuarios_catraca WHERE id_usuario = $idUsuario LIMIT 15";
-		$result = $this->getConexao()->query($sqlUsuarios);
-		$i = 0;
-		foreach($result as $linha){
-				
-			$matrizValidacao = array();
-			foreach($validacoes as $validacao){
-				$matrizValidacao[$validacao->getCampo()] = false;
-			}
-			foreach($matrizValidacao as $campo => $validade){
-				foreach($validacoes as $validacao){
-					if($validacao->getCampo() == $campo && $validacao->getValor() == $linha[$campo]){
-						$matrizValidacao[$campo] = true;
-					}
-				}
-			}
-			$valido = true;
-			foreach($matrizValidacao as $validade){
-				if(!$validade){
-					$valido = false;
-					break;
-				}
-			}
-			if($valido){
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	
+        $result = $this->getConexao()->query($sql);
+        foreach ($result as $linha) {
+            $listaCampos[] = $linha['column'];
+        }
+        return $listaCampos;
+    }
+
+    public function excluirValidacao(Validacao $validacao)
+    {
+        $id = $validacao->getId();
+        $sql = "DELETE FROM validacao WHERE vali_id = $id";
+        if ($this->getConexao()->exec($sql)) {
+            return true;
+        }
+        return false;
+    }
+
+    public function listaDeTipos(Usuario $usuario)
+    {
+        $tipoDao = new TipoDAO($this->getConexao());
+        $usuarioDao = new UsuarioDAO($this->getConexao());
+        $listaDeTipos = $tipoDao->retornaLista();
+        $listaDeUsuarios = $usuarioDao->listaPorIdBaseExterna($usuario);
+        $tiposValidos = array();
+
+        foreach ($listaDeUsuarios as $usuario2) {
+            foreach ($listaDeTipos as $tipo) {
+                if ($this->validarTipo($usuario2, $tipo)) {
+                    $flagExiste = false;
+                    foreach ($tiposValidos as $tipo2) {
+                        if ($tipo2->getNome() == $tipo->getNome()) {
+                            $flagExiste = true;
+                        }
+                    }
+                    if (! $flagExiste) {
+                        $tiposValidos[] = $tipo;
+                    }
+                }
+            }
+        }
+        return $tiposValidos;
+    }
+
+    public function validarTipo(Usuario $usuario, Tipo $tipo)
+    {
+        if (strtolower(trim($tipo->getNome())) == 'aluno') {
+            if (trim($usuario->getStatusDiscente()) == 'CADASTRADO' 
+                || strtolower(trim($usuario->getStatusDiscente())) == 'ativo' 
+                || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - formando'
+                || strtolower(trim($usuario->getStatusDiscente())) == 'formando' 
+                || strtolower(trim($usuario->getStatusDiscente())) == 'formado' 
+                || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - graduando') {
+                return true;
+            }
+        }
+        if (strtolower(trim($tipo->getNome())) == 'servidor tae') {
+            if (strtolower(trim($usuario->getStatusServidor())) == 'ativo' && strpos(strtolower(trim($usuario->getCategoria())), 'administrativo')) {
+                return true;
+            }
+            if ($usuario->getIDCategoria() == 3) {
+                return true;
+            }
+        }
+        if (strtolower(trim($tipo->getNome())) == 'servidor docente') {
+            if ((strtolower(trim($usuario->getTipodeUsuario())) == 'docente externo') || (strtolower(trim($usuario->getStatusServidor())) == 'ativo' && strtolower(trim($usuario->getCategoria())) == 'docente')) {
+                return true;
+            }
+        }
+        if (strtolower(trim($tipo->getNome())) == 'terceirizado') {
+            if (strtolower(trim($usuario->getTipodeUsuario())) == 'terceirizado' || strtolower(trim($usuario->getTipodeUsuario())) == 'outros') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public function verificaSeAtivo(Usuario $usuario)
+    {
+        $id = $usuario->getIdBaseExterna();
+        $strEntidade = "vw_usuarios_catraca";
+        $sql = "SELECT * FROM $strEntidade
+                WHERE id_usuario = $id
+                ORDER BY status_discente, status_servidor
+                ASC LIMIT 30";
+
+        foreach ($this->getConexao()->query($sql) as $linha) {
+            $usuario->setNome($linha['nome']);
+            $usuario->setEmail($linha['email']);
+            $usuario->setLogin($linha['login']);
+            $usuario->setCpf($linha['cpf_cnpj']);
+            $usuario->setIdBaseExterna($linha['id_usuario']);
+            $usuario->setIdentidade($linha['identidade']);
+            $usuario->setPassaporte($linha['passaporte']);
+            $usuario->setTipoDeUsuario($linha['tipo_usuario']);
+            $usuario->setMatricula($linha['matricula_disc']);
+            $usuario->setStatusDiscente($linha['status_discente']);
+            $usuario->setIdStatusDiscente($linha['id_status_discente']);
+            $usuario->setNivelDiscente($linha['nivel_discente']);
+            $usuario->setCategoria($linha['categoria']);
+            $usuario->setIDCategoria($linha['id_categoria']);
+            $usuario->setSiape($linha['siape']);
+            $usuario->setStatusServidor($linha['status_servidor']);
+            $usuario->setStatusSistema($linha['status_sistema']);
+            
+            if (strtolower(trim($usuario->getStatusServidor())) == 'ativo') {
+                return true;
+            }
+            if (trim($usuario->getStatusDiscente()) == 'CADASTRADO' || strtolower(trim($usuario->getStatusDiscente())) == 'ativo' || strtolower(trim($usuario->getStatusDiscente())) == 'formado' || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower(trim($usuario->getStatusDiscente())) == 'formando' || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - graduando' || strtolower(trim($usuario->getIdStatusDiscente())) == self::ID_STATUS_DISCENTE_CONCLUIDO) {
+
+                return true;
+            }
+            if (strtolower(trim($usuario->getTipodeUsuario())) == 'terceirizado' || strtolower(trim($usuario->getTipodeUsuario())) == 'outros') {
+                if($usuario->getStatusSistema() == 1){
+                    return true;
+                }
+            }
+            if (strtolower(trim($usuario->getTipodeUsuario())) == 'docente externo') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    const ID_STATUS_DISCENTE_ATIVO = 1;
+
+    const ID_STATUS_DISCENTE_CADASTRADO = 3;
+
+    const ID_STATUS_DISCENTE_FORMADO = 9;
+
+    const ID_STATUS_DISCENTE_CONCLUIDO = 3;
 }
 
 ?>

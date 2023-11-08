@@ -85,6 +85,20 @@ class CartaoDAO extends DAO{
 		return $lista;
 	}
 
+	public function retornaListaTotal(){
+		$lista = array();
+		$result = $this->getConexao()->query("SELECT * FROM cartao");
+	
+		foreach ($result as $linha){
+			$cartao = new Cartao();
+			$cartao->setId($linha['cart_id']);
+			$cartao->setCreditos($linha['cart_creditos']);
+			$cartao->setNumero($linha['cart_numero']);
+			$lista[] = $cartao;
+		}
+		return $lista;
+	}
+	
 	
 
 	public function inserir(Cartao $cartao){

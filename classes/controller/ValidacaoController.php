@@ -1,89 +1,101 @@
-<?php 
+<?php
 
-class ValidacaoController{
-	
-	private $view;
-	private $dao;
-	
-	public static function main($nivelAcesso){
+/**
+ * 
+ * @author Jefferson Uchôa Ponte
+ *
+ */
+class ValidacaoController
+{
 
-		switch ($nivelAcesso){
-			case Sessao::NIVEL_SUPER:
-				$valida = new ValidacaoController();
-				$valida->telaValidacao();	
-				break;
-			case Sessao::NIVEL_ADMIN:
-				$valida = new ValidacaoController();
-				$valida->telaValidacao();	
-				break;
-			
-			default:
-				UsuarioController::main ( $nivel );
-				break;
-		}
-		
-		
-	}
-	
-	public function telaValidacao(){
-		echo '<div class="navegacao">
-				<div class = "simpleTabs">
-						<div class="doze colunas borda">';
+    private $view;
 
-		$this->Validacao();
-		echo '</div>
-			</div>
-		</div>';
-		
-	}
-	
-	
-	public function Validacao(){
-		
-		$this->view = new ValidacaoView();
-		
-		$tipoDao = new TipoDAO();
-		$validaDao = new ValidacaoDAO();
-		
-		$listaTipos = $tipoDao->retornaLista();
-		$listaCampos = $validaDao->retornaCampos();
-		$listaValidacao = $validaDao->listaValidacao();
-			
-		$this->view->formValidacao($listaTipos, $listaCampos);
-		
-		
-		if (isset($_GET['salvar'])){			
-			if (isset($_POST['confirmar'])){
-				if ($validaDao->inserirValidacao($_GET['campo'], $_GET['valor'], $_GET['tipo'])){
-					$this->view->mensagem('sucesso', 'Dados inseridos com sucesso!');
-					return;
-				}else{
-					$this->view->mensagem('erro', 'Erro ao inserir os dados!');
-					return;
-				}
-			}
-			$this->view->mensagem('ajuda', 'Deseja salvar estes dados?');
-			$this->view->formConfirmar();
-			return ;
-		}		
-		
-		if (isset($_GET['excluir'])){
-			if (isset($_POST['confirmar'])){
-				if ($validaDao->excluirValidacao($_GET['validacao_id'])){
-					$this->view->mensagem('sucesso', 'Dados excluídos com sucesso!');
-					return;
-				}else {
-					$this->view->mensagem('erro', 'Erro ao excluir os dados!');
-					return;
-				}
-			}
-			$this->view->mensagem('ajuda', 'Deseja excluir estes dados?');
-			$this->view->formConfirmar('concluir');
-			return ;
-		}
-		
-		$this->view->tabelaCampos($listaValidacao);
-	}	
+    private $dao;
+
+    /**
+     * Método estático feito para ser chamado na página desejada,
+     * inicia as definições da validação.
+     *
+     * @param int $nivelAcesso
+     */
+    public static function main($nivelAcesso)
+    {
+        switch ($nivelAcesso) {
+            case Sessao::NIVEL_ADMIN:
+                $valida = new ValidacaoController();
+                $valida->definicoesValidacao();
+                break;
+            default:
+                UsuarioController::main($nivelAcesso);
+                break;
+        }
+    }
+
+    public function __construct()
+    {
+        $this->view = new ValidacaoView();
+        $this->dao = new ValidacaoDAO();
+    }
+
+    public function definicoesValidacao()
+    {
+        if (! isset($_GET['validacaoadd']) && ! isset($_GET['excluir'])) {
+
+            $this->view->exibirLista($this->dao->listaValidacao());
+            $this->view->botaoInserirValidacao();
+            return;
+        }
+        $this->adicionar();
+        $this->excluir();
+    }
+
+    public function adicionar()
+    {
+        if (! isset($_GET['validacaoadd'])) {
+            return;
+        }
+        if (! isset($_GET['adicionar'])) {
+            $tipoDao = new TipoDAO($this->dao->getConexao());
+            $listaTipos = $tipoDao->retornaLista();
+            $listaCampos = $this->dao->listaDeCampos();
+            $this->view->formValidacao($listaTipos, $listaCampos);
+            return;
+        }
+        if (! isset($_POST['confirmar'])) {
+            $this->view->formConfirmar("Tem certeza que deseja adicionar esta validação?");
+            return;
+        }
+
+        $validacao = new Validacao();
+        $validacao->getTipo()->setId($_GET['tipo']);
+        $validacao->setCampo($_GET['campo']);
+        $validacao->setValor($_GET['valor']);
+        if ($this->dao->inserirValidacao($validacao)) {
+            $this->view->mensagemSucesso("Validação Inserida Com Sucesso!");
+        } else {
+            $this->view->mensagemErro("Falha ao Inserir Validação!");
+        }
+
+        echo '<meta http-equiv="refresh" content="3; url=.\?pagina=validacao">';
+    }
+
+    public function excluir()
+    {
+        if (! isset($_GET['excluir'])) {
+            return;
+        }
+        if (! isset($_POST['confirmar'])) {
+            $this->view->formConfirmar("Tem certeza que deseja excluir esta validação?");
+            return;
+        }
+        $validacao = new Validacao();
+        $validacao->setId($_GET['validacao_id']);
+        if ($this->dao->excluirValidacao($validacao)) {
+            $this->view->mensagemSucesso("Validação Excluida Com Sucesso!");
+        } else {
+            $this->view->mensagemErro("Erro ao tentar Excluir Validação. ");
+        }
+        echo '<meta http-equiv="refresh" content="3; url=.\?pagina=validacao">';
+    }
 }
-
 ?>

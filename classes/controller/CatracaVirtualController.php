@@ -1,19 +1,23 @@
 <?php
 
+use Vacinometro\dao\VaccineDeclarationDAO;
+use Vacinometro\model\VaccineDeclaration;
+
 /**
  *
- * @author Jefferson Uchôa Ponte
+ * @author Jefferson Uchoa Ponte
  *
  */
-
 class CatracaVirtualController{
 	
 	private $dao;
 	private $view;
 	private $catracaSelecionada;
 	
-	public function CatracaVirtualController(){
+	public function __construct(){
+		
 		$this->view = new CatracaVirtualView();
+		
 	}
 	
 	public static function main($nivel){
@@ -75,13 +79,24 @@ class CatracaVirtualController{
 		$tipoDao = new TipoDAO($this->dao->getConexao());
 		$catracaVirtualDao = new CatracaVirtualDAO($this->dao->getConexao());
 		$listaDeTipos = $tipoDao->retornaLista();
-		$tipoIsento = new Tipo();
+		
 		
 		$unidadeDao = new UnidadeDAO($this->dao->getConexao());
+		$catracaDao = new CatracaDAO($this->dao->getConexao());
+		
 		$catraca = new Catraca();
 		$catraca->setId($_SESSION['catraca_id']);
-		$unidadeDao->preencheCatracaPorId($catraca);
-
+		$catracaDao->preencheCatracaPorId($catraca);
+		
+		echo '<div class="navegacao"> 
+				<div class = "simpleTabs">
+			        <ul class = "simpleTabsNavigation">					
+						<li><a href="#">Catraca Virtual</a></li>	
+			        </ul>
+				
+			        <div class = "simpleTabsContent">
+				
+						<div id="catraca-virtual" class="doze colunas borda">';
 		$turnoAtivo = false;
 		$data = date ( "Y-m-d G:i:s" );
 		$selectTurno = "Select * FROM turno WHERE '$data' BETWEEN turno.turn_hora_inicio AND turno.turn_hora_fim";
@@ -92,10 +107,6 @@ class CatracaVirtualController{
 			$descricao = $linha['turn_descricao'];
 			break;
 		}
-
-		echo '<div class="navegacao">
-				<div id="catraca-virtual" class="doze colunas borda">';
-		
 		
 		echo '	<div class="doze colunas conteudo centralizado titulo-com-borda" >
 					<div class="quatro colunas">
@@ -103,12 +114,11 @@ class CatracaVirtualController{
 					</div>';
 		
 		if($catraca->financeiroAtivo()){
-			echo '		<div class="quatro colunas fundo-verde1 texto-branco negrito" >
+		echo '		<div class="quatro colunas fundo-verde1 texto-branco negrito" >
 				 	<p>Módulo Financeiro Habilitado</p>
 					</div>';
 		}
-		else
-		{
+		else{
 			echo '	<div class="quatro colunas fundo-vermelho1 texto-branco negrito" >
 				 	<p>Módulo Financeiro Desabilitado</p>
 					</div>';
@@ -119,7 +129,8 @@ class CatracaVirtualController{
 					</div>
 				</div>';	
 		
-		$somatorio = 0;
+
+		
 		foreach ($listaDeTipos as $tipo){
 			$quantidades[] = $unidadeDao->totalGiroTurnoAtualNaoIsento($catraca, $tipo);	
 		}
@@ -133,8 +144,7 @@ class CatracaVirtualController{
 		
 		$this->view->formBuscaCartao();
 		$idCatraca = $_SESSION['catraca_id'];
-		$custo = 0;
-		$custo = $catracaVirtualDao->custoDaRefeicao($catraca);
+		
 		
 		echo '
 				
@@ -149,15 +159,22 @@ class CatracaVirtualController{
 				echo '<meta http-equiv="refresh" content="2; url=?pagina=gerador">';
 				return;
 			}
-			
-			
+			$custoDao = new CustoDAO($catracaVirtualDao->getConexao());
+			$custo = $custoDao->custoByTurnoAndUnityToday($turnoAtual, $catraca->getUnidade(), date('Y-m-d'));
+			if(!$custo){
+				$this->mensagemErro("Custo não definido para este turno!");
+				echo '<meta http-equiv="refresh" content="2; url=?pagina=gerador">';
+				return;
+			}
+
+			$usuarioDao = new UsuarioDAO();
 			
 			$cartao = new Cartao();
 			$cartao->setNumero($_GET['numero_cartao']);
 			$vinculo = new Vinculo();
 			$vinculo->setCartao($cartao);
-			
-			
+			$validacaoDao = new ValidacaoDAO($this->dao->getConexao());
+			$vinculoDao = new VinculoDAO($this->dao->getConexao());
 			if(!$catracaVirtualDao->verificaVinculo($vinculo)){
 				//Aqui a gente tenta renovar se tiver vinculo proprio nesse cartao. 
 				$numeroCartao = $vinculo->getCartao()->getNumero();				
@@ -179,13 +196,17 @@ class CatracaVirtualController{
 					$idDoVinculo = $linha['vinc_id'];
 					$tipo->setNome($linha['tipo_nome']);
 					$tipo->setValorCobrado($linha['tipo_valor']);
+					$tipo->setSubsidiado($linha['tipo_subsidiado']);
+					
+					
 					$usuario->setNome($linha['usua_nome']);
 					$usuario->setIdBaseExterna($linha['id_base_externa']);
+					$usuario->setId($linha['usua_id']);
 					$idCartao = $linha['cart_id'];
 						
 					$cartao->setId($idCartao);
 					$cartao->setTipo($tipo);
-						
+				    $cartao->setCreditos($linha['cart_creditos']);
 				
 					$vinculo->setAvulso($linha['vinc_avulso']);
 					$avulso = $linha['vinc_avulso'];
@@ -195,28 +216,24 @@ class CatracaVirtualController{
 					$vinculo->setCartao($cartao);
 					$vinculo->setId($idDoVinculo);
 					$vinculo->setResponsavel($usuario);
-					$usuarioDao = new UsuarioDAO();
-					$usuarioDao->retornaPorIdBaseExterna($vinculo->getResponsavel());					
+					$vinculo->setQuantidadeDeAlimentosPorTurno($linha['vinc_refeicoes']);
+					$usuarioDao->retornaPorIdBaseExterna($vinculo->getResponsavel());	
+					
 					break;
 				
 				}				
-								
-				$vinculoDao = new VinculoDAO($this->dao->getConexao());
-				$validacaoDao = new ValidacaoDAO($this->dao->getConexao());
+						
 				
-				$ativo = $validacaoDao->tipoValido($vinculo->getResponsavel(), $vinculo->getCartao()->getTipo());
-			
 				
-				if(($i != 0) && !$vinculoDao->usuarioJaTemVinculo($usuario) && !$vinculo->isAvulso() && $ativo){
-					
-					$daqui3Meses = date ( 'Y-m-d', strtotime ( "+90 days" ) ) . 'T' . date ( 'G:00:01' );
+				if(($i != 0) && !$vinculoDao->usuarioJaTemVinculo($usuario) && !$vinculo->isAvulso() && $validacaoDao->verificaSeAtivo($usuario)){
+					$daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'G:00:01' );
 					$vinculo->setFinalValidade($daqui3Meses);
 					$vinculoDao->atualizaValidade($vinculo);
 						
 					
 				}else{
 
-					$this->mensagemErro("Verifique o vinculo deste cartão!");
+					$this->mensagemErro("Esse cartão não pode ser renovado!");
 					echo '<meta http-equiv="refresh" content="3; url=?pagina=gerador">';
 					return;
 				}
@@ -224,6 +241,13 @@ class CatracaVirtualController{
 			}
 			
 			
+			if(!$validacaoDao->verificaSeAtivo($vinculo->getResponsavel())){
+			    $vinculo->setFinalValidade(date ( 'Y-m-d'));
+			    $vinculoDao->atualizaValidade($vinculo);
+			    $this->mensagemErro("Seu cartão foi desativado!");
+			    echo '<meta http-equiv="refresh" content="3; url=?pagina=gerador">';
+			    return;
+			}
 			
 			if(!$catracaVirtualDao->podeContinuarComendo($vinculo, $turnoAtual)){
 				$this->mensagemErro("Usuário já passou neste turno!");
@@ -232,21 +256,28 @@ class CatracaVirtualController{
 			}
 				
 			
+			$valorPago = $custo->getValor(); 
+			
+			if($vinculo->getCartao()->getTipo()->isSubsidiado())
+			{
+				$valorPago = $vinculo->getCartao()->getTipo()->getValorCobrado();
+			}
+			
 			if($catracaVirtualDao->vinculoEhIsento($vinculo)){
 				$valorPago = 0;
 				
-			}else{
-				$valorPago = $vinculo->getCartao()->getTipo()->getValorCobrado();
-				if(($vinculo->getCartao()->getCreditos() < $valorPago) && $catraca->financeiroAtivo()){
-					
-					$this->mensagemErro("Usuário créditos insuficiente. ");
-					echo '<meta http-equiv="refresh" content="4; url=?pagina=gerador">';
-					return;
-					
-				}
+			}
+			if(($vinculo->getCartao()->getCreditos() < $valorPago) && $catraca->financeiroAtivo()){
+				
+				$this->mensagemErro("Usuário créditos insuficiente. ");
+				echo '<meta http-equiv="refresh" content="4; url=?pagina=gerador">';
+				return;
+				
 			}
 			
+			
 			$idCartao = $cartao->getId();
+			$usuarioDao->preenchePorIdBaseExterna($vinculo->getResponsavel());
 			$strNome = $vinculo->getResponsavel()->getNome();
 					
 			if(isset($_GET['confirmado'])){				
@@ -256,6 +287,7 @@ class CatracaVirtualController{
 				if($catraca->financeiroAtivo()){
 
 					$this->dao->getConexao()->beginTransaction();
+					
 					$novoValor = floatval($vinculo->getCartao()->getCreditos()) - floatval($valorPago);
 					$sql0 = "UPDATE cartao set cart_creditos = $novoValor WHERE cart_id = $idCartao";
 					
@@ -268,9 +300,8 @@ class CatracaVirtualController{
 					}
 					
 					
-					$sql = "INSERT into registro(regi_data, regi_valor_pago, regi_valor_custo, catr_id, cart_id, vinc_id)
-					VALUES('$data', $valorPago, $custo, $idCatraca, $idCartao, $idVinculo)";
-					//echo $sql;
+					$sql = "INSERT into registro(regi_data, regi_valor_pago, catr_id, cart_id, vinc_id)
+					VALUES('$data', $valorPago, $idCatraca, $idCartao, $idVinculo)";
 					
 					if(!$this->dao->getConexao()->exec($sql)){
 						$this->dao->getConexao()->rollBack();
@@ -313,8 +344,8 @@ class CatracaVirtualController{
 				}else{
 					
 
-					$sql = "INSERT into registro(regi_data, regi_valor_pago, regi_valor_custo, catr_id, cart_id, vinc_id)
-					VALUES('$data', $valorPago, $custo, $idCatraca, $idCartao, $idVinculo)";
+					$sql = "INSERT into registro(regi_data, regi_valor_pago, catr_id, cart_id, vinc_id)
+					VALUES('$data', $valorPago, $idCatraca, $idCartao, $idVinculo)";
 					//echo $sql;
 					if($this->dao->getConexao()->exec($sql)){
 						$this->mensagemSucesso();
@@ -335,7 +366,7 @@ class CatracaVirtualController{
 			}
 			
 			else{				
-				
+			    $usuarioDao->retornaPorIdBaseExterna($vinculo->getResponsavel());
 				$strNome = $vinculo->getResponsavel()->getNome();
 				$imagem = $vinculo->getResponsavel()->getIdBaseExterna();
 				
@@ -357,6 +388,7 @@ class CatracaVirtualController{
 								<div id="informacao" class="fundo-cinza1">
 										<div id="dados" class="dados">';				
 				if($vinculo->isAvulso()){
+				    
 					echo '<p>Cartão Avulso: <strong>'.$_SESSION['nome_usuario'] = $vinculo->getDescricao().'</strong></p>';
 					echo '<p>Refeições Restantes:<strong>'.$_SESSION['refeicoes_restante'] = $vinculo->getRefeicoesRestantes().' </strong></p>';
 				}else{
@@ -372,28 +404,50 @@ class CatracaVirtualController{
 					}else{
 						echo '<p>Valor Cobrado: <strong>R$'.number_format($valorPago, 2, ',', '.').'</strong></p>';
 					}				
-				echo '					</div>
-								
-						<a href="?pagina=gerador&numero_cartao='.$_GET['numero_cartao'].'&confirmado=1" class="botao b-sucesso no-centro">Confimar</a>
+				
+				
+					echo '					</div>';
+
+					$daoVaccine = new VaccineDeclarationDAO();
+					$vaccineDeclaration = new VaccineDeclaration();
+					$vaccineDeclaration->setIdUserSig($vinculo->getResponsavel()->getIdBaseExterna());
+
+					$list = $daoVaccine->fetchByIdUserSig($vaccineDeclaration);
+					foreach($list as $key => $element)  {
+						if($element->getStatus() === VaccineDeclaration::STATUS_DISAPPROVED) {
+							unset($list[$key]);
+						}
+					}
+
+
+					if(count($list) === 0) {
+						
+						echo '<a href="?pagina=gerador&numero_cartao='.$_GET['numero_cartao'].'&confirmado=1" class="botao b-sucesso no-centro">Confimar</a>';
+						echo '<br>Usuário Não Enviou a Certidão de Vacinação.';
+					} else{
+						echo '<a href="?pagina=gerador&numero_cartao='.$_GET['numero_cartao'].'&confirmado=1" class="botao b-sucesso no-centro">Confimar</a>';
+					}
+					
+
+					echo '
 								</div>
 						
 								
 						
 							</div>
 							<div class="tres colunas zoom">';
-				
-				if(file_exists('fotos/'.$imagem.'.png')){
+				if(file_exists("fotos/'.$imagem.'.png")){
 					echo '<img id="imagem" src="fotos/'.$imagem.'.png" alt="">';
 					
 				}
-				
 					
 				echo '			</div>
 						</div>
 					</div>';				
 			}
 		}
-
+		echo '</div>
+				</div>';
 		        
 		
 		

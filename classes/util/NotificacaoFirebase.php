@@ -61,7 +61,7 @@ class NotificacaoFirebase {
 	
 	/**
 	 * 
-	 * @param unknown $idUsuario
+	 * @param integer $idUsuario
 	 */
 	public function NotificacaoFirebase($idUsuario){
 		$this->appDao = new AppDAO();
@@ -71,8 +71,8 @@ class NotificacaoFirebase {
 	
 	/**
 	 * 
-	 * @param unknown $valorVendido
-	 * @param unknown $novoValor
+	 * @param float $valorVendido
+	 * @param float $novoValor
 	 */
 	public function notificacaoGuiche($valorVendido, $novoValor){
 		$app = $this->appDao->retornaAppPorUsuarioId($this->idUsuario);
@@ -89,7 +89,7 @@ class NotificacaoFirebase {
 	
 	/**
 	 *
-	 * @param unknown $valorPago
+	 * @param float $valorPago
 	 */
 	public function notificacaoCatracaVirtual($valorPago){
 		$app = $this->appDao->retornaAppPorUsuarioId($this->idUsuario);
@@ -103,9 +103,9 @@ class NotificacaoFirebase {
 	
 	/**
 	 *
-	 * @param unknown $valorAtual
-	 * @param unknown $valorPago
-	 * @return unknown
+	 * @param float $valorAtual
+	 * @param float $valorPago
+	 * @return string
 	 */
 	public function notificacaoCatracaVirtualUtilizacao($valorAtual, $valorPago){
 		$app = $this->appDao->retornaAppPorUsuarioId($this->idUsuario);

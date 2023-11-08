@@ -152,7 +152,7 @@ class PessoalController {
 		    </div>';
 	
 	}
-	public function PessoalController(){
+	public function __construct(){
 		$this->dao = new DAO();
 	}
 	
@@ -205,6 +205,20 @@ class PessoalController {
 		
 		if(count($vinculos) < 1){
 			echo '<h2 class="titulo">Nenhum cartao ativo</h2>';
+			
+			$inativos = $vinculoDao->retornaVinculosVencidos($usuario);
+			if(count($inativos) > 0){
+			    if(count($inativos) == 1){
+			        echo '<h2 class="titulo">Cartão Inativo</h2>';
+			    }else{
+			        echo '<h2 class="titulo">Cartões Inativos</h2>';
+			    }
+			    
+			    $this->exibirVinculos($inativos, $usuario);
+			    
+			}
+			
+			
 		}else if(count($vinculos) == 1){
 			echo '<h2 class="titulo">Vínculo Ativo</h2>';
 			$this->exibirVinculos($vinculos, $usuario);			
