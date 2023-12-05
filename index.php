@@ -1,15 +1,9 @@
 <?php
 
 
-define ( "CONFIG_CATRACA", "../config/catraca.ini" );
 define("DB_INI", '../config/config_bd.ini');
-$config = parse_ini_file ( CONFIG_CATRACA );
-define ( "CADASTRO_DE_FOTOS", $config ['cadastro_de_fotos'] );
-define ( "NOME_INSTITUICAO", $config ['nome_instituicao'] );
-define ( "PAGINA_INSTITUICAO", $config ['pagina_instituicao'] );
-define ( "LOGIN_LDAP", $config ['login_ldap'] );
-define ( "FONT_DADOS_LDAP_ENTIDADE", $config ['font_dados_ldap_entidade'] );
-define ( "VERSAO_SINCRONIZADOR", $config ['versao_sincronizador'] );
+
+
 
 
 function autoload2($classe) {
@@ -30,7 +24,7 @@ function autoload2($classe) {
 spl_autoload_register('autoload2');
 
 function autoload($classe) {
-    
+
     if (file_exists('classes/dao/' . $classe . '.php')) {
         include_once 'classes/dao/' . $classe . '.php';
     } else if (file_exists('classes/model/' . $classe . '.php')) {
@@ -51,12 +45,10 @@ if (isset ( $_GET ["sair"] )) {
 	$sessao->mataSessao ();
 	header ( "Location:./index.php" );
 }
-if (VERSAO_SINCRONIZADOR == 1) {
-	$s = new SincronizadorController ();
-	$s->sincronizar ();
-} else {
-	// Aqui faremos sincronizacao se for o da UECE.
-}
+
+$s = new SincronizadorController ();
+$s->sincronizar ();
+
 
 if(isset($_GET['ajax'])){
     switch ($_GET['ajax']){
@@ -70,7 +62,7 @@ if(isset($_GET['ajax'])){
     }
 	exit(0);
 }
-                     
+
 if (isset ( $_GET ['gerar'] ) && isset ( $_GET ['pagina'] )) {
     if($_GET['gerar'] == 'Excel'){
         switch ($_GET ['pagina']) {
@@ -102,10 +94,10 @@ if (isset ( $_GET ['gerar'] ) && isset ( $_GET ['pagina'] )) {
                 $controller->gerarExcelNumeracao();
                 exit(0);
                 break;
-                
+
         }
     }
-    
+
 }
 
 
@@ -125,7 +117,7 @@ if (isset ( $_GET ['gerar'] ) && isset ( $_GET ['pagina'] )) {
 <link rel="stylesheet" href="css_spa/spa.css" />
 <link rel="stylesheet" href="css/estilo_comum.css" type="text/css" media="screen">
 <?php
-echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type="text/css" media="screen">';
+echo '<link rel="stylesheet" href="css/estilo_unilab.css" type="text/css" media="screen">';
 
 ?>
 
@@ -162,8 +154,8 @@ echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type
 			<div id="topo" class="resolucao ">
 				<div class="tres colunas">
 				<?php
-				echo '<a href="' . PAGINA_INSTITUICAO . '"><img
-						src="img/logo_instituicao_' . NOME_INSTITUICAO . '.png"
+				echo '<a href="https://unilab.edu.br"><img
+						src="img/logo_instituicao_unilab.png"
 						alt=""></a>';
 				?>
 				</div>
@@ -174,38 +166,38 @@ echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type
 					<a href="http://www.unilab.edu.br"><img src="img/logo_labpati_branco.png" alt=""></a>
 				</div>
 			</div>
-			
+
 		</div>
 
-		
+
 
 				<?php
 				function auditar() {
 					$dao = new DAO ();
 					$sessao = new Sessao ();
 					$auditoria = new Auditoria ( $dao->getConexao () );
-					
+
 					$obs = " - ";
 					if (isset ( $_POST ['catraca_virtual'] ) && isset ( $_POST ['catraca_id'] )) {
 						$obs = "Selecionou Catraca virtual: " . $_POST ['catraca_id'];
 					}
-					
+
 					$auditoria->cadastrar ( $sessao->getIdUsuario (), $obs );
 					$dao->fechaConexao ();
 				}
-				
-				
+
+
 				?>
-				
+
 		<div class="doze colunas">
 <?php
 
 MenuController::main($sessao->getNivelAcesso());
 ?>
-			<div class="resolucao config">					
-						
+			<div class="resolucao config">
+
 					<?php
-						
+
 					if (isset ( $_GET ['pagina'] )) {
 					    auditar();
 						switch ($_GET ['pagina']) {
@@ -251,7 +243,7 @@ MenuController::main($sessao->getNivelAcesso());
 							case 'guiche' :
 								GuicheController::main ( $sessao->getNivelAcesso () );
 								break;
-							
+
 							case 'nivel_acesso' :
 								NivelAcessoController::main ( $sessao->getNivelAcesso () );
 								break;
@@ -306,10 +298,10 @@ MenuController::main($sessao->getNivelAcesso());
 								break;
 						}
 					} else {
-						
+
 						HomeController::main ( $sessao->getNivelAcesso () );
 					}
-					
+
 					?>
 			</div>
 		</div>
