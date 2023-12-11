@@ -229,7 +229,6 @@ class CartaoController
 			$cartPreviousNumber =  $line['cart_numero'];
 			$credits = $line['cart_creditos'];
 		}
-		echo $credits;
 		if ($credits != 0) {
 			echo '<div class="alerta-erro">
 			<div class="icone icone-notification ix16"></div>
@@ -249,8 +248,13 @@ class CartaoController
 		</div>';
 			echo '<meta http-equiv="refresh" content="2; url=?pagina=cartao">';
 			return;
+		} else {
+			echo '<div class="alerta-sucesso">
+				<div class="icone icone-notification ix16"></div>
+				<div class="titulo-alerta">Aten&ccedil&atildeo</div>
+				<div class="subtitulo-alerta">Cartão Reciclado com Sucesso!</div>
+				</div>';
 		}
-
 
 	}
 	public function telaCadastro()
