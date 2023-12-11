@@ -16,7 +16,7 @@ class MenuController
             case Sessao::NIVEL_ADMIN:
                 echo '
 
-				
+
 
 							<div  class="doze colunas barra-menu">
 								    <div class="menu-horizontal config">
@@ -31,20 +31,20 @@ class MenuController
 										<li><a href="?pagina=avulso">Avulso</a></li>
 										<li><a href="?pagina=isento">Isento</a></li>
 										<li><a href="?pagina=info">Informações</a></li>
-                    
+
 									</ul>
-                    
+
 							</li>';
                 echo '	<li><a href="?pagina=gerador" class="item-element"><span class="icone-credit-card"></span> <span class="item-texto">Catraca Virtual</span></a></li>';
                 echo ' 	<li><a href="?pagina=guiche" class="item-element"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a>
 								<ul>
 										<li><a href="?pagina=resumo_compra" target="_blank">Tela de Atendimento</a></li>
 									</ul>
-                    
+
 								</li>';
 
                 echo ' 	<li><a href="?pagina=definicoes_unidade" class="item-element"><span class="icone-cogs"></span> <span class="item-texto">Definições</span></a>
-                    
+
 										<ul>
 											<li><a href="?pagina=definicoes_unidade">Unidades Acadêmicas</a></li>
                                             <li><a href="?pagina=definicoes_turno">Turnos</a></li>
@@ -52,11 +52,11 @@ class MenuController
                                             <li><a href="?pagina=definicoes_tipo">Tipos de Usuários</a></li>
                                             <li><a href="?pagina=definicoes_mensagem">Mensagem Catraca</a></li>
                                             <li><a href="?pagina=definicoes_custo">Custo Refeição</a></li>';
-                    
+
 // 											<li><a href="?pagina=validacao">Validações</a></li>
                 echo '                  </ul>
-                    
-                    
+
+
 							</li>';
 
                 echo ' 	<li><a href="#" class="item-element"><span class="icone-file-text2"></span> <span class="item-texto">Relatórios</span></a>
@@ -74,11 +74,11 @@ class MenuController
 									</ul>
 								</li>';
                 echo ' <li><a href="?pagina=nivel_acesso" class="item-element"><span class="icone-file-text2"></span> <span class="item-texto">Nivel de Acesso</span></a></li>';
-				echo ' <li><a href="?pagina=vaccine_declaration" class="item-element"><span class="icone-file-text2"></span> <span class="item-texto">Vacinação</span></a></li>';
+
 
                 echo '</ol>
 								        <ol class="a-direita" start="4">
-                    
+
 											<li><a href="" class="item-element"><span class="item-texto">Status: Adm</span></a></li>
 											<li><a href="?sair=sair" class="item-element"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
 								        </ol>
@@ -100,13 +100,13 @@ class MenuController
 									<ul>
 										<li><a href="?pagina=resumo_compra">Tela de Atendimento</a></li>
 									</ul>
-                    
+
 									</li>';
                 echo ' 	<li><a href="?pagina=guiche" class="item-element"><span class="icone-user"></span> <span class="item-texto">Guichê</span></a>
 								<ul>
 										<li><a href="?pagina=resumo_compra" target="_blank">Tela de Atendimento</a></li>
 									</ul>
-                    
+
 								</li>';
 
                 echo ' 	<li><a href="?pagina=relatorio_despesa" class="item-element"><span class="icone-file-text2"></span> <span class="item-texto">Relatório</span></a>
@@ -114,15 +114,15 @@ class MenuController
 										<li><a href="?pagina=relatorio_despesa">Relatório RU</a></li>
 									</ul>
 								</li>
-								<li><a href="?pagina=vaccine_declaration" class="item-element"><span class="icone-file-text2"></span> <span class="item-texto">Vacinação</span></a></li>
-								
-								
+
+
+
 								';
 
                 echo '</ol>
-				
+
 								        <ol class="a-direita" start="4">
-                    
+
 											<li><a href="" class="item-element"><span class="item-texto">Status: Pol</span></a></li>
 											<li><a href="?sair=sair" class="item-element"><span class="icone-exit"></span> <span class="item-texto">Sair</span></a></li>
 								        </ol>
@@ -146,7 +146,7 @@ class MenuController
 										<li><a href="?pagina=resumo_compra" target="_blank">Tela de Atendimento</a></li>
 									</ul>
 								</li>';
-				echo ' <li><a href="?pagina=vaccine_declaration" class="item-element"><span class="icone-file-text2"></span> <span class="item-texto">Vacinação</span></a></li>';
+
 
                 echo '</ol>
 								        <ol class="a-direita" start="4">
@@ -206,7 +206,7 @@ class MenuController
 
                 echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
                 echo '<li><a href="?pagina=cartao" class="item-element"><span class="icone-credit-card"></span> <span class="item-texto">Cartão</span></a></li>';
-				echo ' <li><a href="?pagina=vaccine_declaration" class="item-element"><span class="icone-file-text2"></span> <span class="item-texto">Vacinação</span></a></li>';
+
                 echo '</ol>
 						        <ol class="a-direita" start="4">
 									<li><a href="" class="item-element"><span class="item-texto">Status: Cadastro</span></a></li>
@@ -258,10 +258,10 @@ class MenuController
 										<li><a href="?pagina=relatorio_guiche">Relatório Guichê</a></li>
 									</ul>
 								</li>
-								
+
 								';
-				
-				
+
+
                 echo '</ol>
 						        <ol class="a-direita" start="4">
 									<li><a href="" class="item-element"><span class="item-texto">Status: Usuario Externo</span></a></li>
@@ -281,7 +281,6 @@ class MenuController
                  */
                 echo '<li><a href="?pagina=inicio" class="item-ativo"><span class="icone-home3"></span> <span class="item-texto">Início</span></a></li>';
                 echo '<li><a href="?pagina=pessoal" class="item-element"><span class="icone-credit-card"></span> <span class="item-texto">Pessoal</span></a></li>';
-				echo ' <li><a href="?pagina=vaccine_declaration" class="item-element"><span class="icone-file-text2"></span> <span class="item-texto">Vacinação</span></a></li>';
 
                 echo '</ol>
 								        <ol class="a-direita" start="4">
