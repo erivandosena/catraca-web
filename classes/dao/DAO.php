@@ -14,7 +14,7 @@ class DAO
 {
 
     // Caso queira configurar homologacao faça novo arquivo ini. e modifique esta constante.
-    const ARQUIVO_CONFIGURACAO = "/dados/sites/adm/catraca/config/config_bd.ini";
+    const ARQUIVO_CONFIGURACAO = "../config_bd.ini";
 
     const TIPO_CATRACA = 0;
 
@@ -36,10 +36,6 @@ class DAO
 
     private $entidadeUsuarios;
 
-    public function getSgdb()
-    {
-        return $this->sgdb;
-    }
 
     public function __construct(PDO $conexao = null, $tipo = self::TIPO_DEFAULT)
     {
@@ -125,7 +121,6 @@ class DAO
             $this->conexao = new PDO('sqlite:' . $bd['nome']);
         }
         $this->entidadeAutenticacao = $config['autenticacao_entidade_nome'];
-        $this->sgdb = $bd['sgdb'];
     }
 
     public function setConexao($conexao)

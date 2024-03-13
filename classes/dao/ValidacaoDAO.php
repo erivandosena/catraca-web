@@ -87,7 +87,7 @@ class ValidacaoDAO extends DAO
                             $flagExiste = true;
                         }
                     }
-                    if (! $flagExiste) {
+                    if (!$flagExiste) {
                         $tiposValidos[] = $tipo;
                     }
                 }
@@ -99,11 +99,13 @@ class ValidacaoDAO extends DAO
     public function validarTipo(Usuario $usuario, Tipo $tipo)
     {
         if (strtolower(trim($tipo->getNome())) == 'aluno') {
-            if (trim($usuario->getStatusDiscente()) == 'CADASTRADO'
+            if (
+                trim($usuario->getStatusDiscente()) == 'CADASTRADO'
                 || strtolower(trim($usuario->getStatusDiscente())) == 'ativo'
                 || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - formando'
                 || strtolower(trim($usuario->getStatusDiscente())) == 'formando'
-                || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - graduando') {
+                || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - graduando'
+            ) {
                 return true;
             }
         }
@@ -160,12 +162,17 @@ class ValidacaoDAO extends DAO
 
                 return true;
             }
-            if (trim($usuario->getStatusDiscente()) == 'CADASTRADO' || strtolower(trim($usuario->getStatusDiscente())) == 'ativo' || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower(trim($usuario->getStatusDiscente())) == 'formando' || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - graduando') {
-                print_r($usuario);
+            if (
+                trim($usuario->getStatusDiscente()) == 'CADASTRADO'
+                || strtolower(trim($usuario->getStatusDiscente())) == 'ativo'
+                || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - formando'
+                || strtolower(trim($usuario->getStatusDiscente())) == 'formando'
+                || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - graduando'
+            ) {
                 return true;
             }
             if (strtolower(trim($usuario->getTipodeUsuario())) == 'terceirizado' || strtolower(trim($usuario->getTipodeUsuario())) == 'outros') {
-                if($usuario->getStatusSistema() == 1){
+                if ($usuario->getStatusSistema() == 1) {
                     return true;
                 }
             }
@@ -184,5 +191,3 @@ class ValidacaoDAO extends DAO
 
     const ID_STATUS_DISCENTE_CONCLUIDO = 3;
 }
-
-?>
