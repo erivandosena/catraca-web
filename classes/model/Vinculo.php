@@ -2,9 +2,9 @@
 
 
 class Vinculo{
-	
-	
-	
+
+
+
 	private $id;
 	private $avulso;
 	private $responsavel;
@@ -19,9 +19,9 @@ class Vinculo{
 	}
 	public function getRefeicoesRestantes(){
 		return $this->refeicoesRestantes;
-		
+
 	}
-	
+
 	private $isento;
 	public $isencao;
 	public function setIsento($isento){
@@ -30,22 +30,22 @@ class Vinculo{
 		else
 			$this->isento = false;
 	}
-	
+
 	public function setIsencao(Isencao $isencao){
 		$this->isencao = $isencao;
 	}
 	public function getIsencao(){
 		return $this->isencao;
 	}
-	
-	
-	public function Vinculo(){
+
+
+	public function __construct(){
 		$this->setIsento(false);
 		$this->isencao  = new Isencao();
 		$this->setAvulso(false);
 		$this->responsavel = new Usuario();
 		$this->cartao= new Cartao();
-		
+
 	}
 	public function ehIsento(){
 		if($this->isento)
@@ -97,7 +97,7 @@ class Vinculo{
 	}
 	public function getDescricao(){
 		return $this->descricao;
-		
+
 	}
 	public function setCartao(Cartao $cartao){
 		$this->cartao = $cartao;
@@ -105,7 +105,7 @@ class Vinculo{
 	public function getCartao(){
 		return $this->cartao;
 	}
-	
+
 	public function isActive(){
 		$tempoA = strtotime($this->getInicioValidade());
 		$tempoB = strtotime($this->getFinalValidade());
@@ -121,9 +121,9 @@ class Vinculo{
 		if($time > $tempo1 || $time > $tempo2)
 			return true;
 		return false;
-		
+
 	}
-	
+
 }
 
 

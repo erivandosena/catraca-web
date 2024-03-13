@@ -1,9 +1,9 @@
 <?php
 
 /**
- * � a Unidade Academica. 
- * Ser� usada em muitos lugares. 
- * Turno tem unidade academica, catraca tem unidade, etc. 
+ * � a Unidade Academica.
+ * Ser� usada em muitos lugares.
+ * Turno tem unidade academica, catraca tem unidade, etc.
  * @author jefponte
  *
  */
@@ -13,18 +13,18 @@ class Unidade {
 	private $turnosValidos;
 	private $catracas;
 	private $custoUnidade;
-	
-	public function Unidade() {
-		$this->turnosValidos = array();
-		
-	}
-	
 
-	
+	public function __construct(){
+		$this->turnosValidos = array();
+
+	}
+
+
+
 	public function getTurnosValidos() {
 		return $this->turnosValidos;
 	}
-	
+
 
 	public function adicionaTurno(Turno $turno){
 		$this->turnosValidos[] = $turno;
@@ -44,7 +44,7 @@ class Unidade {
 	public function getCustoUnidade(){
 		return $this->custoUnidade;
 	}
-	
+
 	public function setCustoUnidade($custoUnidade){
 		$this->custoUnidade = $custoUnidade;
 	}
