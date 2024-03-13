@@ -26,7 +26,7 @@ class RelatorioConsumoController {
 			    $controller = new RelatorioConsumoController ();
 				$controller->relatorio ();
 				break;
-			case Sessao::NIVEL_SUPER:
+			case Sessao::NIVEL_RELATORIO:
 			    $controller = new RelatorioConsumoController ();
 				$controller->relatorio ();
 				break;
@@ -34,10 +34,6 @@ class RelatorioConsumoController {
 			    $controller = new RelatorioConsumoController ();
 				$controller->relatorio ();
 				break;
-			case Sessao::NIVEL_USUARIO_EXTERNO:
-			    $controller = new RelatorioConsumoController ();
-			    $controller->relatorio ();
-			    break;
 			default :
 				UsuarioController::main ( $nivelDeAcesso );
 				break;
@@ -154,22 +150,16 @@ class RelatorioConsumoController {
 		    $umTurno->setHoraFinal(strtotime($umTurno->getHoraFinal()));
 		}
 		
-		$turnoDoRegistro = null;
+		
 		foreach ( $dao->getConexao ()->query ( $sql ) as $linha ) {
 		    $timeRegistro = strtotime(date("H:i:s", strtotime($linha['regi_data'])));
 		    foreach($listaDeTurnos as $umTurno){
-		        if($timeRegistro <= $umTurno->getHoraFinal() && $timeRegistro >= $umTurno->getHoraInicial())
+		        if($timeRegistro <= $umTurno->getHoraFinal() && $timeRegistro >$umTurno->getHoraInicial())
 		        {
 		            $turnoDoRegistro = $umTurno;
 		            break;
 		        }
 		    }
-			
-			if($turnoDoRegistro == null)
-			{
-				echo 'Registro sem turno definido. Relatório abortado. ';
-				exit(0);
-			}
 		    $data = date('Y-m-d', strtotime($linha['regi_data']));
 		    $data = date('Y-m-d', strtotime($linha['regi_data']));
 		    

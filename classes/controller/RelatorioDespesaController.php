@@ -21,7 +21,7 @@ class RelatorioDespesaController {
 				$controller = new RelatorioDespesaController ();
 				$controller->relatorio ();
 				break;
-			case Sessao::NIVEL_USUARIO_EXTERNO:
+			case Sessao::NIVEL_RELATORIO:
 				$controller = new RelatorioDespesaController ();
 				$controller->relatorio ();
 				break;

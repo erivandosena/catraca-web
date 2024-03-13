@@ -76,7 +76,7 @@ class CartaoAvulsoController{
 				$cartao->setId($idCartao);
 				$vinculoDao->vinculoPorId($vinculo);
 				
-				echo '<div><h1>'.ucwords(strtolower(htmlentities($usuario->getNome()))).'. Tipo: '.$tipo->getNome();
+				echo '<div class="borda"><h1>'.ucwords(strtolower(htmlentities($usuario->getNome()))).'. Tipo: '.$tipo->getNome();
 				
 				echo '</h1>';
 				
@@ -143,7 +143,7 @@ class CartaoAvulsoController{
 			}else
 			{
 
-				echo '<div><h1>Cartão Não possui Vínculo Válido.</h1></div>';
+				echo '<div class="borda"><h1>Cartão Não possui Vínculo Válido.</h1></div>';
 				
 			}
 			
@@ -276,7 +276,7 @@ class CartaoAvulsoController{
 						
 						
 						if($vinculoDao->cartaoTemVinculo($vinculo->getCartao())){
-							echo '<div>';
+							echo '<div class="borda">';
 							echo '<p>O numero do cartão digitado já possui vinculo, utilize outro cartão.</p><br>';
 							echo '</div>';
 							echo '<meta http-equiv="refresh" content="4; url=.\?pagina=avulso&selecionado=' . $vinculo->getResponsavel()->getIdBaseExterna() . '&cartao=add">';
@@ -298,7 +298,7 @@ class CartaoAvulsoController{
 							$vinculo->setQuantidadeDeAlimentosPorTurno($_POST['vinc_refeicoes']);
 							
 							if($vinculoDao->cartaoTemVinculo($vinculo->getCartao())){
-								echo '<div>';
+								echo '<div class="borda">';
 								echo '<p>O numero do cartão digitado já possui vinculo, utilize outro cartão.</p><br>';
 								echo '</div>';
 								return;

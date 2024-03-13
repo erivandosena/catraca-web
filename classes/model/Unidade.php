@@ -14,8 +14,7 @@ class Unidade {
 	private $catracas;
 	private $custoUnidade;
 	
-	public function __construct()
-	{
+	public function Unidade() {
 		$this->turnosValidos = array();
 		
 	}

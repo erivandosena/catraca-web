@@ -1,10 +1,19 @@
 <?php
 
+define ( "CONFIG_CATRACA", "/dados/sites/adm/catraca/config/catraca.ini" );
+$config = parse_ini_file ( CONFIG_CATRACA );
+define ( "CADASTRO_DE_FOTOS", $config ['cadastro_de_fotos'] );
+define ( "NOME_INSTITUICAO", $config ['nome_instituicao'] );
+define ( "PAGINA_INSTITUICAO", $config ['pagina_instituicao'] );
+define ( "LOGIN_LDAP", $config ['login_ldap'] );
+define ( "FONT_DADOS_LDAP_ENTIDADE", $config ['font_dados_ldap_entidade'] );
+define ( "VERSAO_SINCRONIZADOR", $config ['versao_sincronizador'] );
 
-define("DB_INI", '../config/config_bd.ini');
+
+
 
 function autoload($classe) {
-
+    
     if (file_exists('classes/dao/' . $classe . '.php')) {
         include_once 'classes/dao/' . $classe . '.php';
     } else if (file_exists('classes/model/' . $classe . '.php')) {
@@ -19,17 +28,18 @@ function autoload($classe) {
 }
 spl_autoload_register('autoload');
 
-
 $sessao = new Sessao ();
+
 if (isset ( $_GET ["sair"] )) {
 	$sessao->mataSessao ();
 	header ( "Location:./index.php" );
 }
-
-$s = new SincronizadorController ();
-$s->sincronizar ();
-
-
+if (VERSAO_SINCRONIZADOR == 1) {
+	$s = new SincronizadorController ();
+	$s->sincronizar ();
+} else {
+	// Aqui faremos sincronizacao se for o da UECE.
+}
 
 if (isset ( $_GET ['gerar'] ) && isset ( $_GET ['pagina'] )) {
     if($_GET['gerar'] == 'Excel'){
@@ -38,10 +48,6 @@ if (isset ( $_GET ['gerar'] ) && isset ( $_GET ['pagina'] )) {
                 RelatorioDespesaController::main($sessao->getNivelAcesso());
                 exit(0);
                 break;
-			case 'relatorio_guiche' :
-				RelatorioControllerGuiche::main ( $sessao->getNivelAcesso () );
-				exit(0);
-				break;
             case 'relatorio_arrecadacao':
                 RelatorioArrecadacaoController::main($sessao->getNivelAcesso());
                 exit(0);
@@ -49,23 +55,11 @@ if (isset ( $_GET ['gerar'] ) && isset ( $_GET ['pagina'] )) {
             case 'relatorio_consumo':
                 RelatorioConsumoController::main($sessao->getNivelAcesso());
                 exit(0);
-            case 'relatorio_avulso':
-                RelatorioAvulsoController::main($sessao->getNivelAcesso());
-                exit(0);
                 break;
-            case 'relatorio_cartoes':
-                RelatorioAvulsoController::main($sessao->getNivelAcesso());
-                exit(0);
-                break;
-            case 'numeracao':
-                $controller = new InfoController();
-                $controller->gerarExcelNumeracao();
-                exit(0);
-                break;
-
+                
         }
     }
-
+    
 }
 
 
@@ -85,7 +79,7 @@ if (isset ( $_GET ['gerar'] ) && isset ( $_GET ['pagina'] )) {
 <link rel="stylesheet" href="css_spa/spa.css" />
 <link rel="stylesheet" href="css/estilo_comum.css" type="text/css" media="screen">
 <?php
-echo '<link rel="stylesheet" href="css/estilo_unilab.css" type="text/css" media="screen">';
+echo '<link rel="stylesheet" href="css/estilo_' . NOME_INSTITUICAO . '.css" type="text/css" media="screen">';
 
 ?>
 
@@ -95,10 +89,24 @@ echo '<link rel="stylesheet" href="css/estilo_unilab.css" type="text/css" media=
 <script type="text/javascript" src="js/mostra_troco.js"></script>
 <script type="text/javascript" src="js/modal.js"></script>
 <script type="text/javascript" src="js/identificador.js"></script>
-<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
 </head>
 <body>
 	<div class="pagina fundo-cinza1">
+		<div class="acessibilidade">
+			<div class="config">
+				<div class="a-esquerda">
+					<!-- 					<a href="#conteudo" tabindex="1" accesskey="1">Ir para o conteúdo <b>1</b></a> -->
+					<!-- 					<a href="#menu" tabindex="2" accesskey="2"><span>Ir para o</span> menu <b>2</b></a> -->
+					<!-- 					<a href="#busca" tabindex="3" accesskey="3"><span>Ir para a</span> busca <b>3</b></a> -->
+					<!-- 					<a href="#rodape" tabindex="4" accesskey="4"><span>Ir para o</span> rodapé <b>4</b></a> -->
+				</div>
+				<div class="a-direita">
+					<!-- 					<a href="#" id="alto-contraste">ALTO <b>CONTRASTE</b></a> -->
+					<!-- 					<a href="#" id="mapa-do-site"><b>MAPA DO SITE</b></a> -->
+				</div>
+			</div>
+		</div>
 		<div id="barra-governo">
 			<div class="resolucao config">
 				<div class="a-esquerda">
@@ -122,8 +130,8 @@ echo '<link rel="stylesheet" href="css/estilo_unilab.css" type="text/css" media=
 			<div id="topo" class="resolucao ">
 				<div class="tres colunas">
 				<?php
-				echo '<a href="https://unilab.edu.br"><img
-						src="img/logo_instituicao_unilab.png"
+				echo '<a href="' . PAGINA_INSTITUICAO . '"><img
+						src="img/logo_instituicao_' . NOME_INSTITUICAO . '.png"
 						alt=""></a>';
 				?>
 				</div>
@@ -134,38 +142,33 @@ echo '<link rel="stylesheet" href="css/estilo_unilab.css" type="text/css" media=
 					<a href="http://www.unilab.edu.br"><img src="img/logo_labpati_branco.png" alt=""></a>
 				</div>
 			</div>
-
 		</div>
-
-
-
 				<?php
 				function auditar() {
 					$dao = new DAO ();
 					$sessao = new Sessao ();
 					$auditoria = new Auditoria ( $dao->getConexao () );
-
+					
 					$obs = " - ";
 					if (isset ( $_POST ['catraca_virtual'] ) && isset ( $_POST ['catraca_id'] )) {
 						$obs = "Selecionou Catraca virtual: " . $_POST ['catraca_id'];
 					}
-
+					
 					$auditoria->cadastrar ( $sessao->getIdUsuario (), $obs );
 					$dao->fechaConexao ();
 				}
-
-
+				
+				MenuController::main($sessao->getNivelAcesso());
+				
 				?>
+				
+			
 
 		<div class="doze colunas">
-<?php
-
-MenuController::main($sessao->getNivelAcesso());
-?>
-			<div class="resolucao config">
-
+			<div class="resolucao config">					
+						
 					<?php
-
+					
 					if (isset ( $_GET ['pagina'] )) {
 					    auditar();
 						switch ($_GET ['pagina']) {
@@ -205,13 +208,10 @@ MenuController::main($sessao->getNivelAcesso());
 							case 'relatorio_despesa' :
 								RelatorioDespesaController::main ( $sessao->getNivelAcesso () );
 								break;
-							case 'relatorio_isentos' :
-							    RelatorioIsentoController::main ( $sessao->getNivelAcesso () );
-							    break;
 							case 'guiche' :
 								GuicheController::main ( $sessao->getNivelAcesso () );
 								break;
-
+							
 							case 'nivel_acesso' :
 								NivelAcessoController::main ( $sessao->getNivelAcesso () );
 								break;
@@ -262,16 +262,64 @@ MenuController::main($sessao->getNivelAcesso());
 								break;
 						}
 					} else {
-
+						
 						HomeController::main ( $sessao->getNivelAcesso () );
 					}
-
+					
 					?>
 			</div>
+			<script type="text/javascript">
+        	var img;
+
+        	navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia;
+        	
+            var canvas = document.getElementById("canvas"),
+                context = canvas.getContext("2d"),
+                video = document.getElementById("video"),
+                btnStart = document.getElementById("btnStart"),
+                btnStop = document.getElementById("btnStop"),
+                btnPhoto = document.getElementById("btnPhoto"),
+                videoObj = {
+                    video: true,
+                    audio: false
+                };
+            
+	        
+				 //Compatibility
+	            
+	
+	            btnStart.addEventListener("click", function() {
+	                var localMediaStream;
+	
+	                if (navigator.getUserMedia) {
+	                    navigator.getUserMedia(videoObj, function(stream) {              
+	                        video.src = (navigator.webkitGetUserMedia) ? window.webkitURL.createObjectURL(stream) : stream;
+	                        localMediaStream = stream;
+	                        
+	                    }, function(error) {
+	                        console.error("Video capture error: ", error.code);
+
+	                    });
+	                	
+	                    btnStop.addEventListener("click", function() {
+	                        localMediaStream.stop();
+	                        
+	                    });
+	
+	                    btnPhoto.addEventListener("click", function() {
+	                        context.drawImage(video, 0, 0, 320, 240);
+
+	                        img = canvas.toDataURL("image/png");
+	                        formulario.img64.value = img;
+
+							
+	                    });
+
+	                    
+	                }
+	            });
+        </script>
 		</div>
 	</div>
 </body>
-
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="js/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
 </html>

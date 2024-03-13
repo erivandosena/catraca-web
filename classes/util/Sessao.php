@@ -12,7 +12,7 @@ class Sessao{
 	public function __construct(){
 		if (!isset($_SESSION)) session_start();
 	}
-	public function criaSessao($id, $nivel, $login, $idUserSig){
+	public function criaSessao($id, $nivel, $login){
             
 		//setcookie(md5('USUARIO_NIVEL'), $nivel);
 		//setcookie(md5('USUARIO_ID'), $id);
@@ -20,7 +20,7 @@ class Sessao{
 		$_SESSION['USUARIO_NIVEL'] = $nivel;
 		$_SESSION['USUARIO_ID'] = $id;
 		$_SESSION['USUARIO_LOGIN'] = $login;
-		$_SESSION['ID_USER_SIG'] = $idUserSig;
+		
 	}
 	public function mataSessao(){
                 
@@ -45,16 +45,6 @@ class Sessao{
 			return self::NIVEL_DESLOGADO;
 		}
 			
-	}
-	public function getIdUserSig()
-	{
-		if(isset($_SESSION['ID_USER_SIG'])) {
-			return $_SESSION['ID_USER_SIG'];
-		}
-		else
-		{	
-			return self::NIVEL_DESLOGADO;
-		}	
 	}
 	
 	public function getIdUsuario(){
@@ -126,7 +116,7 @@ class Sessao{
 	 * Só acessa os relatórios. 
 	 * @var unknown
 	 */
-	const NIVEL_USUARIO_EXTERNO = 8;
+	const NIVEL_RELATORIO = 8;
 	
 	
 	const NIVEL_CATRACA_VIRTUAL_ORFA = 9;

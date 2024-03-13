@@ -131,39 +131,7 @@ class InfoController{
 		echo '<p>Cartões próprios que nunca foram utilizados:'.($cadastradosProprios-$i).' </p>';
 		
 	}
-	public function gerarExcelNumeracao(){
-	    
-	    
-	    $dados = "";
-	    $dao = new DAO();
-	    $sql = "SELECT cart_numero FROM cartao;";
-	    $result = $dao->getConexao()->query($sql);
-	    
-	    foreach($result as $linha){
-	        $dados .= $linha['cart_numero'];
-	        $dados .= "\n";
-	    }
-	    
-	    if(!is_dir("../tmp")){
-	       mkdir("../tmp");
-	    }
-	    $dados = utf8_decode($dados);
-	    $nomeArquivo = "../tmp/relatorio".uniqid().".csv";
-	    if(fwrite($file=fopen($nomeArquivo,'w+'),$dados)) {
-	        header('Content-Description: File Transfer');
-	        header('Content-Disposition: attachment; filename="numeracao.csv"');
-	        header('Content-Type: application/octet-stream');
-	        header('Content-Transfer-Encoding: binary');
-	        header('Content-Length: ' . filesize($nomeArquivo));
-	        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-	        header('Pragma: public');
-	        header('Expires: 0');
-	        fclose($file);
-	        readfile($nomeArquivo);
-	        unlink($nomeArquivo);
-	        
-	    }
-	}
+		
 		
 	
 	

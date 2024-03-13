@@ -27,36 +27,6 @@ class CustoDAO extends DAO{
         return $lista;
         
     }
-     
-    public function custoByTurnoAndUnityToday(Turno $turno, Unidade $unidade, $date){
-        $idTurno = $turno->getId();
-        $idUnidade = $unidade->getId();
-
-        $result = $this->getConexao()->query("
-                SELECT cure_id, cure_valor, unid_nome, turn_descricao, cure_inicio, cure_fim,
-                 turno.turn_id as turn_id, custo_refeicao.unid_id as unid_id
-                 FROM custo_refeicao
-                INNER JOIN unidade ON unidade.unid_id = custo_refeicao.unid_id
-                INNER JOIN turno ON turno.turn_id = custo_refeicao.turn_id
-                WHERE turno.turn_id = $idTurno AND unidade.unid_id = $idUnidade
-                AND '$date' BETWEEN custo_refeicao.cure_inicio and custo_refeicao.cure_fim
-                ;
-            ");
-        foreach($result as $linha){
-            $custo = new Custo();
-            $custo->setId($linha['cure_id']);
-            $custo->setValor($linha['cure_valor']);
-            $custo->getUnidade()->setId($linha['unid_id']);
-            $custo->getUnidade()->setNome($linha['unid_nome']);
-            $custo->getTurno()->setId($linha['turn_id']);
-            $custo->getTurno()->setDescricao($linha['turn_descricao']);
-            $custo->setInicio($linha['cure_inicio']);
-            $custo->setFim($linha['cure_fim']);
-            return $custo;
-        }
-        return false;
-        
-    }
     public function inserir(Custo $custo){
         $valor = $custo->getValor();
         $idUnidade = $custo->getUnidade()->getId();

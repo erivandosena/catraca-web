@@ -5,18 +5,7 @@ class Tipo{
 	private $id;
 	private $nome;
 	private $valorCobrado;
-	public $subsidiado;
-
-	public function setSubsidiado($subsidiado){
-		if($subsidiado) {
-			$this->subsidiado = true;
-		}else {
-			$this->subsidiado = false;
-		}
-	}
-	public function isSubsidiado(){
-		return $this->subsidiado;
-	}
+	
 	public function setId($id){
 		$this->id = $id;
 	}

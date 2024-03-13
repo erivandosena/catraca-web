@@ -21,52 +21,43 @@ class UsuarioDAO extends DAO {
 		
 		$login = $usuario->getLogin();
 		$senha = md5 ( $usuario->getSenha() );
-
-
-        $url = "https://api.unilab.edu.br/api/authenticate";
-        
-        $data = ['login' =>  $usuario->getLogin(), 'senha' => $usuario->getSenha()];
-        
-
-        $curl = curl_init($url);
-        curl_setopt($curl, CURLOPT_POST, true);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, http_build_query($data));
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        $response = curl_exec($curl);
-        curl_close($curl);
-        $responseJ = json_decode($response);
-		$idUsuario  = 0;
-		if(isset($responseJ->id)) {
-			$idUsuario = intval($responseJ->id);
-		}
-		if($idUsuario === 0) {
-			return false;
-		}
+		$sql = "SELECT * FROM usuario WHERE usua_login ='$login' AND usua_senha = '$senha' LIMIT 1";
 		
-		$sql = "SELECT * FROM usuario WHERE id_base_externa = $idUsuario LIMIT 1";
-		$usuario->setIdBaseExterna($idUsuario);
-		try {
-		    $stmt = $this->conexao->prepare($sql);
-		    $stmt->execute();
-		    $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-		    foreach ( $result as $linha ) {
-		        $usuario->setLogin ( $linha ['usua_login'] );
-		        $usuario->setId ( $linha ['usua_id'] );
-		        $usuario->setNivelAcesso ( $linha ['usua_nivel'] );
-		        return true;
-		    }
-		} catch(PDOException $e) {
-		    echo $e->getMessage();
-		    return false;
-		
-		}
-		$vinculoDao = new VinculoDAO($this->getConexao());
-		$idUsuario = $vinculoDao->verificarUsuario($usuario, $this->getConexao());
-		if($idUsuario === 0) {
-			return false;
-		} else {
+		foreach ( $this->getConexao ()->query ( $sql ) as $linha ) {
+			$usuario->setLogin ( $linha ['usua_login'] );
+			$usuario->setId ( $linha ['usua_id'] );
+			$usuario->setNivelAcesso ( $linha ['usua_nivel'] );
 			return true;
 		}
+		$sql2 = "SELECT login, senha, id_usuario FROM vw_usuarios_autenticacao_catraca WHERE LOWER(login) = LOWER('$login') AND senha = '$senha' LIMIT 1";
+		//Não deu. 
+		//Vou verificar na base do SIG. 
+		$result2 = 	$this->getConexao()->query($sql2);
+		foreach($result2 as $linha){
+			
+			$idBaseExterna = $linha['id_usuario'];
+			//1 Minha senha est� desatualizada no local. -- Nesse caso fazemos update na senha e tentamos autenticar de novo com o Nivel que tenho.
+			$sql3 = "SELECT usua_id, usua_login, usua_senha, id_base_externa FROM usuario WHERE id_base_externa = $idBaseExterna LIMIT 1";			
+			$result3 = $this->getConexao()->query($sql3);
+			foreach($result3 as $outraLinha)
+			{
+			    $sqlUpdate = "UPDATE usuario set usua_senha = '$senha', usua_login = '$login' WHERE id_base_externa = $idBaseExterna";
+				$this->getConexao()->exec($sqlUpdate);
+				foreach ( $this->getConexao ()->query ( $sql ) as $linha2 ) 
+				{
+					$usuario->setLogin ( $linha2 ['usua_login'] );
+					$usuario->setId ( $linha2 ['usua_id'] );
+					$usuario->setNivelAcesso ( $linha2 ['usua_nivel'] );
+					return true;
+				}
+				
+			}
+					
+		}
+		 
+		
+		
+		return false;
 	}
 
 	public function pesquisaNoSigaa($pesquisa){

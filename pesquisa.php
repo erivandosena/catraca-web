@@ -1,5 +1,9 @@
 <?php
 
+ini_set('display_errors',1);
+ini_set('display_startup_erros',1);
+error_reporting(E_ALL);
+
 
 date_default_timezone_set ( 'America/Araguaina' );
 
@@ -29,9 +33,6 @@ if(!($sessao->getNivelAcesso() == Sessao::NIVEL_SUPER || $sessao->getNivelAcesso
 }
 
 
-ini_set('display_errors',1);
-ini_set('display_startup_erros',1);
-error_reporting(E_ALL);
 
 echo '<form action="" method="get">
 	<input type="text" name="nome" placeholder="nome"/>
@@ -40,15 +41,14 @@ echo '<form action="" method="get">
 if(isset($_GET['nome'])){
 
 	
-	$pesquisaO = $_GET['nome'];
+
 	$pesquisa = preg_replace ('/[^a-zA-Z0-9\s]/', '', $_GET['nome'] );
 	$pesquisa = strtoupper ( $pesquisa );
 	echo '<br>Pesquisa: '.$pesquisa.'<br><br>';
 
 	$daoSistemasComum = new DAO(null, DAO::TIPO_USUARIOS);
-	
-	echo 'SIGAA - vw_usuarios_catraca<br>';
-	$result2 = $daoSistemasComum->getConexao()->query("SELECT distinct * FROM vw_usuarios_catraca WHERE (nome like '%$pesquisa%' OR login like '%$pesquisaO%')");
+	echo 'SISTEMAS COMUM - vw_usuarios_autenticacao_catraca<br>';
+	$result2 = $daoSistemasComum->getConexao()->query("SELECT * FROM vw_usuarios_catraca WHERE nome like '%$pesquisa%'");
 	$i = 0;
 	echo '<table border = 1>';
 	foreach($result2 as $linha)
@@ -79,8 +79,8 @@ if(isset($_GET['nome'])){
 	echo '</table>';
 	echo '<hr>';
 	$daoSIGAA = new DAO(null, DAO::TIPO_AUTENTICACAO);
-	echo 'SISTEMAS COMUM - vw_usuarios_autenticacao_catraca<br>';
-	$result2 = $daoSIGAA->getConexao()->query("SELECT * FROM vw_usuarios_autenticacao_catraca WHERE (nome like '%$pesquisa%' OR login like '%$pesquisaO%')");
+	echo 'SIGAA - vw_usuarios_catraca<br>';
+	$result2 = $daoSIGAA->getConexao()->query("SELECT * FROM vw_usuarios_autenticacao_catraca WHERE nome like '%$pesquisa%'");
 	$i = 0;
 	echo '<table border = 1>';
 	foreach($result2 as $linha)

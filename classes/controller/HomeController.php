@@ -37,9 +37,9 @@ class HomeController{
 				//So faz cadastro
 				CartaoController::main($nivelDeAcesso);
 				break;
-			case Sessao::NIVEL_USUARIO_EXTERNO:
+			case Sessao::NIVEL_RELATORIO:
 				//So faz cadastro
-				GuicheController::main($nivelDeAcesso);
+				RelatorioDespesaController::main($nivelDeAcesso);
 				break;
 			case Sessao::NIVEL_CATRACA_VIRTUAL_ORFA:
 				//Catraca Virtual Orfã. 

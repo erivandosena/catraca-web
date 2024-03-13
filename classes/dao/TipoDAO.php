@@ -14,7 +14,6 @@ class TipoDAO extends DAO{
 			$tipo->setId($linha['tipo_id']);
 			$tipo->setNome($linha['tipo_nome']);
 			$tipo->setValorCobrado($linha['tipo_valor']);
-			$tipo->setSubsidiado($linha['tipo_subisidiado']);
 			$lista[] = $tipo;
 
 		}
@@ -22,36 +21,12 @@ class TipoDAO extends DAO{
 	}
 	
 
-            
-            
-    public function atualizar(Tipo $tipo)
-    {
-        $id = $tipo->getId();
-            
-            
-        $sql = "UPDATE tipo
-                SET
-                tipo_valor = :valor,
-                tipo_subisidiado = :subisidiado
-                WHERE tipo.tipo_id = :id;";
-			$valor = $tipo->getValorCobrado();
-			$subisidiado = $tipo->isSubsidiado();
-            
-        try {
-            
-            $stmt = $this->getConexao()->prepare($sql);
-			$stmt->bindParam(":id", $id, PDO::PARAM_INT);
-			$stmt->bindParam(":valor", $valor, PDO::PARAM_STR);
-			$stmt->bindParam(":subisidiado", $subisidiado, PDO::PARAM_BOOL);
-            
-            return $stmt->execute();
-        } catch (PDOException $e) {
-            echo $e->getMessage();
-        }
-            
-    }
-          
-            
+	public function atualizar(Tipo $tipo){
+	    $idTipo = $tipo->getId();
+	    $novoValor = $tipo->getValorCobrado();
+	    $sql = "UPDATE tipo SET tipo_valor=$novoValor WHERE tipo_id= $idTipo";
+	    return $this->getConexao()->exec($sql);
+	}
 	public function retornaTipoPorId(Tipo $tipo){
 	
 		$idTipo = $tipo->getId();
@@ -62,7 +37,6 @@ class TipoDAO extends DAO{
 			$tipo->setId($linha['tipo_id']);
 			$tipo->setNome($linha['tipo_nome']);
 			$tipo->setValorCobrado($linha['tipo_valor']);
-			$tipo->setSubsidiado($linha['tipo_subisidiado']);
 		}
 		return $tipo;
 	}

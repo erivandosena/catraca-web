@@ -554,7 +554,7 @@ class VinculoDAO extends DAO {
 		foreach($result2 as $linha){
 			
 			$nivel = Sessao::NIVEL_COMUM;
-			$nome = $usuario->getNome();
+			$nome = $linha['nome'];
 			$nome = preg_replace ('/[^a-zA-Z0-9\s]/', '', $nome);
 			$nome = strtoupper ( $nome );
 			$email = str_replace("'","",$linha['email']);;
@@ -570,8 +570,7 @@ class VinculoDAO extends DAO {
 				
 				foreach($this->getConexao()->query("SELECT * FROM usuario WHERE id_base_externa = $idBaseExterna") as $linha3){
 					$usuario->setId($linha3['usua_id']);
-					$usuario->setLogin($linha['usua_login']);
-					$usuario->setNivelAcesso($linha['usua_nivel']);
+					
 					return $linha3['usua_id'];
 				}
 			}

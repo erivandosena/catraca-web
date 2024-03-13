@@ -21,10 +21,6 @@ class ResumoCompraController{
 				$resumo = new ResumoCompraController();
 				$resumo->telaResumo();
 				break;
-			case Sessao::NIVEL_USUARIO_EXTERNO:
-			    $resumo = new ResumoCompraController();
-			    $resumo->telaResumo();
-			    break;
 			default:
 				UsuarioController::main ( $nivel );
 				break;

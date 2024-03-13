@@ -27,7 +27,7 @@ class RelatorioArrecadacaoController
                 $controller = new RelatorioArrecadacaoController();
                 $controller->relatorio();
                 break;
-            case Sessao::NIVEL_USUARIO_EXTERNO:
+            case Sessao::NIVEL_RELATORIO:
                 $controller = new RelatorioArrecadacaoController();
                 $controller->relatorio();
                 break;

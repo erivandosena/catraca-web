@@ -47,15 +47,8 @@ class TipoView{
     public function mostrarLinhaTipo(Tipo $tipo){
         echo '<tr>
 				<td>'.$tipo->getId().'</td>
-				<td>'.$tipo->getNome().'</td>';
-				if(!$tipo->isSubsidiado()){
-					echo '<td>Não Subsidiado</td>';
-				}else{
-					echo '
-					<td>R$' . number_format($tipo->getValorCobrado(), 2, ',', '.').'</td>';
-				}
-				
-				echo '
+				<td>'.$tipo->getNome().'</td>
+				<td>R$' . number_format($tipo->getValorCobrado(), 2, ',', '.').'</td>
 				<td class="centralizado">
 				<a href="?pagina=definicoes_tipo&editar_tipo='.$tipo->getId().'"><span class="icone-pencil2 botao texto-amarelo2" title="Editar"></span></a>
 				
@@ -85,30 +78,13 @@ class TipoView{
     }
     
     public function formEditarTipo(Tipo $tipo){
-		$checked = '';
-		$classShow = '';
-		if($tipo->isSubsidiado()){
-			$checked = 'checked';
-			$classShow = 'show';
-		}
         echo '	<h2 class="titulo">Editar Tipo : '.$tipo->getNome().'</h2>
 				<div class="borda">
-					<form method="post" class="">
-						
-						<div class="mb-3">
-							<div class="form-check form-switch">
-								<input class="form-check-input" onchange="new bootstrap.Collapse(document.getElementById(\'input-valor-collapse\')).show()" type="checkbox" role="switch" id="subsidiado-input" name="subsidiado" '.$checked .' value="1">
-								<label class="form-check-label" for="subsidiado-input"> Subsidiado</label>
-							</div>
-						</div>
-
-						<div class="input-group mb-3 collapse '.$classShow.'" id="input-valor-collapse">
-							<span class="input-group-text">Valor R$</span>
-							<input type="number" max="100" step="0.01" name="valor_tipo" value="'.$tipo->getValorCobrado().'" type="text" class="form-control" aria-label="Valor Pago">
-						</div>
-					  
-
-						<input type="submit" name="alterar" class="btn btn-primary" value="Alterar">
+					<form method="post" class="formulario em-linha">
+						<label for="valor_tipo">
+							Novo valor: <input type="number" max="100" step="0.01" name="valor_tipo" value="'.$tipo->getValorCobrado().'">
+						</label>
+						<input type="submit" name="alterar" value="Alterar">
 					</form>
 				</div>';
     }

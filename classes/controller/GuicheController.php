@@ -62,10 +62,6 @@ class GuicheController {
 				$controller = new GuicheController ();
 				$controller->telaGuiche ();
 				break;
-			case Sessao::NIVEL_USUARIO_EXTERNO:
-			    $controller = new GuicheController ();
-			    $controller->telaGuiche ();
-			    break;
 			default :
 				UsuarioController::main ( $nivel );
 				break;
