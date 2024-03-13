@@ -1,7 +1,7 @@
 <?php
 
 /**
- * 
+ *
  * @author Jefferson Uchoa Ponte
  *
  */
@@ -99,10 +99,10 @@ class ValidacaoDAO extends DAO
     public function validarTipo(Usuario $usuario, Tipo $tipo)
     {
         if (strtolower(trim($tipo->getNome())) == 'aluno') {
-            if (trim($usuario->getStatusDiscente()) == 'CADASTRADO' 
-                || strtolower(trim($usuario->getStatusDiscente())) == 'ativo' 
+            if (trim($usuario->getStatusDiscente()) == 'CADASTRADO'
+                || strtolower(trim($usuario->getStatusDiscente())) == 'ativo'
                 || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - formando'
-                || strtolower(trim($usuario->getStatusDiscente())) == 'formando' 
+                || strtolower(trim($usuario->getStatusDiscente())) == 'formando'
                 || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - graduando') {
                 return true;
             }
@@ -155,12 +155,13 @@ class ValidacaoDAO extends DAO
             $usuario->setSiape($linha['siape']);
             $usuario->setStatusServidor($linha['status_servidor']);
             $usuario->setStatusSistema($linha['status_sistema']);
-            
+
             if (strtolower(trim($usuario->getStatusServidor())) == 'ativo') {
+
                 return true;
             }
-            if (trim($usuario->getStatusDiscente()) == 'CADASTRADO' || strtolower(trim($usuario->getStatusDiscente())) == 'ativo' || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower(trim($usuario->getStatusDiscente())) == 'formando' || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - graduando' || strtolower(trim($usuario->getIdStatusDiscente())) == self::ID_STATUS_DISCENTE_CONCLUIDO) {
-
+            if (trim($usuario->getStatusDiscente()) == 'CADASTRADO' || strtolower(trim($usuario->getStatusDiscente())) == 'ativo' || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower(trim($usuario->getStatusDiscente())) == 'formando' || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - graduando') {
+                print_r($usuario);
                 return true;
             }
             if (strtolower(trim($usuario->getTipodeUsuario())) == 'terceirizado' || strtolower(trim($usuario->getTipodeUsuario())) == 'outros') {
