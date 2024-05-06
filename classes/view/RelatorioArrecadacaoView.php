@@ -2,7 +2,7 @@
 
 
 class RelatorioArrecadacaoView{
-    
+
     public function exibirFormulario($listaDeUnidades)
     {
         echo '<div class="doze colunas borda relatorio">
@@ -13,7 +13,7 @@ class RelatorioArrecadacaoView{
         foreach ( $listaDeUnidades as $unidade ) {
             echo '<label for="unidade'.$i.'">'.$unidade->getNome () .'</label>';
             echo '      <input type="checkbox" id="unidade'.$i.'" name="unidade'.$i.'" value="' . $unidade->getId () . '">';
-            
+
             $i++;
         }
 
@@ -34,19 +34,19 @@ class RelatorioArrecadacaoView{
             $subTotal [$tipo->getId ()] = 0;
         }
         $subTotal ['total'] = 0;
-        
-        
+
+
         echo '<div class=" doze colunas borda relatorio">';
         $i = 0;
         foreach($titulos as $titulo){
-            
+
             if(!$i){
                 echo  '<h3>'.$titulo.'</h3><hr class="um">';
                 $i++;
             }else{
                 echo '<span>'.$titulo.'</span>';
             }
-        } 
+        }
         echo '<table class="tabela-relatorio">
 				<thead>
 					<tr>
@@ -56,14 +56,14 @@ class RelatorioArrecadacaoView{
         }
         echo'			<th>Total</th>
 				</thead>';
-        
+
         echo '<tbody>';
-        
+
         foreach ( $listaDeDatas as $data ) {
             echo '<tr>';
             echo '<td>' . date ( 'd/m/Y', strtotime ( $data ) ) . '</td>';
             foreach ( $tipos as $tipo ) {
-                
+
                 echo '<td>'.number_format (floatval($listaDeDados [$data] [$tipo->getId ()]) , 2, ',', '.' )    . '</td>';
                 $subTotal [$tipo->getId ()] += $listaDeDados [$data] [$tipo->getId ()];
             }
@@ -85,19 +85,19 @@ class RelatorioArrecadacaoView{
         echo '		</div></div>';
     }
     public function geraStrCSV($listaDeDados, $titulos, $tipos, $listaDeDatas) {
-        
+
         $dados = "";
         $subTotal = array ();
         foreach ( $tipos as $tipo ) {
             $subTotal [$tipo->getId ()] = 0;
         }
         $subTotal ['total'] = 0;
-        
-        
-        
+
+
+
         $i = 0;
         foreach($titulos as $titulo){
-            
+
             if(!$i){
                 $dados .= $titulo;
                 $i++;
@@ -105,7 +105,7 @@ class RelatorioArrecadacaoView{
                 $dados .= "\n".$titulo;
             }
         }
-       
+
         $dados .= "\n Datas;";
         foreach ( $tipos as $tipo ) {
             $dados .=  $tipo->getNome ().';';
@@ -130,10 +130,10 @@ class RelatorioArrecadacaoView{
         }
         $dados .= number_format ( $subTotal ['total']  , 2, ',', '.' )  . ';';
         $dados .= "\nCATRACA | Copyright © 2015 - DTI\n Relatório Emitido em: ".date('d/m/Y');
-        
-        
+
+
         return $dados;
     }
-    
-    
+
+
 }
