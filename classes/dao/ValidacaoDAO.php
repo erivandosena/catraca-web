@@ -99,12 +99,11 @@ class ValidacaoDAO extends DAO
     public function validarTipo(Usuario $usuario, Tipo $tipo)
     {
         if (strtolower(trim($tipo->getNome())) == 'aluno') {
-            if (trim($usuario->getStatusDiscente()) == 'CADASTRADO'
+            if (
+                trim($usuario->getStatusDiscente()) == 'CADASTRADO'
                 || strtolower(trim($usuario->getStatusDiscente())) == 'ativo'
-                || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - formando'
                 || strtolower(trim($usuario->getStatusDiscente())) == 'formando'
-                || strtolower(trim($usuario->getStatusDiscente())) == 'formado'
-                || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - graduando') {
+            ) {
                 return true;
             }
         }
@@ -160,12 +159,18 @@ class ValidacaoDAO extends DAO
             if (strtolower(trim($usuario->getStatusServidor())) == 'ativo') {
                 return true;
             }
-            if (trim($usuario->getStatusDiscente()) == 'CADASTRADO' || strtolower(trim($usuario->getStatusDiscente())) == 'ativo' || strtolower(trim($usuario->getStatusDiscente())) == 'formado' || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower(trim($usuario->getStatusDiscente())) == 'formando' || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - graduando' || strtolower(trim($usuario->getIdStatusDiscente())) == self::ID_STATUS_DISCENTE_CONCLUIDO) {
-
+            if (
+                strtolower(trim($usuario->getStatusDiscente())) == 'ativo'
+                || trim($usuario->getStatusDiscente()) == 'CADASTRADO'
+                || strtolower(trim($usuario->getStatusDiscente())) == 'formando'
+            ) {
                 return true;
             }
-            if (strtolower(trim($usuario->getTipodeUsuario())) == 'terceirizado' || strtolower(trim($usuario->getTipodeUsuario())) == 'outros') {
-                if($usuario->getStatusSistema() == 1){
+            if (
+                strtolower(trim($usuario->getTipodeUsuario())) == 'terceirizado'
+                || strtolower(trim($usuario->getTipodeUsuario())) == 'outros'
+            ) {
+                if ($usuario->getStatusSistema() == 1) {
                     return true;
                 }
             }
@@ -184,5 +189,3 @@ class ValidacaoDAO extends DAO
 
     const ID_STATUS_DISCENTE_CONCLUIDO = 3;
 }
-
-?>

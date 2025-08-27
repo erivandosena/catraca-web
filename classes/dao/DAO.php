@@ -30,16 +30,12 @@ class DAO
 
     private $tipoDeConexao;
 
-    private $sgbb;
 
     private $entidadeAutenticacao;
 
     private $entidadeUsuarios;
 
-    public function getSgdb()
-    {
-        return $this->sgdb;
-    }
+
 
     public function __construct(PDO $conexao = null, $tipo = self::TIPO_DEFAULT)
     {
@@ -125,7 +121,6 @@ class DAO
             $this->conexao = new PDO('sqlite:' . $bd['nome']);
         }
         $this->entidadeAutenticacao = $config['autenticacao_entidade_nome'];
-        $this->sgdb = $bd['sgdb'];
     }
 
     public function setConexao($conexao)
