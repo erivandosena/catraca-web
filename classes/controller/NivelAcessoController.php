@@ -200,13 +200,13 @@ class NivelAcessoController
 									return;
 								}
 
-								if (!$this->verificaSeAtivo($usuario)) {
+								if (!$validacaoDao->verificaSeAtivo($usuario)) {
 									$this->view->mostraSucesso("Esse usuário possui um problema quanto ao status!");
 									echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
 									return;
 								}
 
-								$daqui3Meses = date('Y-m-d', strtotime("+60 days")) . 'T' . date('G:00:01');
+								$daqui3Meses = date('Y-m-d', strtotime("+7 days")) . 'T' . date('G:00:01');
 								$vinculo->setFinalValidade($daqui3Meses);
 
 								if ($vinculoDao->atualizaValidade($vinculo)) {
@@ -299,20 +299,5 @@ class NivelAcessoController
 			$usuarioDao->fechaConexao();
 		}
 	}
-	public function verificaSeAtivo(Usuario $usuario)
-	{
-		if (strtolower(trim($usuario->getStatusServidor())) == 'ativo') {
 
-			return true;
-		}
-		if (strtolower(trim($usuario->getStatusDiscente())) == 'ativo' || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - graduando') {
-			return true;
-		}
-
-		if (strtolower(trim($usuario->getTipodeUsuario())) == 'terceirizado' || strtolower(trim($usuario->getTipodeUsuario())) == 'outros') {
-			return true;
-		}
-
-		return false;
-	}
 }
