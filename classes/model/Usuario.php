@@ -1,236 +1,274 @@
 <?php
 
 
-class Usuario{
+class Usuario
+{
 	private $id;
-	
+
 	private $nome;
-	
+
 	private $email;
 	private $login;
 	private $senha;
 	private $nivelAcesso;
 	private $idCategoria;
-	
+
 	private $siape;
 	private $categoria;
 	private $tipoDeUsuario;
 	private $statusServidor;
-	
+
 	//Documentos
 	private $idBaseExterna;
 	private $cpf;
 	private $identidade;
 	private $passaporte;
-	
-	
+
+
 	private $matricula;
 	private $nivelDiscente;
 	private $statusDiscente;
-	
+
 	private $idStatusDiscente;
-	
+
 	private $statusSistema;
-	public function setStatusSistema($statusSistema){
-	    $this->statusSistema = $statusSistema;
+	public function setStatusSistema($statusSistema)
+	{
+		$this->statusSistema = $statusSistema;
 	}
-	public function getStatusSistema(){
-	    return $this->statusSistema;
+	public function getStatusSistema()
+	{
+		return $this->statusSistema;
 	}
-	
-	public function __construct(){
+
+	public function __construct()
+	{
 		$this->id = 0;
 	}
-	
-	
-	public function setIDCategoria($idCategoria){	
-		if(is_int($idCategoria))
+
+
+	public function setIDCategoria($idCategoria)
+	{
+		if (is_int($idCategoria))
 			$this->idCategoria = $idCategoria;
 	}
-	
-	public function getIDCategoria(){
-		
+
+	public function getIDCategoria()
+	{
+
 		return $this->idCategoria;
 	}
-	public function setId($id){
-		if(is_int($id))
+	public function setId($id)
+	{
+		if (is_int($id))
 			$this->id = $id;
 	}
-	
-	public function getId(){
+
+	public function getId()
+	{
 		return $this->id;
 	}
-	public function setNome($nome){
+	public function setNome($nome)
+	{
 		$this->nome = $nome;
 	}
-	public function getNome(){
+	public function getNome()
+	{
 		return $this->nome;
 	}
-	public function setEmail($email){
+	public function setEmail($email)
+	{
 		$this->email = $email;
 	}
-	public function getEmail(){
+	public function getEmail()
+	{
 		return $this->email;
 	}
-	public function setLogin($login){
+	public function setLogin($login)
+	{
 		$this->login = $login;
 	}
-	public  function getLogin(){
+	public  function getLogin()
+	{
 		return $this->login;
 	}
-	public function setSenha($senha){
+	public function setSenha($senha)
+	{
 		$this->senha = $senha;
 	}
-        public function getSenha(){
-            return $this->senha;
-        }
-	public function setNivelAcesso($nivelAcesso){
-		$nivelAcesso = intval ( $nivelAcesso) ;
-		if(is_int($nivelAcesso))
+	public function getSenha()
+	{
+		return $this->senha;
+	}
+	public function setNivelAcesso($nivelAcesso)
+	{
+		$nivelAcesso = intval($nivelAcesso);
+		if (is_int($nivelAcesso))
 			$this->nivelAcesso = $nivelAcesso;
 	}
-	public function getNivelAcesso(){
+	public function getNivelAcesso()
+	{
 		return $this->nivelAcesso;
 	}
-	
-	public function __toString(){
-		$strUsuario = ' Nome: '.$this->nome.' email: '.$this->email.' Login: '.$this->login;
-		if($this->getNivelAcesso() == Sessao::NIVEL_COMUM){
+
+	public function __toString()
+	{
+		$strUsuario = ' Nome: ' . $this->nome . ' email: ' . $this->email . ' Login: ' . $this->login;
+		if ($this->getNivelAcesso() == Sessao::NIVEL_COMUM) {
 			$strUsuario .= 'Nivel Default';
 		}
-		if($this->getNivelAcesso() == Sessao::NIVEL_ADMIN){
+		if ($this->getNivelAcesso() == Sessao::NIVEL_ADMIN) {
 			$strUsuario .= 'Nivel Administrador';
 		}
-		if($this->getNivelAcesso() == Sessao::NIVEL_SUPER){
+		if ($this->getNivelAcesso() == Sessao::NIVEL_SUPER) {
 			$strUsuario .= 'Nivel Super';
 		}
 		return $strUsuario;
 	}
-	
-	
 
-	public function setIdStatusDiscente($idStatusDiscente){
+
+
+	public function setIdStatusDiscente($idStatusDiscente)
+	{
 		$this->idStatusDiscente = $idStatusDiscente;
 	}
-	public function getIdStatusDiscente(){
+	public function getIdStatusDiscente()
+	{
 		return $this->idStatusDiscente;
 	}
-	
 
-	
-	public function setStatusServidor($statusServidor){
+
+
+	public function setStatusServidor($statusServidor)
+	{
 		$this->statusServidor = $statusServidor;
 	}
-	public function getStatusServidor(){
+	public function getStatusServidor()
+	{
 		return $this->statusServidor;
 	}
-	
-	public function setIdBaseExterna($idBaseExterna){
-		$idBaseExterna = intval ( $idBaseExterna ) ;
-		if(is_int($idBaseExterna))
+
+	public function setIdBaseExterna($idBaseExterna)
+	{
+		$idBaseExterna = intval($idBaseExterna);
+		if (is_int($idBaseExterna))
 			$this->idBaseExterna = $idBaseExterna;
 	}
-	public function  getIdBaseExterna(){
+	public function  getIdBaseExterna()
+	{
 		return $this->idBaseExterna;
 	}
-	public function setCpf($cpf){
+	public function setCpf($cpf)
+	{
 		$this->cpf = $cpf;
 	}
-	public function getCpf(){
+	public function getCpf()
+	{
 		return $this->cpf;
 	}
-	public function setIdentidade($identidade){
+	public function setIdentidade($identidade)
+	{
 		$this->identidade = $identidade;
 	}
-	public function getIdentidade(){
+	public function getIdentidade()
+	{
 		return $this->identidade;
 	}
-	public function setPassaporte($passaporte){
+	public function setPassaporte($passaporte)
+	{
 		$this->passaporte = $passaporte;
 	}
-	public function getPassaporte(){
+	public function getPassaporte()
+	{
 		return $this->passaporte;
 	}
-	public function setMatricula($matricula){
+	public function setMatricula($matricula)
+	{
 		$this->matricula = $matricula;
 	}
-	public function getMatricula(){
+	public function getMatricula()
+	{
 		return $this->matricula;
 	}
-	public function setNivelDiscente($nivelDiscente){
+	public function setNivelDiscente($nivelDiscente)
+	{
 		$this->nivelDiscente = $nivelDiscente;
 	}
-	public function getNivelDiscente(){
+	public function getNivelDiscente()
+	{
 		return $this->nivelDiscente;
-		
 	}
-	
-	public function setStatusDiscente($statusDiscente){
+
+	public function setStatusDiscente($statusDiscente)
+	{
 		$this->statusDiscente = $statusDiscente;
 	}
-	public function getStatusDiscente(){
+	public function getStatusDiscente()
+	{
 		return $this->statusDiscente;
-		
 	}
-	public function setSiape($siape){
+	public function setSiape($siape)
+	{
 		$this->siape = $siape;
 	}
-	public function getSiape(){
+	public function getSiape()
+	{
 		return $this->siape;
 	}
-	public function setCategoria($categoria){
+	public function setCategoria($categoria)
+	{
 		$this->categoria = $categoria;
 	}
-	public function getCategoria(){
+	public function getCategoria()
+	{
 		return $this->categoria;
 	}
-	public function setTipoDeUsuario($tipoDeUsuario){
+	public function setTipoDeUsuario($tipoDeUsuario)
+	{
 		$this->tipoDeUsuario = $tipoDeUsuario;
 	}
-	public function getTipodeUsuario(){
+	public function getTipodeUsuario()
+	{
 		return $this->tipoDeUsuario;
 	}
-	
-	public function strTipo(){
+
+	public function strTipo()
+	{
 		$usuario = $this;
 		$tipo = "";
-		if(strtolower (trim($usuario->getTipodeUsuario())) == 'servidor'){
-			if(strtolower (trim($usuario->getStatusServidor())) == 'ativo' && strtolower (trim($usuario->getCategoria())) == 'docente'){
+		if (strtolower(trim($usuario->getTipodeUsuario())) == 'servidor') {
+			if (strtolower(trim($usuario->getStatusServidor())) == 'ativo' && strtolower(trim($usuario->getCategoria())) == 'docente') {
 				$tipo  .= "Servidor Docente";
+			} else if (strtolower(trim($usuario->getCategoria())) == 'docente') {
+				$tipo  .= "Servidor Docente Inativo";
 			}
-			else if(strtolower (trim($usuario->getCategoria())) == 'docente'){
-				$tipo  .="Servidor Docente Inativo";
+			if (strtolower(trim($usuario->getStatusServidor())) == 'ativo' && strpos(strtolower(trim($usuario->getCategoria())), 'administrativo')) {
+				$tipo  .= "Servidor TAE";
+			} else if (strpos(strtolower(trim($usuario->getCategoria())), 'administrativo')) {
+				$tipo  .= "Servidor TAE Inativo";
 			}
-			if(strtolower (trim($usuario->getStatusServidor())) == 'ativo' && strpos(strtolower (trim($usuario->getCategoria())), 'administrativo')){
-				$tipo  .="Servidor TAE";
-			}else if(strpos(strtolower (trim($usuario->getCategoria())), 'administrativo' )){
-				$tipo  .="Servidor TAE Inativo";
-		
-			}
-			$tipo  .='. SIAPE: ' . $usuario->getSiape();
+			$tipo  .= '. SIAPE: ' . $usuario->getSiape();
 		}
-		
-		if(strtolower (trim($usuario->getTipodeUsuario())) == 'aluno'){
-			if(strtolower (trim($usuario->getStatusDiscente())) == 'ativo'){
-				$tipo  .='Aluno Ativo ';
-			}else{
-				$tipo  .='Aluno Inativo. ';
-		
+
+		if (strtolower(trim($usuario->getTipodeUsuario())) == 'aluno') {
+			if (strtolower(trim($usuario->getStatusDiscente())) == 'ativo') {
+				$tipo  .= 'Aluno Ativo ';
+			} else {
+				$tipo  .= 'Aluno Inativo. ';
 			}
 			echo 'Nivel Discente: ' . $usuario->getNivelDiscente();
-			$tipo  .=' Matricula: '.$usuario->getMatricula();
-				
+			$tipo  .= ' Matricula: ' . $usuario->getMatricula();
 		}
-		
-		if(strtolower (trim($usuario->getTipodeUsuario())) == 'terceirizado'){
-			$tipo  .='Terceirizado Sem Informação de Status<br>';
+
+		if (strtolower(trim($usuario->getTipodeUsuario())) == 'terceirizado') {
+			$tipo  .= 'Terceirizado Sem Informação de Status<br>';
 		}
 		return $tipo;
-		
 	}
-	public function toStrNivel(){
-		
-		switch ($this->getNivelAcesso()){
+	public function toStrNivel()
+	{
+
+		switch ($this->getNivelAcesso()) {
 			case Sessao::NIVEL_ADMIN:
 				$strNivelAcesso =  " Administrador";
 				break;
@@ -246,32 +284,28 @@ class Usuario{
 			case Sessao::NIVEL_POLIVALENTE:
 				$strNivelAcesso = "Polivalente";
 				break;
-		
+
 			default:
-				$strNivelAcesso = "Nao Listado: ".$this->getNivelAcesso();
-					
+				$strNivelAcesso = "Nao Listado: " . $this->getNivelAcesso();
+
 				break;
-					
 		}
 		return $strNivelAcesso;
-		
-		
 	}
-	public function verificaSeAtivo(){
-		if(strtolower (trim($this->getStatusServidor())) == 'ativo'){
-				
+	public function verificaSeAtivo()
+	{
+		if (strtolower(trim($this->getStatusServidor())) == 'ativo') {
+
 			return true;
 		}
-		if(strtolower (trim($this->getStatusDiscente())) == 'ativo' || strtolower (trim($this->getStatusDiscente())) == 'formando' || strtolower (trim($this->getStatusDiscente())) == 'ativo - formando' || strtolower (trim($this->getStatusDiscente())) == 'ativo - graduando'){
+		if (strtolower(trim($this->getStatusDiscente())) == 'ativo' || strtolower(trim($this->getStatusDiscente())) == 'formando' || strtolower(trim($this->getStatusDiscente())) == 'ativo - formando' || strtolower(trim($this->getStatusDiscente())) == 'ativo - graduando') {
 			return true;
 		}
-	
-		if(strtolower (trim($this->getTipodeUsuario())) == 'terceirizado' || strtolower (trim($this->getTipodeUsuario())) == 'outros'){
+
+		if (strtolower(trim($this->getTipodeUsuario())) == 'terceirizado' || strtolower(trim($this->getTipodeUsuario())) == 'outros') {
 			return true;
 		}
-	
+
 		return false;
 	}
-	
-	
 }
