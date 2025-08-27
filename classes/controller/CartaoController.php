@@ -237,7 +237,7 @@ class CartaoController
 		</div>';
 			return;
 		}
-		$newNumber = 'reciclado_'.date('Ymd').'_'.$cartPreviousNumber;
+		$newNumber = 'reciclado_' . date('Ymd') . '_' . $cartPreviousNumber;
 		$sql0 = "UPDATE cartao set cart_numero = '$newNumber' WHERE cart_id = $id";
 
 		if (!$this->dao->getConexao()->exec($sql0)) {
@@ -255,7 +255,6 @@ class CartaoController
 				<div class="subtitulo-alerta">Cartão Reciclado com Sucesso!</div>
 				</div>';
 		}
-
 	}
 	public function telaCadastro()
 	{
@@ -314,12 +313,12 @@ class CartaoController
 						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
 						return;
 					}
-					// 					$validacaoDao = new ValidacaoDAO($usuarioDao->getConexao());
-					// 					if(!$validacaoDao->verificaSeAtivo($vinculo->getResponsavel())){
-					// 						$this->view->formMensagem("-erro", 'Esse cartão não pode ser renovado!');
-					// 						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
-					// 						return;
-					// 					}
+					$validacaoDao = new ValidacaoDAO($usuarioDao->getConexao());
+					if (!$validacaoDao->verificaSeAtivo($vinculo->getResponsavel())) {
+						$this->view->formMensagem("-erro", 'Esse cartão não pode ser renovado!');
+						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+						return;
+					}
 
 					if ($vinculoDao->atualizaValidade($vinculo)) {
 						$this->view->formMensagem("-sucesso", "Vínculo Atualizado com Sucesso!");
