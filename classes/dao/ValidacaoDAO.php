@@ -161,7 +161,6 @@ class ValidacaoDAO extends DAO
             }
             if (
                 strtolower(trim($usuario->getStatusDiscente())) == 'ativo'
-                || trim($usuario->getStatusDiscente()) == 'CADASTRADO'
                 || strtolower(trim($usuario->getStatusDiscente())) == 'formando'
             ) {
                 return true;
