@@ -99,9 +99,7 @@ class ValidacaoDAO extends DAO
     public function validarTipo(Usuario $usuario, Tipo $tipo)
     {
         if (strtolower(trim($tipo->getNome())) == 'aluno') {
-            if (
-                trim($usuario->getStatusDiscente()) == 'CADASTRADO'
-                || strtolower(trim($usuario->getStatusDiscente())) == 'ativo'
+            if (strtolower(trim($usuario->getStatusDiscente())) == 'ativo'
                 || strtolower(trim($usuario->getStatusDiscente())) == 'formando'
             ) {
                 return true;
