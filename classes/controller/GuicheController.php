@@ -211,7 +211,7 @@ class GuicheController
 					$validacaoDao = new ValidacaoDAO($dao->getConexao());
 					if (!$catracaVirtualDao->verificaVinculo($vinculo)) {
 						if (($i != 0) && ! $vinculoDao->usuarioJaTemVinculo($usuario) && ! $vinculo->isAvulso() && $validacaoDao->verificaSeAtivo($vinculo->getResponsavel())) {
-							$daqui3Meses = date('Y-m-d', strtotime("+60 days")) . 'T' . date('G:00:01');
+							$daqui3Meses = date('Y-m-d', strtotime("+7 days")) . 'T' . date('G:00:01');
 							$vinculo->setFinalValidade($daqui3Meses);
 							$vinculoDao->atualizaValidade($vinculo);
 						} else {

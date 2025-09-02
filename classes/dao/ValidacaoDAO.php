@@ -100,11 +100,8 @@ class ValidacaoDAO extends DAO
     {
         if (strtolower(trim($tipo->getNome())) == 'aluno') {
             if (
-                trim($usuario->getStatusDiscente()) == 'CADASTRADO'
-                || strtolower(trim($usuario->getStatusDiscente())) == 'ativo'
-                || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - formando'
+               strtolower(trim($usuario->getStatusDiscente())) == 'ativo'
                 || strtolower(trim($usuario->getStatusDiscente())) == 'formando'
-                || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - graduando'
             ) {
                 return true;
             }
@@ -159,15 +156,11 @@ class ValidacaoDAO extends DAO
             $usuario->setStatusSistema($linha['status_sistema']);
 
             if (strtolower(trim($usuario->getStatusServidor())) == 'ativo') {
-
                 return true;
             }
             if (
-                trim($usuario->getStatusDiscente()) == 'CADASTRADO'
-                || strtolower(trim($usuario->getStatusDiscente())) == 'ativo'
-                || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - formando'
+                strtolower(trim($usuario->getStatusDiscente())) == 'ativo'
                 || strtolower(trim($usuario->getStatusDiscente())) == 'formando'
-                || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - graduando'
             ) {
                 return true;
             }

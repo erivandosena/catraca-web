@@ -143,7 +143,7 @@ class CartaoController
 									return;
 								}
 
-								$daqui3Meses = date('Y-m-d', strtotime("+60 days")) . 'T' . date('G:00:01');
+								$daqui3Meses = date('Y-m-d', strtotime("+7 days")) . 'T' . date('G:00:01');
 								$vinculo->setFinalValidade($daqui3Meses);
 
 								if ($vinculoDao->atualizaValidade($vinculo)) {
@@ -176,7 +176,7 @@ class CartaoController
 
 			$usuarioDao = new UsuarioDAO();
 
-
+			$validacaoDao = new ValidacaoDAO($usuarioDao->getConexao());
 
 			$usuario = new Usuario();
 			$usuario->setIdBaseExterna($idDoSelecionado);
@@ -208,7 +208,7 @@ class CartaoController
 				$vinculo->setId($_GET['vinculo_renovar']);
 				$vinculoDao->vinculoPorId($vinculo);
 
-				$daqui3Meses = date('Y-m-d', strtotime("+60 days")) . 'T' . date('G:00:01');
+				$daqui3Meses = date('Y-m-d', strtotime("+7 days")) . 'T' . date('G:00:01');
 				$vinculo->setFinalValidade($daqui3Meses);
 
 				if (isset($_POST['certeza'])) {
@@ -223,12 +223,11 @@ class CartaoController
 						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
 						return;
 					}
-					// 					$validacaoDao = new ValidacaoDAO($usuarioDao->getConexao());
-					// 					if(!$validacaoDao->verificaSeAtivo($vinculo->getResponsavel())){
-					// 						$this->view->formMensagem("-erro", 'Esse cartão não pode ser renovado!');
-					// 						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
-					// 						return;
-					// 					}
+					if (!$validacaoDao->verificaSeAtivo($vinculo->getResponsavel())) {
+						$this->view->formMensagem("-erro", 'Esse cartão não pode ser renovado!');
+						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+						return;
+					}
 
 					if ($vinculoDao->atualizaValidade($vinculo)) {
 						$this->view->formMensagem("-sucesso", "Vínculo Atualizado com Sucesso!");
@@ -245,7 +244,9 @@ class CartaoController
 
 			$vinculos = $vinculoDao->retornaVinculosValidosDeUsuario($usuario);
 
-			$podeComer = $this->verificaSeAtivo($usuario);
+
+
+			$podeComer = $validacaoDao->verificaSeAtivo($usuario);
 
 			if (!$vinculoDao->usuarioJaTemVinculo($usuario) && $podeComer) {
 				if (!isset($_GET['cartao'])) {
@@ -301,7 +302,7 @@ class CartaoController
 								$esseTipo = $tipo;
 						}
 						$vinculo = new Vinculo();
-						$daqui3Meses = date('Y-m-d', strtotime("+60 days")) . 'T' . date('G:00:01');
+						$daqui3Meses = date('Y-m-d', strtotime("+7 days")) . 'T' . date('G:00:01');
 						$vinculo->setFinalValidade($daqui3Meses);
 						$vinculo->getCartao()->getTipo()->setId($esseTipo->getId());
 						$vinculo->getCartao()->setNumero($_GET['numero_cartao2']);
@@ -390,24 +391,6 @@ class CartaoController
 		}
 	}
 
-
-	public function verificaSeAtivo(Usuario $usuario)
-	{
-		if (strtolower(trim($usuario->getStatusServidor())) == 'ativo') {
-			return true;
-		}
-		if (trim($usuario->getStatusDiscente()) == 'CADASTRADO' || strtolower(trim($usuario->getStatusDiscente())) == 'ativo' || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower(trim($usuario->getStatusDiscente())) == 'formando' || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - graduando' || strtolower(trim($usuario->getIdStatusDiscente())) == self::ID_STATUS_DISCENTE_CONCLUIDO) {
-
-			return true;
-		}
-		if (strtolower(trim($usuario->getTipodeUsuario())) == 'terceirizado' || strtolower(trim($usuario->getTipodeUsuario())) == 'outros') {
-			return true;
-		}
-		if (strtolower(trim($usuario->getTipodeUsuario())) == 'docente externo') {
-			return true;
-		}
-		return false;
-	}
 	const ID_STATUS_DISCENTE_ATIVO = 1;
 	const ID_STATUS_DISCENTE_CADASTRADO = 3;
 	const ID_STATUS_DISCENTE_FORMADO = 9;

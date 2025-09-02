@@ -152,7 +152,7 @@ class CartaoProprioController
         }
         $vinculoDao = new VinculoDAO($this->dao->getConexao());
         $vinculo = new Vinculo();
-        $daqui3Meses = date('Y-m-d', strtotime("+90 days")) . 'T' . date('G:00:01');
+        $daqui3Meses = date('Y-m-d', strtotime("+7 days")) . 'T' . date('G:00:01');
         $vinculo->setFinalValidade($daqui3Meses);
         $vinculo->getCartao()->getTipo()->setId($_GET['id_tipo']);
         $vinculo->getCartao()->setNumero($_GET['numero_cartao2']);
@@ -223,7 +223,7 @@ class CartaoProprioController
             echo '<meta http-equiv="refresh" content="2; url=.\?pagina=cartao_proprio&selecionado=' . $_GET['selecionado'] . '">';
             return;
         }
-        $daqui3Meses = date('Y-m-d', strtotime("+90 days")) . 'T' . date('G:00:01');
+        $daqui3Meses = date('Y-m-d', strtotime("+7 days")) . 'T' . date('G:00:01');
         $vinculo->setFinalValidade($daqui3Meses);
 
         if (!isset($_POST['certeza'])) {

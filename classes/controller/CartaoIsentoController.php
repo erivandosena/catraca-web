@@ -188,7 +188,7 @@ class CartaoIsentoController
 				$vinculo->setId($_GET['vinculo_renovar']);
 				$vinculoDao->vinculoPorId($vinculo);
 
-				$daqui3Meses = date('Y-m-d', strtotime("+60 days")) . 'T' . date('G:00:01');
+				$daqui3Meses = date('Y-m-d', strtotime("+7 days")) . 'T' . date('G:00:01');
 				$vinculo->setFinalValidade($daqui3Meses);
 
 
@@ -205,9 +205,11 @@ class CartaoIsentoController
 						return;
 					}
 
-					if (!$this->verificaSeAtivo($usuario)) {
+					$validacaoDao = new ValidacaoDAO($usuarioDao->getConexao());
+
+					if (!$validacaoDao->verificaSeAtivo($usuario)) {
 						$this->view->mostraSucesso("Esse usuário possui um problema quanto ao status!");
-						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $usuario->getIdBaseExterna() . '">';
+						echo '<meta http-equiv="refresh" content="4; url=.\?pagina=avulso&selecionado=' . $usuario->getIdBaseExterna() . '">';
 						return;
 					}
 
@@ -233,7 +235,9 @@ class CartaoIsentoController
 
 			$vinculos = $vinculoDao->retornaVinculosValidosDeUsuario($usuario);
 
-			$podeComer = $this->verificaSeAtivo($usuario);
+			$validacaoDao = new ValidacaoDAO($usuarioDao->getConexao());
+			$podeComer = $validacaoDao->verificaSeAtivo($usuario);
+
 
 			if (!sizeof($vinculos) && $podeComer) {
 				if (!isset($_GET['cartao'])) {
@@ -283,7 +287,7 @@ class CartaoIsentoController
 								$esseTipo = $tipo;
 						}
 						$vinculo = new Vinculo();
-						$daqui3Meses = date('Y-m-d', strtotime("+60 days")) . 'T' . date('G:00:01');
+						$daqui3Meses = date('Y-m-d', strtotime("+7 days")) . 'T' . date('G:00:01');
 						$vinculo->setFinalValidade($daqui3Meses);
 						$vinculo->getCartao()->getTipo()->setId($tipo->getId());
 						$vinculo->getCartao()->setNumero($_GET['numero_cartao2']);
@@ -367,21 +371,5 @@ class CartaoIsentoController
 			$this->view->mostraResultadoBuscaDeUsuarios($listaDeUsuarios);
 			$usuarioDao->fechaConexao();
 		}
-	}
-	public function verificaSeAtivo(Usuario $usuario)
-	{
-		if (strtolower(trim($usuario->getStatusServidor())) == 'ativo') {
-
-			return true;
-		}
-		if (strtolower(trim($usuario->getStatusDiscente())) == 'ativo' || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - formando' || strtolower(trim($usuario->getStatusDiscente())) == 'ativo - graduando') {
-			return true;
-		}
-
-		if (strtolower(trim($usuario->getTipodeUsuario())) == 'terceirizado' || strtolower(trim($usuario->getTipodeUsuario())) == 'outros') {
-			return true;
-		}
-
-		return false;
 	}
 }
