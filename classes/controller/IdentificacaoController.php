@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 
+ *
  * @author Jefferson Uchôa Ponte
  *
  */
@@ -77,53 +78,46 @@ class IdentificacaoController
         if ($vinculo->isActive()) {
             return;
         }
-        
-        if(!isset($_GET['cartao_renovar'])){
+
+        if (!isset($_GET['cartao_renovar'])) {
             $this->view->formRenovacao($vinculo);
             return;
         }
-        
-        if($vinculo->isAvulso())
-        {
+
+        if ($vinculo->isAvulso()) {
             $this->view->mensagemErro("Não existe renovação de vínculo avulso.");
             echo '<meta http-equiv="refresh" content="4; url=.\?pagina=identificacao&numero_cartao=' . $vinculo->getCartao()->getNumero() . '">';
             return;
         }
-        if($this->dao->usuarioJaTemVinculo($vinculo->getResponsavel()))
-        {
+        if ($this->dao->usuarioJaTemVinculo($vinculo->getResponsavel())) {
             $this->view->mensagemErro("Esse usuário já possui vínculo válido.");
             echo '<meta http-equiv="refresh" content="4; url=.\?pagina=identificacao&numero_cartao=' . $vinculo->getCartao()->getNumero() . '">';
             return;
         }
-        
-        if(!isset($_POST['certeza'])){
+
+        if (!isset($_POST['certeza'])) {
             $this->view->formCerteza();
             return;
         }
 
-        
+
         $validacaoDao = new ValidacaoDAO();
-        if(!$validacaoDao->verificaSeAtivo($vinculo->getResponsavel())){
+        if (!$validacaoDao->verificaSeAtivo($vinculo->getResponsavel())) {
             $this->view->mensagemErro("Esse usuário possui um problema quanto ao status!");
             echo '<meta http-equiv="refresh" content="4; url=.\?pagina=cartao&selecionado=' . $vinculo->getResponsavel()->getIdBaseExterna() . '">';
             return;
         }
-        
-        $daqui3Meses = date ( 'Y-m-d', strtotime ( "+60 days" ) ) . 'T' . date ( 'G:00:01' );
+
+
+        $daqui3Meses = date('Y-m-d', strtotime("+60 days")) . 'T' . date('G:00:01');
         $vinculo->setFinalValidade($daqui3Meses);
-        
-        if($this->dao->atualizaValidade($vinculo))
-        {
+
+        if ($this->dao->atualizaValidade($vinculo)) {
             $this->view->mensagemSucesso("Vínculo Atualizado com Sucesso!");
-        }else{
+        } else {
             $this->view->mensagemErro("Erro ao tentar renovar vínculo.");
         }
         echo '<meta http-equiv="refresh" content="2; url=.\?pagina=cartao&selecionado=' . $vinculo->getResponsavel()->getIdBaseExterna() . '">';
         return;
-        
     }
-    
-    
 }
-
-?>
