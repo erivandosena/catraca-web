@@ -1,6 +1,7 @@
 <?php
+
 /**
- * 
+ *
  * @author Jefferson Uchôa Ponte
  *
  */
@@ -49,7 +50,7 @@ class CartaoProprioController
     public function telaCartao()
     {
         if (! isset($_GET['selecionado'])) {
-            $this->view->formBuscaUsuarios(); 
+            $this->view->formBuscaUsuarios();
             $this->buscar();
             return;
         }
@@ -57,7 +58,7 @@ class CartaoProprioController
     }
 
     /**
-     * Resultado da busca. 
+     * Resultado da busca.
      */
     public function buscar()
     {
@@ -70,7 +71,7 @@ class CartaoProprioController
     }
 
     /**
-     * Página com usuário selecionado. 
+     * Página com usuário selecionado.
      */
     public function selecionar()
     {
@@ -81,134 +82,122 @@ class CartaoProprioController
         $idDoSelecionado = intval($_GET['selecionado']);
         $usuario = new Usuario();
         $usuario->setIdBaseExterna($idDoSelecionado);
-        
+
         $lista = $this->dao->listaPorIdBaseExterna($usuario);
-        
-        if(!count($lista)){
+
+        if (!count($lista)) {
             $this->view->erro("Usuário Não Localizado.");
             return;
         }
         $this->view->mostraSelecionado($lista[0]);
         $this->view->mostraDadosAdicionais($lista);
- 
-        
-        if(isset($_GET['vinculo_cancelar'])){
+
+
+        if (isset($_GET['vinculo_cancelar'])) {
             $this->invalidarVinculo();
             return;
         }
-        if(isset($_GET['vinculo_renovar'])){
+        if (isset($_GET['vinculo_renovar'])) {
             $this->renovarVinculo();
             return;
         }
-        
+
         $vinculoDao = new VinculoDAO($this->dao->getConexao());
         $vinculos = $vinculoDao->retornaVinculosValidosDeUsuario($usuario);
-        foreach ($vinculos as $vinculoComIsencao) 
-        {
+        foreach ($vinculos as $vinculoComIsencao) {
             $vinculoDao->isencaoValidaDoVinculo($vinculoComIsencao);
         }
 
-        if (! count($vinculos)) 
-        {
+        if (! count($vinculos)) {
             $this->adicionarCartao($usuario);
-        }
-        else 
-        {
+        } else {
             $this->view->mostraVinculos($vinculos, 'Vinculos ativos');
         }
         $vinculosVencidos = $vinculoDao->retornaVinculosVencidos($usuario);
-        if (count($vinculosVencidos))
-        {
+        if (count($vinculosVencidos)) {
             $this->view->mostraVinculos($vinculosVencidos, 'Vinculos Vencidos');
         }
-        
-        
     }
-    
+
     /**
      * @param Usuario $usuario
      */
-    public function adicionarCartao(Usuario $usuario){
+    public function adicionarCartao(Usuario $usuario)
+    {
 
-        if(!isset($_GET['add_cartao'])){
+        if (!isset($_GET['add_cartao'])) {
             $this->view->botaoAdicionarCartao($usuario->getIdBaseExterna());
             return;
         }
-        
+
         $validacaoDao = new ValidacaoDAO();
         $listaTipos = $validacaoDao->listaDeTipos($usuario);
-        
-        if(!isset($_GET['add_cartao_numero'])){
+
+        if (!isset($_GET['add_cartao_numero'])) {
             $this->view->formAddCartao($listaTipos, $usuario->getIdBaseExterna());
             return;
         }
-        if(!isset($_GET['numero_cartao2'])){
+        if (!isset($_GET['numero_cartao2'])) {
             return;
         }
-        if(!isset($_GET['id_tipo'])){
+        if (!isset($_GET['id_tipo'])) {
             return;
         }
-        
+
         $this->dao->preenchePorIdBaseExterna($usuario);
 
-        if(!isset($_POST['certeza'])){
-            $this->view->formConfirmacao("Tem certeza que deseja enviar esse cartão para o usuário ".$usuario->getNome());
+        if (!isset($_POST['certeza'])) {
+            $this->view->formConfirmacao("Tem certeza que deseja enviar esse cartão para o usuário " . $usuario->getNome());
             return;
         }
         $vinculoDao = new VinculoDAO($this->dao->getConexao());
         $vinculo = new Vinculo();
-        $daqui3Meses = date ( 'Y-m-d', strtotime ( "+90 days" ) ) . 'T' . date ( 'G:00:01' );
+        $daqui3Meses = date('Y-m-d', strtotime("+90 days")) . 'T' . date('G:00:01');
         $vinculo->setFinalValidade($daqui3Meses);
         $vinculo->getCartao()->getTipo()->setId($_GET['id_tipo']);
         $vinculo->getCartao()->setNumero($_GET['numero_cartao2']);
         $vinculo->setResponsavel($usuario);
-        $vinculo->setInicioValidade(date ( "Y-m-d G:i:s" ));
-        
-        if($vinculoDao->cartaoTemVinculo($vinculo->getCartao())){
+        $vinculo->setInicioValidade(date("Y-m-d G:i:s"));
+
+        if ($vinculoDao->cartaoTemVinculo($vinculo->getCartao())) {
             $this->view->erro("Esse cartão já foi utilizado. Tente Outro.");
             $this->view->botaoAdicionarCartao($usuario->getIdBaseExterna());
             return;
-            
         }
-        if($vinculoDao->adicionaVinculo ($vinculo)){
+        if ($vinculoDao->adicionaVinculo($vinculo)) {
             $this->view->sucesso("Cartão Adicionado Com Sucesso!");
-        }
-        else
-        {
+        } else {
             $this->view->erro("Erro Ao Adicionar Cartão!");
         }
         echo '<meta http-equiv="refresh" content="2; url=.\?pagina=cartao_proprio&selecionado=' . $_GET['selecionado'] . '">';
-        
     }
-    
-    public function invalidarVinculo(){
-        if(!isset($_GET['vinculo_cancelar'])){
+
+    public function invalidarVinculo()
+    {
+        if (!isset($_GET['vinculo_cancelar'])) {
             return;
         }
         $vinculo = new Vinculo();
         $vinculo->setId($_GET['vinculo_cancelar']);
-        
-        if(!isset($_POST['certeza'])){
+
+        if (!isset($_POST['certeza'])) {
             $this->view->formConfirmacao("Deseja Confirmar o Cancelamento deste Vínculo?");
             return;
         }
         $vinculoDao = new VinculoDAO($this->dao->getConexao());
-        if($vinculoDao->invalidarVinculo($vinculo)){
+        if ($vinculoDao->invalidarVinculo($vinculo)) {
             $this->view->sucesso();
-        }
-        else
-        {
+        } else {
             $this->view->erro();
         }
-        if(isset($_GET['selecionado'])){
+        if (isset($_GET['selecionado'])) {
             echo '<meta http-equiv="refresh" content="2; url=.\?pagina=cartao_proprio&selecionado=' . $_GET['selecionado'] . '">';
         }
-        
-               
     }
-    
-    public function renovarVinculo(){
-        if(!isset($_GET['vinculo_renovar'])){
+
+    public function renovarVinculo()
+    {
+        if (!isset($_GET['vinculo_renovar'])) {
             return;
         }
         $vinculo = new Vinculo();
@@ -218,41 +207,36 @@ class CartaoProprioController
         $validacaoDao = new ValidacaoDAO($this->dao->getConexao());
 
         $listaDeTipos = $validacaoDao->listaDeTipos($vinculo->getResponsavel());
-        
-        
-       
-        
+
+
+
+
         $encontrei = false;
-        foreach($listaDeTipos as $tipo){
-            if($tipo->getId() == $vinculo->getCartao()->getTipo()->getId()){
+        foreach ($listaDeTipos as $tipo) {
+            if ($tipo->getId() == $vinculo->getCartao()->getTipo()->getId()) {
                 $encontrei = true;
                 break;
             }
         }
-        if(!$encontrei){
-            $this->view->erro("Usuário Não Está Mais Ativo Para o Tipo: ".$vinculo->getCartao()->getTipo()->getNome());
+        if (!$encontrei) {
+            $this->view->erro("Usuário Não Está Mais Ativo Para o Tipo: " . $vinculo->getCartao()->getTipo()->getNome());
             echo '<meta http-equiv="refresh" content="2; url=.\?pagina=cartao_proprio&selecionado=' . $_GET['selecionado'] . '">';
             return;
         }
-        $daqui3Meses = date ( 'Y-m-d', strtotime ( "+90 days" ) ) . 'T' . date ( 'G:00:01' );
-        $vinculo->setFinalValidade($daqui3Meses);	
-        
-        if(!isset($_POST['certeza'])){
+        $daqui3Meses = date('Y-m-d', strtotime("+90 days")) . 'T' . date('G:00:01');
+        $vinculo->setFinalValidade($daqui3Meses);
+
+        if (!isset($_POST['certeza'])) {
             $this->view->formConfirmacao("Deseja Confirmar a Renovação deste Vínculo?");
             return;
         }
         $vinculoDao = new VinculoDAO($this->dao->getConexao());
-        if($vinculoDao->atualizaValidade($vinculo)){
+        if ($vinculoDao->atualizaValidade($vinculo)) {
             $this->view->sucesso();
-        }
-        else
-        {
+        } else {
             $this->view->erro();
         }
-       
+
         echo '<meta http-equiv="refresh" content="2; url=.\?pagina=cartao_proprio&selecionado=' . $_GET['selecionado'] . '">';
-        
     }
 }
-
-?>
